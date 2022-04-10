@@ -6,7 +6,7 @@ import com.example.cpudefense.effects.Fadable
 import com.example.cpudefense.effects.Fader
 import java.util.concurrent.CopyOnWriteArrayList
 
-class Typewriter(val game: Game, val myArea: Rect, var lines: CopyOnWriteArrayList<String>, var callback: (() -> Unit)?) {
+class Typewriter(val game: Game, myArea: Rect, var lines: CopyOnWriteArrayList<String>, var callback: (() -> Unit)?) {
     var textBoxes = CopyOnWriteArrayList<TextBox>()
     val pos = Pair(myArea.left + 50, myArea.bottom - 50)
     val lineSpacingY = 70
@@ -37,7 +37,7 @@ class Typewriter(val game: Game, val myArea: Rect, var lines: CopyOnWriteArrayLi
         var x = topLeft.first.toFloat()
         var y = topLeft.second.toFloat()
 
-        init { Fader(game, this, Fader.Type.APPEAR, Fader.Speed.SLOW) }
+        init { Fader(game, this, Fader.Type.APPEAR, Fader.Speed.MEDIUM) }
 
         override fun fadeDone(type: Fader.Type) {
             callback?.let { it() }  // call callback function, if defined.
