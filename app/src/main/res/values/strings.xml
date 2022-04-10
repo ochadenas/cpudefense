@@ -13,7 +13,7 @@
     <string name="game_start">Starting game.</string>
     <string name="continueGame">Continue</string>
     <string name="scoreboard_inf">Inf</string>
-    <string name="scoreboard_waves">Waves</string>
+    <string name="scoreboard_waves">Wave</string>
     <string name="scoreboard_status">Status</string>
     <string name="scoreboard_coins">Coins</string>
 </resources>
