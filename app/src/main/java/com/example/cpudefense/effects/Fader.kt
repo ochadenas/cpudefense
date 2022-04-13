@@ -2,21 +2,21 @@ package com.example.cpudefense.effects
 
 import com.example.cpudefense.Game
 
-class Fader(game: Game, thing: Fadable, type: Type = Type.DISAPPEAR, speed: Speed = Speed.FAST, wait: Int = 0)
+class Fader(game: Game,
+            private val thing: Fadable,
+            var type: Type = Type.DISAPPEAR, speed: Speed = Speed.FAST, wait: Int = 0)
 /**
  * Auxiliary object that handles appearing and disappearing of game elements.
  */
 {
-    var opacity = 0f
+    private var opacity = 0f
 
     private val theGame = game
-    private val thing = thing
 
     private var waitCycles = wait
     private var dAlpha = 0f
 
     enum class Type { NONE, APPEAR, DISAPPEAR }
-    var type = type
 
     enum class Speed { FAST, MEDIUM, SLOW, VERY_SLOW }
 
@@ -28,6 +28,7 @@ class Fader(game: Game, thing: Fadable, type: Type = Type.DISAPPEAR, speed: Spee
             Type.DISAPPEAR -> {
                 opacity = 1.0f
             }
+            else -> {}
         }
         thing.setOpacity(opacity)
         when (speed) {
@@ -39,7 +40,7 @@ class Fader(game: Game, thing: Fadable, type: Type = Type.DISAPPEAR, speed: Spee
         theGame.faders.add(this) // make sure we are in the list so that we can be called during update
     }
 
-    fun endFade() {
+    private fun endFade() {
         thing.fadeDone(type)
         this.type = Type.NONE
     }

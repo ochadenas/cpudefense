@@ -28,7 +28,7 @@ open class Attacker(network: Network, type: Representation = Representation.BINA
     companion object {
         fun makeNumber(attacker: Attacker): String
         {
-            var text = attacker.attackerData.number.toString(radix=2).padStart(attacker.attackerData.digits, '0')
+            val text = attacker.attackerData.number.toString(radix=2).padStart(attacker.attackerData.digits, '0')
             attacker.createBitmap(text)
             return text
         }
@@ -61,7 +61,7 @@ open class Attacker(network: Network, type: Representation = Representation.BINA
     var attackerData = Data( type = type, number = number, digits = log2(number.toFloat()).toInt()+1,
         bits = 0, vehicle = super.data
     )
-    var numberBitmap = Bitmap.createBitmap(100, 32, Bitmap.Config.ARGB_8888)
+    var numberBitmap: Bitmap = Bitmap.createBitmap(100, 32, Bitmap.Config.ARGB_8888)
     var actualRect = Rect()
     var oldNumber: ULong = 0U
     var oldNumberBitmap: Bitmap? = null
@@ -132,7 +132,7 @@ open class Attacker(network: Network, type: Representation = Representation.BINA
             Chip.ChipType.SHIFT ->
             {
                 for (i in 1 .. power)
-                changeNumberTo((attackerData.number / 2u).toULong())
+                changeNumberTo((attackerData.number / 2u))
             }
             else -> return false
         }
@@ -159,19 +159,19 @@ open class Attacker(network: Network, type: Representation = Representation.BINA
 
     fun createBitmap(text: String)
     {
-        var textPaint = Paint()
+        val textPaint = Paint()
         textPaint.textSize = numberFontSize
         textPaint.alpha = 255
         textPaint.color = theNetwork.theGame.resources.getColor(R.color.attackers_foreground)
         // paint.typeface = MONOSPACE
-        textPaint.setTypeface(Typeface.create("sans-serif-condensed", Typeface.BOLD))
+        textPaint.typeface = Typeface.create("sans-serif-condensed", Typeface.BOLD)
         textPaint.textAlign = Paint.Align.CENTER
         val bounds = Rect()
         textPaint.getTextBounds(text, 0, text.length, bounds)
 
         numberBitmap = Bitmap.createBitmap(bounds.width()+8, bounds.height()+10, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(numberBitmap)
-        var rect = Rect(0, 0, numberBitmap.width, numberBitmap.height)
+        val rect = Rect(0, 0, numberBitmap.width, numberBitmap.height)
 
         /* draw the actual (non-blurred) text */
         rect.displayTextCenteredInRect(canvas, text, textPaint)
@@ -198,7 +198,7 @@ open class Attacker(network: Network, type: Representation = Representation.BINA
 
     override fun update() {
         super.update()
-        var link = onLink
+        val link = onLink
         link?.node2?.notify(this, distanceToNextNode)
         link?.node1?.notify(this, -distanceFromLastNode)
 
@@ -212,10 +212,10 @@ open class Attacker(network: Network, type: Representation = Representation.BINA
         actualRect.setCenter(getPositionOnScreen())
         actualRect.offset(displacement.first, displacement.second)
 
-        var paint = Paint()
+        val paint = Paint()
         if (animationCount>0)
             oldNumberBitmap?.let {
-                var divider = numberBitmap.height * animationCount / animationCountMax
+                val divider = numberBitmap.height * animationCount / animationCountMax
                 val newSource = Rect(0, 0, numberBitmap.width, numberBitmap.height-divider)
                 val oldSource = Rect(0, numberBitmap.height-divider, numberBitmap.width, numberBitmap.height)
                 val newTarget =  Rect(0, divider, numberBitmap.width, numberBitmap.height)
@@ -231,7 +231,7 @@ open class Attacker(network: Network, type: Representation = Representation.BINA
 
     fun onDown(event: MotionEvent): Boolean {
         val boundingRecSize = 50
-        var boundingRect = Rect(0, 0, boundingRecSize, boundingRecSize)
+        val boundingRect = Rect(0, 0, boundingRecSize, boundingRecSize)
         boundingRect.setCenter(actualRect.center())
         if (boundingRect.contains(event.x.toInt(), event.y.toInt())) // gesture is inside this object
         {

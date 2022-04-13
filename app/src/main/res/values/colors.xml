@@ -24,5 +24,6 @@
     <color name="led_green">#00EF18</color>
     <color name="led_green_glow">#00A511</color>
     <color name="led_panel">#131313</color>
+    <color name="text_green">#009700</color>
 
 </resources>

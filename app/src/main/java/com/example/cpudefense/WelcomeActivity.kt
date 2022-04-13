@@ -31,8 +31,13 @@ class WelcomeActivity : AppCompatActivity() {
     fun continueGame(v: View)
     {
         var intent = Intent(this, MainGameActivity::class.java)
-        val startLevel = findViewById<NumberPicker>(R.id.stageSelect)?.value ?: 1
         intent.putExtra("CONTINUE_GAME", true)
+        startActivity(intent)
+    }
+
+    fun startLevelSelection(v: View)
+    {
+        var intent = Intent(this, LevelSelectActivity::class.java)
         startActivity(intent)
     }
 

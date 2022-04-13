@@ -36,8 +36,19 @@ class Stage(var theGame: Game) {
     )
     var data = Data()
 
+    data class Summary(
+        var coinsMaxAvailable: Int = 0,
+        var coinsGot: Int = 0,
+        var won: Boolean = false
+    )
+    lateinit var summary: Summary
     var rewardCoins = 0  // number of coins that can be obtained by completing the level
-    var coinsPreviouslyGot = theGame.data.coinsPerLevel[data.level] ?: 0
+
+    fun calculateRewardCoins(previousSummary: Summary?)
+    {
+        summary = previousSummary ?: Summary()
+        summary.coinsMaxAvailable = rewardCoins
+    }
 
     fun provideData(): Data
             /** serialize all objects that belong to this stage
@@ -66,9 +77,9 @@ class Stage(var theGame: Game) {
     }
 
     companion object {
-        fun createStageFromData(game: Game, stageData: Stage.Data?): Stage?
+        fun createStageFromData(game: Game, stageData: Data?): Stage?
         {
-            var data: Stage.Data = stageData ?: return null
+            var data = stageData ?: return null
             var stage = Stage(game)
             stage.data = data
             stage.sizeX = data.gridSizeX
@@ -211,7 +222,7 @@ class Stage(var theGame: Game) {
         network.addVehicle(attacker)
     }
 
-    fun createNetwork(level: Int): Network?
+    fun createNetwork(level: Int): Network
     {
         this.data.level = level
         waves.clear()

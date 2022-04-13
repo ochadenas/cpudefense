@@ -85,7 +85,7 @@ class MainGameActivity : Activity() {
         theGame.update()
         theGame.updateAndMoveEverything()
         theGameView.display()
-        GlobalScope.launch{ delay(mainDelay); update() }
+        GlobalScope.launch{ delay(effectsDelay); update() }
     }
 
     private fun updateGraphicalEffects()
@@ -108,6 +108,12 @@ class MainGameActivity : Activity() {
     {
         val prefs = getSharedPreferences(getString(R.string.pref_filename), MODE_PRIVATE)
         Persistency(theGame).loadState(prefs)
+    }
+
+    fun loadLevelData(): HashMap<Int, Stage.Summary>
+    {
+        val prefs = getSharedPreferences(getString(R.string.pref_filename), MODE_PRIVATE)
+        return Persistency(theGame).loadLevels(prefs) ?: HashMap()
     }
 
 }

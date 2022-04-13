@@ -2,6 +2,7 @@ package com.example.cpudefense
 
 import android.app.Activity
 import android.content.Context
+import android.content.res.Resources
 import android.graphics.*
 import android.view.MotionEvent
 import android.widget.Toast
@@ -22,25 +23,25 @@ import java.util.concurrent.CopyOnWriteArrayList
 class Game(val gameActivity: MainGameActivity) {
     companion object Params {
         val chipSize = GridCoord(6,3)
-        val viewportMargin = 32
-        val minScoreBoardHeight = 100
-        val maxScoreBoardHeight = 320
-        val speedControlButtonSize = 80
-        val speedControlButtonMargin = 16
-        val drawLinesFromChip = false
+        const val viewportMargin = 32
+        const val minScoreBoardHeight = 100
+        const val maxScoreBoardHeight = 320
+        const val speedControlButtonSize = 80
+        const val speedControlButtonMargin = 16
+        const val drawLinesFromChip = false
 
 
-        val scoreTextSize = 40f
-        val scoreHeaderSize = 20f
-        val chipTextSize = 24f
-        val computerTextSize = 36f
-        val instructionTextSize = computerTextSize
+        const val scoreTextSize = 40f
+        const val scoreHeaderSize = 20f
+        const val chipTextSize = 24f
+        const val computerTextSize = 36f
+        const val instructionTextSize = computerTextSize
 
-        val coinSizeOnScoreboard = 40
-        val coinSizeOnScreen = 25
+        const val coinSizeOnScoreboard = 40
+        const val coinSizeOnScreen = 25
 
-        val minimalAmountOfCash = 8
-        val maxLivesPerStage = 4
+        const val minimalAmountOfCash = 8
+        const val maxLivesPerStage = 4
 
         val basePrice = mapOf(
             Chip.ChipUpgrades.SUB to 8, Chip.ChipUpgrades.AND to 32, Chip.ChipUpgrades.SHIFT to 16)
@@ -54,8 +55,7 @@ class Game(val gameActivity: MainGameActivity) {
         var cash: Int,              // current amount of 'information' currency in bits
         var coinsInLevel: Int = 0,  // cryptocoins that can be obtained by completing the current level
         var coinsExtra: Int = 0,    // cryptocoins that have been acquired by collecting moving coins
-        var coinsTotal: Int = 0,    // total number of cryptocoins that can be acquired in the level
-        var coinsPerLevel: HashMap<Int, Int>  // keeping track of coins gathered in previous levels
+        var coinsTotal: Int = 0    // total number of cryptocoins that can be acquired in the level
         )
 
     var data = Data(
@@ -63,11 +63,11 @@ class Game(val gameActivity: MainGameActivity) {
         startingLevel = 1,
         maxLives = maxLivesPerStage,
         lives = 0,
-        cash = minimalAmountOfCash,
-        coinsPerLevel = HashMap()
+        cash = minimalAmountOfCash
     )
 
     var stageData: Stage.Data? = null
+    var summaryPerLevel = HashMap<Int, Stage.Summary>()
 
     val viewport = Viewport()
     var network: Network? = null
@@ -76,7 +76,7 @@ class Game(val gameActivity: MainGameActivity) {
     val speedControlPanel = SpeedControl(this)
     var currentStage: Stage? = null
     var currentWave: Wave? = null
-    val resources = (gameActivity as Activity).resources
+    val resources: Resources = (gameActivity as Activity).resources
 
     var movers = CopyOnWriteArrayList<Mover>() // list of all mover objects that are created for game elements
     var faders = CopyOnWriteArrayList<Fader>() // idem for faders
@@ -84,14 +84,15 @@ class Game(val gameActivity: MainGameActivity) {
     enum class GameState { START, RUNNING, END, INTERMEZZO, PAUSED }
     enum class GameSpeed { NORMAL, MAX }
 
-    val coinIcon = BitmapFactory.decodeResource(resources, R.drawable.cryptocoin)
-    val cpuImage = BitmapFactory.decodeResource(resources, R.drawable.cpu)
-    val playIcon = BitmapFactory.decodeResource(resources, R.drawable.play_active)
-    val pauseIcon = BitmapFactory.decodeResource(resources, R.drawable.pause_active)
-    val fastIcon = BitmapFactory.decodeResource(resources, R.drawable.fast_active)
+    val coinIcon: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.cryptocoin)
+    val cpuImage: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.cpu)
+    val playIcon: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.play_active)
+    val pauseIcon: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.pause_active)
+    val fastIcon: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.fast_active)
 
     fun startGame()
     {
+        summaryPerLevel = gameActivity.loadLevelData()   // get historical data of levels completed so far
         intermezzo.prepareLevel(data.startingLevel, true)
     }
 
@@ -155,12 +156,12 @@ class Game(val gameActivity: MainGameActivity) {
         }
         if (data.state == GameState.PAUSED)
         {
-            var paint = Paint()
+            val paint = Paint()
             paint.color = Color.WHITE
             paint.textSize = 72f
             paint.typeface = Typeface.DEFAULT_BOLD
-            viewport?.let {
-                var rect = Rect(0, 0, it.screenWidth, it.screenHeight)
+            viewport.let {
+                val rect = Rect(0, 0, it.screenWidth, it.screenHeight)
                 rect.displayTextCenteredInRect(canvas, "GAME PAUSED", paint)
             }
         }
@@ -232,8 +233,7 @@ class Game(val gameActivity: MainGameActivity) {
             toast.show()
         }
         intermezzo.coinsGathered = data.coinsExtra + data.coinsInLevel
-        data.coinsPerLevel[stage.data.level] = stage.coinsPreviouslyGot + intermezzo.coinsGathered
-
+        summaryPerLevel[stage.data.level] = Stage.Summary(won = true, coinsGot = stage.summary.coinsGot + intermezzo.coinsGathered)
         if (stage.type == Stage.Type.FINAL)
         {
             intermezzo.endOfGame(stage.data.level, hasWon = true)
@@ -247,18 +247,15 @@ class Game(val gameActivity: MainGameActivity) {
     fun startNextStage(level: Int)
     {
         data.lives = data.maxLives
-
         calculateStartingCash()
-        currentStage = Stage(this)
+        var nextStage = Stage(this)
         gameActivity.runOnUiThread {
-            val toast: Toast = Toast.makeText(gameActivity, "Stage %d".format(currentStage?.data?.level), Toast.LENGTH_SHORT)
+            val toast: Toast = Toast.makeText(gameActivity, "Stage %d".format(nextStage.data.level), Toast.LENGTH_SHORT)
             toast.show() }
-        if (currentStage != null) {
-            network = currentStage!!.createNetwork(level)
-            currentStage?.let {
-                data.coinsInLevel = it.rewardCoins - it.coinsPreviouslyGot
-            }
-        }
+        network = nextStage.createNetwork(level)
+        nextStage.calculateRewardCoins(summaryPerLevel[level])
+        summaryPerLevel[level] = nextStage.summary
+
         if (network == null) // no more levels left
         {
             setMaxStage(level)
@@ -267,8 +264,9 @@ class Game(val gameActivity: MainGameActivity) {
         else {
             viewport.setViewportSize(network!!.data.gridSizeX, network!!.data.gridSizeY)
             data.state = GameState.RUNNING
-            currentWave = currentStage?.nextWave()
+            currentWave = nextStage.nextWave()
         }
+        currentStage = nextStage
     }
 
     fun removeOneLife()
@@ -291,8 +289,8 @@ class Game(val gameActivity: MainGameActivity) {
 
     fun setMaxStage(currentStage: Int)
     {
-        var prefs = gameActivity.getSharedPreferences(gameActivity.getString(R.string.pref_filename), Context.MODE_PRIVATE)
-        var maxStage = prefs.getInt("MAXSTAGE", 1)
+        val prefs = gameActivity.getSharedPreferences(gameActivity.getString(R.string.pref_filename), Context.MODE_PRIVATE)
+        val maxStage = prefs.getInt("MAXSTAGE", 1)
         with (prefs.edit())
         {
             putInt("LASTSTAGE", currentStage)

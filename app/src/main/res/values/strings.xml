@@ -16,4 +16,5 @@
     <string name="scoreboard_waves">Wave</string>
     <string name="scoreboard_status">Status</string>
     <string name="scoreboard_coins">Coins</string>
+    <string name="selectLevel">Select Level</string>
 </resources>

@@ -27,8 +27,9 @@ class Link(val theNetwork: Network, var node1: Node, var node2: Node, var ident:
 
     var lengthOnGrid: Float = 0f
 
-    fun calculate()
-    /*** calculates the position of the intermediate point */
+    init { calculateIntermediatePointPosition() }
+
+    fun calculateIntermediatePointPosition()
     {
         val dist_hori = endPoint.x - startPoint.x
         val dist_vert = endPoint.y - startPoint.y
@@ -119,7 +120,6 @@ class Link(val theNetwork: Network, var node1: Node, var node2: Node, var ident:
     }
 
     override fun update() {
-        calculate()
     }
 
     override fun display(canvas: Canvas, viewport: Viewport) {
@@ -128,6 +128,9 @@ class Link(val theNetwork: Network, var node1: Node, var node2: Node, var ident:
         val delta = 0.8f // distance between two parallel lines
         var dx: Float
         var dy: Float
+
+        calculateIntermediatePointPosition()
+
         when (startPoint.direction(endPoint))
         {
             Network.Dir.DIAGONAL -> { dx = delta; dy = delta }
@@ -180,7 +183,7 @@ class Link(val theNetwork: Network, var node1: Node, var node2: Node, var ident:
     }
 
     companion object {
-        fun createFromData(network: Network, data: Link.Data): Link?
+        fun createFromData(network: Network, data: Data): Link?
             /** reconstruct a Link object based on the saved data
              * and set all inner proprieties
              */

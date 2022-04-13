@@ -13,6 +13,9 @@
             android:name=".MainGameActivity"
             android:exported="false" />
         <activity
+            android:name=".LevelSelectActivity"
+            android:exported="false" />
+        <activity
             android:name=".WelcomeActivity"
             android:exported="true">
             <intent-filter>
