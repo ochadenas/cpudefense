@@ -14,10 +14,9 @@ class Intermezzo(var game: Game): GameElement(), Fadable {
     var level = 0
     var alpha = 0
     var myArea = Rect()
-    // var textBox1: TextBox? = null
-    // var textBox2: TextBox? = null
     var typewriter: Typewriter? = null
-    var button: Button? = null
+    var buttonContinue: Button? = null
+    var buttonPurchase: Button? = null
     var instructions: Instructions? = null
     var coinsGathered = 0
 
@@ -71,10 +70,15 @@ class Intermezzo(var game: Game): GameElement(), Fadable {
 
     fun showButton()
     {
-        button = Button(game.resources.getString(R.string.button_continue))
-        button?.let {
-            Fader(game, it, Fader.Type.APPEAR, Fader.Speed.VERY_SLOW)
+        buttonContinue = Button(game.resources.getString(R.string.button_continue))
+        buttonContinue?.let {
+            Fader(game, it, Fader.Type.APPEAR, Fader.Speed.SLOW)
             it.myArea.set(50, myArea.bottom-it.myArea.height(), 50+it.myArea.width(), myArea.bottom-80)
+        }
+        buttonPurchase = Button(game.resources.getString(R.string.button_purchase))
+        buttonPurchase?.let {
+            Fader(game, it, Fader.Type.APPEAR, Fader.Speed.SLOW)
+            it.myArea.set(myArea.right-it.myArea.width()-50, myArea.bottom-it.myArea.height(), myArea.right-50, myArea.bottom-80)
         }
     }
 
@@ -93,7 +97,7 @@ class Intermezzo(var game: Game): GameElement(), Fadable {
         // textBox1?.display(canvas)
         // textBox2?.display(canvas)
         typewriter?.display(canvas)
-        button?.display(canvas)
+        buttonContinue?.display(canvas)
     }
 
     fun onDown(p0: MotionEvent): Boolean
@@ -143,6 +147,6 @@ class Intermezzo(var game: Game): GameElement(), Fadable {
     {
         typewriter = null
         instructions = null
-        button = null
+        buttonContinue = null
     }
 }

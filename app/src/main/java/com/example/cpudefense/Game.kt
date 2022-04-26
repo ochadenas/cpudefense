@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.res.Resources
 import android.graphics.*
+import android.util.Base64
 import android.view.MotionEvent
 import android.widget.Toast
 import com.example.cpudefense.effects.Fader
@@ -18,7 +19,9 @@ import com.example.cpudefense.networkmap.Viewport
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.io.ByteArrayOutputStream
 import java.util.concurrent.CopyOnWriteArrayList
+
 
 class Game(val gameActivity: MainGameActivity) {
     companion object Params {
@@ -27,9 +30,7 @@ class Game(val gameActivity: MainGameActivity) {
         const val minScoreBoardHeight = 100
         const val maxScoreBoardHeight = 320
         const val speedControlButtonSize = 80
-        const val speedControlButtonMargin = 16
         const val drawLinesFromChip = false
-
 
         const val scoreTextSize = 40f
         const val scoreHeaderSize = 20f
@@ -42,6 +43,8 @@ class Game(val gameActivity: MainGameActivity) {
 
         const val minimalAmountOfCash = 8
         const val maxLivesPerStage = 4
+
+        const val levelSnapshotIconSize = 120
 
         val basePrice = mapOf(
             Chip.ChipUpgrades.SUB to 8, Chip.ChipUpgrades.AND to 32, Chip.ChipUpgrades.SHIFT to 16)
@@ -68,6 +71,7 @@ class Game(val gameActivity: MainGameActivity) {
 
     var stageData: Stage.Data? = null
     var summaryPerLevel = HashMap<Int, Stage.Summary>()
+    var levelThumbnail = HashMap<Int, String>()  // base64-encoded level snapshot
 
     val viewport = Viewport()
     var network: Network? = null
@@ -90,9 +94,10 @@ class Game(val gameActivity: MainGameActivity) {
     val pauseIcon: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.pause_active)
     val fastIcon: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.fast_active)
 
-    fun startGame()
+    fun beginGame()
     {
         summaryPerLevel = gameActivity.loadLevelData()   // get historical data of levels completed so far
+        levelThumbnail = gameActivity.loadThumbnails()   // load the existing thumbnails
         intermezzo.prepareLevel(data.startingLevel, true)
     }
 
@@ -115,7 +120,7 @@ class Game(val gameActivity: MainGameActivity) {
                 toast.show() }
         }
         if (currentStage == null)
-            startGame()
+            beginGame()
     }
 
     fun update()
@@ -127,7 +132,7 @@ class Game(val gameActivity: MainGameActivity) {
         }
     }
 
-    fun updateAndMoveEverything()
+    fun updateEffects()
             /**  execute all movers and faders */
     {
         for (m in movers)
@@ -215,6 +220,7 @@ class Game(val gameActivity: MainGameActivity) {
     {
         if (currentStage == null)
             return // in this case, the stage has already been left
+        takeLevelSnapshot()
         if (currentStage?.attackerCount()?:0 > 0)
         {
             GlobalScope.launch { delay(1000L); onEndOfStage() }
@@ -255,7 +261,6 @@ class Game(val gameActivity: MainGameActivity) {
         network = nextStage.createNetwork(level)
         nextStage.calculateRewardCoins(summaryPerLevel[level])
         summaryPerLevel[level] = nextStage.summary
-
         if (network == null) // no more levels left
         {
             setMaxStage(level)
@@ -267,6 +272,7 @@ class Game(val gameActivity: MainGameActivity) {
             currentWave = nextStage.nextWave()
         }
         currentStage = nextStage
+        takeLevelSnapshot()
     }
 
     fun removeOneLife()
@@ -277,6 +283,7 @@ class Game(val gameActivity: MainGameActivity) {
         if (data.lives == 0)
         {
             val lastLevel = currentStage?.data?.level ?: 1
+            takeLevelSnapshot()
             currentStage = null
             intermezzo.endOfGame(lastLevel, hasWon = false)
         }
@@ -303,6 +310,16 @@ class Game(val gameActivity: MainGameActivity) {
     fun calculateStartingCash()
     {
         data.cash = minimalAmountOfCash
+    }
+
+    fun takeLevelSnapshot()
+    {
+        var snapshot: Bitmap = currentStage?.takeSnapshot(Game.levelSnapshotIconSize) ?: return
+
+        var outputStream = ByteArrayOutputStream()
+        snapshot?.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
+        val encodedImage: String = Base64.encodeToString(outputStream.toByteArray(), Base64.DEFAULT)
+        currentStage?.let { levelThumbnail[it.data.level] = encodedImage }
     }
 
 }

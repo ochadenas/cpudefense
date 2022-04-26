@@ -10,8 +10,12 @@ class Persistency(var game: Game?) {
             )
 
     data class LevelData (
-        val level: HashMap<Int, Stage.Summary> = HashMap<Int, Stage.Summary>()
+        val level: HashMap<Int, Stage.Summary> = HashMap()
             )
+
+    data class ThumbnailData (
+        val thumbnail: HashMap<Int, String> = HashMap()
+    )
 
     fun saveState(editor: SharedPreferences.Editor)
     {
@@ -35,25 +39,39 @@ class Persistency(var game: Game?) {
             val data: GameData = Gson().fromJson(json, GameData::class.java)
             it.data = data.general
             it.stageData = data.stage
-            it.summaryPerLevel = loadLevels(sharedPreferences) ?: HashMap()
+            it.summaryPerLevel = loadLevelSummaries(sharedPreferences) ?: HashMap()
         }
     }
 
     fun saveLevels(editor: SharedPreferences.Editor)
     {
         game?.let {
-            val data = LevelData(it.summaryPerLevel)
-            val json = Gson().toJson(data)
+            // level summary:
+            var data = LevelData(it.summaryPerLevel)
+            var json = Gson().toJson(data)
             editor.putString("levels", json)
+            // level thumbnail:
+            val thumbnail = ThumbnailData(it.levelThumbnail)
+            json = Gson().toJson(thumbnail)
+            editor.putString("thumbnails", json)
         }
     }
 
-    fun loadLevels(sharedPreferences: SharedPreferences): HashMap<Int, Stage.Summary>?
+    fun loadLevelSummaries(sharedPreferences: SharedPreferences): HashMap<Int, Stage.Summary>?
     {
         val json = sharedPreferences.getString("levels", "none")
         if (json == "none")
             return null
         val data: LevelData = Gson().fromJson(json, LevelData::class.java)
         return data.level
+    }
+
+    fun loadLevelThumbnails(sharedPreferences: SharedPreferences): HashMap<Int, String>?
+    {
+        val json = sharedPreferences.getString("thumbnails", "none")
+        if (json == "none")
+            return null
+        val data: ThumbnailData = Gson().fromJson(json, ThumbnailData::class.java)
+        return data.thumbnail
     }
 }

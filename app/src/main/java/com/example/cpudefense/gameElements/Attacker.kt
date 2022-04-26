@@ -193,7 +193,6 @@ open class Attacker(network: Network, type: Representation = Representation.BINA
 
         textPaint.color = theNetwork.theGame.resources.getColor(R.color.attackers_foreground)
         textPaint.maskFilter = null
-        // rect.displayTextCenteredInRect(canvas, text, textPaint)
     }
 
     override fun update() {

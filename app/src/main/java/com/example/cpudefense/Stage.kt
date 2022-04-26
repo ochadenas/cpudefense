@@ -1,9 +1,13 @@
 package com.example.cpudefense
 
+import android.graphics.*
+import androidx.core.graphics.createBitmap
 import com.example.cpudefense.gameElements.*
 import com.example.cpudefense.networkmap.Link
 import com.example.cpudefense.networkmap.Network
 import com.example.cpudefense.networkmap.Track
+import com.example.cpudefense.networkmap.Viewport
+import com.example.cpudefense.utils.blur
 import java.util.concurrent.CopyOnWriteArrayList
 import kotlin.random.Random
 import kotlin.random.nextULong
@@ -220,6 +224,24 @@ class Stage(var theGame: Game) {
     {
         var attacker = Attacker.createFromData(this, data)
         network.addVehicle(attacker)
+    }
+
+    fun takeSnapshot(size: Int): Bitmap
+            /** gets a miniature picture of the current level
+             * @param size snapshot size in pixels (square)
+             * @return the bitmap that holds the snapshot
+             */
+    {
+        var p: Viewport = theGame.viewport
+        var bigSnapshot = createBitmap(p.screenWidth, p.screenHeight)
+        network.display(Canvas(bigSnapshot), p)
+        // var smallSnapshot = createBitmap(size, size)
+
+        /* blur the image */
+        bigSnapshot = bigSnapshot.blur(theGame.gameActivity, 3f) ?: bigSnapshot
+
+        var smallSnapshot = Bitmap.createScaledBitmap(bigSnapshot, size, size, true)
+        return smallSnapshot
     }
 
     fun createNetwork(level: Int): Network

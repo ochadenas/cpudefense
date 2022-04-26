@@ -35,7 +35,7 @@ class MainGameActivity : Activity() {
         else
         {
             theGame.data.startingLevel = intent.getIntExtra("START_ON_STAGE", 1)
-            theGame.startGame()
+            theGame.beginGame()
         }
     }
 
@@ -83,15 +83,15 @@ class MainGameActivity : Activity() {
         if (theGame.data.state == Game.GameState.END)
             return
         theGame.update()
-        theGame.updateAndMoveEverything()
         theGameView.display()
-        GlobalScope.launch{ delay(effectsDelay); update() }
+        GlobalScope.launch{ delay(mainDelay); update() }
     }
 
     private fun updateGraphicalEffects()
     {
         if (theGame.data.state == Game.GameState.END)
             return
+        theGame.updateEffects()
         theGameView.theEffects?.updateGraphicalEffects()
         GlobalScope.launch{ delay(effectsDelay); updateGraphicalEffects() }
     }
@@ -113,7 +113,13 @@ class MainGameActivity : Activity() {
     fun loadLevelData(): HashMap<Int, Stage.Summary>
     {
         val prefs = getSharedPreferences(getString(R.string.pref_filename), MODE_PRIVATE)
-        return Persistency(theGame).loadLevels(prefs) ?: HashMap()
+        return Persistency(theGame).loadLevelSummaries(prefs) ?: HashMap()
     }
 
+
+    fun loadThumbnails(): HashMap<Int, String>
+    {
+        val prefs = getSharedPreferences(getString(R.string.pref_filename), MODE_PRIVATE)
+        return Persistency(theGame).loadLevelThumbnails(prefs) ?: HashMap()
+    }
 }

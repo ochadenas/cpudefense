@@ -37,7 +37,7 @@ class Typewriter(val game: Game, myArea: Rect, private var lines: CopyOnWriteArr
         var x = topLeft.first.toFloat()
         var y = topLeft.second.toFloat()
 
-        init { Fader(game, this, Fader.Type.APPEAR, Fader.Speed.MEDIUM) }
+        init { Fader(game, this, Fader.Type.APPEAR, Fader.Speed.SLOW) }
 
         override fun fadeDone(type: Fader.Type) {
             callback?.let { it() }  // call callback function, if defined.
