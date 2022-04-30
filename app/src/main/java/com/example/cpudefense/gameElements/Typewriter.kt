@@ -2,6 +2,7 @@ package com.example.cpudefense.gameElements
 
 import android.graphics.*
 import com.example.cpudefense.Game
+import com.example.cpudefense.R
 import com.example.cpudefense.effects.Fadable
 import com.example.cpudefense.effects.Fader
 import java.util.concurrent.CopyOnWriteArrayList
@@ -50,7 +51,7 @@ class Typewriter(val game: Game, myArea: Rect, private var lines: CopyOnWriteArr
         fun display(canvas: Canvas) {
             val stringToDisplay = text.substring(0, stringLength)
             val paint = Paint()
-            paint.color = Color.GREEN
+            paint.color = game.resources.getColor(R.color.text_green)
             paint.typeface = Typeface.MONOSPACE
             paint.textSize = textSize
             paint.alpha = alpha

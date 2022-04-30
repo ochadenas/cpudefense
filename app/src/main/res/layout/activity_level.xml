@@ -14,20 +14,33 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
         android:textColor="@color/text_green"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        />
 
-    <LinearLayout
-        android:id="@+id/levelList"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="8dp"
-        android:orientation="vertical"
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
+        android:fillViewport="true"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/playLevelButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/levelSelectorText"
-        app:layout_constraintBottom_toTopOf="@+id/playLevelButton"
-        />
+        >
+
+        <LinearLayout
+            android:id="@+id/levelList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="8dp"
+            android:orientation="vertical" >
+
+        </LinearLayout>
+
+    </ScrollView>
 
     <Button
         android:id="@+id/playLevelButton"
@@ -37,7 +50,10 @@
         android:onClick="startGame"
         android:text="@string/play_selected_level"
         android:textColor="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        />
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

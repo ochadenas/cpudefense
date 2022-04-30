@@ -48,10 +48,16 @@ class Stage(var theGame: Game) {
     lateinit var summary: Summary
     var rewardCoins = 0  // number of coins that can be obtained by completing the level
 
-    fun calculateRewardCoins(previousSummary: Summary?)
+    fun calculateRewardCoins(previousSummary: Summary?): Int
+            /** calculate the coins available for completing this level,
+             * taking into account the coins already got in previous games.
+             * @param previousSummary Saved data set for this level, contains number of coins got earlier
+             * @return number of coins for the current game
+              */
     {
         summary = previousSummary ?: Summary()
         summary.coinsMaxAvailable = rewardCoins
+        return rewardCoins - summary.coinsGot
     }
 
     fun provideData(): Data
@@ -415,13 +421,49 @@ class Stage(var theGame: Game) {
                 createWave(15, 3, .120f, 1.1f)
                 createWave(15, 3, .110f, 1.1f)
                 createWave(20, 4, .110f, 1.1f)
-                createWave(20, 7, .050f, 1f, coins = 1)
-                createWave(15, 15, .050f, 1f, coins = 1)
+                createWave(20, 7, .050f, 1f, coins = 0)
+                createWave(15, 15, .050f, 1f, coins = 0)
 
                 data.chipsAllowed = setOf(Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.POWERUP, Chip.ChipUpgrades.SHIFT)
                 rewardCoins = 2
             }
             7 ->
+            {
+                initializeNetwork(50, 50)
+
+                createChip(10, 10, type = Chip.ChipType.ENTRY)
+                createChip(25, 10, 2)
+                createChip(40, 10, 3)
+                createChip(10, 25, 8)
+                createChip(25, 25, type = Chip.ChipType.CPU)
+                createChip(40, 25, 4)
+                createChip(10, 40, 7)
+                createChip(25, 40, 6)
+                createChip(40, 40, 5)
+
+
+                createLink(0, 2, 1)
+                createLink(2, 3, 2)
+                createLink(3, 4, 3)
+                createLink(4, 5, 4)
+                createLink(5, 6, 5)
+                createLink(6, 7, 6)
+                createLink(7, 8, 7)
+                createLink(8, 999, 8)
+
+                createTrack(listOf(1, 2, 3, 4, 5 ,6, 7, 8,0), 0)
+
+                createWave(10, 2, .125f, 1.2f)
+                createWave(15, 3, .120f, 1.1f)
+                createWave(15, 3, .110f, 1.1f)
+                createWave(20, 4, .110f, 1.1f)
+                createWave(20, 7, .050f, 1f)
+                createWave(15, 15, .050f, 1f, coins = 1)
+
+                data.chipsAllowed = setOf(Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.POWERUP, Chip.ChipUpgrades.SHIFT)
+                rewardCoins = 2
+            }
+            8 ->
             {
                 initializeNetwork(50, 50)
 

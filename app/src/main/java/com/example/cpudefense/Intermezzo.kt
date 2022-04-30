@@ -70,15 +70,18 @@ class Intermezzo(var game: Game): GameElement(), Fadable {
 
     fun showButton()
     {
+        val bottomMargin = 40
         buttonContinue = Button(game.resources.getString(R.string.button_continue))
         buttonContinue?.let {
             Fader(game, it, Fader.Type.APPEAR, Fader.Speed.SLOW)
-            it.myArea.set(50, myArea.bottom-it.myArea.height(), 50+it.myArea.width(), myArea.bottom-80)
+            it.myArea.set(50, myArea.bottom-it.myArea.height()-bottomMargin, 50+it.myArea.width(), myArea.bottom-bottomMargin)
+            it.buttonPaint.color = game.resources.getColor(R.color.text_green)
         }
         buttonPurchase = Button(game.resources.getString(R.string.button_purchase))
         buttonPurchase?.let {
             Fader(game, it, Fader.Type.APPEAR, Fader.Speed.SLOW)
-            it.myArea.set(myArea.right-it.myArea.width()-50, myArea.bottom-it.myArea.height(), myArea.right-50, myArea.bottom-80)
+            it.myArea.set(myArea.right-it.myArea.width()-50, myArea.bottom-it.myArea.height()-bottomMargin, myArea.right-50, myArea.bottom-bottomMargin)
+            it.buttonPaint.color = game.resources.getColor(R.color.text_blue)
         }
     }
 
@@ -98,17 +101,28 @@ class Intermezzo(var game: Game): GameElement(), Fadable {
         // textBox2?.display(canvas)
         typewriter?.display(canvas)
         buttonContinue?.display(canvas)
+        buttonPurchase?.display(canvas)
     }
 
-    fun onDown(p0: MotionEvent): Boolean
-    {
-        when (type)
-        {
-            Type.GAME_WON -> { game.quitGame() }
-            Type.GAME_LOST -> { game.quitGame() }
-            else -> { game.startNextStage(level) }
+    fun onDown(event: MotionEvent): Boolean {
+        /** test if a button has been pressed: */
+        if (buttonPurchase?.myArea?.contains(event.x.toInt(), event.y.toInt()) == true)
+            startMarketplace()
+        else if (buttonContinue?.myArea?.contains(event.x.toInt(), event.y.toInt()) == true) {
+            when (type) {
+                Type.GAME_WON -> {
+                    game.quitGame()
+                }
+                Type.GAME_LOST -> {
+                    game.quitGame()
+                }
+                else -> {
+                    game.startNextStage(level)
+                }
+            }
+            return true
         }
-        return true
+        return false
     }
 
     fun prepareLevel(nextLevel: Int, isStartingLevel: Boolean)
@@ -125,6 +139,12 @@ class Intermezzo(var game: Game): GameElement(), Fadable {
             Fader(game, this, Fader.Type.APPEAR, Fader.Speed.SLOW)
         }
         game.data.state = Game.GameState.INTERMEZZO
+    }
+
+    fun startMarketplace()
+    {
+        clear()
+        game.data.state = Game.GameState.MARKETPLACE
     }
 
     fun endOfGame(lastLevel: Int, hasWon: Boolean)

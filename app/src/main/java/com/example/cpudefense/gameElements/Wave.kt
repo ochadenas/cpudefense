@@ -22,7 +22,7 @@ class Wave(var game: Game, var data: Data)
         else if (ticks > 0)
             ticks--
         else {
-            ticks = (1 / data.attackerFreqency + Random.nextInt(10)).toInt()
+            ticks = (2.0f / data.attackerFreqency + Random.nextInt(10)).toInt()
             if (data.coins>0 && Random.nextFloat() > 0.8)
             {
                 data.coins--

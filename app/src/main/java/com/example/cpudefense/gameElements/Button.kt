@@ -1,6 +1,7 @@
 package com.example.cpudefense.gameElements
 
 import android.graphics.*
+import android.hardware.camera2.params.BlackLevelPattern
 import com.example.cpudefense.displayTextCenteredInRect
 import com.example.cpudefense.effects.Fadable
 import com.example.cpudefense.effects.Fader
@@ -10,15 +11,19 @@ class Button(val text: String, val textsize: Float = 36f): Fadable
 {
     var alpha = 0
     var myArea = Rect()
-    var paint = Paint()
+    var buttonPaint = Paint()
+    var textPaint = Paint()
 
     init {
+        buttonPaint.color = Color.GREEN  // default, should be overridden
+        buttonPaint.style = Paint.Style.FILL
         /* determine size of area */
-        paint.style = Paint.Style.FILL
-        paint.typeface = Typeface.MONOSPACE
-        paint.textSize = textsize
-        paint.getTextBounds(text, 0, text.length, myArea)
-        myArea.inflate(10)
+        textPaint.color = Color.BLACK
+        textPaint.style = Paint.Style.FILL
+        textPaint.typeface = Typeface.MONOSPACE
+        textPaint.textSize = textsize
+        textPaint.getTextBounds(text, 0, text.length, myArea)
+        myArea.inflate(12)
     }
 
     override fun fadeDone(type: Fader.Type) {
@@ -30,17 +35,9 @@ class Button(val text: String, val textsize: Float = 36f): Fadable
 
     fun display(canvas: Canvas) {
         val stringToDisplay = text
-        val paint = Paint()
-        paint.color = Color.GREEN
-        paint.alpha = alpha
-        paint.style = Paint.Style.FILL
-        canvas.drawRect(myArea, paint)
-
-        paint.color = Color.BLACK
-        paint.style = Paint.Style.FILL
-        paint.typeface = Typeface.MONOSPACE
-        paint.textSize = textsize
-        myArea.displayTextCenteredInRect(canvas, stringToDisplay, paint)
+        buttonPaint.alpha = alpha
+        canvas.drawRect(myArea, buttonPaint)
+        myArea.displayTextCenteredInRect(canvas, stringToDisplay, textPaint)
     }
 
 }

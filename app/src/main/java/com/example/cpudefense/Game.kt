@@ -85,7 +85,7 @@ class Game(val gameActivity: MainGameActivity) {
     var movers = CopyOnWriteArrayList<Mover>() // list of all mover objects that are created for game elements
     var faders = CopyOnWriteArrayList<Fader>() // idem for faders
 
-    enum class GameState { START, RUNNING, END, INTERMEZZO, PAUSED }
+    enum class GameState { START, RUNNING, END, INTERMEZZO, MARKETPLACE, PAUSED }
     enum class GameSpeed { NORMAL, MAX }
 
     val coinIcon: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.cryptocoin)
@@ -259,7 +259,7 @@ class Game(val gameActivity: MainGameActivity) {
             val toast: Toast = Toast.makeText(gameActivity, "Stage %d".format(nextStage.data.level), Toast.LENGTH_SHORT)
             toast.show() }
         network = nextStage.createNetwork(level)
-        nextStage.calculateRewardCoins(summaryPerLevel[level])
+        data.coinsInLevel = nextStage.calculateRewardCoins(summaryPerLevel[level])
         summaryPerLevel[level] = nextStage.summary
         if (network == null) // no more levels left
         {
