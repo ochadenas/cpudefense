@@ -59,6 +59,7 @@ class GameView(context: Context, val theGame: Game):
         theGame.scoreBoard.setSize(Rect(0, viewportHeight, w, viewportHeight+scoreBoardHeight))
         theGame.speedControlPanel.setSize(Rect(0, 0, w, viewportHeight))
         theGame.intermezzo.setSize(Rect(0,0,w,h))
+        theGame.marketplace.setSize(Rect(0,0,w,h))
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {

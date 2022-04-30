@@ -16,4 +16,8 @@
     <string name="cleared">Niveau réussi.</string>
     <string name="success">Tous les niveaus réussis.</string>
     <string name="failed">Niveau échoué.</string>
+    <string name="selectLevel">Choix de niveau</string>
+    <string name="play_selected_level">Jouer le niveau choisi</string>
+    <string name="button_purchase">Achat d\'améliorations</string>
+    <string name="level_entry">Niveau %d</string>
 </resources>

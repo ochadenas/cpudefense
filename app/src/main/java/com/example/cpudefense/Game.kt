@@ -76,6 +76,7 @@ class Game(val gameActivity: MainGameActivity) {
     val viewport = Viewport()
     var network: Network? = null
     var intermezzo = Intermezzo(this)
+    var marketplace = Marketplace(this)
     val scoreBoard = ScoreBoard(this)
     val speedControlPanel = SpeedControl(this)
     var currentStage: Stage? = null
@@ -170,8 +171,8 @@ class Game(val gameActivity: MainGameActivity) {
                 rect.displayTextCenteredInRect(canvas, "GAME PAUSED", paint)
             }
         }
-
         intermezzo.display(canvas, viewport)
+        marketplace.display(canvas, viewport)
     }
 
     fun onDown(p0: MotionEvent): Boolean {
@@ -194,6 +195,8 @@ class Game(val gameActivity: MainGameActivity) {
             }
             GameState.INTERMEZZO ->
                 return intermezzo.onDown(p0)
+            GameState.MARKETPLACE ->
+                return marketplace.onDown(p0)
             GameState.PAUSED ->
             {
                 data.state = GameState.RUNNING

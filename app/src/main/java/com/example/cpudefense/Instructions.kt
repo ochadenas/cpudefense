@@ -31,16 +31,16 @@ class Instructions(val game: Game, var stage: Int, var callback: (()->Unit)? ): 
                     "The currency in this game is information. It is displayed on the bottom left.\n\nDestroy the attacking code to gain some information about the virus. "+
                             "Use it to buy additional chips or to upgrade the existing ones.\n\n"
                 4 -> "Remember that in binary, 01 equals 2, 11 equals 3 and so on."
-                5 -> "In the next level, there is a new chip type 'SHR 1' available, meaning 'shift right by 1'.\n\n"+
+                5 -> "In the next level, a new chip type is available. It is labelled 'SHR 1', which means 'shift right by 1'.\n\n"+
                         "All digits are moved one position to the right. The leftmost digit is replaced by 0.\n\n"+
                         "For example, 0110 becomes 0011. This is equivalent to dividing the value by 2.\n\n"
-                6 -> "You can also gain cryptocoins by clearing stages. There is a maximum amount of cryptocoins per level shown on the bottom, "+
+                6 -> "You can gain cryptocoins by clearing stages. There is a maximum amount of cryptocoins per level shown on the bottom, "+
                         "and each life lost will reduce the reward. "+
                         "If you do not get all the coins, you can always replay the level. However, once you have obtained the maximum, "+
                         "you won't receive any more coins for this stage.\n\n"+
-                        "In addition, sometimes you will see a cryptocoin moving along with the attackers. You can collect it by destroying it, "+
-                        "even multiple times when you replay the level.\n\n"+
-                        "Cryptocoins can be exchanged for global, poweful upgrades. (not implemented yet)"
+                        "Cryptocoins can be exchanged for global, powerful upgrades."
+                    7 -> "Sometimes you will see a cryptocoin moving along with the attackers. You can collect it by destroying it, "+
+                        "even multiple times when you replay the level."
                 else -> ""
             }
         }

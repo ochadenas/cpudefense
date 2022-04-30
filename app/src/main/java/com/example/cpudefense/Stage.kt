@@ -299,10 +299,10 @@ class Stage(var theGame: Game) {
                 initializeNetwork(50, 50)
 
                 createChip(1, 1, type = Chip.ChipType.ENTRY)
-                createChip(20, 12, 1)
-                createChip(20, 20, 2)
-                createChip(45, 30, 3)
-                createChip(45, 45, type = Chip.ChipType.CPU)
+                createChip(20, 8, 1)
+                createChip(20, 12, 2)
+                createChip(45, 20, 3)
+                createChip(45, 30, type = Chip.ChipType.CPU)
 
                 createLink(0, 1, 1)
                 createLink(1, 2, 2)

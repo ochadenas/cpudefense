@@ -23,7 +23,7 @@ class Button(val text: String, val textsize: Float = 36f): Fadable
         textPaint.typeface = Typeface.MONOSPACE
         textPaint.textSize = textsize
         textPaint.getTextBounds(text, 0, text.length, myArea)
-        myArea.inflate(12)
+        myArea.inflate(10)
     }
 
     override fun fadeDone(type: Fader.Type) {

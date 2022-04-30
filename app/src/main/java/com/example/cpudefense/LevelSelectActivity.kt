@@ -44,7 +44,7 @@ class LevelSelectActivity : AppCompatActivity() {
         for ((level, summary) in levels?.entries!!)
         {
             val levelEntryView = Button(this)
-            var textString = "Level %d".format(level)
+            var textString = getString(R.string.level_entry).format(level)
             if (summary.coinsMaxAvailable > 0)
                 textString = textString.plus("\n%d of %d coins got.".format(summary.coinsGot, summary.coinsMaxAvailable))
             levelEntryView.text = textString

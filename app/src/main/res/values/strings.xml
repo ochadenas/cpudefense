@@ -18,5 +18,7 @@
     <string name="scoreboard_coins">Coins</string>
     <string name="selectLevel">Select Level</string>
     <string name="play_selected_level">Play selected level</string>
-    <string name="button_purchase">Get heroes</string>
+    <string name="button_purchase">Get upgrades</string>
+    <string name="level_entry">Level %d</string>
+    <string name="level_selector">Level Selector</string>
 </resources>

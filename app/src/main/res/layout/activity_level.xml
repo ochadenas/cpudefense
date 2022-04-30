@@ -10,7 +10,7 @@
         android:id="@+id/levelSelectorText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Level Selector"
+        android:text="@string/level_selector"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
         android:textColor="@color/text_green"
         app:layout_constraintStart_toStartOf="parent"
@@ -33,7 +33,7 @@
         <LinearLayout
             android:id="@+id/levelList"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
             android:layout_marginTop="8dp"
             android:orientation="vertical" >
