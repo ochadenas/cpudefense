@@ -12,6 +12,32 @@ fun Rect.setCenter(coord: Pair<Int, Int>)
     this.setCenter(coord.first, coord.second)
 }
 
+fun Rect.setTop(y: Int)
+{
+    this.set(left, y, right, y+height())
+}
+
+fun Rect.setLeft(x: Int)
+{
+    this.set(x, top, x+width(), bottom)
+}
+
+
+fun Rect.setRight(x: Int)
+{
+    this.set(x-width(), top, x, bottom)
+}
+
+fun Rect.setTopLeft(x: Int, y: Int)
+{
+    this.set(x, y, x+width(), y+height())
+}
+
+fun Rect.setBottomRight(x: Int, y: Int)
+{
+    this.set(x-width(), y-height(), x, y)
+}
+
 fun Rect.center(): Pair<Int, Int>
 {
     return Pair(this.centerX(), this.centerY())

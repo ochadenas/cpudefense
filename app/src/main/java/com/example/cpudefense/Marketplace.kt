@@ -9,17 +9,43 @@ import com.example.cpudefense.effects.Fader
 import com.example.cpudefense.gameElements.Button
 import com.example.cpudefense.gameElements.GameElement
 import com.example.cpudefense.networkmap.Viewport
+import com.example.cpudefense.upgrades.Upgrade
+import java.util.concurrent.CopyOnWriteArrayList
 
 class Marketplace(val game: Game): GameElement()
 {
     private var buttonFinish: Button? = null
     private var myArea = Rect()
 
+    var upgrades = CopyOnWriteArrayList<Upgrade>()
+
     fun setSize(area: Rect)
     {
         myArea = Rect(area)
         createButton()
     }
+
+    fun fillMarket()
+    {
+        upgrades.clear()
+        upgrades.add(Upgrade.createFromData(game, Upgrade.Data(type=Upgrade.Type.INCREASE_CHIP_SPEED)))
+        upgrades.add(Upgrade.createFromData(game, Upgrade.Data(type=Upgrade.Type.INCREASE_STARTING_CASH)))
+        arrangeCards()
+    }
+
+    fun arrangeCards()
+    /** calculate positions of the cards' rectangles */
+    {
+        val space = 20
+        val offset = Game.cardHeight + space
+        var pos = offset
+        for (card in upgrades)
+        {
+            card.areaOnScreen.setTopLeft(space, pos)
+            pos += offset
+        }
+    }
+
 
     override fun update() {
     }
@@ -30,7 +56,7 @@ class Marketplace(val game: Game): GameElement()
         buttonFinish = Button(game.resources.getString(R.string.button_continue))
         buttonFinish?.let {
             Fader(game, it, Fader.Type.APPEAR, Fader.Speed.SLOW)
-            it.myArea.set(50, myArea.bottom-it.myArea.height()-bottomMargin, 50+it.myArea.width(), myArea.bottom-bottomMargin)
+            it.myArea.setBottomRight(myArea.right-50, myArea.bottom-bottomMargin)
             it.buttonPaint.color = game.resources.getColor(R.color.text_blue)
         }
     }
@@ -42,6 +68,8 @@ class Marketplace(val game: Game): GameElement()
             game.startNextStage(game.intermezzo.level)
             return true
         }
+        for (card in upgrades)
+            card.onDown(event)
         return false
     }
 
@@ -52,6 +80,16 @@ class Marketplace(val game: Game): GameElement()
         paint.color = Color.BLACK
         paint.alpha = 255
         canvas.drawRect(myArea, paint)
+        for (card in upgrades)
+            card.display(canvas)
         buttonFinish?.display(canvas)
+
+        val textPaint = Paint()
+        textPaint.color = Color.WHITE
+        textPaint.style = Paint.Style.FILL
+        textPaint.textSize = 36f
+        var text = "Total coins: %d".format(game.data.coinsTotal)
+        canvas.drawText(text, 20f, 40f, textPaint)
+
     }
 }

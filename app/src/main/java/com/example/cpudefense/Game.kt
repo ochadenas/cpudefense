@@ -40,6 +40,8 @@ class Game(val gameActivity: MainGameActivity) {
 
         const val coinSizeOnScoreboard = 40
         const val coinSizeOnScreen = 25
+        const val cardHeight = 160
+        const val cardWidth = 200
 
         const val minimalAmountOfCash = 8
         const val maxLivesPerStage = 4

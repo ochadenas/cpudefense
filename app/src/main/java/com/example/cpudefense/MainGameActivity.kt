@@ -10,7 +10,7 @@ import kotlinx.coroutines.launch
 
 class MainGameActivity : Activity() {
     private var mainDelay: Long = 50
-    private val effectsDelay: Long = 5
+    private val effectsDelay: Long = 15
     lateinit var theGame: Game
     lateinit var theGameView: GameView
 

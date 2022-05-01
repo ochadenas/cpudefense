@@ -97,8 +97,6 @@ class Intermezzo(var game: Game): GameElement(), Fadable {
         paint.alpha = alpha
         canvas.drawRect(myArea, paint)
         instructions?.display(canvas)
-        // textBox1?.display(canvas)
-        // textBox2?.display(canvas)
         typewriter?.display(canvas)
         buttonContinue?.display(canvas)
         buttonPurchase?.display(canvas)
@@ -144,6 +142,7 @@ class Intermezzo(var game: Game): GameElement(), Fadable {
     fun startMarketplace()
     {
         clear()
+        game.marketplace.fillMarket()
         game.data.state = Game.GameState.MARKETPLACE
     }
 
