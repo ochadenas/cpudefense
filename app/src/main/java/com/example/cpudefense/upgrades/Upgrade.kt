@@ -18,11 +18,11 @@ open class Upgrade(var game: Game, type: Type): Fadable {
 
     var data = Data(type = type)
     var areaOnScreen = Rect(0, 0, Game.cardWidth, Game.cardHeight)
-    // private var bitmap = Bitmap(0, 0, Game.cardWidth, Game.cardHeight)
+    private var myBitmap: Bitmap? = null
     private var paintRect = Paint()
     private var shortDescRect = Rect(areaOnScreen)
     private var paintText = Paint()
-    open var shortDesc = ""
+    open var shortDesc: String = ""
 
     init {
         paintRect.color = game.resources.getColor(R.color.card_inactive)
@@ -37,8 +37,23 @@ open class Upgrade(var game: Game, type: Type): Fadable {
 
     fun display(canvas: Canvas)
     {
+        myBitmap?.let { canvas.drawBitmap(it, null, areaOnScreen, paintRect) }
         canvas.drawRect(areaOnScreen, paintRect)
+    }
+
+    fun createBitmap(): Bitmap
+    /** re-creates the bitmap without border, using a canvas positioned at (0, 0) */
+    {
+        var bitmap = Bitmap.createBitmap( Game.cardWidth, Game.cardHeight, Bitmap.Config.ARGB_8888)
+        var canvas = Canvas(bitmap)
         shortDescRect.displayTextCenteredInRect(canvas, shortDesc, paintText)
+        return bitmap
+    }
+
+    fun setDesc(short: String)
+    {
+        shortDesc = short
+        myBitmap = createBitmap()
     }
 
     override fun fadeDone(type: Fader.Type) {
@@ -62,6 +77,8 @@ open class Upgrade(var game: Game, type: Type): Fadable {
         }
         return false
     }
+
+    
 
     companion object {
         fun createFromData(game: Game, data: Upgrade.Data): Upgrade?
