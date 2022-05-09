@@ -167,5 +167,6 @@ class Intermezzo(var game: Game): GameElement(), Fadable {
         typewriter = null
         instructions = null
         buttonContinue = null
+        buttonPurchase = null
     }
 }

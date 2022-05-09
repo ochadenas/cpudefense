@@ -9,7 +9,6 @@ import com.example.cpudefense.effects.Fader
 import com.example.cpudefense.gameElements.Button
 import com.example.cpudefense.gameElements.GameElement
 import com.example.cpudefense.networkmap.Viewport
-import com.example.cpudefense.upgrades.Upgrade
 import java.util.concurrent.CopyOnWriteArrayList
 
 class Marketplace(val game: Game): GameElement()
@@ -28,8 +27,8 @@ class Marketplace(val game: Game): GameElement()
     fun fillMarket()
     {
         upgrades.clear()
-        upgrades.add(Upgrade.createFromData(game, Upgrade.Data(type=Upgrade.Type.INCREASE_CHIP_SPEED)))
-        upgrades.add(Upgrade.createFromData(game, Upgrade.Data(type=Upgrade.Type.INCREASE_STARTING_CASH)))
+        upgrades.add(Upgrade.createFromData(game, Upgrade.Data(type= Upgrade.Type.INCREASE_CHIP_SPEED)))
+        upgrades.add(Upgrade.createFromData(game, Upgrade.Data(type= Upgrade.Type.INCREASE_STARTING_CASH)))
         arrangeCards()
     }
 

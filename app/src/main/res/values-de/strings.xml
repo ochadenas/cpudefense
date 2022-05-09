@@ -20,4 +20,5 @@
     <string name="play_selected_level">Spiele Level</string>
     <string name="button_purchase">Upgrades kaufen</string>
     <string name="level_entry">Level %d</string>
+    <string name="level_selector">Level-Auswahl</string>
 </resources>
