@@ -74,6 +74,7 @@ class Game(val gameActivity: MainGameActivity) {
     var stageData: Stage.Data? = null
     var summaryPerLevel = HashMap<Int, Stage.Summary>()
     var levelThumbnail = HashMap<Int, String>()  // base64-encoded level snapshot
+    var gameUpgrades = HashMap<Upgrade.Type, Upgrade>()
 
     val viewport = Viewport()
     var network: Network? = null
@@ -101,6 +102,7 @@ class Game(val gameActivity: MainGameActivity) {
     {
         summaryPerLevel = gameActivity.loadLevelData()   // get historical data of levels completed so far
         levelThumbnail = gameActivity.loadThumbnails()   // load the existing thumbnails
+        gameUpgrades = gameActivity.loadUpgrades()       // load the upgrades gained so far
         intermezzo.prepareLevel(data.startingLevel, true)
     }
 

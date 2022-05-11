@@ -117,25 +117,30 @@ class Upgrade(var game: Game, type: Type): Fadable {
 
     fun onDown(event: MotionEvent): Boolean
     {
-        if (areaOnScreen.contains(event.x.toInt(), event.y.toInt()))
-        {
-            data.level += 1
-            setDesc()
-            Fader(game, this, Fader.Type.APPEAR, Fader.Speed.MEDIUM)
+        if (areaOnScreen.contains(event.x.toInt(), event.y.toInt())) {
+            doUpgrade()
             return true
         }
         return false
     }
 
-
+    fun doUpgrade()
+    {
+        data.level += 1
+        setDesc()
+        game.gameUpgrades[this.data.type] = this
+        Fader(game, this, Fader.Type.APPEAR, Fader.Speed.MEDIUM)
+    }
 
     companion object {
-        fun createFromData(game: Game, data: Data): Upgrade?
+        fun createFromData(game: Game, data: Data): Upgrade
                 /** reconstruct a Link object based on the saved data
                  * and set all inner proprieties
                  */
         {
             var newInstance = Upgrade(game, data.type)
+            newInstance.data.level = data.level
+            newInstance.setDesc()
             return newInstance
         }
     }

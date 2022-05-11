@@ -116,10 +116,15 @@ class MainGameActivity : Activity() {
         return Persistency(theGame).loadLevelSummaries(prefs) ?: HashMap()
     }
 
-
     fun loadThumbnails(): HashMap<Int, String>
     {
         val prefs = getSharedPreferences(getString(R.string.pref_filename), MODE_PRIVATE)
         return Persistency(theGame).loadLevelThumbnails(prefs) ?: HashMap()
+    }
+
+    fun loadUpgrades(): HashMap<Upgrade.Type, Upgrade>
+    {
+        val prefs = getSharedPreferences(getString(R.string.pref_filename), MODE_PRIVATE)
+        return Persistency(theGame).loadUpgrades(prefs) ?: HashMap()
     }
 }

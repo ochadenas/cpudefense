@@ -2,30 +2,42 @@ package com.example.cpudefense
 
 import android.content.SharedPreferences
 import com.google.gson.Gson
+import java.util.concurrent.CopyOnWriteArrayList
 
 class Persistency(var game: Game?) {
-    data class GameData (
+    data class SerializableGameData (
         val general: Game.Data,
         val stage: Stage.Data?
             )
 
-    data class LevelData (
+    data class SerializableLevelData (
         val level: HashMap<Int, Stage.Summary> = HashMap()
             )
 
-    data class ThumbnailData (
+    data class SerializableThumbnailData (
         val thumbnail: HashMap<Int, String> = HashMap()
+    )
+
+    data class SerializableUpgradeData (
+        val upgrades: CopyOnWriteArrayList<Upgrade.Data> = CopyOnWriteArrayList<Upgrade.Data>()
     )
 
     fun saveState(editor: SharedPreferences.Editor)
     {
         game?.let {
-            val data = GameData(
+            val data = SerializableGameData(
                 general = it.data,
                 stage = it.currentStage?.provideData()
             )
-            val json = Gson().toJson(data)
+            var json = Gson().toJson(data)
             editor.putString("state", json)
+
+            val upgradeData = SerializableUpgradeData()
+            for (upgrade in it.gameUpgrades.values)
+                upgradeData.upgrades.add(upgrade.data)
+            json = Gson().toJson(upgradeData)
+            editor.putString("upgrades", json)
+
             saveLevels(editor)
         }
     }
@@ -36,7 +48,7 @@ class Persistency(var game: Game?) {
             val json = sharedPreferences.getString("state", "none")
             if (json == "none")
                 return   // no saved data present, start new game
-            val data: GameData = Gson().fromJson(json, GameData::class.java)
+            val data: SerializableGameData = Gson().fromJson(json, SerializableGameData::class.java)
             it.data = data.general
             it.stageData = data.stage
             it.summaryPerLevel = loadLevelSummaries(sharedPreferences) ?: HashMap()
@@ -47,11 +59,11 @@ class Persistency(var game: Game?) {
     {
         game?.let {
             // level summary:
-            var data = LevelData(it.summaryPerLevel)
+            var data = SerializableLevelData(it.summaryPerLevel)
             var json = Gson().toJson(data)
             editor.putString("levels", json)
             // level thumbnail:
-            val thumbnail = ThumbnailData(it.levelThumbnail)
+            val thumbnail = SerializableThumbnailData(it.levelThumbnail)
             json = Gson().toJson(thumbnail)
             editor.putString("thumbnails", json)
         }
@@ -62,7 +74,7 @@ class Persistency(var game: Game?) {
         val json = sharedPreferences.getString("levels", "none")
         if (json == "none")
             return null
-        val data: LevelData = Gson().fromJson(json, LevelData::class.java)
+        val data: SerializableLevelData = Gson().fromJson(json, SerializableLevelData::class.java)
         return data.level
     }
 
@@ -71,7 +83,19 @@ class Persistency(var game: Game?) {
         val json = sharedPreferences.getString("thumbnails", "none")
         if (json == "none")
             return null
-        val data: ThumbnailData = Gson().fromJson(json, ThumbnailData::class.java)
+        val data: SerializableThumbnailData = Gson().fromJson(json, SerializableThumbnailData::class.java)
         return data.thumbnail
+    }
+
+    fun loadUpgrades(sharedPreferences: SharedPreferences): HashMap<Upgrade.Type, Upgrade>
+    {
+        var upgradeMap = HashMap<Upgrade.Type, Upgrade>()
+        val json = sharedPreferences.getString("upgrades", "none")
+        if (json != "none") game?.let {
+            val data: SerializableUpgradeData = Gson().fromJson(json, SerializableUpgradeData::class.java)
+            for (upgradeData in data.upgrades)
+                upgradeMap[upgradeData.type] = Upgrade.createFromData(it, upgradeData)
+        }
+        return upgradeMap
     }
 }

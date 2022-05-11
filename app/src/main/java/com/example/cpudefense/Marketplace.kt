@@ -10,6 +10,7 @@ import com.example.cpudefense.gameElements.Button
 import com.example.cpudefense.gameElements.GameElement
 import com.example.cpudefense.networkmap.Viewport
 import java.util.concurrent.CopyOnWriteArrayList
+import kotlin.reflect.typeOf
 
 class Marketplace(val game: Game): GameElement()
 {
@@ -27,8 +28,16 @@ class Marketplace(val game: Game): GameElement()
     fun fillMarket()
     {
         upgrades.clear()
-        upgrades.add(Upgrade.createFromData(game, Upgrade.Data(type= Upgrade.Type.INCREASE_CHIP_SPEED)))
-        upgrades.add(Upgrade.createFromData(game, Upgrade.Data(type= Upgrade.Type.INCREASE_STARTING_CASH)))
+        for (type in Upgrade.Type.values())
+        {
+            /* if upgrade already exists (because it has been bought earlier),
+            get it from the game data. Otherwise, create an empty card.
+             */
+            var upgrade: Upgrade? = game.gameUpgrades[type]
+            if (upgrade == null)
+                upgrade = Upgrade.createFromData(game, Upgrade.Data(type))
+            upgrades.add(upgrade)
+        }
         arrangeCards()
     }
 
