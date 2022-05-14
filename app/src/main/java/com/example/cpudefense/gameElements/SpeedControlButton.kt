@@ -3,8 +3,6 @@ package com.example.cpudefense.gameElements
 import android.graphics.*
 import android.view.MotionEvent
 import com.example.cpudefense.Game
-import com.example.cpudefense.R
-import com.example.cpudefense.contains
 import com.example.cpudefense.effects.Fadable
 import com.example.cpudefense.effects.Fader
 
@@ -32,13 +30,13 @@ class SpeedControlButton(val game: Game, var type: Type = Type.PAUSE, val panel:
             {
                 Type.PAUSE -> {
                     game.gameActivity.setGameSpeed(Game.GameSpeed.NORMAL)
-                    game.data.state = Game.GameState.PAUSED
+                    game.state.phase = Game.GamePhase.PAUSED
                     panel.resetButtons()
                     type = Type.NORMAL
                 }
                 Type.NORMAL -> {
                     game.gameActivity.setGameSpeed(Game.GameSpeed.NORMAL)
-                    game.data.state = Game.GameState.RUNNING
+                    game.state.phase = Game.GamePhase.RUNNING
                     panel.resetButtons()
                 }
                 Type.FAST -> {

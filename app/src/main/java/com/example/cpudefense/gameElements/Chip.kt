@@ -1,12 +1,9 @@
-package com.example.cpudefense
+package com.example.cpudefense.gameElements
 
 import android.graphics.*
 import android.view.MotionEvent
+import com.example.cpudefense.*
 import com.example.cpudefense.effects.Mover
-import com.example.cpudefense.gameElements.Attacker
-import com.example.cpudefense.gameElements.ChipUpgrade
-import com.example.cpudefense.gameElements.Cpu
-import com.example.cpudefense.gameElements.EntryPoint
 import com.example.cpudefense.networkmap.Network
 import com.example.cpudefense.networkmap.Node
 import com.example.cpudefense.networkmap.Viewport
@@ -32,17 +29,28 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
     )
 
     open var bitmap: Bitmap? = null
-    var widthOnScreen: Int = 0
-    var heightOnScreen = 0
+    private var widthOnScreen: Int = 0
+    private var heightOnScreen = 0
 
     val resources = network.theGame.resources
 
     private var cooldownTimer = 0
-    var upgradePossibilities = CopyOnWriteArrayList<ChipUpgrade>()
+    private var upgradePossibilities = CopyOnWriteArrayList<ChipUpgrade>()
 
     init {
         actualRect = Rect()
         data.range = 2.0f
+        when (chipData.type)
+        {
+            ChipType.SUB -> {
+                val modifier: Float = network.theGame.gameUpgrades[Upgrade.Type.INCREASE_CHIP_SUB_SPEED]?.getStrength() ?: 1f
+                chipData.cooldown = (20f / modifier).toInt()
+            }
+            ChipType.SHIFT -> {
+                val modifier: Float = network.theGame.gameUpgrades[Upgrade.Type.INCREASE_CHIP_SHIFT_SPEED]?.getStrength() ?: 1f
+                chipData.cooldown = (32f / modifier).toInt()
+            }
+        }
     }
 
     fun setIdent(ident: Int)
@@ -58,16 +66,16 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
             ChipType.SUB -> {
                 chipData.power = 1
                 bitmap = null
-                chipData.color = resources.getColor(R.color.chips_sub_foreground)
-                chipData.glowColor = resources.getColor(R.color.chips_sub_glow)
-                chipData.value = Game.basePrice[Chip.ChipUpgrades.SUB] ?: 10
+                chipData.color = resources.getColor(R.color.chips_dec_foreground)
+                chipData.glowColor = resources.getColor(R.color.chips_dec_glow)
+                chipData.value = Game.basePrice[ChipUpgrades.SUB] ?: 10
             }
             ChipType.SHIFT -> {
                 chipData.power = 1
                 bitmap = null
-                chipData.color = resources.getColor(R.color.chips_shift_foreground)
-                chipData.glowColor = resources.getColor(R.color.chips_shift_glow)
-                chipData.value = Game.basePrice[Chip.ChipUpgrades.SHIFT] ?: 10
+                chipData.color = resources.getColor(R.color.chips_shr_foreground)
+                chipData.glowColor = resources.getColor(R.color.chips_shr_glow)
+                chipData.value = Game.basePrice[ChipUpgrades.SHIFT] ?: 10
             }
             else -> {}
         }
@@ -100,8 +108,8 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
          */
         val sizeOnScreen = theNetwork?.distanceBetweenGridPoints()
         if (sizeOnScreen != null) {
-            widthOnScreen = sizeOnScreen.first * Game.Params.chipSize.x.toInt()
-            heightOnScreen = sizeOnScreen.second * Game.Params.chipSize.y.toInt()
+            widthOnScreen = sizeOnScreen.first * Game.chipSize.x.toInt()
+            heightOnScreen = sizeOnScreen.second * Game.chipSize.y.toInt()
             actualRect = Rect(0, 0, widthOnScreen, heightOnScreen)
         }
         actualRect.setCenter(viewport.gridToScreen(posOnGrid))
@@ -157,7 +165,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
 
     fun attackersInRange(): List<Attacker>
     {
-        val vehicles = distanceToVehicle.keys.filter { attackerInRange(it as Attacker) }.map { it -> it as Attacker }
+        val vehicles = distanceToVehicle.keys.filter { attackerInRange(it as Attacker) }.map { it as Attacker }
         return vehicles
     }
 
@@ -171,7 +179,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
             attacker?.remove()
     }
 
-    fun createBitmapForType(): Bitmap?
+    private fun createBitmapForType(): Bitmap?
     {
         when (chipData.type)
         {
@@ -181,7 +189,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
         }
     }
 
-    fun createBitmap(text: String): Bitmap?
+    private fun createBitmap(text: String): Bitmap?
     {
         if (actualRect.width() == 0 || actualRect.height() == 0)
             return null
@@ -191,9 +199,9 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
         val canvas = Canvas(bitmap)
         var paint = Paint()
 
-        paint.textSize = Game.Params.chipTextSize
+        paint.textSize = Game.chipTextSize
         paint.alpha = 255
-        paint.setTypeface(Typeface.create("sans-serif-condensed", Typeface.BOLD))
+        paint.typeface = Typeface.create("sans-serif-condensed", Typeface.BOLD)
         paint.textAlign = Paint.Align.CENTER
         var clippedRect = rect.displayTextCenteredInRect(canvas, text, paint)
 
@@ -263,7 +271,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
         for (upgrade in upgradePossibilities)
             upgrade.onDown(event)
 
-        if (actualRect?.contains(event.x.toInt(), event.y.toInt())
+        if (actualRect.contains(event.x.toInt(), event.y.toInt())
             && upgradePossibilities.isEmpty()) // gesture is inside this card
         {
             showUpgrades()
@@ -278,7 +286,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
 
     companion object
     {
-        fun createFromData(network: Network, data: Chip.Data): Chip
+        fun createFromData(network: Network, data: Data): Chip
                 /** reconstruct an object based on the saved data
                  * and set all inner proprieties
                  */
@@ -288,12 +296,12 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
             lateinit var chip: Chip
             when (data.type)
             {
-                Chip.ChipType.ENTRY -> { chip = EntryPoint(network, gridX, gridY) }
-                Chip.ChipType.CPU -> { chip = Cpu(network, gridX, gridY) }
+                ChipType.ENTRY -> { chip = EntryPoint(network, gridX, gridY) }
+                ChipType.CPU -> { chip = Cpu(network, gridX, gridY) }
                 else -> { chip = Chip(network, gridX, gridY) }
             }
             chip.chipData = data
-            return chip as Chip
+            return chip
         }
     }
 }

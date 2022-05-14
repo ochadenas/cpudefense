@@ -3,7 +3,6 @@ package com.example.cpudefense.gameElements
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Rect
-import com.example.cpudefense.Chip
 import com.example.cpudefense.Game
 import com.example.cpudefense.networkmap.Viewport
 import com.example.cpudefense.setCenter
@@ -22,7 +21,7 @@ class Cryptocoin(network: com.example.cpudefense.networkmap.Network, number: ULo
     override fun onShot(type: Chip.ChipType, power: Int): Boolean {
         if (super.onShot(type, power))
         {
-            theNetwork.theGame.data.coinsExtra++
+            theNetwork.theGame.state.coinsExtra++
             return true
         }
         return false

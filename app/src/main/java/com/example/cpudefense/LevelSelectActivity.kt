@@ -12,7 +12,6 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import java.lang.Exception
-import java.util.*
 import kotlin.collections.HashMap
 
 class LevelSelectActivity : AppCompatActivity() {
@@ -45,8 +44,9 @@ class LevelSelectActivity : AppCompatActivity() {
         {
             val levelEntryView = Button(this)
             var textString = getString(R.string.level_entry).format(level)
-            if (summary.coinsMaxAvailable > 0)
-                textString = textString.plus("\n%d of %d coins got.".format(summary.coinsGot, summary.coinsMaxAvailable))
+            var coinsMaxAvailable = summary.coinsAvailable + summary.coinsGot
+            if (coinsMaxAvailable > 0)
+                textString = textString.plus("\n%d of %d coins got.".format(summary.coinsGot, coinsMaxAvailable))
             levelEntryView.text = textString
             levelEntryView.textSize = 32f
             levelEntryView.isAllCaps = false

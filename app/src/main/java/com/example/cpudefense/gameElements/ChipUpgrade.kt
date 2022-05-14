@@ -22,7 +22,7 @@ class ChipUpgrade(val chipToUpgrade: Chip, val type: Chip.ChipUpgrades,
 
     fun canAfford(): Boolean
     {
-        return (price<=game.data.cash)
+        return (price<=game.state.cash)
     }
 
     override fun moveStart() {
@@ -63,7 +63,7 @@ class ChipUpgrade(val chipToUpgrade: Chip, val type: Chip.ChipUpgrades,
             Chip.ChipUpgrades.AND -> chipToUpgrade.setType(Chip.ChipType.AND)
             else -> {}
         }
-        game.data.cash -= price
+        game.state.cash -= price
     }
 
     fun display(canvas: Canvas)

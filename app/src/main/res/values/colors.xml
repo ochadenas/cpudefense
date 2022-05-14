@@ -12,10 +12,10 @@
     <color name="attackers_foreground">#DAFFF2F2</color>
     <color name="attackers_glow">#FFFD2222</color>
     <color name="attackers_background">#40000000</color>
-    <color name="chips_sub_foreground">#DA07DD00</color>
-    <color name="chips_sub_glow">#AFFA34</color>
-    <color name="chips_shift_foreground">#DA649DF3</color>
-    <color name="chips_shift_glow">#DAD2DDEF</color>
+    <color name="chips_dec_foreground">#DA07DD00</color>
+    <color name="chips_dec_glow">#AFFA34</color>
+    <color name="chips_shr_foreground">#DA649DF3</color>
+    <color name="chips_shr_glow">#DAD2DDEF</color>
     <color name="chips_background">#FF000000</color>
 
     <color name="scoreboard_text">#FFFFFF</color>
@@ -28,7 +28,13 @@
     <color name="text_amber">#B9921C</color>
     <color name="text_white">#E8E8E8</color>
     <color name="text_blue">#1BB8FF</color>
-    <color name="card_inactive">#0087C5</color>
-    <color name="card_active">#79D5FF</color>
+
+    <color name="upgrade_inactive">#0087C5</color>
+    <color name="upgrade_active_general">#79D5FF</color>
+    <color name="upgrade_active_eco">#FFC907</color>
+    <color name="upgrade_active_speed">#9C27B0</color>
+    <color name="upgrade_active_chip_dec">#DA07DD00</color>
+    <color name="upgrade_active_chip_shr">#DA649DF3</color>
+
 
 </resources>

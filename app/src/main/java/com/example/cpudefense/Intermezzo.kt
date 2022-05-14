@@ -77,11 +77,18 @@ class Intermezzo(var game: Game): GameElement(), Fadable {
             it.myArea.set(50, myArea.bottom-it.myArea.height()-bottomMargin, 50+it.myArea.width(), myArea.bottom-bottomMargin)
             it.buttonPaint.color = game.resources.getColor(R.color.text_green)
         }
-        buttonPurchase = Button(game.resources.getString(R.string.button_purchase))
-        buttonPurchase?.let {
-            Fader(game, it, Fader.Type.APPEAR, Fader.Speed.SLOW)
-            it.myArea.set(myArea.right-it.myArea.width()-50, myArea.bottom-it.myArea.height()-bottomMargin, myArea.right-50, myArea.bottom-bottomMargin)
-            it.buttonPaint.color = game.resources.getColor(R.color.text_blue)
+        if (game.global.coinsTotal > 0) {
+            buttonPurchase = Button(game.resources.getString(R.string.button_purchase))
+            buttonPurchase?.let {
+                Fader(game, it, Fader.Type.APPEAR, Fader.Speed.SLOW)
+                it.myArea.set(
+                    myArea.right - it.myArea.width() - 50,
+                    myArea.bottom - it.myArea.height() - bottomMargin,
+                    myArea.right - 50,
+                    myArea.bottom - bottomMargin
+                )
+                it.buttonPaint.color = game.resources.getColor(R.color.text_blue)
+            }
         }
     }
 
@@ -90,7 +97,7 @@ class Intermezzo(var game: Game): GameElement(), Fadable {
     }
 
     override fun display(canvas: Canvas, viewport: Viewport) {
-        if (game.data.state != Game.GameState.INTERMEZZO)
+        if (game.state.phase != Game.GamePhase.INTERMEZZO)
             return
         val paint = Paint()
         paint.color = Color.BLACK
@@ -136,14 +143,14 @@ class Intermezzo(var game: Game): GameElement(), Fadable {
             type = Type.NORMAL_LEVEL
             Fader(game, this, Fader.Type.APPEAR, Fader.Speed.SLOW)
         }
-        game.data.state = Game.GameState.INTERMEZZO
+        game.state.phase = Game.GamePhase.INTERMEZZO
     }
 
     fun startMarketplace()
     {
         clear()
         game.marketplace.fillMarket()
-        game.data.state = Game.GameState.MARKETPLACE
+        game.state.phase = Game.GamePhase.MARKETPLACE
     }
 
     fun endOfGame(lastLevel: Int, hasWon: Boolean)
@@ -159,7 +166,7 @@ class Intermezzo(var game: Game): GameElement(), Fadable {
             alpha = 255
             displayText()
         }
-        game.data.state = Game.GameState.INTERMEZZO
+        game.state.phase = Game.GamePhase.INTERMEZZO
     }
 
     fun clear()

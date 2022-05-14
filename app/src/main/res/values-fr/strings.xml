@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">ChipDefense</string>
-    <string name="startGame">Début</string>
+    <string name="startGame">Nouveau jeu</string>
     <string name="button_continue">Continuer</string>
     <string name="scoreboard_waves">Vague</string>
     <string name="scoreboard_inf">Inf</string>

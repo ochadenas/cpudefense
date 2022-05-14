@@ -23,7 +23,7 @@ class ScoreBoard(val game: Game): GameElement() {
     }
 
     fun addScore(amount: Int) {
-        game.data.cash += amount
+        game.state.cash += amount
     }
 
     fun informationToString(number: Int): String {
@@ -83,10 +83,10 @@ class ScoreBoard(val game: Game): GameElement() {
 
         fun display(canvas: Canvas)
         {
-            if (game.data.cash != lastValue)
+            if (game.state.cash != lastValue)
             {
                 /* only render the display if value has changed, otherwise re-use bitmap */
-                lastValue = game.data.cash
+                lastValue = game.state.cash
                 recreateBitmap()
             }
             canvas.drawBitmap(bitmap, null, area, paint)
@@ -97,7 +97,7 @@ class ScoreBoard(val game: Game): GameElement() {
             bitmap = Bitmap.createBitmap(area.width(), area.height(), Bitmap.Config.ARGB_8888)
             var canvas = Canvas(bitmap)
             var rect = Rect(0, divider, area.width(), area.height())
-            var text = informationToString(game.data.cash)
+            var text = informationToString(game.state.cash)
             var paint = Paint()
             paint.color = myColor
             paint.setTypeface(Typeface.create("sans-serif", Typeface.NORMAL))
@@ -165,10 +165,10 @@ class ScoreBoard(val game: Game): GameElement() {
 
         fun display(canvas: Canvas)
         {
-            if (game.data.lives != lastValue)
+            if (game.state.lives != lastValue)
             {
                 /* only render the display if value has changed, otherwise re-use bitmap */
-                lastValue = game.data.lives
+                lastValue = game.state.lives
                 recreateBitmap()
             }
             canvas.drawBitmap(bitmap, null, area, paint)
@@ -182,28 +182,28 @@ class ScoreBoard(val game: Game): GameElement() {
             val sizeLedY = (area.height() * 0.3).toInt()
             val deltaX = 14 + sizeLedX
             val ledAreaHeight = sizeLedY + deltaX
-            val ledAreaWidth = (game.data.maxLives + 1) * deltaX
+            val ledAreaWidth = (game.state.maxLives + 1) * deltaX
             var ledArea = Rect(0, 0, ledAreaWidth, ledAreaHeight)
             // var ledArea = Rect(0, divider+(area.height()-ledAreaHeight)/2, ledAreaWidth, ledAreaHeight)
             // determine the exact position of the LEDs. This is a bit frickelig
             ledArea.setCenter(area.width()/2, (area.height()+divider)/2)
             val resources = game.resources
-            if (game.data.lives <= 0)
+            if (game.state.lives <= 0)
                 return
             val paint = Paint()
             paint.style = Paint.Style.FILL
             paint.color = resources.getColor(R.color.led_panel)
             canvas.drawRect(ledArea, paint)
-            for (i in 1..game.data.maxLives) {
+            for (i in 1..game.state.maxLives) {
                 var rect = Rect(0, 0, sizeLedX, sizeLedY)
                 rect.setCenter(ledArea.right - i * deltaX, ledArea.centerY())
                 var glowRect = Rect(rect).inflate(3)
                 paint.color =
-                    if (i <= game.data.lives) resources.getColor(R.color.led_green_glow)
+                    if (i <= game.state.lives) resources.getColor(R.color.led_green_glow)
                     else resources.getColor(R.color.led_red_glow)
                 canvas.drawRect(glowRect, paint)
                 paint.color =
-                    if (i <= game.data.lives) resources.getColor(R.color.led_green)
+                    if (i <= game.state.lives) resources.getColor(R.color.led_green)
                     else resources.getColor(R.color.led_red)
                 canvas.drawRect(rect, paint)
             }
@@ -227,12 +227,12 @@ class ScoreBoard(val game: Game): GameElement() {
         }
 
         fun display(canvas: Canvas) {
-            var coins = game.data.coinsInLevel + game.data.coinsExtra
+            var coins = game.state.coinsInLevel + game.state.coinsExtra
             if (coins <= 0)
                 return
-            if (game.data.lives != lastValue) {
+            if (game.state.lives != lastValue) {
                 /* only render the display if value has changed, otherwise re-use bitmap */
-                lastValue = game.data.lives
+                lastValue = game.state.lives
                 recreateBitmap(coins)
             }
             canvas.drawBitmap(bitmap, null, area, paint)

@@ -41,7 +41,7 @@ class Stage(var theGame: Game) {
     var data = Data()
 
     data class Summary(
-        var coinsMaxAvailable: Int = 0,
+        var coinsAvailable: Int = 0,
         var coinsGot: Int = 0,
         var won: Boolean = false
     )
@@ -56,8 +56,8 @@ class Stage(var theGame: Game) {
               */
     {
         summary = previousSummary ?: Summary()
-        summary.coinsMaxAvailable = rewardCoins
-        return rewardCoins - summary.coinsGot
+        summary.coinsAvailable = rewardCoins - summary.coinsGot
+        return summary.coinsAvailable
     }
 
     fun provideData(): Data
@@ -145,7 +145,7 @@ class Stage(var theGame: Game) {
 
     fun nextWave(): Wave?
     {
-        if (theGame.data.state != Game.GameState.RUNNING)
+        if (theGame.state.phase != Game.GamePhase.RUNNING)
             return null
         else if (waves.size == 0)
         {

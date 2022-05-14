@@ -68,7 +68,7 @@ open class Node(val theNetwork: Network?, x: Float, y: Float): GameElement()
 
     fun distanceTo(vehicle: Vehicle): Float?
     {
-        var dist = distanceToVehicle[vehicle]
+        val dist = distanceToVehicle[vehicle]
         if (dist != null)
             return if (dist>0) dist else -dist
         else return null

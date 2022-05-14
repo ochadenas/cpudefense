@@ -1,7 +1,6 @@
 package com.example.cpudefense.gameElements
 
 import android.graphics.Canvas
-import com.example.cpudefense.Chip
 import com.example.cpudefense.networkmap.Network
 import com.example.cpudefense.networkmap.Viewport
 

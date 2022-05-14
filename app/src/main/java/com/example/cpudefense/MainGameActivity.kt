@@ -34,8 +34,9 @@ class MainGameActivity : Activity() {
         }
         else
         {
-            theGame.data.startingLevel = intent.getIntExtra("START_ON_STAGE", 1)
-            theGame.beginGame()
+            theGame.state.startingLevel = intent.getIntExtra("START_ON_STAGE", 1)
+            val resetProgress = intent.getBooleanExtra("RESET_PROGRESS", false)
+            theGame.beginGame(resetProgress)
         }
     }
 
@@ -43,7 +44,7 @@ class MainGameActivity : Activity() {
         // this method get executed when the user presses the system's "back" button,
         // but also when she navigates to another app
         saveState()
-        theGame.data.state = Game.GameState.END
+        theGame.state.phase = Game.GamePhase.END
         super.onPause()
     }
 
@@ -80,7 +81,7 @@ class MainGameActivity : Activity() {
 
     private fun update()
     {
-        if (theGame.data.state == Game.GameState.END)
+        if (theGame.state.phase == Game.GamePhase.END)
             return
         theGame.update()
         theGameView.display()
@@ -89,7 +90,7 @@ class MainGameActivity : Activity() {
 
     private fun updateGraphicalEffects()
     {
-        if (theGame.data.state == Game.GameState.END)
+        if (theGame.state.phase == Game.GamePhase.END)
             return
         theGame.updateEffects()
         theGameView.theEffects?.updateGraphicalEffects()
@@ -101,6 +102,8 @@ class MainGameActivity : Activity() {
         val prefs = getSharedPreferences(getString(R.string.pref_filename), MODE_PRIVATE)
         val editor = prefs.edit()
         Persistency(theGame).saveState(editor)
+        // save game data
+
         editor.apply()
     }
 
@@ -108,6 +111,15 @@ class MainGameActivity : Activity() {
     {
         val prefs = getSharedPreferences(getString(R.string.pref_filename), MODE_PRIVATE)
         Persistency(theGame).loadState(prefs)
+    }
+
+    fun loadGlobalData(): Game.GlobalData
+    /* retrieve some global game data, such as total number of coins.
+    Saving is done in saveState().
+     */
+    {
+        val prefs = getSharedPreferences(getString(R.string.pref_filename), MODE_PRIVATE)
+        return Persistency(theGame).loadGlobalData(prefs)
     }
 
     fun loadLevelData(): HashMap<Int, Stage.Summary>
@@ -125,6 +137,6 @@ class MainGameActivity : Activity() {
     fun loadUpgrades(): HashMap<Upgrade.Type, Upgrade>
     {
         val prefs = getSharedPreferences(getString(R.string.pref_filename), MODE_PRIVATE)
-        return Persistency(theGame).loadUpgrades(prefs) ?: HashMap()
+        return Persistency(theGame).loadUpgrades(prefs)
     }
 }

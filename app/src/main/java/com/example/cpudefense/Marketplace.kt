@@ -10,14 +10,13 @@ import com.example.cpudefense.gameElements.Button
 import com.example.cpudefense.gameElements.GameElement
 import com.example.cpudefense.networkmap.Viewport
 import java.util.concurrent.CopyOnWriteArrayList
-import kotlin.reflect.typeOf
 
 class Marketplace(val game: Game): GameElement()
 {
     private var buttonFinish: Button? = null
     private var myArea = Rect()
 
-    var upgrades = CopyOnWriteArrayList<Upgrade>()
+    private var upgrades = CopyOnWriteArrayList<Upgrade>()
 
     fun setSize(area: Rect)
     {
@@ -41,7 +40,7 @@ class Marketplace(val game: Game): GameElement()
         arrangeCards()
     }
 
-    fun arrangeCards()
+    private fun arrangeCards()
     /** calculate positions of the cards' rectangles */
     {
         val space = 20
@@ -77,12 +76,20 @@ class Marketplace(val game: Game): GameElement()
             return true
         }
         for (card in upgrades)
-            card.onDown(event)
+        {
+            if (card.areaOnScreen.contains(event.x.toInt(), event.y.toInt())) {
+                if (game.global.coinsTotal >= card.getPrice(card.data.level)) {
+                    game.global.coinsTotal -= 1
+                    card.doUpgrade()
+                }
+                return true
+            }
+        }
         return false
     }
 
     override fun display(canvas: Canvas, viewport: Viewport) {
-        if (game.data.state != Game.GameState.MARKETPLACE)
+        if (game.state.phase != Game.GamePhase.MARKETPLACE)
             return
         val paint = Paint()
         paint.color = Color.BLACK
@@ -96,7 +103,7 @@ class Marketplace(val game: Game): GameElement()
         textPaint.color = Color.WHITE
         textPaint.style = Paint.Style.FILL
         textPaint.textSize = 36f
-        var text = "Total coins: %d".format(game.data.coinsTotal)
+        val text = "Total coins: %d".format(game.global.coinsTotal)
         canvas.drawText(text, 20f, 40f, textPaint)
 
     }

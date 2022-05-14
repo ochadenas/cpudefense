@@ -9,10 +9,7 @@ import android.view.MotionEvent
 import android.widget.Toast
 import com.example.cpudefense.effects.Fader
 import com.example.cpudefense.effects.Mover
-import com.example.cpudefense.gameElements.Attacker
-import com.example.cpudefense.gameElements.ScoreBoard
-import com.example.cpudefense.gameElements.SpeedControl
-import com.example.cpudefense.gameElements.Wave
+import com.example.cpudefense.gameElements.*
 import com.example.cpudefense.networkmap.GridCoord
 import com.example.cpudefense.networkmap.Network
 import com.example.cpudefense.networkmap.Viewport
@@ -41,7 +38,7 @@ class Game(val gameActivity: MainGameActivity) {
         const val coinSizeOnScoreboard = 40
         const val coinSizeOnScreen = 25
         const val cardHeight = 128
-        const val cardWidth = 256
+        const val cardWidth = 280
 
         const val minimalAmountOfCash = 8
         const val maxLivesPerStage = 4
@@ -52,24 +49,27 @@ class Game(val gameActivity: MainGameActivity) {
             Chip.ChipUpgrades.SUB to 8, Chip.ChipUpgrades.AND to 32, Chip.ChipUpgrades.SHIFT to 16)
     }
 
-    data class Data(
-        var state: GameState,       // whether the game is running, paused or between levels
+    data class StateData(
+        var phase: GamePhase,       // whether the game is running, paused or between levels
         var startingLevel: Int,     // level to begin the next game with
         var maxLives: Int,          // maximum number of lives
         var lives: Int,             // current number of lives
         var cash: Int,              // current amount of 'information' currency in bits
         var coinsInLevel: Int = 0,  // cryptocoins that can be obtained by completing the current level
-        var coinsExtra: Int = 0,    // cryptocoins that have been acquired by collecting moving coins
-        var coinsTotal: Int = 0    // total number of cryptocoins that can be acquired in the level
+        var coinsExtra: Int = 0    // cryptocoins that have been acquired by collecting moving coins
         )
-
-    var data = Data(
-        state = GameState.START,
+    var state = StateData(
+        phase = GamePhase.START,
         startingLevel = 1,
         maxLives = maxLivesPerStage,
         lives = 0,
         cash = minimalAmountOfCash
     )
+
+    data class GlobalData(
+        var coinsTotal: Int = 0
+    )
+    var global = GlobalData()
 
     var stageData: Stage.Data? = null
     var summaryPerLevel = HashMap<Int, Stage.Summary>()
@@ -89,7 +89,7 @@ class Game(val gameActivity: MainGameActivity) {
     var movers = CopyOnWriteArrayList<Mover>() // list of all mover objects that are created for game elements
     var faders = CopyOnWriteArrayList<Fader>() // idem for faders
 
-    enum class GameState { START, RUNNING, END, INTERMEZZO, MARKETPLACE, PAUSED }
+    enum class GamePhase { START, RUNNING, END, INTERMEZZO, MARKETPLACE, PAUSED }
     enum class GameSpeed { NORMAL, MAX }
 
     val coinIcon: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.cryptocoin)
@@ -98,12 +98,17 @@ class Game(val gameActivity: MainGameActivity) {
     val pauseIcon: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.pause_active)
     val fastIcon: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.fast_active)
 
-    fun beginGame()
+    fun beginGame(resetProgress: Boolean = false)
     {
-        summaryPerLevel = gameActivity.loadLevelData()   // get historical data of levels completed so far
-        levelThumbnail = gameActivity.loadThumbnails()   // load the existing thumbnails
-        gameUpgrades = gameActivity.loadUpgrades()       // load the upgrades gained so far
-        intermezzo.prepareLevel(data.startingLevel, true)
+        if (resetProgress == false) {
+            global = gameActivity.loadGlobalData()
+            summaryPerLevel = gameActivity.loadLevelData()   // get historical data of levels completed so far
+            levelThumbnail = gameActivity.loadThumbnails()   // load the existing thumbnails
+            gameUpgrades = gameActivity.loadUpgrades()       // load the upgrades gained so far
+            intermezzo.prepareLevel(state.startingLevel, true)
+        }
+        else
+            intermezzo.prepareLevel(1, true)
     }
 
     fun continueGame()
@@ -130,7 +135,7 @@ class Game(val gameActivity: MainGameActivity) {
 
     fun update()
     {
-        if (data.state == GameState.RUNNING) {
+        if (state.phase == GamePhase.RUNNING) {
             network?.update()
             scoreBoard.update()
             currentWave?.update()
@@ -158,13 +163,13 @@ class Game(val gameActivity: MainGameActivity) {
 
     fun display(canvas: Canvas)
     {
-        if (data.state == GameState.RUNNING || data.state == GameState.PAUSED)
+        if (state.phase == GamePhase.RUNNING || state.phase == GamePhase.PAUSED)
         {
             network?.display(canvas, viewport)
             scoreBoard.display(canvas, viewport)
             speedControlPanel.display(canvas, viewport)
         }
-        if (data.state == GameState.PAUSED)
+        if (state.phase == GamePhase.PAUSED)
         {
             val paint = Paint()
             paint.color = Color.WHITE
@@ -180,9 +185,9 @@ class Game(val gameActivity: MainGameActivity) {
     }
 
     fun onDown(p0: MotionEvent): Boolean {
-        when (data.state)
+        when (state.phase)
         {
-            GameState.RUNNING ->
+            GamePhase.RUNNING ->
             {
                 speedControlPanel.onDown(p0)
                 if (network != null) {
@@ -197,13 +202,13 @@ class Game(val gameActivity: MainGameActivity) {
                 else
                     return false
             }
-            GameState.INTERMEZZO ->
+            GamePhase.INTERMEZZO ->
                 return intermezzo.onDown(p0)
-            GameState.MARKETPLACE ->
+            GamePhase.MARKETPLACE ->
                 return marketplace.onDown(p0)
-            GameState.PAUSED ->
+            GamePhase.PAUSED ->
             {
-                data.state = GameState.RUNNING
+                state.phase = GamePhase.RUNNING
                 speedControlPanel.resetButtons()
                 return true
             }
@@ -228,15 +233,14 @@ class Game(val gameActivity: MainGameActivity) {
         if (currentStage == null)
             return // in this case, the stage has already been left
         takeLevelSnapshot()
-        if (currentStage?.attackerCount()?:0 > 0)
+        if (currentStage?.attackerCount()?:0 > 0)  // still attackers left, wait until wave is really over
         {
             GlobalScope.launch { delay(1000L); onEndOfStage() }
-            return
         }
         else {
-            gameActivity.saveState()
             currentStage?.let { onStageCleared(it) }
         }
+        gameActivity.saveState()
     }
 
     fun onStageCleared(stage: Stage)
@@ -245,8 +249,9 @@ class Game(val gameActivity: MainGameActivity) {
             val toast: Toast = Toast.makeText(gameActivity, "Stage cleared", Toast.LENGTH_SHORT)
             toast.show()
         }
-        intermezzo.coinsGathered = data.coinsExtra + data.coinsInLevel
-        summaryPerLevel[stage.data.level] = Stage.Summary(won = true, coinsGot = stage.summary.coinsGot + intermezzo.coinsGathered)
+        intermezzo.coinsGathered = state.coinsExtra + state.coinsInLevel
+        global.coinsTotal += intermezzo.coinsGathered
+        summaryPerLevel[stage.data.level] = Stage.Summary(won = true, coinsGot = stage.summary.coinsGot + state.coinsInLevel)
         if (stage.type == Stage.Type.FINAL)
         {
             intermezzo.endOfGame(stage.data.level, hasWon = true)
@@ -259,15 +264,16 @@ class Game(val gameActivity: MainGameActivity) {
 
     fun startNextStage(level: Int)
     {
-        data.lives = data.maxLives
+        state.lives = state.maxLives
         calculateStartingCash()
         var nextStage = Stage(this)
         gameActivity.runOnUiThread {
             val toast: Toast = Toast.makeText(gameActivity, "Stage %d".format(nextStage.data.level), Toast.LENGTH_SHORT)
             toast.show() }
         network = nextStage.createNetwork(level)
-        data.coinsInLevel = nextStage.calculateRewardCoins(summaryPerLevel[level])
+        state.coinsInLevel = nextStage.calculateRewardCoins(summaryPerLevel[level])
         summaryPerLevel[level] = nextStage.summary
+        gameActivity.saveState()
         if (network == null) // no more levels left
         {
             setMaxStage(level)
@@ -275,7 +281,7 @@ class Game(val gameActivity: MainGameActivity) {
         }
         else {
             viewport.setViewportSize(network!!.data.gridSizeX, network!!.data.gridSizeY)
-            data.state = GameState.RUNNING
+            state.phase = GamePhase.RUNNING
             currentWave = nextStage.nextWave()
         }
         currentStage = nextStage
@@ -284,10 +290,10 @@ class Game(val gameActivity: MainGameActivity) {
 
     fun removeOneLife()
     {
-        if (data.coinsInLevel > 0)
-            data.coinsInLevel--
-        data.lives--
-        if (data.lives == 0)
+        if (state.coinsInLevel > 0)
+            state.coinsInLevel--
+        state.lives--
+        if (state.lives == 0)
         {
             val lastLevel = currentStage?.data?.level ?: 1
             takeLevelSnapshot()
@@ -316,7 +322,8 @@ class Game(val gameActivity: MainGameActivity) {
 
     fun calculateStartingCash()
     {
-        data.cash = minimalAmountOfCash
+        val cash = gameUpgrades[Upgrade.Type.INCREASE_STARTING_CASH]?.getStrength()?.toInt()
+        state.cash = cash ?: minimalAmountOfCash
     }
 
     fun takeLevelSnapshot()

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">ChipDefense</string>
-    <string name="startGame">Start</string>
+    <string name="startGame">Neues Spiel</string>
     <string name="button_continue">Weiter</string>
     <string name="failed">Level nicht geschafft.</string>
     <string name="success">Alle Level geschafft!</string>

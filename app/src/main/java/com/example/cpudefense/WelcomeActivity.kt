@@ -5,7 +5,8 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.widget.NumberPicker
+import android.widget.Switch
+import androidx.appcompat.app.AlertDialog
 
 class WelcomeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -15,19 +16,6 @@ class WelcomeActivity : AppCompatActivity() {
 
     override fun onActivityReenter(resultCode: Int, data: Intent?) {
         super.onActivityReenter(resultCode, data)
-    }
-
-    fun startGame(v: View)
-    {
-        val prefs = getSharedPreferences(getString(R.string.pref_filename), Context.MODE_PRIVATE)
-        val maxStage = prefs.getInt("MAXSTAGE", 1)
-        val currentStage = prefs.getInt("LASTSTAGE", 1)
-        val startLevel = currentStage
-
-        val intent = Intent(this, MainGameActivity::class.java)
-        intent.putExtra("START_ON_STAGE", startLevel)
-        intent.putExtra("CONTINUE_GAME", false)
-        startActivity(intent)
     }
 
     fun continueGame(v: View)
@@ -41,6 +29,23 @@ class WelcomeActivity : AppCompatActivity() {
     {
         val intent = Intent(this, LevelSelectActivity::class.java)
         startActivity(intent)
+    }
+
+    fun startNewGame(v: View)
+    {
+        val builder = AlertDialog.Builder(this)
+        builder.setMessage("Really start new game? This will reset all your progress.")
+                .setCancelable(false)
+                .setPositiveButton("Yes") { dialog, id ->
+                    val intent = Intent(this, MainGameActivity::class.java)
+                    intent.putExtra("RESET_PROGRESS", true)
+                    intent.putExtra("START_ON_STAGE", 1)
+                    intent.putExtra("CONTINUE_GAME", false)
+                    startActivity(intent)
+                }
+                .setNegativeButton("No") { dialog, id -> dialog.dismiss() }
+        val alert = builder.create()
+        alert.show()
     }
 
 
