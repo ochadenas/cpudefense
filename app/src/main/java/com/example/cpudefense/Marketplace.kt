@@ -31,11 +31,13 @@ class Marketplace(val game: Game): GameElement()
         {
             /* if upgrade already exists (because it has been bought earlier),
             get it from the game data. Otherwise, create an empty card.
+            Only add upgrades that are allowed (available) at present.
              */
             var upgrade: Upgrade? = game.gameUpgrades[type]
             if (upgrade == null)
                 upgrade = Upgrade.createFromData(game, Upgrade.Data(type))
-            upgrades.add(upgrade)
+            if (upgrade.isAvailable())
+                upgrades.add(upgrade)
         }
         arrangeCards()
     }
@@ -52,7 +54,6 @@ class Marketplace(val game: Game): GameElement()
             pos += offset
         }
     }
-
 
     override fun update() {
     }

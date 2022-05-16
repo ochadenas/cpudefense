@@ -14,8 +14,12 @@ class ChipUpgrade(val chipToUpgrade: Chip, val type: Chip.ChipUpgrades,
 
     fun calculatePrice(): Int
     {
-        if (type == Chip.ChipUpgrades.POWERUP)
-            return (chipToUpgrade.chipData.value * 1.5).toInt()
+        if (type == Chip.ChipUpgrades.POWERUP) {
+            var upgradePrice = chipToUpgrade.chipData.value * 1.5
+            var discount = game.gameUpgrades[Upgrade.Type.DECREASE_UPGRADE_COST]?.getStrength() ?: 0f
+            upgradePrice = upgradePrice * (100f - discount) / 100
+            return upgradePrice.toInt()
+        }
         else
             return Game.basePrice.getOrElse(type, { 100 } )
     }

@@ -128,7 +128,7 @@ class Stage(var theGame: Game) {
     fun createNewAttacker(maxNumber: Int, speed: Float, isCoin: Boolean = false)
     {
         val attacker = if (isCoin)
-            Cryptocoin(network, Random.nextULong((maxNumber*1.5).toULong()), speed )
+            Cryptocoin(network, (maxNumber*1.5).toULong(), speed )
         else
             Attacker(network, Attacker.Representation.BINARY,
             Random.nextULong((maxNumber+1).toULong()), speed)
@@ -464,6 +464,43 @@ class Stage(var theGame: Game) {
                 rewardCoins = 2
             }
             8 ->
+            {
+                initializeNetwork(50, 50)
+
+                createChip(10, 25, type = Chip.ChipType.ENTRY)
+                createChip(20, 15, 1)
+                createChip(35, 15, 2)
+                createChip(20, 25, 3)
+                createChip(35, 25, 4)
+                createChip(20, 35, 5)
+                createChip(35, 35, 6)
+                createChip(45, 25, type = Chip.ChipType.CPU)
+
+
+                createLink(0, 3, 1)
+                createLink(3, 1, 2)
+                createLink(1, 2, 3)
+                createLink(2, 4, 4)
+                createLink(3, 4, 5)
+                createLink(3, 5, 6)
+                createLink(5, 6, 7)
+                createLink(6, 4, 8)
+                createLink(4, 999, 9)
+
+                createTrack(listOf(1, 5, 4, 3 ,2, 5, 9), 0)
+                createTrack(listOf(1, 5, 8, 7 ,6, 5, 9), 1)
+                createTrack(listOf(1, 5, 9), 2)
+
+                createWave(15, 2, .150f, 1.4f)
+                createWave(15, 2, .200f, 1.6f)
+                createWave(25, 2, .200f, 1.8f)
+                createWave(25, 2, .250f, 2.0f)
+                createWave(40, 2, .400f, 2.2f)
+
+                data.chipsAllowed = setOf(Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.POWERUP, Chip.ChipUpgrades.SHIFT)
+                rewardCoins = 2
+            }
+            9 ->
             {
                 initializeNetwork(50, 50)
 

@@ -42,11 +42,7 @@ class Persistency(var game: Game?) {
             editor.putString("state", json)
 
             // save upgrades got so far:
-            val upgradeData = SerializableUpgradeData()
-            for (upgrade in it.gameUpgrades.values)
-                upgradeData.upgrades.add(upgrade.data)
-            json = Gson().toJson(upgradeData)
-            editor.putString("upgrades", json)
+            saveUpgrades(editor)
 
             // save level data:
             saveLevels(editor)
@@ -83,6 +79,17 @@ class Persistency(var game: Game?) {
             val thumbnail = SerializableThumbnailData(it.levelThumbnail)
             json = Gson().toJson(thumbnail)
             editor.putString("thumbnails", json)
+        }
+    }
+
+    fun saveUpgrades(editor: SharedPreferences.Editor)
+    {
+        game?.let {
+            val upgradeData = SerializableUpgradeData()
+            for (upgrade in it.gameUpgrades.values)
+                upgradeData.upgrades.add(upgrade.data)
+            var json = Gson().toJson(upgradeData)
+            editor.putString("upgrades", json)
         }
     }
 

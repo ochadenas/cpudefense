@@ -102,8 +102,14 @@ class MainGameActivity : Activity() {
         val prefs = getSharedPreferences(getString(R.string.pref_filename), MODE_PRIVATE)
         val editor = prefs.edit()
         Persistency(theGame).saveState(editor)
-        // save game data
+        editor.apply()
+    }
 
+    fun saveUpgrades()
+    {
+        val prefs = getSharedPreferences(getString(R.string.pref_filename), MODE_PRIVATE)
+        val editor = prefs.edit()
+        Persistency(theGame).saveUpgrades(editor)
         editor.apply()
     }
 

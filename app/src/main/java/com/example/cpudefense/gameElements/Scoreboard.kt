@@ -182,7 +182,7 @@ class ScoreBoard(val game: Game): GameElement() {
             val sizeLedY = (area.height() * 0.3).toInt()
             val deltaX = 14 + sizeLedX
             val ledAreaHeight = sizeLedY + deltaX
-            val ledAreaWidth = (game.state.maxLives + 1) * deltaX
+            val ledAreaWidth = (game.state.currentMaxLives + 1) * deltaX
             var ledArea = Rect(0, 0, ledAreaWidth, ledAreaHeight)
             // var ledArea = Rect(0, divider+(area.height()-ledAreaHeight)/2, ledAreaWidth, ledAreaHeight)
             // determine the exact position of the LEDs. This is a bit frickelig
@@ -194,7 +194,7 @@ class ScoreBoard(val game: Game): GameElement() {
             paint.style = Paint.Style.FILL
             paint.color = resources.getColor(R.color.led_panel)
             canvas.drawRect(ledArea, paint)
-            for (i in 1..game.state.maxLives) {
+            for (i in 1..game.state.currentMaxLives) {
                 var rect = Rect(0, 0, sizeLedX, sizeLedY)
                 rect.setCenter(ledArea.right - i * deltaX, ledArea.centerY())
                 var glowRect = Rect(rect).inflate(3)

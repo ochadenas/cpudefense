@@ -41,7 +41,7 @@ class Game(val gameActivity: MainGameActivity) {
         const val cardWidth = 280
 
         const val minimalAmountOfCash = 8
-        const val maxLivesPerStage = 4
+        const val maxLivesPerStage = 3
 
         const val levelSnapshotIconSize = 120
 
@@ -53,6 +53,7 @@ class Game(val gameActivity: MainGameActivity) {
         var phase: GamePhase,       // whether the game is running, paused or between levels
         var startingLevel: Int,     // level to begin the next game with
         var maxLives: Int,          // maximum number of lives
+        var currentMaxLives: Int,   // maximum number of lives, taking into account modifiers
         var lives: Int,             // current number of lives
         var cash: Int,              // current amount of 'information' currency in bits
         var coinsInLevel: Int = 0,  // cryptocoins that can be obtained by completing the current level
@@ -62,6 +63,7 @@ class Game(val gameActivity: MainGameActivity) {
         phase = GamePhase.START,
         startingLevel = 1,
         maxLives = maxLivesPerStage,
+        currentMaxLives = maxLivesPerStage,
         lives = 0,
         cash = minimalAmountOfCash
     )
@@ -264,7 +266,9 @@ class Game(val gameActivity: MainGameActivity) {
 
     fun startNextStage(level: Int)
     {
-        state.lives = state.maxLives
+        var extraLives = gameUpgrades[Upgrade.Type.ADDITIONAL_LIVES]?.getStrength()
+        state.currentMaxLives = state.maxLives + (extraLives ?: 0f).toInt()
+        state.lives = state.currentMaxLives
         calculateStartingCash()
         var nextStage = Stage(this)
         gameActivity.runOnUiThread {

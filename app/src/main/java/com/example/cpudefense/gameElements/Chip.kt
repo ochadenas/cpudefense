@@ -17,7 +17,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
     data class Data(
         var type: ChipType = ChipType.EMPTY,
         var power: Int = 0,
-        var cooldown: Int = 20,
+        var cooldown: Int = 0,
         var value: Int = 0,
         var node: Node.Data,
         var color: Int = Color.WHITE,
@@ -40,17 +40,6 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
     init {
         actualRect = Rect()
         data.range = 2.0f
-        when (chipData.type)
-        {
-            ChipType.SUB -> {
-                val modifier: Float = network.theGame.gameUpgrades[Upgrade.Type.INCREASE_CHIP_SUB_SPEED]?.getStrength() ?: 1f
-                chipData.cooldown = (20f / modifier).toInt()
-            }
-            ChipType.SHIFT -> {
-                val modifier: Float = network.theGame.gameUpgrades[Upgrade.Type.INCREASE_CHIP_SHIFT_SPEED]?.getStrength() ?: 1f
-                chipData.cooldown = (32f / modifier).toInt()
-            }
-        }
     }
 
     fun setIdent(ident: Int)
@@ -69,6 +58,8 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
                 chipData.color = resources.getColor(R.color.chips_dec_foreground)
                 chipData.glowColor = resources.getColor(R.color.chips_dec_glow)
                 chipData.value = Game.basePrice[ChipUpgrades.SUB] ?: 10
+                val modifier: Float = network.theGame.gameUpgrades[Upgrade.Type.INCREASE_CHIP_SUB_SPEED]?.getStrength() ?: 1f
+                chipData.cooldown = (20f / modifier).toInt()
             }
             ChipType.SHIFT -> {
                 chipData.power = 1
@@ -76,6 +67,8 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
                 chipData.color = resources.getColor(R.color.chips_shr_foreground)
                 chipData.glowColor = resources.getColor(R.color.chips_shr_glow)
                 chipData.value = Game.basePrice[ChipUpgrades.SHIFT] ?: 10
+                val modifier: Float = network.theGame.gameUpgrades[Upgrade.Type.INCREASE_CHIP_SHIFT_SPEED]?.getStrength() ?: 1f
+                chipData.cooldown = (32f / modifier).toInt()
             }
             else -> {}
         }
