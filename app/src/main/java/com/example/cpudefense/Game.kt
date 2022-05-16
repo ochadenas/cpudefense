@@ -278,6 +278,7 @@ class Game(val gameActivity: MainGameActivity) {
         state.coinsInLevel = nextStage.calculateRewardCoins(summaryPerLevel[level])
         summaryPerLevel[level] = nextStage.summary
         gameActivity.setGameSpeed(GameSpeed.NORMAL)
+        speedControlPanel.resetButtons()
         gameActivity.saveState()
         if (network == null) // no more levels left
         {
