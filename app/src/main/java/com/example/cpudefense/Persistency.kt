@@ -52,6 +52,12 @@ class Persistency(var game: Game?) {
     fun loadState(sharedPreferences: SharedPreferences)
     {
         game?.let {
+            // get level data
+            it.summaryPerLevel = loadLevelSummaries(sharedPreferences) ?: HashMap()
+
+            // get global data
+            it.global = loadGlobalData(sharedPreferences)
+
             // get state of running game
             var json = sharedPreferences.getString("state", "none")
             if (json == "none")
@@ -59,12 +65,6 @@ class Persistency(var game: Game?) {
             val data: SerializableStateData = Gson().fromJson(json, SerializableStateData::class.java)
             it.state = data.general
             it.stageData = data.stage
-
-            // get level data
-            it.summaryPerLevel = loadLevelSummaries(sharedPreferences) ?: HashMap()
-
-            // get global data
-            it.global = loadGlobalData(sharedPreferences)
         }
     }
 
