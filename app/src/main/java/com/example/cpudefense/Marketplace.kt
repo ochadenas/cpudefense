@@ -9,14 +9,17 @@ import com.example.cpudefense.effects.Fader
 import com.example.cpudefense.gameElements.Button
 import com.example.cpudefense.gameElements.GameElement
 import com.example.cpudefense.networkmap.Viewport
+import kotlinx.coroutines.processNextEventInCurrentThread
 import java.util.concurrent.CopyOnWriteArrayList
 
 class Marketplace(val game: Game): GameElement()
 {
     private var buttonFinish: Button? = null
     private var myArea = Rect()
+    private var viewOffset = 0f  // used for scrolling
 
     private var upgrades = CopyOnWriteArrayList<Upgrade>()
+    private var nextGameLevel = 0
 
     fun setSize(area: Rect)
     {
@@ -24,9 +27,10 @@ class Marketplace(val game: Game): GameElement()
         createButton()
     }
 
-    fun fillMarket()
+    fun fillMarket(level: Int)
     {
         upgrades.clear()
+        nextGameLevel = level
         for (type in Upgrade.Type.values())
         {
             /* if upgrade already exists (because it has been bought earlier),
@@ -42,12 +46,13 @@ class Marketplace(val game: Game): GameElement()
         arrangeCards()
     }
 
-    private fun arrangeCards()
-    /** calculate positions of the cards' rectangles */
+    private fun arrangeCards(dY: Float = 0f)
+    /** calculate positions of the cards' rectangles.
+     * @param dY Vertical offset used for scrolling */
     {
         val space = 20
         val offset = Game.cardHeight + space
-        var pos = offset
+        var pos = offset + dY.toInt()
         for (card in upgrades)
         {
             card.areaOnScreen.setTopLeft(space, pos)
@@ -73,7 +78,7 @@ class Marketplace(val game: Game): GameElement()
         /** test if a button has been pressed: */
         if (buttonFinish?.myArea?.contains(event.x.toInt(), event.y.toInt()) == true)
         {
-            game.startNextStage(game.intermezzo.level)
+            game.startNextStage(nextGameLevel)
             return true
         }
         for (card in upgrades)
@@ -87,6 +92,14 @@ class Marketplace(val game: Game): GameElement()
             }
         }
         return false
+    }
+
+    fun onScroll(event1: MotionEvent?, event2: MotionEvent?, dX: Float, dY: Float): Boolean {
+        if (dY != 0f) {
+            viewOffset -= dY / 2.0f
+            arrangeCards(viewOffset)
+        }
+        return true
     }
 
     override fun display(canvas: Canvas, viewport: Viewport) {

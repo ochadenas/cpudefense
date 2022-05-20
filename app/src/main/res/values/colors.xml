@@ -29,7 +29,7 @@
     <color name="text_white">#E8E8E8</color>
     <color name="text_blue">#1BB8FF</color>
 
-    <color name="upgrade_inactive">#AEBDC4</color>
+    <color name="upgrade_inactive">#7C878C</color>
     <color name="upgrade_active_general">#79D5FF</color>
     <color name="upgrade_active_eco">#FFC907</color>
     <color name="upgrade_active_speed">#9C27B0</color>

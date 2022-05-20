@@ -37,7 +37,7 @@ class Game(val gameActivity: MainGameActivity) {
 
         const val coinSizeOnScoreboard = 40
         const val coinSizeOnScreen = 25
-        const val cardHeight = 128
+        const val cardHeight = 256
         const val cardWidth = 280
 
         const val minimalAmountOfCash = 8
@@ -117,22 +117,22 @@ class Game(val gameActivity: MainGameActivity) {
     {
         gameActivity.loadState()
         currentStage = Stage.createStageFromData(this, stageData)
-        currentStage?.let {
-            // network = it.createNetwork(it.data.level)
-            // data.coinsInLevel = it.rewardCoins
-            network = it.network
-            currentWave = if (it.waves.size > 0) it.waves[0] else it.nextWave()
-            viewport.setViewportSize(it.sizeX, it.sizeY)
+        var stage = currentStage ?: return beginGame()
+
+        network = stage.network
+        viewport.setViewportSize(stage.sizeX, stage.sizeY)
+        currentWave = if (stage.waves.size > 0) stage.waves[0] else stage.nextWave()
+        // data.coinsInLevel = it.rewardCoins
+        if (state.phase == GamePhase.RUNNING) {
             gameActivity.runOnUiThread {
-                val toast: Toast = Toast.makeText(
-                    gameActivity,
-                    "Stage %d".format(it.data.level),
-                    Toast.LENGTH_SHORT
-                )
-                toast.show() }
+                val toast: Toast = Toast.makeText(gameActivity, "Stage %d".format(stage.data.level), Toast.LENGTH_SHORT )
+                toast.show()
+            }
         }
-        if (currentStage == null)
-            beginGame()
+        else if (state.phase == GamePhase.MARKETPLACE)
+        {
+            marketplace.fillMarket(stage.data.level)
+        }
     }
 
     fun update()

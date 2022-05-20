@@ -36,7 +36,7 @@ class Upgrade(var game: Game, type: Type): Fadable {
         Type.INCREASE_CHIP_SHIFT_SPEED -> game.resources.getColor(R.color.upgrade_active_chip_shr)
         Type.ADDITIONAL_LIVES -> game.resources.getColor(R.color.upgrade_active_eco)
     }
-    var maxLevel = 4   // cannot upgrade beyound this level
+    var maxLevel = 7   // cannot upgrade beyound this level
 
     init {
         paintRect.style = Paint.Style.STROKE
@@ -132,8 +132,10 @@ class Upgrade(var game: Game, type: Type): Fadable {
             return
         val levelText = "%d".format(data.level)
         val bounds = Rect()
+        var paintDeco = Paint(paintText)
+        paintDeco.color = activeColor
         paintText.getTextBounds(levelText, 0, levelText.length, bounds)
-        canvas.drawText(levelText, canvas.width - bounds.width() - 10f, bounds.height() + 10f, paintText)
+        canvas.drawText(levelText, canvas.width - bounds.width() - 10f, bounds.height() + 10f, paintDeco)
     }
 
     fun setDesc()
@@ -165,8 +167,9 @@ class Upgrade(var game: Game, type: Type): Fadable {
             }
             Type.ADDITIONAL_LIVES -> {
                 shortDesc = "Additional lives"
-                strengthDesc = "-%d".format(strength.toInt())
-                upgradeDesc = " -> -%d".format(next.toInt())
+                strengthDesc = "%d".format(strength.toInt())
+                upgradeDesc = " -> %d".format(next.toInt())
+                maxLevel = 3
             }
         }
         upgradeDesc = "%s  [cost: %d]".format(upgradeDesc, getPrice(data.level))
@@ -193,6 +196,7 @@ class Upgrade(var game: Game, type: Type): Fadable {
     {
         when (data.type) {
             Type.DECREASE_UPGRADE_COST -> return (game.gameUpgrades[Type.INCREASE_STARTING_CASH]?.data?.level?: 0 >= 3)
+            Type.ADDITIONAL_LIVES -> return (game.gameUpgrades[Type.DECREASE_UPGRADE_COST]?.data?.level?: 0 >= 3)
             else -> return true
         }
     }

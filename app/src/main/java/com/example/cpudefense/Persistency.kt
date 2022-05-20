@@ -58,6 +58,9 @@ class Persistency(var game: Game?) {
             // get global data
             it.global = loadGlobalData(sharedPreferences)
 
+            // get upgrades
+            it.gameUpgrades = loadUpgrades(sharedPreferences)
+
             // get state of running game
             var json = sharedPreferences.getString("state", "none")
             if (json == "none")

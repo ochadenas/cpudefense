@@ -149,7 +149,7 @@ class Intermezzo(var game: Game): GameElement(), Fadable {
     fun startMarketplace()
     {
         clear()
-        game.marketplace.fillMarket()
+        game.marketplace.fillMarket(level)
         game.state.phase = Game.GamePhase.MARKETPLACE
     }
 

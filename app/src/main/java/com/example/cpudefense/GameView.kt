@@ -82,6 +82,8 @@ class GameView(context: Context, val theGame: Game):
     }
 
     override fun onScroll(p0: MotionEvent?, p1: MotionEvent?, p2: Float, p3: Float): Boolean {
+        if (theGame.state.phase == Game.GamePhase.MARKETPLACE)
+            theGame.marketplace.onScroll(p0, p1, p2, p3)
         return false
     }
 
