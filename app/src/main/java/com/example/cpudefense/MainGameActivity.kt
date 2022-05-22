@@ -113,6 +113,14 @@ class MainGameActivity : Activity() {
         editor.apply()
     }
 
+    fun saveThumbnail(level: Int)
+    {
+        val prefs = getSharedPreferences(getString(R.string.pref_filename), MODE_PRIVATE)
+        val editor = prefs.edit()
+        Persistency(theGame).saveThumbnailOfLevel(editor, level)
+        editor.apply()
+    }
+
     fun loadState()
     {
         val prefs = getSharedPreferences(getString(R.string.pref_filename), MODE_PRIVATE)
@@ -132,12 +140,6 @@ class MainGameActivity : Activity() {
     {
         val prefs = getSharedPreferences(getString(R.string.pref_filename), MODE_PRIVATE)
         return Persistency(theGame).loadLevelSummaries(prefs) ?: HashMap()
-    }
-
-    fun loadThumbnails(): HashMap<Int, String>
-    {
-        val prefs = getSharedPreferences(getString(R.string.pref_filename), MODE_PRIVATE)
-        return Persistency(theGame).loadLevelThumbnails(prefs) ?: HashMap()
     }
 
     fun loadUpgrades(): HashMap<Upgrade.Type, Upgrade>

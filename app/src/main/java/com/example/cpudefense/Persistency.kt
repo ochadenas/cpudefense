@@ -1,7 +1,12 @@
 package com.example.cpudefense
 
 import android.content.SharedPreferences
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.util.Base64
 import com.google.gson.Gson
+import java.io.ByteArrayOutputStream
+import java.lang.Exception
 import java.util.concurrent.CopyOnWriteArrayList
 
 class Persistency(var game: Game?) {
@@ -78,10 +83,21 @@ class Persistency(var game: Game?) {
             val data = SerializableLevelData(it.summaryPerLevel)
             var json = Gson().toJson(data)
             editor.putString("levels", json)
-            // level thumbnail:
-            val thumbnail = SerializableThumbnailData(it.levelThumbnail)
-            json = Gson().toJson(thumbnail)
-            editor.putString("thumbnails", json)
+        }
+    }
+
+    fun saveThumbnailOfLevel(editor: SharedPreferences.Editor, level: Int) {
+        game?.let {
+            val level = it.currentStage?.data?.level ?: 0
+            if (level != 0) {
+                var outputStream = ByteArrayOutputStream()
+                var snapshot: Bitmap? = it.levelThumbnail[level]
+                snapshot?.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
+                val encodedImage: String =
+                    Base64.encodeToString(outputStream.toByteArray(), Base64.DEFAULT)
+                var key: String = "thumbnail_%d".format(level)
+                editor.putString(key, encodedImage)
+            }
         }
     }
 
@@ -114,13 +130,22 @@ class Persistency(var game: Game?) {
         return data.level
     }
 
-    fun loadLevelThumbnails(sharedPreferences: SharedPreferences): HashMap<Int, String>?
+    fun loadThumbnailOfLevel(sharedPreferences: SharedPreferences, level: Int): Bitmap?
     {
-        val json = sharedPreferences.getString("thumbnails", "none")
-        if (json == "none")
-            return null
-        val data: SerializableThumbnailData = Gson().fromJson(json, SerializableThumbnailData::class.java)
-        return data.thumbnail
+        var key: String = "thumbnail_%d".format(level)
+        var encodedString = sharedPreferences.getString(key, "")
+        // reconstruct bitmap from string saved in preferences
+        var snapshot: Bitmap? = null
+        try {
+            val decodedBytes: ByteArray = Base64.decode(encodedString, Base64.DEFAULT)
+            snapshot = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.size)
+        }
+        catch(e: Exception)
+        {
+            // unable to get a level snapshot, for whatever reason
+            snapshot = null
+        }
+        return snapshot
     }
 
     fun loadUpgrades(sharedPreferences: SharedPreferences): HashMap<Upgrade.Type, Upgrade>

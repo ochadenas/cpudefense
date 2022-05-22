@@ -75,7 +75,8 @@ class Game(val gameActivity: MainGameActivity) {
 
     var stageData: Stage.Data? = null
     var summaryPerLevel = HashMap<Int, Stage.Summary>()
-    var levelThumbnail = HashMap<Int, String>()  // base64-encoded level snapshot
+    // var levelThumbnail = HashMap<Int, String>()  // base64-encoded level snapshot
+    var levelThumbnail = HashMap<Int, Bitmap?>()  // level snapshots
     var gameUpgrades = HashMap<Upgrade.Type, Upgrade>()
 
     val viewport = Viewport()
@@ -105,7 +106,6 @@ class Game(val gameActivity: MainGameActivity) {
         if (resetProgress == false) {
             global = gameActivity.loadGlobalData()
             summaryPerLevel = gameActivity.loadLevelData()   // get historical data of levels completed so far
-            levelThumbnail = gameActivity.loadThumbnails()   // load the existing thumbnails
             gameUpgrades = gameActivity.loadUpgrades()       // load the upgrades gained so far
             intermezzo.prepareLevel(state.startingLevel, true)
         }
@@ -334,12 +334,10 @@ class Game(val gameActivity: MainGameActivity) {
 
     fun takeLevelSnapshot()
     {
-        var snapshot: Bitmap = currentStage?.takeSnapshot(Game.levelSnapshotIconSize) ?: return
-
-        var outputStream = ByteArrayOutputStream()
-        snapshot?.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
-        val encodedImage: String = Base64.encodeToString(outputStream.toByteArray(), Base64.DEFAULT)
-        currentStage?.let { levelThumbnail[it.data.level] = encodedImage }
+        currentStage?.let {
+            levelThumbnail[it.data.level] = it.takeSnapshot(Game.levelSnapshotIconSize)
+            gameActivity.saveThumbnail(it.data.level)
+        }
     }
 
 }

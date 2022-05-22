@@ -4,15 +4,12 @@ import android.content.Intent
 import android.graphics.*
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
-import android.util.Base64
 import android.view.Gravity
 import android.view.View
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import java.lang.Exception
-import kotlin.collections.HashMap
 
 class LevelSelectActivity : AppCompatActivity() {
     var levels: HashMap<Int, Stage.Summary>? = null
@@ -35,16 +32,14 @@ class LevelSelectActivity : AppCompatActivity() {
         val listView = findViewById<LinearLayout>(R.id.levelList)
         val prefs = getSharedPreferences(getString(R.string.pref_filename), MODE_PRIVATE)
         levels = Persistency(null).loadLevelSummaries(prefs)
-        var thumbnails = Persistency(null).loadLevelThumbnails(prefs)
 
         if (levels == null)
             levels = hashMapOf(0 to Stage.Summary())  // create empty first level
-
         for ((level, summary) in levels?.entries!!)
         {
             val levelEntryView = Button(this)
             var textString = getString(R.string.level_entry).format(level)
-            var coinsMaxAvailable = summary.coinsAvailable + summary.coinsGot
+            val coinsMaxAvailable = summary.coinsAvailable + summary.coinsGot
             if (coinsMaxAvailable > 0)
                 textString = textString.plus("\n%d of %d coins got.".format(summary.coinsGot, coinsMaxAvailable))
             levelEntryView.text = textString
@@ -54,7 +49,8 @@ class LevelSelectActivity : AppCompatActivity() {
             levelEntryView.setBackgroundColor(Color.BLACK)
             levelEntryView.setGravity(Gravity.START)
 
-            addLevelIcon(levelEntryView, thumbnails?.get(level))
+            val thumbnail = Persistency(null).loadThumbnailOfLevel(prefs, level)
+            addLevelIcon(levelEntryView, thumbnail)
 
             levelEntryView.setTextAppearance(this, R.style.TextAppearance_AppCompat_Medium)
             if (summary.won)
@@ -67,27 +63,16 @@ class LevelSelectActivity : AppCompatActivity() {
         }
     }
 
-    fun addLevelIcon(view: TextView, encodedImage: String?)
+    fun addLevelIcon(view: TextView, icon: Bitmap?)
             /** add an icon representing the network of the level
              * @param view: the level entry
              */
     {
-        // reconstruct bitmap from string saved in preferences
-        var snapshot: Bitmap? = null
-        try {
-            val decodedBytes: ByteArray = Base64.decode(encodedImage, Base64.DEFAULT)
-            snapshot = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.size)
-        }
-        catch(e: Exception)
-        {
-            // unable to get a level snapshot, for whatever reason
-        }
-
         // add bitmap to text view
         val iconPadding = 10
         val iconSize = Game.levelSnapshotIconSize + iconPadding
         val bitmap = Bitmap.createBitmap(iconSize, iconSize, Bitmap.Config.ARGB_8888)
-        snapshot?.let {
+        icon?.let {
             val canvas = Canvas(bitmap)
             val paint = Paint()
             canvas.drawBitmap(it, null, Rect(iconPadding,iconPadding, iconSize-iconPadding, iconSize-iconPadding), paint)

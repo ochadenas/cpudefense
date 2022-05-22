@@ -16,6 +16,7 @@ class Marketplace(val game: Game): GameElement()
 {
     private var buttonFinish: Button? = null
     private var myArea = Rect()
+    private var cardsArea = Rect()  // area used for cards, without header
     private var viewOffset = 0f  // used for scrolling
 
     private var upgrades = CopyOnWriteArrayList<Upgrade>()
@@ -24,6 +25,7 @@ class Marketplace(val game: Game): GameElement()
     fun setSize(area: Rect)
     {
         myArea = Rect(area)
+        cardsArea = Rect(myArea.top, 64, Game.cardWidth + 20, myArea.bottom)
         createButton()
     }
 
@@ -105,14 +107,26 @@ class Marketplace(val game: Game): GameElement()
     override fun display(canvas: Canvas, viewport: Viewport) {
         if (game.state.phase != Game.GamePhase.MARKETPLACE)
             return
-        val paint = Paint()
+
+        // draw empty background
+        var paint = Paint()
         paint.color = Color.BLACK
+        paint.style = Paint.Style.FILL
         paint.alpha = 255
         canvas.drawRect(myArea, paint)
+
+        // draw cards
         for (card in upgrades)
             card.display(canvas)
-        buttonFinish?.display(canvas)
 
+        // draw 'total coins' line
+        val textArea = Rect(0, 0, myArea.right, cardsArea.top)
+        canvas.drawRect(textArea, paint)
+        paint.color = Color.WHITE
+        paint.style = Paint.Style.STROKE
+        paint.strokeWidth = 2f
+        val y = textArea.bottom.toFloat() - 2f
+        canvas.drawLine(0f, y, myArea.right.toFloat(), y, paint)
         val textPaint = Paint()
         textPaint.color = Color.WHITE
         textPaint.style = Paint.Style.FILL
@@ -120,5 +134,7 @@ class Marketplace(val game: Game): GameElement()
         val text = "Total coins: %d".format(game.global.coinsTotal)
         canvas.drawText(text, 20f, 40f, textPaint)
 
+        // draw button
+        buttonFinish?.display(canvas)
     }
 }
