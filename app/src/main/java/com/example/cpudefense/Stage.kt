@@ -46,7 +46,7 @@ class Stage(var theGame: Game) {
         var won: Boolean = false
     )
     lateinit var summary: Summary
-    var rewardCoins = 0  // number of coins that can be obtained by completing the level
+    private var rewardCoins = 0  // number of coins that can be obtained by completing the level
 
     fun calculateRewardCoins(previousSummary: Summary?): Int
             /** calculate the coins available for completing this level,
@@ -89,8 +89,8 @@ class Stage(var theGame: Game) {
     companion object {
         fun createStageFromData(game: Game, stageData: Data?): Stage?
         {
-            var data = stageData ?: return null
-            var stage = Stage(game)
+            val data = stageData ?: return null
+            val stage = Stage(game)
             stage.data = data
             stage.sizeX = data.gridSizeX
             stage.sizeY = data.gridSizeY
@@ -220,9 +220,9 @@ class Stage(var theGame: Game) {
         tracks[ident] = track
     }
     
-    private fun createWave(attackerCount: Int, attackerStrength: Int, attackerFreqency: Float, attackerSpeed: Float, coins: Int = 0)
+    private fun createWave(attackerCount: Int, attackerStrength: Int, attackerFrequency: Float, attackerSpeed: Float, coins: Int = 0)
     {
-        var waveData = Wave.Data(attackerCount, attackerStrength, attackerFreqency, attackerSpeed, coins, currentCount = attackerCount)
+        val waveData = Wave.Data(attackerCount, attackerStrength, attackerFrequency, attackerSpeed, coins, currentCount = attackerCount)
         waves.add(Wave(theGame, waveData))
     }
 
@@ -246,8 +246,7 @@ class Stage(var theGame: Game) {
         /* blur the image */
         bigSnapshot = bigSnapshot.blur(theGame.gameActivity, 3f) ?: bigSnapshot
 
-        var smallSnapshot = Bitmap.createScaledBitmap(bigSnapshot, size, size, true)
-        return smallSnapshot
+        return Bitmap.createScaledBitmap(bigSnapshot, size, size, true)
     }
 
     fun createNetwork(level: Int): Network

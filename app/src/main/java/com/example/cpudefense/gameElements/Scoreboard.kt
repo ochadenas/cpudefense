@@ -230,9 +230,9 @@ class ScoreBoard(val game: Game): GameElement() {
             var coins = game.state.coinsInLevel + game.state.coinsExtra
             if (coins <= 0)
                 return
-            if (game.state.lives != lastValue) {
+            if (coins != lastValue) {
                 /* only render the display if value has changed, otherwise re-use bitmap */
-                lastValue = game.state.lives
+                lastValue = coins
                 recreateBitmap(coins)
             }
             canvas.drawBitmap(bitmap, null, area, paint)

@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Context
 import android.content.res.Resources
 import android.graphics.*
-import android.util.Base64
 import android.view.MotionEvent
 import android.widget.Toast
 import com.example.cpudefense.effects.Fader
@@ -16,7 +15,6 @@ import com.example.cpudefense.networkmap.Viewport
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import java.io.ByteArrayOutputStream
 import java.util.concurrent.CopyOnWriteArrayList
 
 
@@ -75,7 +73,6 @@ class Game(val gameActivity: MainGameActivity) {
 
     var stageData: Stage.Data? = null
     var summaryPerLevel = HashMap<Int, Stage.Summary>()
-    // var levelThumbnail = HashMap<Int, String>()  // base64-encoded level snapshot
     var levelThumbnail = HashMap<Int, Bitmap?>()  // level snapshots
     var gameUpgrades = HashMap<Upgrade.Type, Upgrade>()
 
@@ -103,7 +100,7 @@ class Game(val gameActivity: MainGameActivity) {
 
     fun beginGame(resetProgress: Boolean = false)
     {
-        if (resetProgress == false) {
+        if (!resetProgress) {
             global = gameActivity.loadGlobalData()
             summaryPerLevel = gameActivity.loadLevelData()   // get historical data of levels completed so far
             gameUpgrades = gameActivity.loadUpgrades()       // load the upgrades gained so far
@@ -227,7 +224,7 @@ class Game(val gameActivity: MainGameActivity) {
     fun onEndOfWave()
     {
         currentWave = null
-        GlobalScope.launch { delay(5000L); startNextWave() }
+        GlobalScope.launch { delay(3000L); startNextWave() }
     }
 
     fun onEndOfStage()
@@ -276,6 +273,7 @@ class Game(val gameActivity: MainGameActivity) {
             toast.show() }
         network = nextStage.createNetwork(level)
         state.coinsInLevel = nextStage.calculateRewardCoins(summaryPerLevel[level])
+        state.coinsExtra = 0
         summaryPerLevel[level] = nextStage.summary
         gameActivity.setGameSpeed(GameSpeed.NORMAL)
         speedControlPanel.resetButtons()
@@ -335,7 +333,7 @@ class Game(val gameActivity: MainGameActivity) {
     fun takeLevelSnapshot()
     {
         currentStage?.let {
-            levelThumbnail[it.data.level] = it.takeSnapshot(Game.levelSnapshotIconSize)
+            levelThumbnail[it.data.level] = it.takeSnapshot(levelSnapshotIconSize)
             gameActivity.saveThumbnail(it.data.level)
         }
     }
