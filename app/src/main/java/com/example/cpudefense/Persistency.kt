@@ -154,8 +154,10 @@ class Persistency(var game: Game?) {
         val json = sharedPreferences.getString("upgrades", "none")
         if (json != "none") game?.let {
             val data: SerializableUpgradeData = Gson().fromJson(json, SerializableUpgradeData::class.java)
-            for (upgradeData in data.upgrades)
+            for (upgradeData in data.upgrades) {
                 upgradeMap[upgradeData.type] = Upgrade.createFromData(it, upgradeData)
+
+            }
         }
         return upgradeMap
     }

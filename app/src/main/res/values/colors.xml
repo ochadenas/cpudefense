@@ -35,7 +35,7 @@
     <color name="upgrade_active_speed">#9C27B0</color>
     <color name="upgrade_active_chip_dec">#DA07DD00</color>
     <color name="upgrade_active_chip_shr">#DA649DF3</color>
-    <color name="upgrade_active_acc">#FFC107</color>
+    <color name="upgrade_active_chip_acc">#FFC107</color>
 
 
 </resources>

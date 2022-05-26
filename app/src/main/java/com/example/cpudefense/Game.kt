@@ -127,9 +127,7 @@ class Game(val gameActivity: MainGameActivity) {
             }
         }
         else if (state.phase == GamePhase.MARKETPLACE)
-        {
             marketplace.fillMarket(stage.data.level)
-        }
     }
 
     fun update()

@@ -19,6 +19,7 @@
     <string name="selectLevel">Select Level</string>
     <string name="play_selected_level">Play selected level</string>
     <string name="button_purchase">Get upgrades</string>
+    <string name="button_refund">Reset all</string>
     <string name="level_entry">Level %d</string>
     <string name="level_selector">Level Selector</string>
 </resources>
