@@ -31,7 +31,7 @@
 
     <color name="upgrade_inactive">#7C878C</color>
     <color name="upgrade_active_general">#79D5FF</color>
-    <color name="upgrade_active_eco">#FFFFFF</color>
+    <color name="upgrade_active_eco">#FF8400</color>
     <color name="upgrade_active_speed">#9C27B0</color>
     <color name="upgrade_active_chip_dec">#DA07DD00</color>
     <color name="upgrade_active_chip_shr">#DA649DF3</color>

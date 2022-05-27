@@ -1,17 +1,22 @@
 package com.example.cpudefense
 
-import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.View
-import android.widget.Switch
+import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
+
 
 class WelcomeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_welcome)
+        val info = packageManager.getPackageInfo(this.packageName, PackageManager.GET_ACTIVITIES)
+        val versionName = "Version %s ".format(info.versionName)
+        val view = findViewById<TextView>(R.id.versionText)
+        view?.setText(versionName)
     }
 
     override fun onActivityReenter(resultCode: Int, data: Intent?) {

@@ -198,8 +198,8 @@ open class Attacker(network: Network, type: Representation = Representation.BINA
     override fun update() {
         super.update()
         val link = onLink
-        link?.node2?.notify(this, distanceToNextNode)
-        link?.node1?.notify(this, -distanceFromLastNode)
+        endNode?.notify(this, distanceToNextNode)
+        startNode?.notify(this, -distanceFromLastNode)
 
         // animation, if any
         if (animationCount>0)
