@@ -11,6 +11,7 @@ class Wave(var game: Game, var data: Data)
         var attackerFreqency: Float,
         var attackerSpeed: Float,
         var coins: Int = 0,
+        var representation: Attacker.Representation = Attacker.Representation.UNDEFINED,
         var currentCount: Int
             )
 
@@ -28,6 +29,8 @@ class Wave(var game: Game, var data: Data)
                 data.coins--
                 game.currentStage?.createNewAttacker(data.attackerStrength, data.attackerSpeed, isCoin = true)
             }
+            else if (data.representation == Attacker.Representation.HEX)
+                game.currentStage?.createNewAttacker(data.attackerStrength, data.attackerSpeed, representation = Attacker.Representation.HEX)
             else
                 game.currentStage?.createNewAttacker(data.attackerStrength, data.attackerSpeed)
             data.currentCount--

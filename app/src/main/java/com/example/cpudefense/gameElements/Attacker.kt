@@ -14,12 +14,13 @@ import kotlin.random.Random
 open class Attacker(network: Network, type: Representation = Representation.BINARY,
                     number: ULong = 1u, speed: Float = 1.0f):
     Vehicle(network), Explodable {
-    enum class Representation { BINARY, HEX, DECIMAL, FLOAT }
+    enum class Representation { UNDEFINED, BINARY, HEX, DECIMAL, FLOAT }
 
     data class Data(
-        val type: Representation,
+        var representation: Representation,
         var number: ULong,
-        var digits: Int,
+        var binaryDigits: Int,
+        var hexDigits: Int,
         var bits: Int,
         var isCoin: Boolean = false,
         var vehicle: Vehicle.Data
@@ -28,9 +29,19 @@ open class Attacker(network: Network, type: Representation = Representation.BINA
     companion object {
         fun makeNumber(attacker: Attacker): String
         {
-            val text = attacker.attackerData.number.toString(radix=2).padStart(attacker.attackerData.digits, '0')
+            val text: String
+            if (attacker.attackerData.representation == Representation.BINARY)
+                text = attacker.attackerData.number.toString(radix=2).padStart(attacker.attackerData.binaryDigits, '0')
+            else
+                text = "x" + attacker.attackerData.number.toString(radix=16).uppercase().padStart(attacker.attackerData.hexDigits, '0')
             attacker.createBitmap(text)
             return text
+        }
+
+        fun log16(v: Float): Float
+        {
+            val l16 = log2(16f)
+            return log2(v) / l16
         }
 
         val maskBinary: HashMap<Int, ULong> = hashMapOf(
@@ -45,9 +56,8 @@ open class Attacker(network: Network, type: Representation = Representation.BINA
 
         fun createFromData(stage: Stage, data: Data): Attacker
         {
-            val attacker = Attacker(stage.network, data.type, data.number, data.vehicle.speed)
+            val attacker = Attacker(stage.network, data.representation, data.number, data.vehicle.speed)
             attacker.data = data.vehicle
-            attacker.attackerData = data
             attacker.attackerData = data
             attacker.data = data.vehicle
             attacker.onLink = stage.network.links[data.vehicle.linkId]
@@ -58,7 +68,7 @@ open class Attacker(network: Network, type: Representation = Representation.BINA
         }
     }
 
-    var attackerData = Data( type = type, number = number, digits = log2(number.toFloat()).toInt()+1,
+    var attackerData = Data( representation = type, number = number, binaryDigits = 0, hexDigits = 0,
         bits = 0, vehicle = super.data
     )
     var numberBitmap: Bitmap = Bitmap.createBitmap(100, 32, Bitmap.Config.ARGB_8888)
@@ -68,18 +78,35 @@ open class Attacker(network: Network, type: Representation = Representation.BINA
     var animationCount = 0
     val animationCountMax = 8
     val numberFontSize = 24f
-    var displacement = Pair(Random.nextInt(3)-1, Random.nextInt(5)-2) // small shift in display to avoid over-crowding on the screen
+    var displacement = Pair(Random.nextInt(5)-1, Random.nextInt(7)-2) // small shift in display to avoid over-crowding on the screen
 
     init {
-        if (attackerData.digits<1)
-            attackerData.digits = 1
-        else if (attackerData.digits>16)
-            attackerData.digits = 16
-        else while (! maskBinary.containsKey(attackerData.digits))
-            attackerData.digits++  // adjust 'digits' to nearest allowed value
-        attackerData.number = attackerData.number and maskBinary[attackerData.digits]!!
+        if (attackerData.representation == Representation.UNDEFINED)
+            attackerData.representation = if (attackerData.number >= 32u) Representation.HEX else Representation.BINARY
+        if (attackerData.representation == Representation.BINARY)
+        {
+            attackerData.binaryDigits = log2(number.toFloat()).toInt() + 1
+            if (attackerData.binaryDigits < 1)
+                attackerData.binaryDigits = 1
+            else if (attackerData.binaryDigits > 16)
+                attackerData.binaryDigits = 16
+            else while (!maskBinary.containsKey(attackerData.binaryDigits))
+                attackerData.binaryDigits++  // adjust 'digits' to nearest allowed value
+            attackerData.number = attackerData.number and maskBinary[attackerData.binaryDigits]!!
+        }
+        else
+        {
+            attackerData.hexDigits = log16(number.toFloat()).toInt() + 1
+            if (attackerData.hexDigits < 2)
+                attackerData.hexDigits = 2
+            else if (attackerData.hexDigits > 8)
+                attackerData.hexDigits = 8
+            else while (!maskHex.containsKey(attackerData.hexDigits))
+                attackerData.hexDigits++  // adjust 'digits' to nearest allowed value
+            attackerData.number = attackerData.number and maskHex[attackerData.hexDigits]!!
+        }
         makeNumber(this)
-        attackerData.bits = attackerData.digits // TODO: change for hex values
+        attackerData.bits = attackerData.binaryDigits + 4 * attackerData.hexDigits
         this.data.speed = speed
     }
 
@@ -104,7 +131,10 @@ open class Attacker(network: Network, type: Representation = Representation.BINA
     {
         var n: ULong = attackerData.number
         n = n.inv()
-        n = n and maskBinary[attackerData.digits]!!
+        if (attackerData.representation == Representation.BINARY)
+            n = n and maskBinary[attackerData.binaryDigits]!!
+        else
+            n = n and maskHex[attackerData.hexDigits]!!
         changeNumberTo(n)
     }
 
@@ -159,10 +189,21 @@ open class Attacker(network: Network, type: Representation = Representation.BINA
 
     fun createBitmap(text: String)
     {
+        // define colours
         val textPaint = Paint()
+        val blurPaint = Paint()
+        val blurMaskFilter = BlurMaskFilter(11f, BlurMaskFilter.Blur.OUTER)
+        if (attackerData.representation == Representation.BINARY) {
+            textPaint.color = theNetwork.theGame.resources.getColor(R.color.attackers_foreground_bin)
+            blurPaint.color = theNetwork.theGame.resources.getColor(R.color.attackers_glow_bin)
+        }
+        else {
+            textPaint.color = theNetwork.theGame.resources.getColor(R.color.attackers_foreground_hex)
+            blurPaint.color = theNetwork.theGame.resources.getColor(R.color.attackers_glow_hex)
+        }
+
         textPaint.textSize = numberFontSize
         textPaint.alpha = 255
-        textPaint.color = theNetwork.theGame.resources.getColor(R.color.attackers_foreground)
         // paint.typeface = MONOSPACE
         textPaint.typeface = Typeface.create("sans-serif-condensed", Typeface.BOLD)
         textPaint.textAlign = Paint.Align.CENTER
@@ -183,15 +224,12 @@ open class Attacker(network: Network, type: Representation = Representation.BINA
         // canvas.drawRect(rect, paint)
 
         /* use blurred image to create glow */
-        val blurPaint = Paint()
-        val blurMaskFilter = BlurMaskFilter(9f, BlurMaskFilter.Blur.OUTER)
-        blurPaint.color = theNetwork.theGame.resources.getColor(R.color.attackers_glow)
         blurPaint.maskFilter = blurMaskFilter
         blurPaint.style = Paint.Style.FILL
         val blurCanvas = Canvas(numberBitmap)
         blurCanvas.drawBitmap(alpha, 0f, 0f, blurPaint)
 
-        textPaint.color = theNetwork.theGame.resources.getColor(R.color.attackers_foreground)
+        textPaint.color = theNetwork.theGame.resources.getColor(R.color.attackers_foreground_bin)
         textPaint.maskFilter = null
     }
 

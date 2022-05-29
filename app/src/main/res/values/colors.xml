@@ -9,8 +9,10 @@
     <color name="white">#FFFFFFFF</color>
     <color name="network_background">#F0292215</color>
     <color name="connectors">#F0e79c00</color>
-    <color name="attackers_foreground">#DAFFF2F2</color>
-    <color name="attackers_glow">#FFFD2222</color>
+    <color name="attackers_foreground_bin">#DAFFF2F2</color>
+    <color name="attackers_foreground_hex">#FFDC00</color>
+    <color name="attackers_glow_bin">#FFFD2222</color>
+    <color name="attackers_glow_hex">#A63500</color>
     <color name="attackers_background">#40000000</color>
     <color name="chips_dec_foreground">#DA07DD00</color>
     <color name="chips_dec_glow">#AFFA34</color>

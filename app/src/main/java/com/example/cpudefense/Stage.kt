@@ -125,12 +125,13 @@ class Stage(var theGame: Game) {
         }
     }
 
-    fun createNewAttacker(maxNumber: Int, speed: Float, isCoin: Boolean = false)
+    fun createNewAttacker(maxNumber: Int, speed: Float, isCoin: Boolean = false,
+                          representation: Attacker.Representation = Attacker.Representation.BINARY)
     {
         val attacker = if (isCoin)
             Cryptocoin(network, (maxNumber*1.5).toULong(), speed )
         else
-            Attacker(network, Attacker.Representation.BINARY,
+            Attacker(network, representation,
             Random.nextULong((maxNumber+1).toULong()), speed)
         network.addVehicle(attacker)
 
@@ -220,9 +221,16 @@ class Stage(var theGame: Game) {
         tracks[ident] = track
     }
     
-    private fun createWave(attackerCount: Int, attackerStrength: Int, attackerFrequency: Float, attackerSpeed: Float, coins: Int = 0)
+    private fun createWave(attackerCount: Int, attackerStrength: Int, attackerFrequency: Float, attackerSpeed: Float,
+                           coins: Int = 0, representation: Attacker.Representation = Attacker.Representation.UNDEFINED)
     {
-        val waveData = Wave.Data(attackerCount, attackerStrength, attackerFrequency, attackerSpeed, coins, currentCount = attackerCount)
+        val waveData = Wave.Data(attackerCount, attackerStrength, attackerFrequency, attackerSpeed, coins, currentCount = attackerCount, representation = representation)
+        waves.add(Wave(theGame, waveData))
+    }
+
+    private fun createWaveHex(attackerCount: Int, attackerStrength: Int, attackerFrequency: Float, attackerSpeed: Float, coins: Int = 0)
+    {
+        val waveData = Wave.Data(attackerCount, attackerStrength, attackerFrequency, attackerSpeed, coins, currentCount = attackerCount, representation = Attacker.Representation.HEX)
         waves.add(Wave(theGame, waveData))
     }
 
@@ -591,7 +599,7 @@ class Stage(var theGame: Game) {
             {
                 initializeNetwork(50, 55)
 
-                createChip(40, 5, type = Chip.ChipType.ENTRY)
+                createChip(40, 7, type = Chip.ChipType.ENTRY)
                 createChip(20, 5, 1)
                 createChip(20, 10, 2)
                 createChip(10, 20, 3)
@@ -601,7 +609,7 @@ class Stage(var theGame: Game) {
                 createChip(10, 40, 7)
                 createChip(30, 40, 8)
                 createChip(20, 50, 9)
-                createChip(40, 50, type = Chip.ChipType.CPU)
+                createChip(40, 48, type = Chip.ChipType.CPU)
 
                 createLink(0, 1, 1)
                 createLink(1, 2, 2)
@@ -623,14 +631,14 @@ class Stage(var theGame: Game) {
                 createTrack(listOf(1, 2,4,6,9,13,14), 2)
                 createTrack(listOf(1, 2,4,7,10,13,14), 3)
 
-                createWave(10, 1, .125f, 1.2f)
-                createWave(10, 1, .125f, 1.1f)
-                createWave(15, 2, .100f, 1.0f)
-                createWave(20, 3, .100f, 1.0f)
-                createWave(20, 4, .100f, 1.0f)
-                createWave(20, 5, .125f, 1.0f)
-                createWave(20, 6, .05f, 1f)
-                createWave(15, 8, .05f, 1f, coins = 1)
+                createWave(12, 5, .120f, 1.0f)
+                createWave(12, 7, .110f, 1.0f)
+                createWave(10, 12, .110f, 1.0f)
+                createWave(10, 20, .110f, 1.0f)
+                createWave(10, 30, .110f, 1.0f)
+                createWave(10, 40, .110f, 1.0f)
+                createWaveHex(15, 50, .05f, 1f, coins = 0)
+                createWaveHex(20, 80, .05f, 1f, coins = 1)
 
                 data.chipsAllowed = setOf(Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.POWERUP, Chip.ChipUpgrades.SHIFT)
                 rewardCoins = 2
