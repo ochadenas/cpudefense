@@ -166,8 +166,8 @@ class Link(val theNetwork: Network, var node1: Node, var node2: Node, var ident:
     fun displayLine(canvas: Canvas, viewport: Viewport, startGridPoint: GridCoord, endGridPoint: GridCoord)
     /** draws one single line from start point to end point, in grid coords */
     {
-        val startPoint = viewport.gridToScreen(startGridPoint)
-        val endPoint = viewport.gridToScreen(endGridPoint)
+        val startPoint = viewport.gridToViewport(startGridPoint)
+        val endPoint = viewport.gridToViewport(endGridPoint)
         val paint = Paint()
         paint.style = Paint.Style.STROKE
         paint.color = Color.BLACK

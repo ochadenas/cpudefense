@@ -63,7 +63,7 @@ open class Vehicle(val theNetwork: Network): GameElement() {
         if (posOnGrid == null)
             return
         var actualRect = Rect(0, 0, 20, 20)
-        actualRect.setCenter(viewport.gridToScreen(posOnGrid!!))
+        actualRect.setCenter(viewport.gridToViewport(posOnGrid!!))
         var paint = Paint()
         paint.color = Color.RED
         paint.style = Paint.Style.FILL

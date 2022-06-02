@@ -173,7 +173,7 @@ open class Attacker(network: Network, type: Representation = Representation.BINA
         if (posOnGrid == null)
             return Pair(0, 0)
         else
-            return theNetwork.theGame.viewport.gridToScreen(posOnGrid!!)
+            return theNetwork.theGame.viewport.gridToViewport(posOnGrid!!)
     }
 
     override fun remove()

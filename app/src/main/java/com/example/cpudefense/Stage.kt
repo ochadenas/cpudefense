@@ -46,6 +46,7 @@ class Stage(var theGame: Game) {
         var won: Boolean = false
     )
     lateinit var summary: Summary
+
     private var rewardCoins = 0  // number of coins that can be obtained by completing the level
 
     fun calculateRewardCoins(previousSummary: Summary?): Int
@@ -247,7 +248,7 @@ class Stage(var theGame: Game) {
              */
     {
         var p: Viewport = theGame.viewport
-        var bigSnapshot = createBitmap(p.screenWidth, p.screenHeight)
+        var bigSnapshot = createBitmap(p.viewportWidth, p.viewportHeight)
         network.display(Canvas(bigSnapshot), p)
         // var smallSnapshot = createBitmap(size, size)
 
@@ -474,7 +475,7 @@ class Stage(var theGame: Game) {
             {
                 initializeNetwork(50, 50)
 
-                createChip(10, 25, type = Chip.ChipType.ENTRY)
+                createChip(5, 25, type = Chip.ChipType.ENTRY)
                 createChip(20, 15, 1)
                 createChip(35, 15, 2)
                 createChip(20, 25, 3)
@@ -496,7 +497,9 @@ class Stage(var theGame: Game) {
 
                 createTrack(listOf(1, 5, 4, 3 ,2, 5, 9), 0)
                 createTrack(listOf(1, 5, 8, 7 ,6, 5, 9), 1)
-                createTrack(listOf(1, 5, 9), 2)
+                createTrack(listOf(1, 5, 4, 3 ,2, 5, 9), 2)
+                createTrack(listOf(1, 5, 8, 7 ,6, 5, 9), 3)
+                createTrack(listOf(1, 5, 9), 4)
 
                 createWave(15, 2, .150f, 1.4f)
                 createWave(15, 2, .200f, 1.6f)
@@ -558,7 +561,7 @@ class Stage(var theGame: Game) {
 
                 createChip(45, 1, type = Chip.ChipType.ENTRY)
                 createChip(34, 5, 1)
-                createChip(25, 15, 2)
+                createChip(12, 15, 2)
                 createChip(45, 12, 6)
                 createChip(30, 20, 3)
                 createChip(25, 32, 4)

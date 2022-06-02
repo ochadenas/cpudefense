@@ -105,7 +105,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
             heightOnScreen = sizeOnScreen.second * Game.chipSize.y.toInt()
             actualRect = Rect(0, 0, widthOnScreen, heightOnScreen)
         }
-        actualRect.setCenter(viewport.gridToScreen(posOnGrid))
+        actualRect.setCenter(viewport.gridToViewport(posOnGrid))
 
         val paint = Paint()
         /* draw background */
@@ -133,8 +133,8 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
             for (vehicle in distanceToVehicle.keys.filter { attackerInRange(it as Attacker) })
                 canvas.drawLine(
                     actualRect.centerX().toFloat(), actualRect.centerY().toFloat(),
-                    (viewport.gridToScreen(vehicle.posOnGrid!!)).first.toFloat(),
-                    (viewport.gridToScreen(vehicle.posOnGrid!!)).second.toFloat(), paint
+                    (viewport.gridToViewport(vehicle.posOnGrid!!)).first.toFloat(),
+                    (viewport.gridToViewport(vehicle.posOnGrid!!)).second.toFloat(), paint
                 )
         }
 
@@ -243,7 +243,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
 
         // calculate screen coordinates for the alternative boxes
         var posX = actualRect.centerX()
-        if (network.theGame.viewport.isInRightHalfOfScreen(posX))
+        if (network.theGame.viewport.isInRightHalfOfViewport(posX))
             posX -= (1.2 * actualRect.width()).toInt()
         else
             posX += (1.2 * actualRect.width()).toInt()

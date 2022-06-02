@@ -3,6 +3,7 @@ package com.example.cpudefense.networkmap
 import android.graphics.*
 import android.view.MotionEvent
 import com.example.cpudefense.Game
+import com.example.cpudefense.effects.Background
 import com.example.cpudefense.gameElements.GameElement
 import com.example.cpudefense.gameElements.Vehicle
 import java.util.concurrent.CopyOnWriteArrayList
@@ -23,7 +24,7 @@ class Network(val theGame: Game, x: Int, y: Int): GameElement() {
     var links = hashMapOf<Int, Link>()
     var vehicles: CopyOnWriteArrayList<Vehicle> = CopyOnWriteArrayList<Vehicle>()
 
-    private lateinit var backgroundBitmap: Bitmap
+    private lateinit var networkImage: Bitmap
     var paint = Paint()
 
     enum class Dir { HORIZONTAL, VERTICAL, DIAGONAL, REVERSE_DIAGONAL, UNDEFINED }
@@ -52,8 +53,8 @@ class Network(val theGame: Game, x: Int, y: Int): GameElement() {
 
     fun distanceBetweenGridPoints(): Pair<Int, Int>
     {
-        val point0 = theGame.viewport.gridToScreen(GridCoord(0,0))
-        val point1 = theGame.viewport.gridToScreen(GridCoord(1,1))
+        val point0 = theGame.viewport.gridToViewport(GridCoord(0,0))
+        val point1 = theGame.viewport.gridToViewport(GridCoord(1,1))
         return Pair(point1.first-point0.first, point1.second-point0.second)
     }
 
@@ -67,25 +68,25 @@ class Network(val theGame: Game, x: Int, y: Int): GameElement() {
     }
 
     override fun display(canvas: Canvas, viewport: Viewport) {
-        displayBackground(canvas, viewport)
+        displayNetwork(canvas, viewport)
         for (obj in nodes.values)
             obj.display(canvas, viewport)
         for (obj in vehicles)
             obj.display(canvas, viewport)
     }
 
-    private fun displayBackground(canvas: Canvas, viewport: Viewport)
+    private fun displayNetwork(canvas: Canvas, viewport: Viewport)
     {
         // displayFrame(canvas, viewport) // optional
-        if (!this::backgroundBitmap.isInitialized)
-            recreateBackground(viewport)
-        canvas.drawBitmap(this.backgroundBitmap, null, viewport.getRect(), paint)
+        if (!this::networkImage.isInitialized)
+            recreateNetworkImage(viewport)
+        canvas.drawBitmap(this.networkImage, null, viewport.getRect(), paint)
     }
 
     private fun displayFrame(canvas: Canvas, viewport: Viewport)
     {
-        val cornerTopleft = viewport.gridToScreen(GridCoord(0, 0))
-        val cornerBottomright = viewport.gridToScreen(GridCoord(data.gridSizeX, data.gridSizeY))
+        val cornerTopleft = viewport.gridToViewport(GridCoord(0, 0))
+        val cornerBottomright = viewport.gridToViewport(GridCoord(data.gridSizeX, data.gridSizeY))
         val actualRect = Rect(cornerTopleft.first, cornerTopleft.second, cornerBottomright.first, cornerBottomright.second)
         val paint = Paint()
         paint.color = Color.WHITE
@@ -94,11 +95,11 @@ class Network(val theGame: Game, x: Int, y: Int): GameElement() {
         canvas.drawRect(actualRect, paint)
     }
 
-    private fun recreateBackground(viewport: Viewport)
+    private fun recreateNetworkImage(viewport: Viewport)
     /** function that must be called whenever the viewport (or the network configuration) changes */
     {
-        this.backgroundBitmap = Bitmap.createBitmap(viewport.screenWidth, viewport.screenHeight, Bitmap.Config.ARGB_8888)
-        var canvas = Canvas(this.backgroundBitmap)
+        this.networkImage = Bitmap.createBitmap(viewport.viewportWidth, viewport.viewportHeight, Bitmap.Config.ARGB_8888)
+        var canvas = Canvas(this.networkImage)
         for (obj in links.values)
             obj.display(canvas, viewport)
     }

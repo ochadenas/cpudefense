@@ -6,6 +6,7 @@ import android.content.res.Resources
 import android.graphics.*
 import android.view.MotionEvent
 import android.widget.Toast
+import com.example.cpudefense.effects.Background
 import com.example.cpudefense.effects.Fader
 import com.example.cpudefense.effects.Mover
 import com.example.cpudefense.gameElements.*
@@ -21,7 +22,7 @@ import java.util.concurrent.CopyOnWriteArrayList
 class Game(val gameActivity: MainGameActivity) {
     companion object Params {
         val chipSize = GridCoord(6,3)
-        const val viewportMargin = 32
+        const val viewportMargin = 10
         const val minScoreBoardHeight = 100
         const val maxScoreBoardHeight = 320
         const val speedControlButtonSize = 80
@@ -77,6 +78,7 @@ class Game(val gameActivity: MainGameActivity) {
     var gameUpgrades = HashMap<Upgrade.Type, Upgrade>()
 
     val viewport = Viewport()
+    var background: Background? = null
     var network: Network? = null
     var intermezzo = Intermezzo(this)
     var marketplace = Marketplace(this)
@@ -142,6 +144,7 @@ class Game(val gameActivity: MainGameActivity) {
     fun updateEffects()
             /**  execute all movers and faders */
     {
+        background?.update()
         for (m in movers)
         {
             if (m?.type == Mover.Type.NONE)
@@ -162,6 +165,7 @@ class Game(val gameActivity: MainGameActivity) {
     {
         if (state.phase == GamePhase.RUNNING || state.phase == GamePhase.PAUSED)
         {
+            background?.display(canvas, viewport.screen)
             network?.display(canvas, viewport)
             scoreBoard.display(canvas, viewport)
             speedControlPanel.display(canvas, viewport)
@@ -173,7 +177,7 @@ class Game(val gameActivity: MainGameActivity) {
             paint.textSize = 72f
             paint.typeface = Typeface.DEFAULT_BOLD
             viewport.let {
-                val rect = Rect(0, 0, it.screenWidth, it.screenHeight)
+                val rect = Rect(0, 0, it.viewportWidth, it.viewportHeight)
                 rect.displayTextCenteredInRect(canvas, "GAME PAUSED", paint)
             }
         }

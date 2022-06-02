@@ -46,7 +46,7 @@ class Cpu(network: Network, gridX: Int, gridY: Int): Chip(network, gridX, gridY)
     }
 
     override fun display(canvas: Canvas, viewport: Viewport) {
-        actualRect.setCenter(viewport.gridToScreen(posOnGrid))
+        actualRect.setCenter(viewport.gridToViewport(posOnGrid))
         val paint = Paint()
         bitmap?.let()
         { canvas.drawBitmap(it, null, actualRect, paint) }

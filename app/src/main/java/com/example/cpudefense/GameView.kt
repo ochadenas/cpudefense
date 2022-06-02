@@ -11,6 +11,7 @@ import android.view.MotionEvent
 import android.view.SurfaceHolder
 import android.view.SurfaceView
 import androidx.core.view.GestureDetectorCompat
+import com.example.cpudefense.effects.Background
 import com.example.cpudefense.effects.Effects
 
 class GameView(context: Context, val theGame: Game):
@@ -60,6 +61,7 @@ class GameView(context: Context, val theGame: Game):
         theGame.speedControlPanel.setSize(Rect(0, 0, w, viewportHeight))
         theGame.intermezzo.setSize(Rect(0,0,w,h))
         theGame.marketplace.setSize(Rect(0,0,w,h))
+        theGame.background = Background(theGame)
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
