@@ -514,6 +514,44 @@ class Stage(var theGame: Game) {
             {
                 initializeNetwork(50, 50)
 
+                createChip(10, 45, type = Chip.ChipType.ENTRY)
+                createChip(10, 35, 1)
+                createChip(20, 20, 2)
+                createChip(30, 5, 3)
+                createChip(10, 5, 4)
+                createChip(30, 35, 5)
+                createChip(40, 35, 6)
+                createChip(48, 35, type = Chip.ChipType.CPU)
+
+
+                createLink(0, 1, 1)
+                createLink(1, 2, 2)
+                createLink(2, 3, 3)
+                createLink(2, 4, 4)
+                createLink(2, 5, 5)
+                createLink(3, 4, 7)
+                createLink(5, 6, 6)
+                createLink(6, 999, 8)
+
+                createTrack(listOf(1, 2, 3, 7, 4, 5, 6, 8), 0)
+
+                createWave(10, 2, .140f, 1.4f)
+                createWave(20, 3, .130f, 1.3f)
+                createWave(10, 5, .120f, 1.2f)
+                createWave(20, 7, .110f, 1.1f)
+                createWave(10, 8, .110f, 1.0f)
+                createWave(20, 12, .110f, 1.0f)
+                createWaveHex(20,18, .100f, 1.0f)
+                createWaveHex(20,28, .100f, 1.1f, coins = 1)
+                createWaveHex(20,40, .100f, 1.2f)
+
+                data.chipsAllowed = setOf(Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.POWERUP, Chip.ChipUpgrades.SHIFT)
+                rewardCoins = 2
+            }
+            10 ->
+            {
+                initializeNetwork(50, 50)
+
                 createChip(25, 5, type = Chip.ChipType.ENTRY)
                 createChip(10, 5, 1)
                 createChip(40, 5, 2)
@@ -549,13 +587,13 @@ class Stage(var theGame: Game) {
                 createWave(20, 4, .100f, 1.0f)
                 createWave(20, 5, .125f, 1.0f)
                 createWave(20, 6, .05f, 1f, coins = 1)
-                createWave(15, 8, .05f, 1f, coins = 1)
+                createWave(15, 8, .05f, 1f)
 
                 data.chipsAllowed = setOf(Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.POWERUP, Chip.ChipUpgrades.SHIFT)
                 rewardCoins = 2
 
             }
-            10 ->
+            11 ->
             {
                 initializeNetwork(50, 50)
 
@@ -598,7 +636,7 @@ class Stage(var theGame: Game) {
                 data.chipsAllowed = setOf(Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.POWERUP, Chip.ChipUpgrades.SHIFT)
                 rewardCoins = 2
             }
-            11 ->
+            12 ->
             {
                 initializeNetwork(50, 55)
 

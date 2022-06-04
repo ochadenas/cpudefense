@@ -20,6 +20,7 @@ class GameView(context: Context, val theGame: Game):
 {
     var canvas: Canvas? = null
     var theEffects: Effects? = null
+    private var backgroundColour = Color.BLACK
     private var gestureDetector = GestureDetectorCompat(context, this)
 
     fun setup()
@@ -29,6 +30,7 @@ class GameView(context: Context, val theGame: Game):
     {
         this.visibility = VISIBLE
         this.holder.addCallback(this)
+        backgroundColour = theGame.resources.getColor(R.color.network_background)
         theEffects = Effects(theGame)
     }
 
@@ -102,8 +104,7 @@ class GameView(context: Context, val theGame: Game):
         val canvas = holder.lockCanvas()
         if (canvas != null)
         {
-            canvas.drawColor(theGame.resources.getColor(R.color.network_background) ?: Color.BLACK)
-
+            canvas.drawColor(backgroundColour)
 
             theGame.display(canvas)
             theEffects?.display(canvas)

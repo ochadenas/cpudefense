@@ -25,7 +25,8 @@ class Network(val theGame: Game, x: Int, y: Int): GameElement() {
     var vehicles: CopyOnWriteArrayList<Vehicle> = CopyOnWriteArrayList<Vehicle>()
 
     private lateinit var networkImage: Bitmap
-    var paint = Paint()
+    private var paint = Paint()
+    private var gridPointDistance: Pair<Int, Int>? = null
 
     enum class Dir { HORIZONTAL, VERTICAL, DIAGONAL, REVERSE_DIAGONAL, UNDEFINED }
 
@@ -53,9 +54,13 @@ class Network(val theGame: Game, x: Int, y: Int): GameElement() {
 
     fun distanceBetweenGridPoints(): Pair<Int, Int>
     {
-        val point0 = theGame.viewport.gridToViewport(GridCoord(0,0))
-        val point1 = theGame.viewport.gridToViewport(GridCoord(1,1))
-        return Pair(point1.first-point0.first, point1.second-point0.second)
+        if (gridPointDistance == null || gridPointDistance == Pair(0,0))
+        {
+            val point0 = theGame.viewport.gridToViewport(GridCoord(0,0))
+            val point1 = theGame.viewport.gridToViewport(GridCoord(1,1))
+            gridPointDistance = Pair(point1.first-point0.first, point1.second-point0.second)
+        }
+        return gridPointDistance ?: Pair(0,0)
     }
 
     override fun update() {
