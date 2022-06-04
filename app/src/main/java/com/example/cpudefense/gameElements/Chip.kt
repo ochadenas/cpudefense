@@ -37,9 +37,22 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
     private var cooldownTimer = 0
     private var upgradePossibilities = CopyOnWriteArrayList<ChipUpgrade>()
 
+    private var paintBitmap = Paint()
+    private var paintOutline = Paint()
+    private val paintBackground = Paint()
+    private var paintLines = Paint()
+    private val defaultBackgroundColor = resources.getColor(R.color.chips_background)
+
     init {
         actualRect = Rect()
         data.range = 2.0f
+        paintOutline.color = Color.WHITE
+        paintOutline.style = Paint.Style.STROKE
+        paintOutline.strokeWidth = 2f
+        paintBackground.style = Paint.Style.FILL
+        paintLines.style = Paint.Style.STROKE
+        paintLines.color = Color.WHITE
+        paintLines.strokeWidth = 4.0f
     }
 
     fun setIdent(ident: Int)
@@ -107,41 +120,34 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
         }
         actualRect.setCenter(viewport.gridToViewport(posOnGrid))
 
-        val paint = Paint()
         /* draw background */
-        paint.color = resources.getColor(R.color.chips_background)
-        paint.style = Paint.Style.FILL
-        canvas.drawRect(actualRect, paint)
+        paintBackground.color = defaultBackgroundColor
+        paintBackground.alpha = 255
+        canvas.drawRect(actualRect, paintBackground)
         if (cooldownTimer>0)
         {
-            paint.color = chipData.glowColor
-            paint.alpha = (cooldownTimer*255)/chipData.cooldown
-            canvas.drawRect(actualRect, paint)
+            paintBackground.color = chipData.glowColor
+            paintBackground.alpha = (cooldownTimer*255)/chipData.cooldown
+            canvas.drawRect(actualRect, paintBackground)
         }
 
         /* draw outline */
-        paint.color = Color.WHITE
-        paint.style = Paint.Style.STROKE
-        paint.strokeWidth = 2f
-        canvas.drawRect(actualRect, paint)
+        canvas.drawRect(actualRect, paintOutline)
 
         /* display a line to all vehicles in range */
         if (Game.drawLinesFromChip) {
-            paint.style = Paint.Style.STROKE
-            paint.color = Color.WHITE
-            paint.strokeWidth = 4.0f
             for (vehicle in distanceToVehicle.keys.filter { attackerInRange(it as Attacker) })
                 canvas.drawLine(
                     actualRect.centerX().toFloat(), actualRect.centerY().toFloat(),
                     (viewport.gridToViewport(vehicle.posOnGrid!!)).first.toFloat(),
-                    (viewport.gridToViewport(vehicle.posOnGrid!!)).second.toFloat(), paint
+                    (viewport.gridToViewport(vehicle.posOnGrid!!)).second.toFloat(), paintLines
                 )
         }
 
         if (bitmap == null)
             bitmap = createBitmapForType()
         if (bitmap != null)
-            canvas.drawBitmap(bitmap!!, null, actualRect, paint)
+            canvas.drawBitmap(bitmap!!, null, actualRect, paintBitmap)
 
         /* if applicable, show the different upgrade possibilities */
         for (upgrade in upgradePossibilities)

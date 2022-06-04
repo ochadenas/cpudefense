@@ -14,6 +14,10 @@ class Spark(var posX: Float, var posY: Float, var vX: Float, var vY: Float,
     var size = Random.nextInt(4) + 4
     var maxAge = 64 + Random.nextInt(128)
     var age = 0
+    val paint = Paint()
+    var rect = Rect(0, 0, size, size)
+
+    init { paint.color = color }
 
     fun expired(): Boolean
     { return age > maxAge }
@@ -27,10 +31,7 @@ class Spark(var posX: Float, var posY: Float, var vX: Float, var vY: Float,
     }
 
     fun display(canvas: Canvas) {
-        var paint = Paint()
-        paint.color = color
         paint.alpha = 255 - 255 * age / maxAge
-        var rect = Rect(0, 0, size, size)
         rect.setCenter(Pair(posX.toInt(), posY.toInt()))
         canvas.drawRect(rect, paint)
     }
@@ -53,6 +54,7 @@ class Explosion(game: Game, posOnScreen: Pair<Int, Int>,
 
     fun update() {
         sparks.map { it.update() }
+        // TODO: the following seems to be rather CPU consuming. Try to find a better way
         sparks.removeAll { x: Spark -> x.expired() } // remove sparks after their lifetime
     }
 

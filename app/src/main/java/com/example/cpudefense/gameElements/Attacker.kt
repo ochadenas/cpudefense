@@ -79,6 +79,7 @@ open class Attacker(network: Network, type: Representation = Representation.BINA
     val animationCountMax = 8
     val numberFontSize = 24f
     var displacement = Pair(Random.nextInt(5)-1, Random.nextInt(7)-2) // small shift in display to avoid over-crowding on the screen
+    private val paintBitmap = Paint()
 
     init {
         if (attackerData.representation == Representation.UNDEFINED)
@@ -249,7 +250,6 @@ open class Attacker(network: Network, type: Representation = Representation.BINA
         actualRect.setCenter(getPositionOnScreen())
         actualRect.offset(displacement.first, displacement.second)
 
-        val paint = Paint()
         if (animationCount>0)
             oldNumberBitmap?.let {
                 val divider = numberBitmap.height * animationCount / animationCountMax
@@ -259,11 +259,11 @@ open class Attacker(network: Network, type: Representation = Representation.BINA
                 newTarget.offsetTo(actualRect.left, actualRect.top+divider)
                 val oldTarget = Rect(0, 0, numberBitmap.width, divider)
                 oldTarget.offsetTo(actualRect.left, actualRect.top)
-                canvas.drawBitmap(numberBitmap, newSource, newTarget, paint)
-                canvas.drawBitmap(it, oldSource, oldTarget, paint)
+                canvas.drawBitmap(numberBitmap, newSource, newTarget, paintBitmap)
+                canvas.drawBitmap(it, oldSource, oldTarget, paintBitmap)
         }
         else
-            canvas.drawBitmap(numberBitmap, null, actualRect, paint)
+            canvas.drawBitmap(numberBitmap, null, actualRect, paintBitmap)
     }
 
     fun onDown(event: MotionEvent): Boolean {
