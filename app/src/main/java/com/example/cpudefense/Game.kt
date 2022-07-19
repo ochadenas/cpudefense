@@ -21,6 +21,7 @@ import java.util.concurrent.CopyOnWriteArrayList
 
 class Game(val gameActivity: MainGameActivity) {
     companion object Params {
+        const val defaultMainDelay = 70L
         val chipSize = GridCoord(6,3)
         const val viewportMargin = 10
         const val minScoreBoardHeight = 100
@@ -48,6 +49,8 @@ class Game(val gameActivity: MainGameActivity) {
             Chip.ChipUpgrades.SUB to 8, Chip.ChipUpgrades.AND to 32, Chip.ChipUpgrades.SHIFT to 16)
     }
 
+    var globalSpeedFactor = 1.0f
+
     data class StateData(
         var phase: GamePhase,       // whether the game is running, paused or between levels
         var startingLevel: Int,     // level to begin the next game with
@@ -68,7 +71,8 @@ class Game(val gameActivity: MainGameActivity) {
     )
 
     data class GlobalData(
-        var coinsTotal: Int = 0
+        var coinsTotal: Int = 0,
+        var configDisableBackground: Boolean = false
     )
     var global = GlobalData()
 
@@ -77,6 +81,7 @@ class Game(val gameActivity: MainGameActivity) {
     var levelThumbnail = HashMap<Int, Bitmap?>()  // level snapshots
     var gameUpgrades = HashMap<Upgrade.Type, Upgrade>()
 
+    /* game elements */
     val viewport = Viewport()
     var background: Background? = null
     var network: Network? = null
@@ -87,9 +92,9 @@ class Game(val gameActivity: MainGameActivity) {
     var currentStage: Stage? = null
     var currentWave: Wave? = null
     val resources: Resources = (gameActivity as Activity).resources
-
     var movers = CopyOnWriteArrayList<Mover>() // list of all mover objects that are created for game elements
     var faders = CopyOnWriteArrayList<Fader>() // idem for faders
+    val paintBitmap = Paint()
 
     enum class GamePhase { START, RUNNING, END, INTERMEZZO, MARKETPLACE, PAUSED }
     enum class GameSpeed { NORMAL, MAX }
@@ -165,7 +170,10 @@ class Game(val gameActivity: MainGameActivity) {
     {
         if (state.phase == GamePhase.RUNNING || state.phase == GamePhase.PAUSED)
         {
-            background?.display(canvas, viewport.screen)
+            if (! global.configDisableBackground)
+                background?.actualImage?.let {
+                    canvas.drawBitmap(it, null, viewport.screen, paintBitmap)
+                }
             network?.display(canvas, viewport)
             scoreBoard.display(canvas, viewport)
             speedControlPanel.display(canvas, viewport)
@@ -236,7 +244,7 @@ class Game(val gameActivity: MainGameActivity) {
         takeLevelSnapshot()
         if (currentStage?.attackerCount()?:0 > 0)  // still attackers left, wait until wave is really over
         {
-            GlobalScope.launch { delay(1000L); onEndOfStage() }
+            GlobalScope.launch { delay(2000L); onEndOfStage() }
         }
         else {
             currentStage?.let { onStageCleared(it) }

@@ -172,7 +172,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
     {
         if (chipData.type == ChipType.EMPTY)
             return
-        cooldownTimer = chipData.cooldown
+        cooldownTimer = (chipData.cooldown / network.theGame.globalSpeedFactor).toInt()
         var kill = attacker?.onShot(chipData.type, chipData.power)
         if (kill == true)
             attacker?.remove()

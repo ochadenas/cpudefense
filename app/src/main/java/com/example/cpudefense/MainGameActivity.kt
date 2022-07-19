@@ -9,7 +9,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class MainGameActivity : Activity() {
-    private var mainDelay: Long = 50
+    var mainDelay: Long = 0
     private val effectsDelay: Long = 15
     lateinit var theGame: Game
     lateinit var theGameView: GameView
@@ -72,10 +72,14 @@ class MainGameActivity : Activity() {
 
     fun setGameSpeed(speed: Game.GameSpeed)
     {
-        if (speed == Game.GameSpeed.MAX)
-            mainDelay = 1
-        else
-            mainDelay = 50
+        if (speed == Game.GameSpeed.MAX) {
+            mainDelay = 0
+            theGame.background?.frozen = true
+        }
+        else {
+            mainDelay = Game.defaultMainDelay
+            theGame.background?.frozen = false
+        }
     }
 
 

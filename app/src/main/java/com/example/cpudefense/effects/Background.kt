@@ -2,6 +2,7 @@ package com.example.cpudefense.effects
 
 import android.graphics.*
 import com.example.cpudefense.*
+import com.example.cpudefense.networkmap.Viewport
 import kotlin.math.sin
 import kotlin.math.cos
 
@@ -9,16 +10,20 @@ class Background(val game: Game) {
     var bitmap: Bitmap? = null
     var bitmap1: Bitmap? = null
     var bitmap2: Bitmap? = null
-    var dx = 0f
-    var dy = 0f
-    var angle = 0f
-    var vx = 0.1f
-    var vy = 0.1f
-    var x = 0f
-    var y = 0f
-    var projX = 0f
-    var projY = 0f
-    var opacity = 0.3f
+    var angle = 0.0
+    var x = 0.0
+    var y = 0.0
+    var projX = 0.0
+    var projY = 0.0
+    var opacity = 0.6f
+    var paint = Paint()
+    var actualImage: Bitmap? = null
+    var ticks = 0
+    var frozen = false
+
+    // parameters:
+    val deltaAlpha = 0.00008
+    val ticksBeforeUpdate = 12
 
     init {
         bitmap2 = BitmapFactory.decodeResource(game.resources, R.drawable.background_2)
@@ -41,33 +46,44 @@ class Background(val game: Game) {
 
     fun update()
     {
-        angle += 0.0002f
-        projX = cos(angle)
-        projY = sin(angle)
-    }
-
-    fun display(canvas: Canvas, dest: Rect)
-    {
-        bitmap?.let {
-            var paint = Paint()
-            paint.alpha = (255 * opacity).toInt()
-            var source = Rect(0,0,dest.width(),dest.height())
-            var x = it.width/2 + projX * 0.5f * (it.width - dest.width())
-            var y = it.height/2 + projY * 0.5f * (it.height - dest.height())
-            source.setCenter(x.toInt(),y.toInt())
-
-            /*
-            var source =
-                Rect(dx.toInt(), dy.toInt(), dest.width() + dx.toInt(), dest.height() + dy.toInt())
-
-             */
-            canvas.drawBitmap(it, source, dest, paint)
+        if (actualImage == null)
+            initializeImage()
+        if (frozen)
+            return
+        angle += deltaAlpha
+        ticks--
+        if (ticks < 0)
+        {
+            ticks = ticksBeforeUpdate
+            projX = cos(angle)
+            projY = sin(angle)
+            recreateBackgroundImage(game.viewport)
         }
     }
 
+    fun initializeImage()
+    {
+        if (game.viewport.viewportWidth == 0)
+            return   // dimensions are still not known
+        actualImage = Bitmap.createBitmap(game.viewport.viewportWidth, game.viewport.viewportHeight, Bitmap.Config.ARGB_8888)
+    }
 
-
-
+    fun recreateBackgroundImage(viewport: Viewport)
+    {
+        val destWidth = viewport.viewportWidth
+        val destHeight = viewport.viewportHeight
+        val largeImage: Bitmap = this.bitmap ?: return
+        actualImage?.let {
+            paint.alpha = (255 * opacity).toInt()
+            var source = Rect(0,0, destWidth, destHeight)
+            var x = largeImage.width/2 + projX * 0.5f * (largeImage.width - destWidth)
+            var y = largeImage.height/2 + projY * 0.5f * (largeImage.height - destHeight)
+            source.setCenter(x.toInt(),y.toInt())
+            var canvas = Canvas(it)
+            // canvas.drawColor(Color.BLACK)
+            canvas.drawBitmap(largeImage, source, viewport.getRect(), paint)
+        }
+    }
 
 
 }

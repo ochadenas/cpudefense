@@ -64,6 +64,8 @@ class GameView(context: Context, val theGame: Game):
         theGame.intermezzo.setSize(Rect(0,0,w,h))
         theGame.marketplace.setSize(Rect(0,0,w,h))
         theGame.background = Background(theGame)
+        /* increase speed on larger screens */
+        theGame.globalSpeedFactor = (h / 1024f)
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
