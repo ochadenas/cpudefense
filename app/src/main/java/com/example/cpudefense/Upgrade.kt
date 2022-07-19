@@ -7,7 +7,9 @@ import kotlin.math.sqrt
 
 class Upgrade(var game: Game, type: Type): Fadable {
 
-    enum class Type { INCREASE_CHIP_SUB_SPEED, INCREASE_CHIP_SHIFT_SPEED, INCREASE_CHIP_ACC_SPEED, INCREASE_STARTING_CASH, DECREASE_UPGRADE_COST, ADDITIONAL_LIVES }
+    enum class Type { INCREASE_CHIP_SUB_SPEED, INCREASE_CHIP_SHIFT_SPEED, INCREASE_CHIP_ACC_SPEED,
+        DECREASE_ATT_FREQ ,
+        INCREASE_STARTING_CASH, GAIN_CASH, DECREASE_UPGRADE_COST, ADDITIONAL_LIVES}
     data class Data (
         val type: Type,
         var level: Int = 0,
@@ -40,6 +42,8 @@ class Upgrade(var game: Game, type: Type): Fadable {
         Type.INCREASE_CHIP_SHIFT_SPEED -> game.resources.getColor(R.color.upgrade_active_chip_shr)
         Type.ADDITIONAL_LIVES -> game.resources.getColor(R.color.upgrade_active_eco)
         Type.INCREASE_CHIP_ACC_SPEED -> game.resources.getColor(R.color.upgrade_active_chip_acc)
+        Type.DECREASE_ATT_FREQ -> game.resources.getColor(R.color.upgrade_active_general)
+        Type.GAIN_CASH -> game.resources.getColor(R.color.upgrade_active_eco)
     }
     var maxLevel = 7   // cannot upgrade beyond this level
 
@@ -198,6 +202,17 @@ class Upgrade(var game: Game, type: Type): Fadable {
                 upgradeDesc = " -> %d".format(next.toInt())
                 maxLevel = 3
             }
+            Type.DECREASE_ATT_FREQ -> {
+                shortDesc = "Attacker frequency"
+                strengthDesc = "%.2f".format(strength)
+                upgradeDesc = " -> %.2f".format(next)
+            }
+            Type.GAIN_CASH ->
+            {
+                shortDesc = "Information gain"
+                strengthDesc = "%d bits/sec".format(strength.toInt())
+                upgradeDesc = " -> %d bits/sec".format(next.toInt())
+            }
         }
         upgradeDesc = "%s  [cost: %d]".format(upgradeDesc, getPrice(data.level))
         if (data.level >= maxLevel)
@@ -206,6 +221,9 @@ class Upgrade(var game: Game, type: Type): Fadable {
     }
 
     fun getStrength(level: Int = data.level): Float
+            /** determines the numerical effect ("strength") of the upgrade,
+             * depending on its level
+             */
     {
         when (data.type) {
             Type.INCREASE_CHIP_SUB_SPEED -> return 1.0f + level / 20f
@@ -214,6 +232,8 @@ class Upgrade(var game: Game, type: Type): Fadable {
             Type.DECREASE_UPGRADE_COST -> return level * 5f
             Type.ADDITIONAL_LIVES -> return level.toFloat()
             Type.INCREASE_CHIP_ACC_SPEED -> return 1.0f + level / 20f
+            Type.DECREASE_ATT_FREQ -> return 1.0f - level / 20f
+            Type.GAIN_CASH -> return (10f - level)
         }
     }
 
@@ -225,6 +245,8 @@ class Upgrade(var game: Game, type: Type): Fadable {
         when (data.type) {
             Type.DECREASE_UPGRADE_COST -> return (game.gameUpgrades[Type.INCREASE_STARTING_CASH]?.data?.level?: 0 >= 3)
             Type.ADDITIONAL_LIVES -> return (game.gameUpgrades[Type.DECREASE_UPGRADE_COST]?.data?.level?: 0 >= 3)
+            Type.DECREASE_ATT_FREQ -> return (game.gameUpgrades[Type.INCREASE_CHIP_SHIFT_SPEED]?.data?.level?: 0 >= 3)
+            Type.GAIN_CASH -> return (game.gameUpgrades[Type.INCREASE_STARTING_CASH]?.data?.level?: 0 >= 4)
             Type.INCREASE_CHIP_ACC_SPEED -> return false
             else -> return true
         }
@@ -338,11 +360,23 @@ class Upgrade(var game: Game, type: Type): Fadable {
                     fullName = "Konrad Zuse"
                     picture = BitmapFactory.decodeResource(game.resources, R.drawable.zuse)
                 }
-                else ->
+                Type.DECREASE_ATT_FREQ ->
                 {
                     name = "LHC"
                     fullName = "Les Horribles Cernettes"
                     picture = BitmapFactory.decodeResource(game.resources, R.drawable.cernettes)
+                }
+                Type.GAIN_CASH ->
+                {
+                    name = "Franke"
+                    fullName = "Herbert W. Franke"
+                    picture = BitmapFactory.decodeResource(game.resources, R.drawable.cernettes)
+                }
+                else ->
+                {
+                    name = "Vaughan"
+                    fullName = "Dorothy Vaughan"
+                    picture = BitmapFactory.decodeResource(game.resources, R.drawable.vaughan)
                 }
             }
         }

@@ -268,7 +268,10 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
     override fun onDown(event: MotionEvent): Boolean {
         /* first, check if the click is inside one of the upgrade alternative boxes */
         for (upgrade in upgradePossibilities)
-            upgrade.onDown(event)
+            if (upgrade.onDown(event)) {
+                upgradePossibilities.clear()
+                return true
+            }
 
         if (actualRect.contains(event.x.toInt(), event.y.toInt())
             && upgradePossibilities.isEmpty()) // gesture is inside this card

@@ -186,11 +186,13 @@ class Stage(var theGame: Game) {
         {
             Chip.ChipType.ENTRY -> {
                 chip = EntryPoint(network, gridX, gridY)
-                id = 0
+                if (id == -1)
+                    id = 0  // default value, may be overridden
             }
             Chip.ChipType.CPU -> {
                 chip = Cpu(network, gridX, gridY)
-                id = 999
+                if (id == -1)
+                    id = 999  // default value
             }
             else -> { chip = Chip(network, gridX, gridY) }
         }
@@ -637,6 +639,50 @@ class Stage(var theGame: Game) {
                 rewardCoins = 2
             }
             12 ->
+            {
+                initializeNetwork(50, 50)
+
+                createChip(10, 45, 0, type = Chip.ChipType.ENTRY)
+                createChip(40, 5, 1, type = Chip.ChipType.ENTRY)
+                createChip(10, 35, 2)
+                createChip(10, 25, 3)
+                createChip(10, 15, 4)
+                createChip(25, 15, 5)
+                createChip(40, 15, 6)
+                createChip(40, 25, 7)
+                createChip(40, 35, 8)
+                createChip(25, 35, 9)
+                createChip(25, 25, type = Chip.ChipType.CPU)
+
+                createLink(0, 2, 1)
+                createLink(2, 3, 2)
+                createLink(3, 4, 3)
+                createLink(4, 5, 4)
+                createLink(5, 6, 5)
+                createLink(6, 7, 6)
+                createLink(7, 999, 7)
+                createLink(1, 6, 8)
+                createLink(7, 8, 9)
+                createLink(8, 9, 10)
+                createLink(9, 2, 11)
+                createLink(3, 999, 12)
+
+                createTrack(listOf(1, 2, 3, 4, 5, 6, 7), 0)
+                createTrack(listOf(8, 6, 9, 10, 11, 2, 12), 1)
+
+                createWave(12, 3, .07f, 1.1f)
+                createWave(12, 4, .07f, 1.2f)
+                createWave(12, 6, .06f, 1.2f)
+                createWave(16, 10, .06f, 1.2f)
+                createWave(12, 12, .05f, 1.2f)
+                createWave(16, 15, .05f, 1.2f)
+                createWaveHex(12, 20, .05f, 1.2f)
+                createWaveHex(12, 32, .05f, 1.2f)
+
+                data.chipsAllowed = setOf(Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.POWERUP, Chip.ChipUpgrades.SHIFT)
+                rewardCoins = 2
+            }
+            13 ->
             {
                 initializeNetwork(50, 55)
 

@@ -77,7 +77,7 @@ open class Attacker(network: Network, type: Representation = Representation.BINA
     var oldNumberBitmap: Bitmap? = null
     var animationCount = 0
     val animationCountMax = 8
-    val numberFontSize = 24f
+    val numberFontSize = 32f
     var displacement = Pair(Random.nextInt(5)-1, Random.nextInt(7)-2) // small shift in display to avoid over-crowding on the screen
     private val paintBitmap = Paint()
 
@@ -246,6 +246,8 @@ open class Attacker(network: Network, type: Representation = Representation.BINA
     }
 
     override fun display(canvas: Canvas, viewport: Viewport) {
+        if (posOnGrid == null)
+            return
         actualRect = Rect(0, 0, numberBitmap.width, numberBitmap.height)
         actualRect.setCenter(getPositionOnScreen())
         actualRect.offset(displacement.first, displacement.second)

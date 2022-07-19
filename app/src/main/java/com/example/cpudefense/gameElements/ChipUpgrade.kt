@@ -44,9 +44,8 @@ class ChipUpgrade(val chipToUpgrade: Chip, val type: Chip.ChipUpgrades,
     fun onDown(event: MotionEvent): Boolean {
         if (actualRect.contains(event.x.toInt(), event.y.toInt()))
         {
-            if (!canAfford())
-                return false
-            buyUpgrade(type)
+            if (canAfford())
+                buyUpgrade(type)
             return true
         }
         else

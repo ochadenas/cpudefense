@@ -59,7 +59,7 @@ class Game(val gameActivity: MainGameActivity) {
         var lives: Int,             // current number of lives
         var cash: Int,              // current amount of 'information' currency in bits
         var coinsInLevel: Int = 0,  // cryptocoins that can be obtained by completing the current level
-        var coinsExtra: Int = 0    // cryptocoins that have been acquired by collecting moving coins
+        var coinsExtra: Int = 0     // cryptocoins that have been acquired by collecting moving coins
         )
     var state = StateData(
         phase = GamePhase.START,
@@ -338,6 +338,12 @@ class Game(val gameActivity: MainGameActivity) {
     {
         val cash = gameUpgrades[Upgrade.Type.INCREASE_STARTING_CASH]?.getStrength()?.toInt()
         state.cash = cash ?: minimalAmountOfCash
+    }
+    
+    fun gainAdditionalCash()
+    /** increases the amount of cash in regular intervals */
+    {
+
     }
 
     fun takeLevelSnapshot()

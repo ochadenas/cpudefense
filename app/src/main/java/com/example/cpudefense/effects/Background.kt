@@ -15,7 +15,7 @@ class Background(val game: Game) {
     var y = 0.0
     var projX = 0.0
     var projY = 0.0
-    var opacity = 0.6f
+    var opacity = 0.5f
     var paint = Paint()
     var actualImage: Bitmap? = null
     var ticks = 0
