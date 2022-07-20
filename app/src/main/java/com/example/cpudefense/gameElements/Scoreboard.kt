@@ -22,7 +22,7 @@ class ScoreBoard(val game: Game): GameElement() {
         coins.setSize(area, divider)
     }
 
-    fun addScore(amount: Int) {
+    fun addCash(amount: Int) {
         game.state.cash += amount
     }
 

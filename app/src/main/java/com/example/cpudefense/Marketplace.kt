@@ -60,6 +60,7 @@ class Marketplace(val game: Game): GameElement()
         for (card in upgrades)
         {
             card.areaOnScreen.setTopLeft(space, pos)
+            card.heroArea.setCenter(card.areaOnScreen.center())
             pos += offset
         }
     }

@@ -6,6 +6,20 @@ import com.example.cpudefense.effects.Fader
 import kotlin.math.sqrt
 
 class Upgrade(var game: Game, type: Type): Fadable {
+    /*
+    Ideas:
+    - increase radius
+    - gain additional coins but disable reset of upgrades
+
+    Heroes:
+    - Norbert Wiener
+    - John von Neuman
+    - Pascal
+    - Babbage?
+    - Berners-Lee?
+    - Mandelbrot
+    - Torvalds
+     */
 
     enum class Type { INCREASE_CHIP_SUB_SPEED, INCREASE_CHIP_SHIFT_SPEED, INCREASE_CHIP_ACC_SPEED,
         DECREASE_ATT_FREQ ,
@@ -22,9 +36,11 @@ class Upgrade(var game: Game, type: Type): Fadable {
     private var transition = 0.0f
 
     var areaOnScreen = Rect(0, 0, Game.cardWidth, Game.cardHeight)
+    var heroArea = Rect(0, 0, heroPictureSize, heroPictureSize)
     private var myBitmap: Bitmap? = null
     private var effectBitmap = BitmapFactory.decodeResource(game.resources, R.drawable.glow)
     private var paintRect = Paint()
+    private var paintIndicator = Paint()
     private var shortDescRect = Rect(areaOnScreen)
     private var paintText = Paint()
     private var shortDesc: String = "effect description"
@@ -32,6 +48,8 @@ class Upgrade(var game: Game, type: Type): Fadable {
     private var upgradeDesc: String = " -> next level"
     private var hero: Hero = Hero(type)
     private var heroOpacity = 0f
+    private var levelIndicator = mutableListOf<Rect>()
+    private val indicatorSize = heroPictureSize / 10
 
     var inactiveColor = game.resources.getColor(R.color.upgrade_inactive)
     var activeColor: Int = when(type)
@@ -75,8 +93,6 @@ class Upgrade(var game: Game, type: Type): Fadable {
         // display hero picture
         var paintHero = Paint()
         paintHero.alpha = (255f * heroOpacity).toInt()
-        var heroArea = Rect(0, 0, heroPictureSize, heroPictureSize)
-        heroArea.setCenter(areaOnScreen.center())
         hero.picture?.let { canvas.drawBitmap(it, null, heroArea, paintHero) }
 
         displayFrame(canvas)
@@ -154,14 +170,29 @@ class Upgrade(var game: Game, type: Type): Fadable {
 
     private fun addLevelDecoration(canvas: Canvas)
     {
+        paintIndicator.color = if (data.level == 0) inactiveColor else activeColor
+        for (i in 1 .. maxLevel)
+        {
+            var rect = Rect(0,0, indicatorSize, indicatorSize)
+            rect.setTopLeft(0, (2*i-1)*indicatorSize)
+            levelIndicator.add(rect)
+            paintIndicator.style = if (i<=data.level) Paint.Style.FILL else Paint.Style.STROKE
+            canvas.drawRect(rect, paintIndicator)
+        }
+        return
+
+        /*
         if (data.level == 0)
             return
+
         val levelText = "%d".format(data.level)
         val bounds = Rect()
         var paintDeco = Paint(paintText)
         paintDeco.color = activeColor
         paintText.getTextBounds(levelText, 0, levelText.length, bounds)
         canvas.drawText(levelText, canvas.width - bounds.width() - 10f, bounds.height() + 10f, paintDeco)
+
+         */
     }
 
     fun setDesc()
@@ -210,8 +241,8 @@ class Upgrade(var game: Game, type: Type): Fadable {
             Type.GAIN_CASH ->
             {
                 shortDesc = "Information gain"
-                strengthDesc = "%d bits/sec".format(strength.toInt())
-                upgradeDesc = " -> %d bits/sec".format(next.toInt())
+                strengthDesc = "1 bit/%d ticks".format(strength.toInt())
+                upgradeDesc = " -> 1/%d ticks".format(next.toInt())
             }
         }
         upgradeDesc = "%s  [cost: %d]".format(upgradeDesc, getPrice(data.level))
@@ -233,7 +264,7 @@ class Upgrade(var game: Game, type: Type): Fadable {
             Type.ADDITIONAL_LIVES -> return level.toFloat()
             Type.INCREASE_CHIP_ACC_SPEED -> return 1.0f + level / 20f
             Type.DECREASE_ATT_FREQ -> return 1.0f - level / 20f
-            Type.GAIN_CASH -> return (10f - level)
+            Type.GAIN_CASH -> return (10f - level) * 10
         }
     }
 
@@ -370,7 +401,7 @@ class Upgrade(var game: Game, type: Type): Fadable {
                 {
                     name = "Franke"
                     fullName = "Herbert W. Franke"
-                    picture = BitmapFactory.decodeResource(game.resources, R.drawable.cernettes)
+                    picture = BitmapFactory.decodeResource(game.resources, R.drawable.franke)
                 }
                 else ->
                 {
@@ -378,6 +409,14 @@ class Upgrade(var game: Game, type: Type): Fadable {
                     fullName = "Dorothy Vaughan"
                     picture = BitmapFactory.decodeResource(game.resources, R.drawable.vaughan)
                 }
+                /*
+                {
+                    name = "Schneier"
+                    fullName = "Bruce Schneier"
+                    picture = BitmapFactory.decodeResource(game.resources, R.drawable.schneier)
+                }
+
+                 */
             }
         }
 

@@ -154,7 +154,7 @@ open class Attacker(network: Network, type: Representation = Representation.BINA
                 if (newNumber < 0)
                 {
                     theNetwork.theGame.gameActivity.theGameView.theEffects?.explode(this)
-                    theNetwork.theGame.scoreBoard.addScore(attackerData.bits)
+                    theNetwork.theGame.scoreBoard.addCash(attackerData.bits)
                     return true
                 }
                 else

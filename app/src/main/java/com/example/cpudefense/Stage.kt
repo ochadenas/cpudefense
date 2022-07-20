@@ -718,12 +718,12 @@ class Stage(var theGame: Game) {
                 createTrack(listOf(1, 2,4,6,9,13,14), 2)
                 createTrack(listOf(1, 2,4,7,10,13,14), 3)
 
-                createWave(12, 5, .120f, 1.0f)
-                createWave(12, 7, .110f, 1.0f)
-                createWave(10, 12, .110f, 1.0f)
-                createWave(10, 20, .110f, 1.0f)
-                createWave(10, 30, .110f, 1.0f)
-                createWave(10, 40, .110f, 1.0f)
+                createWave(12, 3, .05f, 1.0f)
+                createWave(12, 5, .05f, 1.0f)
+                createWave(12, 7, .05f, 1.0f)
+                createWave(10, 12, .05f, 1.0f)
+                createWave(10, 20, .05f, 1.0f)
+                createWave(10, 40, .05f, 1.0f)
                 createWaveHex(15, 50, .05f, 1f, coins = 0)
                 createWaveHex(20, 80, .05f, 1f, coins = 1)
 

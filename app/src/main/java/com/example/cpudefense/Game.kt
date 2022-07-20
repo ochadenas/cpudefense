@@ -96,6 +96,10 @@ class Game(val gameActivity: MainGameActivity) {
     var faders = CopyOnWriteArrayList<Fader>() // idem for faders
     val paintBitmap = Paint()
 
+    /* other temporary variables */
+    var additionalCashDelay = 0
+    var additionalCashTicks = 0
+
     enum class GamePhase { START, RUNNING, END, INTERMEZZO, MARKETPLACE, PAUSED }
     enum class GameSpeed { NORMAL, MAX }
 
@@ -111,6 +115,7 @@ class Game(val gameActivity: MainGameActivity) {
             global = gameActivity.loadGlobalData()
             summaryPerLevel = gameActivity.loadLevelData()   // get historical data of levels completed so far
             gameUpgrades = gameActivity.loadUpgrades()       // load the upgrades gained so far
+            additionalCashDelay = gameUpgrades[Upgrade.Type.GAIN_CASH]?.getStrength()?.toInt() ?: 0
             intermezzo.prepareLevel(state.startingLevel, true)
         }
         else
@@ -143,6 +148,7 @@ class Game(val gameActivity: MainGameActivity) {
             network?.update()
             scoreBoard.update()
             currentWave?.update()
+            gainAdditionalCash()
         }
     }
 
@@ -343,7 +349,13 @@ class Game(val gameActivity: MainGameActivity) {
     fun gainAdditionalCash()
     /** increases the amount of cash in regular intervals */
     {
-
+        if (additionalCashDelay == 0)
+            return
+        additionalCashTicks--
+        if (additionalCashTicks<0) {
+            scoreBoard.addCash(1)
+            additionalCashTicks = additionalCashDelay
+        }
     }
 
     fun takeLevelSnapshot()
