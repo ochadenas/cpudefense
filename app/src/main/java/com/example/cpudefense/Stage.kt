@@ -202,7 +202,7 @@ class Stage(var theGame: Game) {
         return chip
     }
 
-    private fun createLink(from: Int, to: Int, ident: Int)
+    private fun createLink(from: Int, to: Int, ident: Int, mask: Int = 0xF)
     /** adds a link between two existing nodes, referenced by ID
      * @param from Ident of first node
      * @param to Ident of 2nd node
@@ -211,7 +211,7 @@ class Stage(var theGame: Game) {
     {
         val node1 = network.nodes[from] ?: return
         val node2 = network.nodes[to] ?: return
-        val link = Link(network, node1, node2, ident)
+        val link = Link(network, node1, node2, ident, mask)
         network.addLink(link, ident)
     }
 
@@ -277,8 +277,8 @@ class Stage(var theGame: Game) {
                 createChip(15, 20, 1)
                 createChip(20, sizeY-2, type = Chip.ChipType.CPU)
 
-                createLink(0, 1, 0)
-                createLink(1, 999, 1)
+                createLink(0, 1, 0, mask = 0x06)
+                createLink(1, 999, 1, mask = 0x06)
 
                 createTrack(listOf(0, 1), 0)
                 
@@ -294,8 +294,8 @@ class Stage(var theGame: Game) {
                 createChip(15, 20, 1)
                 createChip(20, sizeY-2, type = Chip.ChipType.CPU)
 
-                createLink(0, 1, 0)
-                createLink(1, 999, 1)
+                createLink(0, 1, 0, mask = 0x06)
+                createLink(1, 999, 1, mask = 0x06)
 
                 createTrack(listOf(0, 1), 0)
 
@@ -342,10 +342,10 @@ class Stage(var theGame: Game) {
                 
                 createLink(0, 1, 1)
                 createLink(1, 2, 2)
-                createLink(2, 3, 3)
-                createLink(3, 4, 4)
-                createLink(2, 5, 5)
-                createLink(5, 4, 6)
+                createLink(2, 3, 3, mask = 0x03)
+                createLink(3, 4, 4, mask = 0x03)
+                createLink(2, 5, 5, mask = 0x0C)
+                createLink(5, 4, 6, mask = 0x0C)
                 createLink(4, 999, 7)
 
                 createTrack(listOf(1, 2, 3, 4, 7), 0)
@@ -526,14 +526,14 @@ class Stage(var theGame: Game) {
                 createChip(48, 35, type = Chip.ChipType.CPU)
 
 
-                createLink(0, 1, 1)
-                createLink(1, 2, 2)
-                createLink(2, 3, 3)
-                createLink(2, 4, 4)
-                createLink(2, 5, 5)
-                createLink(3, 4, 7)
-                createLink(5, 6, 6)
-                createLink(6, 999, 8)
+                createLink(0, 1, 1, mask = 0x0C)
+                createLink(1, 2, 2, mask = 0x0C)
+                createLink(2, 3, 3, mask = 0x03)
+                createLink(2, 4, 4, mask = 0x0C)
+                createLink(2, 5, 5, mask = 0x03)
+                createLink(3, 4, 7, mask = 0x06)
+                createLink(5, 6, 6, mask = 0x06)
+                createLink(6, 999, 8, mask = 0x06)
 
                 createTrack(listOf(1, 2, 3, 7, 4, 5, 6, 8), 0)
 
@@ -566,17 +566,17 @@ class Stage(var theGame: Game) {
                 createChip(25, 42, type = Chip.ChipType.CPU)
                 chips[7]?.setType(Chip.ChipType.SUB)
 
-                createLink(0, 1, 1)
-                createLink(0, 2, 2)
-                createLink(1, 3, 3)
-                createLink(0, 4, 4)
-                createLink(2, 5, 5)
-                createLink(3, 6, 6)
-                createLink(4, 7, 7)
-                createLink(5, 8, 8)
-                createLink(6, 999, 9)
-                createLink(7, 999, 10)
-                createLink(8, 999, 11)
+                createLink(0, 1, 1, mask = 0x0E)
+                createLink(0, 2, 2, mask = 0x0E)
+                createLink(1, 3, 3, mask = 0x0E)
+                createLink(0, 4, 4, mask = 0x07)
+                createLink(2, 5, 5, mask = 0x07)
+                createLink(3, 6, 6, mask = 0x0E)
+                createLink(4, 7, 7, mask = 0x07)
+                createLink(5, 8, 8, mask = 0x07)
+                createLink(6, 999, 9, mask = 0x0E)
+                createLink(7, 999, 10, mask = 0x07)
+                createLink(8, 999, 11, mask = 0x07)
 
                 createTrack(listOf(1, 3, 6, 9), 0)
                 createTrack(listOf(4, 7, 10), 1)
@@ -611,18 +611,18 @@ class Stage(var theGame: Game) {
                 createChip(20, 45, 9)
                 createChip(45, 30, type = Chip.ChipType.CPU)
 
-                createLink(0, 1, 1)
-                createLink(1, 2, 2)
-                createLink(2, 3, 3)
-                createLink(3, 4, 4)
-                createLink(4, 5, 5)
-                createLink(0, 6, 7)
-                createLink(6, 3, 8)
-                createLink(3, 7, 9)
-                createLink(7, 8, 10)
-                createLink(8, 9, 11)
-                createLink(9, 5, 12)
-                createLink(5, 999, 6)
+                createLink(0, 1, 1, mask = 0x0C)
+                createLink(1, 2, 2, mask = 0x0C)
+                createLink(2, 3, 3, mask = 0x0C)
+                createLink(3, 4, 4, mask = 0x03)
+                createLink(4, 5, 5, mask = 0x0C)
+                createLink(0, 6, 7, mask = 0x03)
+                createLink(6, 3, 8, mask = 0x03)
+                createLink(3, 7, 9, mask = 0x0C)
+                createLink(7, 8, 10, mask = 0x0C)
+                createLink(8, 9, 11, mask = 0x0C)
+                createLink(9, 5, 12, mask = 0x0C)
+                createLink(5, 999, 6, mask = 0x03)
 
                 createTrack(listOf(1, 2, 3, 4, 5, 6), 0)
                 createTrack(listOf(7, 8, 9, 10, 11, 12, 6), 1)
@@ -700,17 +700,16 @@ class Stage(var theGame: Game) {
 
                 createLink(0, 1, 1)
                 createLink(1, 2, 2)
-                createLink(2, 3, 3)
-                createLink(2, 4, 4)
-                createLink(3, 5, 5)
-                createLink(4, 5, 6)
-                createLink(4, 6, 7)
-                createLink(5, 7, 8)
-                createLink(5, 8, 9)
-                createLink(6, 8, 10)
-                createLink(7, 9, 12)
-                createLink(7, 9, 12)
-                createLink(8, 9, 13)
+                createLink(2, 3, 3, mask = 0x0C)
+                createLink(2, 4, 4, mask = 0x03)
+                createLink(3, 5, 5, mask = 0x0C)
+                createLink(4, 5, 6, mask = 0x02)
+                createLink(4, 6, 7, mask = 0x01)
+                createLink(5, 7, 8, mask = 0x0C)
+                createLink(5, 8, 9, mask = 0x02)
+                createLink(6, 8, 10, mask = 0x01)
+                createLink(7, 9, 12, mask = 0x0C)
+                createLink(8, 9, 13, mask = 0x06)
                 createLink(9, 999, 14)
 
                 createTrack(listOf(1, 2,3,5,8,12,14), 0)

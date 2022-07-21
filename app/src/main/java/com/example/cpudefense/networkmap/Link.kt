@@ -6,19 +6,21 @@ import com.example.cpudefense.*
 import com.example.cpudefense.gameElements.GameElement
 import kotlin.math.abs
 
-class Link(val theNetwork: Network, var node1: Node, var node2: Node, var ident: Int): GameElement() {
+class Link(val theNetwork: Network, var node1: Node, var node2: Node, var ident: Int, var mask: Int = 0x0F): GameElement() {
 
     data class Data
         (
         var ident: Int,
         var startId: Int,
-        var endId: Int
+        var endId: Int,
+        var mask: Int
     )
 
     var data = Data(
         ident = ident,
         startId = node1.data.ident,
-        endId = node2.data.ident
+        endId = node2.data.ident,
+        mask = mask
     )
 
     var startPoint: GridCoord = node1.posOnGrid
@@ -125,7 +127,7 @@ class Link(val theNetwork: Network, var node1: Node, var node2: Node, var ident:
     override fun display(canvas: Canvas, viewport: Viewport) {
         var point1: GridCoord
         var point2: GridCoord
-        val delta = 0.8f // distance between two parallel lines
+        val delta = 0.7f // distance between two parallel lines
         var dx: Float
         var dy: Float
 
@@ -139,28 +141,27 @@ class Link(val theNetwork: Network, var node1: Node, var node2: Node, var ident:
             Network.Dir.HORIZONTAL -> { dx = 0f; dy = delta/1.4f }
             else -> { dx = 0f; dy = 0f }
         }
-        if (interPoint == null)  // direct connection
+        for (numLines in 0 .. 3)
         {
-            for (numLines in -1 .. 1)
+            if (mask and maskFilter[numLines] == 0)  // skip masked (invisible) lines
+                continue
+            val displacementX = (numLines - 1.5f) * dx
+            val displacementY = (numLines - 1.5f) * dy
+            if (interPoint == null) // direct connection
             {
-                point1 = GridCoord(startPoint.x+numLines*dx, startPoint.y+numLines*dy)
-                point2 = GridCoord(endPoint.x+numLines*dx, endPoint.y+numLines*dy)
+                point1 = GridCoord(startPoint.x + displacementX, startPoint.y + displacementY)
+                point2 = GridCoord(endPoint.x + displacementX, endPoint.y + displacementY)
+                displayLine(canvas, viewport, point1, point2)
+            }
+            else  // connection via intermediate point
+            {
+                point1 = GridCoord(startPoint.x+displacementX, startPoint.y+displacementY)
+                point2 = GridCoord(interPoint!!.x+displacementX, interPoint!!.y+displacementY)
+                displayLine(canvas, viewport, point1, point2)
+                point1 = GridCoord(endPoint.x+displacementX, endPoint.y+displacementY)
                 displayLine(canvas, viewport, point1, point2)
             }
         }
-        else // connection via intermediate point
-        {
-
-            for (numLines in -1 .. 1)
-            {
-                point1 = GridCoord(startPoint.x+numLines*dx, startPoint.y+numLines*dy)
-                point2 = GridCoord(interPoint!!.x+numLines*dx, interPoint!!.y+numLines*dy)
-                displayLine(canvas, viewport, point1, point2)
-                point1 = GridCoord(endPoint.x+numLines*dx, endPoint.y+numLines*dy)
-                displayLine(canvas, viewport, point1, point2)
-            }
-        }
-
     }
 
     fun displayLine(canvas: Canvas, viewport: Viewport, startGridPoint: GridCoord, endGridPoint: GridCoord)
@@ -194,5 +195,7 @@ class Link(val theNetwork: Network, var node1: Node, var node2: Node, var ident:
             link.data = data
             return link
         }
+
+        var maskFilter: List<Int> = listOf(0x08, 0x04, 0x02, 0x01)
     }
 }
