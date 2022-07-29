@@ -71,23 +71,17 @@ class Intermezzo(var game: Game): GameElement(), Fadable {
     fun showButton()
     {
         val bottomMargin = 40
-        buttonContinue = Button(game.resources.getString(R.string.button_continue))
-        buttonContinue?.let {
+        buttonContinue = Button(game.resources.getString(R.string.button_continue), color = game.resources.getColor(R.color.text_green))
+        val buttonTop = myArea.bottom - (buttonContinue?.myArea?.height() ?: 20) - bottomMargin
+            buttonContinue?.let {
             Fader(game, it, Fader.Type.APPEAR, Fader.Speed.SLOW)
-            it.myArea.set(50, myArea.bottom-it.myArea.height()-bottomMargin, 50+it.myArea.width(), myArea.bottom-bottomMargin)
-            it.buttonPaint.color = game.resources.getColor(R.color.text_green)
+            it.myArea.set(50, buttonTop, 50+it.myArea.width(), myArea.bottom-bottomMargin)
         }
         if (game.global.coinsTotal > 0) {
-            buttonPurchase = Button(game.resources.getString(R.string.button_purchase))
+            buttonPurchase = Button(game.resources.getString(R.string.button_marketplace), color = game.resources.getColor(R.color.text_blue))
             buttonPurchase?.let {
                 Fader(game, it, Fader.Type.APPEAR, Fader.Speed.SLOW)
-                it.myArea.set(
-                    myArea.right - it.myArea.width() - 50,
-                    myArea.bottom - it.myArea.height() - bottomMargin,
-                    myArea.right - 50,
-                    myArea.bottom - bottomMargin
-                )
-                it.buttonPaint.color = game.resources.getColor(R.color.text_blue)
+                it.myArea.set(myArea.right - it.myArea.width() - 50, buttonTop, myArea.right - 50, myArea.bottom - bottomMargin)
             }
         }
     }

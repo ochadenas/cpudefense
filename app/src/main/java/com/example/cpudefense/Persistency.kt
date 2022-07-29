@@ -24,7 +24,7 @@ class Persistency(var game: Game?) {
     )
 
     data class SerializableUpgradeData (
-        val upgrades: CopyOnWriteArrayList<Upgrade.Data> = CopyOnWriteArrayList<Upgrade.Data>()
+        val upgrades: MutableList<Upgrade.Data> = mutableListOf<Upgrade.Data>()
     )
 
     fun saveState(editor: SharedPreferences.Editor)

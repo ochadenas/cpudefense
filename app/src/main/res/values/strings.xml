@@ -18,8 +18,99 @@
     <string name="scoreboard_coins">Coins</string>
     <string name="selectLevel">Select Level</string>
     <string name="play_selected_level">Play selected level</string>
-    <string name="button_purchase">Get upgrades</string>
+    <string name="button_marketplace">Get upgrades</string>
     <string name="button_refund">Reset all</string>
+    <string name="button_purchase">Purchase</string>
     <string name="level_entry">Level %d</string>
     <string name="level_selector">Level Selector</string>
+    <string name="query_reset">Do you want to reset all upgrades?</string>
+    <string name="no">No</string>
+    <string name="yes">Yes</string>
+
+    <string name="instr_1">
+"Your computer is being invaded by an evil virus. Rogue code fragments - shown as Ones and Zeroes - try to get through to the cpu.
+
+Tap on the empty slot to add a chip as defense against the attack, and then tap again to confirm your choice.
+
+The most basic chip is 'SUB 1' which subtracts 1 from the attacker's value: 1's become 0's, and 0's disappear and are no longer a threat."
+    </string>
+    <string name="instr_2">
+"You may also tap on an attacker. This will invert its value: 1 becomes 0, and 0 becomes 1.
+
+Inverting a 0 will actually make the attacker more dangerous, so be careful not to tap on everything you see."
+    </string>
+    <string name="instr_3">
+"The currency in this game is information. It is displayed on the bottom left.
+
+Destroy the attacking code to gain some information about the virus. Use it to buy additional chips or to upgrade the existing ones."
+    </string>
+    <string name="instr_4">
+"Remember that in binary,
+10 equals 2,
+11 equals 3
+and so on."
+    </string>
+    <string name="instr_5">
+"In the next level, a new chip type is available. It is labelled 'SHR 1', which means 'shift right by 1'
+
+All digits are moved one position to the right. The leftmost digit is replaced by 0.
+
+For example, 0110 becomes 0011. This is equivalent to dividing the value by 2."
+    </string>
+    <string name="instr_6">
+"You can gain cryptocoins by clearing stages. There is a maximum amount of cryptocoins per level shown on the bottom, and each life lost will reduce the reward.
+
+If you do not get all the coins, you can always replay the level. However, once you have obtained the maximum, you won't receive any more coins for this stage.
+
+Cryptocoins can be exchanged for global, powerful upgrades.
+    </string>
+    <string name="instr_7">
+"Sometimes you will see a cryptocoin moving along with the attackers. You can collect it by destroying it, even multiple times when you replay the level.
+
+But be careful. The moving cryptocoin is stronger than ordinary attackers, and if it reaches the CPU, it will take one of your lives.
+    </string>
+    <string name="turing">
+"Alan Turing was one of the most important persons in computer science. He created many of the foundations in theoretical computing, such as the Turing machine and the Turing test, but he is also famous for cracking the Enigma code in World War 2. His impact on the outcome of the war can hardly be overestimated.
+
+He was heavily discriminated against because of his homosexuality. He died, probably by his own hand, in 1954."
+    </string>
+    <string name="lovelace">
+"Ada, Countess of Lovelace is held to have invented the concept of Programming.
+
+Together with Charles Babbage she worked on his mechanical calculation machine. She created an instruction set for the calculation of Bernoulli numbers, which is probably the first formal program ever written.
+
+Lovelace realized that the abilities of a programmable engine were much greater than arithmetical computations. She also was the first to distinguish the symbolic concepts (software) from the physical parts (hardware).
+
+She died in 1852, aged only 36."
+    </string>
+    <string name="hollerith">
+"Data storage and processing started when Herman Hollerith introduced punched cards. He developed and merchandised a punched card tabulating machine to assist in collecting, sorting, and summarizing information. It was used (among other uses) for census purposes in many countries.
+
+In 1896, Hollerith founded the Tabulating Machine Company that should later become International Business Machines (IBM)."
+    </string>
+    <string name="osborne">
+"In 1981 Adam Osborne created the first portable computer. The 'Osborne 1' was not really what we nowadays call a laptop, it was more like a big suitcase with a weight of over 11 kg. However, it had everything a computer needed in one compact case: Power supply, keyboard, two floppy drives, a CRT monitor, and lots of software.
+
+Osborne was also an author and book publisher."
+    </string>
+    <string name="cernettes">
+"Les Horribles Cernettes, or LHC, are the High Energy Rock Band of the European research facility CERN. They also were The First Band On The Web.
+
+After Berners-Lee had invented the World Wide Web, he was looking for some content to put into it. Silvano de Gennaro provided him with a photo of the Cernettes taken in july 1992, which became the first photo of a band that appeared in browser windows all over the world."
+    </string>
+    <string name="knuth">
+        "Donald Ervin Knuth is a computer scientist and mathematician who has made numerous contributions to theoretical computer science.
+
+He is mostly known for the monumental work 'The Art of Computer Programming', a project that started in 1962 and is still not finished. For this he created en passant the TeX formatting system that has become the standard for scientific publications all over the world.
+    </string>
+    <string name="zuse">
+"The first modern computer was built by Konrad Zuse in 1941. The Z1 was a programmable, electro-mechanical machine that operated on a digital base, implemented Boolean logic, and even used floating point numbers.
+
+Zuse also created the first high-level programming language 'Plankalkül'."
+    </string>
+    <string name="franke"></string>
+    <string name="vaughan"></string>
+
+
+
 </resources>

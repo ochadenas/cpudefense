@@ -12,37 +12,19 @@ import com.example.cpudefense.effects.Fader
 class Instructions(val game: Game, var stage: Int, var callback: (()->Unit)? ): Fadable {
     var alpha = 0
 
-    companion object {
-        fun instructionText(level: Int): String
+    fun instructionText(level: Int): String
+    {
+        return when (level)
         {
-            return when (level)
-            {
-                1 ->
-                    "Your computer is being invaded by an evil virus. Rogue code fragments - shown as Ones and Zeroes - try to get through to the cpu.\n\n"+
-                            "Tap on the empty slot to add a chip as defense against the attack, and then tap again to confirm your choice.\n\n"+
-                            "The most basic chip is 'SUB 1' which subtracts 1 from the attacker's value: " +
-                            "1's become 0's, and 0's disappear and are no longer a threat."
+            1 -> game.resources.getString(R.string.instr_1)
+            2 -> game.resources.getString(R.string.instr_2)
+            3 -> game.resources.getString(R.string.instr_3)
+            4 -> game.resources.getString(R.string.instr_4)
+            5 -> game.resources.getString(R.string.instr_5)
+            6 -> game.resources.getString(R.string.instr_6)
 
-                2 ->
-                            "You may also tap on an attacker. This will invert its value: 1 becomes 0, and 0 becomes 1.\n\nInverting a 0 will actually make the attacker "+
-                                    "more dangerous, so be careful not to tap on everything you see.\n\n"+
-                                    "Tapping on the cpu pauses the game."
-                3 ->
-                    "The currency in this game is information. It is displayed on the bottom left.\n\nDestroy the attacking code to gain some information about the virus. "+
-                            "Use it to buy additional chips or to upgrade the existing ones.\n\n"
-                4 -> "Remember that in binary, 01 equals 2, 11 equals 3 and so on."
-                5 -> "In the next level, a new chip type is available. It is labelled 'SHR 1', which means 'shift right by 1'.\n\n"+
-                        "All digits are moved one position to the right. The leftmost digit is replaced by 0.\n\n"+
-                        "For example, 0110 becomes 0011. This is equivalent to dividing the value by 2.\n\n"
-                6 -> "You can gain cryptocoins by clearing stages. There is a maximum amount of cryptocoins per level shown on the bottom, "+
-                        "and each life lost will reduce the reward. "+
-                        "If you do not get all the coins, you can always replay the level. However, once you have obtained the maximum, "+
-                        "you won't receive any more coins for this stage.\n\n"+
-                        "Cryptocoins can be exchanged for global, powerful upgrades."
-                    7 -> "Sometimes you will see a cryptocoin moving along with the attackers. You can collect it by destroying it, "+
-                        "even multiple times when you replay the level."
-                else -> ""
-            }
+                7 -> game.resources.getString(R.string.instr_7)
+            else -> ""
         }
     }
 

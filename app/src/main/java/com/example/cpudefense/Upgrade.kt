@@ -1,6 +1,9 @@
 package com.example.cpudefense
 
 import android.graphics.*
+import android.text.Layout
+import android.text.StaticLayout
+import android.text.TextPaint
 import com.example.cpudefense.effects.Fadable
 import com.example.cpudefense.effects.Fader
 import kotlin.math.sqrt
@@ -19,6 +22,7 @@ class Upgrade(var game: Game, type: Type): Fadable {
     - Berners-Lee?
     - Mandelbrot
     - Torvalds
+    - Tramiel
      */
 
     enum class Type { INCREASE_CHIP_SUB_SPEED, INCREASE_CHIP_SHIFT_SPEED, INCREASE_CHIP_ACC_SPEED,
@@ -41,13 +45,14 @@ class Upgrade(var game: Game, type: Type): Fadable {
     private var effectBitmap = BitmapFactory.decodeResource(game.resources, R.drawable.glow)
     private var paintRect = Paint()
     private var paintIndicator = Paint()
+    private var paintBiography = TextPaint()
     private var shortDescRect = Rect(areaOnScreen)
     private var paintText = Paint()
     private var shortDesc: String = "effect description"
     private var strengthDesc: String = "format string"
     private var upgradeDesc: String = " -> next level"
     private var hero: Hero = Hero(type)
-    private var heroOpacity = 0f
+    var heroOpacity = 0f
     private var levelIndicator = mutableListOf<Rect>()
     private val indicatorSize = heroPictureSize / 10
 
@@ -64,6 +69,8 @@ class Upgrade(var game: Game, type: Type): Fadable {
         Type.GAIN_CASH -> game.resources.getColor(R.color.upgrade_active_eco)
     }
     var maxLevel = 7   // cannot upgrade beyond this level
+    var biography: Biography? = null
+    var vitae: String = ""
 
     init {
         paintRect.style = Paint.Style.STROKE
@@ -168,6 +175,14 @@ class Upgrade(var game: Game, type: Type): Fadable {
         return bitmap
     }
 
+    fun createBiography(area: Rect)
+    {
+        if (biography == null)
+            biography = Biography(Rect(0,0,area.width(), area.height()))
+        biography?.let { it.createBiography(this) }
+
+    }
+
     private fun addLevelDecoration(canvas: Canvas)
     {
         paintIndicator.color = if (data.level == 0) inactiveColor else activeColor
@@ -180,19 +195,6 @@ class Upgrade(var game: Game, type: Type): Fadable {
             canvas.drawRect(rect, paintIndicator)
         }
         return
-
-        /*
-        if (data.level == 0)
-            return
-
-        val levelText = "%d".format(data.level)
-        val bounds = Rect()
-        var paintDeco = Paint(paintText)
-        paintDeco.color = activeColor
-        paintText.getTextBounds(levelText, 0, levelText.length, bounds)
-        canvas.drawText(levelText, canvas.width - bounds.width() - 10f, bounds.height() + 10f, paintDeco)
-
-         */
     }
 
     fun setDesc()
@@ -347,7 +349,6 @@ class Upgrade(var game: Game, type: Type): Fadable {
         var name = ""
         var fullName = ""
         var picture: Bitmap? = null
-        var vitae = ""
 
         init { }
 
@@ -359,54 +360,63 @@ class Upgrade(var game: Game, type: Type): Fadable {
                 {
                     name = "Turing"
                     fullName = "Alan Turing"
+                    vitae = game.resources.getString(R.string.turing)
                     picture = BitmapFactory.decodeResource(game.resources, R.drawable.turing)
                 }
                 Type.INCREASE_CHIP_SHIFT_SPEED ->
                 {
                     name = "Lovelace"
                     fullName = "Ada Lovelace"
+                    vitae = game.resources.getString(R.string.lovelace)
                     picture = BitmapFactory.decodeResource(game.resources, R.drawable.lovelace)
                 }
                 Type.INCREASE_CHIP_ACC_SPEED ->
                 {
                     name = "Knuth"
                     fullName = "Donald E. Knuth"
+                    vitae = game.resources.getString(R.string.knuth)
                     picture = BitmapFactory.decodeResource(game.resources, R.drawable.knuth)
                 }
                 Type.INCREASE_STARTING_CASH ->
                 {
                     name = "Hollerith"
                     fullName = "Herman Hollerith"
+                    vitae = game.resources.getString(R.string.hollerith)
                     picture = BitmapFactory.decodeResource(game.resources, R.drawable.hollerith)
                 }
                 Type.DECREASE_UPGRADE_COST ->
                 {
                     name = "Osborne"
                     fullName = "Adam Osborne"
+                    vitae = game.resources.getString(R.string.osborne)
                     picture = BitmapFactory.decodeResource(game.resources, R.drawable.osborne)
                 }
                 Type.ADDITIONAL_LIVES ->
                 {
                     name = "Zuse"
                     fullName = "Konrad Zuse"
+                    vitae = game.resources.getString(R.string.zuse)
                     picture = BitmapFactory.decodeResource(game.resources, R.drawable.zuse)
                 }
                 Type.DECREASE_ATT_FREQ ->
                 {
                     name = "LHC"
                     fullName = "Les Horribles Cernettes"
+                    vitae = game.resources.getString(R.string.cernettes)
                     picture = BitmapFactory.decodeResource(game.resources, R.drawable.cernettes)
                 }
                 Type.GAIN_CASH ->
                 {
                     name = "Franke"
                     fullName = "Herbert W. Franke"
+                    vitae = game.resources.getString(R.string.franke)
                     picture = BitmapFactory.decodeResource(game.resources, R.drawable.franke)
                 }
                 else ->
                 {
                     name = "Vaughan"
                     fullName = "Dorothy Vaughan"
+                    vitae = game.resources.getString(R.string.vaughan)
                     picture = BitmapFactory.decodeResource(game.resources, R.drawable.vaughan)
                 }
                 /*
@@ -422,4 +432,25 @@ class Upgrade(var game: Game, type: Type): Fadable {
 
     }
 
+    inner class Biography(var myArea: Rect)
+    {
+        var bitmap = Bitmap.createBitmap(myArea.width(), myArea.height(), Bitmap.Config.ARGB_8888)
+        private var canvas = Canvas(bitmap)
+
+        fun createBiography(selected: Upgrade?)
+        {
+            canvas.drawColor(Color.BLACK)
+            paintBiography.textSize = 28f
+            paintBiography.color = selected?.activeColor ?: Color.WHITE
+            paintBiography.alpha = 255
+            val textLayout = StaticLayout(
+                vitae, paintBiography, myArea.width(),
+                Layout.Alignment.ALIGN_NORMAL,
+                1.0f,
+                0.0f,
+                false
+            )
+            textLayout.draw(canvas)
+        }
+    }
 }

@@ -18,7 +18,8 @@
     <string name="failed">Niveau échoué.</string>
     <string name="selectLevel">Choix de niveau</string>
     <string name="play_selected_level">Jouer le niveau choisi</string>
-    <string name="button_purchase">Achat d\'améliorations</string>
+    <string name="button_marketplace">Achat d\'améliorations</string>
     <string name="level_entry">Niveau %d</string>
     <string name="level_selector">Sélection de niveau</string>
+    <string name="button_refund">Remise à zéro</string>
 </resources>

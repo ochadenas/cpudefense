@@ -7,7 +7,7 @@ import com.example.cpudefense.effects.Fadable
 import com.example.cpudefense.effects.Fader
 import com.example.cpudefense.inflate
 
-class Button(val text: String, val textsize: Float = 36f): Fadable
+class Button(val text: String, val textsize: Float = 36f, val color: Int = Color.GREEN, val style: Int = 0): Fadable
 {
     var alpha = 0
     var myArea = Rect()
@@ -15,15 +15,27 @@ class Button(val text: String, val textsize: Float = 36f): Fadable
     var textPaint = Paint()
 
     init {
-        buttonPaint.color = Color.GREEN  // default, should be overridden
-        buttonPaint.style = Paint.Style.FILL
-        /* determine size of area */
-        textPaint.color = Color.BLACK
+        when (style)
+        {
+            1 ->
+            {
+                buttonPaint.color = Color.WHITE  // default, should be overridden
+                buttonPaint.style = Paint.Style.STROKE
+                buttonPaint.strokeWidth = 2f
+                textPaint.color = Color.WHITE
+            }
+            else -> {
+                buttonPaint.color = color
+                buttonPaint.style = Paint.Style.FILL
+                textPaint.color = Color.BLACK
+            }
+
+        }
         textPaint.style = Paint.Style.FILL
         textPaint.typeface = Typeface.MONOSPACE
         textPaint.textSize = textsize
         textPaint.getTextBounds(text, 0, text.length, myArea)
-        myArea.inflate(10)
+        myArea.inflate(12)
     }
 
     override fun fadeDone(type: Fader.Type) {

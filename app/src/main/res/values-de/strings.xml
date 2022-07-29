@@ -18,7 +18,55 @@
     <string name="scoreboard_coins">Coins</string>
     <string name="selectLevel">Levelauswahl</string>
     <string name="play_selected_level">Spiele Level</string>
-    <string name="button_purchase">Upgrades kaufen</string>
+    <string name="button_marketplace">Upgrades kaufen</string>
     <string name="level_entry">Level %d</string>
     <string name="level_selector">Level-Auswahl</string>
+    <string name="button_refund">Zurücksetzen</string>
+    <string name="instr_1">
+"Dein Computer ist von einem üblen Virus befallen. Stücke von Schadcode - dargestellt als Einsen und Nullen - versuchen, zur CPU zu gelangen.
+
+Tippe den leeren Slot an, um einen Chip zur Verteidigung gegen den Angriff einzusetzen, und tippe noch einmal zur Bestätigung.
+
+Der einfachste Chip ist 'SUB 1'. Er subtrahiert 1 vom Wert des Angreifers: 1 wird zu 0, und 0 verschwindet und stellt keine Bedrohung mehr dar."
+    </string>
+    <string name="instr_2">
+"Durch Tippen auf einen Angreifer wird dessen Wert invertiert. 1 wird zu 0, und 0 wird zu 1.
+
+Das Invertieren einer 0 macht einen Angreifer tatsächlich gefährlicher. Pass also auf, dass du nicht auf alles tippst, was vorbeikommt."
+    </string>
+    <string name="instr_3">
+"Die Währung in diesem Spiel ist Information. Sie wird unten links angezeigt.
+
+Durch Zerstören eines Angreifers erhält man etwas Information über das Virus. Damit lassen sich zusätzliche Chips kaufen oder bestehende aufwerten."
+    </string>
+    <string name="instr_4">
+"Erinnerung: Im Dualsystem steht
+10 für 2
+11 für 3
+und so weiter."
+    </string>
+    <string name="instr_5">
+"Im nächsten Level steht ein neuer Chip zur Verfügung. Die Bezeichnung 'SHR 1' heißt 'shift right by 1'.
+
+Alle Binärziffern werden eine Stelle nach rechts geschoben. Die Stelle ganz links wird mit 0 aufgefüllt; zum Beispiel wird 0110 zu 0011.
+
+Das Verschieben ist gleichbedeutend mit einer Division durch 2."
+    </string>
+    <string name="instr_6">
+"Bei erfolgreichem Abschließen von Leveln gewinnt man Cryptocoins. Pro Level gibt es eine maximale Anzahl von Cryptocoins, die unten angezeigt werden. Jedes verlorene Leben reduziert die Anzahl der Cryptocoins.
+
+Falls beim ersten Durchgang nicht alle Coins gewonnen werden, kann der Level beliebig wiederholt werden. Wenn allerdings das Maximum erreicht wurde, erhält man keine weiteren Coins für diesen Level.
+
+Mit Cryptocoins können globale Updates mit großer Wirkung gekauft werden."
+    </string>
+    <string name="instr_7">
+"Manchmal sieht man einen Cryptocoin, der sich mit den Angreifern bewegt. Er kann eingesammelt werden, indem er zerstört wird. Dies geht sogar mehrmals, wenn der Level wiederholt wird.
+
+Vorsicht: Der laufende Cryptocoin ist stärker als die gewöhnlichen Angreifer. Wenn er die CPU erreicht, kostet dies ebenfalls ein Leben."
+    </string>
+    <string name="turing">
+"Alan Turing war eine der wichtigsten Persönlichkeiten in der Computerwissenschaft. Er legte viele der Grundlagen der theoretischen Informatik, unter anderem durch die Turing-Maschine und den Turing-Test. Außerdem entschlüsselte er den Enigma-Code im zweiten Weltkrieg. Sein Einfluss auf den Verlauf des Krieges kann kaum überschätzt werden.
+
+Turing wurde aufgrund seiner Homosexualität massiv diskriminiert. Er nahm sich 1954 vermutlich das Leben."
+    </string>
 </resources>
