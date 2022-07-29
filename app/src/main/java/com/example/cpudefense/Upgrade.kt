@@ -26,7 +26,7 @@ class Upgrade(var game: Game, type: Type): Fadable {
      */
 
     enum class Type { INCREASE_CHIP_SUB_SPEED, INCREASE_CHIP_SHIFT_SPEED, INCREASE_CHIP_ACC_SPEED,
-        DECREASE_ATT_FREQ ,
+        DECREASE_ATT_FREQ, DECREASE_ATT_SPEED,
         INCREASE_STARTING_CASH, GAIN_CASH, DECREASE_UPGRADE_COST, ADDITIONAL_LIVES}
     data class Data (
         val type: Type,
@@ -66,10 +66,12 @@ class Upgrade(var game: Game, type: Type): Fadable {
         Type.ADDITIONAL_LIVES -> game.resources.getColor(R.color.upgrade_active_eco)
         Type.INCREASE_CHIP_ACC_SPEED -> game.resources.getColor(R.color.upgrade_active_chip_acc)
         Type.DECREASE_ATT_FREQ -> game.resources.getColor(R.color.upgrade_active_general)
+        Type.DECREASE_ATT_SPEED -> game.resources.getColor(R.color.upgrade_active_general)
         Type.GAIN_CASH -> game.resources.getColor(R.color.upgrade_active_eco)
     }
     var maxLevel = 7   // cannot upgrade beyond this level
     var biography: Biography? = null
+    var effect: String = ""
     var vitae: String = ""
 
     init {
@@ -240,6 +242,11 @@ class Upgrade(var game: Game, type: Type): Fadable {
                 strengthDesc = "%.2f".format(strength)
                 upgradeDesc = " -> %.2f".format(next)
             }
+            Type.DECREASE_ATT_SPEED -> {
+                shortDesc = "Attacker speed"
+                strengthDesc = "%.2f".format(strength)
+                upgradeDesc = " -> %.2f".format(next)
+            }
             Type.GAIN_CASH ->
             {
                 shortDesc = "Information gain"
@@ -265,7 +272,8 @@ class Upgrade(var game: Game, type: Type): Fadable {
             Type.DECREASE_UPGRADE_COST -> return level * 5f
             Type.ADDITIONAL_LIVES -> return level.toFloat()
             Type.INCREASE_CHIP_ACC_SPEED -> return 1.0f + level / 20f
-            Type.DECREASE_ATT_FREQ -> return 1.0f - level / 20f
+            Type.DECREASE_ATT_FREQ -> return 1.0f - level * 0.05f
+            Type.DECREASE_ATT_SPEED -> return 1.0f - level * 0.02f
             Type.GAIN_CASH -> return (10f - level) * 10
         }
     }
@@ -279,6 +287,7 @@ class Upgrade(var game: Game, type: Type): Fadable {
             Type.DECREASE_UPGRADE_COST -> return (game.gameUpgrades[Type.INCREASE_STARTING_CASH]?.data?.level?: 0 >= 3)
             Type.ADDITIONAL_LIVES -> return (game.gameUpgrades[Type.DECREASE_UPGRADE_COST]?.data?.level?: 0 >= 3)
             Type.DECREASE_ATT_FREQ -> return (game.gameUpgrades[Type.INCREASE_CHIP_SHIFT_SPEED]?.data?.level?: 0 >= 3)
+            Type.DECREASE_ATT_SPEED -> return (game.gameUpgrades[Type.DECREASE_ATT_FREQ]?.data?.level?: 0 >= 3)
             Type.GAIN_CASH -> return (game.gameUpgrades[Type.INCREASE_STARTING_CASH]?.data?.level?: 0 >= 4)
             Type.INCREASE_CHIP_ACC_SPEED -> return false
             else -> return true
@@ -360,6 +369,7 @@ class Upgrade(var game: Game, type: Type): Fadable {
                 {
                     name = "Turing"
                     fullName = "Alan Turing"
+                    effect = "Increases speed of all %s chips".format("SUB")
                     vitae = game.resources.getString(R.string.turing)
                     picture = BitmapFactory.decodeResource(game.resources, R.drawable.turing)
                 }
@@ -367,6 +377,7 @@ class Upgrade(var game: Game, type: Type): Fadable {
                 {
                     name = "Lovelace"
                     fullName = "Ada Lovelace"
+                    effect = "Increases speed of all %s chips".format("SHR")
                     vitae = game.resources.getString(R.string.lovelace)
                     picture = BitmapFactory.decodeResource(game.resources, R.drawable.lovelace)
                 }
@@ -374,6 +385,7 @@ class Upgrade(var game: Game, type: Type): Fadable {
                 {
                     name = "Knuth"
                     fullName = "Donald E. Knuth"
+                    effect = "Increases speed of all %s chips".format("ACC")
                     vitae = game.resources.getString(R.string.knuth)
                     picture = BitmapFactory.decodeResource(game.resources, R.drawable.knuth)
                 }
@@ -381,6 +393,7 @@ class Upgrade(var game: Game, type: Type): Fadable {
                 {
                     name = "Hollerith"
                     fullName = "Herman Hollerith"
+                    effect = "Increases information at start of level"
                     vitae = game.resources.getString(R.string.hollerith)
                     picture = BitmapFactory.decodeResource(game.resources, R.drawable.hollerith)
                 }
@@ -388,6 +401,7 @@ class Upgrade(var game: Game, type: Type): Fadable {
                 {
                     name = "Osborne"
                     fullName = "Adam Osborne"
+                    effect = "Decreases upgrade cost of all chips"
                     vitae = game.resources.getString(R.string.osborne)
                     picture = BitmapFactory.decodeResource(game.resources, R.drawable.osborne)
                 }
@@ -395,6 +409,7 @@ class Upgrade(var game: Game, type: Type): Fadable {
                 {
                     name = "Zuse"
                     fullName = "Konrad Zuse"
+                    effect = "Grants additional lives"
                     vitae = game.resources.getString(R.string.zuse)
                     picture = BitmapFactory.decodeResource(game.resources, R.drawable.zuse)
                 }
@@ -402,6 +417,7 @@ class Upgrade(var game: Game, type: Type): Fadable {
                 {
                     name = "LHC"
                     fullName = "Les Horribles Cernettes"
+                    effect = "Decreases attacker frequency"
                     vitae = game.resources.getString(R.string.cernettes)
                     picture = BitmapFactory.decodeResource(game.resources, R.drawable.cernettes)
                 }
@@ -409,24 +425,26 @@ class Upgrade(var game: Game, type: Type): Fadable {
                 {
                     name = "Franke"
                     fullName = "Herbert W. Franke"
+                    effect = "Gains additional bits over time"
                     vitae = game.resources.getString(R.string.franke)
                     picture = BitmapFactory.decodeResource(game.resources, R.drawable.franke)
                 }
-                else ->
+                Type.DECREASE_ATT_SPEED ->
                 {
                     name = "Vaughan"
                     fullName = "Dorothy Vaughan"
+                    effect = "Decreases attacker speed"
+                    effect = "Not implemented yet"
                     vitae = game.resources.getString(R.string.vaughan)
                     picture = BitmapFactory.decodeResource(game.resources, R.drawable.vaughan)
                 }
-                /*
+                else ->
                 {
                     name = "Schneier"
                     fullName = "Bruce Schneier"
                     picture = BitmapFactory.decodeResource(game.resources, R.drawable.schneier)
                 }
 
-                 */
             }
         }
 
@@ -439,12 +457,22 @@ class Upgrade(var game: Game, type: Type): Fadable {
 
         fun createBiography(selected: Upgrade?)
         {
+            val text: String
+            if (data.level>0)
+            {
+                text = vitae
+                paintBiography.color = selected?.activeColor ?: Color.WHITE
+            }
+            else
+            {
+                text = "%s\n\n%s".format(hero.fullName, effect)
+                paintBiography.color = selected?.inactiveColor ?: Color.WHITE
+            }
             canvas.drawColor(Color.BLACK)
             paintBiography.textSize = 28f
-            paintBiography.color = selected?.activeColor ?: Color.WHITE
             paintBiography.alpha = 255
             val textLayout = StaticLayout(
-                vitae, paintBiography, myArea.width(),
+                text, paintBiography, myArea.width(),
                 Layout.Alignment.ALIGN_NORMAL,
                 1.0f,
                 0.0f,
