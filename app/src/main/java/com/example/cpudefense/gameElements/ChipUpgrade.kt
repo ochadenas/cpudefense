@@ -63,7 +63,7 @@ class ChipUpgrade(val chipToUpgrade: Chip, val type: Chip.ChipUpgrades,
             }
             Chip.ChipUpgrades.SUB -> chipToUpgrade.setType(Chip.ChipType.SUB)
             Chip.ChipUpgrades.SHIFT -> chipToUpgrade.setType(Chip.ChipType.SHIFT)
-            Chip.ChipUpgrades.AND -> chipToUpgrade.setType(Chip.ChipType.AND)
+            Chip.ChipUpgrades.ACC -> chipToUpgrade.setType(Chip.ChipType.ACC)
             else -> {}
         }
         game.state.cash -= price
@@ -80,7 +80,7 @@ class ChipUpgrade(val chipToUpgrade: Chip, val type: Chip.ChipUpgrades,
             Chip.ChipUpgrades.POWERUP -> "+1"
             Chip.ChipUpgrades.SUB -> "SUB"
             Chip.ChipUpgrades.SHIFT -> "SHR"
-            Chip.ChipUpgrades.AND -> "AND"
+            Chip.ChipUpgrades.ACC -> "ACC"
             else -> "?"
         }
 

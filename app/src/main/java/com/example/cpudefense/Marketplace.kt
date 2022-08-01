@@ -170,6 +170,7 @@ class Marketplace(val game: Game): GameElement()
         canvas.drawColor(Color.BLACK)
 
         // draw cards
+        selected?.displayHighlightFrame(canvas)
         for (card in upgrades)
             card.display(canvas)
 

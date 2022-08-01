@@ -44,6 +44,7 @@ class Upgrade(var game: Game, type: Type): Fadable {
     private var myBitmap: Bitmap? = null
     private var effectBitmap = BitmapFactory.decodeResource(game.resources, R.drawable.glow)
     private var paintRect = Paint()
+    private var paintInactive = Paint()
     private var paintIndicator = Paint()
     private var paintBiography = TextPaint()
     private var shortDescRect = Rect(areaOnScreen)
@@ -77,6 +78,8 @@ class Upgrade(var game: Game, type: Type): Fadable {
     init {
         paintRect.style = Paint.Style.STROKE
         paintRect.strokeWidth = 2f
+        paintInactive = Paint(paintRect)
+        paintInactive.color = inactiveColor
         paintText.color = Color.WHITE
         paintText.textSize = 24f
         paintText.style = Paint.Style.FILL
@@ -121,8 +124,6 @@ class Upgrade(var game: Game, type: Type): Fadable {
         else if (graphicalState == GraphicalState.TRANSIENT_LEVEL_0)
         {
             // draw animation for initial activation of the upgrade
-            var paintInactive = Paint(paintRect)
-            paintInactive.color = inactiveColor
             canvas.drawRect(areaOnScreen, paintInactive)
             displayLine(canvas, areaOnScreen.left, areaOnScreen.top, areaOnScreen.left, areaOnScreen.bottom)
             displayLine(canvas, areaOnScreen.right, areaOnScreen.bottom, areaOnScreen.right, areaOnScreen.top)
@@ -133,6 +134,26 @@ class Upgrade(var game: Game, type: Type): Fadable {
         }
         else
             canvas.drawRect(areaOnScreen, paintRect)
+    }
+
+    fun displayHighlightFrame(canvas: Canvas)
+    {
+        // if (graphicalState != GraphicalState.TRANSIENT_LEVEL_0) {
+            with (paintInactive)
+            {
+                val originalThickness = strokeWidth
+                val originalAlpha = alpha
+                alpha = 60
+                strokeWidth = originalThickness + 12
+                canvas.drawRect(areaOnScreen, this)
+                alpha = 60
+                strokeWidth = originalThickness + 6
+                canvas.drawRect(areaOnScreen, this)
+                // restore original values
+                strokeWidth = originalThickness
+                alpha = originalAlpha
+            }
+        // }
     }
 
     fun displayLine(canvas: Canvas, x0: Int, y0: Int, x1: Int, y1: Int)
@@ -296,7 +317,8 @@ class Upgrade(var game: Game, type: Type): Fadable {
 
     fun getPrice(level: Int): Int
     {
-        return sqrt(level.toDouble()).toInt()+1
+        // return sqrt(level.toDouble()).toInt()+1
+        return (level / 2 ) + 1
     }
 
     override fun fadeDone(type: Fader.Type) {

@@ -14,10 +14,12 @@
     <color name="attackers_glow_bin">#FFFD2222</color>
     <color name="attackers_glow_hex">#A63500</color>
     <color name="attackers_background">#40000000</color>
-    <color name="chips_dec_foreground">#DA07DD00</color>
-    <color name="chips_dec_glow">#AFFA34</color>
+    <color name="chips_sub_foreground">#DA07DD00</color>
+    <color name="chips_sub_glow">#AFFA34</color>
     <color name="chips_shr_foreground">#DA649DF3</color>
     <color name="chips_shr_glow">#DAD2DDEF</color>
+    <color name="chips_acc_foreground">#FFEB3B</color>
+    <color name="chips_acc_glow">#FFF7AF</color>
     <color name="chips_background">#FF000000</color>
 
     <color name="scoreboard_text">#FFFFFF</color>

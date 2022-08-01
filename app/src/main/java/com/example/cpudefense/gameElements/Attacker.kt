@@ -75,6 +75,7 @@ open class Attacker(network: Network, type: Representation = Representation.BINA
     var actualRect = Rect()
     var oldNumber: ULong = 0U
     var oldNumberBitmap: Bitmap? = null
+    var immuneTo: Chip? = null
     var animationCount = 0
     val animationCountMax = 8
     val numberFontSize = 32f
@@ -82,11 +83,21 @@ open class Attacker(network: Network, type: Representation = Representation.BINA
     private val paintBitmap = Paint()
 
     init {
+        this.data.speed = speed
+        calculateNumberOfDigits()
+        makeNumber(this)
+    }
+
+    private fun calculateNumberOfDigits()
+            /** determine how many binary or hex digits the value must have,
+             * given its number
+             */
+    {
         if (attackerData.representation == Representation.UNDEFINED)
             attackerData.representation = if (attackerData.number >= 32u) Representation.HEX else Representation.BINARY
         if (attackerData.representation == Representation.BINARY)
         {
-            attackerData.binaryDigits = log2(number.toFloat()).toInt() + 1
+            attackerData.binaryDigits = log2(attackerData.number.toFloat()).toInt() + 1
             if (attackerData.binaryDigits < 1)
                 attackerData.binaryDigits = 1
             else if (attackerData.binaryDigits > 16)
@@ -97,7 +108,7 @@ open class Attacker(network: Network, type: Representation = Representation.BINA
         }
         else
         {
-            attackerData.hexDigits = log16(number.toFloat()).toInt() + 1
+            attackerData.hexDigits = log16(attackerData.number.toFloat()).toInt() + 1
             if (attackerData.hexDigits < 2)
                 attackerData.hexDigits = 2
             else if (attackerData.hexDigits > 8)
@@ -106,9 +117,7 @@ open class Attacker(network: Network, type: Representation = Representation.BINA
                 attackerData.hexDigits++  // adjust 'digits' to nearest allowed value
             attackerData.number = attackerData.number and maskHex[attackerData.hexDigits]!!
         }
-        makeNumber(this)
         attackerData.bits = attackerData.binaryDigits + 4 * attackerData.hexDigits
-        this.data.speed = speed
     }
 
     fun provideData(): Data
@@ -125,6 +134,8 @@ open class Attacker(network: Network, type: Representation = Representation.BINA
         oldNumberBitmap = numberBitmap
         animationCount = animationCountMax
         attackerData.number = newNumber
+        if (newNumber>oldNumber)
+            calculateNumberOfDigits()
         makeNumber(this)
     }
 
@@ -141,7 +152,7 @@ open class Attacker(network: Network, type: Representation = Representation.BINA
 
     open fun onShot(type: Chip.ChipType, power: Int): Boolean
             /** function that gets called when a the attacker gets "hit".
-             * @param type the kind of attack, e. g. SUB
+             * @param type the chip's type that effectuates the attack
              * @param power strength (amount) of the shot
              * @return true if the attacker gets destroyed, false otherwise
              */

@@ -1,6 +1,5 @@
 package com.example.cpudefense.networkmap
 import android.graphics.Canvas
-import android.graphics.Color
 import android.graphics.Paint
 import com.example.cpudefense.*
 import com.example.cpudefense.gameElements.GameElement
@@ -28,8 +27,21 @@ class Link(val theNetwork: Network, var node1: Node, var node2: Node, var ident:
     var interPoint: GridCoord? = null
 
     var lengthOnGrid: Float = 0f
+    var connectorWidth = 4f
+    var connectorRadius = 6f
+    val paintConnector = Paint()
+    val paintBackground = Paint()
+    var paintLineBackground = Paint()
 
-    init { calculateIntermediatePointPosition() }
+    init {
+        calculateIntermediatePointPosition()
+        paintBackground.color = theNetwork.theGame.resources.getColor(R.color.network_background)
+        paintBackground.style = Paint.Style.FILL_AND_STROKE
+        paintConnector.color = theNetwork.theGame.resources.getColor(R.color.connectors)
+        paintConnector.style = Paint.Style.STROKE
+        paintConnector.strokeWidth = connectorWidth
+        paintLineBackground = Paint(paintBackground)
+    }
 
     fun calculateIntermediatePointPosition()
     {
@@ -135,9 +147,9 @@ class Link(val theNetwork: Network, var node1: Node, var node2: Node, var ident:
 
         when (startPoint.direction(endPoint))
         {
-            Network.Dir.DIAGONAL -> { dx = delta; dy = delta }
-            Network.Dir.REVERSE_DIAGONAL -> { dx = delta; dy = -delta }
-            Network.Dir.VERTICAL -> { dx = delta/1.4f; dy = 0f }
+            Network.Dir.DIAGONAL -> { dx = delta * 1.2f; dy = delta }
+            Network.Dir.REVERSE_DIAGONAL -> { dx = delta * 1.2f; dy = -delta }
+            Network.Dir.VERTICAL -> { dx = delta * 1.4f; dy = 0f }
             Network.Dir.HORIZONTAL -> { dx = 0f; dy = delta/1.4f }
             else -> { dx = 0f; dy = 0f }
         }
@@ -147,20 +159,20 @@ class Link(val theNetwork: Network, var node1: Node, var node2: Node, var ident:
                 continue
             val displacementX = (numLines - 1.5f) * dx
             val displacementY = (numLines - 1.5f) * dy
+            point1 = GridCoord(startPoint.x + displacementX, startPoint.y + displacementY)
+            point2 = GridCoord(endPoint.x + displacementX, endPoint.y + displacementY)
             if (interPoint == null) // direct connection
             {
-                point1 = GridCoord(startPoint.x + displacementX, startPoint.y + displacementY)
-                point2 = GridCoord(endPoint.x + displacementX, endPoint.y + displacementY)
                 displayLine(canvas, viewport, point1, point2)
             }
             else  // connection via intermediate point
             {
-                point1 = GridCoord(startPoint.x+displacementX, startPoint.y+displacementY)
-                point2 = GridCoord(interPoint!!.x+displacementX, interPoint!!.y+displacementY)
-                displayLine(canvas, viewport, point1, point2)
-                point1 = GridCoord(endPoint.x+displacementX, endPoint.y+displacementY)
-                displayLine(canvas, viewport, point1, point2)
+                val point0 = GridCoord(interPoint!!.x+displacementX, interPoint!!.y+displacementY)
+                displayLine(canvas, viewport, point1, point0)
+                displayLine(canvas, viewport, point0, point2)
             }
+            displayConnectorCircle(canvas, viewport, point1)
+            displayConnectorCircle(canvas, viewport, point2)
         }
     }
 
@@ -169,18 +181,22 @@ class Link(val theNetwork: Network, var node1: Node, var node2: Node, var ident:
     {
         val startPoint = viewport.gridToViewport(startGridPoint)
         val endPoint = viewport.gridToViewport(endGridPoint)
-        val paint = Paint()
-        paint.style = Paint.Style.STROKE
-        paint.color = Color.BLACK
-        paint.strokeWidth = 16.0f
-        /* canvas.drawLine(startPoint.first.toFloat(), startPoint.second.toFloat(),
-            endPoint.first.toFloat(), endPoint.second.toFloat(), paint)
+        /*
+        paintLineBackground.strokeWidth = 4 * connectorWidth
+         canvas.drawLine(startPoint.first.toFloat(), startPoint.second.toFloat(),
+            endPoint.first.toFloat(), endPoint.second.toFloat(), paintLineBackground)
 
          */
-        paint.color = theNetwork.theGame.resources.getColor(R.color.connectors)
-        paint.strokeWidth = 4.0f
         canvas.drawLine(startPoint.first.toFloat(), startPoint.second.toFloat(),
-            endPoint.first.toFloat(), endPoint.second.toFloat(), paint)
+            endPoint.first.toFloat(), endPoint.second.toFloat(), paintConnector)
+    }
+
+    fun displayConnectorCircle(canvas: Canvas, viewport: Viewport, gridPoint: GridCoord)
+    {
+        val point = viewport.gridToViewport(gridPoint)
+        val radius = connectorRadius
+        canvas.drawCircle(point.first.toFloat(), point.second.toFloat(), radius, paintBackground)
+        canvas.drawCircle(point.first.toFloat(), point.second.toFloat(), radius, paintConnector)
     }
 
     companion object {

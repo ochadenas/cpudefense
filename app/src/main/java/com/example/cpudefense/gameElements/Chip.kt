@@ -11,8 +11,8 @@ import java.util.concurrent.CopyOnWriteArrayList
 
 open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gridX.toFloat(), gridY.toFloat())
 {
-    enum class ChipType { EMPTY, SUB, SHIFT, AND, ENTRY, CPU}
-    enum class ChipUpgrades { POWERUP, SUB, SHIFT, AND }
+    enum class ChipType { EMPTY, SUB, SHIFT, ACC, ENTRY, CPU}
+    enum class ChipUpgrades { POWERUP, SUB, SHIFT, ACC }
 
     data class Data(
         var type: ChipType = ChipType.EMPTY,
@@ -34,11 +34,15 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
 
     val resources = network.theGame.resources
 
+    // some chips have a 'register' where an attacker's value can be held.
+    var internalRegister: Attacker? = null
+
     private var cooldownTimer = 0
     private var upgradePossibilities = CopyOnWriteArrayList<ChipUpgrade>()
 
     private var paintBitmap = Paint()
     private var paintOutline = Paint()
+    private val outlineWidth = 2f
     private val paintBackground = Paint()
     private var paintLines = Paint()
     private val defaultBackgroundColor = resources.getColor(R.color.chips_background)
@@ -48,7 +52,6 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
         data.range = 2.0f
         paintOutline.color = Color.WHITE
         paintOutline.style = Paint.Style.STROKE
-        paintOutline.strokeWidth = 2f
         paintBackground.style = Paint.Style.FILL
         paintLines.style = Paint.Style.STROKE
         paintLines.color = Color.WHITE
@@ -68,8 +71,8 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
             ChipType.SUB -> {
                 chipData.power = 1
                 bitmap = null
-                chipData.color = resources.getColor(R.color.chips_dec_foreground)
-                chipData.glowColor = resources.getColor(R.color.chips_dec_glow)
+                chipData.color = resources.getColor(R.color.chips_sub_foreground)
+                chipData.glowColor = resources.getColor(R.color.chips_sub_glow)
                 chipData.value = Game.basePrice[ChipUpgrades.SUB] ?: 10
                 val modifier: Float = network.theGame.gameUpgrades[Upgrade.Type.INCREASE_CHIP_SUB_SPEED]?.getStrength() ?: 1f
                 chipData.cooldown = (20f / modifier).toInt()
@@ -82,6 +85,15 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
                 chipData.value = Game.basePrice[ChipUpgrades.SHIFT] ?: 10
                 val modifier: Float = network.theGame.gameUpgrades[Upgrade.Type.INCREASE_CHIP_SHIFT_SPEED]?.getStrength() ?: 1f
                 chipData.cooldown = (32f / modifier).toInt()
+            }
+            ChipType.ACC -> {
+                chipData.power = 1
+                bitmap = null
+                chipData.color = resources.getColor(R.color.chips_acc_foreground)
+                chipData.glowColor = resources.getColor(R.color.chips_acc_glow)
+                chipData.value = Game.basePrice[ChipUpgrades.ACC] ?: 10
+                val modifier: Float = network.theGame.gameUpgrades[Upgrade.Type.INCREASE_CHIP_ACC_SPEED]?.getStrength() ?: 1f
+                chipData.cooldown = (16f / modifier).toInt()
             }
             else -> {}
         }
@@ -101,7 +113,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
         }
         val attackers = attackersInRange()
         if (attackers.isNotEmpty())
-            shootAt(attackersInRange()[0])
+            shootAt(attackers[0])
     }
 
     override fun display(canvas: Canvas, viewport: Viewport) {
@@ -132,6 +144,10 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
         }
 
         /* draw outline */
+        paintOutline.strokeWidth =
+            if (isActivated()) 3f * outlineWidth
+        else
+            outlineWidth
         canvas.drawRect(actualRect, paintOutline)
 
         /* display a line to all vehicles in range */
@@ -156,7 +172,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
 
     fun attackerInRange(attacker: Attacker): Boolean
     {
-        var dist: Float? = distanceTo(attacker)
+        val dist: Float? = distanceTo(attacker)
         if (dist != null) {
             return dist <= data.range
         } else return false
@@ -168,14 +184,58 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
         return vehicles
     }
 
-    fun shootAt(attacker: Attacker?)
+    fun shootAt(attacker: Attacker)
     {
         if (chipData.type == ChipType.EMPTY)
             return
+        if (attacker.immuneTo == this)
+            return
+        var kill = false
         cooldownTimer = (chipData.cooldown / network.theGame.globalSpeedFactor).toInt()
-        var kill = attacker?.onShot(chipData.type, chipData.power)
-        if (kill == true)
-            attacker?.remove()
+        if (chipData.type == ChipType.ACC)
+            processInAccumulator(attacker)
+        else {
+            kill = attacker.onShot(chipData.type, chipData.power)
+            if (kill == true)
+                attacker.remove()
+        }
+    }
+
+    fun storeAttacker(attacker: Attacker?)
+    {
+        internalRegister = attacker
+        attacker?.let {
+            theNetwork?.theGame?.scoreBoard?.addCash(it.attackerData.bits)
+            it.remove()
+        }
+    }
+
+    fun processInAccumulator(attacker: Attacker)
+    {
+        if (internalRegister == null)
+            storeAttacker(attacker)
+        else
+        {
+            val number1: ULong = attacker.attackerData.number
+            val number2: ULong = internalRegister?.attackerData?.number ?: 0u
+            val newValue = when (chipData.power)
+            {
+                1 -> number1 + number2
+                2 -> number1 or number2
+                else -> number1 and number2
+            }
+            attacker.changeNumberTo(newValue)
+            internalRegister = null
+            attacker.immuneTo = this
+        }
+    }
+
+    fun isActivated(): Boolean
+            /** for display purposes: determine whether the chip is "activated",
+             * depending on its type.
+             */
+    {
+        return (chipData.type == ChipType.ACC && internalRegister != null)
     }
 
     private fun createBitmapForType(): Bitmap?
@@ -184,6 +244,12 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
         {
             ChipType.SUB -> return createBitmap("SUB %d".format(chipData.power))
             ChipType.SHIFT -> return createBitmap("SHR %d".format(chipData.power))
+            ChipType.ACC -> return when (chipData.power)
+            {
+                1 -> createBitmap("ACC +")
+                2 -> createBitmap("ACC v")
+                else -> createBitmap("ACC &")
+            }
             else -> return null
         }
     }
@@ -194,15 +260,15 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
             return null
 
         val bitmap = Bitmap.createBitmap(actualRect.width(), actualRect.height(), Bitmap.Config.ARGB_8888)
-        var rect = Rect(0, 0, bitmap.width, bitmap.height)
+        val rect = Rect(0, 0, bitmap.width, bitmap.height)
         val canvas = Canvas(bitmap)
-        var paint = Paint()
+        val paint = Paint()
 
         paint.textSize = Game.chipTextSize
         paint.alpha = 255
         paint.typeface = Typeface.create("sans-serif-condensed", Typeface.BOLD)
         paint.textAlign = Paint.Align.CENTER
-        var clippedRect = rect.displayTextCenteredInRect(canvas, text, paint)
+        val clippedRect = rect.displayTextCenteredInRect(canvas, text, paint)
 
         val alpha: Bitmap = bitmap.extractAlpha()
         /* create a transparent black background to have more contrast */
@@ -230,7 +296,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
             ChipType.EMPTY -> {
                 alternatives.add(ChipUpgrades.SUB)
                 alternatives.add(ChipUpgrades.SHIFT)
-                //alternatives.add(ChipUpgrades.AND)
+                alternatives.add(ChipUpgrades.ACC)
             }
             ChipType.SUB -> {
                 alternatives.add(ChipUpgrades.POWERUP)
@@ -238,11 +304,15 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
             ChipType.SHIFT -> {
                 alternatives.add(ChipUpgrades.POWERUP)
             }
+            ChipType.ACC -> {
+                if (chipData.power < 3)
+                    alternatives.add(ChipUpgrades.POWERUP)
+            }
             else -> {}
         }
 
         // discard the alternatives that are not allowed for this stage
-        var allowed = network.theGame.currentStage?.data?.chipsAllowed ?: setOf()
+        val allowed = network.theGame.currentStage?.data?.chipsAllowed ?: setOf()
         for (a in alternatives)
             if (a !in allowed)
                 alternatives.remove(a)

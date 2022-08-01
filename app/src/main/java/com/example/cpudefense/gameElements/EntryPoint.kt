@@ -14,6 +14,6 @@ class EntryPoint(network: Network, gridX: Int, gridY: Int): Chip(network, gridX,
     }
 
     override fun display(canvas: Canvas, viewport: Viewport) {
-        super.display(canvas, viewport)
+        // super.display(canvas, viewport)
     }
 }
