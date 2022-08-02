@@ -754,13 +754,13 @@ class Stage(var theGame: Game) {
                 createTrack(listOf(1, 2,4,7,10,13,14), 3)
 
                 createWave(12, 3, .05f, 1.0f)
-                createWave(12, 5, .05f, 1.0f)
-                createWave(12, 7, .05f, 1.0f)
-                createWave(10, 12, .05f, 1.0f)
-                createWave(10, 20, .05f, 1.0f)
-                createWave(10, 40, .05f, 1.0f)
-                createWaveHex(15, 50, .05f, 1f, coins = 0)
-                createWaveHex(20, 80, .05f, 1f, coins = 1)
+                createWave(12, 5, .06f, 1.1f)
+                createWave(12, 7, .07f, 1.1f)
+                createWave(10, 12, .08f, 1.1f)
+                createWave(10, 20, .08f, 1.2f)
+                createWave(10, 40, .09f, 1.2f)
+                createWaveHex(15, 50, .09f, 1f, coins = 0)
+                createWaveHex(20, 80, .10f, 1f, coins = 1)
 
                 // data.chipsAllowed = setOf(Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.POWERUP, Chip.ChipUpgrades.SHIFT, Chip.ChipUpgrades.ACC)
                 rewardCoins = 3

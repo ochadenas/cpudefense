@@ -215,7 +215,8 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
         internalRegister = attacker
         attacker?.let {
             theNetwork?.theGame?.scoreBoard?.addCash(it.attackerData.bits)
-            it.remove()
+            it.immuneTo = this
+            theNetwork?.theGame?.gameActivity?.theGameView?.theEffects?.fade(it)
         }
     }
 
@@ -330,19 +331,28 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
 
         // calculate screen coordinates for the alternative boxes
         var posX = actualRect.centerX()
+        var posY = actualRect.centerY()
+        val positions = listOf (
+            Pair( 1.0f, -0.5f),
+            Pair( 1.0f, +0.5f),
+            Pair( 2.0f, -0.5f),
+            Pair( 2.0f, +0.5f) )
+        val factorY = 1.5 * actualRect.height()
+        var factorX: Float
         if (network.theGame.viewport.isInRightHalfOfViewport(posX))
-            posX -= (1.2 * actualRect.width()).toInt()
+            factorX = -1.2f * actualRect.width()
         else
-            posX += (1.2 * actualRect.width()).toInt()
-        var posY = (actualRect.centerY() - 1.5 * actualRect.height() * (alternatives.size - 1.0)).toInt()
+            factorX = +1.2f * actualRect.width()
+        var i = 0
         for (upgrade in alternatives)
         {
             val chipUpgrade = ChipUpgrade(this, upgrade,
                 actualRect.centerX(), actualRect.centerY(), Color.WHITE)
+            val pos: Pair<Float, Float> = positions.get(i) ?: Pair(1.0f, 1.0f)
             Mover(network.theGame, chipUpgrade, actualRect.centerX(), actualRect.centerY(),
-                posX, posY )
+                posX+(pos.first * factorX).toInt(), posY+(pos.second * factorY).toInt())
             upgradePossibilities.add(chipUpgrade)
-            posY += (actualRect.height() * 1.5f).toInt()
+            i++
         }
     }
 

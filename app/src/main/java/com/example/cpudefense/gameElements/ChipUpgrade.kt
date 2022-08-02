@@ -91,7 +91,7 @@ class ChipUpgrade(val chipToUpgrade: Chip, val type: Chip.ChipUpgrades,
         var rect = Rect(0, 0, bitmap.width, bitmap.height)
 
         val newCanvas = Canvas(bitmap)
-        paint.textSize = 24f
+        paint.textSize = Game.Params.chipTextSize
         paint.alpha = 255
         paint.setTypeface(Typeface.create("sans-serif-condensed", Typeface.BOLD))
         paint.textAlign = Paint.Align.CENTER
@@ -114,7 +114,7 @@ class ChipUpgrade(val chipToUpgrade: Chip, val type: Chip.ChipUpgrades,
         paint.setTypeface(Typeface.create("sans-serif-condensed", Typeface.ITALIC))
         paint.textSize = Game.Params.chipTextSize - 2
         paint.color = if (canAfford()) Color.WHITE else Color.YELLOW
-        canvas.drawText(game.scoreBoard.informationToString(price), actualRect.right.toFloat()+4, actualRect.top.toFloat()+4, paint)
+        canvas.drawText(game.scoreBoard.informationToString(price), actualRect.right.toFloat()-4, actualRect.top.toFloat()+6, paint)
     }
 }
 

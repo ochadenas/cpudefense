@@ -7,6 +7,7 @@ import java.util.concurrent.CopyOnWriteArrayList
 
 class Effects(var theGame: Game) {
     var explosions = CopyOnWriteArrayList<Explosion>()
+    var faders = CopyOnWriteArrayList<Fader>()
 
     fun explode(thing: Explodable)
     {
@@ -16,8 +17,14 @@ class Effects(var theGame: Game) {
         thing.remove()
     }
 
+    fun fade(thing: Fadable)
+    {
+        faders.add(Fader(theGame, thing, speed=Fader.Speed.SLOW ))
+    }
+
     fun updateGraphicalEffects()
     {
+        faders.map { it.update() }
         explosions.map { it.update() }
         explosions.removeAll { it.expired() }
 

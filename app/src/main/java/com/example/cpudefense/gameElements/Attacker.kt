@@ -4,6 +4,8 @@ import android.graphics.*
 import android.view.MotionEvent
 import com.example.cpudefense.*
 import com.example.cpudefense.effects.Explodable
+import com.example.cpudefense.effects.Fadable
+import com.example.cpudefense.effects.Fader
 import com.example.cpudefense.networkmap.Link
 import com.example.cpudefense.networkmap.Network
 import com.example.cpudefense.networkmap.Viewport
@@ -13,7 +15,7 @@ import kotlin.random.Random
 
 open class Attacker(network: Network, type: Representation = Representation.BINARY,
                     number: ULong = 1u, speed: Float = 1.0f):
-    Vehicle(network), Explodable {
+    Vehicle(network), Explodable, Fadable {
     enum class Representation { UNDEFINED, BINARY, HEX, DECIMAL, FLOAT }
 
     data class Data(
@@ -81,6 +83,7 @@ open class Attacker(network: Network, type: Representation = Representation.BINA
     val numberFontSize = 32f
     var displacement = Pair(Random.nextInt(5)-1, Random.nextInt(7)-2) // small shift in display to avoid over-crowding on the screen
     private val paintBitmap = Paint()
+    var scale: Float = 1.0f
 
     init {
         this.data.speed = speed
@@ -178,9 +181,9 @@ open class Attacker(network: Network, type: Representation = Representation.BINA
             }
             Chip.ChipType.MEM ->
             {
-                theNetwork.theGame.gameActivity.theGameView.theEffects?.explode(this)
+                theNetwork.theGame.gameActivity.theGameView.theEffects?.fade(this)
                 theNetwork.theGame.scoreBoard.addCash(attackerData.bits)
-                return true
+                return false // remove() is done after fading
             }
             else -> return false
         }
@@ -267,6 +270,7 @@ open class Attacker(network: Network, type: Representation = Representation.BINA
             return
         actualRect = Rect(0, 0, numberBitmap.width, numberBitmap.height)
         actualRect.setCenter(getPositionOnScreen())
+        actualRect.scale(scale)
         actualRect.offset(displacement.first, displacement.second)
 
         if (animationCount>0)
@@ -285,6 +289,15 @@ open class Attacker(network: Network, type: Representation = Representation.BINA
             canvas.drawBitmap(numberBitmap, null, actualRect, paintBitmap)
     }
 
+    override fun fadeDone(type: Fader.Type) {
+        remove()
+    }
+
+    override fun setOpacity(opacity: Float) {
+        scale = opacity
+        paintBitmap.alpha = (255 * opacity).toInt()
+    }
+
     fun onDown(event: MotionEvent): Boolean {
         val boundingRecSize = 50
         val boundingRect = Rect(0, 0, boundingRecSize, boundingRecSize)
@@ -297,4 +310,5 @@ open class Attacker(network: Network, type: Representation = Representation.BINA
         else
             return false
     }
+
 }

@@ -31,7 +31,7 @@ class Game(val gameActivity: MainGameActivity) {
 
         const val scoreTextSize = 40f
         const val scoreHeaderSize = 20f
-        const val chipTextSize = 24f
+        const val chipTextSize = 28f
         const val computerTextSize = 36f
         const val instructionTextSize = computerTextSize
 
