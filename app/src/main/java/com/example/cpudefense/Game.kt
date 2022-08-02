@@ -46,7 +46,7 @@ class Game(val gameActivity: MainGameActivity) {
         const val levelSnapshotIconSize = 120
 
         val basePrice = mapOf(
-            Chip.ChipUpgrades.SUB to 8, Chip.ChipUpgrades.ACC to 12, Chip.ChipUpgrades.SHIFT to 16)
+            Chip.ChipUpgrades.SUB to 8, Chip.ChipUpgrades.ACC to 12, Chip.ChipUpgrades.SHIFT to 16, Chip.ChipUpgrades.MEM to 20)
     }
 
     var globalSpeedFactor = 1.0f

@@ -265,7 +265,8 @@ class Stage(var theGame: Game) {
         this.data.level = level
         waves.clear()
         type = Type.REGULAR
-        data.chipsAllowed = setOf(Chip.ChipUpgrades.ACC, Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.SHIFT, Chip.ChipUpgrades.POWERUP)
+        data.chipsAllowed =
+            setOf(Chip.ChipUpgrades.ACC, Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.SHIFT, Chip.ChipUpgrades.POWERUP, Chip.ChipUpgrades.MEM)
 
         when (level)
         {
@@ -761,7 +762,7 @@ class Stage(var theGame: Game) {
                 createWaveHex(15, 50, .05f, 1f, coins = 0)
                 createWaveHex(20, 80, .05f, 1f, coins = 1)
 
-                data.chipsAllowed = setOf(Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.POWERUP, Chip.ChipUpgrades.SHIFT, Chip.ChipUpgrades.ACC)
+                // data.chipsAllowed = setOf(Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.POWERUP, Chip.ChipUpgrades.SHIFT, Chip.ChipUpgrades.ACC)
                 rewardCoins = 3
                 type = Type.FINAL
             }

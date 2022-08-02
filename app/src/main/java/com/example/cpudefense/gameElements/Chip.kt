@@ -11,8 +11,8 @@ import java.util.concurrent.CopyOnWriteArrayList
 
 open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gridX.toFloat(), gridY.toFloat())
 {
-    enum class ChipType { EMPTY, SUB, SHIFT, ACC, ENTRY, CPU}
-    enum class ChipUpgrades { POWERUP, SUB, SHIFT, ACC }
+    enum class ChipType { EMPTY, SUB, SHIFT, MEM, ACC, ENTRY, CPU}
+    enum class ChipUpgrades { POWERUP, SUB, SHIFT, MEM, ACC }
 
     data class Data(
         var type: ChipType = ChipType.EMPTY,
@@ -85,6 +85,15 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
                 chipData.value = Game.basePrice[ChipUpgrades.SHIFT] ?: 10
                 val modifier: Float = network.theGame.gameUpgrades[Upgrade.Type.INCREASE_CHIP_SHIFT_SPEED]?.getStrength() ?: 1f
                 chipData.cooldown = (32f / modifier).toInt()
+            }
+            ChipType.MEM -> {
+                chipData.power = 1
+                bitmap = null
+                chipData.color = resources.getColor(R.color.chips_mem_foreground)
+                chipData.glowColor = resources.getColor(R.color.chips_mem_glow)
+                chipData.value = Game.basePrice[ChipUpgrades.MEM] ?: 20
+                val modifier: Float = network.theGame.gameUpgrades[Upgrade.Type.INCREASE_CHIP_MEM_SPEED]?.getStrength() ?: 1f
+                chipData.cooldown = (128f / modifier).toInt()
             }
             ChipType.ACC -> {
                 chipData.power = 1
@@ -244,6 +253,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
         {
             ChipType.SUB -> return createBitmap("SUB %d".format(chipData.power))
             ChipType.SHIFT -> return createBitmap("SHR %d".format(chipData.power))
+            ChipType.MEM -> return createBitmap("MEM %d".format(chipData.power))
             ChipType.ACC -> return when (chipData.power)
             {
                 1 -> createBitmap("ACC +")
@@ -297,6 +307,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
                 alternatives.add(ChipUpgrades.SUB)
                 alternatives.add(ChipUpgrades.SHIFT)
                 alternatives.add(ChipUpgrades.ACC)
+                alternatives.add(ChipUpgrades.MEM)
             }
             ChipType.SUB -> {
                 alternatives.add(ChipUpgrades.POWERUP)

@@ -25,7 +25,7 @@ class Upgrade(var game: Game, type: Type): Fadable {
     - Tramiel
      */
 
-    enum class Type { INCREASE_CHIP_SUB_SPEED, INCREASE_CHIP_SHIFT_SPEED, INCREASE_CHIP_ACC_SPEED,
+    enum class Type { INCREASE_CHIP_SUB_SPEED, INCREASE_CHIP_SHIFT_SPEED, INCREASE_CHIP_MEM_SPEED, INCREASE_CHIP_ACC_SPEED,
         DECREASE_ATT_FREQ, DECREASE_ATT_SPEED,
         INCREASE_STARTING_CASH, GAIN_CASH, DECREASE_UPGRADE_COST, ADDITIONAL_LIVES}
     data class Data (
@@ -64,6 +64,7 @@ class Upgrade(var game: Game, type: Type): Fadable {
         Type.DECREASE_UPGRADE_COST -> game.resources.getColor(R.color.upgrade_active_eco)
         Type.INCREASE_CHIP_SUB_SPEED -> game.resources.getColor(R.color.upgrade_active_chip_dec)
         Type.INCREASE_CHIP_SHIFT_SPEED -> game.resources.getColor(R.color.upgrade_active_chip_shr)
+        Type.INCREASE_CHIP_MEM_SPEED -> game.resources.getColor(R.color.upgrade_active_chip_mem)
         Type.ADDITIONAL_LIVES -> game.resources.getColor(R.color.upgrade_active_eco)
         Type.INCREASE_CHIP_ACC_SPEED -> game.resources.getColor(R.color.upgrade_active_chip_acc)
         Type.DECREASE_ATT_FREQ -> game.resources.getColor(R.color.upgrade_active_general)
@@ -290,6 +291,7 @@ class Upgrade(var game: Game, type: Type): Fadable {
             Type.INCREASE_CHIP_SUB_SPEED -> return 1.0f + level / 20f
             Type.INCREASE_STARTING_CASH -> return 8.0f + level * level
             Type.INCREASE_CHIP_SHIFT_SPEED -> return 1.0f + level / 20f
+            Type.INCREASE_CHIP_MEM_SPEED -> return 1.0f + level / 20f
             Type.DECREASE_UPGRADE_COST -> return level * 5f
             Type.ADDITIONAL_LIVES -> return level.toFloat()
             Type.INCREASE_CHIP_ACC_SPEED -> return 1.0f + level / 20f

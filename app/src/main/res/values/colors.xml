@@ -18,6 +18,8 @@
     <color name="chips_sub_glow">#AFFA34</color>
     <color name="chips_shr_foreground">#DA649DF3</color>
     <color name="chips_shr_glow">#DAD2DDEF</color>
+    <color name="chips_mem_foreground">#774CC3</color>
+    <color name="chips_mem_glow">#BCA7E1</color>
     <color name="chips_acc_foreground">#FFEB3B</color>
     <color name="chips_acc_glow">#FFF7AF</color>
     <color name="chips_background">#FF000000</color>
@@ -36,10 +38,11 @@
     <color name="upgrade_inactive">#7C878C</color>
     <color name="upgrade_active_general">#79D5FF</color>
     <color name="upgrade_active_eco">#FF8400</color>
-    <color name="upgrade_active_speed">#9C27B0</color>
+    <color name="upgrade_active_speed">#E1353B</color>
     <color name="upgrade_active_chip_dec">#DA07DD00</color>
     <color name="upgrade_active_chip_shr">#DA649DF3</color>
     <color name="upgrade_active_chip_acc">#FFC107</color>
+    <color name="upgrade_active_chip_mem">#774CC3</color>
 
 
 </resources>

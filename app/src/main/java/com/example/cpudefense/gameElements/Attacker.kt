@@ -176,6 +176,12 @@ open class Attacker(network: Network, type: Representation = Representation.BINA
                 for (i in 1 .. power)
                 changeNumberTo((attackerData.number / 2u))
             }
+            Chip.ChipType.MEM ->
+            {
+                theNetwork.theGame.gameActivity.theGameView.theEffects?.explode(this)
+                theNetwork.theGame.scoreBoard.addCash(attackerData.bits)
+                return true
+            }
             else -> return false
         }
         return false
