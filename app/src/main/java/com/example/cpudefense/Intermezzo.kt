@@ -2,6 +2,7 @@ package com.example.cpudefense
 
 import android.graphics.*
 import android.view.MotionEvent
+import com.example.cpudefense.effects.Explosion
 import com.example.cpudefense.effects.Fadable
 import com.example.cpudefense.effects.Fader
 import com.example.cpudefense.gameElements.Button
@@ -9,6 +10,7 @@ import com.example.cpudefense.gameElements.GameElement
 import com.example.cpudefense.gameElements.Typewriter
 import com.example.cpudefense.networkmap.Viewport
 import java.util.concurrent.CopyOnWriteArrayList
+import kotlin.random.Random
 
 class Intermezzo(var game: Game): GameElement(), Fadable {
     var level = 0
@@ -29,6 +31,8 @@ class Intermezzo(var game: Game): GameElement(), Fadable {
     }
 
     override fun update() {
+        if (type == Type.GAME_WON)
+            displayFireworks()
     }
 
     override fun fadeDone(faderType: Fader.Type) {
@@ -61,6 +65,27 @@ class Intermezzo(var game: Game): GameElement(), Fadable {
             }
         }
         typewriter = Typewriter(game, myArea, lines, { onTypewriterDone() })
+    }
+
+    fun displayFireworks()
+    {
+        if (myArea.width()==0 || (Random.nextFloat() < 0.9f))
+            return
+        // choose random colour
+        var colour: Pair<Int, Int>
+        when (Random.nextInt(8))
+        {
+            0 -> colour = Pair(Color.YELLOW, Color.WHITE)
+            1 -> colour = Pair(Color.BLUE, Color.YELLOW)
+            2 -> colour = Pair(Color.GREEN, Color.WHITE)
+            3 -> colour = Pair(Color.BLUE, Color.WHITE)
+            4 -> colour = Pair(Color.GREEN, Color.RED)
+            else -> colour = Pair(Color.RED, Color.GREEN)
+        }
+
+            game.gameActivity.theGameView.theEffects?.explosions?.add(
+                Explosion(game, Pair(Random.nextInt(myArea.width()), Random.nextInt(myArea.height()*8/10)),
+                    colour.first, colour.second))
     }
 
     fun onTypewriterDone()

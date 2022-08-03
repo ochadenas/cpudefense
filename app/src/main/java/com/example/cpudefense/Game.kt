@@ -156,6 +156,7 @@ class Game(val gameActivity: MainGameActivity) {
             /**  execute all movers and faders */
     {
         background?.update()
+        intermezzo?.update()
         for (m in movers)
         {
             if (m?.type == Mover.Type.NONE)
