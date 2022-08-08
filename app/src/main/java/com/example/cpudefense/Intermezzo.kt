@@ -31,7 +31,7 @@ class Intermezzo(var game: Game): GameElement(), Fadable {
     }
 
     override fun update() {
-        if (type == Type.GAME_WON)
+        if (type == Type.GAME_WON && game.state.phase == Game.GamePhase.INTERMEZZO)
             displayFireworks()
     }
 
@@ -134,12 +134,8 @@ class Intermezzo(var game: Game): GameElement(), Fadable {
             startMarketplace()
         else if (buttonContinue?.myArea?.contains(event.x.toInt(), event.y.toInt()) == true) {
             when (type) {
-                Type.GAME_WON -> {
-                    game.quitGame()
-                }
-                Type.GAME_LOST -> {
-                    game.quitGame()
-                }
+                Type.GAME_WON -> { game.quitGame() }
+                Type.GAME_LOST -> { game.quitGame() }
                 else -> {
                     game.startNextStage(level)
                 }

@@ -66,6 +66,8 @@ class GameView(context: Context, val theGame: Game):
         theGame.background = Background(theGame)
         /* increase speed on larger screens */
         theGame.globalSpeedFactor = (h / 1024f)
+        /* increase attacker size on larger screens */
+        theGame.globalResolutionFactor = (h / 1024f)
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {

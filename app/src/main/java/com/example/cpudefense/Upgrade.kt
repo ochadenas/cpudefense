@@ -312,6 +312,7 @@ class Upgrade(var game: Game, type: Type): Fadable {
             Type.DECREASE_ATT_FREQ -> return (game.gameUpgrades[Type.INCREASE_CHIP_SHIFT_SPEED]?.data?.level?: 0 >= 3)
             Type.DECREASE_ATT_SPEED -> return (game.gameUpgrades[Type.DECREASE_ATT_FREQ]?.data?.level?: 0 >= 3)
             Type.GAIN_CASH -> return (game.gameUpgrades[Type.INCREASE_STARTING_CASH]?.data?.level?: 0 >= 4)
+            Type.INCREASE_CHIP_MEM_SPEED -> return false
             Type.INCREASE_CHIP_ACC_SPEED -> return false
             else -> return true
         }

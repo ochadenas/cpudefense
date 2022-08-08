@@ -50,6 +50,7 @@ class Game(val gameActivity: MainGameActivity) {
     }
 
     var globalSpeedFactor = 1.0f
+    var globalResolutionFactor = 1.0f
 
     data class StateData(
         var phase: GamePhase,       // whether the game is running, paused or between levels
