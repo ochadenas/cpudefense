@@ -723,6 +723,49 @@ class Stage(var theGame: Game) {
             {
                 initializeNetwork(50, 55)
 
+                createChip(8, 3, ident = 0, type = Chip.ChipType.ENTRY)
+                createChip(15, 22, ident = 1, type = Chip.ChipType.ENTRY)
+                createChip(20, 6, 2)
+                createChip(32, 10, 3)
+                createChip(46, 20, 4)
+                createChip(22, 30, 5)
+                createChip(8, 30, 6)
+                createChip(3, 42, 7)
+                createChip(25, 49, 8)
+                createChip(40, 38, type = Chip.ChipType.CPU)
+
+                createLink(0, 2, 1)
+                createLink(2, 3, 2)
+                createLink(3, 4, 3)
+                createLink(4, 5, 4)
+                createLink(5, 6, 5)
+                createLink(6, 7, 6)
+                createLink(7, 8, 7)
+                createLink(8, 999, 8)
+                createLink(1, 6, 9)
+
+                createTrack(listOf(1,2,3,4,5,6,7,8), 0)
+                createTrack(listOf(1,2,3,4,5,6,7,8), 1)
+                createTrack(listOf(1,2,3,4,5,6,7,8), 2)
+                createTrack(listOf(1,2,3,4,5,6,7,8), 3)
+                createTrack(listOf(9,6,7,8), 4)
+
+                createWave(12, 3, .05f, 1.0f)
+                createWave(12, 5, .06f, 1.1f)
+                createWave(12, 7, .07f, 1.1f)
+                createWave(10, 12, .08f, 1.1f)
+                createWave(10, 20, .08f, 1.2f)
+                createWave(10, 40, .09f, 1.2f)
+                createWaveHex(15, 50, .09f, 1f, coins = 0)
+                createWaveHex(20, 80, .10f, 1f, coins = 0)
+
+                data.chipsAllowed = setOf(Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.POWERUP, Chip.ChipUpgrades.SHIFT, Chip.ChipUpgrades.MEM)
+                rewardCoins = 3
+            }
+            15 ->
+            {
+                initializeNetwork(50, 55)
+
                 createChip(40, 7, type = Chip.ChipType.ENTRY)
                 createChip(20, 5, 1)
                 createChip(20, 10, 2)
