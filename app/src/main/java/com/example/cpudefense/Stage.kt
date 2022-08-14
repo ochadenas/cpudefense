@@ -766,6 +766,52 @@ class Stage(var theGame: Game) {
             {
                 initializeNetwork(50, 55)
 
+                createChip(5, 3, type = Chip.ChipType.ENTRY)
+                createChip(10, 12, 1)
+                createChip(20, 15, 2)
+                createChip(20, 40, 3)
+                createChip(30, 45, 4)
+                createChip(40, 42, 5)
+                createChip(45, 30, 6)
+                createChip(5, 30, 7)
+                createChip(17, 30, 8, type = Chip.ChipType.ENTRY)
+                createChip(23, 30, 9, type = Chip.ChipType.ENTRY)
+                createChip(32, 30, 10)
+                createChip(40, 10, type = Chip.ChipType.CPU)
+
+                createLink(0, 1, 1)
+                createLink(1, 2, 2)
+                createLink(2, 3, 3)
+                createLink(3, 4, 4)
+                createLink(4, 5, 5)
+                createLink(5, 6, 6)
+                createLink(6, 999, 7)
+                createLink(1, 7, 8)
+                createLink(7, 8, 9)
+                createLink(9, 10, 10)
+                createLink(10, 6, 11)
+
+                createTrack(listOf(1, 2,3,4, 5,6, 7), 0)
+                createTrack(listOf(1, 8, 9,10,11,7), 1)
+
+                createWave(12, 3, .05f, 1.0f)
+                createWave(12, 5, .06f, 1.1f)
+                createWave(12, 7, .07f, 1.1f)
+                createWave(10, 14, .08f, 1.1f)
+                createWave(10, 28, .08f, 1.2f)
+                createWave(10, 12, .05f, 2.0f)
+                createWave(10, 50, .09f, 1.2f)
+                createWave(15, 70, .09f, 1f, coins = 0)
+                createWave(15, 80, .09f, 1f, coins = 0)
+                createWaveHex(20, 100, .10f, 1f, coins = 0)
+
+                data.chipsAllowed = setOf(Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.POWERUP, Chip.ChipUpgrades.SHIFT, Chip.ChipUpgrades.MEM)
+                rewardCoins = 3
+            }
+            16 ->
+            {
+                initializeNetwork(50, 55)
+
                 createChip(40, 7, type = Chip.ChipType.ENTRY)
                 createChip(20, 5, 1)
                 createChip(20, 10, 2)

@@ -91,15 +91,15 @@ class Game(val gameActivity: MainGameActivity) {
     val scoreBoard = ScoreBoard(this)
     val speedControlPanel = SpeedControl(this)
     var currentStage: Stage? = null
-    var currentWave: Wave? = null
+    private var currentWave: Wave? = null
     val resources: Resources = (gameActivity as Activity).resources
     var movers = CopyOnWriteArrayList<Mover>() // list of all mover objects that are created for game elements
     var faders = CopyOnWriteArrayList<Fader>() // idem for faders
-    val paintBitmap = Paint()
+    private val paintBitmap = Paint()
 
     /* other temporary variables */
-    var additionalCashDelay = 0
-    var additionalCashTicks = 0
+    private var additionalCashDelay = 0
+    private var additionalCashTicks = 0
 
     enum class GamePhase { START, RUNNING, END, INTERMEZZO, MARKETPLACE, PAUSED }
     enum class GameSpeed { NORMAL, MAX }
@@ -127,7 +127,7 @@ class Game(val gameActivity: MainGameActivity) {
     {
         gameActivity.loadState()
         currentStage = Stage.createStageFromData(this, stageData)
-        var stage = currentStage ?: return beginGame()
+        val stage = currentStage ?: return beginGame()
 
         network = stage.network
         viewport.setViewportSize(stage.sizeX, stage.sizeY)
@@ -157,7 +157,7 @@ class Game(val gameActivity: MainGameActivity) {
             /**  execute all movers and faders */
     {
         background?.update()
-        intermezzo?.update()
+        intermezzo.update()
         for (m in movers)
         {
             if (m?.type == Mover.Type.NONE)
@@ -260,7 +260,7 @@ class Game(val gameActivity: MainGameActivity) {
         gameActivity.saveState()
     }
 
-    fun onStageCleared(stage: Stage)
+    private fun onStageCleared(stage: Stage)
     {
         gameActivity.runOnUiThread {
             val toast: Toast = Toast.makeText(gameActivity, "Stage cleared", Toast.LENGTH_SHORT)
@@ -269,6 +269,10 @@ class Game(val gameActivity: MainGameActivity) {
         intermezzo.coinsGathered = state.coinsExtra + state.coinsInLevel
         global.coinsTotal += intermezzo.coinsGathered
         summaryPerLevel[stage.data.level] = Stage.Summary(won = true, coinsGot = stage.summary.coinsGot + state.coinsInLevel)
+        // make next level available
+        val nextLevel = stage.data.level + 1
+        if (summaryPerLevel[nextLevel] == null)
+            summaryPerLevel[nextLevel] = Stage.Summary()
         if (stage.type == Stage.Type.FINAL)
         {
             intermezzo.endOfGame(stage.data.level, hasWon = true)
@@ -281,11 +285,11 @@ class Game(val gameActivity: MainGameActivity) {
 
     fun startNextStage(level: Int)
     {
-        var extraLives = gameUpgrades[Upgrade.Type.ADDITIONAL_LIVES]?.getStrength()
+        val extraLives = gameUpgrades[Upgrade.Type.ADDITIONAL_LIVES]?.getStrength()
         state.currentMaxLives = state.maxLives + (extraLives ?: 0f).toInt()
         state.lives = state.currentMaxLives
         calculateStartingCash()
-        var nextStage = Stage(this)
+        val nextStage = Stage(this)
         gameActivity.runOnUiThread {
             val toast: Toast = Toast.makeText(gameActivity, "Stage %d".format(nextStage.data.level), Toast.LENGTH_SHORT)
             toast.show() }
