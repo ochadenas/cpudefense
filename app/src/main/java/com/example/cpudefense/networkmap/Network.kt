@@ -4,6 +4,7 @@ import android.graphics.*
 import android.view.MotionEvent
 import com.example.cpudefense.Game
 import com.example.cpudefense.effects.Background
+import com.example.cpudefense.gameElements.Chip
 import com.example.cpudefense.gameElements.GameElement
 import com.example.cpudefense.gameElements.Vehicle
 import java.util.concurrent.CopyOnWriteArrayList
@@ -78,6 +79,8 @@ class Network(val theGame: Game, x: Int, y: Int): GameElement() {
             obj.display(canvas, viewport)
         for (obj in vehicles)
             obj.display(canvas, viewport)
+        for (obj in nodes.values)
+            (obj as Chip).displayUpgrades(canvas)
     }
 
     private fun displayNetwork(canvas: Canvas, viewport: Viewport)

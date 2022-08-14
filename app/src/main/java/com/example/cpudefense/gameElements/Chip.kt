@@ -174,7 +174,11 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
         if (bitmap != null)
             canvas.drawBitmap(bitmap!!, null, actualRect, paintBitmap)
 
-        /* if applicable, show the different upgrade possibilities */
+    }
+
+    fun displayUpgrades(canvas: Canvas)
+    /** if applicable, show the different upgrade possibilities */
+    {
         for (upgrade in upgradePossibilities)
             upgrade.display(canvas)
     }
