@@ -271,7 +271,7 @@ class Game(val gameActivity: MainGameActivity) {
         summaryPerLevel[stage.data.level] = Stage.Summary(won = true, coinsGot = stage.summary.coinsGot + state.coinsInLevel)
         // make next level available
         val nextLevel = stage.data.level + 1
-        if (summaryPerLevel[nextLevel] == null)
+        if (summaryPerLevel[nextLevel] == null && stage.type != Stage.Type.FINAL)
             summaryPerLevel[nextLevel] = Stage.Summary()
         if (stage.type == Stage.Type.FINAL)
         {
