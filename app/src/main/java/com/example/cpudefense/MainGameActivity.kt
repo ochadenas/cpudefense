@@ -116,6 +116,7 @@ class MainGameActivity : Activity() {
 
     fun setGameSpeed(speed: Game.GameSpeed)
     {
+        theGame.global.speed = speed
         if (speed == Game.GameSpeed.MAX) {
             mainDelay = 0
             theGame.background?.frozen = true

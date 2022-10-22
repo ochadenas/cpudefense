@@ -73,6 +73,7 @@ class Persistency(var game: Game?) {
             val data: SerializableStateData = Gson().fromJson(json, SerializableStateData::class.java)
             it.state = data.general
             it.stageData = data.stage
+            it.gameActivity.setGameSpeed(it.global.speed)  // resture game speed mode
         }
     }
 

@@ -72,6 +72,7 @@ class Game(val gameActivity: MainGameActivity) {
     )
 
     data class GlobalData(
+        var speed: Game.GameSpeed = GameSpeed.NORMAL,
         var coinsTotal: Int = 0,
         var configDisableBackground: Boolean = true
     )
@@ -101,7 +102,7 @@ class Game(val gameActivity: MainGameActivity) {
     private var additionalCashDelay = 0
     private var additionalCashTicks = 0
 
-    enum class GamePhase { START, RUNNING, END, INTERMEZZO, MARKETPLACE, PAUSED }
+    enum class GamePhase { START, RUNNING, INTERMEZZO, MARKETPLACE, PAUSED }
     enum class GameSpeed { NORMAL, MAX }
 
     val coinIcon: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.cryptocoin)
@@ -132,7 +133,7 @@ class Game(val gameActivity: MainGameActivity) {
         network?.validateViewport()
         // viewport.setSize(gameActivity.theGameView.width, gameActivity.theGameView.height)
         viewport.setViewportSize(stage.sizeX, stage.sizeY)
-        if (state.phase == Game.GamePhase.MARKETPLACE)
+        if (state.phase == GamePhase.MARKETPLACE)
             marketplace.fillMarket(stage.data.level)
         else
         {
@@ -248,14 +249,15 @@ class Game(val gameActivity: MainGameActivity) {
         if (currentStage == null)
             return // in this case, the stage has already been left
         takeLevelSnapshot()
-        if (currentStage?.attackerCount()?:0 > 0)  // still attackers left, wait until wave is really over
-        {
-            GlobalScope.launch { delay(2000L); onEndOfStage() }
+        currentStage?.let {
+            if (it.attackerCount()>0)
+                // still attackers left, wait until wave is really over
+                GlobalScope.launch { delay(2000L); onEndOfStage() }
+            else {
+                onStageCleared(it)
+                gameActivity.saveState()
+            }
         }
-        else {
-            currentStage?.let { onStageCleared(it) }
-        }
-        gameActivity.saveState()
     }
 
     private fun onStageCleared(stage: Stage)
@@ -295,7 +297,7 @@ class Game(val gameActivity: MainGameActivity) {
         state.coinsInLevel = nextStage.calculateRewardCoins(summaryPerLevel[level])
         state.coinsExtra = 0
         summaryPerLevel[level] = nextStage.summary
-        gameActivity.setGameSpeed(GameSpeed.NORMAL)
+        gameActivity.setGameSpeed(GameSpeed.NORMAL)  // reset speed to normal when starting next stage
         speedControlPanel.resetButtons()
         gameActivity.saveState()
         if (network == null) // no more levels left
