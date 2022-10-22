@@ -1,0 +1,7 @@
+Checklist for version release:
+
+Increase version number in build.gradle (Module)
+
+Commit. Add git tag "version_x_y". Push.
+
+
