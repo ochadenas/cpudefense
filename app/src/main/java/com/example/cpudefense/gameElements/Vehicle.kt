@@ -57,7 +57,7 @@ open class Vehicle(val theNetwork: Network): GameElement() {
             // distanceToNextNode = it.getLength() - data.distanceTravelledOnLink
             distanceToNextNode = it.lengthOnGrid - data.distanceTravelledOnLink
         }
-    }
+     }
 
     override fun display(canvas: Canvas, viewport: Viewport)
     {
@@ -91,6 +91,11 @@ open class Vehicle(val theNetwork: Network): GameElement() {
         data.startNodeId = startNode?.data?.ident ?: -1
         data.endNodeId = endNode?.data?.ident ?: -1
         onLink = link
+        setCurrentSpeed()
+    }
+
+    fun setCurrentSpeed()
+    {
         currentSpeed = 0.16f * data.speed * theNetwork.theGame.globalSpeedFactor
     }
 

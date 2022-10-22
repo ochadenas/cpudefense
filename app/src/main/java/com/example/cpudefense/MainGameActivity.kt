@@ -4,6 +4,7 @@ import android.app.Activity
 import android.os.Bundle
 import android.view.Window
 import android.widget.FrameLayout
+import android.widget.Toast
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -13,8 +14,12 @@ class MainGameActivity : Activity() {
     private val effectsDelay: Long = 15
     lateinit var theGame: Game
     lateinit var theGameView: GameView
+    private var startOnLevel = -1
+    private var resumeGame = true
+    var gameIsRunning = true  // flag used to keep the threads running. Set to false when leaving activity
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?)
+    {
         super.onCreate(savedInstanceState)
         /* here, the size of the surfaces might not be known */
         requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -25,32 +30,38 @@ class MainGameActivity : Activity() {
         val parentView: FrameLayout? = findViewById(R.id.gameFrameLayout)
         parentView?.addView(theGameView)
 
-        theGameView.setup()
-        startGameThreads()
+        startOnLevel = intent.getIntExtra("START_ON_STAGE", -1)
 
-        if (intent.getBooleanExtra("CONTINUE_GAME", true))
-        {
-            theGame.continueGame()
-        }
-        else
-        {
-            theGame.state.startingLevel = intent.getIntExtra("START_ON_STAGE", 1)
-            val resetProgress = intent.getBooleanExtra("RESET_PROGRESS", false)
-            theGame.beginGame(resetProgress)
-        }
+        if (intent.getBooleanExtra("RESUME_GAME", false) == false)
+            resumeGame = false
+        theGameView.setup()
     }
 
     override fun onPause() {
         // this method get executed when the user presses the system's "back" button,
         // but also when she navigates to another app
         saveState()
-        theGame.state.phase = Game.GamePhase.END
+        gameIsRunning = false
         super.onPause()
     }
 
-    override fun onResume() {
+    override fun onResume()
+            /** this function gets called in any case, regardless of whether
+             * a new game is started or the user just navigates back to the app.
+             * theGame already exists when we come here.
+             */
+    {
         super.onResume()
-        // loadState()
+        when
+        {
+            resumeGame -> resumeCurrentGame()
+            startOnLevel == -1 -> startNewGame()
+            else -> startGameAtLevel(startOnLevel)
+        }
+        resumeGame = true
+        gameIsRunning = true
+        loadGameSettings()
+        startGameThreads()
     }
 
     override fun onStop() {
@@ -61,6 +72,33 @@ class MainGameActivity : Activity() {
         super.onDestroy()
     }
 
+    private fun startNewGame()
+    /** starts a new game from level 1, discarding all progress */
+    {
+        theGame.beginGame(resetProgress = true)
+    }
+
+    private fun startGameAtLevel(level: Int)
+    /** continues a current match at a given level, keeping the progress and upgrades */
+    {
+        theGame.state.startingLevel = level
+        theGame.beginGame(resetProgress = false)
+    }
+
+    private fun resumeCurrentGame()
+    /** continues at exactly the same point within a level, restoring the complete game state.
+      */
+    {
+        loadState()
+        theGame.continueGame()
+        if (theGame.state.phase == Game.GamePhase.RUNNING) {
+            runOnUiThread {
+                val toast: Toast = Toast.makeText(this, "Stage %d".format(theGame.currentStage?.data?.level), Toast.LENGTH_SHORT )
+                toast.show()
+            }
+        }
+    }
+
     private fun startGameThreads()
     {
 
@@ -69,6 +107,12 @@ class MainGameActivity : Activity() {
         GlobalScope.launch{ delay(effectsDelay); updateGraphicalEffects(); }
     }
 
+    fun loadGameSettings()
+    /** load global configuration and debug settings from preferences */
+    {
+        val prefs = getSharedPreferences(getString(R.string.pref_filename), MODE_PRIVATE)
+        theGame.global.configDisableBackground = prefs.getBoolean("DISABLE_BACKGROUND", false)
+    }
 
     fun setGameSpeed(speed: Game.GameSpeed)
     {
@@ -82,23 +126,22 @@ class MainGameActivity : Activity() {
         }
     }
 
-
     private fun update()
     {
-        if (theGame.state.phase == Game.GamePhase.END)
-            return
-        theGame.update()
-        theGameView.display()
-        GlobalScope.launch{ delay(mainDelay); update() }
+        if (gameIsRunning) {
+            theGame.update()
+            theGameView.display()
+            GlobalScope.launch { delay(mainDelay); update() }
+        }
     }
 
     private fun updateGraphicalEffects()
     {
-        if (theGame.state.phase == Game.GamePhase.END)
-            return
-        theGame.updateEffects()
-        theGameView.theEffects?.updateGraphicalEffects()
-        GlobalScope.launch{ delay(effectsDelay); updateGraphicalEffects() }
+        if (gameIsRunning) {
+            theGame.updateEffects()
+            theGameView.theEffects?.updateGraphicalEffects()
+            GlobalScope.launch { delay(effectsDelay); updateGraphicalEffects() }
+        }
     }
 
     fun saveState()

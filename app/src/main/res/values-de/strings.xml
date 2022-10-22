@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name">ChipDefense</string>
     <string name="startGame">Neues Spiel</string>
-    <string name="button_continue">Weiter</string>
+    <string name="button_continue">Spiel fortsetzen</string>
     <string name="failed">Level nicht geschafft.</string>
     <string name="success">Alle Level geschafft!</string>
     <string name="cleared">Level geschafft.</string>
@@ -11,7 +11,7 @@
     <string name="next_stage">Nächster Level: %d</string>
     <string name="coins_gathered">Gesammelte Coins: %d.</string>
     <string name="game_start">Start des Spiels.</string>
-    <string name="continueGame">Weiter</string>
+    <string name="continueGame">Spiel fortsetzen</string>
     <string name="scoreboard_inf">Inf</string>
     <string name="scoreboard_waves">Welle</string>
     <string name="scoreboard_status">Status</string>

@@ -275,6 +275,8 @@ class Upgrade(var game: Game, type: Type): Fadable {
                 strengthDesc = "1 bit/%d ticks".format(strength.toInt())
                 upgradeDesc = " -> 1/%d ticks".format(next.toInt())
             }
+            Type.INCREASE_CHIP_MEM_SPEED -> {
+            }
         }
         upgradeDesc = "%s  [cost: %d]".format(upgradeDesc, getPrice(data.level))
         if (data.level >= maxLevel)

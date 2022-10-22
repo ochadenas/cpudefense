@@ -11,7 +11,7 @@
     <string name="next_stage">Next stage: %d</string>
     <string name="coins_gathered">Coins gathered: %d.</string>
     <string name="game_start">Starting game.</string>
-    <string name="continueGame">Continue</string>
+    <string name="continueGame">Resume</string>
     <string name="scoreboard_inf">Inf</string>
     <string name="scoreboard_waves">Wave</string>
     <string name="scoreboard_status">Status</string>
@@ -110,7 +110,7 @@ Zuse also created the first high-level programming language 'Plankalkül'."
     </string>
     <string name="franke"></string>
     <string name="vaughan"></string>
-
+    <string name="settings_title">Settings</string>
 
 
 </resources>

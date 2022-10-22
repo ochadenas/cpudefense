@@ -3,7 +3,6 @@ package com.example.cpudefense.networkmap
 import android.graphics.*
 import android.view.MotionEvent
 import com.example.cpudefense.Game
-import com.example.cpudefense.effects.Background
 import com.example.cpudefense.gameElements.Chip
 import com.example.cpudefense.gameElements.GameElement
 import com.example.cpudefense.gameElements.Vehicle
@@ -53,15 +52,18 @@ class Network(val theGame: Game, x: Int, y: Int): GameElement() {
         }
     }
 
-    fun distanceBetweenGridPoints(): Pair<Int, Int>
+    fun distanceBetweenGridPoints(): Pair<Int, Int>?
     {
-        if (gridPointDistance == null || gridPointDistance == Pair(0,0))
-        {
-            val point0 = theGame.viewport.gridToViewport(GridCoord(0,0))
-            val point1 = theGame.viewport.gridToViewport(GridCoord(1,1))
-            gridPointDistance = Pair(point1.first-point0.first, point1.second-point0.second)
+        if (gridPointDistance != null)
+            return gridPointDistance // no need to recalculate
+        if (validateViewport() == true) {
+            val point0 = theGame.viewport.gridToViewport(GridCoord(0, 0))
+            val point1 = theGame.viewport.gridToViewport(GridCoord(1, 1))
+            gridPointDistance = Pair(point1.first - point0.first, point1.second - point0.second)
         }
-        return gridPointDistance ?: Pair(0,0)
+        else
+            gridPointDistance = null // screen size not known, can't determine distance
+        return gridPointDistance
     }
 
     override fun update() {
@@ -73,7 +75,28 @@ class Network(val theGame: Game, x: Int, y: Int): GameElement() {
             obj.update()
     }
 
-    override fun display(canvas: Canvas, viewport: Viewport) {
+    fun validateViewport(): Boolean
+    /** The viewport needs the size of the game surface (GameView) to calculate positions on the screen.
+     * However, it is not easy to know when GameView actually receives its dimensions.
+     * Therefore we keep track whether the scaling factors are valid, and if not, we recalculate them.
+     *
+     * @return false if the viewport is not valid, i.e. screen dimensions are not known
+     */
+    {
+        val view = theGame.gameActivity.theGameView
+        if (view.width > 0 || view.height > 0) {
+            theGame.viewport.setScreenSize(view.width, view.viewportHeight(view.height))
+            return true
+        }
+        else
+            return false
+    }
+
+    override fun display(canvas: Canvas, viewport: Viewport)
+    {
+        // if viewport is not valid, try to validate it
+        if (viewport.isValid == false && validateViewport() == false)
+            return
         displayNetwork(canvas, viewport)
         for (obj in nodes.values)
             obj.display(canvas, viewport)
@@ -106,6 +129,7 @@ class Network(val theGame: Game, x: Int, y: Int): GameElement() {
     private fun recreateNetworkImage(viewport: Viewport)
     /** function that must be called whenever the viewport (or the network configuration) changes */
     {
+        validateViewport()
         this.networkImage = Bitmap.createBitmap(viewport.viewportWidth, viewport.viewportHeight, Bitmap.Config.ARGB_8888)
         var canvas = Canvas(this.networkImage)
         for (obj in links.values)

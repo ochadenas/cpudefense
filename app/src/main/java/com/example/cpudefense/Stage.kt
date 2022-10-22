@@ -122,6 +122,7 @@ class Stage(var theGame: Game) {
                 val attacker = Attacker.createFromData(stage, attackerData)
                 stage.network.addVehicle(attacker)
             }
+            stage.calculateRewardCoins(game.summaryPerLevel[stage.data.level])
             return stage
         }
     }
@@ -244,21 +245,23 @@ class Stage(var theGame: Game) {
         network.addVehicle(attacker)
     }
 
-    fun takeSnapshot(size: Int): Bitmap
+    fun takeSnapshot(size: Int): Bitmap?
             /** gets a miniature picture of the current level
              * @param size snapshot size in pixels (square)
              * @return the bitmap that holds the snapshot
              */
     {
         var p: Viewport = theGame.viewport
-        var bigSnapshot = createBitmap(p.viewportWidth, p.viewportHeight)
-        network.display(Canvas(bigSnapshot), p)
-        // var smallSnapshot = createBitmap(size, size)
-
-        /* blur the image */
-        bigSnapshot = bigSnapshot.blur(theGame.gameActivity, 3f) ?: bigSnapshot
-
-        return Bitmap.createScaledBitmap(bigSnapshot, size, size, true)
+        if (p.viewportWidth > 0 && p.viewportHeight > 0)
+        {
+            var bigSnapshot = createBitmap(p.viewportWidth, p.viewportHeight)
+            network.display(Canvas(bigSnapshot), p)
+            /* blur the image */
+            bigSnapshot = bigSnapshot.blur(theGame.gameActivity, 3f) ?: bigSnapshot
+            return Bitmap.createScaledBitmap(bigSnapshot, size, size, true)
+        }
+        else
+            return null
     }
 
     fun createNetwork(level: Int): Network
@@ -269,32 +272,29 @@ class Stage(var theGame: Game) {
         data.chipsAllowed =
             setOf(Chip.ChipUpgrades.ACC, Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.SHIFT, Chip.ChipUpgrades.POWERUP, Chip.ChipUpgrades.MEM)
 
-        when (level)
-        {
-            1 ->
-            {
+        when (level) {
+            1 -> {
                 initializeNetwork(40, 40)
 
                 createChip(20, 1, type = Chip.ChipType.ENTRY)
                 createChip(15, 20, 1)
-                createChip(20, sizeY-2, type = Chip.ChipType.CPU)
+                createChip(20, sizeY - 2, type = Chip.ChipType.CPU)
 
                 createLink(0, 1, 0, mask = 0x06)
                 createLink(1, 999, 1, mask = 0x06)
 
                 createTrack(listOf(0, 1), 0)
-                
+
                 createWave(4, 1, .075f, 1f)
 
                 data.chipsAllowed = setOf(Chip.ChipUpgrades.SUB)
             }
-            2 ->
-            {
+            2 -> {
                 initializeNetwork(40, 40)
 
                 createChip(20, 1, type = Chip.ChipType.ENTRY)
                 createChip(15, 20, 1)
-                createChip(20, sizeY-2, type = Chip.ChipType.CPU)
+                createChip(20, sizeY - 2, type = Chip.ChipType.CPU)
 
                 createLink(0, 1, 0, mask = 0x06)
                 createLink(1, 999, 1, mask = 0x06)
@@ -306,8 +306,7 @@ class Stage(var theGame: Game) {
 
                 data.chipsAllowed = setOf(Chip.ChipUpgrades.SUB)
             }
-            3 ->
-            {
+            3 -> {
                 initializeNetwork(50, 50)
 
                 createChip(1, 1, type = Chip.ChipType.ENTRY)
@@ -330,8 +329,7 @@ class Stage(var theGame: Game) {
 
                 data.chipsAllowed = setOf(Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.POWERUP)
             }
-            4 ->
-            {
+            4 -> {
                 initializeNetwork(50, 50)
 
                 createChip(1, 1, type = Chip.ChipType.ENTRY)
@@ -341,7 +339,7 @@ class Stage(var theGame: Game) {
                 createChip(35, 45, 4)
                 createChip(20, 35, 5)
                 createChip(45, 45, type = Chip.ChipType.CPU)
-                
+
                 createLink(0, 1, 1)
                 createLink(1, 2, 2)
                 createLink(2, 3, 3, mask = 0x03)
@@ -360,19 +358,18 @@ class Stage(var theGame: Game) {
 
                 data.chipsAllowed = setOf(Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.POWERUP)
             }
-            5 ->
-            {
+            5 -> {
                 initializeNetwork(50, 50)
 
                 createChip(1, 15, type = Chip.ChipType.ENTRY)
                 createChip(25, 15, 1)
                 createChip(40, 15, 2)
                 createChip(40, 5, 3)
-                createChip(25,  5, 4)
-                createChip(25,  25, 5)
-                createChip(25,  35, 6)
-                createChip(40,  35, 7)
-                createChip(40,  25, 8)
+                createChip(25, 5, 4)
+                createChip(25, 25, 5)
+                createChip(25, 35, 6)
+                createChip(40, 35, 7)
+                createChip(40, 25, 8)
                 createChip(5, 25, type = Chip.ChipType.CPU)
 
                 createLink(0, 1, 1)
@@ -396,21 +393,21 @@ class Stage(var theGame: Game) {
                 createWave(20, 7, .050f, 1f)
                 createWave(15, 15, .050f, 1f)
 
-                data.chipsAllowed = setOf(Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.POWERUP, Chip.ChipUpgrades.SHIFT)
+                data.chipsAllowed =
+                    setOf(Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.POWERUP, Chip.ChipUpgrades.SHIFT)
             }
-            6 ->
-            {
+            6 -> {
                 initializeNetwork(50, 50)
 
                 createChip(1, 5, type = Chip.ChipType.ENTRY)
                 createChip(25, 15, 1)
                 createChip(40, 15, 2)
                 createChip(40, 5, 3)
-                createChip(25,  5, 4)
-                createChip(25,  25, 5)
-                createChip(25,  35, 6)
-                createChip(40,  35, 7)
-                createChip(40,  25, 8)
+                createChip(25, 5, 4)
+                createChip(25, 25, 5)
+                createChip(25, 35, 6)
+                createChip(40, 35, 7)
+                createChip(40, 25, 8)
                 createChip(5, 35, type = Chip.ChipType.CPU)
 
                 createLink(0, 4, 1)
@@ -426,8 +423,8 @@ class Stage(var theGame: Game) {
                 createLink(6, 7, 11)
                 createLink(6, 999, 12)
 
-                createTrack(listOf(1, 2, 4, 5 ,6, 8, 10, 11, 12), 0)
-                createTrack(listOf(1, 3, 5, 7, 8 ,9, 12), 1)
+                createTrack(listOf(1, 2, 4, 5, 6, 8, 10, 11, 12), 0)
+                createTrack(listOf(1, 3, 5, 7, 8, 9, 12), 1)
 
                 createWave(10, 2, .125f, 1.2f)
                 createWave(15, 3, .120f, 1.1f)
@@ -436,11 +433,11 @@ class Stage(var theGame: Game) {
                 createWave(20, 7, .050f, 1f, coins = 0)
                 createWave(15, 15, .050f, 1f, coins = 0)
 
-                data.chipsAllowed = setOf(Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.POWERUP, Chip.ChipUpgrades.SHIFT)
+                data.chipsAllowed =
+                    setOf(Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.POWERUP, Chip.ChipUpgrades.SHIFT)
                 rewardCoins = 3
             }
-            7 ->
-            {
+            7 -> {
                 initializeNetwork(50, 50)
 
                 createChip(10, 10, type = Chip.ChipType.ENTRY)
@@ -463,7 +460,7 @@ class Stage(var theGame: Game) {
                 createLink(7, 8, 7)
                 createLink(8, 999, 8)
 
-                createTrack(listOf(1, 2, 3, 4, 5 ,6, 7, 8,0), 0)
+                createTrack(listOf(1, 2, 3, 4, 5, 6, 7, 8, 0), 0)
 
                 createWave(10, 2, .125f, 1.2f)
                 createWave(15, 3, .120f, 1.1f)
@@ -472,11 +469,11 @@ class Stage(var theGame: Game) {
                 createWave(20, 7, .050f, 1f)
                 createWave(15, 15, .050f, 1f, coins = 1)
 
-                data.chipsAllowed = setOf(Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.POWERUP, Chip.ChipUpgrades.SHIFT)
+                data.chipsAllowed =
+                    setOf(Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.POWERUP, Chip.ChipUpgrades.SHIFT)
                 rewardCoins = 3
             }
-            8 ->
-            {
+            8 -> {
                 initializeNetwork(50, 50)
 
                 createChip(1, 25, type = Chip.ChipType.ENTRY)
@@ -499,10 +496,10 @@ class Stage(var theGame: Game) {
                 createLink(6, 4, 8)
                 createLink(4, 999, 9)
 
-                createTrack(listOf(1, 5, 4, 3 ,2, 5, 9), 0)
-                createTrack(listOf(1, 5, 8, 7 ,6, 5, 9), 1)
-                createTrack(listOf(1, 5, 4, 3 ,2, 5, 9), 2)
-                createTrack(listOf(1, 5, 8, 7 ,6, 5, 9), 3)
+                createTrack(listOf(1, 5, 4, 3, 2, 5, 9), 0)
+                createTrack(listOf(1, 5, 8, 7, 6, 5, 9), 1)
+                createTrack(listOf(1, 5, 4, 3, 2, 5, 9), 2)
+                createTrack(listOf(1, 5, 8, 7, 6, 5, 9), 3)
                 createTrack(listOf(1, 5, 9), 4)
 
                 createWave(15, 2, .150f, 1.4f)
@@ -511,19 +508,19 @@ class Stage(var theGame: Game) {
                 createWave(25, 2, .220f, 2.0f)
                 createWave(40, 2, .300f, 2.2f)
 
-                data.chipsAllowed = setOf(Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.POWERUP, Chip.ChipUpgrades.SHIFT)
+                data.chipsAllowed =
+                    setOf(Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.POWERUP, Chip.ChipUpgrades.SHIFT)
                 rewardCoins = 3
             }
-            9 ->
-            {
+            9 -> {
                 initializeNetwork(50, 50)
 
                 createChip(10, 12, ident = 0, type = Chip.ChipType.ENTRY)
                 createChip(20, 19, 1)
                 createChip(8, 38, 2)
                 createChip(25, 45, 3)
-                createChip(45,  5, 4, type = Chip.ChipType.ENTRY)
-                createChip(35,  25, 5)
+                createChip(45, 5, 4, type = Chip.ChipType.ENTRY)
+                createChip(35, 25, 5)
                 createChip(42, 36, type = Chip.ChipType.CPU)
 
                 createLink(0, 1, 1, mask = 0x07)
@@ -544,11 +541,11 @@ class Stage(var theGame: Game) {
                 createWave(20, 7, .050f, 1f, coins = 0)
                 createWave(15, 15, .050f, 1f, coins = 0)
 
-                data.chipsAllowed = setOf(Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.POWERUP, Chip.ChipUpgrades.SHIFT)
+                data.chipsAllowed =
+                    setOf(Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.POWERUP, Chip.ChipUpgrades.SHIFT)
                 rewardCoins = 3
             }
-            10 ->
-            {
+            10 -> {
                 initializeNetwork(50, 50)
 
                 createChip(10, 45, type = Chip.ChipType.ENTRY)
@@ -578,15 +575,15 @@ class Stage(var theGame: Game) {
                 createWave(20, 7, .110f, 1.1f)
                 createWave(10, 8, .110f, 1.0f)
                 createWave(20, 12, .110f, 1.0f)
-                createWaveHex(20,18, .100f, 1.0f)
-                createWaveHex(20,28, .100f, 1.1f, coins = 1)
-                createWaveHex(20,40, .100f, 1.2f)
+                createWaveHex(20, 18, .100f, 1.0f)
+                createWaveHex(20, 28, .100f, 1.1f, coins = 1)
+                createWaveHex(20, 40, .100f, 1.2f)
 
-                data.chipsAllowed = setOf(Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.POWERUP, Chip.ChipUpgrades.SHIFT)
+                data.chipsAllowed =
+                    setOf(Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.POWERUP, Chip.ChipUpgrades.SHIFT)
                 rewardCoins = 3
             }
-            11 ->
-            {
+            11 -> {
                 initializeNetwork(50, 50)
 
                 createChip(23, 3, 50, type = Chip.ChipType.ENTRY)
@@ -628,12 +625,12 @@ class Stage(var theGame: Game) {
                 createWave(20, 6, .05f, 1f, coins = 1)
                 createWave(15, 8, .05f, 1f)
 
-                data.chipsAllowed = setOf(Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.POWERUP, Chip.ChipUpgrades.SHIFT)
+                data.chipsAllowed =
+                    setOf(Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.POWERUP, Chip.ChipUpgrades.SHIFT)
                 rewardCoins = 3
 
             }
-            12 ->
-            {
+            12 -> {
                 initializeNetwork(50, 50)
 
                 createChip(45, 1, type = Chip.ChipType.ENTRY)
@@ -672,11 +669,11 @@ class Stage(var theGame: Game) {
                 createWave(10, 20, .075f, 1f)
                 createWave(10, 30, .075f, 1f)
 
-                data.chipsAllowed = setOf(Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.POWERUP, Chip.ChipUpgrades.SHIFT)
+                data.chipsAllowed =
+                    setOf(Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.POWERUP, Chip.ChipUpgrades.SHIFT)
                 rewardCoins = 3
             }
-            13 ->
-            {
+            13 -> {
                 initializeNetwork(50, 50)
 
                 createChip(10, 45, 0, type = Chip.ChipType.ENTRY)
@@ -716,11 +713,11 @@ class Stage(var theGame: Game) {
                 createWaveHex(12, 20, .05f, 1.2f)
                 createWaveHex(12, 32, .05f, 1.2f)
 
-                data.chipsAllowed = setOf(Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.POWERUP, Chip.ChipUpgrades.SHIFT)
+                data.chipsAllowed =
+                    setOf(Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.POWERUP, Chip.ChipUpgrades.SHIFT)
                 rewardCoins = 3
             }
-            14 ->
-            {
+            14 -> {
                 initializeNetwork(50, 55)
 
                 createChip(8, 3, ident = 0, type = Chip.ChipType.ENTRY)
@@ -744,11 +741,11 @@ class Stage(var theGame: Game) {
                 createLink(8, 999, 8)
                 createLink(1, 6, 9)
 
-                createTrack(listOf(1,2,3,4,5,6,7,8), 0)
-                createTrack(listOf(1,2,3,4,5,6,7,8), 1)
-                createTrack(listOf(1,2,3,4,5,6,7,8), 2)
-                createTrack(listOf(1,2,3,4,5,6,7,8), 3)
-                createTrack(listOf(9,6,7,8), 4)
+                createTrack(listOf(1, 2, 3, 4, 5, 6, 7, 8), 0)
+                createTrack(listOf(1, 2, 3, 4, 5, 6, 7, 8), 1)
+                createTrack(listOf(1, 2, 3, 4, 5, 6, 7, 8), 2)
+                createTrack(listOf(1, 2, 3, 4, 5, 6, 7, 8), 3)
+                createTrack(listOf(9, 6, 7, 8), 4)
 
                 createWave(12, 3, .05f, 1.0f)
                 createWave(12, 5, .06f, 1.1f)
@@ -759,11 +756,15 @@ class Stage(var theGame: Game) {
                 createWaveHex(15, 50, .09f, 1f, coins = 0)
                 createWaveHex(20, 80, .10f, 1f, coins = 0)
 
-                data.chipsAllowed = setOf(Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.POWERUP, Chip.ChipUpgrades.SHIFT, Chip.ChipUpgrades.MEM)
+                data.chipsAllowed = setOf(
+                    Chip.ChipUpgrades.SUB,
+                    Chip.ChipUpgrades.POWERUP,
+                    Chip.ChipUpgrades.SHIFT,
+                    Chip.ChipUpgrades.MEM
+                )
                 rewardCoins = 3
             }
-            15 ->
-            {
+            15 -> {
                 initializeNetwork(50, 55)
 
                 createChip(5, 3, type = Chip.ChipType.ENTRY)
@@ -791,8 +792,8 @@ class Stage(var theGame: Game) {
                 createLink(9, 10, 10)
                 createLink(10, 6, 11)
 
-                createTrack(listOf(1, 2,3,4, 5,6, 7), 0)
-                createTrack(listOf(1, 8, 9,10,11,7), 1)
+                createTrack(listOf(1, 2, 3, 4, 5, 6, 7), 0)
+                createTrack(listOf(1, 8, 9, 10, 11, 7), 1)
 
                 createWave(12, 3, .05f, 1.0f)
                 createWave(12, 5, .06f, 1.1f)
@@ -805,11 +806,15 @@ class Stage(var theGame: Game) {
                 createWave(15, 80, .09f, 1f, coins = 0)
                 createWaveHex(20, 100, .10f, 1f, coins = 0)
 
-                data.chipsAllowed = setOf(Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.POWERUP, Chip.ChipUpgrades.SHIFT, Chip.ChipUpgrades.MEM)
+                data.chipsAllowed = setOf(
+                    Chip.ChipUpgrades.SUB,
+                    Chip.ChipUpgrades.POWERUP,
+                    Chip.ChipUpgrades.SHIFT,
+                    Chip.ChipUpgrades.MEM
+                )
                 rewardCoins = 3
             }
-            16 ->
-            {
+            16 -> {
                 initializeNetwork(50, 55)
 
                 createChip(40, 7, type = Chip.ChipType.ENTRY)
@@ -838,10 +843,54 @@ class Stage(var theGame: Game) {
                 createLink(8, 9, 13, mask = 0x06)
                 createLink(9, 999, 14)
 
-                createTrack(listOf(1, 2,3,5,8,12,14), 0)
-                createTrack(listOf(1, 2,4,6,8,12,14), 1)
-                createTrack(listOf(1, 2,4,6,9,13,14), 2)
-                createTrack(listOf(1, 2,4,7,10,13,14), 3)
+                createTrack(listOf(1, 2, 3, 5, 8, 12, 14), 0)
+                createTrack(listOf(1, 2, 4, 6, 8, 12, 14), 1)
+                createTrack(listOf(1, 2, 4, 6, 9, 13, 14), 2)
+                createTrack(listOf(1, 2, 4, 7, 10, 13, 14), 3)
+
+                createWave(12, 3, .05f, 1.0f)
+                createWave(12, 5, .06f, 1.1f)
+                createWave(12, 7, .07f, 1.1f)
+                createWave(10, 12, .08f, 1.1f)
+                createWave(10, 20, .08f, 1.2f)
+                createWave(10, 40, .09f, 1.2f)
+                createWaveHex(15, 50, .09f, 1f, coins = 0)
+                createWaveHex(20, 80, .10f, 1f, coins = 1)
+
+                // data.chipsAllowed = setOf(Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.POWERUP, Chip.ChipUpgrades.SHIFT, Chip.ChipUpgrades.ACC)
+                rewardCoins = 3
+            }
+            17 -> {
+                initializeNetwork(45, 55)
+
+                createChip(40, 2, type = Chip.ChipType.ENTRY)
+                createChip(20, 5, 1)
+                createChip(2, 10, 2)
+                createChip(18, 20, 3)
+                createChip(35, 20, 4)
+                createChip(35, 30, 5)
+                createChip(35, 50, 6)
+                createChip(8, 30, 7)
+                createChip(22, 40, 8)
+                createChip(40, 48, type = Chip.ChipType.CPU)
+
+                createLink(0, 1, 1)
+                createLink(1, 2, 2)
+                createLink(2, 3, 3, mask = 0x0C)
+                createLink(3, 4, 4, mask = 0x03)
+                createLink(4, 5, 5, mask = 0x0C)
+                createLink(5, 6, 6, mask = 0x02)
+                createLink(6, 999, 7, mask = 0x01)
+                createLink(4, 7, 8, mask = 0x0C)
+                createLink(3, 7, 9, mask = 0x02)
+                createLink(7, 999, 10, mask = 0x01)
+                createLink(7, 8, 11, mask = 0x0C)
+                createLink(8, 999, 12, mask = 0x06)
+
+                createTrack(listOf(1, 2, 3, 5, 8, 12, 14), 0)
+                createTrack(listOf(1, 2, 4, 6, 8, 12, 14), 1)
+                createTrack(listOf(1, 2, 4, 6, 9, 13, 14), 2)
+                createTrack(listOf(1, 2, 4, 7, 10, 13, 14), 3)
 
                 createWave(12, 3, .05f, 1.0f)
                 createWave(12, 5, .06f, 1.1f)
@@ -857,7 +906,6 @@ class Stage(var theGame: Game) {
                 type = Type.FINAL
             }
         }
-
         data.maxWaves = waves.size
         return network
     }

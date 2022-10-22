@@ -60,7 +60,7 @@ class Mover(game: Game, thing: Movable, fromX: Int, fromY: Int, toX: Int, toY: I
             }
             Type.STRAIGHT -> {
                 // determine dX and dY (movement per step) and number of steps
-                var dist = Math.sqrt((deltaX * deltaX + deltaY * deltaY).toDouble())
+                var dist = sqrt((deltaX * deltaX + deltaY * deltaY).toDouble())
                 steps = (dist / distPerStep).toInt()
                 if (steps < 5) {
                     steps = 5
@@ -69,7 +69,7 @@ class Mover(game: Game, thing: Movable, fromX: Int, fromY: Int, toX: Int, toY: I
                 dY = deltaY / steps
             }
             Type.REPEAT -> {
-                var dist = Math.sqrt((deltaX * deltaX + deltaY * deltaY).toDouble())
+                var dist = sqrt((deltaX * deltaX + deltaY * deltaY).toDouble())
                 steps = (dist / distPerStep).toInt()
                 if (steps < 5) {
                     steps = 5
@@ -86,6 +86,8 @@ class Mover(game: Game, thing: Movable, fromX: Int, fromY: Int, toX: Int, toY: I
                 steps = 1
             }
 
+            Type.NONE -> {}
+            Type.APPEAR -> {}
         }
         reset()
         theGame.movers.add(this) // make sure we are in the list so that we can be called during update
@@ -174,6 +176,7 @@ class Mover(game: Game, thing: Movable, fromX: Int, fromY: Int, toX: Int, toY: I
                     dX=1f
                 }
             }
+            Type.APPEAR -> {}
         }
         return
     }

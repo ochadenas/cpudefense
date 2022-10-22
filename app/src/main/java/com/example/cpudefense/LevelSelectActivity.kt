@@ -15,6 +15,7 @@ class LevelSelectActivity : AppCompatActivity() {
     var levels: HashMap<Int, Stage.Summary>? = null
     var selectedLevelView: Button? = null
     var selectedLevel: Int = 0
+    var configDisableBackground = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -28,48 +28,6 @@ open class Attacker(network: Network, type: Representation = Representation.BINA
         var vehicle: Vehicle.Data
     )
 
-    companion object {
-        fun makeNumber(attacker: Attacker): String
-        {
-            val text: String
-            if (attacker.attackerData.representation == Representation.BINARY)
-                text = attacker.attackerData.number.toString(radix=2).padStart(attacker.attackerData.binaryDigits, '0')
-            else
-                text = "x" + attacker.attackerData.number.toString(radix=16).uppercase().padStart(attacker.attackerData.hexDigits, '0')
-            attacker.createBitmap(text)
-            return text
-        }
-
-        fun log16(v: Float): Float
-        {
-            val l16 = log2(16f)
-            return log2(v) / l16
-        }
-
-        val maskBinary: HashMap<Int, ULong> = hashMapOf(
-            1 to 0x01uL, 2 to 0x03uL,  4 to 0x0FuL,
-            6 to 0x3FuL, 8 to 0xFFuL,
-            12 to 0x0FFFuL, 16 to 0x7FFFuL, 32 to 0xFFFFuL, 64 to 0xFFFFFFFFuL )
-
-        val maskHex: HashMap<Int, ULong> = hashMapOf(
-            1 to 0x0FuL, 2 to 0xFFuL,  4 to 0xFFFFuL,
-            6 to 0xFFFFFFuL, 8 to 0xFFFFFFuL,
-            12 to 0xFFFFFFFFFFFFuL, 16 to 0xFFFFFFFFFFFFFFFFuL)
-
-        fun createFromData(stage: Stage, data: Data): Attacker
-        {
-            val attacker = Attacker(stage.network, data.representation, data.number, data.vehicle.speed)
-            attacker.data = data.vehicle
-            attacker.attackerData = data
-            attacker.data = data.vehicle
-            attacker.onLink = stage.network.links[data.vehicle.linkId]
-            attacker.startNode = stage.chips[data.vehicle.startNodeId]
-            attacker.endNode = stage.chips[data.vehicle.endNodeId]
-            attacker.onTrack = stage.tracks[data.vehicle.trackId]
-            return attacker
-        }
-    }
-
     var attackerData = Data( representation = type, number = number, binaryDigits = 0, hexDigits = 0,
         bits = 0, vehicle = super.data
     )
@@ -79,15 +37,16 @@ open class Attacker(network: Network, type: Representation = Representation.BINA
     var oldNumberBitmap: Bitmap? = null
     var immuneTo: Chip? = null
     var animationCount = 0
-    val animationCountMax = 8
-    val numberFontSize = 24f * theNetwork.theGame.globalResolutionFactor
+    private val animationCountMax = 8
+    private val numberFontSize = 24f * theNetwork.theGame.globalResolutionFactor
     var displacement = Pair(Random.nextInt(5)-1, Random.nextInt(7)-2) // small shift in display to avoid over-crowding on the screen
     private val paintBitmap = Paint()
     var scale: Float = 1.0f
 
     init {
         this.data.speed = speed
-        calculateNumberOfDigits()
+        if (attackerData.bits == 0)
+            calculateNumberOfDigits()
         makeNumber(this)
     }
 
@@ -269,8 +228,7 @@ open class Attacker(network: Network, type: Representation = Representation.BINA
         if (posOnGrid == null)
             return
         actualRect = Rect(0, 0, numberBitmap.width, numberBitmap.height)
-        actualRect.setCenter(getPositionOnScreen())
-        actualRect.scale(scale)
+        actualRect.scaleAndSetCenter(getPositionOnScreen(), scale)
         actualRect.offset(displacement.first, displacement.second)
 
         if (animationCount>0)
@@ -311,4 +269,44 @@ open class Attacker(network: Network, type: Representation = Representation.BINA
             return false
     }
 
+
+    companion object {
+        fun makeNumber(attacker: Attacker): String
+        {
+            val text: String
+            if (attacker.attackerData.representation == Representation.BINARY)
+                text = attacker.attackerData.number.toString(radix=2).padStart(attacker.attackerData.binaryDigits, '0')
+            else
+                text = "x" + attacker.attackerData.number.toString(radix=16).uppercase().padStart(attacker.attackerData.hexDigits, '0')
+            attacker.createBitmap(text)
+            return text
+        }
+
+        fun log16(v: Float): Float
+        {
+            val l16 = log2(16f)
+            return log2(v) / l16
+        }
+
+        val maskBinary: HashMap<Int, ULong> = hashMapOf(
+            1 to 0x01uL, 2 to 0x03uL,  4 to 0x0FuL,
+            6 to 0x3FuL, 8 to 0xFFuL,
+            12 to 0x0FFFuL, 16 to 0x7FFFuL, 32 to 0xFFFFuL, 64 to 0xFFFFFFFFuL )
+
+        val maskHex: HashMap<Int, ULong> = hashMapOf(
+            1 to 0x0FuL, 2 to 0xFFuL,  4 to 0xFFFFuL,
+            6 to 0xFFFFFFuL, 8 to 0xFFFFFFuL,
+            12 to 0xFFFFFFFFFFFFuL, 16 to 0xFFFFFFFFFFFFFFFFuL)
+
+        fun createFromData(stage: Stage, data: Data): Attacker
+        {
+            val attacker = Attacker(stage.network, data.representation, data.number, data.vehicle.speed)
+            attacker.data = data.vehicle
+            attacker.attackerData = data
+            attacker.onTrack = stage.tracks[data.vehicle.trackId]
+            attacker.setOntoLink(stage.network.links[data.vehicle.linkId], stage.chips[data.vehicle.startNodeId])
+            attacker.setCurrentSpeed()
+            return attacker
+        }
+    }
 }

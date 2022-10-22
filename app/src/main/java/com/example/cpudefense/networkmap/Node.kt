@@ -24,35 +24,43 @@ open class Node(val theNetwork: Network?, x: Float, y: Float): GameElement()
     var posOnGrid = GridCoord(Pair(x,y))
 
     var distanceToVehicle: HashMap<Vehicle, Float> = HashMap()
-    open var actualRect = calculateActualRect().makeSquare()
+    open var actualRect: Rect? = null
 
     override fun update() {
     }
 
     override fun display(canvas: Canvas, viewport: Viewport) {
-        actualRect = calculateActualRect().makeSquare()
-        actualRect.setCenter(viewport.gridToViewport(posOnGrid))
-        val paint = Paint()
-        paint.color = theNetwork?.theGame?.resources?.getColor(R.color.network_background) ?: Color.BLACK
-        paint.style = Paint.Style.FILL
-        canvas.drawRect(actualRect, paint)
-        paint.color = Color.WHITE
-        paint.style = Paint.Style.STROKE
-        paint.strokeWidth = 2f
-        canvas.drawRect(actualRect, paint)
-
+        actualRect = calculateActualRect()?.makeSquare()
+        actualRect?.setCenter(viewport.gridToViewport(posOnGrid))
+        actualRect?.let { rect ->
+            val paint = Paint()
+            paint.color =
+                theNetwork?.theGame?.resources?.getColor(R.color.network_background) ?: Color.BLACK
+            paint.style = Paint.Style.FILL
+            canvas.drawRect(rect, paint)
+            paint.color = Color.WHITE
+            paint.style = Paint.Style.STROKE
+            paint.strokeWidth = 2f
+            canvas.drawRect(rect, paint)
+        }
     }
 
-    fun calculateActualRect(): Rect
+    fun calculateActualRect(): Rect?
             /** determines the size of this node on the screen based on the grid points.
-             * @return the actual size of a node
+             * @return the actual size of a node, or null if size cannot be determined
              */
     {
         val factor = 3.0f
-        val dist = theNetwork?.distanceBetweenGridPoints() ?: Pair(0,0)
-        val distX = dist.first * factor
-        val distY = dist.second * factor
-        return Rect(0, 0, distX.toInt(), distY.toInt())
+        val dist = theNetwork?.distanceBetweenGridPoints()
+        return dist?.let {
+            if (it.first>0 && it.second>0) {
+                val distX = it.first * factor
+                val distY = it.second * factor
+                Rect(0, 0, distX.toInt(), distY.toInt())
+            }
+            else
+                null
+        }
     }
 
     fun notify(vehicle: Vehicle, distance: Float)

@@ -73,7 +73,7 @@ class Game(val gameActivity: MainGameActivity) {
 
     data class GlobalData(
         var coinsTotal: Int = 0,
-        var configDisableBackground: Boolean = false
+        var configDisableBackground: Boolean = true
     )
     var global = GlobalData()
 
@@ -125,22 +125,20 @@ class Game(val gameActivity: MainGameActivity) {
 
     fun continueGame()
     {
-        gameActivity.loadState()
         currentStage = Stage.createStageFromData(this, stageData)
         val stage = currentStage ?: return beginGame()
 
         network = stage.network
+        network?.validateViewport()
+        // viewport.setSize(gameActivity.theGameView.width, gameActivity.theGameView.height)
         viewport.setViewportSize(stage.sizeX, stage.sizeY)
-        currentWave = if (stage.waves.size > 0) stage.waves[0] else stage.nextWave()
-        // data.coinsInLevel = it.rewardCoins
-        if (state.phase == GamePhase.RUNNING) {
-            gameActivity.runOnUiThread {
-                val toast: Toast = Toast.makeText(gameActivity, "Stage %d".format(stage.data.level), Toast.LENGTH_SHORT )
-                toast.show()
-            }
-        }
-        else if (state.phase == GamePhase.MARKETPLACE)
+        if (state.phase == Game.GamePhase.MARKETPLACE)
             marketplace.fillMarket(stage.data.level)
+        else
+        {
+            state.phase = GamePhase.RUNNING
+            currentWave = if (stage.waves.size > 0) stage.waves[0] else stage.nextWave()
+        }
     }
 
     fun update()

@@ -15,22 +15,41 @@ class Viewport {
     var gridSizeY: Int = 0
     var scaleX = 1.0f
     var scaleY = 1.0f
+    var isValid = false
 
-    fun setSize(width: Int, height: Int)
+    fun setScreenSize(width: Int, height: Int)
     {
-        screen = Rect(0,0,width,height)
-        this.viewportWidth = width - 2 * Game.viewportMargin
-        this.viewportHeight = height - 2 * Game.viewportMargin
-        scaleX = viewportWidth.toFloat() / gridSizeX
-        scaleY = viewportHeight.toFloat() / gridSizeY
+        if (width == 0 || height == 0)
+            isValid = false
+        else
+        {
+            screen = Rect(0, 0, width, height)
+            this.viewportWidth = width - 2 * Game.viewportMargin
+            this.viewportHeight = height - 2 * Game.viewportMargin
+            calculateScale()
+        }
     }
 
     fun setViewportSize(gridSizeX: Int, gridSizeY: Int)
     {
         this.gridSizeX = gridSizeX
         this.gridSizeY = gridSizeY
-        scaleX = viewportWidth.toFloat() / gridSizeX
-        scaleY = viewportHeight.toFloat() / gridSizeY
+        calculateScale()
+    }
+
+    private fun calculateScale()
+    {
+        val width = viewportWidth.toFloat()
+        val height = viewportHeight.toFloat()
+        if (width == 0f || height == 0f)
+            isValid = false
+        else if (gridSizeX>0 && gridSizeY>0) {
+            scaleX = viewportWidth.toFloat() / gridSizeX
+            scaleY = viewportHeight.toFloat() / gridSizeY
+            isValid = true
+        }
+        else
+            isValid = false  // screen size is known, but grid size isn't
     }
 
     fun gridToViewport(gridPos: GridCoord): Pair<Int, Int>

@@ -16,7 +16,7 @@ class Cpu(network: Network, gridX: Int, gridY: Int): Chip(network, gridX, gridY)
         )
 
     var cpuData = CpuData(hits = 0)
-    override var actualRect = Rect(0, 0, 100, 100)
+    override var actualRect: Rect? = null
 
     override var bitmap: Bitmap? = network.theGame.cpuImage
     private val maxAnimationCount: Int = 32
@@ -25,6 +25,7 @@ class Cpu(network: Network, gridX: Int, gridY: Int): Chip(network, gridX, gridY)
     init {
         data.range = 1.0f
         chipData.type = ChipType.CPU
+        actualRect = Rect(0, 0, 100, 100)
     }
 
     /*
@@ -45,20 +46,23 @@ class Cpu(network: Network, gridX: Int, gridY: Int): Chip(network, gridX, gridY)
         }
     }
 
-    override fun display(canvas: Canvas, viewport: Viewport) {
-        actualRect.setCenter(viewport.gridToViewport(posOnGrid))
-        val paint = Paint()
-        bitmap?.let()
-        { canvas.drawBitmap(it, null, actualRect, paint) }
+    override fun display(canvas: Canvas, viewport: Viewport)
+    {
+        actualRect?.let { rect ->
+            rect.setCenter(viewport.gridToViewport(posOnGrid))
+            val paint = Paint()
+            bitmap?.let()
+            { canvas.drawBitmap(it, null, rect, paint) }
 
-        if (animationCount>0)
-        {
-            val rect = Rect(actualRect)
-            rect.scale((1.2f - (animationCount/maxAnimationCount.toFloat())))
-            paint.color = Color.RED
-            paint.alpha = (animationCount * 255)/maxAnimationCount
-            animationCount--
-            canvas.drawRect(rect, paint)
+            if (animationCount>0)
+            {
+                var animationRect = Rect(rect)
+                animationRect.scale((1.2f - (animationCount/maxAnimationCount.toFloat())))
+                paint.color = Color.RED
+                paint.alpha = (animationCount * 255)/maxAnimationCount
+                animationCount--
+                canvas.drawRect(animationRect, paint)
+            }
         }
     }
 
@@ -72,7 +76,7 @@ class Cpu(network: Network, gridX: Int, gridY: Int): Chip(network, gridX, gridY)
 
     override fun onDown(event: MotionEvent): Boolean {
         /* pause the game when touched */
-        if (actualRect.contains(event.x.toInt(), event.y.toInt())) {
+        if (actualRect?.contains(event.x.toInt(), event.y.toInt()) ?: false)  {
             theNetwork?.let { it.theGame.state.phase = Game.GamePhase.PAUSED }
             return true
         }

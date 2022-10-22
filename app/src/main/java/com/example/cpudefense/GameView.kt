@@ -3,9 +3,7 @@ package com.example.cpudefense
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
-import android.graphics.Paint
 import android.graphics.Rect
-import android.icu.text.RelativeDateTimeFormatter
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.SurfaceHolder
@@ -35,6 +33,8 @@ class GameView(context: Context, val theGame: Game):
     }
 
     override fun surfaceCreated(p0: SurfaceHolder) {
+        if (this.width > 0 && this.height > 0)
+            setSize(width, height)
     }
 
     override fun surfaceChanged(p0: SurfaceHolder, p1: Int, p2: Int, p3: Int) {
@@ -49,17 +49,34 @@ class GameView(context: Context, val theGame: Game):
         setSize(w, h)
     }
 
+    inline fun scoreBoardHeight(h: Int): Int
+    /** calculate score board size for a given screen size
+    @param h total height of screen
+     */
+    {
+        var scoreBoardHeight = (h*0.1).toInt()
+        if (scoreBoardHeight < Game.Params.minScoreBoardHeight)
+            return Game.minScoreBoardHeight
+        else if (scoreBoardHeight > Game.Params.maxScoreBoardHeight)
+            return Game.maxScoreBoardHeight
+        else
+            return scoreBoardHeight
+    }
+
+    inline fun viewportHeight(h: Int): Int
+    /** calculate viewport size for a given screen size
+    @param h total height of screen
+     */
+    {
+        return h - scoreBoardHeight(h)
+    }
+
     private fun setSize(w: Int, h: Int)
     {
         /* determine dimensions of the different game areas */
-        var scoreBoardHeight = (h*0.1).toInt()
-        if (scoreBoardHeight < Game.Params.minScoreBoardHeight)
-            scoreBoardHeight = Game.Params.minScoreBoardHeight
-        else if (scoreBoardHeight > Game.Params.maxScoreBoardHeight)
-            scoreBoardHeight = Game.Params.maxScoreBoardHeight
-        var viewportHeight = h - scoreBoardHeight
-        theGame.viewport.setSize(w, viewportHeight)
-        theGame.scoreBoard.setSize(Rect(0, viewportHeight, w, viewportHeight+scoreBoardHeight))
+        var viewportHeight = viewportHeight(h)
+        theGame.viewport.setScreenSize(w, viewportHeight)
+        theGame.scoreBoard.setSize(Rect(0, viewportHeight, w, viewportHeight+scoreBoardHeight(h)))
         theGame.speedControlPanel.setSize(Rect(0, 0, w, viewportHeight))
         theGame.intermezzo.setSize(Rect(0,0,w,h))
         theGame.marketplace.setSize(Rect(0,0,w,h))

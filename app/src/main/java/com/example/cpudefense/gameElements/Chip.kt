@@ -48,7 +48,6 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
     private val defaultBackgroundColor = resources.getColor(R.color.chips_background)
 
     init {
-        actualRect = Rect()
         data.range = 2.0f
         paintOutline.color = Color.WHITE
         paintOutline.style = Paint.Style.STROKE
@@ -139,41 +138,43 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
             heightOnScreen = sizeOnScreen.second * Game.chipSize.y.toInt()
             actualRect = Rect(0, 0, widthOnScreen, heightOnScreen)
         }
-        actualRect.setCenter(viewport.gridToViewport(posOnGrid))
 
-        /* draw background */
-        paintBackground.color = defaultBackgroundColor
-        paintBackground.alpha = 255
-        canvas.drawRect(actualRect, paintBackground)
-        if (cooldownTimer>0)
-        {
-            paintBackground.color = chipData.glowColor
-            paintBackground.alpha = (cooldownTimer*255)/chipData.cooldown
-            canvas.drawRect(actualRect, paintBackground)
+        actualRect?.let { rect ->
+            rect.setCenter(viewport.gridToViewport(posOnGrid))
+
+            /* draw background */
+            paintBackground.color = defaultBackgroundColor
+            paintBackground.alpha = 255
+            canvas.drawRect(rect, paintBackground)
+            if (cooldownTimer>0)
+            {
+                paintBackground.color = chipData.glowColor
+                paintBackground.alpha = (cooldownTimer*255)/chipData.cooldown
+                canvas.drawRect(rect, paintBackground)
+            }
+
+            /* draw outline */
+            paintOutline.strokeWidth =
+                if (isActivated()) 3f * outlineWidth
+            else
+                outlineWidth
+            canvas.drawRect(rect, paintOutline)
+
+            /* display a line to all vehicles in range */
+            if (Game.drawLinesFromChip) {
+                for (vehicle in distanceToVehicle.keys.filter { attackerInRange(it as Attacker) })
+                    canvas.drawLine(
+                        rect.centerX().toFloat(), rect.centerY().toFloat(),
+                        (viewport.gridToViewport(vehicle.posOnGrid!!)).first.toFloat(),
+                        (viewport.gridToViewport(vehicle.posOnGrid!!)).second.toFloat(), paintLines
+                    )
+            }
+
+            if (bitmap == null)
+                bitmap = createBitmapForType()
+            if (bitmap != null)
+                canvas.drawBitmap(bitmap!!, null, rect, paintBitmap)
         }
-
-        /* draw outline */
-        paintOutline.strokeWidth =
-            if (isActivated()) 3f * outlineWidth
-        else
-            outlineWidth
-        canvas.drawRect(actualRect, paintOutline)
-
-        /* display a line to all vehicles in range */
-        if (Game.drawLinesFromChip) {
-            for (vehicle in distanceToVehicle.keys.filter { attackerInRange(it as Attacker) })
-                canvas.drawLine(
-                    actualRect.centerX().toFloat(), actualRect.centerY().toFloat(),
-                    (viewport.gridToViewport(vehicle.posOnGrid!!)).first.toFloat(),
-                    (viewport.gridToViewport(vehicle.posOnGrid!!)).second.toFloat(), paintLines
-                )
-        }
-
-        if (bitmap == null)
-            bitmap = createBitmapForType()
-        if (bitmap != null)
-            canvas.drawBitmap(bitmap!!, null, actualRect, paintBitmap)
-
     }
 
     fun displayUpgrades(canvas: Canvas)
@@ -271,37 +272,37 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
 
     private fun createBitmap(text: String): Bitmap?
     {
-        if (actualRect.width() == 0 || actualRect.height() == 0)
-            return null
+        var bitmap: Bitmap? = null
+        bitmap = actualRect?.let {
+            val bitmap = Bitmap.createBitmap(it.width(), it.height(), Bitmap.Config.ARGB_8888)
+            val rect = Rect(0, 0, bitmap.width, bitmap.height)
+            val canvas = Canvas(bitmap)
+            val paint = Paint()
 
-        val bitmap = Bitmap.createBitmap(actualRect.width(), actualRect.height(), Bitmap.Config.ARGB_8888)
-        val rect = Rect(0, 0, bitmap.width, bitmap.height)
-        val canvas = Canvas(bitmap)
-        val paint = Paint()
+            paint.textSize = Game.chipTextSize
+            paint.alpha = 255
+            paint.typeface = Typeface.create("sans-serif-condensed", Typeface.BOLD)
+            paint.textAlign = Paint.Align.CENTER
+            val clippedRect = rect.displayTextCenteredInRect(canvas, text, paint)
 
-        paint.textSize = Game.chipTextSize
-        paint.alpha = 255
-        paint.typeface = Typeface.create("sans-serif-condensed", Typeface.BOLD)
-        paint.textAlign = Paint.Align.CENTER
-        val clippedRect = rect.displayTextCenteredInRect(canvas, text, paint)
+            val alpha: Bitmap = bitmap.extractAlpha()
+            /* create a transparent black background to have more contrast */
+            paint.color = resources.getColor(R.color.chips_background)
+            canvas.drawRect(clippedRect, paint)
 
-        val alpha: Bitmap = bitmap.extractAlpha()
-        /* create a transparent black background to have more contrast */
-        paint.color = resources.getColor(R.color.chips_background)
-        canvas.drawRect(clippedRect, paint)
+            /* use blurred image to create glow */
+            val blurMaskFilter = BlurMaskFilter(1.5f, BlurMaskFilter.Blur.OUTER)
+            paint.color = chipData.glowColor
+            paint.maskFilter = blurMaskFilter
+            val blurCanvas = Canvas(bitmap)
+            blurCanvas.drawBitmap(alpha, 0f, 0f, paint)
 
-        /* use blurred image to create glow */
-        val blurMaskFilter = BlurMaskFilter(1.5f, BlurMaskFilter.Blur.OUTER)
-        paint.color = chipData.glowColor
-        paint.maskFilter = blurMaskFilter
-        val blurCanvas = Canvas(bitmap)
-        blurCanvas.drawBitmap(alpha, 0f, 0f, paint)
-
-        /* add the actual (non-blurred) text */
-        paint.color = chipData.color
-        paint.maskFilter = null
-        clippedRect.displayTextCenteredInRect(canvas, text, paint)
-
+            /* add the actual (non-blurred) text */
+            paint.color = chipData.color
+            paint.maskFilter = null
+            clippedRect.displayTextCenteredInRect(canvas, text, paint)
+            bitmap
+        }
         return bitmap
     }
 
@@ -334,29 +335,35 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
                 alternatives.remove(a)
 
         // calculate screen coordinates for the alternative boxes
-        var posX = actualRect.centerX()
-        var posY = actualRect.centerY()
-        val positions = listOf (
-            Pair( 1.0f, -0.5f),
-            Pair( 1.0f, +0.5f),
-            Pair( 2.0f, -0.5f),
-            Pair( 2.0f, +0.5f) )
-        val factorY = 1.5 * actualRect.height()
-        var factorX: Float
-        if (network.theGame.viewport.isInRightHalfOfViewport(posX))
-            factorX = -1.2f * actualRect.width()
-        else
-            factorX = +1.2f * actualRect.width()
-        var i = 0
-        for (upgrade in alternatives)
-        {
-            val chipUpgrade = ChipUpgrade(this, upgrade,
-                actualRect.centerX(), actualRect.centerY(), Color.WHITE)
-            val pos: Pair<Float, Float> = positions.get(i) ?: Pair(1.0f, 1.0f)
-            Mover(network.theGame, chipUpgrade, actualRect.centerX(), actualRect.centerY(),
-                posX+(pos.first * factorX).toInt(), posY+(pos.second * factorY).toInt())
-            upgradePossibilities.add(chipUpgrade)
-            i++
+        actualRect?.let { rect ->
+            var posX = rect.centerX()
+            var posY = rect.centerY()
+            val positions = listOf(
+                Pair(1.0f, -0.5f),
+                Pair(1.0f, +0.5f),
+                Pair(2.0f, -0.5f),
+                Pair(2.0f, +0.5f)
+            )
+            val factorY = 1.5 * rect.height()
+            var factorX: Float
+            if (network.theGame.viewport.isInRightHalfOfViewport(posX))
+                factorX = -1.2f * rect.width()
+            else
+                factorX = +1.2f * rect.width()
+            var i = 0
+            for (upgrade in alternatives) {
+                val chipUpgrade = ChipUpgrade(
+                    this, upgrade,
+                    rect.centerX(), rect.centerY(), Color.WHITE
+                )
+                val pos: Pair<Float, Float> = positions.get(i) ?: Pair(1.0f, 1.0f)
+                Mover(
+                    network.theGame, chipUpgrade, rect.centerX(), rect.centerY(),
+                    posX + (pos.first * factorX).toInt(), posY + (pos.second * factorY).toInt()
+                )
+                upgradePossibilities.add(chipUpgrade)
+                i++
+            }
         }
     }
 
@@ -368,7 +375,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
                 return true
             }
 
-        if (actualRect.contains(event.x.toInt(), event.y.toInt())
+        if (actualRect?.contains(event.x.toInt(), event.y.toInt()) ?: false
             && upgradePossibilities.isEmpty()) // gesture is inside this card
         {
             showUpgrades()

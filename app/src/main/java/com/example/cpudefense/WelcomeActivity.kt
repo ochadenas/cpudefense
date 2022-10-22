@@ -4,12 +4,14 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.View
+import android.widget.Switch
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 
 
-class WelcomeActivity : AppCompatActivity() {
+class WelcomeActivity : AppCompatActivity()
+{
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_welcome)
@@ -23,16 +25,22 @@ class WelcomeActivity : AppCompatActivity() {
         super.onActivityReenter(resultCode, data)
     }
 
-    fun continueGame(v: View)
+    fun resumeGame(v: View)
     {
         val intent = Intent(this, MainGameActivity::class.java)
-        intent.putExtra("CONTINUE_GAME", true)
+        intent.putExtra("RESUME_GAME", true)
         startActivity(intent)
     }
 
     fun startLevelSelection(v: View)
     {
         val intent = Intent(this, LevelSelectActivity::class.java)
+        startActivity(intent)
+    }
+
+    fun displaySettingsDialog(v: View)
+    {
+        val intent = Intent(this, SettingsActivity::class.java)
         startActivity(intent)
     }
 
