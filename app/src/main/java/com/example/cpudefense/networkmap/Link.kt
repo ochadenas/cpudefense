@@ -207,7 +207,7 @@ class Link(val theNetwork: Network, var node1: Node, var node2: Node, var ident:
         {
             var node1 = network.nodes[data.startId] ?: return null
             var node2 = network.nodes[data.endId] ?: return null
-            var link = Link(network, node1, node2, data.ident)
+            var link = Link(network, node1, node2, data.ident, data.mask)
             link.data = data
             return link
         }
