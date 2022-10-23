@@ -111,6 +111,22 @@ Zuse also created the first high-level programming language 'Plankalkül'."
     <string name="franke"></string>
     <string name="vaughan"></string>
     <string name="settings_title">Settings</string>
+    <string name="settings_about">About</string>
+    <string name="license">
+        "
+This game is open source. Visit https://github.com/ochadenas/cpudefense for more information.
+
+The portraits of the Information Age Heroes are derived from works of the public domain.
+
+Original photos:
+  Jacob Appelbaum (CC BY-SA 2.5)
+  Rama (CC BY-SA 2.0 fr)
+  Shervinafshar (CC BY-SA 3.0)
+  Tony Bove (CC BY 3.0)
+  Wolfgang Hunscher (CC BY-SA 3.0)
+
+All other artwork:
+  Oliver Chadenas (CC BY-SA 3.0)"</string>
 
 
 </resources>

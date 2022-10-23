@@ -4,4 +4,9 @@ Increase version number in build.gradle (Module)
 
 Commit. Add git tag "version_x_y". Push.
 
+Build -> Generate signed bundle/APK -> APK -> release
+
+Get app package from /home/oliver/AndroidStudioProjects/CpuDefense/app/release/
+
+
 

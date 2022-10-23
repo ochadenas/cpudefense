@@ -2,17 +2,33 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/settings_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#000000"
     tools:context=".SettingsActivity">
 
+    <ImageView
+        android:id="@+id/settings_title_image"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="24dp"
+        android:padding="4dp"
+        android:scaleType="fitStart"
+        app:layout_constraintBottom_toBottomOf="@+id/settings_title_view"
+        app:layout_constraintEnd_toStartOf="@+id/settings_title_view"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/settings_title_view"
+        app:srcCompat="@drawable/dip" />
+
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/settings_title_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
         android:text="@string/settings_title"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:textColor="#FFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
@@ -25,33 +41,57 @@
         android:layout_marginTop="24dp"
         android:orientation="vertical"
         app:layout_constraintStart_toStartOf="@+id/settings_title_image"
-        app:layout_constraintTop_toBottomOf="@+id/textView">
+        app:layout_constraintTop_toBottomOf="@+id/settings_title_view">
 
         <Switch
             android:id="@+id/switch_disable_background"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="savePrefs"
-            android:text="Disable background" />
+            android:text="Disable background"
+            android:textColor="#FFFFFF" />
 
-        <Switch
-            android:id="@+id/switch_unused"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="unused" />
     </LinearLayout>
 
     <ImageView
-        android:id="@+id/settings_title_image"
+        android:id="@+id/about_title_image"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginStart="24dp"
         android:padding="4dp"
         android:scaleType="fitStart"
-        app:layout_constraintBottom_toBottomOf="@+id/textView"
-        app:layout_constraintEnd_toStartOf="@+id/textView"
+        app:layout_constraintBottom_toBottomOf="@+id/about_title_view"
+        app:layout_constraintEnd_toEndOf="@+id/settings_title_image"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/settings_title_image"
+        app:layout_constraintTop_toTopOf="@+id/about_title_view"
+        app:layout_constraintVertical_bias="1.0"
+        app:srcCompat="@drawable/cryptocoin" />
+
+    <TextView
+        android:id="@+id/about_title_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/settings_about"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:textColor="#FFFFFF"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/settings_title_image"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+
+    <TextView
+        android:id="@+id/about_text_view"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="start"
+        android:maxEms="20"
+        android:padding="8dp"
+        android:scrollbars="vertical"
+        android:text="@string/license"
+        android:textAlignment="viewStart"
+        android:textColor="#939393"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/textView"
-        app:srcCompat="@drawable/dip" />
+        app:layout_constraintTop_toBottomOf="@+id/about_title_view" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

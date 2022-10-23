@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#000000"
     tools:context=".WelcomeActivity">
 
     <Button
@@ -29,8 +30,7 @@
         android:onClick="startLevelSelection"
         android:text="@string/selectLevel"
         app:layout_constraintBottom_toTopOf="@id/continueGameButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/startGameButton"
         app:layout_constraintTop_toBottomOf="@id/startGameButton" />
 
     <Button
@@ -42,9 +42,20 @@
         android:onClick="resumeGame"
         android:text="@string/continueGame"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/startGameButton"
         app:layout_constraintTop_toBottomOf="@+id/startGameButton" />
+
+    <Button
+        android:id="@+id/settingsButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        android:onClick="displaySettingsDialog"
+        android:text="@string/settings_title"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/startGameButton"
+        app:layout_constraintTop_toBottomOf="@+id/continueGameButton" />
 
     <TextView
         android:id="@+id/versionText"
@@ -58,14 +69,47 @@
         android:id="@+id/settings_button"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="8dp"
         android:background="@android:color/transparent"
         android:onClick="displaySettingsDialog"
         android:scaleType="centerInside"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/startGameButton"
+        app:layout_constraintTop_toBottomOf="@+id/continueGameButton"
         app:srcCompat="@drawable/dip" />
+
+    <ImageView
+        android:id="@+id/deko1"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginEnd="8dp"
+        android:scaleType="fitEnd"
+        app:layout_constraintBottom_toBottomOf="@+id/startGameButton"
+        app:layout_constraintEnd_toStartOf="@+id/startGameButton"
+        app:layout_constraintTop_toTopOf="@+id/startGameButton"
+        app:srcCompat="@drawable/deko" />
+
+    <ImageView
+        android:id="@+id/deko2"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginEnd="8dp"
+        android:scaleType="fitEnd"
+        app:layout_constraintBottom_toBottomOf="@+id/selectLevelButton"
+        app:layout_constraintEnd_toStartOf="@+id/selectLevelButton"
+        app:layout_constraintTop_toTopOf="@+id/selectLevelButton"
+        app:srcCompat="@drawable/deko" />
+
+    <ImageView
+        android:id="@+id/deko3"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginEnd="8dp"
+        android:scaleType="fitEnd"
+        app:layout_constraintBottom_toBottomOf="@+id/continueGameButton"
+        app:layout_constraintEnd_toStartOf="@+id/continueGameButton"
+        app:layout_constraintTop_toTopOf="@+id/continueGameButton"
+        app:srcCompat="@drawable/deko" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
