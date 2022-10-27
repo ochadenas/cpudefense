@@ -126,7 +126,7 @@ class Network(val theGame: Game, x: Int, y: Int): GameElement() {
         canvas.drawRect(actualRect, paint)
     }
 
-    private fun recreateNetworkImage(viewport: Viewport)
+    fun recreateNetworkImage(viewport: Viewport)
     /** function that must be called whenever the viewport (or the network configuration) changes */
     {
         validateViewport()

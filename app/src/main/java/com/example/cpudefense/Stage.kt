@@ -170,7 +170,7 @@ class Stage(var theGame: Game) {
         sizeX = dimX
         sizeY = dimY
         network = Network(theGame, sizeX, sizeY)
-        theGame.viewport.setViewportSize(sizeX, sizeY)
+        theGame.viewport.setGridSize(sizeX, sizeY)
     }
 
     private fun createChip(gridX: Int, gridY: Int, ident: Int = -1, type: Chip.ChipType = Chip.ChipType.EMPTY): Chip

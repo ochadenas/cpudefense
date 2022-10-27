@@ -132,7 +132,7 @@ class Game(val gameActivity: MainGameActivity) {
         network = stage.network
         network?.validateViewport()
         // viewport.setSize(gameActivity.theGameView.width, gameActivity.theGameView.height)
-        viewport.setViewportSize(stage.sizeX, stage.sizeY)
+        viewport.setGridSize(stage.sizeX, stage.sizeY)
         if (state.phase == GamePhase.MARKETPLACE)
             marketplace.fillMarket(stage.data.level)
         else
@@ -299,17 +299,20 @@ class Game(val gameActivity: MainGameActivity) {
         summaryPerLevel[level] = nextStage.summary
         gameActivity.setGameSpeed(GameSpeed.NORMAL)  // reset speed to normal when starting next stage
         speedControlPanel.resetButtons()
+        viewport.reset()
         gameActivity.saveState()
+
         if (network == null) // no more levels left
         {
             setMaxStage(level)
             intermezzo.endOfGame(level, hasWon = true)
         }
         else {
-            viewport.setViewportSize(network!!.data.gridSizeX, network!!.data.gridSizeY)
+            viewport.setGridSize(network!!.data.gridSizeX, network!!.data.gridSizeY)
             state.phase = GamePhase.RUNNING
             currentWave = nextStage.nextWave()
         }
+
         currentStage = nextStage
         takeLevelSnapshot()
     }
