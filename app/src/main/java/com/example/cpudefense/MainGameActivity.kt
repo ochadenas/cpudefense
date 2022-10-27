@@ -31,6 +31,8 @@ class MainGameActivity : Activity() {
         parentView?.addView(theGameView)
 
         startOnLevel = intent.getIntExtra("START_ON_STAGE", -1)
+        if (intent.getBooleanExtra("RESET_PROGRESS", false))
+            startOnLevel = -1
 
         if (intent.getBooleanExtra("RESUME_GAME", false) == false)
             resumeGame = false
