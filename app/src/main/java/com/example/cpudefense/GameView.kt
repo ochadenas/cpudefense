@@ -115,7 +115,6 @@ class GameView(context: Context, val theGame: Game):
                 theGame.viewport.addOffset(-dx, -dy)
                 theGame.currentStage?.network?.recreateNetworkImage(theGame.viewport)
             }
-
         }
 
 

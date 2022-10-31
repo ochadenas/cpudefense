@@ -731,7 +731,7 @@ class Stage(var theGame: Game) {
                 createChip(8, 30, 6)
                 createChip(3, 42, 7)
                 createChip(21, 45, 8)
-                createChip(32, 40, 9)
+                createChip(32, 40, 9).setType(Chip.ChipType.MEM)
                 createChip(43, 35, type = Chip.ChipType.CPU)
 
                 createLink(0, 2, 1)
@@ -864,7 +864,7 @@ class Stage(var theGame: Game) {
                 createWaveHex(15, 50, .09f, 1f, coins = 0)
                 createWaveHex(20, 80, .10f, 1f, coins = 1)
 
-                // data.chipsAllowed = setOf(Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.POWERUP, Chip.ChipUpgrades.SHIFT, Chip.ChipUpgrades.ACC)
+                data.chipsAllowed = setOf(Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.POWERUP, Chip.ChipUpgrades.SHIFT, Chip.ChipUpgrades.MEM)
                 rewardCoins = 3
             }
             17 -> {
@@ -909,7 +909,7 @@ class Stage(var theGame: Game) {
                 createWaveHex(16, 50, .09f, 1f, coins = 0)
                 createWaveHex(24, 80, .10f, 1f, coins = 1)
 
-                // data.chipsAllowed = setOf(Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.POWERUP, Chip.ChipUpgrades.SHIFT, Chip.ChipUpgrades.ACC)
+                data.chipsAllowed = setOf(Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.POWERUP, Chip.ChipUpgrades.SHIFT, Chip.ChipUpgrades.MEM)
                 rewardCoins = 3
             }
             18 -> {
@@ -952,7 +952,7 @@ class Stage(var theGame: Game) {
                 createWaveHex(24, 80, .11f, 1.4f, coins = 1)
                 createWaveHex(24, 127, .12f, 1.4f, coins = 0)
 
-                // data.chipsAllowed = setOf(Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.POWERUP, Chip.ChipUpgrades.SHIFT, Chip.ChipUpgrades.ACC)
+                data.chipsAllowed = setOf(Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.POWERUP, Chip.ChipUpgrades.SHIFT, Chip.ChipUpgrades.MEM)
                 rewardCoins = 3
             }
             19 -> {
@@ -1010,7 +1010,47 @@ class Stage(var theGame: Game) {
                 createWaveHex(24, 80, .11f, 1.4f, coins = 1)
                 createWaveHex(24, 127, .12f, 1.4f, coins = 0)
 
-                // data.chipsAllowed = setOf(Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.POWERUP, Chip.ChipUpgrades.SHIFT, Chip.ChipUpgrades.ACC)
+                data.chipsAllowed = setOf(Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.POWERUP, Chip.ChipUpgrades.SHIFT, Chip.ChipUpgrades.MEM)
+                rewardCoins = 3
+            }
+            20 -> {
+                initializeNetwork(50, 50)
+
+                createChip(48, 12, ident = 101, type = Chip.ChipType.ENTRY)
+                createChip(8, 2, ident = 102, type = Chip.ChipType.ENTRY)
+                createChip(2, 40, ident = 103, type = Chip.ChipType.ENTRY)
+                createChip(32, 12, 1)
+                createChip(8, 20, 2)
+                createChip(22, 40, 3)
+                createChip(40, 42, 4)
+                createChip(45, 32, 5)
+                createChip(35, 26, 6)
+                createChip(45, 20, 999, Chip.ChipType.CPU)
+
+                createLink(101, 1, 1, 0x07)
+                createLink(1, 2, 2, 0x07)
+                createLink(2, 3, 3, 0x07)
+                createLink(3, 4, 4, 0x0e)
+                createLink(4, 5, 5, 0x03)
+                createLink(5, 6, 6, 0x0c)
+                createLink(6, 999, 7, 0x0c)
+                createLink(102, 2, 102, 0x0c)
+                createLink(103, 3, 103, 0x03)
+
+                createTrack(listOf(1,2,3,4,5,6,7), 0)
+                createTrack(listOf(102,3,4,5,6,7), 1)
+                createTrack(listOf(103,4,5,6,7), 2)
+
+                createWave(16, 3, .08f, 1.1f)
+                createWave(16, 5, .09f, 1.2f)
+                createWave(12, 7, .10f, 1.3f)
+                createWave(12, 9, .11f, 1.3f)
+                createWave(12, 20, .12f, 1.3f)
+                createWaveHex(16, 40, .12f, 1.4f, coins = 0)
+                createWaveHex(24, 60, .12f, 1.4f, coins = 1)
+                createWaveHex(24, 80, .12f, 1.4f, coins = 0)
+
+                // data.chipsAllowed = setOf(Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.POWERUP, Chip.ChipUpgrades.SHIFT, Chip.ChipUpgrades.MEM)
                 rewardCoins = 3
                 type = Type.FINAL
             }

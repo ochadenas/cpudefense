@@ -68,8 +68,18 @@ class Viewport
 
     fun addOffset(deltaX: Float, deltaY: Float)
     {
+        val maxX = viewportWidth / 2
         offsetX += deltaX.toInt()
+        if (offsetX > maxX)
+            offsetX = maxX
+        else if (offsetX < -maxX)
+            offsetX = -maxX
+        val maxY = viewportHeight / 2
         offsetY += deltaY.toInt()
+        if (offsetY > maxY)
+            offsetY = maxY
+        else if (offsetY < -maxY)
+            offsetY = - maxY
     }
 
     fun gridToViewport(gridPos: GridCoord): Pair<Int, Int>
