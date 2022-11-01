@@ -81,7 +81,7 @@ class Game(val gameActivity: MainGameActivity) {
     var stageData: Stage.Data? = null
     var summaryPerLevel = HashMap<Int, Stage.Summary>()
     var levelThumbnail = HashMap<Int, Bitmap?>()  // level snapshots
-    var gameUpgrades = HashMap<Upgrade.Type, Upgrade>()
+    var gameUpgrades = HashMap<Hero.Type, Hero>()
 
     /* game elements */
     val viewport = Viewport()
@@ -117,7 +117,7 @@ class Game(val gameActivity: MainGameActivity) {
             global = gameActivity.loadGlobalData()
             summaryPerLevel = gameActivity.loadLevelData()   // get historical data of levels completed so far
             gameUpgrades = gameActivity.loadUpgrades()       // load the upgrades gained so far
-            additionalCashDelay = gameUpgrades[Upgrade.Type.GAIN_CASH]?.getStrength()?.toInt() ?: 0
+            additionalCashDelay = gameUpgrades[Hero.Type.GAIN_CASH]?.getStrength()?.toInt() ?: 0
             intermezzo.prepareLevel(state.startingLevel, true)
         }
         else
@@ -285,7 +285,7 @@ class Game(val gameActivity: MainGameActivity) {
 
     fun startNextStage(level: Int)
     {
-        val extraLives = gameUpgrades[Upgrade.Type.ADDITIONAL_LIVES]?.getStrength()
+        val extraLives = gameUpgrades[Hero.Type.ADDITIONAL_LIVES]?.getStrength()
         state.currentMaxLives = state.maxLives + (extraLives ?: 0f).toInt()
         state.lives = state.currentMaxLives
         calculateStartingCash()
@@ -351,7 +351,7 @@ class Game(val gameActivity: MainGameActivity) {
 
     fun calculateStartingCash()
     {
-        val cash = gameUpgrades[Upgrade.Type.INCREASE_STARTING_CASH]?.getStrength()?.toInt()
+        val cash = gameUpgrades[Hero.Type.INCREASE_STARTING_CASH]?.getStrength()?.toInt()
         state.cash = cash ?: minimalAmountOfCash
     }
     

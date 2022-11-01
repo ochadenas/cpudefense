@@ -7,7 +7,6 @@ import android.util.Base64
 import com.google.gson.Gson
 import java.io.ByteArrayOutputStream
 import java.lang.Exception
-import java.util.concurrent.CopyOnWriteArrayList
 
 class Persistency(var game: Game?) {
     data class SerializableStateData (
@@ -24,7 +23,7 @@ class Persistency(var game: Game?) {
     )
 
     data class SerializableUpgradeData (
-        val upgrades: MutableList<Upgrade.Data> = mutableListOf<Upgrade.Data>()
+        val upgrades: MutableList<Hero.Data> = mutableListOf<Hero.Data>()
     )
 
     fun saveState(editor: SharedPreferences.Editor)
@@ -149,14 +148,14 @@ class Persistency(var game: Game?) {
         return snapshot
     }
 
-    fun loadUpgrades(sharedPreferences: SharedPreferences): HashMap<Upgrade.Type, Upgrade>
+    fun loadUpgrades(sharedPreferences: SharedPreferences): HashMap<Hero.Type, Hero>
     {
-        val upgradeMap = HashMap<Upgrade.Type, Upgrade>()
+        val upgradeMap = HashMap<Hero.Type, Hero>()
         val json = sharedPreferences.getString("upgrades", "none")
         if (json != "none") game?.let {
             val data: SerializableUpgradeData = Gson().fromJson(json, SerializableUpgradeData::class.java)
             for (upgradeData in data.upgrades) {
-                upgradeMap[upgradeData.type] = Upgrade.createFromData(it, upgradeData)
+                upgradeMap[upgradeData.type] = Hero.createFromData(it, upgradeData)
 
             }
         }

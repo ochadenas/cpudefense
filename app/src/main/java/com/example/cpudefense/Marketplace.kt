@@ -22,8 +22,8 @@ class Marketplace(val game: Game): GameElement()
     private var paint = Paint()
     private var viewOffset = 0f  // used for scrolling
 
-    private var upgrades = mutableListOf<Upgrade>()
-    private var selected: Upgrade? = null
+    private var upgrades = mutableListOf<Hero>()
+    private var selected: Hero? = null
 
     private var nextGameLevel = 0
 
@@ -44,16 +44,16 @@ class Marketplace(val game: Game): GameElement()
     {
         // upgrades.clear()
         nextGameLevel = level
-        var newUpgrades = mutableListOf<Upgrade>()
-        for (type in Upgrade.Type.values())
+        var newUpgrades = mutableListOf<Hero>()
+        for (type in Hero.Type.values())
         {
             /* if upgrade already exists (because it has been bought earlier),
             get it from the game data. Otherwise, create an empty card.
             Only add upgrades that are allowed (available) at present.
              */
-            var upgrade: Upgrade? = game.gameUpgrades[type]
+            var upgrade: Hero? = game.gameUpgrades[type]
             if (upgrade == null)
-               upgrade = Upgrade.createFromData(game, Upgrade.Data(type))
+               upgrade = Hero.createFromData(game, Hero.Data(type))
             if (upgrade.isAvailable()) {
                 upgrade.createBiography(biographyArea)
                 newUpgrades.add(upgrade)
@@ -63,7 +63,7 @@ class Marketplace(val game: Game): GameElement()
         upgrades = newUpgrades
     }
 
-    private fun arrangeCards(cards: MutableList<Upgrade>, dY: Float = 0f)
+    private fun arrangeCards(cards: MutableList<Hero>, dY: Float = 0f)
     /** calculate positions of the cards' rectangles.
      * @param dY Vertical offset used for scrolling */
     {

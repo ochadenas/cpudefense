@@ -6,9 +6,8 @@ import android.text.StaticLayout
 import android.text.TextPaint
 import com.example.cpudefense.effects.Fadable
 import com.example.cpudefense.effects.Fader
-import kotlin.math.sqrt
 
-class Upgrade(var game: Game, type: Type): Fadable {
+class Hero(var game: Game, type: Type): Fadable {
     /*
     Ideas:
     - increase radius
@@ -248,6 +247,11 @@ class Upgrade(var game: Game, type: Type): Fadable {
                 strengthDesc = "x %.2f".format(strength)
                 upgradeDesc = " -> x %.2f".format(next)
             }
+            Type.INCREASE_CHIP_MEM_SPEED -> {
+                shortDesc = "MEM chip speed"
+                strengthDesc = "x %.2f".format(strength)
+                upgradeDesc = " -> x %.2f".format(next)
+            }
             Type.DECREASE_UPGRADE_COST ->             {
                 shortDesc = "Chip upgrade cost"
                 strengthDesc = "-%d%%".format(strength.toInt())
@@ -274,8 +278,6 @@ class Upgrade(var game: Game, type: Type): Fadable {
                 shortDesc = "Information gain"
                 strengthDesc = "1 bit/%d ticks".format(strength.toInt())
                 upgradeDesc = " -> 1/%d ticks".format(next.toInt())
-            }
-            Type.INCREASE_CHIP_MEM_SPEED -> {
             }
         }
         upgradeDesc = "%s  [cost: %d]".format(upgradeDesc, getPrice(data.level))
@@ -314,7 +316,7 @@ class Upgrade(var game: Game, type: Type): Fadable {
             Type.DECREASE_ATT_FREQ -> return (game.gameUpgrades[Type.INCREASE_CHIP_SHIFT_SPEED]?.data?.level?: 0 >= 3)
             Type.DECREASE_ATT_SPEED -> return (game.gameUpgrades[Type.DECREASE_ATT_FREQ]?.data?.level?: 0 >= 3)
             Type.GAIN_CASH -> return (game.gameUpgrades[Type.INCREASE_STARTING_CASH]?.data?.level?: 0 >= 4)
-            Type.INCREASE_CHIP_MEM_SPEED -> return false
+            Type.INCREASE_CHIP_MEM_SPEED -> return (game.gameUpgrades[Type.INCREASE_CHIP_SHIFT_SPEED]?.data?.level?: 0 >= 4)
             Type.INCREASE_CHIP_ACC_SPEED -> return false
             else -> return true
         }
@@ -364,12 +366,12 @@ class Upgrade(var game: Game, type: Type): Fadable {
     }
 
     companion object {
-        fun createFromData(game: Game, data: Data): Upgrade
+        fun createFromData(game: Game, data: Data): com.example.cpudefense.Hero
                 /** reconstruct a Link object based on the saved data
                  * and set all inner proprieties
                  */
         {
-            val newInstance = Upgrade(game, data.type)
+            val newInstance = Hero(game, data.type)
             newInstance.data.level = data.level
             newInstance.hero.setType()
             newInstance.heroOpacity = when (data.level) { 0 -> 0f else -> 1f}
@@ -408,11 +410,11 @@ class Upgrade(var game: Game, type: Type): Fadable {
                     vitae = game.resources.getString(R.string.lovelace)
                     picture = BitmapFactory.decodeResource(game.resources, R.drawable.lovelace)
                 }
-                Type.INCREASE_CHIP_ACC_SPEED ->
+                Type.INCREASE_CHIP_MEM_SPEED ->
                 {
                     name = "Knuth"
                     fullName = "Donald E. Knuth"
-                    effect = "Increases speed of all %s chips".format("ACC")
+                    effect = "Increases speed of all %s chips".format("MEM")
                     vitae = game.resources.getString(R.string.knuth)
                     picture = BitmapFactory.decodeResource(game.resources, R.drawable.knuth)
                 }
@@ -481,7 +483,7 @@ class Upgrade(var game: Game, type: Type): Fadable {
         var bitmap = Bitmap.createBitmap(myArea.width(), myArea.height(), Bitmap.Config.ARGB_8888)
         private var canvas = Canvas(bitmap)
 
-        fun createBiography(selected: Upgrade?)
+        fun createBiography(selected: com.example.cpudefense.Hero?)
         {
             val text: String
             if (data.level>0)

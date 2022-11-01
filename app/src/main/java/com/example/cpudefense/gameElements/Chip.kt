@@ -2,7 +2,6 @@ package com.example.cpudefense.gameElements
 
 import android.graphics.*
 import android.view.MotionEvent
-import android.webkit.WebHistoryItem
 import com.example.cpudefense.*
 import com.example.cpudefense.effects.Mover
 import com.example.cpudefense.networkmap.Network
@@ -89,7 +88,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
                 chipData.color = resources.getColor(R.color.chips_sub_foreground)
                 chipData.glowColor = resources.getColor(R.color.chips_sub_glow)
                 chipData.value = Game.basePrice[ChipUpgrades.SUB] ?: 10
-                val modifier: Float = network.theGame.gameUpgrades[Upgrade.Type.INCREASE_CHIP_SUB_SPEED]?.getStrength() ?: 1f
+                val modifier: Float = network.theGame.gameUpgrades[Hero.Type.INCREASE_CHIP_SUB_SPEED]?.getStrength() ?: 1f
                 chipData.cooldown = (20f / modifier).toInt()
             }
             ChipType.SHIFT -> {
@@ -98,7 +97,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
                 chipData.color = resources.getColor(R.color.chips_shr_foreground)
                 chipData.glowColor = resources.getColor(R.color.chips_shr_glow)
                 chipData.value = Game.basePrice[ChipUpgrades.SHIFT] ?: 10
-                val modifier: Float = network.theGame.gameUpgrades[Upgrade.Type.INCREASE_CHIP_SHIFT_SPEED]?.getStrength() ?: 1f
+                val modifier: Float = network.theGame.gameUpgrades[Hero.Type.INCREASE_CHIP_SHIFT_SPEED]?.getStrength() ?: 1f
                 chipData.cooldown = (32f / modifier).toInt()
             }
             ChipType.MEM -> {
@@ -107,7 +106,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
                 chipData.color = resources.getColor(R.color.chips_mem_foreground)
                 chipData.glowColor = resources.getColor(R.color.chips_mem_glow)
                 chipData.value = Game.basePrice[ChipUpgrades.MEM] ?: 20
-                val modifier: Float = network.theGame.gameUpgrades[Upgrade.Type.INCREASE_CHIP_MEM_SPEED]?.getStrength() ?: 1f
+                val modifier: Float = network.theGame.gameUpgrades[Hero.Type.INCREASE_CHIP_MEM_SPEED]?.getStrength() ?: 1f
                 chipData.cooldown = (128f / modifier).toInt()
             }
             ChipType.ACC -> {
@@ -116,7 +115,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
                 chipData.color = resources.getColor(R.color.chips_acc_foreground)
                 chipData.glowColor = resources.getColor(R.color.chips_acc_glow)
                 chipData.value = Game.basePrice[ChipUpgrades.ACC] ?: 10
-                val modifier: Float = network.theGame.gameUpgrades[Upgrade.Type.INCREASE_CHIP_ACC_SPEED]?.getStrength() ?: 1f
+                val modifier: Float = network.theGame.gameUpgrades[Hero.Type.INCREASE_CHIP_ACC_SPEED]?.getStrength() ?: 1f
                 chipData.cooldown = (16f / modifier).toInt()
             }
             else -> {}

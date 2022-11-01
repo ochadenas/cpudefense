@@ -130,7 +130,7 @@ class Stage(var theGame: Game) {
     fun createNewAttacker(maxNumber: Int, speed: Float, isCoin: Boolean = false,
                           representation: Attacker.Representation = Attacker.Representation.BINARY)
     {
-        val actualSpeed = speed * (theGame.gameUpgrades[Upgrade.Type.DECREASE_ATT_SPEED]?.getStrength() ?: 1.0f)
+        val actualSpeed = speed * (theGame.gameUpgrades[Hero.Type.DECREASE_ATT_SPEED]?.getStrength() ?: 1.0f)
         val attacker = if (isCoin)
             Cryptocoin(network, (maxNumber*1.5).toULong(), actualSpeed )
         else

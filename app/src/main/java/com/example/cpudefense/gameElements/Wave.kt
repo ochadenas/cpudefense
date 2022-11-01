@@ -1,7 +1,7 @@
 package com.example.cpudefense.gameElements
 
 import com.example.cpudefense.Game
-import com.example.cpudefense.Upgrade
+import com.example.cpudefense.Hero
 import kotlin.random.Random
 
 class Wave(var game: Game, var data: Data)
@@ -24,7 +24,7 @@ class Wave(var game: Game, var data: Data)
         else if (ticks > 0)
             ticks--
         else {
-            val frequency = data.attackerFrequency * (game.gameUpgrades[Upgrade.Type.DECREASE_ATT_FREQ]?.getStrength() ?: 1f)
+            val frequency = data.attackerFrequency * (game.gameUpgrades[Hero.Type.DECREASE_ATT_FREQ]?.getStrength() ?: 1f)
             ticks = ((2.0f / frequency + Random.nextInt(10))/game.globalSpeedFactor).toInt()
             if (data.coins>0 && Random.nextFloat() > 0.8)
             {
