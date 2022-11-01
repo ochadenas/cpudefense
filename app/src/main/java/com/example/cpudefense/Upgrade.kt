@@ -298,7 +298,7 @@ class Upgrade(var game: Game, type: Type): Fadable {
             Type.ADDITIONAL_LIVES -> return level.toFloat()
             Type.INCREASE_CHIP_ACC_SPEED -> return 1.0f + level / 20f
             Type.DECREASE_ATT_FREQ -> return 1.0f - level * 0.05f
-            Type.DECREASE_ATT_SPEED -> return 1.0f - level * 0.02f
+            Type.DECREASE_ATT_SPEED -> return 1.0f - level * 0.04f
             Type.GAIN_CASH -> return (10f - level) * 20
         }
     }
@@ -461,7 +461,6 @@ class Upgrade(var game: Game, type: Type): Fadable {
                     name = "Vaughan"
                     fullName = "Dorothy Vaughan"
                     effect = "Decreases attacker speed"
-                    effect = "Not implemented yet"
                     vitae = game.resources.getString(R.string.vaughan)
                     picture = BitmapFactory.decodeResource(game.resources, R.drawable.vaughan)
                 }

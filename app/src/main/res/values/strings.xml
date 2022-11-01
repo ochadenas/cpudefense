@@ -109,7 +109,11 @@ He is mostly known for the monumental work 'The Art of Computer Programming', a 
 Zuse also created the first high-level programming language 'Plankalkül'."
     </string>
     <string name="franke"></string>
-    <string name="vaughan"></string>
+    <string name="vaughan">
+"Dorothy Vaughan was one of the 'human computers' working with the NASA. With other women, she significantly helped advancing the American space program.
+
+Later, as NASA manager, she prepared for the introduction of electronic computers by teaching herself and her staff the FORTRAN programming language."
+    </string>
     <string name="settings_title">Settings</string>
     <string name="settings_about">About</string>
     <string name="license">
