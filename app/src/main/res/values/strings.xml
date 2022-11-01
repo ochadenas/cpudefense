@@ -18,7 +18,7 @@
     <string name="scoreboard_coins">Coins</string>
     <string name="selectLevel">Select Level</string>
     <string name="play_selected_level">Play selected level</string>
-    <string name="button_marketplace">Get upgrades</string>
+    <string name="button_marketplace">Heroes</string>
     <string name="button_refund">Reset all</string>
     <string name="button_purchase">Purchase</string>
     <string name="level_entry">Level %d</string>
@@ -45,10 +45,17 @@ Inverting a 0 will actually make the attacker more dangerous, so be careful not 
 Destroy the attacking code to gain some information about the virus. Use it to buy additional chips or to upgrade the existing ones."
     </string>
     <string name="instr_4">
-"Remember that in binary,
+"Here are some hints:
+
+Remember that in binary,
 10 equals 2,
-11 equals 3
-and so on."
+11 equals 3,
+100 equals 4, and so on.
+
+Try to tap on numbers starting with '1'. This reduces the attacker's number and makes the level much easier.
+
+Any attacker that gets through to the CPU will cost one life, regardless of its number. You must have at least one SUB chip to get rid of them.
+"
     </string>
     <string name="instr_5">
 "In the next level, a new chip type is available. It is labelled 'SHR 1', which means 'shift right by 1'
@@ -58,16 +65,21 @@ All digits are moved one position to the right. The leftmost digit is replaced b
 For example, 0110 becomes 0011. This is equivalent to dividing the value by 2."
     </string>
     <string name="instr_6">
-"You can gain cryptocoins by clearing stages. There is a maximum amount of cryptocoins per level shown on the bottom, and each life lost will reduce the reward.
+"By clearing stages, you can gain cryptocoins. These coins are valuable. You can use them to hire some
+powerful Heroes of the Information Age who will give you significant advantages in the game.
+
+There is a maximum amount of cryptocoins per level shown on the bottom, and each life lost will reduce the reward.
 
 If you do not get all the coins, you can always replay the level. However, once you have obtained the maximum, you won't receive any more coins for this stage.
-
-Cryptocoins can be exchanged for global, powerful upgrades.
+"
     </string>
     <string name="instr_7">
 "Sometimes you will see a cryptocoin moving along with the attackers. You can collect it by destroying it, even multiple times when you replay the level.
 
-But be careful. The moving cryptocoin is stronger than ordinary attackers, and if it reaches the CPU, it will take one of your lives.
+But be careful. The moving cryptocoin is stronger than ordinary attackers, and if it reaches the CPU, it will take one of your lives."
+    </string>
+    <string name="instr_8">
+"You can sell existing chips and re-use their slot. Most, but not all of the information will be refunded."
     </string>
     <string name="turing">
 "Alan Turing was one of the most important persons in computer science. He created many of the foundations in theoretical computing, such as the Turing machine and the Turing test, but he is also famous for cracking the Enigma code in World War 2. His impact on the outcome of the war can hardly be overestimated.
@@ -99,7 +111,7 @@ Osborne was also an author and book publisher."
 After Berners-Lee had invented the World Wide Web, he was looking for some content to put into it. Silvano de Gennaro provided him with a photo of the Cernettes taken in july 1992, which became the first photo of a band that appeared in browser windows all over the world."
     </string>
     <string name="knuth">
-        "Donald Ervin Knuth is a computer scientist and mathematician who has made numerous contributions to theoretical computer science.
+"Donald Ervin Knuth is a computer scientist and mathematician who has made numerous contributions to theoretical computer science.
 
 He is mostly known for the monumental work 'The Art of Computer Programming', a project that started in 1962 and is still not finished. For this he created en passant the TeX formatting system that has become the standard for scientific publications all over the world.
     </string>
@@ -108,11 +120,15 @@ He is mostly known for the monumental work 'The Art of Computer Programming', a 
 
 Zuse also created the first high-level programming language 'Plankalkül'."
     </string>
-    <string name="franke"></string>
-    <string name="vaughan">
-"Dorothy Vaughan was one of the 'human computers' working with the NASA. With other women, she significantly helped advancing the American space program.
+    <string name="franke">
+"Herbert W. Franke was a physicist well known as an author of science fiction novels and documentary works.
 
-Later, as NASA manager, she prepared for the introduction of electronic computers by teaching herself and her staff the FORTRAN programming language."
+He was a pionieer in the field of computer art and computer graphics, and developed the concept of 'cybernetical aesthetics' - art created by electronic devices and numerical algorithms."
+    </string>
+    <string name="vaughan">
+"Dorothy Vaughan was one of the 'human computers' working with the NASA. She was capable of solving complex mathematical equations faster and more reliably than the electronic or mechanical devices available at the time. With other women, she significantly helped advancing the American space program.
+
+Later, as manager at the NASA, she prepared for the introduction of electronic computers by teaching herself and her staff the FORTRAN programming language."
     </string>
     <string name="settings_title">Settings</string>
     <string name="settings_about">About</string>

@@ -270,7 +270,7 @@ class Stage(var theGame: Game) {
         waves.clear()
         type = Type.REGULAR
         data.chipsAllowed =
-            setOf(Chip.ChipUpgrades.ACC, Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.SHIFT, Chip.ChipUpgrades.POWERUP, Chip.ChipUpgrades.MEM)
+            setOf(Chip.ChipUpgrades.ACC, Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.SHIFT, Chip.ChipUpgrades.POWERUP, Chip.ChipUpgrades.SELL, Chip.ChipUpgrades.MEM)
 
         when (level) {
             1 -> {
@@ -434,7 +434,7 @@ class Stage(var theGame: Game) {
                 createWave(15, 15, .050f, 1f, coins = 0)
 
                 data.chipsAllowed =
-                    setOf(Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.POWERUP, Chip.ChipUpgrades.SHIFT)
+                    setOf(Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.POWERUP, Chip.ChipUpgrades.SELL, Chip.ChipUpgrades.SHIFT)
                 rewardCoins = 3
             }
             7 -> {
@@ -509,7 +509,7 @@ class Stage(var theGame: Game) {
                 createWave(40, 2, .300f, 2.2f)
 
                 data.chipsAllowed =
-                    setOf(Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.POWERUP, Chip.ChipUpgrades.SHIFT)
+                    setOf(Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.POWERUP, Chip.ChipUpgrades.SELL, Chip.ChipUpgrades.SHIFT)
                 rewardCoins = 3
             }
             9 -> {
@@ -544,7 +544,7 @@ class Stage(var theGame: Game) {
                 createWave(15, 15, .050f, 1f, coins = 0)
 
                 data.chipsAllowed =
-                    setOf(Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.POWERUP, Chip.ChipUpgrades.SHIFT)
+                    setOf(Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.POWERUP, Chip.ChipUpgrades.SELL, Chip.ChipUpgrades.SHIFT)
                 rewardCoins = 3
             }
             10 -> {
@@ -582,7 +582,7 @@ class Stage(var theGame: Game) {
                 createWaveHex(20, 40, .100f, 1.2f)
 
                 data.chipsAllowed =
-                    setOf(Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.POWERUP, Chip.ChipUpgrades.SHIFT)
+                    setOf(Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.POWERUP, Chip.ChipUpgrades.SELL, Chip.ChipUpgrades.SHIFT)
                 rewardCoins = 3
             }
             11 -> {
@@ -628,7 +628,7 @@ class Stage(var theGame: Game) {
                 createWave(15, 8, .05f, 1f)
 
                 data.chipsAllowed =
-                    setOf(Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.POWERUP, Chip.ChipUpgrades.SHIFT)
+                    setOf(Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.POWERUP, Chip.ChipUpgrades.SELL, Chip.ChipUpgrades.SHIFT)
                 rewardCoins = 3
 
             }
@@ -672,7 +672,7 @@ class Stage(var theGame: Game) {
                 createWave(10, 30, .075f, 1f)
 
                 data.chipsAllowed =
-                    setOf(Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.POWERUP, Chip.ChipUpgrades.SHIFT)
+                    setOf(Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.POWERUP, Chip.ChipUpgrades.SELL, Chip.ChipUpgrades.SHIFT)
                 rewardCoins = 3
             }
             13 -> {
@@ -716,7 +716,7 @@ class Stage(var theGame: Game) {
                 createWaveHex(12, 32, .05f, 1.2f)
 
                 data.chipsAllowed =
-                    setOf(Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.POWERUP, Chip.ChipUpgrades.SHIFT)
+                    setOf(Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.POWERUP, Chip.ChipUpgrades.SELL, Chip.ChipUpgrades.SHIFT)
                 rewardCoins = 3
             }
             14 -> {
@@ -760,12 +760,7 @@ class Stage(var theGame: Game) {
                 createWaveHex(15, 50, .09f, 1f, coins = 0)
                 createWaveHex(20, 80, .10f, 1f, coins = 0)
 
-                data.chipsAllowed = setOf(
-                    Chip.ChipUpgrades.SUB,
-                    Chip.ChipUpgrades.POWERUP,
-                    Chip.ChipUpgrades.SHIFT,
-                    Chip.ChipUpgrades.MEM
-                )
+                data.chipsAllowed = setOf(Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.POWERUP, Chip.ChipUpgrades.SELL, Chip.ChipUpgrades.SHIFT, Chip.ChipUpgrades.MEM)
                 rewardCoins = 3
             }
             15 -> {
@@ -813,12 +808,7 @@ class Stage(var theGame: Game) {
                 createWave(15, 80, .09f, 1f, coins = 0)
                 createWaveHex(20, 100, .10f, 1f, coins = 0)
 
-                data.chipsAllowed = setOf(
-                    Chip.ChipUpgrades.SUB,
-                    Chip.ChipUpgrades.POWERUP,
-                    Chip.ChipUpgrades.SHIFT,
-                    Chip.ChipUpgrades.MEM
-                )
+                data.chipsAllowed = setOf(Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.POWERUP, Chip.ChipUpgrades.SELL, Chip.ChipUpgrades.SHIFT, Chip.ChipUpgrades.MEM)
                 rewardCoins = 3
             }
             16 -> {
@@ -864,7 +854,7 @@ class Stage(var theGame: Game) {
                 createWaveHex(15, 50, .09f, 1f, coins = 0)
                 createWaveHex(20, 80, .10f, 1f, coins = 1)
 
-                data.chipsAllowed = setOf(Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.POWERUP, Chip.ChipUpgrades.SHIFT, Chip.ChipUpgrades.MEM)
+                data.chipsAllowed = setOf(Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.POWERUP, Chip.ChipUpgrades.SELL, Chip.ChipUpgrades.SHIFT, Chip.ChipUpgrades.MEM)
                 rewardCoins = 3
             }
             17 -> {
@@ -909,7 +899,7 @@ class Stage(var theGame: Game) {
                 createWaveHex(16, 50, .09f, 1f, coins = 0)
                 createWaveHex(24, 80, .10f, 1f, coins = 1)
 
-                data.chipsAllowed = setOf(Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.POWERUP, Chip.ChipUpgrades.SHIFT, Chip.ChipUpgrades.MEM)
+                data.chipsAllowed = setOf(Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.POWERUP, Chip.ChipUpgrades.SELL, Chip.ChipUpgrades.SHIFT, Chip.ChipUpgrades.MEM)
                 rewardCoins = 3
             }
             18 -> {
@@ -952,7 +942,7 @@ class Stage(var theGame: Game) {
                 createWaveHex(24, 80, .11f, 1.4f, coins = 1)
                 createWaveHex(24, 127, .12f, 1.4f, coins = 0)
 
-                data.chipsAllowed = setOf(Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.POWERUP, Chip.ChipUpgrades.SHIFT, Chip.ChipUpgrades.MEM)
+                data.chipsAllowed = setOf(Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.POWERUP, Chip.ChipUpgrades.SELL, Chip.ChipUpgrades.SHIFT, Chip.ChipUpgrades.MEM)
                 rewardCoins = 3
             }
             19 -> {
@@ -1010,7 +1000,7 @@ class Stage(var theGame: Game) {
                 createWaveHex(24, 80, .11f, 1.4f, coins = 1)
                 createWaveHex(24, 127, .12f, 1.4f, coins = 0)
 
-                data.chipsAllowed = setOf(Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.POWERUP, Chip.ChipUpgrades.SHIFT, Chip.ChipUpgrades.MEM)
+                data.chipsAllowed = setOf(Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.POWERUP, Chip.ChipUpgrades.SELL, Chip.ChipUpgrades.SHIFT, Chip.ChipUpgrades.MEM)
                 rewardCoins = 3
             }
             20 -> {
@@ -1050,7 +1040,7 @@ class Stage(var theGame: Game) {
                 createWaveHex(24, 60, .12f, 1.4f, coins = 1)
                 createWaveHex(24, 80, .12f, 1.4f, coins = 0)
 
-                // data.chipsAllowed = setOf(Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.POWERUP, Chip.ChipUpgrades.SHIFT, Chip.ChipUpgrades.MEM)
+                data.chipsAllowed = setOf(Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.POWERUP, Chip.ChipUpgrades.SELL, Chip.ChipUpgrades.SHIFT, Chip.ChipUpgrades.MEM)
                 rewardCoins = 3
                 type = Type.FINAL
             }

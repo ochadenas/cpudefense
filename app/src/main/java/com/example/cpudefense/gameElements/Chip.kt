@@ -2,6 +2,7 @@ package com.example.cpudefense.gameElements
 
 import android.graphics.*
 import android.view.MotionEvent
+import android.webkit.WebHistoryItem
 import com.example.cpudefense.*
 import com.example.cpudefense.effects.Mover
 import com.example.cpudefense.networkmap.Network
@@ -12,7 +13,7 @@ import java.util.concurrent.CopyOnWriteArrayList
 open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gridX.toFloat(), gridY.toFloat())
 {
     enum class ChipType { EMPTY, SUB, SHIFT, MEM, ACC, ENTRY, CPU}
-    enum class ChipUpgrades { POWERUP, SUB, SHIFT, MEM, ACC }
+    enum class ChipUpgrades { POWERUP, SELL, SUB, SHIFT, MEM, ACC }
 
     data class Data(
         var type: ChipType = ChipType.EMPTY,
@@ -55,6 +56,21 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
         paintLines.style = Paint.Style.STROKE
         paintLines.color = Color.WHITE
         paintLines.strokeWidth = 4.0f
+    }
+
+    fun resetToEmptyChip()
+    {
+        with (chipData)
+        {
+            type = ChipType.EMPTY
+            power = 0
+            value = 0
+            color = Color.WHITE
+            glowColor = Color.WHITE
+        }
+        cooldownTimer = 0
+        internalRegister = null
+        bitmap = null
     }
 
     fun setIdent(ident: Int)
@@ -317,13 +333,17 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
             }
             ChipType.SUB -> {
                 alternatives.add(ChipUpgrades.POWERUP)
+                alternatives.add(ChipUpgrades.SELL)
             }
             ChipType.SHIFT -> {
                 alternatives.add(ChipUpgrades.POWERUP)
+                alternatives.add(ChipUpgrades.SELL)
             }
             ChipType.ACC -> {
-                if (chipData.power < 3)
+                if (chipData.power < 3) {
                     alternatives.add(ChipUpgrades.POWERUP)
+                    alternatives.add(ChipUpgrades.SELL)
+                }
             }
             else -> {}
         }

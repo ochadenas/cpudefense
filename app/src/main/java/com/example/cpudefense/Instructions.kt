@@ -22,8 +22,8 @@ class Instructions(val game: Game, var stage: Int, var callback: (()->Unit)? ): 
             4 -> game.resources.getString(R.string.instr_4)
             5 -> game.resources.getString(R.string.instr_5)
             6 -> game.resources.getString(R.string.instr_6)
-
-                7 -> game.resources.getString(R.string.instr_7)
+            7 -> game.resources.getString(R.string.instr_7)
+            8 -> game.resources.getString(R.string.instr_8)
             else -> ""
         }
     }

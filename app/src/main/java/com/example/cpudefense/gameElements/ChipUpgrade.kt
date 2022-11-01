@@ -11,17 +11,25 @@ class ChipUpgrade(val chipToUpgrade: Chip, val type: Chip.ChipUpgrades,
     val game = chipToUpgrade.network.theGame
     var actualRect = Rect(chipToUpgrade.actualRect)
     var price = calculatePrice()
+    val paintBackground = Paint()
+    val paintText = Paint()
+    val paintFrame = Paint()
 
     fun calculatePrice(): Int
     {
-        if (type == Chip.ChipUpgrades.POWERUP) {
-            var upgradePrice = chipToUpgrade.chipData.value * 1.5
-            var discount = game.gameUpgrades[Upgrade.Type.DECREASE_UPGRADE_COST]?.getStrength() ?: 0f
-            upgradePrice = upgradePrice * (100f - discount) / 100
-            return upgradePrice.toInt()
+        when (type){
+            Chip.ChipUpgrades.POWERUP -> {
+                var upgradePrice = chipToUpgrade.chipData.value * 1.5
+                var discount = game.gameUpgrades[Upgrade.Type.DECREASE_UPGRADE_COST]?.getStrength() ?: 0f
+                upgradePrice = upgradePrice * (100f - discount) / 100
+                return upgradePrice.toInt()
+            }
+            Chip.ChipUpgrades.SELL -> {
+                var refund = - chipToUpgrade.chipData.value * 0.8f
+                return refund.toInt()
+            }
+            else -> return Game.basePrice.getOrElse(type, { 100 } )
         }
-        else
-            return Game.basePrice.getOrElse(type, { 100 } )
     }
 
     fun canAfford(): Boolean
@@ -61,6 +69,7 @@ class ChipUpgrade(val chipToUpgrade: Chip, val type: Chip.ChipUpgrades,
                 chipToUpgrade.addPower(1)
                 chipToUpgrade.chipData.value += price
             }
+            Chip.ChipUpgrades.SELL -> chipToUpgrade.resetToEmptyChip()
             Chip.ChipUpgrades.SUB -> chipToUpgrade.setType(Chip.ChipType.SUB)
             Chip.ChipUpgrades.SHIFT -> chipToUpgrade.setType(Chip.ChipType.SHIFT)
             Chip.ChipUpgrades.ACC -> chipToUpgrade.setType(Chip.ChipType.ACC)
@@ -79,43 +88,44 @@ class ChipUpgrade(val chipToUpgrade: Chip, val type: Chip.ChipUpgrades,
         val text = when(type)
         {
             Chip.ChipUpgrades.POWERUP -> "+1"
+            Chip.ChipUpgrades.SELL -> "SELL"
             Chip.ChipUpgrades.SUB -> "SUB"
             Chip.ChipUpgrades.SHIFT -> "SHR"
             Chip.ChipUpgrades.ACC -> "ACC"
             Chip.ChipUpgrades.MEM -> "MEM"
             else -> "?"
         }
-
-        var paint = Paint()
         val bitmap = Bitmap.createBitmap(actualRect.width(), actualRect.height(), Bitmap.Config.ARGB_8888)
         var rect = Rect(0, 0, bitmap.width, bitmap.height)
 
+        paintFrame.color = if (type== Chip.ChipUpgrades.SELL) Color.RED else color
+
         val newCanvas = Canvas(bitmap)
-        paint.textSize = Game.Params.chipTextSize
-        paint.alpha = 255
-        paint.setTypeface(Typeface.create("sans-serif-condensed", Typeface.BOLD))
-        paint.textAlign = Paint.Align.CENTER
-        paint.color = Color.WHITE
-        rect.displayTextCenteredInRect(newCanvas, text, paint)
-        canvas.drawBitmap(bitmap, null, actualRect, paint)
-        paint.color = chipToUpgrade.theNetwork?.theGame?.resources?.getColor(R.color.network_background) ?: Color.BLACK
-        paint.alpha = 40
-        paint.style = Paint.Style.FILL
-        canvas.drawRect(actualRect, paint)
-        paint.style = Paint.Style.STROKE
-        paint.strokeWidth = 2f
-        paint.color = color
-        paint.alpha = 255
-        canvas.drawBitmap(bitmap, null, actualRect, paint)
-        canvas.drawRect(actualRect, paint)
+        paintText.textSize = Game.Params.chipTextSize
+        paintText.alpha = 255
+        paintText.setTypeface(Typeface.create("sans-serif-condensed", Typeface.BOLD))
+        paintText.textAlign = Paint.Align.CENTER
+        paintText.color = paintFrame.color
+        rect.displayTextCenteredInRect(newCanvas, text, paintText)
+        canvas.drawBitmap(bitmap, null, actualRect, paintText)
+
+        paintBackground.color = chipToUpgrade.theNetwork?.theGame?.resources?.getColor(R.color.network_background) ?: Color.BLACK
+        paintBackground.alpha = 40
+        paintBackground.style = Paint.Style.FILL
+        canvas.drawRect(actualRect, paintBackground)
+
+        paintFrame.style = Paint.Style.STROKE
+        paintFrame.strokeWidth = 2f
+        paintFrame.alpha = 255
+        canvas.drawBitmap(bitmap, null, actualRect, paintFrame)
+        canvas.drawRect(actualRect, paintFrame)
 
         /* display the price */
         // val priceRect = Rect(actualRect.right, actualRect.top, actualRect.right+48, actualRect.bottom)
-        paint = Paint()
-        paint.setTypeface(Typeface.create("sans-serif-condensed", Typeface.ITALIC))
-        paint.textSize = Game.Params.chipTextSize - 1
-        paint.color = if (canAfford()) Color.WHITE else Color.YELLOW
-        canvas.drawText(game.scoreBoard.informationToString(price), actualRect.right.toFloat()-4, actualRect.top.toFloat()+6, paint)
+        paintText.setTypeface(Typeface.create("sans-serif-condensed", Typeface.ITALIC))
+        paintText.textSize = Game.Params.chipTextSize - 1
+        paintText.color = if (canAfford()) paintFrame.color else Color.YELLOW
+        canvas.drawText(game.scoreBoard.informationToString(price), actualRect.right.toFloat()-4, actualRect.top.toFloat()+6, paintText)
     }
 }
 
