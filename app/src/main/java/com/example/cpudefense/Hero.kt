@@ -21,12 +21,11 @@ class Hero(var game: Game, type: Type): Fadable {
     - Berners-Lee?
     - Mandelbrot
     - Torvalds
-    - Tramiel
      */
 
     enum class Type { INCREASE_CHIP_SUB_SPEED, INCREASE_CHIP_SHIFT_SPEED, INCREASE_CHIP_MEM_SPEED, INCREASE_CHIP_ACC_SPEED,
         DECREASE_ATT_FREQ, DECREASE_ATT_SPEED,
-        INCREASE_STARTING_CASH, GAIN_CASH, DECREASE_UPGRADE_COST, ADDITIONAL_LIVES}
+        INCREASE_STARTING_CASH, GAIN_CASH, DECREASE_UPGRADE_COST, ADDITIONAL_LIVES, INCREASE_REFUND}
     data class Data (
         val type: Type,
         var level: Int = 0,
@@ -69,6 +68,7 @@ class Hero(var game: Game, type: Type): Fadable {
         Type.DECREASE_ATT_FREQ -> game.resources.getColor(R.color.upgrade_active_general)
         Type.DECREASE_ATT_SPEED -> game.resources.getColor(R.color.upgrade_active_general)
         Type.GAIN_CASH -> game.resources.getColor(R.color.upgrade_active_eco)
+        Type.INCREASE_REFUND -> game.resources.getColor(R.color.upgrade_active_eco)
     }
     var maxLevel = 7   // cannot upgrade beyond this level
     var biography: Biography? = null
@@ -279,6 +279,12 @@ class Hero(var game: Game, type: Type): Fadable {
                 strengthDesc = "1 bit/%d ticks".format(strength.toInt())
                 upgradeDesc = " -> 1/%d ticks".format(next.toInt())
             }
+            Type.INCREASE_REFUND ->
+            {
+                shortDesc = "Refund when selling chips"
+                strengthDesc = "%d%%".format(strength.toInt())
+                upgradeDesc = " -> %d%%".format(next.toInt())
+            }
         }
         upgradeDesc = "%s  [cost: %d]".format(upgradeDesc, getPrice(data.level))
         if (data.level >= maxLevel)
@@ -302,6 +308,7 @@ class Hero(var game: Game, type: Type): Fadable {
             Type.DECREASE_ATT_FREQ -> return 1.0f - level * 0.05f
             Type.DECREASE_ATT_SPEED -> return 1.0f - level * 0.04f
             Type.GAIN_CASH -> return (10f - level) * 20
+            Type.INCREASE_REFUND -> return (50f + level * 10)
         }
     }
 
@@ -316,7 +323,7 @@ class Hero(var game: Game, type: Type): Fadable {
             Type.DECREASE_ATT_FREQ -> return (game.gameUpgrades[Type.INCREASE_CHIP_SHIFT_SPEED]?.data?.level?: 0 >= 3)
             Type.DECREASE_ATT_SPEED -> return (game.gameUpgrades[Type.DECREASE_ATT_FREQ]?.data?.level?: 0 >= 3)
             Type.GAIN_CASH -> return (game.gameUpgrades[Type.INCREASE_STARTING_CASH]?.data?.level?: 0 >= 4)
-            Type.INCREASE_CHIP_MEM_SPEED -> return (game.gameUpgrades[Type.INCREASE_CHIP_SHIFT_SPEED]?.data?.level?: 0 >= 4)
+            Type.INCREASE_CHIP_MEM_SPEED -> return (game.currentStage?.data?.level?:0 >= 9 )
             Type.INCREASE_CHIP_ACC_SPEED -> return false
             else -> return true
         }
@@ -464,6 +471,14 @@ class Hero(var game: Game, type: Type): Fadable {
                     fullName = "Dorothy Vaughan"
                     effect = "Decreases attacker speed"
                     vitae = game.resources.getString(R.string.vaughan)
+                    picture = BitmapFactory.decodeResource(game.resources, R.drawable.vaughan)
+                }
+                Type.INCREASE_REFUND ->
+                {
+                    name = "Tramiel"
+                    fullName = "Jack Tramiel"
+                    effect = "Increases refund when selling chips"
+                    vitae = game.resources.getString(R.string.tramiel)
                     picture = BitmapFactory.decodeResource(game.resources, R.drawable.vaughan)
                 }
                 else ->

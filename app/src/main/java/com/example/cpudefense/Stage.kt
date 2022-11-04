@@ -509,7 +509,7 @@ class Stage(var theGame: Game) {
                 createWave(40, 2, .300f, 2.2f)
 
                 data.chipsAllowed =
-                    setOf(Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.POWERUP, Chip.ChipUpgrades.SELL, Chip.ChipUpgrades.SHIFT)
+                    setOf(Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.POWERUP, Chip.ChipUpgrades.SHIFT)
                 rewardCoins = 3
             }
             9 -> {
@@ -1040,7 +1040,8 @@ class Stage(var theGame: Game) {
                 createWaveHex(24, 60, .12f, 1.4f, coins = 1)
                 createWaveHex(24, 80, .12f, 1.4f, coins = 0)
 
-                data.chipsAllowed = setOf(Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.POWERUP, Chip.ChipUpgrades.SELL, Chip.ChipUpgrades.SHIFT, Chip.ChipUpgrades.MEM)
+                data.chipsAllowed = setOf(Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.POWERUP, Chip.ChipUpgrades.SELL,
+                    Chip.ChipUpgrades.SHIFT, Chip.ChipUpgrades.MEM, Chip.ChipUpgrades.ACC)
                 rewardCoins = 3
                 type = Type.FINAL
             }

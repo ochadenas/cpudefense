@@ -23,7 +23,7 @@
     <string name="button_purchase">Purchase</string>
     <string name="level_entry">Level %d</string>
     <string name="level_selector">Level Selector</string>
-    <string name="query_reset">Do you want to reset all upgrades?</string>
+    <string name="query_reset">Do you want to reset all heroes?</string>
     <string name="no">No</string>
     <string name="yes">Yes</string>
 
@@ -130,6 +130,11 @@ He was a pionieer in the field of computer art and computer graphics, and develo
 
 Later, as manager at the NASA, she prepared for the introduction of electronic computers by teaching herself and her staff the FORTRAN programming language."
     </string>
+    <string name="tramiel">
+"As a child, Idek Tramielski survived Auschwitz. In 1947, he emigrated to the USA, where in 1954 he founded Commodore International, a company manufacturing typewriters. In 1982, Commodore presented the C64, the world's first real home computer.
+
+The record-selling C64 not only had an enormous 64 kiB of RAM, it also featured hi-res graphics, digital sound, a built-in BASIC interpreter, and two joystick ports. Countless persons made their first steps into the information age on good old C64."
+    </string>
     <string name="settings_title">Settings</string>
     <string name="settings_about">About</string>
     <string name="license">
@@ -139,11 +144,15 @@ This game is open source. Visit https://github.com/ochadenas/cpudefense for more
 The portraits of the Information Age Heroes are derived from works of the public domain.
 
 Original photos:
+  Alex Handy (CC BY-SA 2.0)
   Jacob Appelbaum (CC BY-SA 2.5)
   Rama (CC BY-SA 2.0 fr)
   Shervinafshar (CC BY-SA 3.0)
   Tony Bove (CC BY 3.0)
   Wolfgang Hunscher (CC BY-SA 3.0)
+
+Computer boards:
+  Bill Bertram (CC-BY 2.0)
 
 All other artwork:
   Oliver Chadenas (CC BY-SA 3.0)"</string>

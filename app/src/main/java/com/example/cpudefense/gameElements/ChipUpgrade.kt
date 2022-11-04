@@ -25,7 +25,7 @@ class ChipUpgrade(val chipToUpgrade: Chip, val type: Chip.ChipUpgrades,
                 return upgradePrice.toInt()
             }
             Chip.ChipUpgrades.SELL -> {
-                var refund = - chipToUpgrade.chipData.value * 0.8f
+                var refund = - chipToUpgrade.chipData.value * (game.gameUpgrades[Hero.Type.INCREASE_REFUND]?.getStrength() ?: 50f) * 0.01f
                 return refund.toInt()
             }
             else -> return Game.basePrice.getOrElse(type, { 100 } )
