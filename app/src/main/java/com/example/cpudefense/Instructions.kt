@@ -24,6 +24,10 @@ class Instructions(val game: Game, var stage: Int, var callback: (()->Unit)? ): 
             6 -> game.resources.getString(R.string.instr_6)
             7 -> game.resources.getString(R.string.instr_7)
             9 -> game.resources.getString(R.string.instr_8)
+            14 -> game.resources.getString(R.string.instr_9)
+            20 -> game.resources.getString(R.string.instr_10)
+            10 -> game.resources.getString(R.string.instr_11)
+
             else -> ""
         }
     }

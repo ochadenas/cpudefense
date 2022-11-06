@@ -20,7 +20,7 @@
     <string name="play_selected_level">Play selected level</string>
     <string name="button_marketplace">Heroes</string>
     <string name="button_refund">Reset all</string>
-    <string name="button_purchase">Purchase</string>
+    <string name="button_purchase">Hire</string>
     <string name="level_entry">Level %d</string>
     <string name="level_selector">Level Selector</string>
     <string name="query_reset">Do you want to reset all heroes?</string>
@@ -81,6 +81,29 @@ But be careful. The moving cryptocoin is stronger than ordinary attackers, and i
     <string name="instr_8">
 "You can sell existing chips and re-use their slot. Most, but not all of the information will be refunded."
     </string>
+    <string name="instr_9">
+"Let's introduce another chip. The MEM (for memory) chip takes a number and stores it safely away in memory.
+
+MEM chips are powerful because they can take out any attacker, but they are very slow."
+    </string>
+    <string name="instr_10">
+"The ACC chip is a bit more complex than the others, but it can be very effective against large numbers of attackers. It takes two numbers and combines them into one result.
+
+In its basic variant, ACC performs an ADD operation, that means, it adds the two numbers. If you upgrade the chip once, it will OR the input numbers. Upgrading twice makes the operation an AND.
+
+Example: If the numbers 0110 (that is 6) and 0011 (that is 3) enter the ACC chip, the result will be
+1001 (that is 9) for ADD [ACC +]
+0111 (that is 7) for OR [ACC v]
+0010 (that is 2) for AND [ACC &amp;].
+
+The advantage of ACC is that it is really fast."
+    </string>
+    <string name="instr_11">
+"Larger numbers are represented in hexadecimal. They are shown with a leading 'x'.
+
+In hex, you have digits from 0 to 9 and then from A to F. The hex number 0x0F equals 15, or 1111 in binary."
+    </string>
+
     <string name="turing">
 "Alan Turing was one of the most important persons in computer science. He created many of the foundations in theoretical computing, such as the Turing machine and the Turing test, but he is also famous for cracking the Enigma code in World War 2. His impact on the outcome of the war can hardly be overestimated.
 
@@ -152,7 +175,10 @@ Original photos:
   Wolfgang Hunscher (CC BY-SA 3.0)
 
 Computer boards:
+  Autopilot (CC BY-SA 4.0)
   Bill Bertram (CC-BY 2.0)
+  Oliver Chadenas (CC BY-SA 3.0)
+  Smial (FAL)
 
 All other artwork:
   Oliver Chadenas (CC BY-SA 3.0)"</string>

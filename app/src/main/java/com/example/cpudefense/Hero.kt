@@ -479,7 +479,7 @@ class Hero(var game: Game, type: Type): Fadable {
                     fullName = "Jack Tramiel"
                     effect = "Increases refund when selling chips"
                     vitae = game.resources.getString(R.string.tramiel)
-                    picture = BitmapFactory.decodeResource(game.resources, R.drawable.vaughan)
+                    picture = BitmapFactory.decodeResource(game.resources, R.drawable.tramiel)
                 }
                 else ->
                 {

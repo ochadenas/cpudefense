@@ -314,6 +314,7 @@ class Game(val gameActivity: MainGameActivity) {
         }
 
         currentStage = nextStage
+        background?.choose(level, 0.2f)
         takeLevelSnapshot()
     }
 

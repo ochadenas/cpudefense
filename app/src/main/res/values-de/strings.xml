@@ -18,7 +18,7 @@
     <string name="scoreboard_coins">Coins</string>
     <string name="selectLevel">Levelauswahl</string>
     <string name="play_selected_level">Spiele Level</string>
-    <string name="button_marketplace">Upgrades kaufen</string>
+    <string name="button_marketplace">Helden</string>
     <string name="level_entry">Level %d</string>
     <string name="level_selector">Level-Auswahl</string>
     <string name="button_refund">Zurücksetzen</string>
@@ -39,12 +39,7 @@ Das Invertieren einer 0 macht einen Angreifer tatsächlich gefährlicher. Pass a
 
 Durch Zerstören eines Angreifers erhält man etwas Information über das Virus. Damit lassen sich zusätzliche Chips kaufen oder bestehende aufwerten."
     </string>
-    <string name="instr_4">
-"Erinnerung: Im Dualsystem steht
-10 für 2
-11 für 3
-und so weiter."
-    </string>
+    <string name="instr_4">" Einige Tipps:\n \n Im Dualsystem steht \n 10 für 2,\n 11 für 3,\n 100 für 4 und so weiter.\n \n Versuche, Zahlen mit '1' am Anfang anzutippen. Dadurch wird die Zahl kleiner und der Level viel einfacher.\n \n Jeder Angreifer, der zur CPU durchkommt, kostet dich ein Leben, egal welche Zahl er hat. Du brauchst mindestens einen SUB Chip, um sie loszuwerden.\n  "</string>
     <string name="instr_5">
 "Im nächsten Level steht ein neuer Chip zur Verfügung. Die Bezeichnung 'SHR 1' heißt 'shift right by 1'.
 
@@ -52,13 +47,7 @@ Alle Binärziffern werden eine Stelle nach rechts geschoben. Die Stelle ganz lin
 
 Das Verschieben ist gleichbedeutend mit einer Division durch 2."
     </string>
-    <string name="instr_6">
-"Bei erfolgreichem Abschließen von Leveln gewinnt man Cryptocoins. Pro Level gibt es eine maximale Anzahl von Cryptocoins, die unten angezeigt werden. Jedes verlorene Leben reduziert die Anzahl der Cryptocoins.
-
-Falls beim ersten Durchgang nicht alle Coins gewonnen werden, kann der Level beliebig wiederholt werden. Wenn allerdings das Maximum erreicht wurde, erhält man keine weiteren Coins für diesen Level.
-
-Mit Cryptocoins können globale Updates mit großer Wirkung gekauft werden."
-    </string>
+    <string name="instr_6">"\nBei erfolgreichem Abschließen von Leveln gewinnt man wertvolle Cryptocoins. Damit kannst du Heldinnen und Helden des Informationszeitalters anheuern, die dir erhebliche Vorteile im Spiel bringen. \n\nPro Level gibt es eine maximale Anzahl von Cryptocoins, die unten angezeigt werden. Jedes verlorene Leben reduziert die Anzahl der Cryptocoins.\n\nFalls beim ersten Durchgang nicht alle Coins gewonnen werden, kann der Level beliebig wiederholt werden. Wenn allerdings das Maximum erreicht wurde, erhält man keine weiteren Coins für diesen Level.\n\n    "</string>
     <string name="instr_7">
 "Manchmal sieht man einen Cryptocoin, der sich mit den Angreifern bewegt. Er kann eingesammelt werden, indem er zerstört wird. Dies geht sogar mehrmals, wenn der Level wiederholt wird.
 
@@ -69,4 +58,11 @@ Vorsicht: Der laufende Cryptocoin ist stärker als die gewöhnlichen Angreifer. 
 
 Turing wurde aufgrund seiner Homosexualität massiv diskriminiert. Er nahm sich 1954 vermutlich das Leben."
     </string>
+    <string name="button_purchase">Anheuern</string>
+    <string name="query_reset">Möchtest du alle Heldinnen und Helden zurücksetzen?</string>
+    <string name="no">Nein</string>
+    <string name="instr_8">Du kannst Chips wieder verkaufen und so ihren Steckplatz neu verwenden.\n\nEin Teil der Information wird dir dabeu zurückerstattet.</string>
+    <string name="lovelace">"Ada Gräfin Lovelace gilt als die Erfinderin der Programmierung.\n\nZusammen mit Charles Babbage arbeitete sie mit seiner Rechenmaschine. Sie stellte ein Instruktionsset für die Berechnung der Bernoullizahlen auf, das vermutlich das erste formale Programm überhaupt war.\n\nLovelace erkannte, dass die Möglichkeiten einer programmierbaren Maschine weit über arithmetische Berechnungen hinaus gingen. Sie war zudem die erste, die zwischen symbolischen Konzepten (Software) und physischen Teilen (Hardware) unterschied.\n    "</string>
+    <string name="settings_title">Einstellungen</string>
+    <string name="settings_about">Info</string>
 </resources>

@@ -22,6 +22,10 @@ class Viewport
     var userScale = 1.0f // zoom factor chosen by the player
     var isValid = false
 
+    /* default grid size that fits on screen without scrolling */
+    val standardGridSizeX = 50
+    val standardGridSizeY = 60
+
     fun setScreenSize(width: Int, height: Int)
     {
         if (width == 0 || height == 0)
@@ -55,9 +59,9 @@ class Viewport
         val height = viewportHeight.toFloat()
         if (width == 0f || height == 0f)
             isValid = false
-        else if (gridSizeX>0 && gridSizeY>0) {
-            scaleX = viewportWidth.toFloat() / gridSizeX
-            scaleY = viewportHeight.toFloat() / gridSizeY
+        else if (standardGridSizeX>0 && standardGridSizeY>0) {
+            scaleX = viewportWidth.toFloat() / standardGridSizeX
+            scaleY = viewportHeight.toFloat() / standardGridSizeY
             scaleX *= userScale
             scaleY *= userScale
             isValid = true

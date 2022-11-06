@@ -110,7 +110,7 @@ class ChipUpgrade(val chipToUpgrade: Chip, val type: Chip.ChipUpgrades,
         canvas.drawBitmap(bitmap, null, actualRect, paintText)
 
         paintBackground.color = chipToUpgrade.theNetwork?.theGame?.resources?.getColor(R.color.network_background) ?: Color.BLACK
-        paintBackground.alpha = 40
+        paintBackground.alpha = 80
         paintBackground.style = Paint.Style.FILL
         canvas.drawRect(actualRect, paintBackground)
 
@@ -121,7 +121,9 @@ class ChipUpgrade(val chipToUpgrade: Chip, val type: Chip.ChipUpgrades,
         canvas.drawRect(actualRect, paintFrame)
 
         /* display the price */
-        // val priceRect = Rect(actualRect.right, actualRect.top, actualRect.right+48, actualRect.bottom)
+        val priceRect = Rect(actualRect.right, actualRect.top - 20, actualRect.right+50, actualRect.top)
+        paintBackground.alpha = 220
+        canvas.drawRect(priceRect, paintBackground)
         paintText.setTypeface(Typeface.create("sans-serif-condensed", Typeface.ITALIC))
         paintText.textSize = Game.Params.chipTextSize - 1
         paintText.color = if (canAfford()) paintFrame.color else Color.YELLOW

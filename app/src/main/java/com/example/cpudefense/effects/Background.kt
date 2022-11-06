@@ -8,8 +8,6 @@ import kotlin.math.cos
 
 class Background(val game: Game) {
     var bitmap: Bitmap? = null
-    var bitmap1: Bitmap? = null
-    var bitmap2: Bitmap? = null
     var angle = 0.0
     var x = 0.0
     var y = 0.0
@@ -25,9 +23,23 @@ class Background(val game: Game) {
     val deltaAlpha = 0.00008
     val ticksBeforeUpdate = 12
 
+    companion object {
+        var bitmapsLoaded = false
+        var available_bitmaps = mutableListOf<Bitmap>()
+    }
+
     init {
-        bitmap2 = BitmapFactory.decodeResource(game.resources, R.drawable.background_2)
-        choose(1, 0.2f)
+        if (bitmapsLoaded == false)
+        {
+            available_bitmaps.add(BitmapFactory.decodeResource(game.resources, R.drawable.background_1))
+            available_bitmaps.add(BitmapFactory.decodeResource(game.resources, R.drawable.background_2))
+            available_bitmaps.add(BitmapFactory.decodeResource(game.resources, R.drawable.background_3))
+            available_bitmaps.add(BitmapFactory.decodeResource(game.resources, R.drawable.background_4))
+            available_bitmaps.add(BitmapFactory.decodeResource(game.resources, R.drawable.background_5))
+            available_bitmaps.add(BitmapFactory.decodeResource(game.resources, R.drawable.background_6))
+            bitmapsLoaded = true
+        }
+        choose(4, 0.12f)
     }
 
     fun choose(number: Int, opacity: Float = 0.3f)
@@ -36,11 +48,8 @@ class Background(val game: Game) {
              * @param opacity sets the opacity, from 0.0 to 1.0
              */
     {
-        when (number)
-        {
-            2 -> bitmap = bitmap2
-            else -> bitmap = bitmap2
-        }
+        val n = number % available_bitmaps.size
+        this.bitmap = available_bitmaps[n]
         this.opacity = opacity
     }
 

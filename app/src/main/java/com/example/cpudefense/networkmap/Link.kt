@@ -27,8 +27,8 @@ class Link(val theNetwork: Network, var node1: Node, var node2: Node, var ident:
     var interPoint: GridCoord? = null
 
     var lengthOnGrid: Float = 0f
-    var connectorWidth = 4f
-    var connectorRadius = 6f
+    var connectorWidth = 6f
+    var connectorRadius = 8f
     val paintConnector = Paint()
     val paintBackground = Paint()
     var paintLineBackground = Paint()
