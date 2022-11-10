@@ -65,4 +65,5 @@ Turing wurde aufgrund seiner Homosexualität massiv diskriminiert. Er nahm sich 
     <string name="lovelace">"Ada Gräfin Lovelace gilt als die Erfinderin der Programmierung.\n\nZusammen mit Charles Babbage arbeitete sie mit seiner Rechenmaschine. Sie stellte ein Instruktionsset für die Berechnung der Bernoullizahlen auf, das vermutlich das erste formale Programm überhaupt war.\n\nLovelace erkannte, dass die Möglichkeiten einer programmierbaren Maschine weit über arithmetische Berechnungen hinaus gingen. Sie war zudem die erste, die zwischen symbolischen Konzepten (Software) und physischen Teilen (Hardware) unterschied.\n    "</string>
     <string name="settings_title">Einstellungen</string>
     <string name="settings_about">Info</string>
+    <string name="yes">Ja</string>
 </resources>

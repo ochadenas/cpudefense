@@ -307,7 +307,7 @@ class Hero(var game: Game, type: Type): Fadable {
             Type.INCREASE_CHIP_ACC_SPEED -> return 1.0f + level / 20f
             Type.DECREASE_ATT_FREQ -> return 1.0f - level * 0.05f
             Type.DECREASE_ATT_SPEED -> return 1.0f - level * 0.04f
-            Type.GAIN_CASH -> return (10f - level) * 20
+            Type.GAIN_CASH -> return (8f - level) * 20
             Type.INCREASE_REFUND -> return (50f + level * 10)
         }
     }

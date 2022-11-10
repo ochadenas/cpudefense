@@ -10,12 +10,12 @@ import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import kotlin.math.max
 
 class LevelSelectActivity : AppCompatActivity() {
     var levels: HashMap<Int, Stage.Summary>? = null
     var selectedLevelView: Button? = null
     var selectedLevel: Int = 0
-    var configDisableBackground = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,32 +36,39 @@ class LevelSelectActivity : AppCompatActivity() {
 
         if (levels == null)
             levels = hashMapOf(0 to Stage.Summary())  // create empty first level
-        for ((level, summary) in levels?.entries!!)
-        {
-            val levelEntryView = Button(this)
-            var textString = getString(R.string.level_entry).format(level)
-            val coinsMaxAvailable = summary.coinsAvailable + summary.coinsGot
-            if (coinsMaxAvailable > 0)
-                textString = textString.plus("\n%d of %d coins got.".format(summary.coinsGot, coinsMaxAvailable))
-            levelEntryView.text = textString
-            levelEntryView.textSize = 32f
-            levelEntryView.isAllCaps = false
-            levelEntryView.setPadding(20, 0, 0, 0)
-            levelEntryView.setBackgroundColor(Color.BLACK)
-            levelEntryView.setGravity(Gravity.START)
+        levels?.let {
+            val maxLevelCompleted = prefs?.getInt("MAXSTAGE", 0)  ?: 0
+            if (maxLevelCompleted < Game.maxLevelAvailable)
+                it[maxLevelCompleted + 1] = Stage.Summary()  // create an empty level if necessary
 
-            val thumbnail = Persistency(null).loadThumbnailOfLevel(prefs, level)
-            addLevelIcon(levelEntryView, thumbnail)
+            for ((level, summary) in it.entries)
+            {
+                val levelEntryView = Button(this)
+                var textString = getString(R.string.level_entry).format(level)
+                val coinsMaxAvailable = summary.coinsAvailable + summary.coinsGot
+                if (coinsMaxAvailable > 0)
+                    textString = textString.plus("\n%d of %d coins got.".format(summary.coinsGot, coinsMaxAvailable))
+                levelEntryView.text = textString
+                levelEntryView.textSize = 32f
+                levelEntryView.isAllCaps = false
+                levelEntryView.setPadding(20, 0, 0, 0)
+                levelEntryView.setBackgroundColor(Color.BLACK)
+                levelEntryView.setGravity(Gravity.START)
 
-            levelEntryView.setTextAppearance(this, R.style.TextAppearance_AppCompat_Medium)
-            if (summary.won)
-                levelEntryView.setTextColor(resources.getColor(R.color.text_green))
-            else
-                levelEntryView.setTextColor(resources.getColor(R.color.text_amber))
-            levelEntryView.isClickable = true
-            levelEntryView.setOnClickListener { onLevelSelect(levelEntryView, level) }
-            listView.addView(levelEntryView)
+                val thumbnail = Persistency(null).loadThumbnailOfLevel(prefs, level)
+                addLevelIcon(levelEntryView, thumbnail)
+
+                levelEntryView.setTextAppearance(this, R.style.TextAppearance_AppCompat_Medium)
+                if (summary.won)
+                    levelEntryView.setTextColor(resources.getColor(R.color.text_green))
+                else
+                    levelEntryView.setTextColor(resources.getColor(R.color.text_amber))
+                levelEntryView.isClickable = true
+                levelEntryView.setOnClickListener { onLevelSelect(levelEntryView, level) }
+                listView.addView(levelEntryView)
+            }
         }
+
     }
 
     fun addLevelIcon(view: TextView, icon: Bitmap?)

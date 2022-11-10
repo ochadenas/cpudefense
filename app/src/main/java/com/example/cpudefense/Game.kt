@@ -21,6 +21,8 @@ import java.util.concurrent.CopyOnWriteArrayList
 
 class Game(val gameActivity: MainGameActivity) {
     companion object Params {
+        val maxLevelAvailable: Int = 20
+
         const val defaultMainDelay = 70L
         val chipSize = GridCoord(6,3)
         const val viewportMargin = 10
@@ -120,8 +122,9 @@ class Game(val gameActivity: MainGameActivity) {
             additionalCashDelay = gameUpgrades[Hero.Type.GAIN_CASH]?.getStrength()?.toInt() ?: 0
             intermezzo.prepareLevel(state.startingLevel, true)
         }
-        else
+        else {
             intermezzo.prepareLevel(1, true)
+        }
     }
 
     fun continueGame()
@@ -273,12 +276,12 @@ class Game(val gameActivity: MainGameActivity) {
         val nextLevel = stage.data.level + 1
         if (summaryPerLevel[nextLevel] == null && stage.type != Stage.Type.FINAL)
             summaryPerLevel[nextLevel] = Stage.Summary()
+        setMaxStage(stage.data.level)
         if (stage.type == Stage.Type.FINAL)
         {
             intermezzo.endOfGame(stage.data.level, hasWon = true)
         }
         else {
-            setMaxStage(stage.data.level+1)
             intermezzo.prepareLevel(stage.data.level + 1, false)
         }
     }

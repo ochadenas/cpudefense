@@ -87,14 +87,14 @@ But be careful. The moving cryptocoin is stronger than ordinary attackers, and i
 MEM chips are powerful because they can take out any attacker, but they are very slow."
     </string>
     <string name="instr_10">
-"The ACC chip is a bit more complex than the others, but it can be very effective against large numbers of attackers. It takes two numbers and combines them into one result.
+"The accumulator chip (ACC) is a bit more complex than the others, but it can be very effective against large numbers of attackers. It takes two numbers and combines them into one result.
 
-In its basic variant, ACC performs an ADD operation, that means, it adds the two numbers. If you upgrade the chip once, it will OR the input numbers. Upgrading twice makes the operation an AND.
+In its basic variant, it adds the two numbers. If you upgrade the chip once, it will OR the input numbers. Upgrading twice makes the operation an AND.
 
 Example: If the numbers 0110 (that is 6) and 0011 (that is 3) enter the ACC chip, the result will be
-1001 (that is 9) for ADD [ACC +]
-0111 (that is 7) for OR [ACC v]
-0010 (that is 2) for AND [ACC &amp;].
+1001 (that is 9) when adding [ACC +]
+0111 (that is 7) using OR [ACC v]
+0010 (that is 2) using AND [ACC &amp;].
 
 The advantage of ACC is that it is really fast."
     </string>

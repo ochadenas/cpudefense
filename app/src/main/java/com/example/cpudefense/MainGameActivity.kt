@@ -77,6 +77,7 @@ class MainGameActivity : Activity() {
     private fun startNewGame()
     /** starts a new game from level 1, discarding all progress */
     {
+        theGame.setMaxStage(0)
         theGame.beginGame(resetProgress = true)
     }
 
