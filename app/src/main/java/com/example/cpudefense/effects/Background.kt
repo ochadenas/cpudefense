@@ -3,6 +3,7 @@ package com.example.cpudefense.effects
 import android.graphics.*
 import com.example.cpudefense.*
 import com.example.cpudefense.networkmap.Viewport
+import com.example.cpudefense.utils.setCenter
 import kotlin.math.sin
 import kotlin.math.cos
 

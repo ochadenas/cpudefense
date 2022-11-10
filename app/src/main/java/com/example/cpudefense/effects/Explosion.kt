@@ -4,7 +4,7 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Rect
 import com.example.cpudefense.Game
-import com.example.cpudefense.setCenter
+import com.example.cpudefense.utils.setCenter
 import java.util.concurrent.CopyOnWriteArrayList
 import kotlin.random.Random
 

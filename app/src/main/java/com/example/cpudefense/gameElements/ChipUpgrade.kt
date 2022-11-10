@@ -4,6 +4,8 @@ import android.graphics.*
 import android.view.MotionEvent
 import com.example.cpudefense.*
 import com.example.cpudefense.effects.Movable
+import com.example.cpudefense.utils.displayTextCenteredInRect
+import com.example.cpudefense.utils.setCenter
 
 class ChipUpgrade(val chipToUpgrade: Chip, val type: Chip.ChipUpgrades,
                   var posX: Int, var posY: Int, val color: Int): Movable

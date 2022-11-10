@@ -1,11 +1,10 @@
 package com.example.cpudefense.gameElements
 
 import android.graphics.*
-import android.hardware.camera2.params.BlackLevelPattern
-import com.example.cpudefense.displayTextCenteredInRect
+import com.example.cpudefense.utils.displayTextCenteredInRect
 import com.example.cpudefense.effects.Fadable
 import com.example.cpudefense.effects.Fader
-import com.example.cpudefense.inflate
+import com.example.cpudefense.utils.inflate
 
 class Button(val text: String, val textsize: Float = 36f, val color: Int = Color.GREEN, val style: Int = 0): Fadable
 {

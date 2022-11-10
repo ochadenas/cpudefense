@@ -5,8 +5,8 @@ import android.view.MotionEvent
 import com.example.cpudefense.Game
 import com.example.cpudefense.networkmap.Network
 import com.example.cpudefense.networkmap.Viewport
-import com.example.cpudefense.scale
-import com.example.cpudefense.setCenter
+import com.example.cpudefense.utils.scale
+import com.example.cpudefense.utils.setCenter
 
 class Cpu(network: Network, gridX: Int, gridY: Int): Chip(network, gridX, gridY)
 {

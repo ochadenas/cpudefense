@@ -3,6 +3,9 @@ package com.example.cpudefense.gameElements
 import android.graphics.*
 import com.example.cpudefense.*
 import com.example.cpudefense.networkmap.Viewport
+import com.example.cpudefense.utils.displayTextCenteredInRect
+import com.example.cpudefense.utils.inflate
+import com.example.cpudefense.utils.setCenter
 
 class ScoreBoard(val game: Game): GameElement() {
     var area = Rect()

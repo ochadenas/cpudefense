@@ -1,4 +1,4 @@
-package com.example.cpudefense
+package com.example.cpudefense.utils
 
 import android.graphics.*
 
@@ -56,7 +56,7 @@ inline fun Rect.setRightEdge(x: Int, y: Int)
 
 inline fun Rect.scale(f: Float): Rect
         /** grows or shrinks the rectangle by a factor (in place)
-         * @param scale factor by which the rectangle is to be scaled. Values less than 1.0
+         * @param f scale factor by which the rectangle is to be scaled. Values less than 1.0
          * means shrinking the rectangle.
          * @return the modified rectangle
          */
@@ -84,8 +84,8 @@ inline fun Rect.inflate(amount: Int): Rect
          * @return the modified rectangle
          */
 {
-    val height = (this.height()+2*amount).toInt()
-    val width = (this.width()+2*amount).toInt()
+    val height = (this.height()+2*amount)
+    val width = (this.width()+2*amount)
     this.set(centerX()-width/2, centerY()-height/2, centerX()+width/2, centerY()+height/2)
     return this
 }

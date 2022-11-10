@@ -7,6 +7,8 @@ import com.example.cpudefense.effects.Mover
 import com.example.cpudefense.networkmap.Network
 import com.example.cpudefense.networkmap.Node
 import com.example.cpudefense.networkmap.Viewport
+import com.example.cpudefense.utils.displayTextCenteredInRect
+import com.example.cpudefense.utils.setCenter
 import java.util.concurrent.CopyOnWriteArrayList
 
 open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gridX.toFloat(), gridY.toFloat())

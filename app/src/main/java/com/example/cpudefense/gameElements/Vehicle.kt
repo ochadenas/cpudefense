@@ -5,7 +5,7 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Rect
 import com.example.cpudefense.networkmap.*
-import com.example.cpudefense.setCenter
+import com.example.cpudefense.utils.setCenter
 
 open class Vehicle(val theNetwork: Network): GameElement() {
     data class Data

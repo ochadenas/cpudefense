@@ -35,7 +35,7 @@ class Intermezzo(var game: Game): GameElement(), Fadable {
             displayFireworks()
     }
 
-    override fun fadeDone(faderType: Fader.Type) {
+    override fun fadeDone(type: Fader.Type) {
         alpha = 255
         instructions = Instructions(game, level, { displayText() })
     }
@@ -72,7 +72,7 @@ class Intermezzo(var game: Game): GameElement(), Fadable {
         if (myArea.width()==0 || (Random.nextFloat() < 0.9f))
             return
         // choose random colour
-        var colour: Pair<Int, Int>
+        val colour: Pair<Int, Int>
         when (Random.nextInt(8))
         {
             0 -> colour = Pair(Color.YELLOW, Color.WHITE)
@@ -98,7 +98,7 @@ class Intermezzo(var game: Game): GameElement(), Fadable {
         val bottomMargin = 40
         buttonContinue = Button(game.resources.getString(R.string.button_continue), color = game.resources.getColor(R.color.text_green))
         val buttonTop = myArea.bottom - (buttonContinue?.myArea?.height() ?: 20) - bottomMargin
-            buttonContinue?.let {
+        buttonContinue?.let {
             Fader(game, it, Fader.Type.APPEAR, Fader.Speed.SLOW)
             it.myArea.set(50, buttonTop, 50+it.myArea.width(), myArea.bottom-bottomMargin)
         }

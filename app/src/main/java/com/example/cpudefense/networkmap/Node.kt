@@ -8,6 +8,8 @@ import android.view.MotionEvent
 import com.example.cpudefense.*
 import com.example.cpudefense.gameElements.GameElement
 import com.example.cpudefense.gameElements.Vehicle
+import com.example.cpudefense.utils.makeSquare
+import com.example.cpudefense.utils.setCenter
 
 open class Node(val theNetwork: Network?, x: Float, y: Float): GameElement()
 {

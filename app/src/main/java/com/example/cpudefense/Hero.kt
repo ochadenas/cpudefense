@@ -1,11 +1,15 @@
 package com.example.cpudefense
 
 import android.graphics.*
+import android.graphics.Bitmap.createBitmap
 import android.text.Layout
 import android.text.StaticLayout
 import android.text.TextPaint
 import com.example.cpudefense.effects.Fadable
 import com.example.cpudefense.effects.Fader
+import com.example.cpudefense.utils.displayTextCenteredInRect
+import com.example.cpudefense.utils.setCenter
+import com.example.cpudefense.utils.setTopLeft
 
 class Hero(var game: Game, type: Type): Fadable {
     /*
@@ -103,37 +107,36 @@ class Hero(var game: Game, type: Type): Fadable {
         myBitmap?.let { canvas.drawBitmap(it, null, areaOnScreen, paintRect) }
 
         // display hero picture
-        var paintHero = Paint()
+        val paintHero = Paint()
         paintHero.alpha = (255f * heroOpacity).toInt()
         hero.picture?.let { canvas.drawBitmap(it, null, heroArea, paintHero) }
 
         displayFrame(canvas)
     }
 
-    fun displayFrame(canvas: Canvas)
+    private fun displayFrame(canvas: Canvas)
     {
-        if (graphicalState == GraphicalState.TRANSIENT)
-        {
-            // draw animation
-            var thickness = transition
-            if (transition > 0.5)
-                thickness = 1.0f - transition
-            paintRect.strokeWidth = 2f + 10 * thickness
-            canvas.drawRect(areaOnScreen, paintRect)
+        when (graphicalState) {
+            GraphicalState.TRANSIENT -> {
+                // draw animation
+                var thickness = transition
+                if (transition > 0.5)
+                    thickness = 1.0f - transition
+                paintRect.strokeWidth = 2f + 10 * thickness
+                canvas.drawRect(areaOnScreen, paintRect)
+            }
+            GraphicalState.TRANSIENT_LEVEL_0 -> {
+                // draw animation for initial activation of the upgrade
+                canvas.drawRect(areaOnScreen, paintInactive)
+                displayLine(canvas, areaOnScreen.left, areaOnScreen.top, areaOnScreen.left, areaOnScreen.bottom)
+                displayLine(canvas, areaOnScreen.right, areaOnScreen.bottom, areaOnScreen.right, areaOnScreen.top)
+                displayLine(canvas, areaOnScreen.right, areaOnScreen.top, areaOnScreen.left, areaOnScreen.top)
+                displayLine(canvas, areaOnScreen.left, areaOnScreen.bottom, areaOnScreen.right, areaOnScreen.bottom)
+                // let hero picture appear
+                heroOpacity = transition
+            }
+            else -> canvas.drawRect(areaOnScreen, paintRect)
         }
-        else if (graphicalState == GraphicalState.TRANSIENT_LEVEL_0)
-        {
-            // draw animation for initial activation of the upgrade
-            canvas.drawRect(areaOnScreen, paintInactive)
-            displayLine(canvas, areaOnScreen.left, areaOnScreen.top, areaOnScreen.left, areaOnScreen.bottom)
-            displayLine(canvas, areaOnScreen.right, areaOnScreen.bottom, areaOnScreen.right, areaOnScreen.top)
-            displayLine(canvas, areaOnScreen.right, areaOnScreen.top, areaOnScreen.left, areaOnScreen.top)
-            displayLine(canvas, areaOnScreen.left, areaOnScreen.bottom, areaOnScreen.right, areaOnScreen.bottom)
-            // let hero picture appear
-            heroOpacity = transition
-        }
-        else
-            canvas.drawRect(areaOnScreen, paintRect)
     }
 
     fun displayHighlightFrame(canvas: Canvas)
@@ -156,14 +159,14 @@ class Hero(var game: Game, type: Type): Fadable {
         // }
     }
 
-    fun displayLine(canvas: Canvas, x0: Int, y0: Int, x1: Int, y1: Int)
+    private fun displayLine(canvas: Canvas, x0: Int, y0: Int, x1: Int, y1: Int)
     // draws a fraction of the line between x0,y0 and x1,y1
     {
-        var x: Float = x0 * (1-transition) + x1 * transition
-        var y = y0 * (1-transition) + y1 * transition
+        val x: Float = x0 * (1-transition) + x1 * transition
+        val y = y0 * (1-transition) + y1 * transition
         canvas.drawLine(x0.toFloat(), y0.toFloat(), x, y, paintRect)
         // draw the glow effect
-        var effectRect = Rect(0, 0, effectBitmap.width, effectBitmap.height)
+        val effectRect = Rect(0, 0, effectBitmap.width, effectBitmap.height)
         effectRect.setCenter(x.toInt(), y.toInt())
         canvas.drawBitmap(effectBitmap, null, effectRect, paintText)
     }
@@ -171,7 +174,7 @@ class Hero(var game: Game, type: Type): Fadable {
     private fun createBitmap(): Bitmap
     /** re-creates the bitmap without border, using a canvas positioned at (0, 0) */
     {
-        val bitmap = Bitmap.createBitmap( Game.cardWidth, Game.cardHeight, Bitmap.Config.ARGB_8888)
+        val bitmap = createBitmap( Game.cardWidth, Game.cardHeight, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)
 
         // render text used to indicate the effect of the upgrade, and calculate its position
@@ -187,10 +190,10 @@ class Hero(var game: Game, type: Type): Fadable {
         canvas.drawText(upgradeDesc, bounds.right + marginHorizontal, baseline, paintUpdate)
 
         // draw hero
-        var margin = 10
-        var heroPaintText = Paint(paintText)
+        val margin = 10
+        val heroPaintText = Paint(paintText)
         heroPaintText.color = if (data.level == 0) inactiveColor else activeColor
-        var heroTextRect = Rect(0, margin, Game.cardWidth, margin+40)
+        val heroTextRect = Rect(0, margin, Game.cardWidth, margin+40)
         heroTextRect.displayTextCenteredInRect(canvas, hero.fullName, heroPaintText)
 
         addLevelDecoration(canvas)
@@ -202,7 +205,7 @@ class Hero(var game: Game, type: Type): Fadable {
     {
         if (biography == null)
             biography = Biography(Rect(0,0,area.width(), area.height()))
-        biography?.let { it.createBiography(this) }
+        biography?.createBiography(this)
 
     }
 
@@ -211,7 +214,7 @@ class Hero(var game: Game, type: Type): Fadable {
         paintIndicator.color = if (data.level == 0) inactiveColor else activeColor
         for (i in 1 .. maxLevel)
         {
-            var rect = Rect(0,0, indicatorSize, indicatorSize)
+            val rect = Rect(0,0, indicatorSize, indicatorSize)
             rect.setTopLeft(0, (2*i-1)*indicatorSize)
             levelIndicator.add(rect)
             paintIndicator.style = if (i<=data.level) Paint.Style.FILL else Paint.Style.STROKE
@@ -395,8 +398,6 @@ class Hero(var game: Game, type: Type): Fadable {
         var fullName = ""
         var picture: Bitmap? = null
 
-        init { }
-
         fun setType()
         {
             when (type)
@@ -495,7 +496,7 @@ class Hero(var game: Game, type: Type): Fadable {
 
     inner class Biography(var myArea: Rect)
     {
-        var bitmap = Bitmap.createBitmap(myArea.width(), myArea.height(), Bitmap.Config.ARGB_8888)
+        var bitmap: Bitmap = createBitmap(myArea.width(), myArea.height(), Bitmap.Config.ARGB_8888)
         private var canvas = Canvas(bitmap)
 
         fun createBiography(selected: com.example.cpudefense.Hero?)

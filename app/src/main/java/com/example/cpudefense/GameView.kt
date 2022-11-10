@@ -54,10 +54,10 @@ class GameView(context: Context, val theGame: Game):
     @param h total height of screen
      */
     {
-        var scoreBoardHeight = (h*0.1).toInt()
-        if (scoreBoardHeight < Game.Params.minScoreBoardHeight)
+        val scoreBoardHeight = (h*0.1).toInt()
+        if (scoreBoardHeight < Game.minScoreBoardHeight)
             return Game.minScoreBoardHeight
-        else if (scoreBoardHeight > Game.Params.maxScoreBoardHeight)
+        else if (scoreBoardHeight > Game.maxScoreBoardHeight)
             return Game.maxScoreBoardHeight
         else
             return scoreBoardHeight
@@ -74,7 +74,7 @@ class GameView(context: Context, val theGame: Game):
     private fun setSize(w: Int, h: Int)
     {
         /* determine dimensions of the different game areas */
-        var viewportHeight = viewportHeight(h)
+        val viewportHeight = viewportHeight(h)
         theGame.viewport.setScreenSize(w, viewportHeight)
         theGame.scoreBoard.setSize(Rect(0, viewportHeight, w, viewportHeight+scoreBoardHeight(h)))
         theGame.speedControlPanel.setSize(Rect(0, 0, w, viewportHeight))
@@ -88,14 +88,12 @@ class GameView(context: Context, val theGame: Game):
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
-        if (gestureDetector != null)
-            this.gestureDetector!!.onTouchEvent(event)
+        this.gestureDetector.onTouchEvent(event)
         return true
     }
 
     override fun onDown(p0: MotionEvent?): Boolean {
-        if (p0 != null)
-            theGame.onDown(p0)
+        p0?.let { theGame.onDown(it) }
         return true
     }
 

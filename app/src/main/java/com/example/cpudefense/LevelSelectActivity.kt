@@ -10,7 +10,6 @@ import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import kotlin.math.max
 
 class LevelSelectActivity : AppCompatActivity() {
     var levels: HashMap<Int, Stage.Summary>? = null
@@ -53,7 +52,7 @@ class LevelSelectActivity : AppCompatActivity() {
                 levelEntryView.isAllCaps = false
                 levelEntryView.setPadding(20, 0, 0, 0)
                 levelEntryView.setBackgroundColor(Color.BLACK)
-                levelEntryView.setGravity(Gravity.START)
+                levelEntryView.gravity = Gravity.START
 
                 val thumbnail = Persistency(null).loadThumbnailOfLevel(prefs, level)
                 addLevelIcon(levelEntryView, thumbnail)
@@ -104,7 +103,7 @@ class LevelSelectActivity : AppCompatActivity() {
     {
         if (selectedLevel == 0)
             return
-        var intent = Intent(this, MainGameActivity::class.java)
+        val intent = Intent(this, MainGameActivity::class.java)
         intent.putExtra("START_ON_STAGE", selectedLevel)
         intent.putExtra("CONTINUE_GAME", false)
         startActivity(intent)

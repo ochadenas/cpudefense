@@ -5,7 +5,7 @@ import android.graphics.Paint
 import android.graphics.Rect
 import com.example.cpudefense.Game
 import com.example.cpudefense.networkmap.Viewport
-import com.example.cpudefense.setCenter
+import com.example.cpudefense.utils.setCenter
 
 class Cryptocoin(network: com.example.cpudefense.networkmap.Network, number: ULong = 1u, speed: Float = 1.0f):
     Attacker(network, Representation.BINARY, number, speed)

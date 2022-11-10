@@ -4,9 +4,8 @@ import android.graphics.Canvas
 import android.graphics.Rect
 import android.view.MotionEvent
 import com.example.cpudefense.Game
-import com.example.cpudefense.drawOutline
 import com.example.cpudefense.networkmap.Viewport
-import com.example.cpudefense.setCenter
+import com.example.cpudefense.utils.setCenter
 
 class SpeedControl(var game: Game) {
     var button1 = SpeedControlButton(game, SpeedControlButton.Type.FAST, this)
