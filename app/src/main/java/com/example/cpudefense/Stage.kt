@@ -1043,6 +1043,76 @@ class Stage(var theGame: Game) {
                 data.chipsAllowed = setOf(Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.POWERUP, Chip.ChipUpgrades.SELL,
                     Chip.ChipUpgrades.SHIFT, Chip.ChipUpgrades.MEM, Chip.ChipUpgrades.ACC)
                 rewardCoins = 3
+            }
+            21 -> {
+                initializeNetwork(70, 60)
+
+                createChip(5, 10, ident = 101, type = Chip.ChipType.ENTRY)
+                createChip(5, 20, ident = 102, type = Chip.ChipType.ENTRY)
+                createChip(5, 30, ident = 103, type = Chip.ChipType.ENTRY)
+                createChip(20, 10, 1)
+                createChip(40, 10, 2)
+                createChip(60, 10, 3)
+                createChip(70, 15, 4)
+                createChip(10, 20, 5)
+                createChip(30, 20, 6)
+                createChip(50, 20, 7)
+                createChip(20, 30, 8)
+                createChip(40, 30, 9)
+                createChip(60, 30, 10)
+                createChip(70, 30, 11)
+                createChip(30, 40, 12)
+                createChip(50, 40, 13)
+                createChip(10, 45, 14)
+                createChip(20, 50, 15)
+                createChip(40, 50, 16)
+                createChip(60, 50, ident=999, type=Chip.ChipType.CPU)
+
+                createLink(101, 1, 1, 0x0f)
+                createLink(1, 2, 2, 0x0f)
+                createLink(2, 3, 3, 0x0c)
+                createLink(3, 4, 4, 0x03)
+                createLink(102, 5, 5, 0x07)
+                createLink(5, 6, 6, 0x07)
+                createLink(6, 7, 7, 0x07)
+                createLink(2, 7, 8, 0x03)
+                createLink(7, 11, 9, 0x0e)
+                createLink(4, 11, 10, 0x07)
+                createLink(103, 8, 11, 0x0f)
+                createLink(8, 9, 12, 0x0f)
+                createLink(9, 10, 13, 0x06)
+                createLink(10, 11, 14, 0x06)
+                createLink(9, 13, 15, 0x06)
+                createLink(12, 14, 16, 0x0c)
+                createLink(13, 12, 17, 0x03)
+                createLink(11, 13, 18, 0x03)
+                createLink(14, 15, 19, 0x0c)
+                createLink(15, 16, 20, 0x0e)
+                createLink(16, 999, 21, 0x0e)
+
+
+
+                createTrack(listOf(1,2,3,4,10,18,17,16,19,20,21), 0)
+                createTrack(listOf(1,2,8,9,18,17,16,19,20,21), 1)
+                createTrack(listOf(5,6,7,9,18,17,16,19,20,21), 2)
+                createTrack(listOf(5,6,7,9,18,17,16,19,20,21), 3)
+                createTrack(listOf(11,12,15,17,16,19,20,21), 4)
+                createTrack(listOf(11,12,13,14,18,17,16,19,20,21), 5)
+
+                createWave(16, 3, .08f, 1.1f)
+                createWave(16, 5, .09f, 1.2f)
+                createWave(12, 7, .10f, 1.3f)
+                createWave(12, 9, .11f, 1.3f)
+                createWave(12, 20, .12f, 1.3f)
+                createWaveHex(16, 40, .12f, 1.4f, coins = 0)
+                createWaveHex(24, 60, .12f, 1.4f, coins = 0)
+                createWaveHex(24, 80, .12f, 1.4f, coins = 1)
+                createWaveHex(24, 100, .12f, 1.4f, coins = 0)
+                createWaveHex(24, 120, .12f, 1.4f, coins = 1)
+
+                data.chipsAllowed = setOf(Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.POWERUP, Chip.ChipUpgrades.SELL,
+                    Chip.ChipUpgrades.SHIFT, Chip.ChipUpgrades.MEM, Chip.ChipUpgrades.ACC)
+                rewardCoins = 3
                 type = Type.FINAL
             }
         }
