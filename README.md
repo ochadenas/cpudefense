@@ -1,6 +1,6 @@
 # Chip Defense
 
-*Chip defense* is a casual game for Android devices of the "tower defense" genre. It centres around a design of electric circuits and logical chips,
+*Chip defense* is a casual game for Android devices of the "tower defence" genre. It centres around a design of electric circuits and logical chips,
 evoking the good ol' days of 8 bit micro-processors.
 
 The attackers in this game are represented as bits and bytes. To defend the cpu against them, the player builds chips in designated slots. 
