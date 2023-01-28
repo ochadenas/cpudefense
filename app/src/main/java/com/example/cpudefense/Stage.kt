@@ -264,13 +264,19 @@ class Stage(var theGame: Game) {
             return null
     }
 
-    fun createNetwork(level: Int): Network
-    {
+    fun createNetwork(level: Int): Network {
         this.data.level = level
         waves.clear()
         type = Type.REGULAR
         data.chipsAllowed =
-            setOf(Chip.ChipUpgrades.ACC, Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.SHIFT, Chip.ChipUpgrades.POWERUP, Chip.ChipUpgrades.SELL, Chip.ChipUpgrades.MEM)
+            setOf(
+                Chip.ChipUpgrades.ACC,
+                Chip.ChipUpgrades.SUB,
+                Chip.ChipUpgrades.SHIFT,
+                Chip.ChipUpgrades.POWERUP,
+                Chip.ChipUpgrades.SELL,
+                Chip.ChipUpgrades.MEM
+            )
 
         when (level) {
             1 -> {
@@ -434,7 +440,12 @@ class Stage(var theGame: Game) {
                 createWave(15, 15, .050f, 1f, coins = 0)
 
                 data.chipsAllowed =
-                    setOf(Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.POWERUP, Chip.ChipUpgrades.SELL, Chip.ChipUpgrades.SHIFT)
+                    setOf(
+                        Chip.ChipUpgrades.SUB,
+                        Chip.ChipUpgrades.POWERUP,
+                        Chip.ChipUpgrades.SELL,
+                        Chip.ChipUpgrades.SHIFT
+                    )
                 rewardCoins = 3
             }
             7 -> {
@@ -544,7 +555,12 @@ class Stage(var theGame: Game) {
                 createWave(15, 15, .050f, 1f, coins = 0)
 
                 data.chipsAllowed =
-                    setOf(Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.POWERUP, Chip.ChipUpgrades.SELL, Chip.ChipUpgrades.SHIFT)
+                    setOf(
+                        Chip.ChipUpgrades.SUB,
+                        Chip.ChipUpgrades.POWERUP,
+                        Chip.ChipUpgrades.SELL,
+                        Chip.ChipUpgrades.SHIFT
+                    )
                 rewardCoins = 3
             }
             10 -> {
@@ -582,7 +598,12 @@ class Stage(var theGame: Game) {
                 createWaveHex(20, 40, .100f, 1.2f)
 
                 data.chipsAllowed =
-                    setOf(Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.POWERUP, Chip.ChipUpgrades.SELL, Chip.ChipUpgrades.SHIFT)
+                    setOf(
+                        Chip.ChipUpgrades.SUB,
+                        Chip.ChipUpgrades.POWERUP,
+                        Chip.ChipUpgrades.SELL,
+                        Chip.ChipUpgrades.SHIFT
+                    )
                 rewardCoins = 3
             }
             11 -> {
@@ -628,7 +649,12 @@ class Stage(var theGame: Game) {
                 createWave(15, 8, .05f, 1f)
 
                 data.chipsAllowed =
-                    setOf(Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.POWERUP, Chip.ChipUpgrades.SELL, Chip.ChipUpgrades.SHIFT)
+                    setOf(
+                        Chip.ChipUpgrades.SUB,
+                        Chip.ChipUpgrades.POWERUP,
+                        Chip.ChipUpgrades.SELL,
+                        Chip.ChipUpgrades.SHIFT
+                    )
                 rewardCoins = 3
 
             }
@@ -672,7 +698,12 @@ class Stage(var theGame: Game) {
                 createWave(10, 30, .075f, 1f)
 
                 data.chipsAllowed =
-                    setOf(Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.POWERUP, Chip.ChipUpgrades.SELL, Chip.ChipUpgrades.SHIFT)
+                    setOf(
+                        Chip.ChipUpgrades.SUB,
+                        Chip.ChipUpgrades.POWERUP,
+                        Chip.ChipUpgrades.SELL,
+                        Chip.ChipUpgrades.SHIFT
+                    )
                 rewardCoins = 3
             }
             13 -> {
@@ -716,7 +747,12 @@ class Stage(var theGame: Game) {
                 createWaveHex(12, 32, .05f, 1.2f)
 
                 data.chipsAllowed =
-                    setOf(Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.POWERUP, Chip.ChipUpgrades.SELL, Chip.ChipUpgrades.SHIFT)
+                    setOf(
+                        Chip.ChipUpgrades.SUB,
+                        Chip.ChipUpgrades.POWERUP,
+                        Chip.ChipUpgrades.SELL,
+                        Chip.ChipUpgrades.SHIFT
+                    )
                 rewardCoins = 3
             }
             14 -> {
@@ -760,7 +796,13 @@ class Stage(var theGame: Game) {
                 createWaveHex(15, 50, .09f, 1f, coins = 0)
                 createWaveHex(20, 80, .10f, 1f, coins = 0)
 
-                data.chipsAllowed = setOf(Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.POWERUP, Chip.ChipUpgrades.SELL, Chip.ChipUpgrades.SHIFT, Chip.ChipUpgrades.MEM)
+                data.chipsAllowed = setOf(
+                    Chip.ChipUpgrades.SUB,
+                    Chip.ChipUpgrades.POWERUP,
+                    Chip.ChipUpgrades.SELL,
+                    Chip.ChipUpgrades.SHIFT,
+                    Chip.ChipUpgrades.MEM
+                )
                 rewardCoins = 3
             }
             15 -> {
@@ -808,7 +850,13 @@ class Stage(var theGame: Game) {
                 createWave(15, 80, .09f, 1f, coins = 0)
                 createWaveHex(20, 100, .10f, 1f, coins = 0)
 
-                data.chipsAllowed = setOf(Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.POWERUP, Chip.ChipUpgrades.SELL, Chip.ChipUpgrades.SHIFT, Chip.ChipUpgrades.MEM)
+                data.chipsAllowed = setOf(
+                    Chip.ChipUpgrades.SUB,
+                    Chip.ChipUpgrades.POWERUP,
+                    Chip.ChipUpgrades.SELL,
+                    Chip.ChipUpgrades.SHIFT,
+                    Chip.ChipUpgrades.MEM
+                )
                 rewardCoins = 3
             }
             16 -> {
@@ -854,7 +902,13 @@ class Stage(var theGame: Game) {
                 createWaveHex(15, 50, .09f, 1f, coins = 0)
                 createWaveHex(20, 80, .10f, 1f, coins = 1)
 
-                data.chipsAllowed = setOf(Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.POWERUP, Chip.ChipUpgrades.SELL, Chip.ChipUpgrades.SHIFT, Chip.ChipUpgrades.MEM)
+                data.chipsAllowed = setOf(
+                    Chip.ChipUpgrades.SUB,
+                    Chip.ChipUpgrades.POWERUP,
+                    Chip.ChipUpgrades.SELL,
+                    Chip.ChipUpgrades.SHIFT,
+                    Chip.ChipUpgrades.MEM
+                )
                 rewardCoins = 3
             }
             17 -> {
@@ -899,7 +953,13 @@ class Stage(var theGame: Game) {
                 createWaveHex(16, 50, .09f, 1f, coins = 0)
                 createWaveHex(24, 80, .10f, 1f, coins = 1)
 
-                data.chipsAllowed = setOf(Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.POWERUP, Chip.ChipUpgrades.SELL, Chip.ChipUpgrades.SHIFT, Chip.ChipUpgrades.MEM)
+                data.chipsAllowed = setOf(
+                    Chip.ChipUpgrades.SUB,
+                    Chip.ChipUpgrades.POWERUP,
+                    Chip.ChipUpgrades.SELL,
+                    Chip.ChipUpgrades.SHIFT,
+                    Chip.ChipUpgrades.MEM
+                )
                 rewardCoins = 3
             }
             18 -> {
@@ -942,7 +1002,13 @@ class Stage(var theGame: Game) {
                 createWaveHex(24, 80, .11f, 1.4f, coins = 1)
                 createWaveHex(24, 127, .12f, 1.4f, coins = 0)
 
-                data.chipsAllowed = setOf(Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.POWERUP, Chip.ChipUpgrades.SELL, Chip.ChipUpgrades.SHIFT, Chip.ChipUpgrades.MEM)
+                data.chipsAllowed = setOf(
+                    Chip.ChipUpgrades.SUB,
+                    Chip.ChipUpgrades.POWERUP,
+                    Chip.ChipUpgrades.SELL,
+                    Chip.ChipUpgrades.SHIFT,
+                    Chip.ChipUpgrades.MEM
+                )
                 rewardCoins = 3
             }
             19 -> {
@@ -1000,7 +1066,13 @@ class Stage(var theGame: Game) {
                 createWaveHex(24, 80, .11f, 1.4f, coins = 1)
                 createWaveHex(24, 127, .12f, 1.4f, coins = 0)
 
-                data.chipsAllowed = setOf(Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.POWERUP, Chip.ChipUpgrades.SELL, Chip.ChipUpgrades.SHIFT, Chip.ChipUpgrades.MEM)
+                data.chipsAllowed = setOf(
+                    Chip.ChipUpgrades.SUB,
+                    Chip.ChipUpgrades.POWERUP,
+                    Chip.ChipUpgrades.SELL,
+                    Chip.ChipUpgrades.SHIFT,
+                    Chip.ChipUpgrades.MEM
+                )
                 rewardCoins = 3
             }
             20 -> {
@@ -1027,9 +1099,9 @@ class Stage(var theGame: Game) {
                 createLink(102, 2, 102, 0x0c)
                 createLink(103, 3, 103, 0x03)
 
-                createTrack(listOf(1,2,3,4,5,6,7), 0)
-                createTrack(listOf(102,3,4,5,6,7), 1)
-                createTrack(listOf(103,4,5,6,7), 2)
+                createTrack(listOf(1, 2, 3, 4, 5, 6, 7), 0)
+                createTrack(listOf(102, 3, 4, 5, 6, 7), 1)
+                createTrack(listOf(103, 4, 5, 6, 7), 2)
 
                 createWave(16, 3, .08f, 1.1f)
                 createWave(16, 5, .09f, 1.2f)
@@ -1040,8 +1112,10 @@ class Stage(var theGame: Game) {
                 createWaveHex(24, 60, .12f, 1.4f, coins = 1)
                 createWaveHex(24, 80, .12f, 1.4f, coins = 0)
 
-                data.chipsAllowed = setOf(Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.POWERUP, Chip.ChipUpgrades.SELL,
-                    Chip.ChipUpgrades.SHIFT, Chip.ChipUpgrades.MEM, Chip.ChipUpgrades.ACC)
+                data.chipsAllowed = setOf(
+                    Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.POWERUP, Chip.ChipUpgrades.SELL,
+                    Chip.ChipUpgrades.SHIFT, Chip.ChipUpgrades.MEM, Chip.ChipUpgrades.ACC
+                )
                 rewardCoins = 3
             }
             21 -> {
@@ -1066,7 +1140,7 @@ class Stage(var theGame: Game) {
                 createChip(10, 45, 14)
                 createChip(20, 50, 15)
                 createChip(40, 50, 16)
-                createChip(60, 50, ident=999, type=Chip.ChipType.CPU)
+                createChip(60, 50, ident = 999, type = Chip.ChipType.CPU)
 
                 createLink(101, 1, 1, 0x0f)
                 createLink(1, 2, 2, 0x0f)
@@ -1092,12 +1166,12 @@ class Stage(var theGame: Game) {
 
 
 
-                createTrack(listOf(1,2,3,4,10,18,17,16,19,20,21), 0)
-                createTrack(listOf(1,2,8,9,18,17,16,19,20,21), 1)
-                createTrack(listOf(5,6,7,9,18,17,16,19,20,21), 2)
-                createTrack(listOf(5,6,7,9,18,17,16,19,20,21), 3)
-                createTrack(listOf(11,12,15,17,16,19,20,21), 4)
-                createTrack(listOf(11,12,13,14,18,17,16,19,20,21), 5)
+                createTrack(listOf(1, 2, 3, 4, 10, 18, 17, 16, 19, 20, 21), 0)
+                createTrack(listOf(1, 2, 8, 9, 18, 17, 16, 19, 20, 21), 1)
+                createTrack(listOf(5, 6, 7, 9, 18, 17, 16, 19, 20, 21), 2)
+                createTrack(listOf(5, 6, 7, 9, 18, 17, 16, 19, 20, 21), 3)
+                createTrack(listOf(11, 12, 15, 17, 16, 19, 20, 21), 4)
+                createTrack(listOf(11, 12, 13, 14, 18, 17, 16, 19, 20, 21), 5)
 
                 createWave(16, 3, .08f, 1.1f)
                 createWave(16, 5, .09f, 1.2f)
@@ -1110,12 +1184,148 @@ class Stage(var theGame: Game) {
                 createWaveHex(24, 100, .12f, 1.4f, coins = 0)
                 createWaveHex(24, 120, .12f, 1.4f, coins = 1)
 
-                data.chipsAllowed = setOf(Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.POWERUP, Chip.ChipUpgrades.SELL,
-                    Chip.ChipUpgrades.SHIFT, Chip.ChipUpgrades.MEM, Chip.ChipUpgrades.ACC)
+                data.chipsAllowed = setOf(
+                    Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.POWERUP, Chip.ChipUpgrades.SELL,
+                    Chip.ChipUpgrades.SHIFT, Chip.ChipUpgrades.MEM, Chip.ChipUpgrades.ACC
+                )
                 rewardCoins = 3
+            }
+            22 -> {
+                initializeNetwork(50, 50)
+
+                createChip(10, 45, ident = 100, type = Chip.ChipType.ENTRY)
+                createChip(11, 40, 1)
+                createChip(8, 22, 2)
+                createChip(11, 10, 3)
+                createChip(20, 10, ident = 900, type = Chip.ChipType.CPU)
+
+                createChip(30, 45, ident = 101, type = Chip.ChipType.ENTRY)
+                createChip(30, 40, 4)
+                createChip(21, 40, 5)
+                createChip(18, 22, 6)
+                createChip(30, 25, ident = 901, type = Chip.ChipType.CPU)
+
+                createChip(30, 5, ident = 102, type = Chip.ChipType.ENTRY)
+                createChip(30, 10, 7)
+                createChip(40, 10, 8)
+                createChip(43, 22, 9)
+                createChip(40, 40, ident = 902, type = Chip.ChipType.CPU)
+
+                createLink(100, 1, 1)
+                createLink(1, 2, 2)
+                createLink(2, 3, 3)
+                createLink(3, 900, 4)
+                createLink(101, 4, 5)
+                createLink(4, 5, 6)
+                createLink(5, 6, 7)
+                createLink(6, 901, 8)
+                createLink(102, 7, 9)
+                createLink(7, 8, 10)
+                createLink(8, 9, 11)
+                createLink(9, 902, 12)
+
+                createTrack(listOf(1, 2, 3, 4), 0)
+                createTrack(listOf(5, 6, 7, 8), 1)
+                createTrack(listOf(9, 10, 11, 12), 2)
+
+                createWave(12, 2, .10f, 1.0f)
+                createWave(12, 3, .09f, 1.0f)
+                createWave(12, 4, .08f, 1.0f)
+                createWave(12, 6, .09f, 0.9f)
+                createWave(12, 8, .09f, 0.9f)
+                createWave(12, 12, .09f, 0.9f)
+                createWave(12, 16, .10f, 0.9f)
+                createWave(12, 24, .11f, 0.8f)
+                createWave(12, 32, .12f, 0.8f)
+                createWave(12, 48, .14f, 0.9f)
+
+                rewardCoins = 3
+
                 type = Type.FINAL
             }
-        }
+            /**
+             * Template for the creation of new stage data.
+             * Copy and uncomment this when adding your own levels.
+
+            22 ->  // number of the level. Must be in increasing order.
+            {
+                // Define the size of the virtual grid where all elements (nodes) will be placed.
+                // All chip coordinates will refer to this grid.
+                // A standard size is 50x50. Bigger grids are allowed, they will require scrolling.
+                initializeNetwork(70, 60)
+
+                // Define the chips (nodes) and their positions on the virtual grid.
+                // Each chip must have a unique ident.
+                // The type may be ENTRY, CPU or empty for standard slots.
+                // You should have at least one entry and at least one CPU.
+                // Multiple entries and multiple CPUs are allowed.
+                createChip(5, 10, ident = 101, type = Chip.ChipType.ENTRY)
+                createChip(20, 10, 1)
+                createChip(40, 20, 2)
+                createChip(40, 50, ident = 999, type = Chip.ChipType.CPU)
+
+                // Define the connections between the chips.
+                // 'from' and 'to' refer to the chip idents defined above.
+                // Each link must have its own unique ident.
+                //
+                // By default, connections have 4 'copper lanes'. The 'mask' parameter can be
+                // used to hide one or more of them to avoid visual crossing of the lanes
+                // in order to prettify the layout and make it more circuit-like.
+                // It has no influence on gameplay.
+                // The mask is applied by bitwise AND: 0x0f shows all lanes, 0x0e suppresses the
+                // right-most, 0x07 the left-most, and so forth.
+                createLink(101, 1, 1 )
+                createLink(1, 2, 2 )
+                createLink(2, 999, 3, 0x0c)
+
+                // Define the track(s) that are used by the attackers.
+                // A track is just a sequence of connections. The first link should start on
+                // an ENTRY node, the last one should end on a CPU node.
+                // You must ensure that the links  are connected to each other,
+                // i.e. that the track is logically possible
+                // in your grid layout. Otherwise, you will see attackers appearing out of nowhere.
+                // It is not possible to include the same link twice in a track, although you
+                // can pass through the same node more than once using different links.
+                //
+                // An arbitrary number of tracks can be defined, and they must have idents
+                // 0, 1, 2, ... in continuous order. An attacker will chose one of the tracks with
+                // equal probability. If you want a higher probability for one of the tracks, just
+                // copy it multiple times.
+                createTrack(listOf(1, 2, 3), 0)
+                createTrack(listOf(1, 2, 3), 1)
+
+                // Define the waves of attackers. The waves are executed subsequently in the order
+                // given. Preferably they should increase in strength.
+                //
+                // There will be attackerCount attackers in the wave. They will have a random
+                // strength ranging from 0 to attackerStrength. Higher attackerFrequency and
+                // attackerSpeed will make the wave considerably more dagerous.
+                // Optionally, a number of travelling coins can be defined that will come with the
+                // wave; use this sparsely to avoid coin inflation (not more than 1 per level).
+                //
+                // Attackers are shown in binary as long as their number is not too big, otherwise
+                // in hexadecimal. The alternative method createWaveHex only creates hex attackers,
+                // even for small numbers.
+                createWave(16, 3, .08f, 1.1f)
+                createWaveHex(24, 80, .12f, 1.4f, coins = 1)
+
+                // You can limit the types of chips that can be bought by the player.
+                // If none is given, all chip types are allowed, even future ones.
+                data.chipsAllowed = setOf(
+                    Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.POWERUP, Chip.ChipUpgrades.SELL,
+                    Chip.ChipUpgrades.SHIFT, Chip.ChipUpgrades.MEM, Chip.ChipUpgrades.ACC
+                )
+
+                // Number of coins that are rewarded for the completion of a level. A good number is 3.
+                rewardCoins = 3
+
+                // Marker for the last level in the current implementation. Remove this when adding
+                // more levels.
+                // Keep in mind that you must change the value of Game.maxLevelAvailable, too.
+                type = Type.FINAL
+             }
+             */
+            }
         data.maxWaves = waves.size
         return network
     }
