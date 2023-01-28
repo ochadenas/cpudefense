@@ -13,7 +13,7 @@ class SettingsActivity : AppCompatActivity()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
-        findViewById<TextView>(R.id.about_text_view)?.setMovementMethod(ScrollingMovementMethod())
+        findViewById<TextView>(R.id.about_text_view)?.movementMethod = ScrollingMovementMethod()
         loadPrefs()
     }
 

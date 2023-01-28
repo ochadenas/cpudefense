@@ -4,7 +4,6 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.View
-import android.widget.Switch
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -18,33 +17,33 @@ class WelcomeActivity : AppCompatActivity()
         val info = packageManager.getPackageInfo(this.packageName, PackageManager.GET_ACTIVITIES)
         val versionName = "Version %s ".format(info.versionName)
         val view = findViewById<TextView>(R.id.versionText)
-        view?.setText(versionName)
+        view?.text = versionName
     }
 
     override fun onActivityReenter(resultCode: Int, data: Intent?) {
         super.onActivityReenter(resultCode, data)
     }
 
-    fun resumeGame(v: View)
+    fun resumeGame(@Suppress("UNUSED_PARAMETER") v: View)
     {
         val intent = Intent(this, MainGameActivity::class.java)
         intent.putExtra("RESUME_GAME", true)
         startActivity(intent)
     }
 
-    fun startLevelSelection(v: View)
+    fun startLevelSelection(@Suppress("UNUSED_PARAMETER") v: View)
     {
         val intent = Intent(this, LevelSelectActivity::class.java)
         startActivity(intent)
     }
 
-    fun displaySettingsDialog(v: View)
+    fun displaySettingsDialog(@Suppress("UNUSED_PARAMETER") v: View)
     {
         val intent = Intent(this, SettingsActivity::class.java)
         startActivity(intent)
     }
 
-    fun startNewGame(v: View)
+    fun startNewGame(@Suppress("UNUSED_PARAMETER") v: View)
     {
         val builder = AlertDialog.Builder(this)
         builder.setMessage("Really start new game? This will reset all your progress.")

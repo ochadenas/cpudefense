@@ -52,7 +52,7 @@ class ScoreBoard(val game: Game): GameElement() {
     }
 
     override fun display(canvas: Canvas, viewport: Viewport) {
-        var paint = Paint()
+        val paint = Paint()
         paint.color = Color.BLACK
         paint.style = Paint.Style.FILL
         canvas.drawRect(area, paint)
@@ -61,7 +61,7 @@ class ScoreBoard(val game: Game): GameElement() {
         paint.strokeWidth = 4f
         canvas.drawRect(area, paint)
 
-        if (game.currentStage?.data?.level ?: 3 > 2)
+        if ((game.currentStage?.data?.level ?: 3) > 2)
             score.display(canvas)
         waves.display(canvas)
         lives.display(canvas)
@@ -98,12 +98,12 @@ class ScoreBoard(val game: Game): GameElement() {
         fun recreateBitmap()
         {
             bitmap = Bitmap.createBitmap(area.width(), area.height(), Bitmap.Config.ARGB_8888)
-            var canvas = Canvas(bitmap)
-            var rect = Rect(0, divider, area.width(), area.height())
-            var text = informationToString(game.state.cash)
-            var paint = Paint()
+            val canvas = Canvas(bitmap)
+            val rect = Rect(0, divider, area.width(), area.height())
+            val text = informationToString(game.state.cash)
+            val paint = Paint()
             paint.color = myColor
-            paint.setTypeface(Typeface.create("sans-serif", Typeface.NORMAL))
+            paint.typeface = Typeface.create("sans-serif", Typeface.NORMAL)
             paint.textSize = Game.scoreTextSize
             rect.displayTextCenteredInRect(canvas, text, paint)
             displayHeader(canvas, Rect(0,0, area.width(), area.height()), game.resources.getString(R.string.scoreboard_inf))
@@ -141,7 +141,7 @@ class ScoreBoard(val game: Game): GameElement() {
             var canvas = Canvas(bitmap)
             displayHeader(canvas, Rect(0,0, area.width(), area.height()), game.resources.getString(R.string.scoreboard_waves))
             var rect = Rect(0, divider, area.width(), area.height())
-            paint.setTypeface(Typeface.create("sans-serif", Typeface.NORMAL))
+            paint.typeface = Typeface.create("sans-serif", Typeface.NORMAL)
             paint.style = Paint.Style.FILL
             paint.color = myColor
             paint.textSize = Game.scoreTextSize
@@ -151,8 +151,7 @@ class ScoreBoard(val game: Game): GameElement() {
         }
     }
 
-    inner class Lives()
-    {
+    inner class Lives {
         var area = Rect()
         var divider = 0
 
@@ -186,7 +185,7 @@ class ScoreBoard(val game: Game): GameElement() {
             val deltaX = 14 + sizeLedX
             val ledAreaHeight = sizeLedY + deltaX
             val ledAreaWidth = (game.state.currentMaxLives + 1) * deltaX
-            var ledArea = Rect(0, 0, ledAreaWidth, ledAreaHeight)
+            val ledArea = Rect(0, 0, ledAreaWidth, ledAreaHeight)
             // var ledArea = Rect(0, divider+(area.height()-ledAreaHeight)/2, ledAreaWidth, ledAreaHeight)
             // determine the exact position of the LEDs. This is a bit frickelig
             ledArea.setCenter(area.width()/2, (area.height()+divider)/2)
@@ -198,9 +197,9 @@ class ScoreBoard(val game: Game): GameElement() {
             paint.color = resources.getColor(R.color.led_panel)
             canvas.drawRect(ledArea, paint)
             for (i in 1..game.state.currentMaxLives) {
-                var rect = Rect(0, 0, sizeLedX, sizeLedY)
+                val rect = Rect(0, 0, sizeLedX, sizeLedY)
                 rect.setCenter(ledArea.right - i * deltaX, ledArea.centerY())
-                var glowRect = Rect(rect).inflate(3)
+                val glowRect = Rect(rect).inflate(3)
                 paint.color =
                     if (i <= game.state.lives) resources.getColor(R.color.led_green_glow)
                     else resources.getColor(R.color.led_red_glow)
@@ -214,7 +213,7 @@ class ScoreBoard(val game: Game): GameElement() {
         }
     }
 
-    inner class Coins() {
+    inner class Coins {
         var area = Rect()
         var divider = 0
 
@@ -230,7 +229,7 @@ class ScoreBoard(val game: Game): GameElement() {
         }
 
         fun display(canvas: Canvas) {
-            var coins = game.state.coinsInLevel + game.state.coinsExtra
+            val coins = game.state.coinsInLevel + game.state.coinsExtra
             if (coins <= 0)
                 return
             if (coins != lastValue) {
@@ -243,15 +242,15 @@ class ScoreBoard(val game: Game): GameElement() {
 
         fun recreateBitmap(value: Int) {
             bitmap = Bitmap.createBitmap(area.width(), area.height(), Bitmap.Config.ARGB_8888)
-            var canvas = Canvas(bitmap)
+            val canvas = Canvas(bitmap)
 
-            var y = (divider + area.height()) / 2
+            val y = (divider + area.height()) / 2
             val deltaX = if (value > 1)
                 (area.width() - (2 * Game.coinSizeOnScoreboard)) / (value - 1)
             else 0
 
-            var x = area.width() - Game.coinSizeOnScoreboard
-            var rect = Rect(0, 0, 50, 50)
+            val x = area.width() - Game.coinSizeOnScoreboard
+            val rect = Rect(0, 0, 50, 50)
             val paint = Paint()
             for (i in 0 until value) {
                 rect.setCenter(x - i * deltaX, y)
@@ -266,7 +265,7 @@ class ScoreBoard(val game: Game): GameElement() {
         rect.bottom = divider
         val paint = Paint()
         paint.color = game.resources.getColor(R.color.scoreboard_text)
-        paint.setTypeface(Typeface.create("sans-serif", Typeface.NORMAL))
+        paint.typeface = Typeface.create("sans-serif", Typeface.NORMAL)
         paint.textSize = Game.scoreHeaderSize
         rect.displayTextCenteredInRect(canvas, text, paint)
     }

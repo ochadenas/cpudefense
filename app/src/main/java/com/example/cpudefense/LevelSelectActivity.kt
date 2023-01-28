@@ -99,7 +99,7 @@ class LevelSelectActivity : AppCompatActivity() {
         selectedLevelView?.setBackgroundResource(R.drawable.button_border)
     }
 
-    fun startGame(v: View)
+    fun startGame(@Suppress("UNUSED_PARAMETER") v: View)
     {
         if (selectedLevel == 0)
             return

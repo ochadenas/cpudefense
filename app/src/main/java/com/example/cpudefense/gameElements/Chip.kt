@@ -221,13 +221,12 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
             return
         if (attacker.immuneTo == this)
             return
-        var kill = false
         cooldownTimer = (chipData.cooldown / network.theGame.globalSpeedFactor).toInt()
         if (chipData.type == ChipType.ACC)
             processInAccumulator(attacker)
         else {
-            kill = attacker.onShot(chipData.type, chipData.power)
-            if (kill == true)
+            val kill = attacker.onShot(chipData.type, chipData.power)
+            if (kill)
                 attacker.remove()
         }
     }
@@ -289,8 +288,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
 
     private fun createBitmap(text: String): Bitmap?
     {
-        var bitmap: Bitmap? = null
-        bitmap = actualRect?.let {
+        val bitmap: Bitmap? = actualRect?.let {
             val bitmap = Bitmap.createBitmap(it.width(), it.height(), Bitmap.Config.ARGB_8888)
             val rect = Rect(0, 0, bitmap.width, bitmap.height)
             val canvas = Canvas(bitmap)
@@ -377,7 +375,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
                     this, upgrade,
                     rect.centerX(), rect.centerY(), Color.WHITE
                 )
-                val pos: Pair<Float, Float> = positions.get(i) ?: Pair(1.0f, 1.0f)
+                val pos: Pair<Float, Float> = positions[i]
                 Mover(
                     network.theGame, chipUpgrade, rect.centerX(), rect.centerY(),
                     posX + (pos.first * factorX).toInt(), posY + (pos.second * factorY).toInt()

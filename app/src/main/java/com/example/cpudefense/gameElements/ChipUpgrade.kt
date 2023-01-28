@@ -22,12 +22,12 @@ class ChipUpgrade(val chipToUpgrade: Chip, val type: Chip.ChipUpgrades,
         when (type){
             Chip.ChipUpgrades.POWERUP -> {
                 var upgradePrice = chipToUpgrade.chipData.value * 1.5
-                var discount = game.gameUpgrades[Hero.Type.DECREASE_UPGRADE_COST]?.getStrength() ?: 0f
+                val discount = game.gameUpgrades[Hero.Type.DECREASE_UPGRADE_COST]?.getStrength() ?: 0f
                 upgradePrice = upgradePrice * (100f - discount) / 100
                 return upgradePrice.toInt()
             }
             Chip.ChipUpgrades.SELL -> {
-                var refund = - chipToUpgrade.chipData.value * (game.gameUpgrades[Hero.Type.INCREASE_REFUND]?.getStrength() ?: 50f) * 0.01f
+                val refund = - chipToUpgrade.chipData.value * (game.gameUpgrades[Hero.Type.INCREASE_REFUND]?.getStrength() ?: 50f) * 0.01f
                 return refund.toInt()
             }
             else -> return Game.basePrice.getOrElse(type, { 100 } )
@@ -98,12 +98,12 @@ class ChipUpgrade(val chipToUpgrade: Chip, val type: Chip.ChipUpgrades,
             else -> "?"
         }
         val bitmap = Bitmap.createBitmap(actualRect.width(), actualRect.height(), Bitmap.Config.ARGB_8888)
-        var rect = Rect(0, 0, bitmap.width, bitmap.height)
+        val rect = Rect(0, 0, bitmap.width, bitmap.height)
 
         paintFrame.color = if (type== Chip.ChipUpgrades.SELL) Color.RED else color
 
         val newCanvas = Canvas(bitmap)
-        paintText.textSize = Game.Params.chipTextSize
+        paintText.textSize = Game.chipTextSize
         paintText.alpha = 255
         paintText.setTypeface(Typeface.create("sans-serif-condensed", Typeface.BOLD))
         paintText.textAlign = Paint.Align.CENTER
@@ -126,8 +126,8 @@ class ChipUpgrade(val chipToUpgrade: Chip, val type: Chip.ChipUpgrades,
         val priceRect = Rect(actualRect.right, actualRect.top - 20, actualRect.right+50, actualRect.top)
         paintBackground.alpha = 220
         canvas.drawRect(priceRect, paintBackground)
-        paintText.setTypeface(Typeface.create("sans-serif-condensed", Typeface.ITALIC))
-        paintText.textSize = Game.Params.chipTextSize - 1
+        paintText.typeface = Typeface.create("sans-serif-condensed", Typeface.ITALIC)
+        paintText.textSize = Game.chipTextSize - 1
         paintText.color = if (canAfford()) paintFrame.color else Color.YELLOW
         canvas.drawText(game.scoreBoard.informationToString(price), actualRect.right.toFloat()-4, actualRect.top.toFloat()+6, paintText)
     }

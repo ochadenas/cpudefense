@@ -35,9 +35,9 @@ open class Attacker(network: Network, type: Representation = Representation.BINA
     var attackerData = Data( representation = type, number = number, binaryDigits = 0, hexDigits = 0,
         bits = 0, vehicle = super.data
     )
-    var numberBitmap: Bitmap = Bitmap.createBitmap(100, 32, Bitmap.Config.ARGB_8888)
+    private var numberBitmap: Bitmap = Bitmap.createBitmap(100, 32, Bitmap.Config.ARGB_8888)
     var actualRect = Rect()
-    var oldNumber: ULong = 0U
+    private var oldNumber: ULong = 0U
     var oldNumberBitmap: Bitmap? = null
     var immuneTo: Chip? = null
     var animationCount = 0
@@ -219,7 +219,6 @@ open class Attacker(network: Network, type: Representation = Representation.BINA
 
     override fun update() {
         super.update()
-        val link = onLink
         endNode?.notify(this, distanceToNextNode)
         startNode?.notify(this, -distanceFromLastNode)
 
