@@ -260,6 +260,7 @@ class Game(val gameActivity: MainGameActivity) {
             else {
                 onStageCleared(it)
                 gameActivity.saveState()
+                gameActivity.setGameActivityStatus(MainGameActivity.GameActivityStatus.BETWEEN_LEVELS)
             }
         }
     }
@@ -293,7 +294,7 @@ class Game(val gameActivity: MainGameActivity) {
             quitGame()   // should not happen, but better handle this
             return
         }
-
+        gameActivity.setGameActivityStatus(MainGameActivity.GameActivityStatus.PLAYING)
         val extraLives = gameUpgrades[Hero.Type.ADDITIONAL_LIVES]?.getStrength()
         state.currentMaxLives = state.maxLives + (extraLives ?: 0f).toInt()
         state.lives = state.currentMaxLives
@@ -347,9 +348,11 @@ class Game(val gameActivity: MainGameActivity) {
     }
 
     fun setMaxStage(currentStage: Int)
+    /** when completing a level, record the current number as MAXSTAGE in the SharedPrefs
+     * @param currentStage number of the level successfully completed */
     {
         val prefs = gameActivity.getSharedPreferences(gameActivity.getString(R.string.pref_filename), Context.MODE_PRIVATE)
-        val maxStage = prefs.getInt("MAXSTAGE", 1)
+        val maxStage = prefs.getInt("MAXSTAGE", 0)
         with (prefs.edit())
         {
             putInt("LASTSTAGE", currentStage)

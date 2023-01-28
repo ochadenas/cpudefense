@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">ChipDefense</string>
-    <string name="startGame">Nouveau jeu</string>
-    <string name="button_continue">Reprendre le jeu</string>
+    <string name="button_startGame">Nouveau jeu</string>
+    <string name="button_resume">Reprendre le jeu</string>
     <string name="scoreboard_waves">Vague</string>
     <string name="scoreboard_inf">Inf</string>
     <string name="scoreboard_status">État</string>
@@ -26,5 +26,6 @@
     <string name="yes">Oui</string>
     <string name="button_purchase">Recruter</string>
     <string name="query_reset">Remettre à zéro tous les héros et héroïnes ?</string>
+    <string name="settings_title">Réglages</string>
     <string name="settings_about">A propos de ...</string>
 </resources>

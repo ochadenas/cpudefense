@@ -88,7 +88,7 @@ class Marketplace(val game: Game): GameElement()
     private fun createButton()
     {
         val bottomMargin = 40
-        buttonFinish = Button(game.resources.getString(R.string.button_continue), style = 1)
+        buttonFinish = Button(game.resources.getString(R.string.button_resume), style = 1)
         buttonFinish?.let {
             Fader(game, it, Fader.Type.APPEAR, Fader.Speed.SLOW)
             it.myArea.setBottomRight(myArea.right-50, myArea.bottom-bottomMargin)

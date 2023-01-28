@@ -18,6 +18,9 @@ class MainGameActivity : Activity() {
     private var resumeGame = true
     var gameIsRunning = true  // flag used to keep the threads running. Set to false when leaving activity
 
+    enum class GameActivityStatus { PLAYING, BETWEEN_LEVELS, UNDETERMINED }
+    var status: GameActivityStatus = GameActivityStatus.UNDETERMINED
+
     override fun onCreate(savedInstanceState: Bundle?)
     {
         super.onCreate(savedInstanceState)
@@ -146,6 +149,19 @@ class MainGameActivity : Activity() {
             theGameView.theEffects?.updateGraphicalEffects()
             GlobalScope.launch { delay(effectsDelay); updateGraphicalEffects() }
         }
+    }
+
+    fun setGameActivityStatus(status: GameActivityStatus)
+    {
+        val prefs = getSharedPreferences(getString(R.string.pref_filename), MODE_PRIVATE)
+        val editor = prefs.edit()
+        when (status)
+        {
+            GameActivityStatus.PLAYING -> editor.putString("STATUS", "running")
+            GameActivityStatus.BETWEEN_LEVELS -> editor.putString("STATUS", "complete")
+            else -> editor.putString("STATUS", "complete")
+        }
+        editor.apply()
     }
 
     fun saveState()
