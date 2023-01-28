@@ -61,7 +61,8 @@ class Intermezzo(var game: Game): GameElement(), Fadable {
                 lines.add(game.resources.getString(R.string.cleared))
                 if (coinsGathered>0)
                     lines.add(game.resources.getString(R.string.coins_gathered).format(coinsGathered))
-                lines.add(game.resources.getString(R.string.next_stage).format(level))
+                if (level <= Game.maxLevelAvailable)
+                    lines.add(game.resources.getString(R.string.next_stage).format(level))
             }
         }
         typewriter = Typewriter(game, myArea, lines, { onTypewriterDone() })

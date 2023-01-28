@@ -289,6 +289,11 @@ class Game(val gameActivity: MainGameActivity) {
 
     fun startNextStage(level: Int)
     {
+        if (level > Game.maxLevelAvailable) {
+            quitGame()   // should not happen, but better handle this
+            return
+        }
+
         val extraLives = gameUpgrades[Hero.Type.ADDITIONAL_LIVES]?.getStrength()
         state.currentMaxLives = state.maxLives + (extraLives ?: 0f).toInt()
         state.lives = state.currentMaxLives
