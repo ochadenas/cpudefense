@@ -2,7 +2,6 @@ package com.example.cpudefense.gameElements
 
 import android.graphics.*
 import android.view.MotionEvent
-import com.example.cpudefense.Game
 import com.example.cpudefense.networkmap.Network
 import com.example.cpudefense.networkmap.Viewport
 import com.example.cpudefense.utils.scale
@@ -56,7 +55,7 @@ class Cpu(network: Network, gridX: Int, gridY: Int): Chip(network, gridX, gridY)
 
             if (animationCount>0)
             {
-                var animationRect = Rect(rect)
+                val animationRect = Rect(rect)
                 animationRect.scale((1.2f - (animationCount/maxAnimationCount.toFloat())))
                 paint.color = Color.RED
                 paint.alpha = (animationCount * 255)/maxAnimationCount
@@ -66,7 +65,7 @@ class Cpu(network: Network, gridX: Int, gridY: Int): Chip(network, gridX, gridY)
         }
     }
 
-    fun scoreHit()
+    private fun scoreHit()
     /** function that gets called when an attacker reaches the CPU
      */
     {
@@ -74,13 +73,8 @@ class Cpu(network: Network, gridX: Int, gridY: Int): Chip(network, gridX, gridY)
         theNetwork?.theGame?.removeOneLife()
     }
 
-    override fun onDown(event: MotionEvent): Boolean {
-        /* pause the game when touched */
-        if (actualRect?.contains(event.x.toInt(), event.y.toInt()) ?: false)  {
-            theNetwork?.let { it.theGame.state.phase = Game.GamePhase.PAUSED }
-            return true
-        }
-        else
-            return false
+    override fun onDown(event: MotionEvent): Boolean
+    {
+        return false
     }
 }
