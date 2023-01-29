@@ -38,7 +38,7 @@ class WelcomeActivity : AppCompatActivity()
                 nextLevelToPlay = prefs.getInt("LASTSTAGE", 0)
                 if (nextLevelToPlay < prefs.getInt("MAXSTAGE", 1))
                     nextLevelToPlay += 1
-                buttonResume.text = "Play level %d".format(nextLevelToPlay)
+                buttonResume.text = getString(R.string.play_level_x).format(nextLevelToPlay)
             }
             else -> buttonResume.isEnabled = false
         }

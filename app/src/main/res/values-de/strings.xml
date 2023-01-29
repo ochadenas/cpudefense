@@ -11,7 +11,7 @@
     <string name="next_stage">Nächster Level: %d</string>
     <string name="coins_gathered">Gesammelte Coins: %d.</string>
     <string name="game_start">Start des Spiels.</string>
-    <string name="continueGame">Spiel fortsetzen</string>
+    <string name="continue_game">Los</string>
     <string name="scoreboard_inf">Inf</string>
     <string name="scoreboard_waves">Welle</string>
     <string name="scoreboard_status">Status</string>

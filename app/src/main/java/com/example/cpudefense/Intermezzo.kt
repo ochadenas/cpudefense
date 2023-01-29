@@ -22,6 +22,8 @@ class Intermezzo(var game: Game): GameElement(), Fadable {
     var instructions: Instructions? = null
     var coinsGathered = 0
 
+    var textOnContinueButton = ""
+
     enum class Type {STARTING_LEVEL, NORMAL_LEVEL, GAME_LOST, GAME_WON}
     var type = Type.NORMAL_LEVEL
 
@@ -48,14 +50,21 @@ class Intermezzo(var game: Game): GameElement(), Fadable {
             Type.GAME_LOST -> {
                 lines.add(game.resources.getString(R.string.failed))
                 lines.add(game.resources.getString(R.string.last_stage).format(level))
+                textOnContinueButton = game.resources.getString(R.string.button_exit)
+                game.setLastStage(level-1)
             }
             Type.GAME_WON  -> {
                 lines.add(game.resources.getString(R.string.success))
                 if (coinsGathered>0)
                     lines.add(game.resources.getString(R.string.coins_gathered).format(coinsGathered))
                 lines.add(game.resources.getString(R.string.win))
+                textOnContinueButton = game.resources.getString(R.string.button_exit)
+                game.setLastStage(level)
             }
-            Type.STARTING_LEVEL -> lines.add(game.resources.getString(R.string.game_start))
+            Type.STARTING_LEVEL -> {
+                lines.add(game.resources.getString(R.string.game_start))
+                textOnContinueButton = game.resources.getString(R.string.continue_game)
+            }
             Type.NORMAL_LEVEL ->
             {
                 lines.add(game.resources.getString(R.string.cleared))
@@ -63,6 +72,8 @@ class Intermezzo(var game: Game): GameElement(), Fadable {
                     lines.add(game.resources.getString(R.string.coins_gathered).format(coinsGathered))
                 if (level <= Game.maxLevelAvailable)
                     lines.add(game.resources.getString(R.string.next_stage).format(level))
+                textOnContinueButton = game.resources.getString(R.string.continue_game)
+                game.setLastStage(level)
             }
         }
         typewriter = Typewriter(game, myArea, lines, { onTypewriterDone() })
@@ -97,7 +108,7 @@ class Intermezzo(var game: Game): GameElement(), Fadable {
     fun showButton()
     {
         val bottomMargin = 40
-        buttonContinue = Button(game.resources.getString(R.string.button_resume), color = game.resources.getColor(R.color.text_green))
+        buttonContinue = Button(textOnContinueButton, color = game.resources.getColor(R.color.text_green))
         val buttonTop = myArea.bottom - (buttonContinue?.myArea?.height() ?: 20) - bottomMargin
         buttonContinue?.let {
             Fader(game, it, Fader.Type.APPEAR, Fader.Speed.SLOW)

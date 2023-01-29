@@ -43,7 +43,7 @@
         android:clickable="true"
         android:focusable="true"
         android:onClick="resumeGame"
-        android:text="@string/continueGame"
+        android:text="@string/button_resume"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@+id/startGameButton"
         app:layout_constraintTop_toBottomOf="@+id/startGameButton" />

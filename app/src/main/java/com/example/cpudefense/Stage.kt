@@ -1240,9 +1240,64 @@ class Stage(var theGame: Game) {
                 createWave(12, 48, .14f, 0.9f)
 
                 rewardCoins = 3
+            }
+            23 -> {
+                initializeNetwork(50, 55)
+
+                createChip(10, 5, ident = 100, type = Chip.ChipType.ENTRY)
+                createChip(30, 5, ident = 101, type = Chip.ChipType.ENTRY)
+                createChip(40, 5, ident = 102, type = Chip.ChipType.ENTRY)
+                createChip(35, 50, ident = 103, type = Chip.ChipType.ENTRY)
+                createChip(10, 10, 1)
+                createChip(25, 10, 2)
+                createChip(40, 10, 3)
+                createChip(10, 20, 4)
+                createChip(30, 20, 5)
+                createChip(40, 20, 6)
+                createChip(12, 30, 7)
+                createChip(35, 30, 8)
+                createChip(12, 40, 9)
+                createChip(35, 40, 10)
+                createChip(20, 20, 11)
+                createChip(12, 50, ident = 900, type = Chip.ChipType.CPU)
+
+                createLink(100, 1, 1)
+                createLink(1, 4, 2)
+                createLink(4, 7, 3, 0x0c)
+                createLink(7, 9, 4)
+                createLink(9, 900, 5)
+                createLink(101, 2, 6, 0x06)
+                createLink(2, 5, 7, 0x06)
+                createLink(11, 7, 8, 0x07)
+                createLink(102, 3, 9)
+                createLink(3, 6, 10)
+                createLink(6, 8, 11, 0x03)
+                createLink(8, 5, 12, 0x0c)
+                createLink(103, 10, 13, 0x06)
+                createLink(10, 8, 14, 0x06)
+                createLink(11, 5, 15, 0x0e)
+
+                createTrack(listOf(1, 2, 3, 4, 5), 0)
+                createTrack(listOf(6, 7, 15, 8, 4, 5), 1)
+                createTrack(listOf(9, 10, 11, 12, 15, 8, 4, 5), 2)
+                createTrack(listOf(13, 14, 12, 15, 8, 4, 5), 3)
+
+                createWave(16, 3, .08f, 1.1f)
+                createWave(16, 5, .09f, 1.2f)
+                createWave(16, 7, .10f, 1.3f)
+                createWave(16, 11, .11f, 1.3f)
+                createWave(12, 24, .12f, 1.3f)
+                createWave(16, 48, .12f, 1.4f, coins = 0)
+                createWave(24, 64, .12f, 1.4f, coins = 0)
+                createWave(24, 92, .12f, 1.4f, coins = 1)
+                createWave(24, 128, .12f, 1.4f, coins = 0)
+                createWave(24, 160, .12f, 1.4f, coins = 0)
+
+                rewardCoins = 3
 
                 type = Type.FINAL
             }
+
             /**
              * Template for the creation of new stage data.
              * Copy and uncomment this when adding your own levels.

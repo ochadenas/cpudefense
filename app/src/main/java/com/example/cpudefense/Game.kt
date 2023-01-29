@@ -22,7 +22,7 @@ import java.util.concurrent.CopyOnWriteArrayList
 
 class Game(val gameActivity: MainGameActivity) {
     companion object Params {
-        const val maxLevelAvailable: Int = 22
+        const val maxLevelAvailable: Int = 23
 
         const val defaultMainDelay = 70L
         val chipSize = GridCoord(6,3)
@@ -278,7 +278,7 @@ class Game(val gameActivity: MainGameActivity) {
         val nextLevel = stage.data.level + 1
         if (summaryPerLevel[nextLevel] == null && stage.type != Stage.Type.FINAL)
             summaryPerLevel[nextLevel] = Stage.Summary()
-        setMaxStage(stage.data.level)
+        setLastStage(stage.data.level)
         if (stage.type == Stage.Type.FINAL)
         {
             intermezzo.endOfGame(stage.data.level, hasWon = true)
@@ -314,7 +314,7 @@ class Game(val gameActivity: MainGameActivity) {
 
         if (network == null) // no more levels left
         {
-            setMaxStage(level)
+            setLastStage(level)
             intermezzo.endOfGame(level, hasWon = true)
         }
         else {
@@ -347,8 +347,9 @@ class Game(val gameActivity: MainGameActivity) {
         gameActivity.finish()
     }
 
-    fun setMaxStage(currentStage: Int)
-    /** when completing a level, record the current number as MAXSTAGE in the SharedPrefs
+    fun setLastStage(currentStage: Int)
+    /** when completing a level, record the current number in the SharedPrefs.
+     * If necessary, adjust MAXSTAGE, too.
      * @param currentStage number of the level successfully completed */
     {
         val prefs = gameActivity.getSharedPreferences(gameActivity.getString(R.string.pref_filename), Context.MODE_PRIVATE)

@@ -11,7 +11,7 @@
     <string name="next_stage">Next stage: %d</string>
     <string name="coins_gathered">Coins gathered: %d.</string>
     <string name="game_start">Starting game.</string>
-    <string name="continueGame">Resume</string>
+    <string name="continue_game">Enter</string>
     <string name="scoreboard_inf">Inf</string>
     <string name="scoreboard_waves">Wave</string>
     <string name="scoreboard_status">Status</string>
@@ -182,6 +182,8 @@ Computer boards:
 
 All other artwork:
   Oliver Chadenas (CC BY-SA 3.0)"</string>
+    <string name="play_level_x">Play level %d</string>
+    <string name="button_exit">Exit</string>
 
 
 </resources>

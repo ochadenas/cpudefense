@@ -6,7 +6,7 @@ import com.example.cpudefense.effects.Fadable
 import com.example.cpudefense.effects.Fader
 import com.example.cpudefense.utils.inflate
 
-class Button(val text: String, val textsize: Float = 36f, val color: Int = Color.GREEN, val style: Int = 0): Fadable
+class Button(var text: String, val textsize: Float = 36f, val color: Int = Color.GREEN, val style: Int = 0): Fadable
 {
     var alpha = 0
     var myArea = Rect()
