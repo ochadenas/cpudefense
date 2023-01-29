@@ -34,7 +34,7 @@ class Wave(var game: Game, var data: Data)
             else if (data.representation == Attacker.Representation.HEX)
                 game.currentStage?.createNewAttacker(data.attackerStrength, data.attackerSpeed, representation = Attacker.Representation.HEX)
             else
-                game.currentStage?.createNewAttacker(data.attackerStrength, data.attackerSpeed)
+                game.currentStage?.createNewAttacker(data.attackerStrength, data.attackerSpeed, representation = Attacker.Representation.UNDEFINED)
             data.currentCount--
         }
     }
