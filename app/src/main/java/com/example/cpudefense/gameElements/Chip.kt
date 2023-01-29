@@ -223,7 +223,12 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
             return
         cooldownTimer = (chipData.cooldown / network.theGame.globalSpeedFactor).toInt()
         if (chipData.type == ChipType.ACC)
-            processInAccumulator(attacker)
+        {
+            if (attacker.attackerData.isCoin)
+                return // ACC does not affect coins
+            else
+                processInAccumulator(attacker)
+        }
         else {
             val kill = attacker.onShot(chipData.type, chipData.power)
             if (kill)
