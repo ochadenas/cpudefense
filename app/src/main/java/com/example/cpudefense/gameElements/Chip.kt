@@ -344,7 +344,10 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
                     alternatives.add(ChipUpgrades.SELL)
                 }
             }
-            else -> {}
+            ChipType.MEM -> {
+                alternatives.add(ChipUpgrades.SELL)
+            }
+                else -> {}
         }
 
         // discard the alternatives that are not allowed for this stage
