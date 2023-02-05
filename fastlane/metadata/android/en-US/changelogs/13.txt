@@ -1,0 +1,13 @@
+New features:
+- added level 22 and 23
+- On the welcome screen, the RESUME button now shows the next level to be played.
+
+Bugfixes:
+- the game no longer crashes when trying to resume a game beyond the last level
+- fixed a bug that let attackers always appear as binary and never as hex
+- MEM chips can now be sold
+- cryptocoins are no longer affected by ACC chips
+
+Miscellaneous:
+- darkened some background images that were too distracting
+- tapping on the CPU no longer pauses the game. (This was annoying on cluttered maps.)
