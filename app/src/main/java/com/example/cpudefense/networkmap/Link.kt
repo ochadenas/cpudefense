@@ -5,7 +5,7 @@ import com.example.cpudefense.*
 import com.example.cpudefense.gameElements.GameElement
 import kotlin.math.abs
 
-class Link(val theNetwork: Network, var node1: Node, var node2: Node, var ident: Int, var mask: Int = 0x0F): GameElement() {
+class Link(@Suppress("UNUSED_PARAMETER") val theNetwork: Network, var node1: Node, var node2: Node, var ident: Int, var mask: Int = 0x0F): GameElement() {
 
     data class Data
         (
@@ -43,65 +43,63 @@ class Link(val theNetwork: Network, var node1: Node, var node2: Node, var ident:
         paintLineBackground = Paint(paintBackground)
     }
 
-    fun calculateIntermediatePointPosition()
+    private fun calculateIntermediatePointPosition()
     {
-        val dist_hori = endPoint.x - startPoint.x
-        val dist_vert = endPoint.y - startPoint.y
+        val distHori = endPoint.x - startPoint.x
+        val distVert = endPoint.y - startPoint.y
 
-        if (dist_hori>0 && dist_vert>0)
+        if (distHori>0 && distVert>0)
             calculate1stQuadrant(startPoint, endPoint)
-        else if (dist_hori<0 && dist_vert<0)
+        else if (distHori<0 && distVert<0)
             calculate1stQuadrant(endPoint, startPoint)
-        else if (dist_hori>0 && dist_vert<0)
+        else if (distHori>0 && distVert<0)
             calculate4thQuadrant(startPoint, endPoint)
-        else if (dist_hori<0 && dist_vert>0)
+        else if (distHori<0 && distVert>0)
             calculate4thQuadrant(endPoint, startPoint)
         else
             interPoint = null
         lengthOnGrid = getLength()
     }
 
-    fun calculate1stQuadrant(point1: GridCoord, point2: GridCoord)
+    private fun calculate1stQuadrant(point1: GridCoord, point2: GridCoord)
     /** determines link coordinates in case that both horizontal and vertical distance
      * from 1st to 2nd point is positive.
      */
     {
-        val dist_hori: Float = abs(point2.x - point1.x)
-        val dist_vert: Float = abs(point2.y - point1.y)
+        val distHori: Float = abs(point2.x - point1.x)
+        val distVert: Float = abs(point2.y - point1.y)
 
-        if (dist_vert > dist_hori)
-            interPoint = GridCoord(point1.x, point2.y - dist_hori)
-        else if (dist_vert < dist_hori)
-            interPoint = GridCoord(point2.x-dist_vert, point1.y)
+        if (distVert > distHori)
+            interPoint = GridCoord(point1.x, point2.y - distHori)
+        else if (distVert < distHori)
+            interPoint = GridCoord(point2.x-distVert, point1.y)
     }
 
-    fun calculate4thQuadrant(point1: GridCoord, point2: GridCoord)
+    private fun calculate4thQuadrant(point1: GridCoord, point2: GridCoord)
     /** determines link coordinates in case that horizontal distance
      * from 1st to 2nd point is positive and vertical is negative
      */
     {
-        val dist_hori: Float = abs(point2.x - point1.x)
-        val dist_vert: Float = abs(point2.y - point1.y)
+        val distHori: Float = abs(point2.x - point1.x)
+        val distVert: Float = abs(point2.y - point1.y)
 
-        if (dist_vert < dist_hori)
-            interPoint = GridCoord(point2.x - dist_vert, point1.y)
-        else if (dist_vert > dist_hori)
-            interPoint = GridCoord(point1.x, point2.y + dist_hori)
+        if (distVert < distHori)
+            interPoint = GridCoord(point2.x - distVert, point1.y)
+        else if (distVert > distHori)
+            interPoint = GridCoord(point1.x, point2.y + distHori)
     }
 
-    fun getLength(): Float
+    private fun getLength(): Float
     /** returns the length of the link on the grid */
     {
+        var length = 0.0f
         if (interPoint == null)
-            return startPoint.distanceTo(endPoint)
+            length = startPoint.distanceTo(endPoint)
         else
-        {
-            return startPoint.distanceTo(interPoint) + interPoint!!.distanceTo(endPoint)
-            /*
-            val lSquared: Float = startPoint.distanceToSquared(interPoint) +
-                    interPoint!!.distanceToSquared(endPoint)
-            return kotlin.math.sqrt(lSquared) */
+            interPoint?.let {
+                length = startPoint.distanceTo(it) + it.distanceTo(endPoint)
         }
+        return length
     }
 
     fun getPositionOnGrid(distanceTravelled: Float, start: Node): GridCoord
@@ -111,26 +109,25 @@ class Link(val theNetwork: Network, var node1: Node, var node2: Node, var ident:
              * @return the coordinates on the grid that correspond to the position
              */
     {
-        var end = if (start == node1) node2 else node1
+        val end = if (start == node1) node2 else node1
+        var positionOnGrid = GridCoord(0f, 0f)
         if (distanceTravelled > this.lengthOnGrid)
-            return end.posOnGrid
-        if (interPoint != null) // pass by intermediate point
-        {
-            var delta1 = interPoint!!.minus(start.posOnGrid)
-            var delta2 = end.posOnGrid.minus(interPoint!!)
-            if (distanceTravelled <= delta1.length())
-                return start.posOnGrid.plus(delta1.multiplyBy(distanceTravelled/delta1.length()))
-            else
-            {
-                return interPoint!!.plus(delta2.multiplyBy(
-                    (distanceTravelled-delta1.length())/delta2.length()))
+            positionOnGrid = end.posOnGrid
+        else if (interPoint != null) // pass by intermediate point
+            interPoint?.let {
+                val delta1 = it.minus(start.posOnGrid)
+                val delta2 = end.posOnGrid.minus(it)
+                if (distanceTravelled <= delta1.length())
+                    positionOnGrid = start.posOnGrid.plus(delta1.multiplyBy(distanceTravelled / delta1.length()))
+                else
+                    positionOnGrid = it.plus(delta2.multiplyBy((distanceTravelled - delta1.length()) / delta2.length()))
             }
-        }
-        else
+        else // no intermediate point
         {
-            var delta = end.posOnGrid.minus(start.posOnGrid)
-            return start.posOnGrid.plus(delta.multiplyBy(distanceTravelled/lengthOnGrid))
+            val delta = end.posOnGrid.minus(start.posOnGrid)
+            positionOnGrid = start.posOnGrid.plus(delta.multiplyBy(distanceTravelled/lengthOnGrid))
         }
+        return positionOnGrid
     }
 
     override fun update() {
@@ -140,8 +137,8 @@ class Link(val theNetwork: Network, var node1: Node, var node2: Node, var ident:
         var point1: GridCoord
         var point2: GridCoord
         val delta = 0.7f // distance between two parallel lines
-        var dx: Float
-        var dy: Float
+        val dx: Float
+        val dy: Float
 
         calculateIntermediatePointPosition()
 
@@ -166,8 +163,8 @@ class Link(val theNetwork: Network, var node1: Node, var node2: Node, var ident:
                 displayLine(canvas, viewport, point1, point2)
             }
             else  // connection via intermediate point
-            {
-                val point0 = GridCoord(interPoint!!.x+displacementX, interPoint!!.y+displacementY)
+            interPoint?.let {
+                val point0 = GridCoord(it.x+displacementX, it.y+displacementY)
                 displayLine(canvas, viewport, point1, point0)
                 displayLine(canvas, viewport, point0, point2)
             }
@@ -176,7 +173,7 @@ class Link(val theNetwork: Network, var node1: Node, var node2: Node, var ident:
         }
     }
 
-    fun displayLine(canvas: Canvas, viewport: Viewport, startGridPoint: GridCoord, endGridPoint: GridCoord)
+    private fun displayLine(canvas: Canvas, viewport: Viewport, startGridPoint: GridCoord, endGridPoint: GridCoord)
     /** draws one single line from start point to end point, in grid coords */
     {
         val startPoint = viewport.gridToViewport(startGridPoint)
@@ -191,7 +188,7 @@ class Link(val theNetwork: Network, var node1: Node, var node2: Node, var ident:
             endPoint.first.toFloat(), endPoint.second.toFloat(), paintConnector)
     }
 
-    fun displayConnectorCircle(canvas: Canvas, viewport: Viewport, gridPoint: GridCoord)
+    private fun displayConnectorCircle(canvas: Canvas, viewport: Viewport, gridPoint: GridCoord)
     {
         val point = viewport.gridToViewport(gridPoint)
         val radius = connectorRadius
@@ -205,9 +202,9 @@ class Link(val theNetwork: Network, var node1: Node, var node2: Node, var ident:
              * and set all inner proprieties
              */
         {
-            var node1 = network.nodes[data.startId] ?: return null
-            var node2 = network.nodes[data.endId] ?: return null
-            var link = Link(network, node1, node2, data.ident, data.mask)
+            val node1 = network.nodes[data.startId] ?: return null
+            val node2 = network.nodes[data.endId] ?: return null
+            val link = Link(network, node1, node2, data.ident, data.mask)
             link.data = data
             return link
         }

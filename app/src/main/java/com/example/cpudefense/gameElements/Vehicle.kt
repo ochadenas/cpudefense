@@ -61,14 +61,14 @@ open class Vehicle(val theNetwork: Network): GameElement() {
 
     override fun display(canvas: Canvas, viewport: Viewport)
     {
-        if (posOnGrid == null)
-            return
-        var actualRect = Rect(0, 0, 20, 20)
-        actualRect.setCenter(viewport.gridToViewport(posOnGrid!!))
-        var paint = Paint()
-        paint.color = Color.RED
-        paint.style = Paint.Style.FILL
-        canvas.drawRect(actualRect, paint)
+        posOnGrid?.let {
+            var actualRect = Rect(0, 0, 20, 20)
+            actualRect.setCenter(viewport.gridToViewport(it))
+            var paint = Paint()
+            paint.color = Color.RED
+            paint.style = Paint.Style.FILL
+            canvas.drawRect(actualRect, paint)
+        }
     }
 
     fun setOntoLink(link: Link?, node: Node?)

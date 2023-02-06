@@ -210,17 +210,16 @@ class Game(val gameActivity: MainGameActivity) {
             GamePhase.RUNNING ->
             {
                 speedControlPanel.onDown(p0)
-                if (network != null) {
-                    for (obj in network!!.nodes.values)
+                network?.let {
+                    for (obj in it.nodes.values)
                         if (obj.onDown(p0))
                             return true
-                    for (obj in network!!.vehicles)
+                    for (obj in it.vehicles)
                         if ((obj as Attacker).onDown(p0))
                             return true
                     return false
                 }
-                else
-                    return false
+                return false
             }
             GamePhase.INTERMEZZO ->
                 return intermezzo.onDown(p0)
