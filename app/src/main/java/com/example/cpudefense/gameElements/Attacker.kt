@@ -70,7 +70,8 @@ open class Attacker(network: Network, type: Representation = Representation.BINA
                 attackerData.binaryDigits = 16
             else while (!maskBinary.containsKey(attackerData.binaryDigits))
                 attackerData.binaryDigits++  // adjust 'digits' to nearest allowed value
-            attackerData.number = attackerData.number and maskBinary[attackerData.binaryDigits]!!
+            maskBinary[attackerData.binaryDigits]?.let { mask ->
+                attackerData.number = attackerData.number and mask }
         }
         else
         {
@@ -81,7 +82,8 @@ open class Attacker(network: Network, type: Representation = Representation.BINA
                 attackerData.hexDigits = 8
             else while (!maskHex.containsKey(attackerData.hexDigits))
                 attackerData.hexDigits++  // adjust 'digits' to nearest allowed value
-            attackerData.number = attackerData.number and maskHex[attackerData.hexDigits]!!
+            maskHex[attackerData.hexDigits]?.let { mask ->
+                attackerData.number = attackerData.number and mask }
         }
         attackerData.bits = attackerData.binaryDigits + 4 * attackerData.hexDigits
     }
@@ -110,9 +112,9 @@ open class Attacker(network: Network, type: Representation = Representation.BINA
         var n: ULong = attackerData.number
         n = n.inv()
         if (attackerData.representation == Representation.BINARY)
-            n = n and maskBinary[attackerData.binaryDigits]!!
+            maskBinary[attackerData.binaryDigits]?.let { mask -> n = n and mask }
         else
-            n = n and maskHex[attackerData.hexDigits]!!
+            maskHex[attackerData.hexDigits]?.let { mask -> n = n and mask }
         changeNumberTo(n)
     }
 
@@ -154,19 +156,16 @@ open class Attacker(network: Network, type: Representation = Representation.BINA
     }
 
     override fun getPositionOnScreen(): Pair<Int, Int> {
-        if (posOnGrid == null)
-            return Pair(0, 0)
-        else
-            return theNetwork.theGame.viewport.gridToViewport(posOnGrid!!)
+        posOnGrid?.let { return theNetwork.theGame.viewport.gridToViewport(it) }
+        /* else, if posOnGrid == null: */
+        return Pair(0, 0)
     }
 
     override fun remove()
     {
-        if (onLink != null)
-        {
-            val link: Link = onLink!!
-            link.node1.distanceToVehicle.remove(this)
-            link.node2.distanceToVehicle.remove(this)
+        onLink?.let {
+            it.node1.distanceToVehicle.remove(this)
+            it.node2.distanceToVehicle.remove(this)
             theNetwork.vehicles.remove(this)
         }
     }

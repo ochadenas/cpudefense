@@ -155,43 +155,34 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
             heightOnScreen = sizeOnScreen.second * Game.chipSize.y.toInt()
             actualRect = Rect(0, 0, widthOnScreen, heightOnScreen)
         }
+        actualRect?.setCenter(viewport.gridToViewport(posOnGrid))
+        actualRect?.let { displayRect(canvas, it) }
+    }
 
-        actualRect?.let { rect ->
-            rect.setCenter(viewport.gridToViewport(posOnGrid))
-
-            /* draw background */
-            paintBackground.color = defaultBackgroundColor
-            paintBackground.alpha = 255
+    fun displayRect(canvas: Canvas, rect: Rect)
+    {
+        /* draw background */
+        paintBackground.color = defaultBackgroundColor
+        paintBackground.alpha = 255
+        canvas.drawRect(rect, paintBackground)
+        if (cooldownTimer>0)
+        {
+            paintBackground.color = chipData.glowColor
+            paintBackground.alpha = (cooldownTimer*255)/chipData.cooldown
             canvas.drawRect(rect, paintBackground)
-            if (cooldownTimer>0)
-            {
-                paintBackground.color = chipData.glowColor
-                paintBackground.alpha = (cooldownTimer*255)/chipData.cooldown
-                canvas.drawRect(rect, paintBackground)
-            }
+        }
 
-            /* draw outline */
-            paintOutline.strokeWidth =
-                if (isActivated()) 3f * outlineWidth
+        /* draw outline */
+        paintOutline.strokeWidth =
+            if (isActivated()) 3f * outlineWidth
             else
                 outlineWidth
-            canvas.drawRect(rect, paintOutline)
+        canvas.drawRect(rect, paintOutline)
 
-            /* display a line to all vehicles in range */
-            if (Game.drawLinesFromChip) {
-                for (vehicle in distanceToVehicle.keys.filter { attackerInRange(it as Attacker) })
-                    canvas.drawLine(
-                        rect.centerX().toFloat(), rect.centerY().toFloat(),
-                        (viewport.gridToViewport(vehicle.posOnGrid!!)).first.toFloat(),
-                        (viewport.gridToViewport(vehicle.posOnGrid!!)).second.toFloat(), paintLines
-                    )
-            }
-
-            if (bitmap == null)
-                bitmap = createBitmapForType()
-            if (bitmap != null)
-                canvas.drawBitmap(bitmap!!, null, rect, paintBitmap)
-        }
+        /* draw foreground */
+        if (bitmap == null)
+            bitmap = createBitmapForType()
+        bitmap?.let { canvas.drawBitmap(it, null, rect, paintBitmap) }
     }
 
     fun displayUpgrades(canvas: Canvas)

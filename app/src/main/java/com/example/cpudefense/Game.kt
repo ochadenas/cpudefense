@@ -316,8 +316,8 @@ class Game(val gameActivity: MainGameActivity) {
             setLastStage(level)
             intermezzo.endOfGame(level, hasWon = true)
         }
-        else {
-            viewport.setGridSize(network!!.data.gridSizeX, network!!.data.gridSizeY)
+        else network?.let {
+            viewport.setGridSize(it.data.gridSizeX, it.data.gridSizeY)
             state.phase = GamePhase.RUNNING
             currentWave = nextStage.nextWave()
         }
