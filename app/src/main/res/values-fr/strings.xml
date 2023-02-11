@@ -28,4 +28,6 @@
     <string name="query_reset">Remettre à zéro tous les héros et héroïnes ?</string>
     <string name="settings_title">Réglages</string>
     <string name="settings_about">A propos de ...</string>
+    <string name="play_level_x">Jouer niveau %d</string>
+    <string name="button_exit">Sortir</string>
 </resources>
