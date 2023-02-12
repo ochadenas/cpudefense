@@ -30,12 +30,12 @@ class Game(val gameActivity: MainGameActivity) {
         const val minScoreBoardHeight = 100
         const val maxScoreBoardHeight = 320
         const val speedControlButtonSize = 80
-        const val drawLinesFromChip = false
 
         const val scoreTextSize = 40f
         const val scoreHeaderSize = 20f
         const val chipTextSize = 28f
         const val computerTextSize = 36f
+        const val notificationTextSize = computerTextSize
         const val instructionTextSize = computerTextSize
 
         const val coinSizeOnScoreboard = 40
@@ -99,6 +99,7 @@ class Game(val gameActivity: MainGameActivity) {
     val resources: Resources = (gameActivity as Activity).resources
     var movers = CopyOnWriteArrayList<Mover>() // list of all mover objects that are created for game elements
     var faders = CopyOnWriteArrayList<Fader>() // idem for faders
+    val notification = ProgressNotification(this)
     private val paintBitmap = Paint()
 
     /* other temporary variables */
@@ -202,6 +203,7 @@ class Game(val gameActivity: MainGameActivity) {
         }
         intermezzo.display(canvas, viewport)
         marketplace.display(canvas, viewport)
+        notification.display(canvas)
     }
 
     fun onDown(p0: MotionEvent): Boolean {

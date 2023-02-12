@@ -29,18 +29,25 @@ class Background(val game: Game) {
         var available_bitmaps = mutableListOf<Bitmap>()
     }
 
-    init {
+    fun loadBitmaps() {
         if (bitmapsLoaded == false)
         {
+            game.notification.showProgress(0.0f)
             available_bitmaps.add(BitmapFactory.decodeResource(game.resources, R.drawable.background_1))
+            game.notification.showProgress(0.15f)
             available_bitmaps.add(BitmapFactory.decodeResource(game.resources, R.drawable.background_2))
+            game.notification.showProgress(0.30f)
             available_bitmaps.add(BitmapFactory.decodeResource(game.resources, R.drawable.background_3))
+            game.notification.showProgress(0.45f)
             available_bitmaps.add(BitmapFactory.decodeResource(game.resources, R.drawable.background_4))
+            game.notification.showProgress(0.60f)
             available_bitmaps.add(BitmapFactory.decodeResource(game.resources, R.drawable.background_5))
+            game.notification.showProgress(0.75f)
             available_bitmaps.add(BitmapFactory.decodeResource(game.resources, R.drawable.background_6))
+            game.notification.showProgress(0.90f)
             bitmapsLoaded = true
+            game.notification.hide()
         }
-        choose(4, 0.12f)
     }
 
     fun choose(number: Int, opacity: Float = 0.3f)
@@ -49,6 +56,7 @@ class Background(val game: Game) {
              * @param opacity sets the opacity, from 0.0 to 1.0
              */
     {
+        loadBitmaps() // if necessary
         val n = number % available_bitmaps.size
         this.bitmap = available_bitmaps[n]
         this.opacity = opacity
