@@ -30,4 +30,17 @@
     <string name="settings_about">A propos de ...</string>
     <string name="play_level_x">Jouer niveau %d</string>
     <string name="button_exit">Sortir</string>
+    <string name="shortdesc_SUB">vitesse puces SUB</string>
+    <string name="shortdesc_startinfo">info initiale</string>
+    <string name="shortdesc_SHR">vitesse puces SHR</string>
+    <string name="shortdesc_ACC">vitesse puces ACC</string>
+    <string name="shortdesc_MEM">vitesse puces MEM</string>
+    <string name="shortdesc_upgrade">coût pour amélioration</string>
+    <string name="shortdesc_lives">vies supplementaires</string>
+    <string name="shortdesc_frequency">frequence attaquants</string>
+    <string name="shortdesc_att_speed">vitesse attaquants</string>
+    <string name="shortdesc_info_gain">gain d\'info</string>
+    <string name="shortdesc_refund">remboursement vente</string>
+    <string name="upgrade_format">%s  [coût: %d]</string>
+    <string name="toast_next_stage">Niveau %d</string>
 </resources>

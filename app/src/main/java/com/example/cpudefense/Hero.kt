@@ -230,66 +230,66 @@ class Hero(var game: Game, type: Type): Fadable {
         when (data.type)
         {
             Type.INCREASE_CHIP_SUB_SPEED -> {
-                shortDesc = "SUB chip speed"
+                shortDesc = game.resources.getString(R.string.shortdesc_SUB)
                 strengthDesc = "x %.2f".format(strength)
                 upgradeDesc = " -> x %.2f".format(next)
             }
             Type.INCREASE_STARTING_CASH ->
             {
-                shortDesc = "Starting information"
+                shortDesc = game.resources.getString(R.string.shortdesc_startinfo)
                 strengthDesc = "%d bits".format(strength.toInt())
                 upgradeDesc = " -> %d bits".format(next.toInt())
             }
             Type.INCREASE_CHIP_SHIFT_SPEED ->             {
-                shortDesc = "SHR chip speed"
+                shortDesc = game.resources.getString(R.string.shortdesc_SHR)
                 strengthDesc = "x %.2f".format(strength)
                 upgradeDesc = " -> x %.2f".format(next)
             }
             Type.INCREASE_CHIP_ACC_SPEED -> {
-                shortDesc = "ACC chip speed"
+                shortDesc = game.resources.getString(R.string.shortdesc_ACC)
                 strengthDesc = "x %.2f".format(strength)
                 upgradeDesc = " -> x %.2f".format(next)
             }
             Type.INCREASE_CHIP_MEM_SPEED -> {
-                shortDesc = "MEM chip speed"
+                shortDesc = game.resources.getString(R.string.shortdesc_MEM)
                 strengthDesc = "x %.2f".format(strength)
                 upgradeDesc = " -> x %.2f".format(next)
             }
             Type.DECREASE_UPGRADE_COST ->             {
-                shortDesc = "Chip upgrade cost"
+                shortDesc = game.resources.getString(R.string.shortdesc_upgrade)
                 strengthDesc = "-%d%%".format(strength.toInt())
                 upgradeDesc = " -> -%d%%".format(next.toInt())
             }
             Type.ADDITIONAL_LIVES -> {
-                shortDesc = "Additional lives"
+                shortDesc = game.resources.getString(R.string.shortdesc_lives)
                 strengthDesc = "%d".format(strength.toInt())
                 upgradeDesc = " -> %d".format(next.toInt())
                 maxLevel = 3
             }
             Type.DECREASE_ATT_FREQ -> {
-                shortDesc = "Attacker frequency"
+                shortDesc = game.resources.getString(R.string.shortdesc_frequency)
                 strengthDesc = "%.2f".format(strength)
                 upgradeDesc = " -> %.2f".format(next)
             }
             Type.DECREASE_ATT_SPEED -> {
-                shortDesc = "Attacker speed"
+                shortDesc = game.resources.getString(R.string.shortdesc_att_speed)
                 strengthDesc = "%.2f".format(strength)
                 upgradeDesc = " -> %.2f".format(next)
             }
             Type.GAIN_CASH ->
             {
-                shortDesc = "Information gain"
+                shortDesc = game.resources.getString(R.string.shortdesc_info_gain)
                 strengthDesc = "1 bit/%d ticks".format(strength.toInt())
                 upgradeDesc = " -> 1/%d ticks".format(next.toInt())
             }
             Type.INCREASE_REFUND ->
             {
-                shortDesc = "Refund when selling chips"
+                shortDesc = game.resources.getString(R.string.shortdesc_refund)
                 strengthDesc = "%d%%".format(strength.toInt())
                 upgradeDesc = " -> %d%%".format(next.toInt())
             }
         }
-        upgradeDesc = "%s  [cost: %d]".format(upgradeDesc, getPrice(data.level))
+        upgradeDesc = game.resources.getString(R.string.upgrade_format).format(upgradeDesc, getPrice(data.level))
         if (data.level >= maxLevel)
             upgradeDesc = ""
         myBitmap = createBitmap()

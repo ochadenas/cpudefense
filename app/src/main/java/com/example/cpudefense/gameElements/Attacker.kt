@@ -6,7 +6,6 @@ import com.example.cpudefense.*
 import com.example.cpudefense.effects.Explodable
 import com.example.cpudefense.effects.Fadable
 import com.example.cpudefense.effects.Fader
-import com.example.cpudefense.networkmap.Link
 import com.example.cpudefense.networkmap.Network
 import com.example.cpudefense.networkmap.Viewport
 import com.example.cpudefense.utils.center
@@ -139,16 +138,27 @@ open class Attacker(network: Network, type: Representation = Representation.BINA
                 else
                     changeNumberTo(newNumber.toULong())
             }
-            Chip.ChipType.SHIFT ->
+            Chip.ChipType.SHR ->
             {
-                for (i in 1 .. power)
-                changeNumberTo((attackerData.number / 2u))
+                val factor: UInt = powerOfTwo[power] ?: 1u
+                changeNumberTo((attackerData.number / factor))
             }
             Chip.ChipType.MEM ->
             {
                 theNetwork.theGame.gameActivity.theGameView.theEffects?.fade(this)
                 theNetwork.theGame.scoreBoard.addCash(attackerData.bits)
                 return false // remove() is done after fading
+            }
+            Chip.ChipType.ADD ->
+            {
+                val newNumber =  attackerData.number.toLong() + power
+                changeNumberTo(newNumber.toULong())
+            }
+            Chip.ChipType.SHL ->
+            {
+                val factor: UInt = powerOfTwo[power] ?: 1u
+                changeNumberTo((attackerData.number * factor))
+
             }
             else -> return false
         }
@@ -289,6 +299,10 @@ open class Attacker(network: Network, type: Representation = Representation.BINA
             val l16 = log2(16f)
             return log2(v) / l16
         }
+
+        val powerOfTwo: HashMap<Int, UInt> = hashMapOf(
+            0 to 1u, 1 to 2u, 2 to 4u, 3 to 8u, 4 to 16u,
+            5 to 32u, 6 to 64u, 7 to 128u, 8 to 256u)
 
         val maskBinary: HashMap<Int, ULong> = hashMapOf(
             1 to 0x01uL, 2 to 0x03uL,  4 to 0x0FuL,

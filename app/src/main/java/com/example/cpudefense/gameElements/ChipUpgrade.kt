@@ -26,6 +26,10 @@ class ChipUpgrade(val chipToUpgrade: Chip, val type: Chip.ChipUpgrades,
                 upgradePrice = upgradePrice * (100f - discount) / 100
                 return upgradePrice.toInt()
             }
+            Chip.ChipUpgrades.REDUCE -> {
+                var upgradePrice = chipToUpgrade.chipData.value
+                return upgradePrice.toInt()
+            }
             Chip.ChipUpgrades.SELL -> {
                 val refund = - chipToUpgrade.chipData.value * (game.gameUpgrades[Hero.Type.INCREASE_REFUND]?.getStrength() ?: 50f) * 0.01f
                 return refund.toInt()
@@ -71,9 +75,15 @@ class ChipUpgrade(val chipToUpgrade: Chip, val type: Chip.ChipUpgrades,
                 chipToUpgrade.addPower(1)
                 chipToUpgrade.chipData.value += price
             }
+            Chip.ChipUpgrades.REDUCE ->
+            {
+                chipToUpgrade.addPower(-1)
+                if (chipToUpgrade.chipData.power == 0)
+                    chipToUpgrade.resetToEmptyChip()
+            }
             Chip.ChipUpgrades.SELL -> chipToUpgrade.resetToEmptyChip()
             Chip.ChipUpgrades.SUB -> chipToUpgrade.setType(Chip.ChipType.SUB)
-            Chip.ChipUpgrades.SHIFT -> chipToUpgrade.setType(Chip.ChipType.SHIFT)
+            Chip.ChipUpgrades.SHR -> chipToUpgrade.setType(Chip.ChipType.SHR)
             Chip.ChipUpgrades.ACC -> chipToUpgrade.setType(Chip.ChipType.ACC)
             Chip.ChipUpgrades.MEM -> chipToUpgrade.setType(Chip.ChipType.MEM)
             else -> {}
@@ -90,9 +100,10 @@ class ChipUpgrade(val chipToUpgrade: Chip, val type: Chip.ChipUpgrades,
         val text = when(type)
         {
             Chip.ChipUpgrades.POWERUP -> "+1"
+            Chip.ChipUpgrades.REDUCE -> "-1"
             Chip.ChipUpgrades.SELL -> "SELL"
             Chip.ChipUpgrades.SUB -> "SUB"
-            Chip.ChipUpgrades.SHIFT -> "SHR"
+            Chip.ChipUpgrades.SHR -> "SHR"
             Chip.ChipUpgrades.ACC -> "ACC"
             Chip.ChipUpgrades.MEM -> "MEM"
             else -> "?"
@@ -123,11 +134,11 @@ class ChipUpgrade(val chipToUpgrade: Chip, val type: Chip.ChipUpgrades,
         canvas.drawRect(actualRect, paintFrame)
 
         /* display the price */
-        val priceRect = Rect(actualRect.right, actualRect.top - 20, actualRect.right+50, actualRect.top)
-        paintBackground.alpha = 220
+        val priceRect = Rect(actualRect.right - 10, actualRect.top - 20, actualRect.right+50, actualRect.top)
+        paintBackground.alpha = 160
         canvas.drawRect(priceRect, paintBackground)
         paintText.typeface = Typeface.create("sans-serif-condensed", Typeface.ITALIC)
-        paintText.textSize = Game.chipTextSize - 1
+        paintText.textSize = Game.chipTextSize - 0
         paintText.color = if (canAfford()) paintFrame.color else Color.YELLOW
         canvas.drawText(game.scoreBoard.informationToString(price), actualRect.right.toFloat()-4, actualRect.top.toFloat()+6, paintText)
     }

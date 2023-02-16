@@ -184,6 +184,20 @@ All other artwork:
   Oliver Chadenas (CC BY-SA 3.0)"</string>
     <string name="play_level_x">Play level %d</string>
     <string name="button_exit">Exit</string>
+    <string name="shortdesc_SUB">SUB chip speed</string>
+    <string name="shortdesc_startinfo">Starting information</string>
+    <string name="shortdesc_SHR">SHR chip speed</string>
+    <string name="shortdesc_ACC">ACC chip speed</string>
+    <string name="shortdesc_MEM">MEM chip speed</string>
+    <string name="shortdesc_upgrade">Chip upgrade cost</string>
+    <string name="shortdesc_lives">Additional lives</string>
+    <string name="shortdesc_frequency">Attacker frequency</string>
+    <string name="shortdesc_att_speed">Attacker speed</string>
+    <string name="shortdesc_info_gain">Information gain</string>
+    <string name="shortdesc_refund">Refund when selling chips</string>
+    <string name="upgrade_format">%s  [cost: %d]</string>
+    <string name="toast_next_stage">Stage %d</string>
+    <string name="toast_stage_cleared">Stage cleared</string>
 
 
 </resources>

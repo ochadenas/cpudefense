@@ -272,10 +272,11 @@ class Stage(var theGame: Game) {
             setOf(
                 Chip.ChipUpgrades.ACC,
                 Chip.ChipUpgrades.SUB,
-                Chip.ChipUpgrades.SHIFT,
+                Chip.ChipUpgrades.SHR,
+                Chip.ChipUpgrades.MEM,
                 Chip.ChipUpgrades.POWERUP,
-                Chip.ChipUpgrades.SELL,
-                Chip.ChipUpgrades.MEM
+                Chip.ChipUpgrades.REDUCE,
+                Chip.ChipUpgrades.SELL
             )
 
         when (level) {
@@ -400,7 +401,7 @@ class Stage(var theGame: Game) {
                 createWave(15, 15, .050f, 1f)
 
                 data.chipsAllowed =
-                    setOf(Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.POWERUP, Chip.ChipUpgrades.SHIFT)
+                    setOf(Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.POWERUP, Chip.ChipUpgrades.SHR)
             }
             6 -> {
                 initializeNetwork(50, 50)
@@ -444,7 +445,7 @@ class Stage(var theGame: Game) {
                         Chip.ChipUpgrades.SUB,
                         Chip.ChipUpgrades.POWERUP,
                         Chip.ChipUpgrades.SELL,
-                        Chip.ChipUpgrades.SHIFT
+                        Chip.ChipUpgrades.SHR
                     )
                 rewardCoins = 3
             }
@@ -481,7 +482,7 @@ class Stage(var theGame: Game) {
                 createWave(15, 15, .050f, 1f, coins = 1)
 
                 data.chipsAllowed =
-                    setOf(Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.POWERUP, Chip.ChipUpgrades.SHIFT)
+                    setOf(Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.POWERUP, Chip.ChipUpgrades.SHR)
                 rewardCoins = 3
             }
             8 -> {
@@ -520,7 +521,7 @@ class Stage(var theGame: Game) {
                 createWave(40, 2, .300f, 2.2f)
 
                 data.chipsAllowed =
-                    setOf(Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.POWERUP, Chip.ChipUpgrades.SHIFT)
+                    setOf(Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.POWERUP, Chip.ChipUpgrades.SHR)
                 rewardCoins = 3
             }
             9 -> {
@@ -559,7 +560,7 @@ class Stage(var theGame: Game) {
                         Chip.ChipUpgrades.SUB,
                         Chip.ChipUpgrades.POWERUP,
                         Chip.ChipUpgrades.SELL,
-                        Chip.ChipUpgrades.SHIFT
+                        Chip.ChipUpgrades.SHR
                     )
                 rewardCoins = 3
             }
@@ -602,7 +603,7 @@ class Stage(var theGame: Game) {
                         Chip.ChipUpgrades.SUB,
                         Chip.ChipUpgrades.POWERUP,
                         Chip.ChipUpgrades.SELL,
-                        Chip.ChipUpgrades.SHIFT
+                        Chip.ChipUpgrades.SHR
                     )
                 rewardCoins = 3
             }
@@ -653,7 +654,7 @@ class Stage(var theGame: Game) {
                         Chip.ChipUpgrades.SUB,
                         Chip.ChipUpgrades.POWERUP,
                         Chip.ChipUpgrades.SELL,
-                        Chip.ChipUpgrades.SHIFT
+                        Chip.ChipUpgrades.SHR
                     )
                 rewardCoins = 3
 
@@ -702,7 +703,7 @@ class Stage(var theGame: Game) {
                         Chip.ChipUpgrades.SUB,
                         Chip.ChipUpgrades.POWERUP,
                         Chip.ChipUpgrades.SELL,
-                        Chip.ChipUpgrades.SHIFT
+                        Chip.ChipUpgrades.SHR
                     )
                 rewardCoins = 3
             }
@@ -751,7 +752,7 @@ class Stage(var theGame: Game) {
                         Chip.ChipUpgrades.SUB,
                         Chip.ChipUpgrades.POWERUP,
                         Chip.ChipUpgrades.SELL,
-                        Chip.ChipUpgrades.SHIFT
+                        Chip.ChipUpgrades.SHR
                     )
                 rewardCoins = 3
             }
@@ -800,7 +801,7 @@ class Stage(var theGame: Game) {
                     Chip.ChipUpgrades.SUB,
                     Chip.ChipUpgrades.POWERUP,
                     Chip.ChipUpgrades.SELL,
-                    Chip.ChipUpgrades.SHIFT,
+                    Chip.ChipUpgrades.SHR,
                     Chip.ChipUpgrades.MEM
                 )
                 rewardCoins = 3
@@ -854,7 +855,7 @@ class Stage(var theGame: Game) {
                     Chip.ChipUpgrades.SUB,
                     Chip.ChipUpgrades.POWERUP,
                     Chip.ChipUpgrades.SELL,
-                    Chip.ChipUpgrades.SHIFT,
+                    Chip.ChipUpgrades.SHR,
                     Chip.ChipUpgrades.MEM
                 )
                 rewardCoins = 3
@@ -906,7 +907,7 @@ class Stage(var theGame: Game) {
                     Chip.ChipUpgrades.SUB,
                     Chip.ChipUpgrades.POWERUP,
                     Chip.ChipUpgrades.SELL,
-                    Chip.ChipUpgrades.SHIFT,
+                    Chip.ChipUpgrades.SHR,
                     Chip.ChipUpgrades.MEM
                 )
                 rewardCoins = 3
@@ -957,7 +958,7 @@ class Stage(var theGame: Game) {
                     Chip.ChipUpgrades.SUB,
                     Chip.ChipUpgrades.POWERUP,
                     Chip.ChipUpgrades.SELL,
-                    Chip.ChipUpgrades.SHIFT,
+                    Chip.ChipUpgrades.SHR,
                     Chip.ChipUpgrades.MEM
                 )
                 rewardCoins = 3
@@ -1006,7 +1007,7 @@ class Stage(var theGame: Game) {
                     Chip.ChipUpgrades.SUB,
                     Chip.ChipUpgrades.POWERUP,
                     Chip.ChipUpgrades.SELL,
-                    Chip.ChipUpgrades.SHIFT,
+                    Chip.ChipUpgrades.SHR,
                     Chip.ChipUpgrades.MEM
                 )
                 rewardCoins = 3
@@ -1070,7 +1071,7 @@ class Stage(var theGame: Game) {
                     Chip.ChipUpgrades.SUB,
                     Chip.ChipUpgrades.POWERUP,
                     Chip.ChipUpgrades.SELL,
-                    Chip.ChipUpgrades.SHIFT,
+                    Chip.ChipUpgrades.SHR,
                     Chip.ChipUpgrades.MEM
                 )
                 rewardCoins = 3
@@ -1114,7 +1115,7 @@ class Stage(var theGame: Game) {
 
                 data.chipsAllowed = setOf(
                     Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.POWERUP, Chip.ChipUpgrades.SELL,
-                    Chip.ChipUpgrades.SHIFT, Chip.ChipUpgrades.MEM, Chip.ChipUpgrades.ACC
+                    Chip.ChipUpgrades.SHR, Chip.ChipUpgrades.MEM, Chip.ChipUpgrades.ACC
                 )
                 rewardCoins = 3
             }
@@ -1186,7 +1187,7 @@ class Stage(var theGame: Game) {
 
                 data.chipsAllowed = setOf(
                     Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.POWERUP, Chip.ChipUpgrades.SELL,
-                    Chip.ChipUpgrades.SHIFT, Chip.ChipUpgrades.MEM, Chip.ChipUpgrades.ACC
+                    Chip.ChipUpgrades.SHR, Chip.ChipUpgrades.MEM, Chip.ChipUpgrades.ACC
                 )
                 rewardCoins = 3
             }
@@ -1253,12 +1254,12 @@ class Stage(var theGame: Game) {
                 createChip(40, 10, 3)
                 createChip(10, 20, 4)
                 createChip(30, 20, 5)
-                createChip(40, 20, 6)
+                createChip(40, 20, 6).setType(Chip.ChipType.ADD)
                 createChip(12, 30, 7)
                 createChip(35, 30, 8)
                 createChip(12, 40, 9)
                 createChip(35, 40, 10)
-                createChip(20, 20, 11)
+                createChip(20, 20, 11).setType(Chip.ChipType.SHL)
                 createChip(12, 50, ident = 900, type = Chip.ChipType.CPU)
 
                 createLink(100, 1, 1)
@@ -1368,7 +1369,7 @@ class Stage(var theGame: Game) {
                 // If none is given, all chip types are allowed, even future ones.
                 data.chipsAllowed = setOf(
                     Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.POWERUP, Chip.ChipUpgrades.SELL,
-                    Chip.ChipUpgrades.SHIFT, Chip.ChipUpgrades.MEM, Chip.ChipUpgrades.ACC
+                    Chip.ChipUpgrades.SHR, Chip.ChipUpgrades.MEM, Chip.ChipUpgrades.ACC
                 )
 
                 // Number of coins that are rewarded for the completion of a level. A good number is 3.

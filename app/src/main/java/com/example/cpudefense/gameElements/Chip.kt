@@ -13,8 +13,8 @@ import java.util.concurrent.CopyOnWriteArrayList
 
 open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gridX.toFloat(), gridY.toFloat())
 {
-    enum class ChipType { EMPTY, SUB, SHIFT, MEM, ACC, ENTRY, CPU}
-    enum class ChipUpgrades { POWERUP, SELL, SUB, SHIFT, MEM, ACC }
+    enum class ChipType { EMPTY, SUB, SHR, MEM, ACC, SHL, ADD, ENTRY, CPU}
+    enum class ChipUpgrades { POWERUP, REDUCE, SELL, SUB, SHR, MEM, ACC }
 
     data class Data(
         var type: ChipType = ChipType.EMPTY,
@@ -93,12 +93,12 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
                 val modifier: Float = network.theGame.gameUpgrades[Hero.Type.INCREASE_CHIP_SUB_SPEED]?.getStrength() ?: 1f
                 chipData.cooldown = (20f / modifier).toInt()
             }
-            ChipType.SHIFT -> {
+            ChipType.SHR -> {
                 chipData.power = 1
                 bitmap = null
                 chipData.color = resources.getColor(R.color.chips_shr_foreground)
                 chipData.glowColor = resources.getColor(R.color.chips_shr_glow)
-                chipData.value = Game.basePrice[ChipUpgrades.SHIFT] ?: 10
+                chipData.value = Game.basePrice[ChipUpgrades.SHR] ?: 10
                 val modifier: Float = network.theGame.gameUpgrades[Hero.Type.INCREASE_CHIP_SHIFT_SPEED]?.getStrength() ?: 1f
                 chipData.cooldown = (32f / modifier).toInt()
             }
@@ -119,6 +119,24 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
                 chipData.value = Game.basePrice[ChipUpgrades.ACC] ?: 10
                 val modifier: Float = network.theGame.gameUpgrades[Hero.Type.INCREASE_CHIP_ACC_SPEED]?.getStrength() ?: 1f
                 chipData.cooldown = (16f / modifier).toInt()
+            }
+            ChipType.SHL -> {
+                chipData.power = 1
+                bitmap = null
+                chipData.color = resources.getColor(R.color.chips_shl_foreground)
+                chipData.glowColor = resources.getColor(R.color.chips_shl_glow)
+                chipData.value = Game.basePrice[ChipUpgrades.REDUCE] ?: 20
+                val modifier = 1.5f
+                chipData.cooldown = (32f / modifier).toInt()
+            }
+            ChipType.ADD -> {
+                chipData.power = 1
+                bitmap = null
+                chipData.color = resources.getColor(R.color.chips_add_foreground)
+                chipData.glowColor = resources.getColor(R.color.chips_add_glow)
+                chipData.value = Game.basePrice[ChipUpgrades.REDUCE] ?: 20
+                val modifier = 1.5f
+                chipData.cooldown = (20f / modifier).toInt()
             }
             else -> {}
         }
@@ -270,7 +288,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
         when (chipData.type)
         {
             ChipType.SUB -> return createBitmap("SUB %d".format(chipData.power))
-            ChipType.SHIFT -> return createBitmap("SHR %d".format(chipData.power))
+            ChipType.SHR -> return createBitmap("SHR %d".format(chipData.power))
             ChipType.MEM -> return createBitmap("MEM %d".format(chipData.power))
             ChipType.ACC -> return when (chipData.power)
             {
@@ -278,6 +296,8 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
                 2 -> createBitmap("ACC v")
                 else -> createBitmap("ACC &")
             }
+            ChipType.SHL -> return createBitmap("SHL %d".format(chipData.power))
+            ChipType.ADD -> return createBitmap("ADD %d".format(chipData.power))
             else -> return null
         }
     }
@@ -322,7 +342,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
         when (chipData.type) {
             ChipType.EMPTY -> {
                 alternatives.add(ChipUpgrades.SUB)
-                alternatives.add(ChipUpgrades.SHIFT)
+                alternatives.add(ChipUpgrades.SHR)
                 alternatives.add(ChipUpgrades.ACC)
                 alternatives.add(ChipUpgrades.MEM)
             }
@@ -330,7 +350,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
                 alternatives.add(ChipUpgrades.POWERUP)
                 alternatives.add(ChipUpgrades.SELL)
             }
-            ChipType.SHIFT -> {
+            ChipType.SHR -> {
                 alternatives.add(ChipUpgrades.POWERUP)
                 alternatives.add(ChipUpgrades.SELL)
             }
@@ -343,6 +363,12 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
             ChipType.MEM -> {
                 alternatives.add(ChipUpgrades.SELL)
             }
+            ChipType.SHL -> {
+                alternatives.add(ChipUpgrades.REDUCE)
+            }
+            ChipType.ADD -> {
+                alternatives.add(ChipUpgrades.REDUCE)
+            }
                 else -> {}
         }
 
@@ -354,8 +380,8 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
 
         // calculate screen coordinates for the alternative boxes
         actualRect?.let { rect ->
-            var posX = rect.centerX()
-            var posY = rect.centerY()
+            val posX = rect.centerX()
+            val posY = rect.centerY()
             val positions = listOf(
                 Pair(1.0f, -0.5f),
                 Pair(1.0f, +0.5f),
@@ -363,7 +389,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
                 Pair(2.0f, +0.5f)
             )
             val factorY = 1.5 * rect.height()
-            var factorX: Float
+            val factorX: Float
             if (network.theGame.viewport.isInRightHalfOfViewport(posX))
                 factorX = -1.2f * rect.width()
             else
@@ -393,7 +419,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
                 return true
             }
 
-        if (actualRect?.contains(event.x.toInt(), event.y.toInt()) ?: false
+        if (actualRect?.contains(event.x.toInt(), event.y.toInt()) == true
             && upgradePossibilities.isEmpty()) // gesture is inside this card
         {
             showUpgrades()

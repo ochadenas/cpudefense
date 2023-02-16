@@ -26,6 +26,7 @@ class Instructions(val game: Game, var stage: Int, var callback: (()->Unit)? ): 
             9 -> game.resources.getString(R.string.instr_8)
             14 -> game.resources.getString(R.string.instr_9)
             20 -> game.resources.getString(R.string.instr_10)
+            23 -> "Two more chip types: ADD and SHL.\n\nThese do the opposite of SUB and SHR, respectively: They add 1 to the number and shift the bits to the left.\n\nOf course, this is really undesired. You can 'upgrade' these chips to reduce their strength or make them disappear."
             10 -> game.resources.getString(R.string.instr_11)
 
             else -> ""

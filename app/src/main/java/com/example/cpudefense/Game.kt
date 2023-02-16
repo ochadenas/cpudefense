@@ -48,8 +48,8 @@ class Game(val gameActivity: MainGameActivity) {
 
         const val levelSnapshotIconSize = 120
 
-        val basePrice = mapOf(
-            Chip.ChipUpgrades.SUB to 8, Chip.ChipUpgrades.ACC to 10, Chip.ChipUpgrades.SHIFT to 16, Chip.ChipUpgrades.MEM to 12)
+        val basePrice = mapOf(Chip.ChipUpgrades.REDUCE to 20,
+            Chip.ChipUpgrades.SUB to 8, Chip.ChipUpgrades.ACC to 10, Chip.ChipUpgrades.SHR to 16, Chip.ChipUpgrades.MEM to 12 )
     }
 
     var globalSpeedFactor = 1.0f
@@ -269,7 +269,7 @@ class Game(val gameActivity: MainGameActivity) {
     private fun onStageCleared(stage: Stage)
     {
         gameActivity.runOnUiThread {
-            val toast: Toast = Toast.makeText(gameActivity, "Stage cleared", Toast.LENGTH_SHORT)
+            val toast: Toast = Toast.makeText(gameActivity, resources.getString(R.string.toast_stage_cleared), Toast.LENGTH_SHORT)
             toast.show()
         }
         intermezzo.coinsGathered = state.coinsExtra + state.coinsInLevel
@@ -302,7 +302,7 @@ class Game(val gameActivity: MainGameActivity) {
         calculateStartingCash()
         val nextStage = Stage(this)
         gameActivity.runOnUiThread {
-            val toast: Toast = Toast.makeText(gameActivity, "Stage %d".format(nextStage.data.level), Toast.LENGTH_SHORT)
+            val toast: Toast = Toast.makeText(gameActivity, resources.getString(R.string.toast_next_stage).format(nextStage.data.level), Toast.LENGTH_SHORT)
             toast.show() }
         network = nextStage.createNetwork(level)
         state.coinsInLevel = nextStage.calculateRewardCoins(summaryPerLevel[level])
