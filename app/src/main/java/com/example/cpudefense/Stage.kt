@@ -1295,10 +1295,55 @@ class Stage(var theGame: Game) {
                 createWave(24, 160, .12f, 1.4f, coins = 0)
 
                 rewardCoins = 3
+            }
+            24 -> {
+                initializeNetwork(50, 55)
+
+                createChip(25, 0, ident = 100, type = Chip.ChipType.ENTRY)
+                createChip(25, 8, 1).setType(Chip.ChipType.SHL)
+                createChip(25, 16, 2)
+                createChip(25, 24, 3)
+                createChip(25, 32, 4)
+                createChip(25, 40, 5).setType(Chip.ChipType.ADD)
+                createChip(25, 48, ident = 900, type = Chip.ChipType.CPU)
+                createChip(12, 20, 6)
+                createChip(38, 28, 7)
+
+                createLink(100, 1, 1)
+                createLink(1, 2, 2)
+                createLink(1, 2, 2)
+                createLink(2, 3, 3)
+                createLink(3, 4, 4)
+                createLink(4, 5, 5)
+                createLink(5, 900, 6)
+                createLink(1, 6, 7, 0x0c)
+                createLink(6, 4, 8, 0x0c)
+                createLink(2, 7, 9, 0x03)
+                createLink(7, 5, 10, 0x03)
+
+                createTrack(listOf(1, 7, 8, 5, 6), 0)
+                createTrack(listOf(1, 2, 9, 10, 6), 1)
+                createTrack(listOf(1, 2, 3, 4, 5, 6), 2)
+                createTrack(listOf(1, 2, 3, 4, 5, 6), 3)
+                createTrack(listOf(1, 2, 3, 4, 5, 6), 4)
+                createTrack(listOf(1, 2, 3, 4, 5, 6), 5)
+                createTrack(listOf(1, 2, 3, 4, 5, 6), 6)
+                createTrack(listOf(1, 2, 3, 4, 5, 6), 7)
+
+                createWave(10, 1, .11f, 1.2f)
+                createWave(10, 3, .11f, 1.2f)
+                createWave(10, 6, .11f, 1.4f)
+                createWave(10, 8, .12f, 1.5f)
+                createWave(10, 16, .12f, 1.5f)
+                createWave(10, 30, .14f, 1.5f)
+                createWave(10, 40, .16f, 1.5f)
+                createWave(10, 50, .16f, 1.8f)
+                createWave(10, 80, .16f, 2.0f)
+
+                rewardCoins = 3
 
                 type = Type.FINAL
             }
-
             /**
              * Template for the creation of new stage data.
              * Copy and uncomment this when adding your own levels.

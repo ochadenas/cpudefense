@@ -126,7 +126,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
                 chipData.color = resources.getColor(R.color.chips_shl_foreground)
                 chipData.glowColor = resources.getColor(R.color.chips_shl_glow)
                 chipData.value = Game.basePrice[ChipUpgrades.REDUCE] ?: 20
-                val modifier = 1.5f
+                val modifier = 1.2f
                 chipData.cooldown = (32f / modifier).toInt()
             }
             ChipType.ADD -> {
@@ -135,7 +135,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
                 chipData.color = resources.getColor(R.color.chips_add_foreground)
                 chipData.glowColor = resources.getColor(R.color.chips_add_glow)
                 chipData.value = Game.basePrice[ChipUpgrades.REDUCE] ?: 20
-                val modifier = 1.5f
+                val modifier = 1.2f
                 chipData.cooldown = (20f / modifier).toInt()
             }
             else -> {}
