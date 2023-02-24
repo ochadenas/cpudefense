@@ -77,6 +77,7 @@ class WelcomeActivity : AppCompatActivity()
     fun displaySettingsDialog(@Suppress("UNUSED_PARAMETER") v: View)
     {
         val intent = Intent(this, SettingsActivity::class.java)
+        startActivity(intent)
     }
 
     fun startNewGame(@Suppress("UNUSED_PARAMETER") v: View)
