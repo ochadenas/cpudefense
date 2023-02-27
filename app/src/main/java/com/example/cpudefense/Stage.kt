@@ -1300,17 +1300,16 @@ class Stage(var theGame: Game) {
                 initializeNetwork(50, 55)
 
                 createChip(25, 0, ident = 100, type = Chip.ChipType.ENTRY)
-                createChip(25, 8, 1).setType(Chip.ChipType.SHL)
-                createChip(25, 16, 2)
-                createChip(25, 24, 3)
-                createChip(25, 32, 4)
-                createChip(25, 40, 5).setType(Chip.ChipType.ADD)
-                createChip(25, 48, ident = 900, type = Chip.ChipType.CPU)
-                createChip(12, 20, 6)
-                createChip(38, 28, 7)
+                createChip(25, 12, 1).setType(Chip.ChipType.SHL)
+                createChip(25, 20, 2)
+                createChip(25, 28, 3)
+                createChip(25, 36, 4)
+                createChip(25, 44, 5).setType(Chip.ChipType.ADD)
+                createChip(25, 52, ident = 900, type = Chip.ChipType.CPU)
+                createChip(12, 22, 6)
+                createChip(38, 30, 7)
 
                 createLink(100, 1, 1)
-                createLink(1, 2, 2)
                 createLink(1, 2, 2)
                 createLink(2, 3, 3)
                 createLink(3, 4, 4)
@@ -1337,8 +1336,50 @@ class Stage(var theGame: Game) {
                 createWave(10, 16, .12f, 1.5f)
                 createWave(10, 30, .14f, 1.5f)
                 createWave(10, 40, .16f, 1.5f)
-                createWave(10, 50, .16f, 1.8f)
+                createWave(10, 50, .16f, 1.8f, coins = 1)
                 createWave(10, 80, .16f, 2.0f)
+
+                rewardCoins = 3
+            }
+            25 -> {
+                initializeNetwork(50, 50)
+
+                createChip(5, 5, ident = 100, type = Chip.ChipType.ENTRY)
+                createChip(25, 5+Random.nextInt(5), 1)
+                createChip(40+Random.nextInt(5), 5+Random.nextInt(5), 2)
+                createChip(40+Random.nextInt(5), 25, 3)
+                createChip(25, 25, 4)
+                createChip(5+Random.nextInt(5), 25, 5)
+                createChip(5+Random.nextInt(5), 40+Random.nextInt(5), 6)
+                createChip(25, 40+Random.nextInt(5), 7)
+                createChip(40+Random.nextInt(5), 40+Random.nextInt(5), ident = 900, type = Chip.ChipType.CPU)
+
+                createLink(100, 1, 1)
+                createLink(1, 2, 2)
+                createLink(2, 3, 3)
+                createLink(3, 4, 4)
+                createLink(4, 5, 5)
+                createLink(5, 6, 6)
+                createLink(6, 7, 7)
+                createLink(7, 900, 8)
+                createLink(1, 4, 9, 0x0A)
+                createLink(4, 7, 10, 0x05)
+
+                createTrack(listOf(1,2,3,4,5,6,7,8), 0)
+                createTrack(listOf(1,2,3,4,5,6,7,8), 1)
+                createTrack(listOf(1,9,5,6,7,8), 2)
+                createTrack(listOf(1,2,3,4,10,8), 3)
+                createTrack(listOf(1,9,10,8), 4)
+
+                createWave(16, 2, .10f, 1.0f)
+                createWave(16, 4, .10f, 1.0f)
+                createWave(16, 6, .10f, 1.1f, coins = 1)
+                createWave(16, 8, .12f, 1.1f)
+                createWave(16, 16, .12f, 1.1f, coins = 1)
+                createWave(16, 30, .14f, 1.1f, coins = 1)
+                createWave(16, 40, .16f, 1.1f, coins = 1)
+                createWave(16, 50, .16f, 1.2f)
+                createWave(16, 80, .16f, 1.2f)
 
                 rewardCoins = 3
 

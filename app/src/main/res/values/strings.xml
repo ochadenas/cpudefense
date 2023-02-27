@@ -103,6 +103,12 @@ The advantage of ACC is that it is really fast."
 
 In hex, you have digits from 0 to 9 and then from A to F. The hex number 0x0F equals 15, or 1111 in binary."
     </string>
+    <string name="instr_12">
+"Two more chip types: ADD and SHL.\n\nThese do the opposite of SUB and SHR, respectively: They add 1 to the number and shift the bits to the left.\n\nOf course, this is really undesired. You can 'upgrade' these chips to reduce their strength or make them disappear."
+    </string>
+    <string name="instr_13">
+"Note that cryptocoins are unaffected by ACC and also by MEM chips."
+    </string>
 
     <string name="turing">
 "Alan Turing was one of the most important persons in computer science. He created many of the foundations in theoretical computing, such as the Turing machine and the Turing test, but he is also famous for cracking the Enigma code in World War 2. His impact on the outcome of the war can hardly be overestimated.

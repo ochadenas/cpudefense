@@ -10,6 +10,9 @@ import com.example.cpudefense.utils.setCenter
 class Cryptocoin(network: com.example.cpudefense.networkmap.Network, number: ULong = 1u, speed: Float = 1.0f):
     Attacker(network, Representation.BINARY, number, speed)
 {
+    init {
+        this.attackerData.isCoin = true
+    }
     override fun display(canvas: Canvas, viewport: Viewport) {
         actualRect = Rect(0,0, Game.coinSizeOnScreen, Game.coinSizeOnScreen)
         actualRect.setCenter(getPositionOnScreen())
@@ -18,12 +21,21 @@ class Cryptocoin(network: com.example.cpudefense.networkmap.Network, number: ULo
         canvas.drawBitmap(theNetwork.theGame.coinIcon, null, actualRect, paint)
     }
 
-    override fun onShot(type: Chip.ChipType, power: Int): Boolean {
-        if (super.onShot(type, power))
+    override fun onShot(type: Chip.ChipType, power: Int): Boolean
+    {
+        when (type)
         {
-            theNetwork.theGame.state.coinsExtra++
-            return true
+            Chip.ChipType.ACC -> return false
+            Chip.ChipType.MEM -> return false
+            else -> {
+                if (super.onShot(type, power))
+                {
+                    theNetwork.theGame.state.coinsExtra++
+                    return true
+                }
+                else
+                    return false
+            }
         }
-        return false
     }
 }

@@ -108,4 +108,6 @@ Ein Teil der Information wird dir dabei zurückerstattet."
     <string name="upgrade_format">%s  [Kosten: %d]</string>
     <string name="toast_next_stage">Level %d</string>
     <string name="toast_stage_cleared">Level geschafft</string>
+    <string name="instr_12">Zwei weitere Chiparten: ADD und SHL.\n\nDiese tun das Gegenteil von SUB und SHR: Sie subtrahieren 1 von der Zahl bzw. schieben die Bits nach links.\n\nDas ist natürlich unerwünscht, denn es macht die Zahlen größer. Für diese Chips bedeutet ein \'Upgrade\', dass sie schwächer werden oder ganz verschwinden.</string>
+    <string name="instr_13">"Beachte, dass CryptoCoins weder von ACC- noch von MEM-Chips beeinflusst werden.\n "</string>
 </resources>

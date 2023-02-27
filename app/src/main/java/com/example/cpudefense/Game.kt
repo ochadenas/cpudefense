@@ -22,7 +22,7 @@ import java.util.concurrent.CopyOnWriteArrayList
 
 class Game(val gameActivity: MainGameActivity) {
     companion object Params {
-        const val maxLevelAvailable: Int = 24
+        const val maxLevelAvailable: Int = 25
 
         const val defaultMainDelay = 70L
         val chipSize = GridCoord(6,3)
