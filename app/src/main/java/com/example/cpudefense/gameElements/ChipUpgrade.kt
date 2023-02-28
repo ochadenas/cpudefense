@@ -19,6 +19,7 @@ class ChipUpgrade(val chipToUpgrade: Chip, val type: Chip.ChipUpgrades,
 
     fun calculatePrice(): Int
     {
+        var penalty = 0 // possible price modification
         when (type){
             Chip.ChipUpgrades.POWERUP -> {
                 var upgradePrice = chipToUpgrade.chipData.value * 1.5
@@ -34,7 +35,16 @@ class ChipUpgrade(val chipToUpgrade: Chip, val type: Chip.ChipUpgrades,
                 val refund = - chipToUpgrade.chipData.value * (game.gameUpgrades[Hero.Type.INCREASE_REFUND]?.getStrength() ?: 50f) * 0.01f
                 return refund.toInt()
             }
-            else -> return Game.basePrice.getOrElse(type, { 100 } )
+            Chip.ChipUpgrades.ACC -> {
+                // ACC chips are more expensive if there are already chips of the same type
+                game.currentStage?.let {
+                    val count = it.chipCount(Chip.ChipType.ACC)
+                    penalty = count*count*count
+                }
+                val p = Game.basePrice.getOrElse(Chip.ChipUpgrades.ACC, {20}) + penalty
+                return p
+            }
+            else -> return Game.basePrice.getOrElse(type, { 20 } )
         }
     }
 

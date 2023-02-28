@@ -420,7 +420,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
             }
 
         if (actualRect?.contains(event.x.toInt(), event.y.toInt()) == true
-            && upgradePossibilities.isEmpty()) // gesture is inside this card
+            && upgradePossibilities.isEmpty()) // gesture is inside this chip
         {
             showUpgrades()
             return true

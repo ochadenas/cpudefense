@@ -159,7 +159,6 @@ class Network(val theGame: Game, x: Int, y: Int): GameElement() {
         return node
     }
 
-
     fun addLink(link: Link?, ident: Int = -1): Int
             /**
              * @param ident If no ident is given, a new one is created.

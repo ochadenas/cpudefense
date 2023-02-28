@@ -142,6 +142,15 @@ class Stage(var theGame: Game) {
             attacker.setOntoTrack(tracks[Random.nextInt(tracks.size)])
     }
 
+    fun chipCount(type: Chip.ChipType): Int
+            /**
+             * @param type the type of chips to be counted
+             *  @return the number of chips of this type in the network
+             *  */
+    {
+        return chips.values.filter { it.chipData.type == type }.size
+    }
+
     fun attackerCount(): Int
     {
         return network.vehicles.size
@@ -1371,12 +1380,12 @@ class Stage(var theGame: Game) {
                 createTrack(listOf(1,2,3,4,10,8), 3)
                 createTrack(listOf(1,9,10,8), 4)
 
-                createWave(16, 2, .10f, 1.0f)
-                createWave(16, 4, .10f, 1.0f)
-                createWave(16, 6, .10f, 1.1f, coins = 1)
-                createWave(16, 8, .12f, 1.1f)
-                createWave(16, 16, .12f, 1.1f, coins = 1)
-                createWave(16, 30, .14f, 1.1f, coins = 1)
+                createWave(16, 3, .10f, 1.0f)
+                createWave(16, 5, .10f, 1.0f)
+                createWave(16, 8, .10f, 1.1f)
+                createWave(16, 12, .12f, 1.1f)
+                createWave(16, 16, .12f, 1.1f)
+                createWave(16, 30, .14f, 1.1f)
                 createWave(16, 40, .16f, 1.1f, coins = 1)
                 createWave(16, 50, .16f, 1.2f)
                 createWave(16, 80, .16f, 1.2f)
