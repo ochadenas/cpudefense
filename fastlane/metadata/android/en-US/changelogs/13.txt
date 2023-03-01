@@ -6,7 +6,6 @@ Bugfixes:
 - the game no longer crashes when trying to resume a game beyond the last level
 - fixed a bug that let attackers always appear as binary and never as hex
 - MEM chips can now be sold
-- cryptocoins are no longer affected by ACC chips
 
 Miscellaneous:
 - darkened some background images that were too distracting
