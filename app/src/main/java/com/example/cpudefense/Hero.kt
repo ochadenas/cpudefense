@@ -406,7 +406,7 @@ class Hero(var game: Game, type: Type): Fadable {
                 {
                     name = "Turing"
                     fullName = "Alan Turing"
-                    effect = "Increases speed of all %s chips".format("SUB")
+                    effect = game.resources.getString(R.string.HERO_EFFECT_CHIPSPEED).format("SUB")
                     vitae = game.resources.getString(R.string.turing)
                     picture = BitmapFactory.decodeResource(game.resources, R.drawable.turing)
                 }
@@ -414,7 +414,7 @@ class Hero(var game: Game, type: Type): Fadable {
                 {
                     name = "Lovelace"
                     fullName = "Ada Lovelace"
-                    effect = "Increases speed of all %s chips".format("SHR")
+                    effect = game.resources.getString(R.string.HERO_EFFECT_CHIPSPEED).format("SHR")
                     vitae = game.resources.getString(R.string.lovelace)
                     picture = BitmapFactory.decodeResource(game.resources, R.drawable.lovelace)
                 }
@@ -422,7 +422,7 @@ class Hero(var game: Game, type: Type): Fadable {
                 {
                     name = "Knuth"
                     fullName = "Donald E. Knuth"
-                    effect = "Increases speed of all %s chips".format("MEM")
+                    effect = game.resources.getString(R.string.HERO_EFFECT_CHIPSPEED).format("MEM")
                     vitae = game.resources.getString(R.string.knuth)
                     picture = BitmapFactory.decodeResource(game.resources, R.drawable.knuth)
                 }
@@ -430,7 +430,7 @@ class Hero(var game: Game, type: Type): Fadable {
                 {
                     name = "Hollerith"
                     fullName = "Herman Hollerith"
-                    effect = "Increases information at start of level"
+                    effect = game.resources.getString(R.string.HERO_EFFECT_STARTINFO)
                     vitae = game.resources.getString(R.string.hollerith)
                     picture = BitmapFactory.decodeResource(game.resources, R.drawable.hollerith)
                 }
@@ -438,7 +438,7 @@ class Hero(var game: Game, type: Type): Fadable {
                 {
                     name = "Osborne"
                     fullName = "Adam Osborne"
-                    effect = "Decreases upgrade cost of all chips"
+                    effect = game.resources.getString(R.string.HERO_EFFECT_UPGRADECOST)
                     vitae = game.resources.getString(R.string.osborne)
                     picture = BitmapFactory.decodeResource(game.resources, R.drawable.osborne)
                 }
@@ -446,7 +446,7 @@ class Hero(var game: Game, type: Type): Fadable {
                 {
                     name = "Zuse"
                     fullName = "Konrad Zuse"
-                    effect = "Grants additional lives"
+                    effect = game.resources.getString(R.string.HERO_EFFECT_LIVES)
                     vitae = game.resources.getString(R.string.zuse)
                     picture = BitmapFactory.decodeResource(game.resources, R.drawable.zuse)
                 }
@@ -454,7 +454,7 @@ class Hero(var game: Game, type: Type): Fadable {
                 {
                     name = "LHC"
                     fullName = "Les Horribles Cernettes"
-                    effect = "Decreases attacker frequency"
+                    effect = game.resources.getString(R.string.HERO_EFFECT_FREQUENCY)
                     vitae = game.resources.getString(R.string.cernettes)
                     picture = BitmapFactory.decodeResource(game.resources, R.drawable.cernettes)
                 }
@@ -462,7 +462,7 @@ class Hero(var game: Game, type: Type): Fadable {
                 {
                     name = "Franke"
                     fullName = "Herbert W. Franke"
-                    effect = "Gains additional bits over time"
+                    effect = game.resources.getString(R.string.HERO_EFFECT_INFOOVERTIME)
                     vitae = game.resources.getString(R.string.franke)
                     picture = BitmapFactory.decodeResource(game.resources, R.drawable.franke)
                 }
@@ -470,7 +470,7 @@ class Hero(var game: Game, type: Type): Fadable {
                 {
                     name = "Vaughan"
                     fullName = "Dorothy Vaughan"
-                    effect = "Decreases attacker speed"
+                    effect = game.resources.getString(R.string.HERO_EFFECT_ATTSPEED)
                     vitae = game.resources.getString(R.string.vaughan)
                     picture = BitmapFactory.decodeResource(game.resources, R.drawable.vaughan)
                 }
@@ -478,7 +478,7 @@ class Hero(var game: Game, type: Type): Fadable {
                 {
                     name = "Tramiel"
                     fullName = "Jack Tramiel"
-                    effect = "Increases refund when selling chips"
+                    effect = game.resources.getString(R.string.HERO_EFFECT_REFUNDPRICE)
                     vitae = game.resources.getString(R.string.tramiel)
                     picture = BitmapFactory.decodeResource(game.resources, R.drawable.tramiel)
                 }

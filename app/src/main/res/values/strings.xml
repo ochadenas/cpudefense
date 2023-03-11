@@ -204,6 +204,14 @@ All other artwork:
     <string name="upgrade_format">%s  [cost: %d]</string>
     <string name="toast_next_stage">Stage %d</string>
     <string name="toast_stage_cleared">Stage cleared</string>
+    <string name="HERO_EFFECT_CHIPSPEED">Increases speed of all %s chips</string>
+    <string name="HERO_EFFECT_STARTINFO">Increases information at start of level</string>
+    <string name="HERO_EFFECT_UPGRADECOST">Decreases upgrade cost of all chips</string>
+    <string name="HERO_EFFECT_LIVES">Grants additional lives</string>
+    <string name="HERO_EFFECT_FREQUENCY">Decreases attacker frequency</string>
+    <string name="HERO_EFFECT_INFOOVERTIME">Gains additional bits over time</string>
+    <string name="HERO_EFFECT_ATTSPEED">Decreases attacker speed</string>
+    <string name="HERO_EFFECT_REFUNDPRICE">Increases refund when selling chips</string>
 
 
 </resources>
