@@ -11,5 +11,8 @@ on the development of modern computers. They come with a short biography und pro
 
 The game is under development, but already playable. Currently, it has some 20 levels, 4 types of chips, and 10 heroes and heroines.
 
+[<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
+     alt="Get it on F-Droid"
+     height="80">](https://f-droid.org/packages/de.chadenas.cpudefense/)
 
-
+Or get the latest APK from the [Releases Section](https://github.com/ochadenas/cpudefense/releases/latest).
