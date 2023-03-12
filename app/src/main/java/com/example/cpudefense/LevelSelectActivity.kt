@@ -58,10 +58,15 @@ class LevelSelectActivity : AppCompatActivity() {
                 addLevelIcon(levelEntryView, thumbnail)
 
                 levelEntryView.setTextAppearance(this, R.style.TextAppearance_AppCompat_Medium)
-                if (summary.won)
-                    levelEntryView.setTextColor(resources.getColor(R.color.text_green))
-                else
-                    levelEntryView.setTextColor(resources.getColor(R.color.text_amber))
+                // choose color of text:
+                when
+                {
+                    (summary.won == true && summary.coinsAvailable > 0) ->
+                        levelEntryView.setTextColor(resources.getColor(R.color.text_lightgreen))
+                    summary.won == true -> levelEntryView.setTextColor(resources.getColor(R.color.text_green))
+                    else -> levelEntryView.setTextColor(resources.getColor(R.color.text_amber))
+
+                }
                 levelEntryView.isClickable = true
                 levelEntryView.setOnClickListener { onLevelSelect(levelEntryView, level) }
                 listView.addView(levelEntryView)
