@@ -26,7 +26,7 @@ class ProgressNotification (theGame: Game)
         paintRect.strokeWidth = 4.0f
         paintText.color = paintRect.color
         paintText.style = Paint.Style.FILL
-        paintText.textSize = Game.notificationTextSize
+        paintText.textSize = Game.notificationTextSize * theGame.resources.displayMetrics.scaledDensity
     }
 
     fun setPositionOnScreen(x: Int, y: Int)

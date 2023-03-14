@@ -10,7 +10,7 @@ import java.util.concurrent.CopyOnWriteArrayList
 class Typewriter(val game: Game, myArea: Rect, private var lines: CopyOnWriteArrayList<String>, private var callback: (() -> Unit)?) {
     var textBoxes = CopyOnWriteArrayList<TextBox>()
     val pos = Pair(myArea.left + 50, myArea.bottom - 50)
-    val lineSpacingY = 70
+    val lineSpacingY = Game.computerTextSize * game.resources.displayMetrics.scaledDensity * 1.8f
 
     init { showNextLine() }
 
@@ -33,7 +33,7 @@ class Typewriter(val game: Game, myArea: Rect, private var lines: CopyOnWriteArr
         Fadable
     {
         var alpha = 255
-        val textSize = Game.computerTextSize
+        val textSize = Game.computerTextSize * game.resources.displayMetrics.scaledDensity
         var stringLength = 0 // number of characters to display
         var x = topLeft.first.toFloat()
         var y = topLeft.second.toFloat()

@@ -124,7 +124,7 @@ class ChipUpgrade(val chipToUpgrade: Chip, val type: Chip.ChipUpgrades,
         paintFrame.color = if (type== Chip.ChipUpgrades.SELL) Color.RED else color
 
         val newCanvas = Canvas(bitmap)
-        paintText.textSize = Game.chipTextSize
+        paintText.textSize = Game.chipTextSize * game.resources.displayMetrics.scaledDensity
         paintText.alpha = 255
         paintText.setTypeface(Typeface.create("sans-serif-condensed", Typeface.BOLD))
         paintText.textAlign = Paint.Align.CENTER
@@ -132,7 +132,7 @@ class ChipUpgrade(val chipToUpgrade: Chip, val type: Chip.ChipUpgrades,
         rect.displayTextCenteredInRect(newCanvas, text, paintText)
         canvas.drawBitmap(bitmap, null, actualRect, paintText)
 
-        paintBackground.color = chipToUpgrade.theNetwork?.theGame?.resources?.getColor(R.color.network_background) ?: Color.BLACK
+        paintBackground.color = game.resources.getColor(R.color.network_background) ?: Color.BLACK
         paintBackground.alpha = 80
         paintBackground.style = Paint.Style.FILL
         canvas.drawRect(actualRect, paintBackground)
@@ -148,8 +148,8 @@ class ChipUpgrade(val chipToUpgrade: Chip, val type: Chip.ChipUpgrades,
         paintBackground.alpha = 160
         canvas.drawRect(priceRect, paintBackground)
         paintText.typeface = Typeface.create("sans-serif-condensed", Typeface.ITALIC)
-        paintText.textSize = Game.chipTextSize - 0
-        paintText.color = if (canAfford()) paintFrame.color else Color.YELLOW
+        paintText.textSize = (Game.chipTextSize - 0) * game.resources.displayMetrics.scaledDensity
+                paintText.color = if (canAfford()) paintFrame.color else Color.YELLOW
         canvas.drawText(game.scoreBoard.informationToString(price), actualRect.right.toFloat()-4, actualRect.top.toFloat()+6, paintText)
     }
 }

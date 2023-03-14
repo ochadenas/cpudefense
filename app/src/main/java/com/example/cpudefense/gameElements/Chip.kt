@@ -310,7 +310,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
             val canvas = Canvas(bitmap)
             val paint = Paint()
 
-            paint.textSize = Game.chipTextSize
+            paint.textSize = (Game.chipTextSize * resources.displayMetrics.scaledDensity)
             paint.alpha = 255
             paint.typeface = Typeface.create("sans-serif-condensed", Typeface.BOLD)
             paint.textAlign = Paint.Align.CENTER

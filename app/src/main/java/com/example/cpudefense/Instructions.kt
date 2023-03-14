@@ -53,7 +53,7 @@ class Instructions(val game: Game, var stage: Int, var callback: (()->Unit)? ): 
 
         var text = instructionText(stage)
         val textPaint = TextPaint()
-        textPaint.textSize = Game.instructionTextSize
+        textPaint.textSize = Game.instructionTextSize * game.resources.displayMetrics.scaledDensity
         textPaint.color = Color.WHITE
         textPaint.alpha = alpha
         val textLayout = StaticLayout(

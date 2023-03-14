@@ -2,8 +2,13 @@ package com.example.cpudefense.gameElements
 
 import android.graphics.*
 import android.view.MotionEvent
+import androidx.core.graphics.createBitmap
+import com.example.cpudefense.Game
+import com.example.cpudefense.R
 import com.example.cpudefense.networkmap.Network
 import com.example.cpudefense.networkmap.Viewport
+import com.example.cpudefense.utils.displayTextCenteredInRect
+import com.example.cpudefense.utils.makeSquare
 import com.example.cpudefense.utils.scale
 import com.example.cpudefense.utils.setCenter
 
@@ -17,7 +22,7 @@ class Cpu(network: Network, gridX: Int, gridY: Int): Chip(network, gridX, gridY)
     var cpuData = CpuData(hits = 0)
     override var actualRect: Rect? = null
 
-    override var bitmap: Bitmap? = network.theGame.cpuImage
+    override var bitmap: Bitmap? = null
     private val maxAnimationCount: Int = 32
     private var animationCount: Int = 0
 
@@ -45,8 +50,18 @@ class Cpu(network: Network, gridX: Int, gridY: Int): Chip(network, gridX, gridY)
         }
     }
 
+    private fun createBitmap(): Bitmap?
+    {
+        var bitmap: Bitmap? = null
+        actualRect = calculateActualRect()?.makeSquare()?.scale(2.5f)
+        actualRect?.let {bitmap = Bitmap.createScaledBitmap(network.theGame.cpuImage, it.width(), it.height(), true) }
+        return bitmap
+    }
+
     override fun display(canvas: Canvas, viewport: Viewport)
     {
+        if (bitmap == null)
+            bitmap = createBitmap()
         actualRect?.let { rect ->
             rect.setCenter(viewport.gridToViewport(posOnGrid))
             val paint = Paint()

@@ -88,32 +88,41 @@ class Marketplace(val game: Game): GameElement()
     private fun createButton()
     {
         val bottomMargin = 40
-        buttonFinish = Button(game.resources.getString(R.string.button_resume), style = 1)
+        buttonFinish = Button(game.resources.getString(R.string.button_resume),
+            textsize = Game.purchaseButtonTextSize * game.resources.displayMetrics.scaledDensity,
+            style = 1)
         buttonFinish?.let {
             Fader(game, it, Fader.Type.APPEAR, Fader.Speed.SLOW)
-            it.myArea.setBottomRight(myArea.right-50, myArea.bottom-bottomMargin)
+            it.alignRight(myArea.right, myArea.bottom - bottomMargin - it.area.height())
+            // it.area.setBottomRight(myArea.right-50, myArea.bottom-bottomMargin)
         }
-        buttonRefund = Button(game.resources.getString(R.string.button_refund), style = 1)
+        buttonRefund = Button(game.resources.getString(R.string.button_refund),
+            textsize = Game.purchaseButtonTextSize * game.resources.displayMetrics.scaledDensity,
+            style = 1)
         buttonRefund?.let {
             Fader(game, it, Fader.Type.APPEAR, Fader.Speed.SLOW)
-            it.myArea.setBottomRight(myArea.right-50, myArea.bottom - bottomMargin - 2*(buttonFinish?.myArea?.height() ?: 200))
+            it.alignRight(myArea.right, myArea.bottom - bottomMargin - 3*it.area.height())
+            // it.area.setBottomRight(myArea.right-50, myArea.bottom - bottomMargin - 2*(buttonFinish?.area?.height() ?: 200))
         }
-        buttonPurchase = Button(game.resources.getString(R.string.button_purchase), style = 1)
+        buttonPurchase = Button(game.resources.getString(R.string.button_purchase),
+            textsize = Game.purchaseButtonTextSize * game.resources.displayMetrics.scaledDensity,
+            style = 1)
         buttonPurchase?.let {
             Fader(game, it, Fader.Type.APPEAR, Fader.Speed.SLOW)
-            it.myArea.setBottomRight(myArea.right-50, myArea.bottom - bottomMargin - 4*(buttonFinish?.myArea?.height() ?: 200))
+            it.alignRight(myArea.right, myArea.bottom - bottomMargin - 5*it.area.height())
+            // it.area.setBottomRight(myArea.right-50, myArea.bottom - bottomMargin - 4*(buttonFinish?.area?.height() ?: 200))
         }
-        biographyArea.bottom = ((buttonPurchase?.myArea?.top ?: buttonFinish?.myArea?.top) ?: myArea.bottom ) - biographyAreaMargin
+        biographyArea.bottom = ((buttonPurchase?.area?.top ?: buttonFinish?.area?.top) ?: myArea.bottom ) - biographyAreaMargin
     }
 
     fun onDown(event: MotionEvent): Boolean {
         /** test if a button has been pressed: */
-        if (buttonFinish?.myArea?.contains(event.x.toInt(), event.y.toInt()) == true)
+        if (buttonFinish?.area?.contains(event.x.toInt(), event.y.toInt()) == true)
         {
             game.startNextStage(nextGameLevel)
             return true
         }
-        if (buttonRefund?.myArea?.contains(event.x.toInt(), event.y.toInt()) == true)
+        if (buttonRefund?.area?.contains(event.x.toInt(), event.y.toInt()) == true)
         {
             val builder = AlertDialog.Builder(game.gameActivity)
             builder.setMessage(game.resources.getString(R.string.query_reset))
@@ -124,7 +133,7 @@ class Marketplace(val game: Game): GameElement()
             alert.show()
             return true
         }
-        if (buttonPurchase?.myArea?.contains(event.x.toInt(), event.y.toInt()) == true)
+        if (buttonPurchase?.area?.contains(event.x.toInt(), event.y.toInt()) == true)
         {
             selected?.let {
                 var price = it.getPrice(it.data.level)

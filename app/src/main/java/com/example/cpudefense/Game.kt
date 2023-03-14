@@ -30,12 +30,14 @@ class Game(val gameActivity: MainGameActivity) {
         const val maxScoreBoardHeight = 320
         const val speedControlButtonSize = 80
 
-        const val scoreTextSize = 40f
-        const val scoreHeaderSize = 20f
-        const val chipTextSize = 28f
-        const val computerTextSize = 36f
-        const val notificationTextSize = computerTextSize
-        const val instructionTextSize = computerTextSize
+        // text sizes are given in dp (device independent)
+        const val scoreTextSize = 20f
+        const val scoreHeaderSize = 14f
+        const val chipTextSize = 16f
+        const val computerTextSize = 18f
+        const val notificationTextSize = 20f
+        const val instructionTextSize = 20f
+        const val purchaseButtonTextSize = 16f
 
         const val coinSizeOnScoreboard = 40
         const val coinSizeOnScreen = 25

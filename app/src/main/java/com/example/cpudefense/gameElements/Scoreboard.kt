@@ -104,7 +104,7 @@ class ScoreBoard(val game: Game): GameElement() {
             val paint = Paint()
             paint.color = myColor
             paint.typeface = Typeface.create("sans-serif", Typeface.NORMAL)
-            paint.textSize = Game.scoreTextSize
+            paint.textSize = Game.scoreTextSize * game.resources.displayMetrics.scaledDensity
             rect.displayTextCenteredInRect(canvas, text, paint)
             displayHeader(canvas, Rect(0,0, area.width(), area.height()), game.resources.getString(R.string.scoreboard_inf))
         }
@@ -144,7 +144,7 @@ class ScoreBoard(val game: Game): GameElement() {
             paint.typeface = Typeface.create("sans-serif", Typeface.NORMAL)
             paint.style = Paint.Style.FILL
             paint.color = myColor
-            paint.textSize = Game.scoreTextSize
+            paint.textSize = Game.scoreTextSize * game.resources.displayMetrics.scaledDensity
             game.currentStage?.let {
                 rect.displayTextCenteredInRect(canvas, "%d / %d".format(it.data.countOfWaves, it.data.maxWaves ), paint)
             }
@@ -266,7 +266,7 @@ class ScoreBoard(val game: Game): GameElement() {
         val paint = Paint()
         paint.color = game.resources.getColor(R.color.scoreboard_text)
         paint.typeface = Typeface.create("sans-serif", Typeface.NORMAL)
-        paint.textSize = Game.scoreHeaderSize
+        paint.textSize = Game.scoreHeaderSize * game.resources.displayMetrics.scaledDensity
         rect.displayTextCenteredInRect(canvas, text, paint)
     }
 }

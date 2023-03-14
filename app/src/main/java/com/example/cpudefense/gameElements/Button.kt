@@ -1,15 +1,15 @@
 package com.example.cpudefense.gameElements
 
 import android.graphics.*
-import com.example.cpudefense.utils.displayTextCenteredInRect
 import com.example.cpudefense.effects.Fadable
 import com.example.cpudefense.effects.Fader
-import com.example.cpudefense.utils.inflate
+import com.example.cpudefense.utils.*
 
-class Button(var text: String, val textsize: Float = 36f, val color: Int = Color.GREEN, val style: Int = 0): Fadable
+class Button(var text: String, val textsize: Float, val color: Int = Color.GREEN, val style: Int = 0): Fadable
 {
     var alpha = 0
-    var myArea = Rect()
+    var area = Rect()
+    var touchableArea = Rect() // bigger than visible area, making it easier to hit the button
     var buttonPaint = Paint()
     var textPaint = Paint()
 
@@ -33,8 +33,21 @@ class Button(var text: String, val textsize: Float = 36f, val color: Int = Color
         textPaint.style = Paint.Style.FILL
         textPaint.typeface = Typeface.MONOSPACE
         textPaint.textSize = textsize
-        textPaint.getTextBounds(text, 0, text.length, myArea)
-        myArea.inflate(12)
+        textPaint.getTextBounds(text, 0, text.length, area)
+        area.inflate(textsize.toInt() / 4)
+        touchableArea = Rect(area).inflate(textsize.toInt())
+    }
+
+    fun alignRight(right: Int, top: Int)
+    {
+        area.set(right-area.width(), top, right, top+area.height())
+        touchableArea.setCenter(area.center())
+    }
+
+    fun alignLeft(left: Int, top: Int)
+    {
+        area.setTopLeft(left, top)
+        touchableArea.setCenter(area.center())
     }
 
     override fun fadeDone(type: Fader.Type) {
@@ -47,8 +60,8 @@ class Button(var text: String, val textsize: Float = 36f, val color: Int = Color
     fun display(canvas: Canvas) {
         val stringToDisplay = text
         buttonPaint.alpha = alpha
-        canvas.drawRect(myArea, buttonPaint)
-        myArea.displayTextCenteredInRect(canvas, stringToDisplay, textPaint)
+        canvas.drawRect(area, buttonPaint)
+        area.displayTextCenteredInRect(canvas, stringToDisplay, textPaint)
     }
 
 }

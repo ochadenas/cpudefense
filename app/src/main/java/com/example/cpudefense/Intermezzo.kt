@@ -108,17 +108,21 @@ class Intermezzo(var game: Game): GameElement(), Fadable {
     fun showButton()
     {
         val bottomMargin = 40
-        buttonContinue = Button(textOnContinueButton, color = game.resources.getColor(R.color.text_green))
-        val buttonTop = myArea.bottom - (buttonContinue?.myArea?.height() ?: 20) - bottomMargin
+        buttonContinue = Button(textOnContinueButton,
+            textsize = Game.computerTextSize * game.resources.displayMetrics.scaledDensity,
+            color = game.resources.getColor(R.color.text_green))
+        val buttonTop = myArea.bottom - (buttonContinue?.area?.height() ?: 20) - bottomMargin
         buttonContinue?.let {
             Fader(game, it, Fader.Type.APPEAR, Fader.Speed.SLOW)
-            it.myArea.set(50, buttonTop, 50+it.myArea.width(), myArea.bottom-bottomMargin)
+            it.alignLeft(50, buttonTop)
         }
         if (game.global.coinsTotal > 0) {
-            buttonPurchase = Button(game.resources.getString(R.string.button_marketplace), color = game.resources.getColor(R.color.text_blue))
+            buttonPurchase = Button(game.resources.getString(R.string.button_marketplace),
+                textsize = Game.computerTextSize * game.resources.displayMetrics.scaledDensity,
+                color = game.resources.getColor(R.color.text_blue))
             buttonPurchase?.let {
                 Fader(game, it, Fader.Type.APPEAR, Fader.Speed.SLOW)
-                it.myArea.set(myArea.right - it.myArea.width() - 50, buttonTop, myArea.right - 50, myArea.bottom - bottomMargin)
+                it.alignRight(myArea.right, buttonTop)
             }
         }
     }
@@ -142,9 +146,9 @@ class Intermezzo(var game: Game): GameElement(), Fadable {
 
     fun onDown(event: MotionEvent): Boolean {
         /** test if a button has been pressed: */
-        if (buttonPurchase?.myArea?.contains(event.x.toInt(), event.y.toInt()) == true)
+        if (buttonPurchase?.touchableArea?.contains(event.x.toInt(), event.y.toInt()) == true)
             startMarketplace()
-        else if (buttonContinue?.myArea?.contains(event.x.toInt(), event.y.toInt()) == true) {
+        else if (buttonContinue?.touchableArea?.contains(event.x.toInt(), event.y.toInt()) == true) {
             when (type) {
                 Type.GAME_WON -> { game.quitGame() }
                 Type.GAME_LOST -> { game.quitGame() }

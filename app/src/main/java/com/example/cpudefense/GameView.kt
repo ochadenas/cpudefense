@@ -22,8 +22,9 @@ class GameView(context: Context, val theGame: Game):
     private var gestureDetector = GestureDetectorCompat(context, this)
 
     fun setup()
-            /** called when ... TODO!
-             *
+            /** called when the game view is created.
+             * This is NOT the case when the user returns to the main menu
+             *  and then continues the game.
              */
     {
         this.visibility = VISIBLE
@@ -85,7 +86,9 @@ class GameView(context: Context, val theGame: Game):
         /* increase speed on larger screens */
         theGame.globalSpeedFactor = (h / 1024f)
         /* increase attacker size on larger screens */
+        // theGame.globalResolutionFactorX = (w / )
         theGame.globalResolutionFactor = (h / 1024f)
+        resources.displayMetrics
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
