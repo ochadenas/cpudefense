@@ -1,0 +1,13 @@
+New features:
+- added level 24 and 25
+- new chip types: SHL and ADD
+
+Bugfixes:
+- cryptocoins are no longer affected by ACC and MEM chips
+- the "settings" button had no effect
+
+Miscellaneous:
+- "loading" notification added
+- ACC chips get more expensive when there are already chips of the same type
+- German translation added
+
