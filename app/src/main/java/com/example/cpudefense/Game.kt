@@ -11,7 +11,6 @@ import com.example.cpudefense.effects.Fader
 import com.example.cpudefense.effects.Mover
 import com.example.cpudefense.gameElements.*
 import com.example.cpudefense.networkmap.GridCoord
-import com.example.cpudefense.networkmap.Network
 import com.example.cpudefense.networkmap.Viewport
 import com.example.cpudefense.utils.displayTextCenteredInRect
 import kotlinx.coroutines.GlobalScope
@@ -89,7 +88,6 @@ class Game(val gameActivity: MainGameActivity) {
     /* game elements */
     val viewport = Viewport()
     var background: Background? = null
-    var network: Network? = null
     var intermezzo = Intermezzo(this)
     var marketplace = Marketplace(this)
     val scoreBoard = ScoreBoard(this)
@@ -134,8 +132,7 @@ class Game(val gameActivity: MainGameActivity) {
         currentStage = Stage.createStageFromData(this, stageData)
         val stage = currentStage ?: return beginGame()
 
-        network = stage.network
-        network?.validateViewport()
+        stage.network?.validateViewport()
         // viewport.setSize(gameActivity.theGameView.width, gameActivity.theGameView.height)
         viewport.setGridSize(stage.sizeX, stage.sizeY)
         if (state.phase == GamePhase.MARKETPLACE)
@@ -145,12 +142,15 @@ class Game(val gameActivity: MainGameActivity) {
             state.phase = GamePhase.RUNNING
             currentWave = if (stage.waves.size > 0) stage.waves[0] else stage.nextWave()
         }
+        if (background == null)
+            background = Background(this)
+        background?.choose(stage.data.level, 0.2f)
     }
 
     fun update()
     {
         if (state.phase == GamePhase.RUNNING) {
-            network?.update()
+            currentStage?.network?.update()
             scoreBoard.update()
             currentWave?.update()
             gainAdditionalCash()
@@ -186,7 +186,7 @@ class Game(val gameActivity: MainGameActivity) {
                 background?.actualImage?.let {
                     canvas.drawBitmap(it, null, viewport.screen, paintBitmap)
                 }
-            network?.display(canvas, viewport)
+            currentStage?.network?.display(canvas, viewport)
             scoreBoard.display(canvas, viewport)
             speedControlPanel.display(canvas, viewport)
         }
@@ -212,7 +212,7 @@ class Game(val gameActivity: MainGameActivity) {
             GamePhase.RUNNING ->
             {
                 speedControlPanel.onDown(p0)
-                network?.let {
+                currentStage?.network?.let {
                     for (obj in it.nodes.values)
                         if (obj.onDown(p0))
                             return true
@@ -304,7 +304,7 @@ class Game(val gameActivity: MainGameActivity) {
         gameActivity.runOnUiThread {
             val toast: Toast = Toast.makeText(gameActivity, resources.getString(R.string.toast_next_stage).format(nextStage.data.level), Toast.LENGTH_SHORT)
             toast.show() }
-        network = nextStage.createNetwork(level)
+        StageFactory.createStage(nextStage, level)
         state.coinsInLevel = nextStage.calculateRewardCoins(summaryPerLevel[level])
         state.coinsExtra = 0
         summaryPerLevel[level] = nextStage.summary
@@ -313,12 +313,12 @@ class Game(val gameActivity: MainGameActivity) {
         viewport.reset()
         gameActivity.saveState()
 
-        if (network == null) // no more levels left
+        if (nextStage.network == null) // no more levels left
         {
             setLastStage(level)
             intermezzo.endOfGame(level, hasWon = true)
         }
-        else network?.let {
+        else nextStage.network?.let {
             viewport.setGridSize(it.data.gridSizeX, it.data.gridSizeY)
             state.phase = GamePhase.RUNNING
             currentWave = nextStage.nextWave()
