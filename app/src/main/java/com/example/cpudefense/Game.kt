@@ -28,7 +28,7 @@ class Game(val gameActivity: MainGameActivity) {
         const val viewportMargin = 10
         const val minScoreBoardHeight = 100
         const val maxScoreBoardHeight = 320
-        const val speedControlButtonSize = 80
+        const val speedControlButtonSize = 48
 
         // text sizes are given in dp (device independent)
         const val scoreTextSize = 20f
@@ -82,6 +82,8 @@ class Game(val gameActivity: MainGameActivity) {
     )
     var global = GlobalData()
 
+    val resources: Resources = (gameActivity as Activity).resources
+
     var stageData: Stage.Data? = null
     var summaryPerLevel = HashMap<Int, Stage.Summary>()
     var levelThumbnail = HashMap<Int, Bitmap?>()  // level snapshots
@@ -96,7 +98,6 @@ class Game(val gameActivity: MainGameActivity) {
     val speedControlPanel = SpeedControl(this)
     var currentStage: Stage? = null
     private var currentWave: Wave? = null
-    val resources: Resources = (gameActivity as Activity).resources
     var movers = CopyOnWriteArrayList<Mover>() // list of all mover objects that are created for game elements
     var faders = CopyOnWriteArrayList<Fader>() // idem for faders
     val notification = ProgressNotification(this)
@@ -134,7 +135,7 @@ class Game(val gameActivity: MainGameActivity) {
         currentStage = Stage.createStageFromData(this, stageData)
         val stage = currentStage ?: return beginGame()
 
-        stage.network?.validateViewport()
+        stage.network.validateViewport()
         // viewport.setSize(gameActivity.theGameView.width, gameActivity.theGameView.height)
         viewport.setGridSize(stage.sizeX, stage.sizeY)
         if (state.phase == GamePhase.MARKETPLACE)
@@ -293,7 +294,7 @@ class Game(val gameActivity: MainGameActivity) {
 
     fun startNextStage(level: Int)
     {
-        if (level > Game.maxLevelAvailable) {
+        if (level > maxLevelAvailable) {
             quitGame()   // should not happen, but better handle this
             return
         }

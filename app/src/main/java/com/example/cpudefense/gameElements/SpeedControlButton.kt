@@ -10,8 +10,8 @@ class SpeedControlButton(val game: Game, var type: Type = Type.PAUSE, val panel:
 {
     enum class Type { PAUSE, FAST, NORMAL }
 
-    var size = Game.speedControlButtonSize
-    var area = Rect(0, 0, size, size)
+    var actualSize = Game.speedControlButtonSize * game.resources.displayMetrics.density.toInt()
+    var area = Rect(0, 0, actualSize, actualSize)
     var paint = Paint()
     var alpha = 255
     lateinit var bitmap: Bitmap

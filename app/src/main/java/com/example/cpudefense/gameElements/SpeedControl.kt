@@ -8,19 +8,20 @@ import com.example.cpudefense.networkmap.Viewport
 import com.example.cpudefense.utils.setCenter
 
 class SpeedControl(var game: Game) {
-    var button1 = SpeedControlButton(game, SpeedControlButton.Type.FAST, this)
-    var button2 = SpeedControlButton(game, SpeedControlButton.Type.PAUSE, this)
-    var area = Rect(0,0,0,0)
-    var margin = 20
+    private var button1 = SpeedControlButton(game, SpeedControlButton.Type.FAST, this)
+    private var button2 = SpeedControlButton(game, SpeedControlButton.Type.PAUSE, this)
+    private var area = Rect(0,0,0,0)
 
     fun setSize(parentArea: Rect)
     {
+        val actualButtonSize = Game.speedControlButtonSize * game.resources.displayMetrics.density.toInt()
+        val margin = actualButtonSize / 5   // space between the buttons
         area.right = parentArea.right - margin
         area.bottom = parentArea.bottom - margin
-        area.left = area.right - 2 * Game.speedControlButtonSize - margin
-        area.top = area.bottom - Game.speedControlButtonSize
-        button1.area.setCenter(area.left + Game.speedControlButtonSize / 2, area.centerY())
-        button2.area.setCenter(area.right - Game.speedControlButtonSize / 2, area.centerY())
+        area.left = area.right - 2 * actualButtonSize - margin
+        area.top = area.bottom - actualButtonSize
+        button1.area.setCenter(area.left + actualButtonSize / 2, area.centerY())
+        button2.area.setCenter(area.right - actualButtonSize / 2, area.centerY())
     }
 
     fun resetButtons()
