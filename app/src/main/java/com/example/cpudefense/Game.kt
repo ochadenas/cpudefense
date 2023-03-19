@@ -128,9 +128,13 @@ class Game(val gameActivity: MainGameActivity) {
         else {
             intermezzo.prepareLevel(1, true)
         }
+        if (!global.configDisableBackground) {
+            if (background == null)
+                background = Background(this)
+        }
     }
 
-    fun continueGame()
+    fun resumeGame()
     {
         currentStage = Stage.createStageFromData(this, stageData)
         val stage = currentStage ?: return beginGame()
@@ -145,9 +149,11 @@ class Game(val gameActivity: MainGameActivity) {
             state.phase = GamePhase.RUNNING
             currentWave = if (stage.waves.size > 0) stage.waves[0] else stage.nextWave()
         }
-        if (background == null)
-            background = Background(this)
-        background?.choose(stage.data.level, 0.2f)
+        if (!global.configDisableBackground) {
+            if (background == null)
+                background = Background(this)
+            background?.choose(stage.data.level, 0.2f)
+        }
     }
 
     fun update()
@@ -241,7 +247,7 @@ class Game(val gameActivity: MainGameActivity) {
         }
     }
     
-    fun startNextWave()
+    private fun startNextWave()
     {
         currentWave = currentStage?.nextWave()
     }
@@ -328,7 +334,8 @@ class Game(val gameActivity: MainGameActivity) {
         }
 
         currentStage = nextStage
-        background?.choose(level, 0.2f)
+        if (!global.configDisableBackground)
+            background?.choose(level, 0.2f)
         takeLevelSnapshot()
     }
 
@@ -367,13 +374,13 @@ class Game(val gameActivity: MainGameActivity) {
         }
     }
 
-    fun calculateStartingCash()
+    private fun calculateStartingCash()
     {
         val cash = gameUpgrades[Hero.Type.INCREASE_STARTING_CASH]?.getStrength()?.toInt()
         state.cash = cash ?: minimalAmountOfCash
     }
     
-    fun gainAdditionalCash()
+    private fun gainAdditionalCash()
     /** increases the amount of cash in regular intervals */
     {
         if (additionalCashDelay == 0)
@@ -385,7 +392,7 @@ class Game(val gameActivity: MainGameActivity) {
         }
     }
 
-    fun takeLevelSnapshot()
+    private fun takeLevelSnapshot()
     {
         currentStage?.let {
             levelThumbnail[it.data.level] = it.takeSnapshot(levelSnapshotIconSize)

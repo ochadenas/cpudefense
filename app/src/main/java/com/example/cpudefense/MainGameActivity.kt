@@ -96,7 +96,7 @@ class MainGameActivity : Activity() {
       */
     {
         loadState()
-        theGame.continueGame()
+        theGame.resumeGame()
         if (theGame.state.phase == Game.GamePhase.RUNNING) {
             runOnUiThread {
                 val toast: Toast = Toast.makeText(this, "Stage %d".format(theGame.currentStage?.data?.level), Toast.LENGTH_SHORT )

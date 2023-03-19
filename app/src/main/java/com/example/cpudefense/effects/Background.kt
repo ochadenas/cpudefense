@@ -48,6 +48,7 @@ class Background(val game: Game) {
             bitmapsLoaded = true
             game.notification.hide()
         }
+        actualImage = null
     }
 
     fun choose(number: Int, opacity: Float = 0.3f)

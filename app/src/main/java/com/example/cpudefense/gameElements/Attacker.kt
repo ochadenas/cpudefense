@@ -165,7 +165,12 @@ open class Attacker(network: Network, type: Representation = Representation.BINA
         return false
     }
 
-    override fun getPositionOnScreen(): Pair<Int, Int> {
+    override fun getPositionOnScreen(): Pair<Int, Int>
+            /** given grid coordinates, calculate the actual pixel coordinates.
+             * @return The position as pair of pixels (x, y),
+             * or (0, 0) if the viewport is undefined or invalid.
+             */
+    {
         posOnGrid?.let { return theNetwork.theGame.viewport.gridToViewport(it) }
         /* else, if posOnGrid == null: */
         return Pair(0, 0)
