@@ -1,0 +1,6 @@
+Bugfixes:
+- size of text and game elements scales with screen resolution,
+making the game look better on devices with large displays.
+
+Miscellaneous:
+- increased effect of H. W. Franke
