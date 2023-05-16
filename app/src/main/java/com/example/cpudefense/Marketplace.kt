@@ -159,7 +159,7 @@ class Marketplace(val game: Game): GameElement()
     {
         for (card in upgrades.filter { it.data.level > 0} ) {
             var refund =
-                if (card.data.coinsSpent > 0) card.data.coinsSpent else 4
+                if (card.data.coinsSpent > 0) card.data.coinsSpent else 0  // was: 4
             game.global.coinsTotal += refund
             card.resetUpgrade()
         }
