@@ -33,16 +33,16 @@ class ScoreBoard(val game: Game): GameElement() {
         if (number < 512)
             return "%d bit".format(number)
         var bytes = number / 8
-        if (bytes < 10000)
+        if (bytes < 1000)
             return "%d B".format(bytes)
         bytes /= 1024
-        if (bytes < 10000)
+        if (bytes < 1000)
             return "%d KiB".format(bytes)
         bytes /= 1024
-        if (bytes < 10000)
+        if (bytes < 1000)
             return "%d MiB".format(bytes)
         bytes /= 1024
-        if (bytes < 10000)
+        if (bytes < 1000)
             return "%d GiB".format(bytes)
         bytes /= 1024
         return "%d TiB".format(bytes)
