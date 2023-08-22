@@ -9,7 +9,10 @@ import android.renderscript.ScriptIntrinsicBlur
 
 // extension function to blur a bitmap
 // from https://www.android--code.com/2020/06/android-kotlin-bitmap-blur-effect.html
-fun Bitmap.blur(context: Context, radius:Float = 10F):Bitmap?
+fun Bitmap.blur(context: Context, radius: Float = 10F): Bitmap?
+/** extension function to blur a bitmap
+ * from https://www.android--code.com/2020/06/android-kotlin-bitmap-blur-effect.html
+ * */
 {
     val bitmap = copy(config,true)
 
@@ -22,7 +25,6 @@ fun Bitmap.blur(context: Context, radius:Float = 10F):Bitmap?
             // Set the radius of the Blur. Supported range 0 < radius <= 25
             setRadius(radius)
             forEach(output)
-
             output.copyTo(bitmap)
             destroy()
         }
