@@ -4,6 +4,7 @@ import android.graphics.*
 import com.example.cpudefense.*
 import com.example.cpudefense.networkmap.Viewport
 import com.example.cpudefense.utils.setCenter
+import java.util.concurrent.CopyOnWriteArrayList
 import kotlin.math.sin
 import kotlin.math.cos
 
@@ -26,31 +27,60 @@ class Background(val game: Game) {
 
     companion object {
         var bitmapsLoaded = false
-        var available_bitmaps = mutableListOf<Bitmap>()
+        var availableBitmaps = hashMapOf<Int, Bitmap>()
     }
 
     fun loadBitmaps() {
         if (bitmapsLoaded == false)
         {
-            game.notification.showProgress(0.0f)
-            available_bitmaps.add(BitmapFactory.decodeResource(game.resources, R.drawable.background_1))
-            game.notification.showProgress(0.15f)
-            available_bitmaps.add(BitmapFactory.decodeResource(game.resources, R.drawable.background_2))
-            game.notification.showProgress(0.30f)
-            available_bitmaps.add(BitmapFactory.decodeResource(game.resources, R.drawable.background_3))
-            game.notification.showProgress(0.45f)
-            available_bitmaps.add(BitmapFactory.decodeResource(game.resources, R.drawable.background_4))
-            game.notification.showProgress(0.60f)
-            available_bitmaps.add(BitmapFactory.decodeResource(game.resources, R.drawable.background_5))
-            game.notification.showProgress(0.75f)
-            available_bitmaps.add(BitmapFactory.decodeResource(game.resources, R.drawable.background_6))
-            game.notification.showProgress(0.90f)
-            bitmapsLoaded = true
-            game.notification.hide()
+            actualImage = null
+            try {
+                var bitmap: Bitmap? = null
+                game.notification.showProgress(0.0f)
+                availableBitmaps[1] = BitmapFactory.decodeResource(game.resources, R.drawable.background_1)
+                game.notification.showProgress(0.15f)
+                availableBitmaps[2] = BitmapFactory.decodeResource(game.resources, R.drawable.background_2)
+                game.notification.showProgress(0.30f)
+                availableBitmaps[3] = BitmapFactory.decodeResource(game.resources, R.drawable.background_3)
+                game.notification.showProgress(0.45f)
+                availableBitmaps[4] = BitmapFactory.decodeResource(game.resources, R.drawable.background_4)
+                game.notification.showProgress(0.60f)
+                availableBitmaps[5] = BitmapFactory.decodeResource(game.resources, R.drawable.background_5)
+                game.notification.showProgress(0.75f)
+                availableBitmaps[6] = BitmapFactory.decodeResource(game.resources, R.drawable.background_6)
+                game.notification.showProgress(0.90f)
+                /*
+                // code to provoke an Out Of Memory issue
+                val myBitmaps = hashMapOf<Int, Bitmap>()
+                for (i in 0 until 100)
+                {
+                    try {
+                        // game.notification.showProgress(i * 0.01f)
+                        bitmap = BitmapFactory.decodeResource(game.resources, R.drawable.background_6)
+                        myBitmaps[i] = bitmap
+                    }
+                    catch (e: java.lang.Exception)
+                    {
+                        throw (OutOfMemoryError())
+                    }
+                }
+                 */
+                 bitmapsLoaded = true
+            }
+            catch (e: java.lang.Exception)
+            {
+                // throw away the bitmaps decoded so far:
+                for (bitmap in availableBitmaps.values)
+                    bitmap.recycle()
+                availableBitmaps.clear()
+            }
+            finally {
+                game.notification.hide()
+            }
         }
-        actualImage = null
     }
 
+    @Synchronized
     fun choose(number: Int, opacity: Float = 0.3f)
             /** selects the background to use.
              * @param number selects one of the available backgrounds
@@ -58,8 +88,8 @@ class Background(val game: Game) {
              */
     {
         loadBitmaps() // if necessary
-        val n = number % available_bitmaps.size
-        this.bitmap = available_bitmaps[n]
+        val n = number % availableBitmaps.size
+        this.bitmap = availableBitmaps[n]
         this.opacity = opacity
     }
 
