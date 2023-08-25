@@ -113,6 +113,16 @@ class Network(val theGame: Game, x: Int, y: Int): GameElement() {
             (obj as Chip).displayUpgrades(canvas)
     }
 
+    fun makeSnapshot(canvas: Canvas, viewport: Viewport)
+    {
+        for (obj in links.values)
+            obj.display(canvas, viewport)
+        for (obj in nodes.values) {
+            obj.display(canvas, viewport)
+            (obj as Chip).displayUpgrades(canvas)
+        }
+    }
+
     private fun displayNetwork(canvas: Canvas, viewport: Viewport)
     /** draws all 'fixed' elements, i.e. the background image and the links */
     {

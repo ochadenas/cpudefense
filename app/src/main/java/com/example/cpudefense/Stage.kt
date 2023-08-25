@@ -266,7 +266,7 @@ class Stage(var theGame: Game) {
         if (p.viewportWidth > 0 && p.viewportHeight > 0)
         {
             var bigSnapshot = createBitmap(p.viewportWidth, p.viewportHeight)
-            network.display(Canvas(bigSnapshot), p)
+            network.makeSnapshot(Canvas(bigSnapshot), p)
             /* blur the image */
             bigSnapshot = bigSnapshot.blur(theGame.gameActivity, 3f) ?: bigSnapshot
             return Bitmap.createScaledBitmap(bigSnapshot, size, size, true)
