@@ -142,7 +142,7 @@ class MainGameActivity : Activity() {
             }
             catch (e: Exception)
             {
-                Toast.makeText(this, "Exception occurred",Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Exception occurred: %s".format(e),Toast.LENGTH_SHORT).show()
             }
             GlobalScope.launch { delay(mainDelay); update() }
         }

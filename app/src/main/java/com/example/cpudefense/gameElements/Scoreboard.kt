@@ -23,6 +23,7 @@ class ScoreBoard(val game: Game): GameElement() {
         waves.setSize(area, divider)
         lives.setSize(area, divider)
         coins.setSize(area, divider)
+        recreateBitmap()
     }
 
     fun addCash(amount: Int) {
@@ -66,6 +67,37 @@ class ScoreBoard(val game: Game): GameElement() {
         waves.display(canvas)
         lives.display(canvas)
         coins.display(canvas)
+    }
+
+    fun displayHeader(canvas: Canvas, area: Rect, text: String)
+            /**
+             * Display text in 'header' text size
+             *
+             * @param canvas Where to paint on
+             * @param area The rectangle where the header text should be placed
+             * @param text The actual string to be displayed
+             */
+    {
+        var rect = Rect(area)
+        rect.bottom = divider
+        val paint = Paint()
+        paint.color = game.resources.getColor(R.color.scoreboard_text)
+        paint.typeface = Typeface.create("sans-serif", Typeface.NORMAL)
+        paint.textSize = Game.scoreHeaderSize * game.resources.displayMetrics.scaledDensity
+        rect.displayTextCenteredInRect(canvas, text, paint)
+    }
+
+    fun recreateBitmap()
+            /**
+             * Recreate all parts of the score board. Called when resuming the game.
+             */
+    {
+        if (area.width()>0 && area.height()>0) {
+            score.recreateBitmap()
+            waves.recreateBitmap()
+            lives.recreateBitmap()
+            coins.recreateBitmap()
+        }
     }
 
     inner class Score()
@@ -216,6 +248,7 @@ class ScoreBoard(val game: Game): GameElement() {
     inner class Coins {
         var area = Rect()
         var divider = 0
+        var coins: Int = 0
 
         var lastValue = -1   // used to detect value changes
         lateinit var bitmap: Bitmap
@@ -229,30 +262,30 @@ class ScoreBoard(val game: Game): GameElement() {
         }
 
         fun display(canvas: Canvas) {
-            val coins = game.state.coinsInLevel + game.state.coinsExtra
+            coins = game.state.coinsInLevel + game.state.coinsExtra
             if (coins <= 0)
                 return
             if (coins != lastValue) {
                 /* only render the display if value has changed, otherwise re-use bitmap */
                 lastValue = coins
-                recreateBitmap(coins)
+                recreateBitmap()
             }
             canvas.drawBitmap(bitmap, null, area, paint)
         }
 
-        fun recreateBitmap(value: Int) {
+        fun recreateBitmap() {
             bitmap = Bitmap.createBitmap(area.width(), area.height(), Bitmap.Config.ARGB_8888)
             val canvas = Canvas(bitmap)
 
             val y = (divider + area.height()) / 2
-            val deltaX = if (value > 1)
-                (area.width() - (2 * Game.coinSizeOnScoreboard)) / (value - 1)
+            val deltaX = if (coins > 1)
+                (area.width() - (2 * Game.coinSizeOnScoreboard)) / (coins - 1)
             else 0
 
             val x = area.width() - Game.coinSizeOnScoreboard
             val rect = Rect(0, 0, 50, 50)
             val paint = Paint()
-            for (i in 0 until value) {
+            for (i in 0 until coins) {
                 rect.setCenter(x - i * deltaX, y)
                 canvas.drawBitmap(game.coinIcon, null, rect, paint)
                 displayHeader(canvas, Rect(0,0, area.width(), area.height()), game.resources.getString(R.string.scoreboard_coins))
@@ -260,13 +293,4 @@ class ScoreBoard(val game: Game): GameElement() {
         }
     }
 
-    fun displayHeader(canvas: Canvas, area: Rect, text: String) {
-        var rect = Rect(area)
-        rect.bottom = divider
-        val paint = Paint()
-        paint.color = game.resources.getColor(R.color.scoreboard_text)
-        paint.typeface = Typeface.create("sans-serif", Typeface.NORMAL)
-        paint.textSize = Game.scoreHeaderSize * game.resources.displayMetrics.scaledDensity
-        rect.displayTextCenteredInRect(canvas, text, paint)
-    }
 }
