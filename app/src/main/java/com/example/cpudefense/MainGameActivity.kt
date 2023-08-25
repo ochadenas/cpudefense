@@ -136,14 +136,8 @@ class MainGameActivity : Activity() {
     private fun update()
     {
         if (gameIsRunning) {
-            try {
-                theGame.update()
-                theGameView.display()
-            }
-            catch (e: Exception)
-            {
-                Toast.makeText(this, "Exception occurred: %s".format(e),Toast.LENGTH_SHORT).show()
-            }
+            theGame.update()
+            theGameView.display()
             GlobalScope.launch { delay(mainDelay); update() }
         }
     }

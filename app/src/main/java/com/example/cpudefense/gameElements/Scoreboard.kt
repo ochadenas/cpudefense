@@ -262,9 +262,11 @@ class ScoreBoard(val game: Game): GameElement() {
         }
 
         fun display(canvas: Canvas) {
+            if (game.currentStage?.summary?.coinsMaxAvailable == 0)
+                return  // levels where you can't get coins
             coins = game.state.coinsInLevel + game.state.coinsExtra
-            if (coins <= 0)
-                return
+            if (coins<0)
+                return  // something went wrong, shouldn't happen
             if (coins != lastValue) {
                 /* only render the display if value has changed, otherwise re-use bitmap */
                 lastValue = coins
@@ -285,10 +287,10 @@ class ScoreBoard(val game: Game): GameElement() {
             val x = area.width() - Game.coinSizeOnScoreboard
             val rect = Rect(0, 0, 50, 50)
             val paint = Paint()
+            displayHeader(canvas, Rect(0,0, area.width(), area.height()), game.resources.getString(R.string.scoreboard_coins))
             for (i in 0 until coins) {
                 rect.setCenter(x - i * deltaX, y)
                 canvas.drawBitmap(game.coinIcon, null, rect, paint)
-                displayHeader(canvas, Rect(0,0, area.width(), area.height()), game.resources.getString(R.string.scoreboard_coins))
             }
         }
     }
