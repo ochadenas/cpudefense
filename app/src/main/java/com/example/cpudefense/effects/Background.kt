@@ -7,7 +7,14 @@ import com.example.cpudefense.utils.setCenter
 import kotlin.math.sin
 import kotlin.math.cos
 
-class Background(val game: Game) {
+class Background(val game: Game)
+/** The background shown during the game, showing a picture of real circuits.
+ * This object is created whenever a game is started or resumed.
+ *
+ * @property bitmap The chosen background for this level. Might be bigger than the screen (viewport) size
+ * @property actualImage A bitmap with the size of the viewport, cut out of the larger bitmap
+  */
+{
     var bitmap: Bitmap? = null
     private var angle = 0.0
     var x = 0.0
@@ -17,17 +24,18 @@ class Background(val game: Game) {
     var opacity = 0.5f
     var paint = Paint()
     var actualImage: Bitmap? = null
-    private var ticks = 0
+    private var ticks = 1
     var frozen = false
 
     // parameters:
-    private val deltaAlpha = 0.00008
-    private val ticksBeforeUpdate = 12
+    private val deltaAlpha = 0.0001
+    private val ticksBeforeUpdate = 8
 
     companion object {
         var bitmapsLoaded = false
         var availableBitmaps = hashMapOf<Int, Bitmap>()
     }
+    // TODO: this should be moved to the application
 
     private fun loadBitmaps() {
         if (!bitmapsLoaded)
@@ -67,10 +75,9 @@ class Background(val game: Game) {
             }
             catch (e: java.lang.Exception)
             {
-                // throw away the bitmaps decoded so far:
-                for (bitmap in availableBitmaps.values)
-                    bitmap.recycle()
-                availableBitmaps.clear()
+                bitmapsLoaded = true
+            // keep the bitmaps loaded so far,
+            // avoid further attempts to load more bitmaps
             }
             finally {
                 game.notification.hide()
@@ -78,8 +85,7 @@ class Background(val game: Game) {
         }
     }
 
-    @Synchronized
-    fun choose(number: Int, opacity: Float = 0.3f)
+    fun choose(number: Int, opacity: Float = 0.2f)
             /** selects the background to use.
              * @param number selects one of the available backgrounds
              * @param opacity sets the opacity, from 0.0 to 1.0
@@ -89,23 +95,31 @@ class Background(val game: Game) {
         val n = number % availableBitmaps.size
         this.bitmap = availableBitmaps[n]
         this.opacity = opacity
+        recreateBackgroundImage(game.viewport)
     }
 
-    fun update()
+    fun update(): Boolean
+            /** called in regular time intervals.
+             * @return true if the background image must be changed, false otherwise
+             */
     {
-        if (actualImage == null)
+        var imageHasChanged = false
+        if (actualImage == null) {
             initializeImage()
-        if (frozen)
-            return
-        angle += deltaAlpha
-        ticks--
-        if (ticks < 0)
-        {
-            ticks = ticksBeforeUpdate
-            projX = cos(angle)
-            projY = sin(angle)
-            recreateBackgroundImage(game.viewport)
+            imageHasChanged = true
         }
+        if (!frozen) {
+            angle += deltaAlpha
+            ticks--
+            if (ticks < 0) {
+                imageHasChanged = true
+                ticks = ticksBeforeUpdate
+                projX = cos(angle)
+                projY = sin(angle)
+                recreateBackgroundImage(game.viewport)
+            }
+        }
+        return imageHasChanged
     }
 
     private fun initializeImage()
@@ -115,7 +129,7 @@ class Background(val game: Game) {
         actualImage = Bitmap.createBitmap(game.viewport.viewportWidth, game.viewport.viewportHeight, Bitmap.Config.ARGB_8888)
     }
 
-    private fun recreateBackgroundImage(viewport: Viewport)
+    fun recreateBackgroundImage(viewport: Viewport)
     {
         val destWidth = viewport.viewportWidth
         val destHeight = viewport.viewportHeight

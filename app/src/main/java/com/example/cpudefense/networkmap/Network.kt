@@ -24,6 +24,7 @@ class Network(val theGame: Game, x: Int, y: Int): GameElement() {
     var links = hashMapOf<Int, Link>()
     var vehicles: CopyOnWriteArrayList<Vehicle> = CopyOnWriteArrayList<Vehicle>()
 
+    var backgroundImage: Bitmap? = null
     private lateinit var networkImage: Bitmap
     private var paint = Paint()
     private var gridPointDistance: Pair<Int, Int>? = null
@@ -53,6 +54,12 @@ class Network(val theGame: Game, x: Int, y: Int): GameElement() {
     }
 
     fun distanceBetweenGridPoints(): Pair<Int, Int>?
+            /**
+             * Calculate the distance on the screen between two grid points. (This is a property of the
+             * network under a given viewport and does not depend on the actual network elements.)
+             *
+             * @return 2-dimensional distance vector (x,y), or null if the distance cannot be determined.
+             */
     {
         if (gridPointDistance != null)
             return gridPointDistance // no need to recalculate
@@ -107,6 +114,7 @@ class Network(val theGame: Game, x: Int, y: Int): GameElement() {
     }
 
     private fun displayNetwork(canvas: Canvas, viewport: Viewport)
+    /** draws all 'fixed' elements, i.e. the background image and the links */
     {
         // displayFrame(canvas, viewport) // optional
         if (!this::networkImage.isInitialized)
@@ -115,6 +123,8 @@ class Network(val theGame: Game, x: Int, y: Int): GameElement() {
     }
 
     private fun displayFrame(canvas: Canvas, viewport: Viewport)
+            /** draws an outline around the network area, e.g. for testing purposes.
+             */
     {
         val cornerTopleft = viewport.gridToViewport(GridCoord(0, 0))
         val cornerBottomright = viewport.gridToViewport(GridCoord(data.gridSizeX, data.gridSizeY))
@@ -127,11 +137,24 @@ class Network(val theGame: Game, x: Int, y: Int): GameElement() {
     }
 
     fun recreateNetworkImage(viewport: Viewport)
-    /** function that must be called whenever the viewport (or the network configuration) changes */
+    /** function that must be called whenever the viewport (or the network configuration) changes.
+     * It either takes the provided background image or an empty background
+     * and places the network elements on it */
     {
         validateViewport()
-        this.networkImage = Bitmap.createBitmap(viewport.viewportWidth, viewport.viewportHeight, Bitmap.Config.ARGB_8888)
-        var canvas = Canvas(this.networkImage)
+        if (backgroundImage == null)
+            // use an empty background in this case
+            this.networkImage = Bitmap.createBitmap(viewport.viewportWidth, viewport.viewportHeight, Bitmap.Config.ARGB_8888)
+        else
+            // use the given background image
+            backgroundImage?.let {
+                if (it.width == viewport.viewportWidth && it.height == viewport.viewportHeight)
+                    // just use the given bitmap, it has the correct dimensions
+                    this.networkImage = it.copy(it.config, true)
+                else
+                    this.networkImage = Bitmap.createScaledBitmap(it, viewport.viewportWidth, viewport.viewportHeight, false)
+            }
+        val canvas = Canvas(this.networkImage)
         for (obj in links.values)
             obj.display(canvas, viewport)
     }
