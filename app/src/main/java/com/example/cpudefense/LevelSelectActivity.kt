@@ -44,7 +44,11 @@ class LevelSelectActivity : AppCompatActivity() {
             {
                 val levelEntryView = Button(this)
                 var textString = getString(R.string.level_entry).format(level)
-                val coinsMaxAvailable = summary.coinsAvailable + summary.coinsGot
+                val coinsMaxAvailable = when {
+                    // this is a hack to handle levels where coinsMaxAvailable is not set correctly
+                    summary.coinsMaxAvailable>0 -> summary.coinsMaxAvailable
+                    else -> summary.coinsAvailable + summary.coinsGot
+                }
                 if (coinsMaxAvailable > 0)
                     textString = textString.plus("\n%d of %d coins got.".format(summary.coinsGot, coinsMaxAvailable))
                 levelEntryView.text = textString
@@ -61,11 +65,10 @@ class LevelSelectActivity : AppCompatActivity() {
                 // choose color of text:
                 when
                 {
-                    (summary.won == true && summary.coinsAvailable > 0) ->
-                        levelEntryView.setTextColor(resources.getColor(R.color.text_lightgreen))
+                    (summary.won == true && (summary.coinsGot < summary.coinsMaxAvailable))
+                    -> levelEntryView.setTextColor(resources.getColor(R.color.text_lightgreen))
                     summary.won == true -> levelEntryView.setTextColor(resources.getColor(R.color.text_green))
                     else -> levelEntryView.setTextColor(resources.getColor(R.color.text_amber))
-
                 }
                 levelEntryView.isClickable = true
                 levelEntryView.setOnClickListener { onLevelSelect(levelEntryView, level) }

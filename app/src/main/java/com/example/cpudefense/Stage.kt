@@ -43,6 +43,7 @@ class Stage(var theGame: Game) {
     data class Summary(
         var coinsAvailable: Int = 0,
         var coinsGot: Int = 0,
+        var coinsMaxAvailable: Int = 0,
         var won: Boolean = false
     )
     lateinit var summary: Summary
@@ -58,6 +59,7 @@ class Stage(var theGame: Game) {
     {
         summary = previousSummary ?: Summary()
         summary.coinsAvailable = rewardCoins - summary.coinsGot
+        summary.coinsMaxAvailable = rewardCoins
         return summary.coinsAvailable
     }
 

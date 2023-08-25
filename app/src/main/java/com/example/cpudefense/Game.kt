@@ -149,17 +149,30 @@ class Game(val gameActivity: MainGameActivity) {
             state.phase = GamePhase.RUNNING
             currentWave = if (stage.waves.size > 0) stage.waves[0] else stage.nextWave()
         }
-        if (!global.configDisableBackground) {
+        if (!global.configDisableBackground)
+        {
             if (background == null)
                 background = Background(this)
-            background?.choose(stage.data.level, 0.2f)
+            background?.let {
+                it.choose(stage.data.level)
+                it.recreateBackgroundImage(viewport)
+                stage.network.backgroundImage = it.actualImage
+            }
         }
     }
 
     fun update()
     {
-        if (state.phase == GamePhase.RUNNING) {
-            currentStage?.network?.update()
+        if (state.phase == GamePhase.RUNNING)
+        {
+            currentStage?.network?.let {
+                if (!global.configDisableBackground)
+                    if (background?.update() == true) {
+                        it.backgroundImage = background?.actualImage
+                        it.recreateNetworkImage(viewport)
+                    }
+                it.update()
+            }
             scoreBoard.update()
             currentWave?.update()
             gainAdditionalCash()
@@ -169,7 +182,6 @@ class Game(val gameActivity: MainGameActivity) {
     fun updateEffects()
             /**  execute all movers and faders */
     {
-        background?.update()
         intermezzo.update()
         for (m in movers)
         {
@@ -191,10 +203,13 @@ class Game(val gameActivity: MainGameActivity) {
     {
         if (state.phase == GamePhase.RUNNING || state.phase == GamePhase.PAUSED)
         {
+            /*
             if (! global.configDisableBackground)
                 background?.actualImage?.let {
                     canvas.drawBitmap(it, null, viewport.screen, paintBitmap)
                 }
+
+             */
             currentStage?.network?.display(canvas, viewport)
             scoreBoard.display(canvas, viewport)
             speedControlPanel.display(canvas, viewport)
@@ -283,7 +298,11 @@ class Game(val gameActivity: MainGameActivity) {
         }
         intermezzo.coinsGathered = state.coinsExtra + state.coinsInLevel
         global.coinsTotal += intermezzo.coinsGathered
-        summaryPerLevel[stage.data.level] = Stage.Summary(won = true, coinsGot = stage.summary.coinsGot + state.coinsInLevel)
+        summaryPerLevel[stage.data.level] = Stage.Summary(won = true,
+            coinsGot = stage.summary.coinsGot + state.coinsInLevel,
+            coinsMaxAvailable = stage.summary.coinsMaxAvailable,
+            coinsAvailable = stage.summary.coinsMaxAvailable - state.coinsInLevel
+        )
         // make next level available
         val nextLevel = stage.data.level + 1
         if (summaryPerLevel[nextLevel] == null && stage.type != Stage.Type.FINAL)
@@ -335,7 +354,7 @@ class Game(val gameActivity: MainGameActivity) {
 
         currentStage = nextStage
         if (!global.configDisableBackground)
-            background?.choose(level, 0.2f)
+            background?.choose(level)
         takeLevelSnapshot()
     }
 
