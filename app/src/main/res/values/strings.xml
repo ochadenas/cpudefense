@@ -44,19 +44,7 @@ Inverting a 0 will actually make the attacker more dangerous, so be careful not 
 
 Destroy the attacking code to gain some information about the virus. Use it to buy additional chips or to upgrade the existing ones."
     </string>
-    <string name="instr_4">
-"Here are some hints:
-
-Remember that in binary,
-10 equals 2,
-11 equals 3,
-100 equals 4, and so on.
-
-Try to tap on numbers starting with '1'. This reduces the attacker's number and makes the level much easier.
-
-Any attacker that gets through to the CPU will cost one life, regardless of its number. You must have at least one SUB chip to get rid of them.
-"
-    </string>
+    <string name="instr_4">" Here are some hints:  Remember that in binary, 10 equals 2, 11 equals 3, 100 equals 4, and so on.  Try to tap on numbers starting with '1'. This reduces the attacker's number and makes the level much easier.  Any attacker that gets through to the CPU will cost one life, regardless of its number. You must have at least one SUB chip to get rid of them.      "</string>
     <string name="instr_5">
 "In the next level, a new chip type is available. It is labelled 'SHR 1', which means 'shift right by 1'
 
@@ -139,11 +127,7 @@ Osborne was also an author and book publisher."
 
 After Berners-Lee had invented the World Wide Web, he was looking for some content to put into it. Silvano de Gennaro provided him with a photo of the Cernettes taken in july 1992, which became the first photo of a band that appeared in browser windows all over the world."
     </string>
-    <string name="knuth">
-"Donald Ervin Knuth is a computer scientist and mathematician who has made numerous contributions to theoretical computer science.
-
-He is mostly known for the monumental work 'The Art of Computer Programming', a project that started in 1962 and is still not finished. For this he created en passant the TeX formatting system that has become the standard for scientific publications all over the world.
-    </string>
+    <string name="knuth">" Donald Ervin Knuth is a computer scientist and mathematician who has made numerous contributions to theoretical computer science.  He is mostly known for the monumental work 'The Art of Computer Programming', a project that started in 1962 and is still not finished. For this he created en passant the TeX formatting system that has become the standard for scientific publications all over the world.     "</string>
     <string name="zuse">
 "The first modern computer was built by Konrad Zuse in 1941. The Z1 was a programmable, electro-mechanical machine that operated on a digital base, implemented Boolean logic, and even used floating point numbers.
 

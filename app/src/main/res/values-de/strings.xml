@@ -39,7 +39,7 @@ Das Invertieren einer 0 macht einen Angreifer tatsächlich gefährlicher. Pass a
 
 Durch Zerstören eines Angreifers erhält man etwas Information über das Virus. Damit lassen sich zusätzliche Chips kaufen oder bestehende aufwerten."
     </string>
-    <string name="instr_4">" Einige Tipps:\n \n Im Dualsystem steht \n 10 für 2,\n 11 für 3,\n 100 für 4 und so weiter.\n \n Versuche, Zahlen mit '1' am Anfang anzutippen. Dadurch wird die Zahl kleiner und der Level viel einfacher.\n \n Jeder Angreifer, der zur CPU durchkommt, kostet dich ein Leben, egal welche Zahl er hat. Du brauchst mindestens einen SUB Chip, um sie loszuwerden.\n  "</string>
+    <string name="instr_4">" Einige Tipps:\n \n Im Dualsystem steht \n  10 für 2,\n  11 für 3,\n 100 für 4 und so weiter.\n \n Versuche, Zahlen mit '1' am Anfang anzutippen. Dadurch wird die Zahl kleiner und der Level viel einfacher.\n \n Jeder Angreifer, der zur CPU durchkommt, kostet dich ein Leben, egal welche Zahl er hat. Du brauchst mindestens einen SUB Chip, um sie loszuwerden.\n  "</string>
     <string name="instr_5">
 "Im nächsten Level steht ein neuer Chip zur Verfügung. Die Bezeichnung 'SHR 1' heißt 'shift right by 1'.
 
