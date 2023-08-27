@@ -25,6 +25,7 @@ class Hero(var game: Game, type: Type): Fadable {
     - Berners-Lee?
     - Mandelbrot
     - Torvalds
+    - Sid Meier
      */
 
     enum class Type { INCREASE_CHIP_SUB_SPEED, INCREASE_CHIP_SHIFT_SPEED, INCREASE_CHIP_MEM_SPEED, INCREASE_CHIP_ACC_SPEED,

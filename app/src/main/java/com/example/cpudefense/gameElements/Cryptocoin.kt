@@ -5,7 +5,6 @@ import android.graphics.Paint
 import android.graphics.Rect
 import com.example.cpudefense.Game
 import com.example.cpudefense.networkmap.Viewport
-import com.example.cpudefense.utils.scale
 import com.example.cpudefense.utils.setCenter
 
 class Cryptocoin(network: com.example.cpudefense.networkmap.Network, number: ULong = 1u, speed: Float = 1.0f):
@@ -16,7 +15,8 @@ class Cryptocoin(network: com.example.cpudefense.networkmap.Network, number: ULo
         this.animationCount = 2 * animationCount
     }
     override fun display(canvas: Canvas, viewport: Viewport) {
-        actualRect = Rect(0,0, Game.coinSizeOnScreen, Game.coinSizeOnScreen)
+        val size =  (Game.coinSizeOnScreen * theNetwork.theGame.globalResolutionFactor).toInt()
+        actualRect = Rect(0, 0, size, size)
         actualRect.setCenter(getPositionOnScreen())
         actualRect.offset(displacement.first, displacement.second)
         if (animationCount>0)

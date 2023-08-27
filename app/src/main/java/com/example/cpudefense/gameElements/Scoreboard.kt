@@ -249,12 +249,14 @@ class ScoreBoard(val game: Game): GameElement() {
         var area = Rect()
         var divider = 0
         var coins: Int = 0
+        var actualSize = Game.coinSizeOnScoreboard
 
         var lastValue = -1   // used to detect value changes
         lateinit var bitmap: Bitmap
         val paint = Paint()
 
         fun setSize(area: Rect, divider: Int) {
+            actualSize = (Game.coinSizeOnScoreboard * game.globalResolutionFactor).toInt()
             this.area = Rect(waves.area.right, area.top, lives.area.left, area.bottom)
             bitmap =
                 Bitmap.createBitmap(this.area.width(), this.area.height(), Bitmap.Config.ARGB_8888)
@@ -281,11 +283,11 @@ class ScoreBoard(val game: Game): GameElement() {
 
             val y = (divider + area.height()) / 2
             val deltaX = if (coins > 1)
-                (area.width() - (2 * Game.coinSizeOnScoreboard)) / (coins - 1)
+                (area.width() - (2 * actualSize)) / (coins - 1)
             else 0
 
-            val x = area.width() - Game.coinSizeOnScoreboard
-            val rect = Rect(0, 0, 50, 50)
+            val x = area.width() - actualSize
+            val rect = Rect(0, 0, actualSize, actualSize)
             val paint = Paint()
             displayHeader(canvas, Rect(0,0, area.width(), area.height()), game.resources.getString(R.string.scoreboard_coins))
             for (i in 0 until coins) {
