@@ -31,18 +31,19 @@ class Game(val gameActivity: MainGameActivity) {
         const val speedControlButtonSize = 48
 
         // text sizes are given in dp (device independent)
-        const val scoreTextSize = 20f
-        const val scoreHeaderSize = 14f
-        const val chipTextSize = 16f
-        const val computerTextSize = 18f
-        const val notificationTextSize = 20f
-        const val instructionTextSize = 20f
-        const val purchaseButtonTextSize = 16f
+        const val scoreTextSize = 36f
+        const val scoreHeaderSize = 18f
+        const val chipTextSize = 22f
+        const val computerTextSize = 28f
+        const val notificationTextSize = 22f
+        const val instructionTextSize = 28f
+        const val biographyTextSize = 24f
+        const val purchaseButtonTextSize = 24f
 
         const val coinSizeOnScoreboard = 40
         const val coinSizeOnScreen = 25
         const val cardHeight = 256
-        const val cardWidth = 280
+        const val cardWidth = 220
 
         const val minimalAmountOfCash = 8
         const val maxLivesPerStage = 3
@@ -54,7 +55,6 @@ class Game(val gameActivity: MainGameActivity) {
     }
 
     var globalSpeedFactor = 1.0f
-    var globalResolutionFactor = 1.0f
 
     data class StateData(
         var phase: GamePhase,       // whether the game is running, paused or between levels

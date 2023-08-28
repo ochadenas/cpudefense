@@ -7,6 +7,7 @@ import android.text.StaticLayout
 import android.text.TextPaint
 import com.example.cpudefense.effects.Fadable
 import com.example.cpudefense.effects.Fader
+import com.example.cpudefense.utils.center
 import com.example.cpudefense.utils.displayTextCenteredInRect
 import com.example.cpudefense.utils.setCenter
 import com.example.cpudefense.utils.setTopLeft
@@ -42,8 +43,8 @@ class Hero(var game: Game, type: Type): Fadable {
     private var graphicalState = GraphicalState.NORMAL
     private var transition = 0.0f
 
-    var areaOnScreen = Rect(0, 0, Game.cardWidth, Game.cardHeight)
-    var heroArea = Rect(0, 0, heroPictureSize, heroPictureSize)
+    var areaOnScreen = Rect(0, 0, (Game.cardWidth*game.resources.displayMetrics.scaledDensity).toInt(), (Game.cardHeight*game.resources.displayMetrics.scaledDensity).toInt())
+    var heroArea = Rect(0, 0, (heroPictureSize*game.resources.displayMetrics.scaledDensity).toInt(), (heroPictureSize*game.resources.displayMetrics.scaledDensity).toInt())
     private var myBitmap: Bitmap? = null
     private var effectBitmap = BitmapFactory.decodeResource(game.resources, R.drawable.glow)
     private var paintRect = Paint()
@@ -52,13 +53,14 @@ class Hero(var game: Game, type: Type): Fadable {
     private var paintBiography = TextPaint()
     private var shortDescRect = Rect(areaOnScreen)
     private var paintText = Paint()
+    private val paintHero = Paint()
     private var shortDesc: String = "effect description"
     private var strengthDesc: String = "format string"
     private var upgradeDesc: String = " -> next level"
     private var hero: Hero = Hero(type)
     var heroOpacity = 0f
     private var levelIndicator = mutableListOf<Rect>()
-    private val indicatorSize = heroPictureSize / 10
+    private var indicatorSize = heroArea.width() / 10  // to be scaled
 
     var inactiveColor = game.resources.getColor(R.color.upgrade_inactive)
     var activeColor: Int = when(type)
@@ -82,15 +84,12 @@ class Hero(var game: Game, type: Type): Fadable {
 
     init {
         paintRect.style = Paint.Style.STROKE
-        paintRect.strokeWidth = 2f
         paintInactive = Paint(paintRect)
         paintInactive.color = inactiveColor
         paintText.color = Color.WHITE
-        paintText.textSize = 24f
         paintText.style = Paint.Style.FILL
-        shortDescRect.top = shortDescRect.bottom - 50
+        shortDescRect.top = shortDescRect.bottom - (50 * game.resources.displayMetrics.scaledDensity).toInt()
         heroOpacity = when (data.level) { 0 -> 0f else -> 1f}
-        setDesc()
     }
 
     fun display(canvas: Canvas)
@@ -105,10 +104,11 @@ class Hero(var game: Game, type: Type): Fadable {
             paintRect.color = activeColor
             paintRect.strokeWidth = 2f + data.level / 2
         }
+        paintRect.strokeWidth *= game.resources.displayMetrics.scaledDensity
         myBitmap?.let { canvas.drawBitmap(it, null, areaOnScreen, paintRect) }
 
         // display hero picture
-        val paintHero = Paint()
+        // (this is put here because of fading)
         paintHero.alpha = (255f * heroOpacity).toInt()
         hero.picture?.let { canvas.drawBitmap(it, null, heroArea, paintHero) }
 
@@ -123,7 +123,7 @@ class Hero(var game: Game, type: Type): Fadable {
                 var thickness = transition
                 if (transition > 0.5)
                     thickness = 1.0f - transition
-                paintRect.strokeWidth = 2f + 10 * thickness
+                paintRect.strokeWidth = (2f + 10 * thickness)*game.resources.displayMetrics.scaledDensity
                 canvas.drawRect(areaOnScreen, paintRect)
             }
             GraphicalState.TRANSIENT_LEVEL_0 -> {
@@ -148,10 +148,10 @@ class Hero(var game: Game, type: Type): Fadable {
                 val originalThickness = strokeWidth
                 val originalAlpha = alpha
                 alpha = 60
-                strokeWidth = originalThickness + 12
+                strokeWidth = originalThickness + 12 * game.resources.displayMetrics.scaledDensity
                 canvas.drawRect(areaOnScreen, this)
                 alpha = 60
-                strokeWidth = originalThickness + 6
+                strokeWidth = originalThickness + 6 * game.resources.displayMetrics.scaledDensity
                 canvas.drawRect(areaOnScreen, this)
                 // restore original values
                 strokeWidth = originalThickness
@@ -172,15 +172,26 @@ class Hero(var game: Game, type: Type): Fadable {
         canvas.drawBitmap(effectBitmap, null, effectRect, paintText)
     }
 
-    private fun createBitmap(): Bitmap
+    fun setSize()
+    {
+        var centre = areaOnScreen.center() // remember the former screen position, if given
+        areaOnScreen = Rect(0, 0, (Game.cardWidth*game.resources.displayMetrics.scaledDensity).toInt(), (Game.cardHeight*game.resources.displayMetrics.scaledDensity).toInt())
+        areaOnScreen.setCenter(centre)
+        centre = heroArea.center()
+        heroArea = Rect(0, 0, (heroPictureSize*game.resources.displayMetrics.scaledDensity).toInt(), (heroPictureSize*game.resources.displayMetrics.scaledDensity).toInt())
+        heroArea.setCenter(centre)
+        paintText.textSize = (Game.biographyTextSize - 2) * game.resources.displayMetrics.scaledDensity
+        indicatorSize = heroArea.width() / 10
+    }
+    fun createBitmap(): Unit
     /** re-creates the bitmap without border, using a canvas positioned at (0, 0) */
     {
-        val bitmap = createBitmap( Game.cardWidth, Game.cardHeight, Bitmap.Config.ARGB_8888)
+        val bitmap = createBitmap( areaOnScreen.width(), areaOnScreen.height(), Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)
 
         // render text used to indicate the effect of the upgrade, and calculate its position
-        val marginHorizontal = 10f
-        val marginVertical = 10f
+        val marginHorizontal = 10f*game.resources.displayMetrics.scaledDensity
+        val marginVertical = 10f*game.resources.displayMetrics.scaledDensity
         val baseline = bitmap.height-marginVertical
         val paintUpdate = Paint(paintText)
         canvas.drawText(strengthDesc, marginHorizontal, baseline, paintText)
@@ -191,15 +202,14 @@ class Hero(var game: Game, type: Type): Fadable {
         canvas.drawText(upgradeDesc, bounds.right + marginHorizontal, baseline, paintUpdate)
 
         // draw hero
-        val margin = 10
+        val margin = (10*game.resources.displayMetrics.scaledDensity).toInt()
         val heroPaintText = Paint(paintText)
         heroPaintText.color = if (data.level == 0) inactiveColor else activeColor
-        val heroTextRect = Rect(0, margin, Game.cardWidth, margin+40)
+        val heroTextRect = Rect(0, margin, areaOnScreen.width(), margin+40)
         heroTextRect.displayTextCenteredInRect(canvas, hero.fullName, heroPaintText)
 
         addLevelDecoration(canvas)
-
-        return bitmap
+        myBitmap = bitmap
     }
 
     fun createBiography(area: Rect)
@@ -293,7 +303,6 @@ class Hero(var game: Game, type: Type): Fadable {
         upgradeDesc = game.resources.getString(R.string.upgrade_format).format(upgradeDesc, getPrice(data.level))
         if (data.level >= maxLevel)
             upgradeDesc = ""
-        myBitmap = createBitmap()
     }
 
     fun getStrength(level: Int = data.level): Float
@@ -514,7 +523,7 @@ class Hero(var game: Game, type: Type): Fadable {
                 paintBiography.color = selected?.inactiveColor ?: Color.WHITE
             }
             canvas.drawColor(Color.BLACK)
-            paintBiography.textSize = 28f
+            paintBiography.textSize = Game.biographyTextSize*game.resources.displayMetrics.scaledDensity
             paintBiography.alpha = 255
             val textLayout = StaticLayout(
                 text, paintBiography, myArea.width(),

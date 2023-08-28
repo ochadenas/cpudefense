@@ -8,7 +8,6 @@ import com.example.cpudefense.gameElements.Button
 import com.example.cpudefense.gameElements.GameElement
 import com.example.cpudefense.networkmap.Viewport
 import com.example.cpudefense.utils.center
-import com.example.cpudefense.utils.setBottomRight
 import com.example.cpudefense.utils.setCenter
 import com.example.cpudefense.utils.setTopLeft
 
@@ -39,8 +38,9 @@ class Marketplace(val game: Game): GameElement()
     fun setSize(area: Rect)
     {
         myArea = Rect(area)
-        cardsArea = Rect(myArea.top, 64, Game.cardWidth + 20, myArea.bottom)
-        biographyArea= Rect(cardsArea.right+biographyAreaMargin, 64+biographyAreaMargin, myArea.right-biographyAreaMargin, myArea.bottom-biographyAreaMargin)
+        val topMargin = (60 * game.resources.displayMetrics.scaledDensity).toInt()
+        cardsArea = Rect(64, topMargin, ((Game.cardWidth + 20)*game.resources.displayMetrics.scaledDensity).toInt(), myArea.bottom)
+        biographyArea= Rect(cardsArea.right+biographyAreaMargin, topMargin, myArea.right-biographyAreaMargin, myArea.bottom-biographyAreaMargin)
         createButton()
     }
 
@@ -55,13 +55,16 @@ class Marketplace(val game: Game): GameElement()
             get it from the game data. Otherwise, create an empty card.
             Only add upgrades that are allowed (available) at present.
              */
-            var upgrade: Hero? = game.gameUpgrades[type]
-            if (upgrade == null)
-               upgrade = Hero.createFromData(game, Hero.Data(type))
-            if (upgrade.isAvailable()) {
-                upgrade.createBiography(biographyArea)
-                newUpgrades.add(upgrade)
+            var card: Hero? = game.gameUpgrades[type]
+            if (card == null)
+               card = Hero.createFromData(game, Hero.Data(type))
+            if (card.isAvailable()) {
+                card.createBiography(biographyArea)
+                newUpgrades.add(card)
             }
+            card.setDesc()
+            card.setSize()
+            card.createBitmap()
         }
         arrangeCards(newUpgrades, viewOffset)
         upgrades = newUpgrades
@@ -72,10 +75,11 @@ class Marketplace(val game: Game): GameElement()
      * @param dY Vertical offset used for scrolling */
     {
         val space = 20
-        val offset = Game.cardHeight + space
+        val offset = (Game.cardHeight*game.resources.displayMetrics.scaledDensity).toInt() + space
         var pos = offset + dY.toInt()
         for (card in cards)
         {
+            card.setSize()
             card.areaOnScreen.setTopLeft(space, pos)
             card.heroArea.setCenter(card.areaOnScreen.center())
             pos += offset
@@ -192,16 +196,16 @@ class Marketplace(val game: Game): GameElement()
         canvas.drawRect(textArea, clearPaint)
         paint.color = Color.WHITE
         paint.style = Paint.Style.STROKE
-        paint.strokeWidth = 2f
+        paint.strokeWidth = 2f * game.resources.displayMetrics.scaledDensity
         paint.alpha = 255
-        val y = textArea.bottom.toFloat() - 2f
+        val y = textArea.bottom.toFloat() - paint.strokeWidth
         canvas.drawLine(0f, y, myArea.right.toFloat(), y, paint)
 
         textPaint.color = Color.WHITE
         textPaint.style = Paint.Style.FILL
-        textPaint.textSize = 36f
+        textPaint.textSize = 24f * game.resources.displayMetrics.scaledDensity
         val text = "Total coins: %d".format(game.global.coinsTotal)
-        canvas.drawText(text, 20f, 40f, textPaint)
+        canvas.drawText(text, 20f, y-4*game.resources.displayMetrics.scaledDensity, textPaint)
 
         // draw buttons
         buttonFinish?.display(canvas)

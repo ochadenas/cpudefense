@@ -9,7 +9,6 @@ import android.view.MotionEvent
 import android.view.SurfaceHolder
 import android.view.SurfaceView
 import androidx.core.view.GestureDetectorCompat
-import com.example.cpudefense.effects.Background
 import com.example.cpudefense.effects.Effects
 
 class GameView(context: Context, val theGame: Game):
@@ -87,7 +86,7 @@ class GameView(context: Context, val theGame: Game):
         theGame.globalSpeedFactor = (h / 1024f)
         /* increase attacker size on larger screens */
         // theGame.globalResolutionFactorX = (w / )
-        theGame.globalResolutionFactor = (h / 1024f)
+        theGame.resources.displayMetrics.scaledDensity = (h / 1024f)
         resources.displayMetrics
     }
 

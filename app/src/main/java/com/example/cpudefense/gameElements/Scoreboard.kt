@@ -256,7 +256,7 @@ class ScoreBoard(val game: Game): GameElement() {
         val paint = Paint()
 
         fun setSize(area: Rect, divider: Int) {
-            actualSize = (Game.coinSizeOnScoreboard * game.globalResolutionFactor).toInt()
+            actualSize = (Game.coinSizeOnScoreboard * game.resources.displayMetrics.scaledDensity).toInt()
             this.area = Rect(waves.area.right, area.top, lives.area.left, area.bottom)
             bitmap =
                 Bitmap.createBitmap(this.area.width(), this.area.height(), Bitmap.Config.ARGB_8888)

@@ -44,7 +44,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
 
     private var paintBitmap = Paint()
     private var paintOutline = Paint()
-    private val outlineWidth = 2f
+    private var outlineWidth = 2f
     private val paintBackground = Paint()
     private var paintLines = Paint()
     private val defaultBackgroundColor = resources.getColor(R.color.chips_background)
@@ -167,11 +167,14 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
         /* this is put here because the viewport / zoom factor may change.
         However, it may be possible to remove this from display()
          */
-        val sizeOnScreen = theNetwork?.distanceBetweenGridPoints()
-        if (sizeOnScreen != null) {
-            widthOnScreen = sizeOnScreen.first * Game.chipSize.x.toInt()
-            heightOnScreen = sizeOnScreen.second * Game.chipSize.y.toInt()
-            actualRect = Rect(0, 0, widthOnScreen, heightOnScreen)
+        theNetwork?.let {
+            val sizeOnScreen = it.distanceBetweenGridPoints()
+            if (sizeOnScreen != null) {
+                widthOnScreen = sizeOnScreen.first * Game.chipSize.x.toInt()
+                heightOnScreen = sizeOnScreen.second * Game.chipSize.y.toInt()
+                actualRect = Rect(0, 0, widthOnScreen, heightOnScreen)
+            }
+            outlineWidth = 2f * it.theGame.resources.displayMetrics.scaledDensity
         }
         actualRect?.setCenter(viewport.gridToViewport(posOnGrid))
         actualRect?.let { displayRect(canvas, it) }
