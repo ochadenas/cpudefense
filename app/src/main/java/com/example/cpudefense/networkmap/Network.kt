@@ -129,7 +129,7 @@ class Network(val theGame: Game, x: Int, y: Int): GameElement() {
         // displayFrame(canvas, viewport) // optional
         if (!this::networkImage.isInitialized)
             recreateNetworkImage(viewport)
-        canvas.drawBitmap(this.networkImage, null, viewport.getRect(), paint)
+        canvas.drawBitmap(this.networkImage, null, viewport.screen, paint)
     }
 
     private fun displayFrame(canvas: Canvas, viewport: Viewport)
@@ -152,18 +152,19 @@ class Network(val theGame: Game, x: Int, y: Int): GameElement() {
      * and places the network elements on it */
     {
         validateViewport()
-        if (backgroundImage == null)
-            // use an empty background in this case
-            this.networkImage = Bitmap.createBitmap(viewport.viewportWidth, viewport.viewportHeight, Bitmap.Config.ARGB_8888)
-        else
-            // use the given background image
-            backgroundImage?.let {
-                if (it.width == viewport.viewportWidth && it.height == viewport.viewportHeight)
-                    // just use the given bitmap, it has the correct dimensions
-                    this.networkImage = it.copy(it.config, true)
-                else
-                    this.networkImage = Bitmap.createScaledBitmap(it, viewport.viewportWidth, viewport.viewportHeight, false)
-            }
+        backgroundImage = theGame.background?.getImage()
+        backgroundImage?.let {
+            if (it.width == viewport.screen.width() && it.height == viewport.screen.height())
+            // just use the given bitmap, it has the correct dimensions
+                this.networkImage = it.copy(it.config, true)
+            else
+                this.networkImage = Bitmap.createScaledBitmap(
+                    it,
+                    viewport.screen.width(),
+                    viewport.screen.height(),
+                    false
+                )
+        }
         val canvas = Canvas(this.networkImage)
         for (obj in links.values)
             obj.display(canvas, viewport)

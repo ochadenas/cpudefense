@@ -101,7 +101,6 @@ class Game(val gameActivity: MainGameActivity) {
     var movers = CopyOnWriteArrayList<Mover>() // list of all mover objects that are created for game elements
     var faders = CopyOnWriteArrayList<Fader>() // idem for faders
     val notification = ProgressNotification(this)
-    private val paintBitmap = Paint()
 
     /* other temporary variables */
     private var additionalCashDelay = 0
@@ -127,11 +126,10 @@ class Game(val gameActivity: MainGameActivity) {
         }
         else {
             intermezzo.prepareLevel(1, true)
+            state.startingLevel = 1
         }
-        if (!global.configDisableBackground) {
-            if (background == null)
-                background = Background(this)
-        }
+        if (background == null)
+            background = Background(this)
     }
 
     fun resumeGame()
@@ -149,16 +147,11 @@ class Game(val gameActivity: MainGameActivity) {
             state.phase = GamePhase.RUNNING
             currentWave = if (stage.waves.size > 0) stage.waves[0] else stage.nextWave()
         }
+        if (background == null)
+            background = Background(this)
         if (!global.configDisableBackground)
-        {
-            if (background == null)
-                background = Background(this)
-            background?.let {
-                it.choose(stage.data.level)
-                it.recreateBackgroundImage(viewport)
-                stage.network.backgroundImage = it.actualImage
-            }
-        }
+            background?.choose(stage.data.level)
+        background?.state = Background.BackgroundState.UNINITIALIZED
     }
 
     fun update()
@@ -166,11 +159,10 @@ class Game(val gameActivity: MainGameActivity) {
         if (state.phase == GamePhase.RUNNING)
         {
             currentStage?.network?.let {
-                if (!global.configDisableBackground)
-                    if (background?.update() == true) {
-                        it.backgroundImage = background?.actualImage
-                        it.recreateNetworkImage(viewport)
-                    }
+                if (background?.update() == true) {
+                    it.backgroundImage = background?.actualImage
+                    it.recreateNetworkImage(viewport)
+                }
                 it.update()
             }
             scoreBoard.update()

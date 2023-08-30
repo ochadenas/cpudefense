@@ -1,21 +1,24 @@
 package com.example.cpudefense.effects
 
 import android.graphics.*
+import android.widget.Toast
 import com.example.cpudefense.*
-import com.example.cpudefense.networkmap.Viewport
 import com.example.cpudefense.utils.setCenter
-import kotlin.math.sin
 import kotlin.math.cos
+import kotlin.math.sin
+import kotlin.random.Random
 
 class Background(val game: Game)
 /** The background shown during the game, showing a picture of real circuits.
  * This object is created whenever a game is started or resumed.
+ * The actual image is only a part of the larger image, cut out at random positions.
  *
- * @property bitmap The chosen background for this level. Might be bigger than the screen (viewport) size
+ * @property wholeImageOfCurrentStage The chosen background for this level. Might be bigger than the screen (viewport) size
  * @property actualImage A bitmap with the size of the viewport, cut out of the larger bitmap
   */
 {
-    var bitmap: Bitmap? = null
+    private var backgroundNumber: Int = 0 // the selected background
+    private var wholeImageOfCurrentStage: Bitmap? = null
     private var angle = 0.0
     var x = 0.0
     var y = 0.0
@@ -23,13 +26,17 @@ class Background(val game: Game)
     private var projY = 0.0
     var opacity = 0.5f
     var paint = Paint()
-    var actualImage: Bitmap? = null
+    var actualImage: Bitmap? = null // this is an image of the proportions of the screen
     private var ticks = 1
+    private var imageHasChanged = true
     var frozen = false
 
     // parameters:
     private val deltaAlpha = 0.0001
     private val ticksBeforeUpdate = 8
+
+    enum class BackgroundState { DISABLED, UNINITIALIZED, BLANK, INITIALIZED }
+    var state = BackgroundState.BLANK
 
     companion object {
         var bitmapsLoaded = false
@@ -37,9 +44,15 @@ class Background(val game: Game)
     }
     // TODO: this should be moved to the application
 
-    private fun loadBitmaps() {
+    private fun loadBitmaps()
+    /** loads the large background images as static objects into memory */
+    {
         if (!bitmapsLoaded)
         {
+            game.gameActivity.runOnUiThread {
+                val toast: Toast = Toast.makeText(game.gameActivity, game.resources.getString(R.string.toast_loading), Toast.LENGTH_LONG)
+                toast.show()
+            }
             actualImage = null
             try {
                 game.notification.showProgress(0.0f)
@@ -61,13 +74,10 @@ class Background(val game: Game)
                 for (i in 0 until 100)
                 {
                     try {
-                        // game.notification.showProgress(i * 0.01f)
-                        bitmap = BitmapFactory.decodeResource(game.resources, R.drawable.background_6)
-                        myBitmaps[i] = bitmap
+                        myBitmaps[i] = BitmapFactory.decodeResource(game.resources, R.drawable.background_6)
                     }
                     catch (e: java.lang.Exception)
                     {
-                        throw (OutOfMemoryError())
                     }
                 }
                  */
@@ -86,16 +96,19 @@ class Background(val game: Game)
     }
 
     fun choose(number: Int, opacity: Float = 0.2f)
-            /** selects the background to use.
+            /** chooses the background to use,
+             * and selects a random part of it
              * @param number selects one of the available backgrounds
              * @param opacity sets the opacity, from 0.0 to 1.0
              */
     {
-        loadBitmaps() // if necessary
-        val n = number % availableBitmaps.size
-        this.bitmap = availableBitmaps[n]
+        loadBitmaps()
+        backgroundNumber = number % availableBitmaps.size + 1
         this.opacity = opacity
-        recreateBackgroundImage(game.viewport)
+        angle = Random.nextDouble() * 2 * Math.PI
+        projX = cos(angle)
+        projY = sin(angle)
+        state = BackgroundState.UNINITIALIZED
     }
 
     fun update(): Boolean
@@ -103,47 +116,69 @@ class Background(val game: Game)
              * @return true if the background image must be changed, false otherwise
              */
     {
-        var imageHasChanged = false
-        if (actualImage == null) {
-            initializeImage()
-            imageHasChanged = true
-        }
-        if (!frozen) {
-            angle += deltaAlpha
-            ticks--
-            if (ticks < 0) {
-                imageHasChanged = true
-                ticks = ticksBeforeUpdate
-                projX = cos(angle)
-                projY = sin(angle)
-                recreateBackgroundImage(game.viewport)
-            }
-        }
-        return imageHasChanged
+        if (state == BackgroundState.BLANK)
+            return true
+        else
+            return false
     }
 
-    private fun initializeImage()
+    private fun blankImage(): Bitmap?
     {
-        if (game.viewport.viewportWidth == 0)
-            return   // dimensions are still not known
-        actualImage = Bitmap.createBitmap(game.viewport.viewportWidth, game.viewport.viewportHeight, Bitmap.Config.ARGB_8888)
+        if (game.viewport.screen.width() == 0 || game.viewport.screen.height() == 0)
+            return null  // can't determine screen dimensions
+        else
+            return Bitmap.createBitmap(game.viewport.screen.width(), game.viewport.screen.height(), Bitmap.Config.ARGB_8888)
     }
-
-    fun recreateBackgroundImage(viewport: Viewport)
+    fun getImage(): Bitmap?
+            /** provides the background image. If necessary, recreate the bitmap.
+             * If the screen dimensions are unknown, return null.
+             * @return the bitmap, or NULL if none can be provided.
+             */
     {
-        val destWidth = viewport.viewportWidth
-        val destHeight = viewport.viewportHeight
-        val largeImage: Bitmap = this.bitmap ?: return
+        if (actualImage == null || state == BackgroundState.UNINITIALIZED) {
+            actualImage = blankImage()
+            state = BackgroundState.BLANK
+        }
+        if (game.global.configDisableBackground) {
+            actualImage = blankImage()
+            state = BackgroundState.DISABLED
+        }
+        // draw background on canvas
         actualImage?.let {
-            paint.alpha = (255 * opacity).toInt()
-            val source = Rect(0,0, destWidth, destHeight)
-            val x = largeImage.width/2 + projX * 0.5f * (largeImage.width - destWidth)
-            val y = largeImage.height/2 + projY * 0.5f * (largeImage.height - destHeight)
-            source.setCenter(x.toInt(),y.toInt())
-            val canvas = Canvas(it)
-            // canvas.drawColor(Color.BLACK)
-            canvas.drawBitmap(largeImage, source, viewport.getRect(), paint)
+            val background = when (state) {
+                BackgroundState.DISABLED -> it
+                BackgroundState.UNINITIALIZED -> it // should not happen
+                BackgroundState.BLANK -> {
+                    loadBitmaps()
+                    wholeImageOfCurrentStage = availableBitmaps[backgroundNumber]
+                    if (bitmapsLoaded)
+                        state = BackgroundState.INITIALIZED
+                    paintOnBackgroundImage(it)
+                }
+                BackgroundState.INITIALIZED -> it
+            }
+            actualImage = background
         }
+        return actualImage
+    }
+
+    private fun paintOnBackgroundImage(bitmap: Bitmap): Bitmap
+            /** paints a selection out of the whole background image onto the existing bitmap
+             * @param bitmap The bitmap where to paint on. Should be a blank canvas.
+             * @return the bitmap containing the image */
+    {
+        this.wholeImageOfCurrentStage?.let {
+            paint.alpha = (255 * opacity).toInt()
+            val dest = Rect(0, 0, bitmap.width, bitmap.height)
+            val source = Rect(dest)
+            val x = it.width / 2 + projX * 0.5f * (it.width - dest.width())
+            val y = it.height / 2 + projY * 0.5f * (it.height - dest.height())
+            source.setCenter(x.toInt(), y.toInt())
+            val canvas = Canvas(bitmap)
+            canvas.drawColor(Color.BLACK)
+            canvas.drawBitmap(it, source, dest, paint)
+        }
+        return bitmap
     }
 
 
