@@ -95,7 +95,7 @@ class Background(val game: Game)
         }
     }
 
-    fun choose(number: Int, opacity: Float = 0.2f)
+    fun choose(number: Int, opacity: Float = 0.6f)
             /** chooses the background to use,
              * and selects a random part of it
              * @param number selects one of the available backgrounds
