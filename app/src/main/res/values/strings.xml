@@ -44,7 +44,16 @@ Inverting a 0 will actually make the attacker more dangerous, so be careful not 
 
 Destroy the attacking code to gain some information about the virus. Use it to buy additional chips or to upgrade the existing ones."
     </string>
-    <string name="instr_4">" Here are some hints:  Remember that in binary, 10 equals 2, 11 equals 3, 100 equals 4, and so on.  Try to tap on numbers starting with '1'. This reduces the attacker's number and makes the level much easier.  Any attacker that gets through to the CPU will cost one life, regardless of its number. You must have at least one SUB chip to get rid of them.      "</string>
+    <string name="instr_4">
+"Here are some hints:
+
+Remember that in binary,
+  10 equals 2,
+  11 equals 3,
+100 equals 4,
+and so on.
+
+Try to tap on numbers starting with '1'. This reduces the attacker's number and makes the level much easier.  Any attacker that gets through to the CPU will cost one life, regardless of its number. You must have at least one SUB chip to get rid of them.      "</string>
     <string name="instr_5">
 "In the next level, a new chip type is available. It is labelled 'SHR 1', which means 'shift right by 1'
 
@@ -175,6 +184,7 @@ The record-selling C64 not only had an enormous 64 kiB of RAM, it also featured 
     <string name="HERO_EFFECT_INFOOVERTIME">Gains additional bits over time</string>
     <string name="HERO_EFFECT_ATTSPEED">Decreases attacker speed</string>
     <string name="HERO_EFFECT_REFUNDPRICE">Increases refund when selling chips</string>
+    <string name="toast_loading">Loading ...</string>
 
 
 </resources>
