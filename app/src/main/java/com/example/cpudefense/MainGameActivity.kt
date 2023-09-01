@@ -10,16 +10,15 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class MainGameActivity : Activity() {
-    var mainDelay: Long = 0
+    private var mainDelay: Long = 0
     private val effectsDelay: Long = 15
     lateinit var theGame: Game
     lateinit var theGameView: GameView
     private var startOnLevel = -1
     private var resumeGame = true
-    var gameIsRunning = true  // flag used to keep the threads running. Set to false when leaving activity
+    private var gameIsRunning = true  // flag used to keep the threads running. Set to false when leaving activity
 
     enum class GameActivityStatus { PLAYING, BETWEEN_LEVELS, UNDETERMINED }
-    var status: GameActivityStatus = GameActivityStatus.UNDETERMINED
 
     override fun onCreate(savedInstanceState: Bundle?)
     {
@@ -37,7 +36,7 @@ class MainGameActivity : Activity() {
         if (intent.getBooleanExtra("RESET_PROGRESS", false))
             startOnLevel = -1
 
-        if (intent.getBooleanExtra("RESUME_GAME", false) == false)
+        if (!intent.getBooleanExtra("RESUME_GAME", false))
             resumeGame = false
         theGameView.setup()
     }
@@ -113,7 +112,7 @@ class MainGameActivity : Activity() {
         GlobalScope.launch{ delay(effectsDelay); updateGraphicalEffects(); }
     }
 
-    fun loadGameSettings()
+    private fun loadGameSettings()
     /** load global configuration and debug settings from preferences */
     {
         val prefs = getSharedPreferences(getString(R.string.pref_filename), MODE_PRIVATE)
@@ -188,7 +187,7 @@ class MainGameActivity : Activity() {
         editor.apply()
     }
 
-    fun loadState()
+    private fun loadState()
     {
         val prefs = getSharedPreferences(getString(R.string.pref_filename), MODE_PRIVATE)
         Persistency(theGame).loadState(prefs)

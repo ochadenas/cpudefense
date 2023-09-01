@@ -27,13 +27,7 @@ class Background(val game: Game)
     var opacity = 0.5f
     var paint = Paint()
     var actualImage: Bitmap? = null // this is an image of the proportions of the screen
-    private var ticks = 1
-    private var imageHasChanged = true
     var frozen = false
-
-    // parameters:
-    private val deltaAlpha = 0.0001
-    private val ticksBeforeUpdate = 8
 
     enum class BackgroundState { DISABLED, UNINITIALIZED, BLANK, INITIALIZED }
     var state = BackgroundState.BLANK
@@ -116,10 +110,7 @@ class Background(val game: Game)
              * @return true if the background image must be changed, false otherwise
              */
     {
-        if (state == BackgroundState.BLANK)
-            return true
-        else
-            return false
+        return (this.state == BackgroundState.BLANK)
     }
 
     private fun blankImage(): Bitmap?

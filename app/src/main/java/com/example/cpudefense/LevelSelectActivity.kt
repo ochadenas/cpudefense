@@ -11,10 +11,11 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 
+@Suppress("DEPRECATION")
 class LevelSelectActivity : AppCompatActivity() {
-    var levels: HashMap<Int, Stage.Summary>? = null
-    var selectedLevelView: Button? = null
-    var selectedLevel: Int = 0
+    private var levels: HashMap<Int, Stage.Summary>? = null
+    private var selectedLevelView: Button? = null
+    private var selectedLevel: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,7 +28,7 @@ class LevelSelectActivity : AppCompatActivity() {
         prepareStageSelector()
     }
 
-    fun prepareStageSelector()
+    private fun prepareStageSelector()
     {
         val listView = findViewById<LinearLayout>(R.id.levelList)
         val prefs = getSharedPreferences(getString(R.string.pref_filename), MODE_PRIVATE)
@@ -63,6 +64,7 @@ class LevelSelectActivity : AppCompatActivity() {
 
                 levelEntryView.setTextAppearance(this, R.style.TextAppearance_AppCompat_Medium)
                 // choose color of text:
+                @Suppress("SimplifyBooleanWithConstants") // no linter warning, please
                 when
                 {
                     (summary.won == true && (summary.coinsGot < summary.coinsMaxAvailable))
@@ -78,7 +80,7 @@ class LevelSelectActivity : AppCompatActivity() {
 
     }
 
-    fun addLevelIcon(view: TextView, icon: Bitmap?)
+    private fun addLevelIcon(view: TextView, icon: Bitmap?)
             /** add an icon representing the network of the level
              * @param view: the level entry
              */
@@ -95,7 +97,7 @@ class LevelSelectActivity : AppCompatActivity() {
         view.setCompoundDrawablesWithIntrinsicBounds(BitmapDrawable(resources, bitmap), null, null, null)
     }
 
-    fun onLevelSelect(v: View, level: Int)
+    private fun onLevelSelect(v: View, level: Int)
     {
         selectedLevel = level
 
