@@ -27,6 +27,7 @@ class Stage(var theGame: Game) {
 
     data class Data (
         var level: Int = 0,
+        var series: Int = 1,
         var gridSizeX: Int = 1,
         var gridSizeY: Int = 1,
         var maxWaves: Int = 0,
@@ -124,7 +125,7 @@ class Stage(var theGame: Game) {
                 val attacker = Attacker.createFromData(stage, attackerData)
                 stage.network.addVehicle(attacker)
             }
-            stage.calculateRewardCoins(game.summaryPerLevel[stage.data.level])
+            stage.calculateRewardCoins(game.summaryPerLevelOfSeries1[stage.data.level])
             return stage
         }
     }

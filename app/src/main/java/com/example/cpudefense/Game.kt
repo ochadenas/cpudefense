@@ -85,7 +85,7 @@ class Game(val gameActivity: MainGameActivity) {
     val resources: Resources = (gameActivity as Activity).resources
 
     var stageData: Stage.Data? = null
-    var summaryPerLevel = HashMap<Int, Stage.Summary>()
+    var summaryPerLevelOfSeries1 = HashMap<Int, Stage.Summary>()
     var levelThumbnail = HashMap<Int, Bitmap?>()  // level snapshots
     var gameUpgrades = HashMap<Hero.Type, Hero>()
 
@@ -119,7 +119,7 @@ class Game(val gameActivity: MainGameActivity) {
     {
         if (!resetProgress) {
             global = gameActivity.loadGlobalData()
-            summaryPerLevel = gameActivity.loadLevelData()   // get historical data of levels completed so far
+            summaryPerLevelOfSeries1 = gameActivity.loadLevelData()   // get historical data of levels completed so far
             gameUpgrades = gameActivity.loadUpgrades()       // load the upgrades gained so far
             additionalCashDelay = gameUpgrades[Hero.Type.GAIN_CASH]?.getStrength()?.toInt() ?: 0
             intermezzo.prepareLevel(state.startingLevel, true)
@@ -290,15 +290,15 @@ class Game(val gameActivity: MainGameActivity) {
         }
         intermezzo.coinsGathered = state.coinsExtra + state.coinsInLevel
         global.coinsTotal += intermezzo.coinsGathered
-        summaryPerLevel[stage.data.level] = Stage.Summary(won = true,
+        summaryPerLevelOfSeries1[stage.data.level] = Stage.Summary(won = true,
             coinsGot = stage.summary.coinsGot + state.coinsInLevel,
             coinsMaxAvailable = stage.summary.coinsMaxAvailable,
             coinsAvailable = stage.summary.coinsMaxAvailable - state.coinsInLevel
         )
         // make next level available
         val nextLevel = stage.data.level + 1
-        if (summaryPerLevel[nextLevel] == null && stage.type != Stage.Type.FINAL)
-            summaryPerLevel[nextLevel] = Stage.Summary()
+        if (summaryPerLevelOfSeries1[nextLevel] == null && stage.type != Stage.Type.FINAL)
+            summaryPerLevelOfSeries1[nextLevel] = Stage.Summary()
         setLastStage(stage.data.level)
         if (stage.type == Stage.Type.FINAL)
         {
@@ -325,9 +325,9 @@ class Game(val gameActivity: MainGameActivity) {
             val toast: Toast = Toast.makeText(gameActivity, resources.getString(R.string.toast_next_stage).format(nextStage.data.level), Toast.LENGTH_SHORT)
             toast.show() }
         StageFactory.createStage(nextStage, level)
-        state.coinsInLevel = nextStage.calculateRewardCoins(summaryPerLevel[level])
+        state.coinsInLevel = nextStage.calculateRewardCoins(summaryPerLevelOfSeries1[level])
         state.coinsExtra = 0
-        summaryPerLevel[level] = nextStage.summary
+        summaryPerLevelOfSeries1[level] = nextStage.summary
         gameActivity.setGameSpeed(GameSpeed.NORMAL)  // reset speed to normal when starting next stage
         speedControlPanel.resetButtons()
         viewport.reset()

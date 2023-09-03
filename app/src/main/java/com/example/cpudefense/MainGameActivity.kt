@@ -205,7 +205,7 @@ class MainGameActivity : Activity() {
     fun loadLevelData(): HashMap<Int, Stage.Summary>
     {
         val prefs = getSharedPreferences(getString(R.string.pref_filename), MODE_PRIVATE)
-        return Persistency(theGame).loadLevelSummaries(prefs) ?: HashMap()
+        return Persistency(theGame).loadLevelSummaries(prefs, 1) ?: HashMap()
     }
 
     fun loadUpgrades(): HashMap<Hero.Type, Hero>

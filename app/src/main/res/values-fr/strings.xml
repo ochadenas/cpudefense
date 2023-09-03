@@ -69,4 +69,7 @@
     <string name="toast_next_stage">Niveau %d</string>
     <string name="toast_stage_cleared">Niveau réussi</string>
     <string name="toast_loading">Chargement ...</string>
+    <string name="name_series_1">Série 1</string>
+    <string name="name_series_2">Série 2</string>
+    <string name="message_series_unavailable">Complétez tous les niveaux en série 1 d\'abord.</string>
 </resources>

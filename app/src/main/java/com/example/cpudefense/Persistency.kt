@@ -14,6 +14,9 @@ class Persistency(var game: Game?) {
         val stage: Stage.Data?
             )
 
+    // designators of the level data in the prefs
+    val seriesKey = hashMapOf<Int, String>(1 to "levels", 2 to "levels_series2")
+
     data class SerializableLevelData (
         val level: HashMap<Int, Stage.Summary> = HashMap()
             )
@@ -57,7 +60,7 @@ class Persistency(var game: Game?) {
     {
         game?.let {
             // get level data
-            it.summaryPerLevel = loadLevelSummaries(sharedPreferences) ?: HashMap()
+            it.summaryPerLevelOfSeries1 = loadLevelSummaries(sharedPreferences, 1) ?: HashMap()
 
             // get global data
             it.global = loadGlobalData(sharedPreferences)
@@ -80,9 +83,9 @@ class Persistency(var game: Game?) {
     {
         game?.let {
             // level summary:
-            val data = SerializableLevelData(it.summaryPerLevel)
+            val data = SerializableLevelData(it.summaryPerLevelOfSeries1)
             var json = Gson().toJson(data)
-            editor.putString("levels", json)
+            editor.putString(seriesKey[1], json)
         }
     }
 
@@ -121,13 +124,21 @@ class Persistency(var game: Game?) {
             return Gson().fromJson(json, Game.GlobalData::class.java)
     }
 
-    fun loadLevelSummaries(sharedPreferences: SharedPreferences): HashMap<Int, Stage.Summary>?
+    fun loadLevelSummaries(sharedPreferences: SharedPreferences, series: Int): HashMap<Int, Stage.Summary>?
+            /** loads the summaries for the given series (1, 2, ...).
+             * @return the set of all level summaries, or null if none can be found (or the series doesn't exist)
+             */
     {
-        val json = sharedPreferences.getString("levels", "none")
-        if (json == "none")
+        try {
+            val json = sharedPreferences.getString(seriesKey[series], "none")
+            val data: SerializableLevelData =
+                Gson().fromJson(json, SerializableLevelData::class.java)
+            return data.level
+        }
+        catch (e: Exception)
+        {
             return null
-        val data: SerializableLevelData = Gson().fromJson(json, SerializableLevelData::class.java)
-        return data.level
+        }
     }
 
     fun loadThumbnailOfLevel(sharedPreferences: SharedPreferences, level: Int): Bitmap?

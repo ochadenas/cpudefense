@@ -53,7 +53,9 @@ Remember that in binary,
 100 equals 4,
 and so on.
 
-Try to tap on numbers starting with '1'. This reduces the attacker's number and makes the level much easier.  Any attacker that gets through to the CPU will cost one life, regardless of its number. You must have at least one SUB chip to get rid of them.      "</string>
+Try to tap on numbers starting with '1'. This reduces the attacker's number and makes the level much easier.
+
+Any attacker that gets through to the CPU will cost one life, regardless of its number. You must have at least one SUB chip to get rid of them.      "</string>
     <string name="instr_5">
 "In the next level, a new chip type is available. It is labelled 'SHR 1', which means 'shift right by 1'
 
@@ -185,6 +187,8 @@ The record-selling C64 not only had an enormous 64 kiB of RAM, it also featured 
     <string name="HERO_EFFECT_ATTSPEED">Decreases attacker speed</string>
     <string name="HERO_EFFECT_REFUNDPRICE">Increases refund when selling chips</string>
     <string name="toast_loading">Loading ...</string>
-
+    <string name="name_series_1">Series 1</string>
+    <string name="name_series_2">Series 2</string>
+    <string name="message_series_unavailable">Complete all levels in series 1 first.</string>
 
 </resources>

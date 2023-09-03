@@ -50,13 +50,13 @@
                 android:id="@+id/series1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Series 1" />
+                android:text="@string/name_series_1" />
 
             <com.google.android.material.tabs.TabItem
                 android:id="@+id/series2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Series 2" />
+                android:text="@string/name_series_2" />
 
         </com.google.android.material.tabs.TabLayout>
 
