@@ -6,16 +6,61 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/pager"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constrainedHeight="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_wrapBehaviorInParent="horizontal_only"
+        />
+
     <TextView
         android:id="@+id/levelSelectorText"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/level_selector"
+        app:layout_constrainedHeight="true"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
         android:textColor="@color/text_green"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         />
+
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tab_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginBottom="16dp"
+            android:background="@color/black"
+            app:layout_constraintBottom_toTopOf="@+id/scrollView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/levelSelectorText"
+            app:tabSelectedTextColor="@color/text_white"
+            app:tabTextColor="@color/text_green">
+
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/series1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Series 1" />
+
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/series2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Series 2" />
+
+        </com.google.android.material.tabs.TabLayout>
+
+
 
     <ScrollView
         android:id="@+id/scrollView"
@@ -27,7 +72,7 @@
         app:layout_constraintBottom_toTopOf="@+id/playLevelButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/levelSelectorText"
+        app:layout_constraintTop_toBottomOf="@+id/tab_layout"
         >
 
         <LinearLayout
