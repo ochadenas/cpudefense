@@ -18,6 +18,7 @@ class LevelSelectActivity : AppCompatActivity() {
     private var levels: HashMap<Int, Stage.Summary> = HashMap()
     private var selectedLevelView: Button? = null
     private var selectedLevel: Int = 0
+    private var selectedSeries: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,6 +64,7 @@ class LevelSelectActivity : AppCompatActivity() {
         val listView = findViewById<LinearLayout>(R.id.levelList)
         val prefs = getSharedPreferences(getString(R.string.pref_filename), MODE_PRIVATE)
         listView.removeAllViews()
+        selectedSeries = series
         when (series)
         {
             1 -> {
@@ -174,6 +176,7 @@ class LevelSelectActivity : AppCompatActivity() {
             return
         val intent = Intent(this, MainGameActivity::class.java)
         intent.putExtra("START_ON_STAGE", selectedLevel)
+        intent.putExtra("START_ON_SERIES", selectedSeries)
         intent.putExtra("CONTINUE_GAME", false)
         startActivity(intent)
         finish()

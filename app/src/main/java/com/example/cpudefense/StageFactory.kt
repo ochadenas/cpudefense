@@ -1,13 +1,12 @@
 package com.example.cpudefense
 
 import com.example.cpudefense.gameElements.*
-import com.example.cpudefense.networkmap.Network
 import kotlin.random.Random
 
-class StageFactory() {
+class StageFactory {
     companion object {
-        fun createStage(stage: Stage, level: Int) {
-            stage.data.level = level
+        fun createStage(stage: Stage, level: Stage.Identifier) {
+            stage.data.ident = level
             stage.waves.clear()
             stage.type = Stage.Type.REGULAR
             stage.data.chipsAllowed =
@@ -23,7 +22,7 @@ class StageFactory() {
 
             with(stage)
             {
-                when (level) {
+                when (stage.getLevel()) {
                     1 -> {
                         initializeNetwork(40, 40)
 

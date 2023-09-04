@@ -62,7 +62,7 @@ class ScoreBoard(val game: Game): GameElement() {
         paint.strokeWidth = 4f
         canvas.drawRect(area, paint)
 
-        if ((game.currentStage?.data?.level ?: 3) > 2)
+        if (game.currentStage?.getSeries() ?: 1 > 1 || game.currentStage?.getLevel() ?: 3 > 2)
             score.display(canvas)
         waves.display(canvas)
         lives.display(canvas)

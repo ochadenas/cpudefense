@@ -9,7 +9,7 @@ import android.text.TextPaint
 import com.example.cpudefense.effects.Fadable
 import com.example.cpudefense.effects.Fader
 
-class Instructions(val game: Game, var stage: Int, var callback: (()->Unit)? ): Fadable {
+class Instructions(val game: Game, var stage: Stage.Identifier, var callback: (()->Unit)? ): Fadable {
     var alpha = 0
 
     fun instructionText(level: Int): String
@@ -46,12 +46,14 @@ class Instructions(val game: Game, var stage: Int, var callback: (()->Unit)? ): 
 
 
     fun display(canvas: Canvas) {
+        if (stage.series > 1)
+            return  // display instructions for series 1 only
         val margin = 20
         val textArea = Rect(0, 0, canvas.width - 2 * margin, canvas.height - 200)
         canvas.save()
-        canvas.translate(2*margin.toFloat(), margin.toFloat())
 
-        var text = instructionText(stage)
+        canvas.translate(2*margin.toFloat(), margin.toFloat())
+        var text = instructionText(stage.number)
         val textPaint = TextPaint()
         textPaint.textSize = Game.instructionTextSize * game.resources.displayMetrics.scaledDensity
         textPaint.color = Color.WHITE

@@ -13,7 +13,7 @@ import java.util.concurrent.CopyOnWriteArrayList
 import kotlin.random.Random
 
 class Intermezzo(var game: Game): GameElement(), Fadable {
-    var level = 0
+    var level = Stage.Identifier()
     var alpha = 0
     var myArea = Rect()
     var typewriter: Typewriter? = null
@@ -39,7 +39,7 @@ class Intermezzo(var game: Game): GameElement(), Fadable {
 
     override fun fadeDone(type: Fader.Type) {
         alpha = 255
-        instructions = Instructions(game, level, { displayText() })
+        instructions = Instructions(game, level) { displayText() }
     }
 
     fun displayText()
@@ -49,9 +49,9 @@ class Intermezzo(var game: Game): GameElement(), Fadable {
         {
             Type.GAME_LOST -> {
                 lines.add(game.resources.getString(R.string.failed))
-                lines.add(game.resources.getString(R.string.last_stage).format(level))
+                lines.add(game.resources.getString(R.string.last_stage).format(level.number))
                 textOnContinueButton = game.resources.getString(R.string.button_exit)
-                game.setLastStage(level-1)
+                game.setLastPlayedStage(level.previous())
             }
             Type.GAME_WON  -> {
                 lines.add(game.resources.getString(R.string.success))
@@ -59,7 +59,7 @@ class Intermezzo(var game: Game): GameElement(), Fadable {
                     lines.add(game.resources.getString(R.string.coins_gathered).format(coinsGathered))
                 lines.add(game.resources.getString(R.string.win))
                 textOnContinueButton = game.resources.getString(R.string.button_exit)
-                game.setLastStage(level)
+                game.setLastPlayedStage(level)
             }
             Type.STARTING_LEVEL -> {
                 lines.add(game.resources.getString(R.string.game_start))
@@ -70,13 +70,12 @@ class Intermezzo(var game: Game): GameElement(), Fadable {
                 lines.add(game.resources.getString(R.string.cleared))
                 if (coinsGathered>0)
                     lines.add(game.resources.getString(R.string.coins_gathered).format(coinsGathered))
-                if (level <= Game.maxLevelAvailable)
-                    lines.add(game.resources.getString(R.string.next_stage).format(level))
+                lines.add(game.resources.getString(R.string.next_stage).format(level.number))
                 textOnContinueButton = game.resources.getString(R.string.continue_game)
-                game.setLastStage(level)
+                game.setLastPlayedStage(level)
             }
         }
-        typewriter = Typewriter(game, myArea, lines, { onTypewriterDone() })
+        typewriter = Typewriter(game, myArea, lines) { onTypewriterDone() }
     }
 
     fun displayFireworks()
@@ -161,7 +160,7 @@ class Intermezzo(var game: Game): GameElement(), Fadable {
         return false
     }
 
-    fun prepareLevel(nextLevel: Int, isStartingLevel: Boolean)
+    fun prepareLevel(nextLevel: Stage.Identifier, isStartingLevel: Boolean)
     {
         clear()
         this.level = nextLevel
@@ -185,7 +184,12 @@ class Intermezzo(var game: Game): GameElement(), Fadable {
         game.state.phase = Game.GamePhase.MARKETPLACE
     }
 
-    fun endOfGame(lastLevel: Int, hasWon: Boolean)
+    fun endOfGame(lastLevel: Stage.Identifier, hasWon: Boolean)
+            /** called when the game is definitely over. Either because the player has completed all levels,
+             * or lost all lives.
+             * @param lastLevel The level that has been played
+             * @param hasWon False if all lives have been lost
+             */
     {
         clear()
         this.level = lastLevel
@@ -202,7 +206,7 @@ class Intermezzo(var game: Game): GameElement(), Fadable {
         game.state.phase = Game.GamePhase.INTERMEZZO
     }
 
-    fun clear()
+    private fun clear()
     {
         typewriter = null
         instructions = null

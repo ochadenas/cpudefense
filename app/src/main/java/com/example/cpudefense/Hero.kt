@@ -183,7 +183,7 @@ class Hero(var game: Game, type: Type): Fadable {
         paintText.textSize = (Game.biographyTextSize - 2) * game.resources.displayMetrics.scaledDensity
         indicatorSize = heroArea.width() / 10
     }
-    fun createBitmap(): Unit
+    fun createBitmap()
     /** re-creates the bitmap without border, using a canvas positioned at (0, 0) */
     {
         val bitmap = createBitmap( areaOnScreen.width(), areaOnScreen.height(), Bitmap.Config.ARGB_8888)
@@ -325,18 +325,28 @@ class Hero(var game: Game, type: Type): Fadable {
         }
     }
 
+    fun upgradeLevel(type: Type): Int
+    {
+        val level = game.gameUpgrades[type]?.data?.level
+        return level ?: 0
+    }
+
     fun isAvailable(): Boolean
             /** function that evaluates certain restrictions on upgrades.
              * Some upgrades require others to reach a certain level, etc.
              */
     {
+        val currentStage = game.currentStage?.data?.ident ?: Stage.Identifier()
+        // TODO: check conditions!
+        if (currentStage.series > 1)  // display instructions only for series 1
+            return true
         when (data.type) {
-            Type.DECREASE_UPGRADE_COST -> return (game.gameUpgrades[Type.INCREASE_STARTING_CASH]?.data?.level?: 0 >= 3)
+            Type.DECREASE_UPGRADE_COST -> return (upgradeLevel(Type.INCREASE_STARTING_CASH) >= 3)
             Type.ADDITIONAL_LIVES -> return (game.gameUpgrades[Type.DECREASE_UPGRADE_COST]?.data?.level?: 0 >= 3)
             Type.DECREASE_ATT_FREQ -> return (game.gameUpgrades[Type.INCREASE_CHIP_SHIFT_SPEED]?.data?.level?: 0 >= 3)
             Type.DECREASE_ATT_SPEED -> return (game.gameUpgrades[Type.DECREASE_ATT_FREQ]?.data?.level?: 0 >= 3)
             Type.GAIN_CASH -> return (game.gameUpgrades[Type.INCREASE_STARTING_CASH]?.data?.level?: 0 >= 4)
-            Type.INCREASE_CHIP_MEM_SPEED -> return (game.currentStage?.data?.level?:0 >= 9 )
+            Type.INCREASE_CHIP_MEM_SPEED -> return (game.currentStage?.getLevel()?:0 >= 9 )
             Type.INCREASE_CHIP_ACC_SPEED -> return false
             else -> return true
         }

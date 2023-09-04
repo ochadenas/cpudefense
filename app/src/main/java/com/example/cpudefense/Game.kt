@@ -21,8 +21,6 @@ import java.util.concurrent.CopyOnWriteArrayList
 
 class Game(val gameActivity: MainGameActivity) {
     companion object Params {
-        const val maxLevelAvailable: Int = 25
-
         const val defaultMainDelay = 70L
         val chipSize = GridCoord(6,3)
         const val viewportMargin = 10
@@ -58,7 +56,7 @@ class Game(val gameActivity: MainGameActivity) {
 
     data class StateData(
         var phase: GamePhase,       // whether the game is running, paused or between levels
-        var startingLevel: Int,     // level to begin the next game with
+        var startingLevel: Stage.Identifier,     // level to begin the next game with
         var maxLives: Int,          // maximum number of lives
         var currentMaxLives: Int,   // maximum number of lives, taking into account modifiers
         var lives: Int,             // current number of lives
@@ -68,7 +66,7 @@ class Game(val gameActivity: MainGameActivity) {
         )
     var state = StateData(
         phase = GamePhase.START,
-        startingLevel = 1,
+        startingLevel = Stage.Identifier(),
         maxLives = maxLivesPerStage,
         currentMaxLives = maxLivesPerStage,
         lives = 0,
@@ -86,7 +84,8 @@ class Game(val gameActivity: MainGameActivity) {
 
     var stageData: Stage.Data? = null
     var summaryPerLevelOfSeries1 = HashMap<Int, Stage.Summary>()
-    var levelThumbnail = HashMap<Int, Bitmap?>()  // level snapshots
+    var summaryPerLevelOfSeries2 = HashMap<Int, Stage.Summary>()
+    var levelThumbnail = HashMap<Int, Bitmap?>()  // level snapshots (common for series 1 and 2)
     var gameUpgrades = HashMap<Hero.Type, Hero>()
 
     /* game elements */
@@ -125,8 +124,8 @@ class Game(val gameActivity: MainGameActivity) {
             intermezzo.prepareLevel(state.startingLevel, true)
         }
         else {
-            intermezzo.prepareLevel(1, true)
-            state.startingLevel = 1
+            state.startingLevel = Stage.Identifier(1,1)
+            intermezzo.prepareLevel(state.startingLevel, true)
         }
         if (background == null)
             background = Background(this)
@@ -141,7 +140,7 @@ class Game(val gameActivity: MainGameActivity) {
         // viewport.setSize(gameActivity.theGameView.width, gameActivity.theGameView.height)
         viewport.setGridSize(stage.sizeX, stage.sizeY)
         if (state.phase == GamePhase.MARKETPLACE)
-            marketplace.fillMarket(stage.data.level)
+            marketplace.fillMarket(stage.data.ident)
         else
         {
             state.phase = GamePhase.RUNNING
@@ -150,7 +149,7 @@ class Game(val gameActivity: MainGameActivity) {
         if (background == null)
             background = Background(this)
         if (!global.configDisableBackground)
-            background?.choose(stage.data.level)
+            background?.choose(stage.getLevel())
         background?.state = Background.BackgroundState.UNINITIALIZED
     }
 
@@ -253,6 +252,26 @@ class Game(val gameActivity: MainGameActivity) {
                 return false
         }
     }
+
+    fun getSummaryOfStage(stage: Stage.Identifier): Stage.Summary?
+    {
+        when (stage.series)
+        {
+            1 -> return summaryPerLevelOfSeries1[stage.number]
+            2 -> return summaryPerLevelOfSeries2[stage.number]
+            else -> return null
+        }
+    }
+
+    fun setSummaryOfStage(stage: Stage.Identifier, summary: Stage.Summary)
+    {
+        when (stage.series)
+        {
+            1 -> summaryPerLevelOfSeries1[stage.number] = summary
+            2 -> summaryPerLevelOfSeries2[stage.number] = summary
+            else -> return
+        }
+    }
     
     private fun startNextWave()
     {
@@ -290,63 +309,50 @@ class Game(val gameActivity: MainGameActivity) {
         }
         intermezzo.coinsGathered = state.coinsExtra + state.coinsInLevel
         global.coinsTotal += intermezzo.coinsGathered
-        summaryPerLevelOfSeries1[stage.data.level] = Stage.Summary(won = true,
+        summaryPerLevelOfSeries1[stage.getLevel()] = Stage.Summary(won = true,
             coinsGot = stage.summary.coinsGot + state.coinsInLevel,
             coinsMaxAvailable = stage.summary.coinsMaxAvailable,
             coinsAvailable = stage.summary.coinsMaxAvailable - state.coinsInLevel
         )
         // make next level available
-        val nextLevel = stage.data.level + 1
-        if (summaryPerLevelOfSeries1[nextLevel] == null && stage.type != Stage.Type.FINAL)
-            summaryPerLevelOfSeries1[nextLevel] = Stage.Summary()
-        setLastStage(stage.data.level)
+        val nextLevel = Stage.Identifier(series = stage.getSeries(), number = stage.getLevel()+1)
+        if (summaryPerLevelOfSeries1[nextLevel.number] == null && stage.type != Stage.Type.FINAL)
+            summaryPerLevelOfSeries1[nextLevel.number] = Stage.Summary()
+        setLastPlayedStage(stage.data.ident)
         if (stage.type == Stage.Type.FINAL)
         {
-            intermezzo.endOfGame(stage.data.level, hasWon = true)
+            intermezzo.endOfGame(stage.data.ident, hasWon = true)
         }
         else {
-            intermezzo.prepareLevel(stage.data.level + 1, false)
+            intermezzo.prepareLevel(stage.data.ident.next(), false)
         }
     }
 
-    fun startNextStage(level: Int)
+    fun startNextStage(level: Stage.Identifier)
     {
-        if (level > maxLevelAvailable) {
-            quitGame()   // should not happen, but better handle this
-            return
-        }
         gameActivity.setGameActivityStatus(MainGameActivity.GameActivityStatus.PLAYING)
-        val extraLives = gameUpgrades[Hero.Type.ADDITIONAL_LIVES]?.getStrength()
-        state.currentMaxLives = state.maxLives + (extraLives ?: 0f).toInt()
-        state.lives = state.currentMaxLives
+        calculateLives()
         calculateStartingCash()
         val nextStage = Stage(this)
         gameActivity.runOnUiThread {
-            val toast: Toast = Toast.makeText(gameActivity, resources.getString(R.string.toast_next_stage).format(nextStage.data.level), Toast.LENGTH_SHORT)
+            val toast: Toast = Toast.makeText(gameActivity, resources.getString(R.string.toast_next_stage).format(nextStage.getLevel()), Toast.LENGTH_SHORT)
             toast.show() }
         StageFactory.createStage(nextStage, level)
-        state.coinsInLevel = nextStage.calculateRewardCoins(summaryPerLevelOfSeries1[level])
+        state.coinsInLevel = nextStage.calculateRewardCoins(getSummaryOfStage(level))
         state.coinsExtra = 0
-        summaryPerLevelOfSeries1[level] = nextStage.summary
+        setSummaryOfStage(level, nextStage.summary)
         gameActivity.setGameSpeed(GameSpeed.NORMAL)  // reset speed to normal when starting next stage
         speedControlPanel.resetButtons()
         viewport.reset()
         gameActivity.saveState()
 
-        if (nextStage.network == null) // no more levels left
-        {
-            setLastStage(level)
-            intermezzo.endOfGame(level, hasWon = true)
-        }
-        else nextStage.network?.let {
-            viewport.setGridSize(it.data.gridSizeX, it.data.gridSizeY)
-            state.phase = GamePhase.RUNNING
-            currentWave = nextStage.nextWave()
-        }
+        viewport.setGridSize(nextStage.network.data.gridSizeX, nextStage.network.data.gridSizeY)
+        state.phase = GamePhase.RUNNING
+        currentWave = nextStage.nextWave()
 
         currentStage = nextStage
         if (!global.configDisableBackground)
-            background?.choose(level)
+            background?.choose(level.number)
         takeLevelSnapshot()
     }
 
@@ -357,7 +363,7 @@ class Game(val gameActivity: MainGameActivity) {
         state.lives--
         if (state.lives == 0)
         {
-            val lastLevel = currentStage?.data?.level ?: 1
+            val lastLevel = currentStage?.data?.ident ?: Stage.Identifier(1,0)
             takeLevelSnapshot()
             currentStage = null
             intermezzo.endOfGame(lastLevel, hasWon = false)
@@ -369,28 +375,38 @@ class Game(val gameActivity: MainGameActivity) {
         gameActivity.finish()
     }
 
-    fun setLastStage(currentStage: Int)
+    fun setLastPlayedStage(currentStage: Stage.Identifier)
     /** when completing a level, record the current number in the SharedPrefs.
      * If necessary, adjust MAXSTAGE, too.
      * @param currentStage number of the level successfully completed */
     {
         val prefs = gameActivity.getSharedPreferences(gameActivity.getString(R.string.pref_filename), Context.MODE_PRIVATE)
-        val maxStage = prefs.getInt("MAXSTAGE", 0)
+        val maxStageNumber = prefs.getInt("MAXSTAGE", 0)
+        val maxStageSeries = prefs.getInt("MAXSERIES", 1)
         with (prefs.edit())
         {
-            putInt("LASTSTAGE", currentStage)
-            if (currentStage > maxStage)
-                putInt("MAXSTAGE", currentStage)
+            putInt("LASTSTAGE", currentStage.number)
+            putInt("LASTSERIES", currentStage.series)
+            if (currentStage.number > maxStageNumber && currentStage.series>=maxStageSeries) {
+                putInt("MAXSTAGE", currentStage.number)
+                putInt("MAXSERIES", currentStage.series)
+            }
             commit()
         }
     }
 
+    private fun calculateLives()
+    {
+        val extraLives = gameUpgrades[Hero.Type.ADDITIONAL_LIVES]?.getStrength()
+        state.currentMaxLives = state.maxLives + (extraLives ?: 0f).toInt()
+        state.lives = state.currentMaxLives
+    }
     private fun calculateStartingCash()
     {
         val cash = gameUpgrades[Hero.Type.INCREASE_STARTING_CASH]?.getStrength()?.toInt()
         state.cash = cash ?: minimalAmountOfCash
     }
-    
+
     private fun gainAdditionalCash()
     /** increases the amount of cash in regular intervals */
     {
@@ -406,8 +422,8 @@ class Game(val gameActivity: MainGameActivity) {
     private fun takeLevelSnapshot()
     {
         currentStage?.let {
-            levelThumbnail[it.data.level] = it.takeSnapshot(levelSnapshotIconSize)
-            gameActivity.saveThumbnail(it.data.level)
+            levelThumbnail[it.getLevel()] = it.takeSnapshot(levelSnapshotIconSize)
+            gameActivity.saveThumbnail(it.getLevel())
         }
     }
 

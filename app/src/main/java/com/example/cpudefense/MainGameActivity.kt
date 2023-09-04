@@ -14,7 +14,7 @@ class MainGameActivity : Activity() {
     private val effectsDelay: Long = 15
     lateinit var theGame: Game
     lateinit var theGameView: GameView
-    private var startOnLevel = -1
+    private var startOnLevel: Stage.Identifier? = null
     private var resumeGame = true
     private var gameIsRunning = true  // flag used to keep the threads running. Set to false when leaving activity
 
@@ -32,10 +32,15 @@ class MainGameActivity : Activity() {
         val parentView: FrameLayout? = findViewById(R.id.gameFrameLayout)
         parentView?.addView(theGameView)
 
-        startOnLevel = intent.getIntExtra("START_ON_STAGE", -1)
-        if (intent.getBooleanExtra("RESET_PROGRESS", false))
-            startOnLevel = -1
-
+        if (intent.getBooleanExtra("RESET_PROGRESS", false) == false)
+        {
+            startOnLevel = Stage.Identifier(
+                series = intent.getIntExtra("START_ON_SERIES", 1),
+                number = intent.getIntExtra("START_ON_STAGE", 1)
+            )
+        }
+        else
+            startOnLevel = null
         if (!intent.getBooleanExtra("RESUME_GAME", false))
             resumeGame = false
         theGameView.setup()
@@ -59,8 +64,8 @@ class MainGameActivity : Activity() {
         when
         {
             resumeGame -> resumeCurrentGame()
-            startOnLevel == -1 -> startNewGame()
-            else -> startGameAtLevel(startOnLevel)
+            startOnLevel == null -> startNewGame()
+            else -> startGameAtLevel(startOnLevel ?: Stage.Identifier())
         }
         resumeGame = true
         gameIsRunning = true
@@ -79,11 +84,11 @@ class MainGameActivity : Activity() {
     private fun startNewGame()
     /** starts a new game from level 1, discarding all progress */
     {
-        theGame.setLastStage(0)
+        theGame.setLastPlayedStage(Stage.Identifier())
         theGame.beginGame(resetProgress = true)
     }
 
-    private fun startGameAtLevel(level: Int)
+    private fun startGameAtLevel(level: Stage.Identifier)
     /** continues a current match at a given level, keeping the progress and upgrades */
     {
         theGame.state.startingLevel = level
@@ -98,7 +103,7 @@ class MainGameActivity : Activity() {
         theGame.resumeGame()
         if (theGame.state.phase == Game.GamePhase.RUNNING) {
             runOnUiThread {
-                val toast: Toast = Toast.makeText(this, "Stage %d".format(theGame.currentStage?.data?.level), Toast.LENGTH_SHORT )
+                val toast: Toast = Toast.makeText(this, "Stage %d".format(theGame.currentStage?.getLevel()), Toast.LENGTH_SHORT )
                 toast.show()
             }
         }

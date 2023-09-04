@@ -91,7 +91,7 @@ class Persistency(var game: Game?) {
 
     fun saveThumbnailOfLevel(editor: SharedPreferences.Editor, level: Int) {
         game?.let {
-            val level = it.currentStage?.data?.level ?: 0
+            val level = it.currentStage?.getLevel() ?: 0
             if (level != 0) {
                 var outputStream = ByteArrayOutputStream()
                 var snapshot: Bitmap? = it.levelThumbnail[level]

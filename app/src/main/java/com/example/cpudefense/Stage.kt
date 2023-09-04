@@ -14,6 +14,15 @@ import kotlin.random.nextULong
 
 class Stage(var theGame: Game) {
 
+    class Identifier(var series: Int =1, var number: Int =0) {
+        fun next(): Identifier
+        /** returns an identifier of the next level */
+        { return Identifier(series, number+1)}
+        fun previous(): Identifier
+        /** returns an identifier of the previous level */
+        { return Identifier(series, if (number<=1) 1 else number-1)}
+    }
+
     lateinit var network: Network
     var sizeX = 0
     var sizeY = 0
@@ -26,7 +35,7 @@ class Stage(var theGame: Game) {
     var type = Type.REGULAR
 
     data class Data (
-        var level: Int = 0,
+        var ident: Stage.Identifier = Identifier(series=1, number=0),
         var series: Int = 1,
         var gridSizeX: Int = 1,
         var gridSizeY: Int = 1,
@@ -51,8 +60,12 @@ class Stage(var theGame: Game) {
 
     var rewardCoins = 0  // number of coins that can be obtained by completing the level
 
+    fun getLevel(): Int {return data.ident.number}
+
+    fun getSeries(): Int {return data.ident.series}
+
     fun calculateRewardCoins(previousSummary: Summary?): Int
-            /** calculate the coins available for completing this level,
+     /** calculate the coins available for completing this level,
              * taking into account the coins already got in previous games.
              * @param previousSummary Saved data set for this level, contains number of coins got earlier
              * @return number of coins for the current game
@@ -125,7 +138,7 @@ class Stage(var theGame: Game) {
                 val attacker = Attacker.createFromData(stage, attackerData)
                 stage.network.addVehicle(attacker)
             }
-            stage.calculateRewardCoins(game.summaryPerLevelOfSeries1[stage.data.level])
+            stage.calculateRewardCoins(game.summaryPerLevelOfSeries1[stage.getLevel()])
             return stage
         }
     }

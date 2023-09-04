@@ -28,7 +28,7 @@ class Marketplace(val game: Game): GameElement()
     private var upgrades = mutableListOf<Hero>()
     private var selected: Hero? = null
 
-    private var nextGameLevel = 0
+    private var nextGameLevel = Stage.Identifier()
 
     init {
         clearPaint.color = Color.BLACK
@@ -44,11 +44,11 @@ class Marketplace(val game: Game): GameElement()
         createButton()
     }
 
-    fun fillMarket(level: Int)
+    fun fillMarket(level: Stage.Identifier)
     {
         // upgrades.clear()
         nextGameLevel = level
-        var newUpgrades = mutableListOf<Hero>()
+        val newUpgrades = mutableListOf<Hero>()
         for (type in Hero.Type.values())
         {
             /* if upgrade already exists (because it has been bought earlier),
@@ -140,7 +140,7 @@ class Marketplace(val game: Game): GameElement()
         if (buttonPurchase?.area?.contains(event.x.toInt(), event.y.toInt()) == true)
         {
             selected?.let {
-                var price = it.getPrice(it.data.level)
+                val price = it.getPrice(it.data.level)
                 if (game.global.coinsTotal >= price && it.data.level < it.maxLevel) {
                     game.global.coinsTotal -= price
                     it.data.coinsSpent += price
@@ -159,10 +159,10 @@ class Marketplace(val game: Game): GameElement()
         return false
     }
 
-    fun refundAll()
+    private fun refundAll()
     {
         for (card in upgrades.filter { it.data.level > 0} ) {
-            var refund =
+            val refund =
                 if (card.data.coinsSpent > 0) card.data.coinsSpent else 0  // was: 4
             game.global.coinsTotal += refund
             card.resetUpgrade()
