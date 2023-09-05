@@ -375,11 +375,14 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
                 else -> {}
         }
 
-        // discard the alternatives that are not allowed for this stage
-        val allowed = network.theGame.currentStage?.data?.chipsAllowed ?: setOf()
-        for (a in alternatives)
-            if (a !in allowed)
-                alternatives.remove(a)
+        // discard the alternatives that are not allowed for this stage,
+        // but only for series 1
+        if (network.theGame.currentStage?.getSeries() == 1) {
+            val allowed = network.theGame.currentStage?.data?.chipsAllowed ?: setOf()
+            for (a in alternatives)
+                if (a !in allowed)
+                    alternatives.remove(a)
+        }
 
         // calculate screen coordinates for the alternative boxes
         actualRect?.let { rect ->
