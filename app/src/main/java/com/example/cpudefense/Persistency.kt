@@ -61,6 +61,7 @@ class Persistency(var game: Game?) {
         game?.let {
             // get level data
             it.summaryPerLevelOfSeries1 = loadLevelSummaries(sharedPreferences, 1) ?: HashMap()
+            it.summaryPerLevelOfSeries2 = loadLevelSummaries(sharedPreferences, 2) ?: HashMap()
 
             // get global data
             it.global = loadGlobalData(sharedPreferences)
@@ -82,10 +83,14 @@ class Persistency(var game: Game?) {
     fun saveLevels(editor: SharedPreferences.Editor)
     {
         game?.let {
-            // level summary:
-            val data = SerializableLevelData(it.summaryPerLevelOfSeries1)
+            // level summary for series 1:
+            var data = SerializableLevelData(it.summaryPerLevelOfSeries1)
             var json = Gson().toJson(data)
             editor.putString(seriesKey[1], json)
+            // same for series 2:
+            data = SerializableLevelData(it.summaryPerLevelOfSeries2)
+            json = Gson().toJson(data)
+            editor.putString(seriesKey[2], json)
         }
     }
 

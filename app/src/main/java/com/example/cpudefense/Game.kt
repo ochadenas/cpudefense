@@ -263,13 +263,14 @@ class Game(val gameActivity: MainGameActivity) {
         }
     }
 
-    fun setSummaryOfStage(stage: Stage.Identifier, summary: Stage.Summary)
+    fun setSummaryOfStage(stage: Stage.Identifier, summary: Stage.Summary?)
     {
-        when (stage.series)
-        {
-            1 -> summaryPerLevelOfSeries1[stage.number] = summary
-            2 -> summaryPerLevelOfSeries2[stage.number] = summary
-            else -> return
+        summary?.let {
+            when (stage.series) {
+                1 -> summaryPerLevelOfSeries1[stage.number] = it
+                2 -> summaryPerLevelOfSeries2[stage.number] = it
+                else -> return
+            }
         }
     }
     
@@ -309,22 +310,23 @@ class Game(val gameActivity: MainGameActivity) {
         }
         intermezzo.coinsGathered = state.coinsExtra + state.coinsInLevel
         global.coinsTotal += intermezzo.coinsGathered
-        summaryPerLevelOfSeries1[stage.getLevel()] = Stage.Summary(won = true,
+        val summaryOfCompletedStage = Stage.Summary(won = true,
             coinsGot = stage.summary.coinsGot + state.coinsInLevel,
             coinsMaxAvailable = stage.summary.coinsMaxAvailable,
             coinsAvailable = stage.summary.coinsMaxAvailable - state.coinsInLevel
         )
-        // make next level available
-        val nextLevel = Stage.Identifier(series = stage.getSeries(), number = stage.getLevel()+1)
-        if (summaryPerLevelOfSeries1[nextLevel.number] == null && stage.type != Stage.Type.FINAL)
-            summaryPerLevelOfSeries1[nextLevel.number] = Stage.Summary()
-        setLastPlayedStage(stage.data.ident)
+        val currentStage = stage.data.ident
+        val nextStage = currentStage.next()
+        setSummaryOfStage(currentStage, summaryOfCompletedStage)
+        setLastPlayedStage(currentStage)
         if (stage.type == Stage.Type.FINAL)
         {
-            intermezzo.endOfGame(stage.data.ident, hasWon = true)
+            intermezzo.endOfGame(currentStage, hasWon = true)
         }
         else {
-            intermezzo.prepareLevel(stage.data.ident.next(), false)
+            // make next level available. Create an empty one if necessary
+            setSummaryOfStage(nextStage, getSummaryOfStage(nextStage) ?: Stage.Summary())
+            intermezzo.prepareLevel(nextStage, false)
         }
     }
 
