@@ -3,9 +3,7 @@ package com.example.cpudefense.gameElements
 import android.graphics.*
 import com.example.cpudefense.*
 import com.example.cpudefense.networkmap.Viewport
-import com.example.cpudefense.utils.displayTextCenteredInRect
-import com.example.cpudefense.utils.inflate
-import com.example.cpudefense.utils.setCenter
+import com.example.cpudefense.utils.*
 
 class ScoreBoard(val game: Game): GameElement() {
     var area = Rect()
@@ -18,6 +16,7 @@ class ScoreBoard(val game: Game): GameElement() {
 
     fun setSize(area: Rect) {
         this.area = Rect(area)
+        // divider between title line and actual status indicators
         divider = /* this.area.top + */ this.area.height() * 32 / 100
         score.setSize(area, divider)
         waves.setSize(area, divider)
@@ -170,9 +169,9 @@ class ScoreBoard(val game: Game): GameElement() {
 
         fun recreateBitmap() {
             bitmap = Bitmap.createBitmap(area.width(), area.height(), Bitmap.Config.ARGB_8888)
-            var canvas = Canvas(bitmap)
+            val canvas = Canvas(bitmap)
             displayHeader(canvas, Rect(0,0, area.width(), area.height()), game.resources.getString(R.string.scoreboard_waves))
-            var rect = Rect(0, divider, area.width(), area.height())
+            val rect = Rect(0, divider, area.width(), area.height())
             paint.typeface = Typeface.create("sans-serif", Typeface.NORMAL)
             paint.style = Paint.Style.FILL
             paint.color = myColor
@@ -227,18 +226,33 @@ class ScoreBoard(val game: Game): GameElement() {
             val paint = Paint()
             paint.style = Paint.Style.FILL
             paint.color = resources.getColor(R.color.led_panel)
+            val glowPaint = Paint(paint)
             canvas.drawRect(ledArea, paint)
             for (i in 1..game.state.currentMaxLives) {
                 val rect = Rect(0, 0, sizeLedX, sizeLedY)
                 rect.setCenter(ledArea.right - i * deltaX, ledArea.centerY())
                 val glowRect = Rect(rect).inflate(3)
-                paint.color =
-                    if (i <= game.state.lives) resources.getColor(R.color.led_green_glow)
-                    else resources.getColor(R.color.led_red_glow)
-                canvas.drawRect(glowRect, paint)
-                paint.color =
-                    if (i <= game.state.lives) resources.getColor(R.color.led_green)
-                    else resources.getColor(R.color.led_red)
+                when (game.currentStage?.getSeries())
+                {
+                    1 -> {
+                        paint.color = resources.getColor(R.color.led_green)
+                        glowPaint.color = resources.getColor(R.color.led_green)
+                    }
+                    2 -> {
+                        paint.color = resources.getColor(R.color.led_turbo)
+                        glowPaint.color = resources.getColor(R.color.led_turbo_glow)
+                    }
+                    else -> {
+                        paint.color = resources.getColor(R.color.led_green)
+                        glowPaint.color = resources.getColor(R.color.led_green)
+                    }
+                }
+                if (i > game.state.lives)
+                {
+                    paint.color = resources.getColor(R.color.led_red)
+                    glowPaint.color = resources.getColor(R.color.led_red_glow)
+                }
+                canvas.drawRect(glowRect, glowPaint)
                 canvas.drawRect(rect, paint)
             }
             displayHeader(canvas, Rect(0,0, area.width(), area.height()), game.resources.getString(R.string.scoreboard_status))
@@ -296,5 +310,4 @@ class ScoreBoard(val game: Game): GameElement() {
             }
         }
     }
-
 }
