@@ -254,14 +254,19 @@ class Stage(var theGame: Game) {
     fun createWave(attackerCount: Int, attackerStrength: Int, attackerFrequency: Float, attackerSpeed: Float,
                            coins: Int = 0, representation: Attacker.Representation = Attacker.Representation.UNDEFINED)
     {
-        val waveData = Wave.Data(attackerCount, attackerStrength, attackerFrequency, attackerSpeed, coins, currentCount = attackerCount, representation = representation)
+        val series = getSeries()
+        val count = if (series==1) attackerCount else (attackerCount * 1.5f).toInt()
+        val strength = if (series==1) attackerStrength else (attackerStrength * 1.2f + 2).toInt()
+        val frequency = if (series==1) attackerFrequency else attackerFrequency * 1.2f
+
+        val waveData = Wave.Data(count, strength, frequency, attackerSpeed,
+            coins, currentCount = attackerCount, representation = representation)
         waves.add(Wave(theGame, waveData))
     }
 
     fun createWaveHex(attackerCount: Int, attackerStrength: Int, attackerFrequency: Float, attackerSpeed: Float, coins: Int = 0)
     {
-        val waveData = Wave.Data(attackerCount, attackerStrength, attackerFrequency, attackerSpeed, coins, currentCount = attackerCount, representation = Attacker.Representation.HEX)
-        waves.add(Wave(theGame, waveData))
+        createWave(attackerCount, attackerStrength, attackerFrequency, attackerSpeed, coins, Attacker.Representation.HEX)
     }
 
     private fun createAttacker(data: Attacker.Data)

@@ -1,10 +1,37 @@
 package com.example.cpudefense
 
 import com.example.cpudefense.gameElements.*
+import com.example.cpudefense.networkmap.Network
+import com.example.cpudefense.networkmap.Node
 import kotlin.random.Random
+import kotlin.random.Random.Default.nextBoolean
 
 class StageFactory {
     companion object {
+        fun createStageWithObstacles(stage: Stage, level: Stage.Identifier)
+        {
+            createStage(stage, level)  // make basic layout
+            if (level.series == 2)
+            {
+                val possibleTypes = setOf<Chip.ChipType>( Chip.ChipType.EMPTY, Chip.ChipType.ADD, Chip.ChipType.SHL)
+                for (i in 1 .. 2)  // set or upgrade 2 slots
+                {
+                    var slot: Chip? = null
+                    while (slot?.chipData?.type !in possibleTypes)
+                    {
+                        slot = stage.chips.values.random()
+                    }
+                    when (slot?.chipData?.type) {
+                        Chip.ChipType.ADD -> slot.addPower(1)
+                        Chip.ChipType.SHL -> slot.addPower(1)
+                        else -> if (Random.nextBoolean())
+                            slot?.setType(Chip.ChipType.SHL)
+                        else
+                            slot?.setType(Chip.ChipType.ADD)
+                    }
+                }
+            }
+        }
         fun createStage(stage: Stage, level: Stage.Identifier) {
             stage.data.ident = level
             stage.waves.clear()

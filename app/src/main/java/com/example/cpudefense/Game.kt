@@ -332,14 +332,14 @@ class Game(val gameActivity: MainGameActivity) {
 
     fun startNextStage(level: Stage.Identifier)
     {
+        val nextStage = Stage(this)
         gameActivity.setGameActivityStatus(MainGameActivity.GameActivityStatus.PLAYING)
         calculateLives()
         calculateStartingCash()
-        val nextStage = Stage(this)
+        StageFactory.createStageWithObstacles(nextStage, level)
         gameActivity.runOnUiThread {
             val toast: Toast = Toast.makeText(gameActivity, resources.getString(R.string.toast_next_stage).format(nextStage.getLevel()), Toast.LENGTH_SHORT)
             toast.show() }
-        StageFactory.createStage(nextStage, level)
         state.coinsInLevel = nextStage.calculateRewardCoins(getSummaryOfStage(level))
         state.coinsExtra = 0
         setSummaryOfStage(level, nextStage.summary)
