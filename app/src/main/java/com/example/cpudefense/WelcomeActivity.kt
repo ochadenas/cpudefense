@@ -1,6 +1,7 @@
 package com.example.cpudefense
 
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.View
@@ -24,21 +25,34 @@ class WelcomeActivity : AppCompatActivity()
     }
 
     var gameState: String? = null
-    var nextLevelToPlay = 1
+    var nextLevelToPlay = Stage.Identifier()
+    var maxLevel = Stage.Identifier()
+    var turboSeriesAvailable = false
+
+    private fun determineLevels(prefs: SharedPreferences)
+    {
+        maxLevel.series = prefs.getInt("MAXSERIES", 1)
+        maxLevel.number = prefs.getInt("MAXSTAGE", 0)
+        nextLevelToPlay.series = prefs.getInt("LASTSERIES", 1)
+        nextLevelToPlay.number = prefs.getInt("LASTSTAGE", 0)
+        turboSeriesAvailable = prefs.getBoolean("TURBO_AVAILABLE", false)
+
+    }
 
     private fun setupButtons()
     {
         val prefs = getSharedPreferences(getString(R.string.pref_filename), MODE_PRIVATE)
         gameState = prefs.getString("STATUS", "")
+        determineLevels(prefs)
+        val textMaxLevel = findViewById<TextView>(R.id.highestStageReached)
+        var seriesName = if (maxLevel.series == 2) getString(R.string.name_series_2) else getString(R.string.name_series_1)
+        textMaxLevel.text = getString(R.string.stage_reached).format(seriesName, maxLevel.number)
         val buttonResume = findViewById<Button>(R.id.continueGameButton)
         when (gameState)
         {
             "running" -> buttonResume.text = getString(R.string.button_resume)
             "complete" -> {
-                nextLevelToPlay = prefs.getInt("LASTSTAGE", 0)
-                if (nextLevelToPlay < prefs.getInt("MAXSTAGE", 1))
-                    nextLevelToPlay += 1
-                buttonResume.text = getString(R.string.play_level_x).format(nextLevelToPlay)
+                buttonResume.text = getString(R.string.play_level_x).format(nextLevelToPlay.number)
             }
             else -> buttonResume.isEnabled = false
         }
@@ -62,7 +76,8 @@ class WelcomeActivity : AppCompatActivity()
         }
         else
         {
-            intent.putExtra("START_ON_STAGE", nextLevelToPlay)
+            intent.putExtra("START_ON_STAGE", nextLevelToPlay.number)
+            intent.putExtra("START_ON_SERIES", nextLevelToPlay.series)
             intent.putExtra("CONTINUE_GAME", false)  // TODO: wie heißt es nun wirklich?
             startActivity(intent)
         }
@@ -71,6 +86,7 @@ class WelcomeActivity : AppCompatActivity()
     fun startLevelSelection(@Suppress("UNUSED_PARAMETER") v: View)
     {
         val intent = Intent(this, LevelSelectActivity::class.java)
+        intent.putExtra("TURBO_AVAILABLE", turboSeriesAvailable)
         startActivity(intent)
     }
 

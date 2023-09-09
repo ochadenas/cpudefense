@@ -21,6 +21,13 @@ class Stage(var theGame: Game) {
         fun previous(): Identifier
         /** returns an identifier of the previous level */
         { return Identifier(series, if (number<=1) 1 else number-1)}
+        fun isGreaterThan(compare: Identifier): Boolean {
+            return when {
+                compare.series > this.series -> false
+                compare.series < this.series -> true
+                else -> compare.number < this.number
+            }
+        }
     }
 
     lateinit var network: Network
@@ -63,6 +70,11 @@ class Stage(var theGame: Game) {
     fun getLevel(): Int {return data.ident.number}
 
     fun getSeries(): Int {return data.ident.series}
+
+    fun isInitialized(): Boolean
+    {
+        return this::network.isInitialized
+    }
 
     fun calculateRewardCoins(previousSummary: Summary?): Int
      /** calculate the coins available for completing this level,

@@ -13,6 +13,7 @@ import com.example.cpudefense.gameElements.*
 import com.example.cpudefense.networkmap.GridCoord
 import com.example.cpudefense.networkmap.Viewport
 import com.example.cpudefense.utils.displayTextCenteredInRect
+import com.example.cpudefense.utils.flipHorizontally
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -21,6 +22,8 @@ import java.util.concurrent.CopyOnWriteArrayList
 
 class Game(val gameActivity: MainGameActivity) {
     companion object Params {
+        val maximumStageAvailableInTheGame = 25
+
         const val defaultMainDelay = 70L
         val chipSize = GridCoord(6,3)
         const val viewportMargin = 10
@@ -109,6 +112,7 @@ class Game(val gameActivity: MainGameActivity) {
     enum class GameSpeed { NORMAL, MAX }
 
     val coinIcon: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.cryptocoin)
+    val coinIconReverse = coinIcon.flipHorizontally()
     val cpuImage: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.cpu)
     val playIcon: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.play_active)
     val pauseIcon: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.pause_active)
@@ -118,13 +122,18 @@ class Game(val gameActivity: MainGameActivity) {
     {
         if (!resetProgress) {
             global = gameActivity.loadGlobalData()
-            summaryPerLevelOfSeries1 = gameActivity.loadLevelData()   // get historical data of levels completed so far
+            summaryPerLevelOfSeries1 = gameActivity.loadLevelData(1)   // get historical data of levels completed so far
+            summaryPerLevelOfSeries2 = gameActivity.loadLevelData(2)   // get historical data of levels completed so far
             gameUpgrades = gameActivity.loadUpgrades()       // load the upgrades gained so far
             additionalCashDelay = gameUpgrades[Hero.Type.GAIN_CASH]?.getStrength()?.toInt() ?: 0
             intermezzo.prepareLevel(state.startingLevel, true)
         }
         else {
             state.startingLevel = Stage.Identifier(1,1)
+            summaryPerLevelOfSeries1 = HashMap()
+            summaryPerLevelOfSeries2 = HashMap()
+            setLastPlayedStage(state.startingLevel)
+            setMaxPlayedStage(state.startingLevel, resetProgress=true)
             intermezzo.prepareLevel(state.startingLevel, true)
         }
         if (background == null)
@@ -318,7 +327,7 @@ class Game(val gameActivity: MainGameActivity) {
         val currentStage = stage.data.ident
         val nextStage = currentStage.next()
         setSummaryOfStage(currentStage, summaryOfCompletedStage)
-        setLastPlayedStage(currentStage)
+        setMaxPlayedStage(currentStage)
         if (stage.type == Stage.Type.FINAL)
         {
             intermezzo.endOfGame(currentStage, hasWon = true)
@@ -337,9 +346,16 @@ class Game(val gameActivity: MainGameActivity) {
         calculateLives()
         calculateStartingCash()
         StageFactory.createStageWithObstacles(nextStage, level)
+        if (!nextStage.isInitialized())
+            return  // something went wrong, possibly trying to create a level that doesn't exist
         gameActivity.runOnUiThread {
-            val toast: Toast = Toast.makeText(gameActivity, resources.getString(R.string.toast_next_stage).format(nextStage.getLevel()), Toast.LENGTH_SHORT)
-            toast.show() }
+            val toast: Toast = Toast.makeText(
+                gameActivity,
+                resources.getString(R.string.toast_next_stage).format(nextStage.getLevel()),
+                Toast.LENGTH_SHORT
+            )
+            toast.show()
+        }
         state.coinsInLevel = nextStage.calculateRewardCoins(getSummaryOfStage(level))
         state.coinsExtra = 0
         setSummaryOfStage(level, nextStage.summary)
@@ -379,24 +395,39 @@ class Game(val gameActivity: MainGameActivity) {
 
     fun setLastPlayedStage(currentStage: Stage.Identifier)
     /** when completing a level, record the current number in the SharedPrefs.
-     * If necessary, adjust MAXSTAGE, too.
      * @param currentStage number of the level successfully completed */
     {
         val prefs = gameActivity.getSharedPreferences(gameActivity.getString(R.string.pref_filename), Context.MODE_PRIVATE)
-        val maxStageNumber = prefs.getInt("MAXSTAGE", 0)
-        val maxStageSeries = prefs.getInt("MAXSERIES", 1)
         with (prefs.edit())
         {
             putInt("LASTSTAGE", currentStage.number)
             putInt("LASTSERIES", currentStage.series)
-            if (currentStage.number > maxStageNumber && currentStage.series>=maxStageSeries) {
-                putInt("MAXSTAGE", currentStage.number)
-                putInt("MAXSERIES", currentStage.series)
-            }
             commit()
         }
     }
 
+    fun setMaxPlayedStage(currentStage: Stage.Identifier, resetProgress: Boolean = false)
+            /** when completing a level, record the level as highest completed, but only if the old max level is not higher.
+             * @param currentStage number of the level successfully completed
+             * @param resetProgress If true, forces resetting the max stage to the given currentStage
+             * */
+    {
+        val prefs = gameActivity.getSharedPreferences(gameActivity.getString(R.string.pref_filename), Context.MODE_PRIVATE)
+        val maxStage = Stage.Identifier(prefs.getInt("MAXSERIES", 1), prefs.getInt("MAXSTAGE", 0))
+        with (prefs.edit())
+        {
+            if (currentStage.isGreaterThan(maxStage) || resetProgress)
+            {
+                putInt("MAXSTAGE", currentStage.number)
+                putInt("MAXSERIES", currentStage.series)
+                commit()
+            }
+            if (currentStage.series>1 || currentStage.number==Game.maximumStageAvailableInTheGame) {
+                putBoolean("TURBO_AVAILABLE", true)
+                commit()
+            }
+        }
+    }
     private fun calculateLives()
     {
         val extraLives = gameUpgrades[Hero.Type.ADDITIONAL_LIVES]?.getStrength()

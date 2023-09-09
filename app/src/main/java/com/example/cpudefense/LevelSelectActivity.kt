@@ -19,15 +19,19 @@ class LevelSelectActivity : AppCompatActivity() {
     private var selectedLevelView: Button? = null
     private var selectedLevel: Int = 0
     private var selectedSeries: Int = 0
+    private var isTurboAvailable = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        isTurboAvailable = intent.getBooleanExtra("TURBO_AVAILABLE", false)
         setContentView(R.layout.activity_level)
         setupSelector()
     }
 
-    override fun onActivityReenter(resultCode: Int, data: Intent?) {
+    override fun onActivityReenter(resultCode: Int, data: Intent?)
+    {
         super.onActivityReenter(resultCode, data)
+        isTurboAvailable = intent.getBooleanExtra("TURBO_AVAILABLE", false)
         setupSelector()
     }
 
@@ -72,23 +76,24 @@ class LevelSelectActivity : AppCompatActivity() {
                 populateStageList(listView, levels, prefs)
             }
             2 -> {
-                levels = Persistency(null).loadLevelSummaries(prefs, 2) ?: HashMap()
-                populateStageList(listView, levels, prefs)
+                if (isTurboAvailable) {
+                    levels = Persistency(null).loadLevelSummaries(prefs, 2) ?: HashMap()
+                    populateStageList(listView, levels, prefs)
+                }
+                else
+                {
+                    val textView = TextView(this)
+                    textView.text = getString(R.string.message_series_unavailable)
+                    textView.textSize = 8f * resources.displayMetrics.scaledDensity
+                    textView.isAllCaps = false
+                    textView.setPadding(20, 0, 0, 0)
+                    textView.setBackgroundColor(Color.BLACK)
+                    textView.setTextColor(resources.getColor(R.color.text_white))
+                    textView.gravity = Gravity.START
+                    listView.addView(textView)
+                }
             }
-
         }
-            /*
-            val textView = TextView(this)
-            textView.text = getString(R.string.message_series_unavailable)
-            textView.textSize = 10f * resources.displayMetrics.scaledDensity
-            textView.isAllCaps = false
-            textView.setPadding(20, 0, 0, 0)
-            textView.setBackgroundColor(Color.BLACK)
-            textView.setTextColor(resources.getColor(R.color.text_green))
-            textView.gravity = Gravity.START
-            listView.addView(textView)
-
-             */
     }
 
     private fun populateStageList(listView: LinearLayout, stageSummary: HashMap<Int, Stage.Summary>, prefs: SharedPreferences)
@@ -136,6 +141,8 @@ class LevelSelectActivity : AppCompatActivity() {
             levelEntryView.isClickable = true
             levelEntryView.setOnClickListener { onLevelSelect(levelEntryView, level) }
             listView.addView(levelEntryView)
+            if (level >= Game.maximumStageAvailableInTheGame)
+                break
         }
     }
 

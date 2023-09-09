@@ -2,6 +2,7 @@ package com.example.cpudefense.utils
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.Matrix
 import android.renderscript.Allocation
 import android.renderscript.Element
 import android.renderscript.RenderScript
@@ -30,4 +31,13 @@ fun Bitmap.blur(context: Context, radius: Float = 10F): Bitmap?
         }
     }
     return bitmap
+}
+
+fun Bitmap.flipHorizontally(): Bitmap
+        /** flips the bitmap horizontally. Taken from
+         * https://stackoverflow.com/questions/36493977/flip-a-bitmap-image-horizontally-or-vertically
+         */
+{
+    val matrix = Matrix().apply { postScale(-1f, 1f, width / 2f, height / 2f) }
+    return Bitmap.createBitmap(this, 0, 0, width, height, matrix, true)
 }

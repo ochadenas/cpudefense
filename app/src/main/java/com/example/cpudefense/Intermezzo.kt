@@ -51,19 +51,28 @@ class Intermezzo(var game: Game): GameElement(), Fadable {
                 lines.add(game.resources.getString(R.string.failed))
                 lines.add(game.resources.getString(R.string.last_stage).format(level.number))
                 textOnContinueButton = game.resources.getString(R.string.button_exit)
-                game.setLastPlayedStage(level.previous())
+                game.setLastPlayedStage(level)
             }
             Type.GAME_WON  -> {
                 lines.add(game.resources.getString(R.string.success))
                 if (coinsGathered>0)
                     lines.add(game.resources.getString(R.string.coins_gathered).format(coinsGathered))
-                lines.add(game.resources.getString(R.string.win))
+                if (level.series == 1)
+                {
+                    lines.add(game.resources.getString(R.string.series_completed_message_1))
+                    lines.add(game.resources.getString(R.string.series_completed_message_2))
+                    lines.add(game.resources.getString(R.string.series_completed_message_3))
+                    lines.add(game.resources.getString(R.string.series_completed_message_4))
+                }
+                else
+                    lines.add(game.resources.getString(R.string.win))
                 textOnContinueButton = game.resources.getString(R.string.button_exit)
                 game.setLastPlayedStage(level)
             }
             Type.STARTING_LEVEL -> {
                 lines.add(game.resources.getString(R.string.game_start))
                 textOnContinueButton = game.resources.getString(R.string.continue_game)
+                game.setLastPlayedStage(level)
             }
             Type.NORMAL_LEVEL ->
             {
@@ -80,7 +89,10 @@ class Intermezzo(var game: Game): GameElement(), Fadable {
 
     fun displayFireworks()
     {
-        if (myArea.width()==0 || (Random.nextFloat() < 0.9f))
+        if (myArea.width()==0)
+            return
+        val frequency = if (level.series == 1) 0.96f else 0.92f
+        if (Random.nextFloat() < frequency)  // control amount of fireworks
             return
         // choose random colour
         val colour: Pair<Int, Int>

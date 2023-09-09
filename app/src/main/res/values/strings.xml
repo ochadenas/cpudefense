@@ -187,8 +187,13 @@ The record-selling C64 not only had an enormous 64 kiB of RAM, it also featured 
     <string name="HERO_EFFECT_ATTSPEED">Decreases attacker speed</string>
     <string name="HERO_EFFECT_REFUNDPRICE">Increases refund when selling chips</string>
     <string name="toast_loading">Loading ...</string>
-    <string name="name_series_1">Series 1</string>
-    <string name="name_series_2">Series 2</string>
-    <string name="message_series_unavailable">Complete all levels in series 1 first.</string>
+    <string name="name_series_1">Normal</string>
+    <string name="name_series_2">Turbo</string>
+    <string name="message_series_unavailable">Complete all levels in \'normal\' mode first.</string>
+    <string name="stage_reached">Stage reached: %s %d</string>
+    <string name="series_completed_message_1" />
+    <string name="series_completed_message_2">You may replay all levels</string>
+    <string name="series_completed_message_3">in \'turbo\' mode now.</string>
+    <string name="series_completed_message_4" />
 
 </resources>

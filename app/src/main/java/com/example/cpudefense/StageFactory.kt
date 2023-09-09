@@ -14,7 +14,13 @@ class StageFactory {
             if (level.series == 2)
             {
                 val possibleTypes = setOf<Chip.ChipType>( Chip.ChipType.EMPTY, Chip.ChipType.ADD, Chip.ChipType.SHL)
-                for (i in 1 .. 2)  // set or upgrade 2 slots
+                val numberOfObstacles = when (level.number)
+                {
+                    1 -> 1
+                    2 -> 1
+                    else -> 2
+                }
+                for (i in 1 .. numberOfObstacles)  // set or upgrade 2 slots
                 {
                     var slot: Chip? = null
                     while (slot?.chipData?.type !in possibleTypes)
@@ -32,7 +38,8 @@ class StageFactory {
                 }
             }
         }
-        fun createStage(stage: Stage, level: Stage.Identifier) {
+        fun createStage(stage: Stage, level: Stage.Identifier)
+        {
             stage.data.ident = level
             stage.waves.clear()
             stage.type = Stage.Type.REGULAR
@@ -86,11 +93,11 @@ class StageFactory {
                     3 -> {
                         initializeNetwork(50, 50)
 
-                        createChip(1, 1, type = Chip.ChipType.ENTRY)
-                        createChip(20, 8, 1)
-                        createChip(20, 12, 2)
-                        createChip(45, 20, 3)
-                        createChip(45, 30, type = Chip.ChipType.CPU)
+                        createChip(8, 1, type = Chip.ChipType.ENTRY)
+                        createChip(20, 18, 1)
+                        createChip(20, 22, 2)
+                        createChip(45, 30, 3)
+                        createChip(45, 40, type = Chip.ChipType.CPU)
 
                         createLink(0, 1, 1)
                         createLink(1, 2, 2)

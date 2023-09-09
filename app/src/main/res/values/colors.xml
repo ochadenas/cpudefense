@@ -35,7 +35,7 @@
     <color name="led_green_glow">#00A511</color>
     <color name="led_blue">#1BB8FF</color>
     <color name="led_blue_glow">#006A9A</color>
-    <color name="led_turbo">#FFED8D</color>
+    <color name="led_turbo">#FFFF00</color>
     <color name="led_turbo_glow">#FDD300</color>
     <color name="led_panel">#131313</color>
     <color name="text_green">#009700</color>

@@ -129,7 +129,11 @@ Ein Teil der Information wird dir dabei zurückerstattet."
     <string name="HERO_EFFECT_ATTSPEED">verringert die Geschwindigkeit der Angreifer</string>
     <string name="HERO_EFFECT_REFUNDPRICE">erhöht die Erstattung beim Verkauf von Chips</string>
     <string name="toast_loading">Lade Daten ...</string>
-    <string name="name_series_1">Serie 1</string>
-    <string name="name_series_2">Serie 2</string>
-    <string name="message_series_unavailable">Wird freigeschaltet, wenn alle Level in Serie 1 geschafft sind.</string>
+    <string name="name_series_1">Normal</string>
+    <string name="name_series_2">Turbo</string>
+    <string name="message_series_unavailable">Wird freigeschaltet, wenn alle Level im Modus \"Normal\" geschafft sind.</string>
+    <string name="series_completed_message_1">" "</string>
+    <string name="series_completed_message_2">Du kannst alle Levels</string>
+    <string name="series_completed_message_3">nun noch einmal im</string>
+    <string name="series_completed_message_4">\'Turbo\'-Modus spielen.</string>
 </resources>
