@@ -14,24 +14,32 @@ class Instructions(val game: Game, var stage: Stage.Identifier, var callback: ((
 
     fun instructionText(level: Int): String
     {
-        return when (level)
-        {
-            1 -> game.resources.getString(R.string.instr_1)
-            2 -> game.resources.getString(R.string.instr_2)
-            3 -> game.resources.getString(R.string.instr_3)
-            4 -> game.resources.getString(R.string.instr_4)
-            5 -> game.resources.getString(R.string.instr_5)
-            6 -> game.resources.getString(R.string.instr_6)
-            7 -> game.resources.getString(R.string.instr_7)
-            9 -> game.resources.getString(R.string.instr_8)
-            14 -> game.resources.getString(R.string.instr_9)
-            20 -> game.resources.getString(R.string.instr_10)
-            23 -> game.resources.getString(R.string.instr_12)
-            10 -> game.resources.getString(R.string.instr_11)
-            21 -> game.resources.getString(R.string.instr_13)
+        if (stage.series == 1)
+            return when (level)
+            {
+                1 -> game.resources.getString(R.string.instr_1)
+                2 -> game.resources.getString(R.string.instr_2)
+                3 -> game.resources.getString(R.string.instr_3)
+                4 -> game.resources.getString(R.string.instr_4)
+                5 -> game.resources.getString(R.string.instr_5)
+                6 -> game.resources.getString(R.string.instr_6)
+                7 -> game.resources.getString(R.string.instr_7)
+                8 -> game.resources.getString(R.string.instr_7a)
+                9 -> game.resources.getString(R.string.instr_8)
+                14 -> game.resources.getString(R.string.instr_9)
+                20 -> game.resources.getString(R.string.instr_10)
+                23 -> game.resources.getString(R.string.instr_12)
+                10 -> game.resources.getString(R.string.instr_11)
+                21 -> game.resources.getString(R.string.instr_13)
 
-            else -> ""
-        }
+                else -> ""
+            }
+        else
+            return when (level)
+            {
+                1 -> game.resources.getString(R.string.instr_2_1)
+                else -> ""
+            }
     }
 
     init { Fader(game, this, Fader.Type.APPEAR, Fader.Speed.SLOW) }
@@ -46,8 +54,6 @@ class Instructions(val game: Game, var stage: Stage.Identifier, var callback: ((
 
 
     fun display(canvas: Canvas) {
-        if (stage.series > 1)
-            return  // display instructions for series 1 only
         val margin = 20
         val textArea = Rect(0, 0, canvas.width - 2 * margin, canvas.height - 200)
         canvas.save()

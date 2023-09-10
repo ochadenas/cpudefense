@@ -79,7 +79,8 @@ class Game(val gameActivity: MainGameActivity) {
     data class GlobalData(
         var speed: GameSpeed = GameSpeed.NORMAL,
         var coinsTotal: Int = 0,
-        var configDisableBackground: Boolean = true
+        var configDisableBackground: Boolean = true,
+        var configShowAttsInRange: Boolean = false
     )
     var global = GlobalData()
 

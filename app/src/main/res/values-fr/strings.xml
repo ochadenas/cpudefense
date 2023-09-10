@@ -68,7 +68,7 @@
     <string name="upgrade_format">%s  [coût: %d]</string>
     <string name="toast_next_stage">Niveau %d</string>
     <string name="toast_stage_cleared">Niveau réussi</string>
-    <string name="HERO_EFFECT_CHIPSPEED">réduit le temps de recharge de toutes les puces</string>
+    <string name="HERO_EFFECT_CHIPSPEED">réduit le temps de recharge de toutes les puces %s</string>
     <string name="HERO_EFFECT_STARTINFO">démarre tous les niveaux avec plus d\'info\n</string>
     <string name="HERO_EFFECT_UPGRADECOST">réduit les coûts d\'amélioration</string>
     <string name="HERO_EFFECT_LIVES">accorde des vies supplémentaires</string>
@@ -80,8 +80,10 @@
     <string name="name_series_1">Normal</string>
     <string name="name_series_2">Turbo</string>
     <string name="message_series_unavailable">Complétez tous les niveaux en mode normal d\'abord.</string>
+    <string name="stage_reached">Niveau atteint : %s %d</string>
     <string name="series_completed_message_1">" "</string>
     <string name="series_completed_message_2">Vous pouvez rejouer</string>
     <string name="series_completed_message_3">tous les niveaux</string>
     <string name="series_completed_message_4">en mode \'turbo\'.</string>
+    <string name="instr_2_1">"En mode turbo, les attaquants sont plus rapides, plus forts et plus nombreux.  De plus, certains slots sont déjà occupés par des puces indésirables que tu dois gérer. "</string>
 </resources>

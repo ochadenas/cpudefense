@@ -6,7 +6,7 @@ import android.graphics.BitmapFactory
 import android.util.Base64
 import com.google.gson.Gson
 import java.io.ByteArrayOutputStream
-import java.lang.Exception
+import kotlin.Exception
 
 class Persistency(var game: Game?) {
     data class SerializableStateData (
@@ -171,8 +171,12 @@ class Persistency(var game: Game?) {
         if (json != "none") game?.let {
             val data: SerializableUpgradeData = Gson().fromJson(json, SerializableUpgradeData::class.java)
             for (upgradeData in data.upgrades) {
-                upgradeMap[upgradeData.type] = Hero.createFromData(it, upgradeData)
-
+                try {
+                    upgradeMap[upgradeData.type] = Hero.createFromData(it, upgradeData)
+                }
+                catch(ex: NullPointerException) {
+                    /* may happen if a previously existing hero type is definitely removed from the game */
+                }
             }
         }
         return upgradeMap

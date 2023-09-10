@@ -122,6 +122,7 @@ class MainGameActivity : Activity() {
     {
         val prefs = getSharedPreferences(getString(R.string.pref_filename), MODE_PRIVATE)
         theGame.global.configDisableBackground = prefs.getBoolean("DISABLE_BACKGROUND", false)
+        theGame.global.configShowAttsInRange = prefs.getBoolean("SHOW_ATTS_IN_RANGE", false)
     }
 
     fun setGameSpeed(speed: Game.GameSpeed)

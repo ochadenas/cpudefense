@@ -47,7 +47,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="savePrefs"
-            android:text="Disable background"
+            android:text="@string/settings_disable_background"
+            android:textColor="#FFFFFF" />
+        <Switch
+            android:id="@+id/switch_show_atts_in_range"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="savePrefs"
+            android:text="@string/settings_show_atts_in_range"
             android:textColor="#FFFFFF" />
 
     </LinearLayout>

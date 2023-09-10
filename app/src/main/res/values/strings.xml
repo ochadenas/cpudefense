@@ -64,8 +64,7 @@ All digits are moved one position to the right. The leftmost digit is replaced b
 For example, 0110 becomes 0011. This is equivalent to dividing the value by 2."
     </string>
     <string name="instr_6">
-"By clearing stages, you can gain cryptocoins. These coins are valuable. You can use them to hire some
-powerful Heroes of the Information Age who will give you significant advantages in the game.
+"By clearing stages, you can gain cryptocoins. These coins are valuable. You can use them to hire some powerful Heroes of the Information Age who will give you significant advantages in the game.
 
 There is a maximum amount of cryptocoins per level shown on the bottom, and each life lost will reduce the reward.
 
@@ -76,6 +75,9 @@ If you do not get all the coins, you can always replay the level. However, once 
 "Sometimes you will see a cryptocoin moving along with the attackers. You can collect it by destroying it, even multiple times when you replay the level.
 
 But be careful. The moving cryptocoin is stronger than ordinary attackers, and if it reaches the CPU, it will take one of your lives."
+    </string>
+    <string name="instr_7a">
+"Hint: If you are stuck, you can replay a lower level trying to catch a running cryptocoin."
     </string>
     <string name="instr_8">
 "You can sell existing chips and re-use their slot. Most, but not all of the information will be refunded."
@@ -159,6 +161,12 @@ Later, as manager at the NASA, she prepared for the introduction of electronic c
 
 The record-selling C64 not only had an enormous 64 kiB of RAM, it also featured hi-res graphics, digital sound, a built-in BASIC interpreter, and two joystick ports. Countless persons made their first steps into the information age on good old C64."
     </string>
+    <string name="wiener">" Norbert Wiener ist als Begründer der Kybernetik bekannt, also der Steuerung und Regelung von Maschinen, und ist damit einer der Wegbereiter von Künstlicher Intelligenz. Der von ihm geprägte Begriff 'cyber' ist heute allgegenwärtig.  Er entwickelte mathematische Theorien, vor allem im Bereich der Mustererkennung und Bildbearbeitung, und bewies eine Reihe von mathematischen Sätzen.  Aufgrund der Erfahrungen im 2. Weltkrieg nahm er eine zunehmend pazifistische Haltung ein und weigerte sich, Werke zu veröffentlichen, die in den Händen von Militaristen Schaden anrichten könnten.     "</string>
+    <string name="pascal">
+"Blaise Pascal war ein Universalgelehrter auf vielen Gebieten der Mathematik, Philosophie und Physik. Für das spätere Informationszeitalter waren seine Rechenmaschinen, die 'Pascalinen', ein früher Vorläufer.
+
+Die Programmiersprache Pascal ist nach ihm benannt."
+    </string>
     <string name="settings_title">Settings</string>
     <string name="settings_about">About</string>
     <string name="license">\n        \nThis game is open source. Visit https://github.com/ochadenas/cpudefense for more information.\n\nThe portraits of the Information Age Heroes are mostly derived from works of the public domain.\n\nOriginal photos:\n  Alex Handy (CC BY-SA 2.0)\n  Jacob Appelbaum (CC BY-SA 2.5)\n  Rama (CC BY-SA 2.0 fr)\n  Shervinafshar (CC BY-SA 3.0)\n  Tony Bove (CC BY 3.0)\n  Wolfgang Hunscher (CC BY-SA 3.0)\n  Silvano de Gennaro (courtesy of the author)\n\nComputer boards:\n  Autopilot (CC BY-SA 4.0)\n  Bill Bertram (CC-BY 2.0)\n  Oliver Chadenas (CC BY-SA 3.0)\n  Smial (FAL)\n\nAll other artwork:\n  Oliver Chadenas (CC BY-SA 3.0)</string>
@@ -174,6 +182,7 @@ The record-selling C64 not only had an enormous 64 kiB of RAM, it also featured 
     <string name="shortdesc_frequency">Attacker frequency</string>
     <string name="shortdesc_att_speed">Attacker speed</string>
     <string name="shortdesc_info_gain">Information gain</string>
+    <string name="shortdesc_range">Chip range</string>
     <string name="shortdesc_refund">Refund when selling chips</string>
     <string name="upgrade_format">%s  [cost: %d]</string>
     <string name="toast_next_stage">Stage %d</string>
@@ -186,6 +195,7 @@ The record-selling C64 not only had an enormous 64 kiB of RAM, it also featured 
     <string name="HERO_EFFECT_INFOOVERTIME">Gains additional bits over time</string>
     <string name="HERO_EFFECT_ATTSPEED">Decreases attacker speed</string>
     <string name="HERO_EFFECT_REFUNDPRICE">Increases refund when selling chips</string>
+    <string name="HERO_EFFECT_RANGE">Increases %s chip range</string>
     <string name="toast_loading">Loading ...</string>
     <string name="name_series_1">Normal</string>
     <string name="name_series_2">Turbo</string>
@@ -195,5 +205,11 @@ The record-selling C64 not only had an enormous 64 kiB of RAM, it also featured 
     <string name="series_completed_message_2">You may replay all levels</string>
     <string name="series_completed_message_3">in \'turbo\' mode now.</string>
     <string name="series_completed_message_4" />
+    <string name="instr_2_1">
+"In turbo mode, the attackers are stronger, faster and more numerous.
+
+Furthermore, some slots are already taken by unwanted chips you'll have to deal with."</string>
+    <string name="settings_disable_background">Disable background</string>
+    <string name="settings_show_atts_in_range">Show attackers in range</string>
 
 </resources>

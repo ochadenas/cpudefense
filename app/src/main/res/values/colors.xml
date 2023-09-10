@@ -41,6 +41,7 @@
     <color name="text_green">#009700</color>
     <color name="text_lightgreen">#79CD79</color>
     <color name="text_amber">#B9921C</color>
+    <color name="text_lightamber">#FFDE7A</color>
     <color name="text_white">#FFFFFF</color>
     <color name="text_blue">#1BB8FF</color>
 
@@ -48,7 +49,7 @@
     <color name="upgrade_active_general">#79D5FF</color>
     <color name="upgrade_active_eco">#FF8400</color>
     <color name="upgrade_active_speed">#E1353B</color>
-    <color name="upgrade_active_chip_dec">#DA07DD00</color>
+    <color name="upgrade_active_chip_sub">#DA07DD00</color>
     <color name="upgrade_active_chip_shr">#DA649DF3</color>
     <color name="upgrade_active_chip_acc">#FFC107</color>
     <color name="upgrade_active_chip_mem">#774CC3</color>

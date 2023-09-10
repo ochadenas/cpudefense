@@ -20,8 +20,10 @@ class SettingsActivity : AppCompatActivity()
     fun loadPrefs()
     {
         val disableBackgroundView = findViewById<Switch>(R.id.switch_disable_background)
+        val showRangeView = findViewById<Switch>(R.id.switch_show_atts_in_range)
         val prefs = getSharedPreferences(getString(R.string.pref_filename), MODE_PRIVATE)
         disableBackgroundView.isChecked = prefs.getBoolean("DISABLE_BACKGROUND", false)
+        showRangeView.isChecked = prefs.getBoolean("SHOW_ATTS_IN_RANGE", false)
     }
 
     fun savePrefs(v: View)
@@ -29,6 +31,7 @@ class SettingsActivity : AppCompatActivity()
         val prefs = getSharedPreferences(getString(R.string.pref_filename), MODE_PRIVATE)
         prefs.edit().apply {
             putBoolean("DISABLE_BACKGROUND", findViewById<Switch>(R.id.switch_disable_background)?.isChecked ?: false)
+            putBoolean("SHOW_ATTS_IN_RANGE", findViewById<Switch>(R.id.switch_show_atts_in_range)?.isChecked ?: false)
             apply()
         }
     }

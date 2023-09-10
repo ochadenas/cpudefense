@@ -29,7 +29,8 @@ class Hero(var game: Game, type: Type): Fadable {
     - Sid Meier
      */
 
-    enum class Type { INCREASE_CHIP_SUB_SPEED, INCREASE_CHIP_SHIFT_SPEED, INCREASE_CHIP_MEM_SPEED, INCREASE_CHIP_ACC_SPEED,
+    enum class Type { INCREASE_CHIP_SUB_SPEED, INCREASE_CHIP_SUB_RANGE, INCREASE_CHIP_SHR_SPEED, INCREASE_CHIP_MEM_SPEED,
+        INCREASE_CHIP_SHR_RANGE, INCREASE_CHIP_MEM_RANGE,
         DECREASE_ATT_FREQ, DECREASE_ATT_SPEED,
         INCREASE_STARTING_CASH, GAIN_CASH, DECREASE_UPGRADE_COST, ADDITIONAL_LIVES, INCREASE_REFUND}
     data class Data (
@@ -67,15 +68,17 @@ class Hero(var game: Game, type: Type): Fadable {
     {
         Type.INCREASE_STARTING_CASH -> game.resources.getColor(R.color.upgrade_active_eco)
         Type.DECREASE_UPGRADE_COST -> game.resources.getColor(R.color.upgrade_active_eco)
-        Type.INCREASE_CHIP_SUB_SPEED -> game.resources.getColor(R.color.upgrade_active_chip_dec)
-        Type.INCREASE_CHIP_SHIFT_SPEED -> game.resources.getColor(R.color.upgrade_active_chip_shr)
+        Type.INCREASE_CHIP_SUB_SPEED -> game.resources.getColor(R.color.upgrade_active_chip_sub)
+        Type.INCREASE_CHIP_SHR_SPEED -> game.resources.getColor(R.color.upgrade_active_chip_shr)
         Type.INCREASE_CHIP_MEM_SPEED -> game.resources.getColor(R.color.upgrade_active_chip_mem)
         Type.ADDITIONAL_LIVES -> game.resources.getColor(R.color.upgrade_active_eco)
-        Type.INCREASE_CHIP_ACC_SPEED -> game.resources.getColor(R.color.upgrade_active_chip_acc)
         Type.DECREASE_ATT_FREQ -> game.resources.getColor(R.color.upgrade_active_general)
         Type.DECREASE_ATT_SPEED -> game.resources.getColor(R.color.upgrade_active_general)
         Type.GAIN_CASH -> game.resources.getColor(R.color.upgrade_active_eco)
         Type.INCREASE_REFUND -> game.resources.getColor(R.color.upgrade_active_eco)
+        Type.INCREASE_CHIP_SUB_RANGE -> game.resources.getColor(R.color.upgrade_active_chip_sub)
+        Type.INCREASE_CHIP_SHR_RANGE -> game.resources.getColor(R.color.upgrade_active_chip_shr)
+        Type.INCREASE_CHIP_MEM_RANGE -> game.resources.getColor(R.color.upgrade_active_chip_mem)
     }
     var maxLevel = 7   // cannot upgrade beyond this level
     var biography: Biography? = null
@@ -251,20 +254,15 @@ class Hero(var game: Game, type: Type): Fadable {
                 strengthDesc = "%d bits".format(strength.toInt())
                 upgradeDesc = " -> %d bits".format(next.toInt())
             }
-            Type.INCREASE_CHIP_SHIFT_SPEED ->             {
+            Type.INCREASE_CHIP_SHR_SPEED ->             {
                 shortDesc = game.resources.getString(R.string.shortdesc_SHR)
                 strengthDesc = "x %.2f".format(strength)
-                upgradeDesc = " -> x %.2f".format(next)
-            }
-            Type.INCREASE_CHIP_ACC_SPEED -> {
-                shortDesc = game.resources.getString(R.string.shortdesc_ACC)
-                strengthDesc = "x %.2f".format(strength)
-                upgradeDesc = " -> x %.2f".format(next)
+                upgradeDesc = " -> %.2f".format(next)
             }
             Type.INCREASE_CHIP_MEM_SPEED -> {
                 shortDesc = game.resources.getString(R.string.shortdesc_MEM)
                 strengthDesc = "x %.2f".format(strength)
-                upgradeDesc = " -> x %.2f".format(next)
+                upgradeDesc = " -> %.2f".format(next)
             }
             Type.DECREASE_UPGRADE_COST ->             {
                 shortDesc = game.resources.getString(R.string.shortdesc_upgrade)
@@ -279,12 +277,12 @@ class Hero(var game: Game, type: Type): Fadable {
             }
             Type.DECREASE_ATT_FREQ -> {
                 shortDesc = game.resources.getString(R.string.shortdesc_frequency)
-                strengthDesc = "%.2f".format(strength)
+                strengthDesc = "x %.2f".format(strength)
                 upgradeDesc = " -> %.2f".format(next)
             }
             Type.DECREASE_ATT_SPEED -> {
                 shortDesc = game.resources.getString(R.string.shortdesc_att_speed)
-                strengthDesc = "%.2f".format(strength)
+                strengthDesc = "x %.2f".format(strength)
                 upgradeDesc = " -> %.2f".format(next)
             }
             Type.GAIN_CASH ->
@@ -299,6 +297,24 @@ class Hero(var game: Game, type: Type): Fadable {
                 strengthDesc = "%d%%".format(strength.toInt())
                 upgradeDesc = " -> %d%%".format(next.toInt())
             }
+            Type.INCREASE_CHIP_SUB_RANGE ->
+            {
+                shortDesc = game.resources.getString(R.string.shortdesc_range)
+                strengthDesc = "x %.2f".format(strength)
+                    upgradeDesc = " -> %.2f".format(next)
+            }  
+            Type.INCREASE_CHIP_SHR_RANGE ->
+            {
+                shortDesc = game.resources.getString(R.string.shortdesc_range)
+                strengthDesc = "x %.2f".format(strength)
+                upgradeDesc = " -> %.2f".format(next)
+            }
+            Type.INCREASE_CHIP_MEM_RANGE ->
+            {
+                shortDesc = game.resources.getString(R.string.shortdesc_range)
+                strengthDesc = "x %.2f".format(strength)
+                upgradeDesc = " -> %.2f".format(next)
+            }
         }
         upgradeDesc = game.resources.getString(R.string.upgrade_format).format(upgradeDesc, getPrice(data.level))
         if (data.level >= maxLevel)
@@ -312,16 +328,18 @@ class Hero(var game: Game, type: Type): Fadable {
     {
         when (data.type) {
             Type.INCREASE_CHIP_SUB_SPEED -> return 1.0f + level / 20f
-            Type.INCREASE_STARTING_CASH -> return 8.0f + level * level
-            Type.INCREASE_CHIP_SHIFT_SPEED -> return 1.0f + level / 20f
+            Type.INCREASE_CHIP_SHR_SPEED -> return 1.0f + level / 20f
             Type.INCREASE_CHIP_MEM_SPEED -> return 1.0f + level / 20f
+            Type.INCREASE_STARTING_CASH -> return 8.0f + level * level
             Type.DECREASE_UPGRADE_COST -> return level * 5f
             Type.ADDITIONAL_LIVES -> return level.toFloat()
-            Type.INCREASE_CHIP_ACC_SPEED -> return 1.0f + level / 20f
             Type.DECREASE_ATT_FREQ -> return 1.0f - level * 0.05f
             Type.DECREASE_ATT_SPEED -> return 1.0f - level * 0.04f
             Type.GAIN_CASH -> return (8f - level) * 11
             Type.INCREASE_REFUND -> return (50f + level * 10)
+            Type.INCREASE_CHIP_SUB_RANGE -> return 1.0f + level / 10f
+            Type.INCREASE_CHIP_SHR_RANGE -> return 1.0f + level / 10f
+            Type.INCREASE_CHIP_MEM_RANGE -> return 1.0f + level / 10f
         }
     }
 
@@ -340,15 +358,17 @@ class Hero(var game: Game, type: Type): Fadable {
         // TODO: check conditions!
         if (currentStage.series > 1)  // display instructions only for series 1
             return true
-        when (data.type) {
-            Type.DECREASE_UPGRADE_COST -> return (upgradeLevel(Type.INCREASE_STARTING_CASH) >= 3)
-            Type.ADDITIONAL_LIVES -> return (game.gameUpgrades[Type.DECREASE_UPGRADE_COST]?.data?.level?: 0 >= 3)
-            Type.DECREASE_ATT_FREQ -> return (game.gameUpgrades[Type.INCREASE_CHIP_SHIFT_SPEED]?.data?.level?: 0 >= 3)
-            Type.DECREASE_ATT_SPEED -> return (game.gameUpgrades[Type.DECREASE_ATT_FREQ]?.data?.level?: 0 >= 3)
-            Type.GAIN_CASH -> return (game.gameUpgrades[Type.INCREASE_STARTING_CASH]?.data?.level?: 0 >= 4)
-            Type.INCREASE_CHIP_MEM_SPEED -> return (game.currentStage?.getLevel()?:0 >= 9 )
-            Type.INCREASE_CHIP_ACC_SPEED -> return false
-            else -> return true
+        return when (data.type) {
+            Type.DECREASE_UPGRADE_COST ->   upgradeLevel(Type.INCREASE_STARTING_CASH) >= 3
+            Type.ADDITIONAL_LIVES ->        upgradeLevel(Type.DECREASE_UPGRADE_COST) >= 3
+            Type.DECREASE_ATT_FREQ ->       upgradeLevel(Type.INCREASE_CHIP_SHR_SPEED) >= 3
+            Type.DECREASE_ATT_SPEED ->      upgradeLevel(Type.DECREASE_ATT_FREQ) >= 3
+            Type.GAIN_CASH ->               upgradeLevel(Type.INCREASE_STARTING_CASH)>= 4
+            Type.INCREASE_CHIP_MEM_SPEED -> (game.currentStage?.getLevel() ?: 0) >= 9
+            Type.INCREASE_CHIP_SUB_RANGE -> upgradeLevel(Type.INCREASE_CHIP_SUB_SPEED) >= 5
+            Type.INCREASE_CHIP_SHR_RANGE -> upgradeLevel(Type.INCREASE_CHIP_SHR_SPEED) >= 5
+            Type.INCREASE_CHIP_MEM_RANGE -> upgradeLevel(Type.INCREASE_CHIP_MEM_SPEED) >= 5
+            else -> true
         }
     }
 
@@ -430,7 +450,7 @@ class Hero(var game: Game, type: Type): Fadable {
                     vitae = game.resources.getString(R.string.turing)
                     picture = BitmapFactory.decodeResource(game.resources, R.drawable.turing)
                 }
-                Type.INCREASE_CHIP_SHIFT_SPEED ->
+                Type.INCREASE_CHIP_SHR_SPEED ->
                 {
                     name = "Lovelace"
                     fullName = "Ada Lovelace"
@@ -502,13 +522,28 @@ class Hero(var game: Game, type: Type): Fadable {
                     vitae = game.resources.getString(R.string.tramiel)
                     picture = BitmapFactory.decodeResource(game.resources, R.drawable.tramiel)
                 }
+                Type.INCREASE_CHIP_SUB_RANGE ->
+                {
+                    name = "Wiener"
+                    fullName = "Norbert Wiener"
+                    effect = game.resources.getString(R.string.HERO_EFFECT_RANGE).format("SUB")
+                    vitae = game.resources.getString(R.string.wiener)
+                    picture = BitmapFactory.decodeResource(game.resources, R.drawable.wiener)
+                }
+                Type.INCREASE_CHIP_SHR_RANGE ->
+                {
+                    name = "Pascal"
+                    fullName = "Blaise Pascal"
+                    effect = game.resources.getString(R.string.HERO_EFFECT_RANGE).format("SHR")
+                    vitae = game.resources.getString(R.string.pascal)
+                    picture = BitmapFactory.decodeResource(game.resources, R.drawable.pascal)
+                }
                 else ->
                 {
                     name = "Schneier"
                     fullName = "Bruce Schneier"
                     picture = BitmapFactory.decodeResource(game.resources, R.drawable.schneier)
                 }
-
             }
         }
 

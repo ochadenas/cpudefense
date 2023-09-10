@@ -73,12 +73,14 @@ class LevelSelectActivity : AppCompatActivity() {
         {
             1 -> {
                 levels = Persistency(null).loadLevelSummaries(prefs, 1) ?: HashMap()
-                populateStageList(listView, levels, prefs)
+                populateStageList(listView, levels, prefs,
+                    resources.getColor(R.color.text_green), resources.getColor(R.color.text_lightgreen))
             }
             2 -> {
                 if (isTurboAvailable) {
                     levels = Persistency(null).loadLevelSummaries(prefs, 2) ?: HashMap()
-                    populateStageList(listView, levels, prefs)
+                    populateStageList(listView, levels, prefs,
+                        resources.getColor(R.color.text_amber), resources.getColor(R.color.text_lightamber))
                 }
                 else
                 {
@@ -96,7 +98,10 @@ class LevelSelectActivity : AppCompatActivity() {
         }
     }
 
-    private fun populateStageList(listView: LinearLayout, stageSummary: HashMap<Int, Stage.Summary>, prefs: SharedPreferences)
+    private fun populateStageList(
+        listView: LinearLayout, stageSummary: HashMap<Int, Stage.Summary>, prefs: SharedPreferences,
+        colorFinished: Int, colorUnfinished: Int
+    )
             /**
              * Populate the scrollable list for a given set of levels, depending on the series.
              *
@@ -134,9 +139,9 @@ class LevelSelectActivity : AppCompatActivity() {
             when
             {
                 (summary.won == true && (summary.coinsGot < summary.coinsMaxAvailable))
-                -> levelEntryView.setTextColor(resources.getColor(R.color.text_lightgreen))
-                summary.won == true -> levelEntryView.setTextColor(resources.getColor(R.color.text_green))
-                else -> levelEntryView.setTextColor(resources.getColor(R.color.text_amber))
+                -> levelEntryView.setTextColor(colorUnfinished)
+                summary.won == true -> levelEntryView.setTextColor(colorFinished)
+                else -> levelEntryView.setTextColor(resources.getColor(R.color.text_white))
             }
             levelEntryView.isClickable = true
             levelEntryView.setOnClickListener { onLevelSelect(levelEntryView, level) }
