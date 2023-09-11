@@ -50,7 +50,7 @@ class Intermezzo(var game: Game): GameElement(), Fadable {
             Type.GAME_LOST -> {
                 lines.add(game.resources.getString(R.string.failed))
                 lines.add(game.resources.getString(R.string.last_stage).format(level.number))
-                textOnContinueButton = game.resources.getString(R.string.button_exit)
+                textOnContinueButton = game.resources.getString(R.string.button_retry)
                 game.setLastPlayedStage(level)
             }
             Type.GAME_WON  -> {
@@ -162,10 +162,8 @@ class Intermezzo(var game: Game): GameElement(), Fadable {
         else if (buttonContinue?.touchableArea?.contains(event.x.toInt(), event.y.toInt()) == true) {
             when (type) {
                 Type.GAME_WON -> { game.quitGame() }
-                Type.GAME_LOST -> { game.quitGame() }
-                else -> {
-                    game.startNextStage(level)
-                }
+                Type.GAME_LOST -> { game.startNextStage(level) }
+                else -> { game.startNextStage(level) }
             }
             return true
         }

@@ -172,6 +172,7 @@ Die Programmiersprache Pascal ist nach ihm benannt."
     <string name="license">\n        \nThis game is open source. Visit https://github.com/ochadenas/cpudefense for more information.\n\nThe portraits of the Information Age Heroes are mostly derived from works of the public domain.\n\nOriginal photos:\n  Alex Handy (CC BY-SA 2.0)\n  Jacob Appelbaum (CC BY-SA 2.5)\n  Rama (CC BY-SA 2.0 fr)\n  Shervinafshar (CC BY-SA 3.0)\n  Tony Bove (CC BY 3.0)\n  Wolfgang Hunscher (CC BY-SA 3.0)\n  Silvano de Gennaro (courtesy of the author)\n\nComputer boards:\n  Autopilot (CC BY-SA 4.0)\n  Bill Bertram (CC-BY 2.0)\n  Oliver Chadenas (CC BY-SA 3.0)\n  Smial (FAL)\n\nAll other artwork:\n  Oliver Chadenas (CC BY-SA 3.0)</string>
     <string name="play_level_x">Play level %d</string>
     <string name="button_exit">Exit</string>
+    <string name="button_retry">Retry</string>
     <string name="shortdesc_SUB">SUB chip speed</string>
     <string name="shortdesc_startinfo">Starting information</string>
     <string name="shortdesc_SHR">SHR chip speed</string>

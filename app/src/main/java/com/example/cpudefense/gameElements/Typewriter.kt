@@ -9,7 +9,7 @@ import java.util.concurrent.CopyOnWriteArrayList
 
 class Typewriter(val game: Game, myArea: Rect, private var lines: CopyOnWriteArrayList<String>, private var callback: (() -> Unit)?) {
     var textBoxes = CopyOnWriteArrayList<TextBox>()
-    val pos = Pair(myArea.left + 50, myArea.bottom - 50)
+    val pos = Pair(myArea.left + 50, myArea.bottom - 80)
     val lineSpacingY = Game.computerTextSize * game.resources.displayMetrics.scaledDensity * 1.8f
 
     init { showNextLine() }
