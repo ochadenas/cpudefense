@@ -1184,6 +1184,63 @@ class StageFactory {
                         createWave(16, 80, .16f, 1.2f)
 
                         rewardCoins = 3
+                    }
+                    26 -> {
+                        initializeNetwork(50, 50)
+
+                        createChip(5, 35, ident = 100, type = Chip.ChipType.ENTRY)
+                        createChip(5, 45, 1)
+                        createChip(30, 45 + Random.nextInt(5), 2)
+                        createChip(30 + Random.nextInt(5), 32, 3)
+                        createChip(20, 20, 4)
+                        createChip(20, 12 + Random.nextInt(5), 5)
+                        createChip(10, 12 + Random.nextInt(5), 6)
+                        createChip(5, 5, 7)
+                        createChip(20, 5, 8)
+                        createChip(31, 12 + Random.nextInt(2), 9)
+                        createChip(42, 5, 10)
+                        createChip(45, 20, 11)
+                        createChip(40, 32, 12)
+                        createChip(
+                            40 + Random.nextInt(5),
+                            40 + Random.nextInt(5),
+                            ident = 900,
+                            type = Chip.ChipType.CPU
+                        )
+
+                        createLink(100, 1, 1)
+                        createLink(1, 2, 2)
+                        createLink(2, 3, 3)
+                        createLink(3, 4, 4)
+                        createLink(4, 5, 5)
+                        createLink(5, 6, 6)
+                        createLink(6, 7, 7)
+                        createLink(7, 8, 8)
+                        createLink(8, 9, 9)
+                        createLink(9, 10, 10)
+                        createLink(10, 11, 11)
+                        createLink(11, 12, 12)
+                        createLink(12, 900, 13)
+                        createLink(3, 12, 14, 0x02)
+
+                        createTrack(listOf(1, 2, 3, 14, 13), 0)
+                        createTrack(listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13), 1)
+                        createTrack(listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13), 2)
+                        createTrack(listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13), 3)
+                        createTrack(listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13), 4)
+                        createTrack(listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13), 5)
+
+                        createWave(16, 3, .10f, 1.0f)
+                        createWave(16, 5, .10f, 1.0f)
+                        createWave(16, 8, .10f, 1.1f)
+                        createWave(16, 12, .12f, 1.1f)
+                        createWave(16, 16, .12f, 1.1f)
+                        createWave(16, 30, .14f, 1.1f)
+                        createWave(16, 40, .16f, 1.1f, coins = 1)
+                        createWave(16, 50, .16f, 1.2f)
+                        createWave(16, 80, .16f, 1.2f)
+
+                        rewardCoins = 3
 
                         type = Stage.Type.FINAL
                     }

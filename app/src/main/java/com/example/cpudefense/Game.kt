@@ -22,7 +22,7 @@ import java.util.concurrent.CopyOnWriteArrayList
 
 class Game(val gameActivity: MainGameActivity) {
     companion object Params {
-        val maximumStageAvailableInTheGame = 25
+        val maxLevelAvailable = 26
 
         const val defaultMainDelay = 70L
         val chipSize = GridCoord(6,3)
@@ -423,7 +423,7 @@ class Game(val gameActivity: MainGameActivity) {
                 putInt("MAXSERIES", currentStage.series)
                 commit()
             }
-            if (currentStage.series>1 || currentStage.number==Game.maximumStageAvailableInTheGame) {
+            if (currentStage.series>1 || currentStage.number==Game.maxLevelAvailable) {
                 putBoolean("TURBO_AVAILABLE", true)
                 commit()
             }

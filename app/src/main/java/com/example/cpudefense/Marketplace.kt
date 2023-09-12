@@ -38,7 +38,7 @@ class Marketplace(val game: Game): GameElement()
     fun setSize(area: Rect)
     {
         myArea = Rect(area)
-        val topMargin = (60 * game.resources.displayMetrics.scaledDensity).toInt()
+        val topMargin = (80 * game.resources.displayMetrics.scaledDensity).toInt()
         cardsArea = Rect(64, topMargin, ((Game.cardWidth + 20)*game.resources.displayMetrics.scaledDensity).toInt(), myArea.bottom)
         biographyArea= Rect(cardsArea.right+biographyAreaMargin, topMargin, myArea.right-biographyAreaMargin, myArea.bottom-biographyAreaMargin)
         createButton()
@@ -203,7 +203,7 @@ class Marketplace(val game: Game): GameElement()
 
         textPaint.color = Color.WHITE
         textPaint.style = Paint.Style.FILL
-        textPaint.textSize = 24f * game.resources.displayMetrics.scaledDensity
+        textPaint.textSize = 48f * game.resources.displayMetrics.scaledDensity
         val text = "Total coins: %d".format(game.global.coinsTotal)
         canvas.drawText(text, 20f, y-4*game.resources.displayMetrics.scaledDensity, textPaint)
 

@@ -189,7 +189,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
         }
         actualRect?.setCenter(viewport.gridToViewport(posOnGrid))
         actualRect?.let { displayRect(canvas, it) }
-        if (network.theGame.global.configShowAttsInRange)
+        if (network.theGame.global.configShowAttsInRange && chipData.type != ChipType.EMPTY)
             actualRect?.let { displayLineToAttacker(canvas, attackersInRange(), it) }
     }
 

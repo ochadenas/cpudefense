@@ -146,7 +146,7 @@ class LevelSelectActivity : AppCompatActivity() {
             levelEntryView.isClickable = true
             levelEntryView.setOnClickListener { onLevelSelect(levelEntryView, level) }
             listView.addView(levelEntryView)
-            if (level >= Game.maximumStageAvailableInTheGame)
+            if (level >= Game.maxLevelAvailable)
                 break
         }
     }
