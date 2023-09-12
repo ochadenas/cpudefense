@@ -1190,7 +1190,7 @@ class StageFactory {
 
                         createChip(5, 35, ident = 100, type = Chip.ChipType.ENTRY)
                         createChip(5, 45, 1)
-                        createChip(30, 45 + Random.nextInt(5), 2)
+                        createChip(25, 40 + Random.nextInt(5), 2)
                         createChip(30 + Random.nextInt(5), 32, 3)
                         createChip(20, 20, 4)
                         createChip(20, 12 + Random.nextInt(5), 5)
@@ -1230,15 +1230,14 @@ class StageFactory {
                         createTrack(listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13), 4)
                         createTrack(listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13), 5)
 
-                        createWave(16, 3, .10f, 1.0f)
-                        createWave(16, 5, .10f, 1.0f)
-                        createWave(16, 8, .10f, 1.1f)
-                        createWave(16, 12, .12f, 1.1f)
-                        createWave(16, 16, .12f, 1.1f)
-                        createWave(16, 30, .14f, 1.1f)
-                        createWave(16, 40, .16f, 1.1f, coins = 1)
-                        createWave(16, 50, .16f, 1.2f)
-                        createWave(16, 80, .16f, 1.2f)
+                        createWaveHex(16, 16, .12f, 1.1f)
+                        createWaveHex(16, 64, .16f, 1.1f, coins = 1)
+                        createWaveHex(16, 128, .16f, 1.2f)
+                        createWaveHex(16,256, .16f, 1.2f)
+                        createWaveHex(16,512, .16f, 1.2f)
+                        createWaveHex(16,1024, .16f, 1.2f)
+                        createWaveHex(16,2048, .16f, 1.6f)
+                        createWaveHex(16,4096, .16f, 1.6f)
 
                         rewardCoins = 3
 

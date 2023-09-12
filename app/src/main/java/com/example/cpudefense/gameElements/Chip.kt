@@ -244,8 +244,13 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
 
     fun attackersInRange(): List<Attacker>
     {
-        val vehicles = distanceToVehicle.keys.filter { attackerInRange(it as Attacker) }.map { it as Attacker }
-        return vehicles
+        try {
+            val vehicles = distanceToVehicle.keys.filter { attackerInRange(it as Attacker) }
+                .map { it as Attacker }
+            return vehicles
+        }
+        catch (ex: ConcurrentModificationException)
+        { return listOf() }  // may happen when there are really many chips and attackers
     }
 
     fun shootAt(attacker: Attacker)
