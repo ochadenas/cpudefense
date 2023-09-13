@@ -127,7 +127,9 @@ class Intermezzo(var game: Game): GameElement(), Fadable {
             Fader(game, it, Fader.Type.APPEAR, Fader.Speed.SLOW)
             it.alignLeft(50, buttonTop)
         }
-        if (game.global.coinsTotal > 0) {
+        // if (game.global.coinsTotal > 0)  // make button always accessible. Issue #20
+        if (level.number > 6 || level.series > 1)  // level 6 in series 1 is the first one where coins may be present
+        {
             buttonPurchase = Button(game.resources.getString(R.string.button_marketplace),
                 textsize = Game.computerTextSize * game.resources.displayMetrics.scaledDensity,
                 color = game.resources.getColor(R.color.text_blue))
