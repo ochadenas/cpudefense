@@ -1,0 +1,4 @@
+Bugfixes:
+- Coins were not refunded when resetting heroes
+
+
