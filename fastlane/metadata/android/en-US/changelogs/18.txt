@@ -1,4 +1,8 @@
 Bugfixes:
 - Coins were not refunded when resetting heroes
 
+Miscellaneous:
+- 'Heroes' button is visible also when there are no coins to spent
+
+
 
