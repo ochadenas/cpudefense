@@ -166,7 +166,7 @@ class MainGameActivity : Activity() {
             GameActivityStatus.BETWEEN_LEVELS -> editor.putString("STATUS", "complete")
             else -> editor.putString("STATUS", "complete")
         }
-        editor.apply()
+        editor.commit()
     }
 
     fun saveState()
@@ -174,7 +174,7 @@ class MainGameActivity : Activity() {
         val prefs = getSharedPreferences(getString(R.string.pref_filename), MODE_PRIVATE)
         val editor = prefs.edit()
         Persistency(theGame).saveState(editor)
-        editor.apply()
+        editor.commit()
     }
 
     fun saveUpgrades()
@@ -182,7 +182,7 @@ class MainGameActivity : Activity() {
         val prefs = getSharedPreferences(getString(R.string.pref_filename), MODE_PRIVATE)
         val editor = prefs.edit()
         Persistency(theGame).saveUpgrades(editor)
-        editor.apply()
+        editor.commit()
     }
 
     fun saveThumbnail(level: Int)
@@ -190,7 +190,7 @@ class MainGameActivity : Activity() {
         val prefs = getSharedPreferences(getString(R.string.pref_filename), MODE_PRIVATE)
         val editor = prefs.edit()
         Persistency(theGame).saveThumbnailOfLevel(editor, level)
-        editor.apply()
+        editor.commit()
     }
 
     private fun loadState()

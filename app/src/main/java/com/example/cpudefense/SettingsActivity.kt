@@ -32,7 +32,7 @@ class SettingsActivity : AppCompatActivity()
         prefs.edit().apply {
             putBoolean("DISABLE_BACKGROUND", findViewById<Switch>(R.id.switch_disable_background)?.isChecked ?: false)
             putBoolean("SHOW_ATTS_IN_RANGE", findViewById<Switch>(R.id.switch_show_atts_in_range)?.isChecked ?: false)
-            apply()
+            commit()
         }
     }
 

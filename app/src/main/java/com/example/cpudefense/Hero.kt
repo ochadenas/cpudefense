@@ -394,8 +394,8 @@ class Hero(var game: Game, type: Type): Fadable {
             return
         data.level += 1
         setDesc()
-        game.gameActivity.saveUpgrades()
         game.gameUpgrades[this.data.type] = this
+        game.gameActivity.saveUpgrades()
         // start graphical transition */
         if (data.level == 1) {
             Fader(game, this, Fader.Type.APPEAR, Fader.Speed.VERY_SLOW)
@@ -417,12 +417,13 @@ class Hero(var game: Game, type: Type): Fadable {
 
     companion object {
         fun createFromData(game: Game, data: Data): com.example.cpudefense.Hero
-                /** reconstruct a Link object based on the saved data
+                /** reconstruct a Hero object based on the saved data
                  * and set all inner proprieties
                  */
         {
             val newInstance = Hero(game, data.type)
             newInstance.data.level = data.level
+            newInstance.data.coinsSpent = data.coinsSpent
             newInstance.hero.setType()
             newInstance.heroOpacity = when (data.level) { 0 -> 0f else -> 1f}
             newInstance.setDesc()
