@@ -6,10 +6,11 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import com.example.cpudefense.MainGameActivity.GameActivityStatus.UNDETERMINED
+import com.example.cpudefense.gameElements.SevenSegmentDisplay
 
 
 class WelcomeActivity : AppCompatActivity()
@@ -39,14 +40,29 @@ class WelcomeActivity : AppCompatActivity()
 
     }
 
+    private fun showLevelReached()
+    {
+        // display as text:
+        var seriesName = if (maxLevel.series == 2) getString(R.string.name_series_2) else getString(R.string.name_series_1)
+        val textMaxLevel = findViewById<TextView>(R.id.highestStageReached)
+        textMaxLevel.text = getString(R.string.stage_reached).format(seriesName, maxLevel.number)
+        // display as graphics:
+        val display = SevenSegmentDisplay(2, (50 * resources.displayMetrics.scaledDensity).toInt(), this)
+        var imageView = findViewById<ImageView>(R.id.sevenSegmentDisplay)
+        when (maxLevel.series)
+        {
+            1 -> imageView.setImageBitmap(display.getDisplayBitmap(maxLevel.number, SevenSegmentDisplay.LedColors.GREEN))
+            2 -> imageView.setImageBitmap(display.getDisplayBitmap(maxLevel.number, SevenSegmentDisplay.LedColors.YELLOW))
+            else -> imageView.setImageBitmap(display.getDisplayBitmap(maxLevel.number, SevenSegmentDisplay.LedColors.RED))
+        }
+    }
+
     private fun setupButtons()
     {
         val prefs = getSharedPreferences(getString(R.string.pref_filename), MODE_PRIVATE)
         gameState = prefs.getString("STATUS", "")
         determineLevels(prefs)
-        val textMaxLevel = findViewById<TextView>(R.id.highestStageReached)
-        var seriesName = if (maxLevel.series == 2) getString(R.string.name_series_2) else getString(R.string.name_series_1)
-        textMaxLevel.text = getString(R.string.stage_reached).format(seriesName, maxLevel.number)
+        showLevelReached()
         val buttonResume = findViewById<Button>(R.id.continueGameButton)
         when (gameState)
         {
