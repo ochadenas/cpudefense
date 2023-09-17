@@ -1034,8 +1034,8 @@ class StageFactory {
                         createWave(12, 12, .09f, 0.9f)
                         createWave(12, 16, .10f, 0.9f)
                         createWave(12, 24, .11f, 0.8f)
-                        createWave(12, 32, .12f, 0.8f)
-                        createWave(12, 48, .14f, 0.9f)
+                        createWave(12, 38, .12f, 0.8f)
+                        createWave(12, 32, .14f, 0.9f)
 
                         rewardCoins = 3
                     }
