@@ -82,6 +82,7 @@ Turing wurde aufgrund seiner Homosexualität massiv diskriminiert. Er starb 1954
     <string name="button_purchase">Anheuern</string>
     <string name="query_reset">Möchtest du alle Heldinnen und Helden zurücksetzen?</string>
     <string name="no">Nein</string>
+    <string name="instr_7a">Tipp:\n\nWenn du nicht weiter kommst, kannst du einen der niedrigeren Level erneut spielen, um dort einen Cryptocoin einzufangen.\n</string>
     <string name="instr_8">
 "Du kannst Chips wieder verkaufen und so ihren Steckplatz neu verwenden.
 
@@ -115,6 +116,7 @@ Ein Teil der Information wird dir dabei zurückerstattet."
     <string name="shortdesc_lives">Extra-Leben</string>
     <string name="shortdesc_frequency">Frequenz der Angreifer</string>
     <string name="shortdesc_att_speed">Geschw. der Angreifer</string>
+    <string name="shortdesc_att_strength">Stärke der Angreifer</string>
     <string name="shortdesc_info_gain">Informationsgewinn</string>
     <string name="shortdesc_range">Chip-Reichweite</string>
     <string name="shortdesc_refund">Erstattung bei Verkauf</string>
@@ -130,7 +132,8 @@ Ein Teil der Information wird dir dabei zurückerstattet."
     <string name="HERO_EFFECT_FREQUENCY">verringert die Frequenz der Angreifer</string>
     <string name="HERO_EFFECT_INFOOVERTIME">zusätzlicher Informationsgewinn pro Zeit</string>
     <string name="HERO_EFFECT_ATTSPEED">verringert die Geschwindigkeit der Angreifer</string>
-    <string name="HERO_EFFECT_REFUNDPRICE">erhöht die Erstattung beim Verkauf von Chips</string>
+    <string name="HERO_EFFECT_ATTSTRENGTH">verringert die Stärke der Angreifer</string>
+    <string name="HERO_EFFECT_REFUNDPRICE">höhere Erstattung beim Verkauf von Chips</string>
     <string name="HERO_EFFECT_RANGE">erhöht die Reichweite der Chips</string>
     <string name="toast_loading">Lade Daten ...</string>
     <string name="name_series_1">Normal</string>
@@ -145,4 +148,7 @@ Ein Teil der Information wird dir dabei zurückerstattet."
     <string name="wiener">" Norbert Wiener ist als Begründer der Kybernetik bekannt, also der Steuerung und Regelung von Maschinen, und ist damit einer der Wegbereiter von Künstlicher Intelligenz. Der von ihm geprägte Begriff 'cyber' ist heute allgegenwärtig.  Er entwickelte mathematische Theorien, vor allem im Bereich der Mustererkennung und Bildbearbeitung, und bewies eine Reihe von mathematischen Sätzen.  Aufgrund der Erfahrungen im 2. Weltkrieg nahm er eine zunehmend pazifistische Haltung ein und weigerte sich, Werke zu veröffentlichen, die in den Händen von Militaristen Schaden anrichten könnten.     "</string>
     <string name="settings_disable_background">Hintergrund ausschalten</string>
     <string name="settings_show_atts_in_range">Angreifer in Reichweite zeigen</string>
+    <string name="mandelbrot">Der Mathematiker Benoît B. Mandelbrot war der wichtigste Begründer der Fraktalen Geometrie, mit der sich nicht nur viele Strukturen in der Natur sehr gut beschreiben, sondern auch phantastische Grafiken am Rechner erzeugen lassen. \n\nDie Darstellung der Mandelbrot-Menge, die sogenannten Apfelmännchen, gingen viral und begründeten ein neues Zeitalter der Computerkunst.\n</string>
+    <string name="shortdesc_info_on_kill">Infogewinn</string>
+    <string name="HERO_EFFECT_GAININFO">Erhöht die durch Zerstören der Angreifer gewonnene Information</string>
 </resources>

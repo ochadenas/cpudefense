@@ -149,7 +149,7 @@ Zuse also created the first high-level programming language 'Plankalkül'."
     <string name="franke">
 "Herbert W. Franke was a physicist well known as an author of science fiction novels and documentary works.
 
-He was a pionieer in the field of computer art and computer graphics, and developed the concept of 'cybernetical aesthetics' - art created by electronic devices and numerical algorithms."
+He was a pionier in the field of computer art and computer graphics, and developed the concept of 'cybernetical aesthetics' - art created by electronic devices and numerical algorithms."
     </string>
     <string name="vaughan">
 "Dorothy Vaughan was one of the 'human computers' working with the NASA. She was capable of solving complex mathematical equations faster and more reliably than the electronic or mechanical devices available at the time. With other women, she significantly helped advancing the American space program.
@@ -162,7 +162,11 @@ Later, as manager at the NASA, she prepared for the introduction of electronic c
 The record-selling C64 not only had an enormous 64 kiB of RAM, it also featured hi-res graphics, digital sound, a built-in BASIC interpreter, and two joystick ports. Countless persons made their first steps into the information age on good old C64."
     </string>
     <string name="wiener">"Norbert Wiener is known as the founder of cybernetics, i.e. the control and regulation of machines, and is thus one of the pioneers of artificial intelligence. The term 'cyber' coined by him is ubiquitous today.  \n\nHe developed mathematical theories, especially in the field of pattern recognition and image processing, and proved a number of mathematical theorems.  \n\nDue to his experiences in WW2, he adopted an increasingly pacifist stance and refused to publish works that might cause harm in the hands of militarists.\n   "</string>
-    <string name="pascal">\nBlaise Pascal was a polymath in many fields of mathematics, philosophy and physics. For the later information age, his calculating machines, the \'Pascalines\', were an early precursor.\n\nThe programming language Pascal is named after him.</string>
+    <string name="pascal">
+"Blaise Pascal was a polymath in many fields of mathematics, philosophy and physics. For the later information age, his calculating machines, the \'Pascalines\', were an early precursor.
+
+The programming language Pascal is named after him."</string>
+    <string name="mandelbrot">Benoît B. Mandelbrot was the most important founder of fractal geometry, which can not only be used to describe many structures in nature very well, but also to create fantastic graphics on the computer. \n\nThe representation of the Mandelbrot set went viral and founded a new age of computer art.</string>
     <string name="settings_title">Settings</string>
     <string name="settings_about">About</string>
     <string name="license">\n        \nThis game is open source. Visit https://github.com/ochadenas/cpudefense for more information.\n\nThe portraits of the Information Age Heroes are mostly derived from works of the public domain.\n\nOriginal photos:\n  Alex Handy (CC BY-SA 2.0)\n  Jacob Appelbaum (CC BY-SA 2.5)\n  Konrad Jacobs (CC BY-SA 2.0 de)\n  Rama (CC BY-SA 2.0 fr)\n  Shervinafshar (CC BY-SA 3.0)\n  Tony Bove (CC BY 3.0)\n  Wolfgang Hunscher (CC BY-SA 3.0)\n  Silvano de Gennaro (courtesy of the author)\n  Clermont Auvergne Métropole (CC BY-SA 4.0)\n\nComputer boards:\n  Autopilot (CC BY-SA 4.0)\n  Bill Bertram (CC-BY 2.0)\n  Oliver Chadenas (CC BY-SA 3.0)\n  Smial (FAL)\n\nAll other artwork:\n  Oliver Chadenas (CC BY-SA 3.0)</string>
@@ -171,6 +175,7 @@ The record-selling C64 not only had an enormous 64 kiB of RAM, it also featured 
     <string name="button_retry">Retry</string>
     <string name="shortdesc_SUB">SUB chip speed</string>
     <string name="shortdesc_startinfo">Starting information</string>
+    <string name="shortdesc_info_on_kill">Additional info</string>
     <string name="shortdesc_SHR">SHR chip speed</string>
     <string name="shortdesc_ACC">ACC chip speed</string>
     <string name="shortdesc_MEM">MEM chip speed</string>
@@ -194,21 +199,23 @@ The record-selling C64 not only had an enormous 64 kiB of RAM, it also featured 
     <string name="HERO_EFFECT_ATTSPEED">Reduces attacker speed</string>
     <string name="HERO_EFFECT_ATTSTRENGTH">Reduces attacker strength</string>
     <string name="HERO_EFFECT_REFUNDPRICE">Increases refund when selling chips</string>
+    <string name="HERO_EFFECT_GAININFO">Increases information gain through destroying attackers</string>
     <string name="HERO_EFFECT_RANGE">Increases %s chip range</string>
     <string name="toast_loading">Loading ...</string>
     <string name="name_series_1">Normal</string>
     <string name="name_series_2">Turbo</string>
     <string name="message_series_unavailable">Complete all levels in \'normal\' mode first.</string>
     <string name="stage_reached">Stage reached: %s %d</string>
-    <string name="series_completed_message_1" />
     <string name="series_completed_message_2">You may replay all levels</string>
     <string name="series_completed_message_3">in \'turbo\' mode now.</string>
-    <string name="series_completed_message_4" />
     <string name="instr_2_1">
 "In turbo mode, the attackers are stronger, faster and more numerous.
 
 Furthermore, some slots are already taken by unwanted chips you'll have to deal with."</string>
     <string name="settings_disable_background">Disable background</string>
     <string name="settings_show_atts_in_range">Show attackers in range</string>
+    <string name="series_completed_message_1">" "</string>
+    <string name="series_completed_message_4">" "</string>
+
 
 </resources>

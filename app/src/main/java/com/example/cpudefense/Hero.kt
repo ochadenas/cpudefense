@@ -15,16 +15,12 @@ import com.example.cpudefense.utils.setTopLeft
 class Hero(var game: Game, type: Type): Fadable {
     /*
     Ideas:
-    - increase radius
     - gain additional coins but disable reset of upgrades
 
     Heroes:
-    - Norbert Wiener
-    - John von Neuman
-    - Pascal
+    - John von Neuman?
     - Babbage?
     - Berners-Lee?
-    - Mandelbrot
     - Torvalds
     - Sid Meier
      */
@@ -33,7 +29,8 @@ class Hero(var game: Game, type: Type): Fadable {
         INCREASE_CHIP_SHR_SPEED,  INCREASE_CHIP_SHR_RANGE,
         INCREASE_CHIP_MEM_SPEED,  INCREASE_CHIP_MEM_RANGE,
         DECREASE_ATT_FREQ, DECREASE_ATT_SPEED, DECREASE_ATT_STRENGTH,
-        INCREASE_STARTING_CASH, GAIN_CASH, DECREASE_UPGRADE_COST, ADDITIONAL_LIVES, INCREASE_REFUND}
+        INCREASE_STARTING_CASH, GAIN_CASH, GAIN_CASH_ON_KILL,
+        DECREASE_UPGRADE_COST, ADDITIONAL_LIVES, INCREASE_REFUND}
     data class Data (
         val type: Type,
         var level: Int = 0,
@@ -76,10 +73,11 @@ class Hero(var game: Game, type: Type): Fadable {
         Type.DECREASE_ATT_FREQ -> game.resources.getColor(R.color.upgrade_active_general)
         Type.DECREASE_ATT_SPEED -> game.resources.getColor(R.color.upgrade_active_general)
         Type.DECREASE_ATT_STRENGTH -> game.resources.getColor(R.color.upgrade_active_general)
+        Type.INCREASE_STARTING_CASH -> game.resources.getColor(R.color.upgrade_active_eco)
         Type.GAIN_CASH -> game.resources.getColor(R.color.upgrade_active_eco)
+        Type.GAIN_CASH_ON_KILL -> game.resources.getColor(R.color.upgrade_active_eco)
         Type.INCREASE_REFUND -> game.resources.getColor(R.color.upgrade_active_eco)
         Type.ADDITIONAL_LIVES -> game.resources.getColor(R.color.upgrade_active_eco)
-        Type.INCREASE_STARTING_CASH -> game.resources.getColor(R.color.upgrade_active_eco)
         Type.DECREASE_UPGRADE_COST -> game.resources.getColor(R.color.upgrade_active_eco)
     }
     var maxLevel = 7   // cannot upgrade beyond this level
@@ -293,6 +291,12 @@ class Hero(var game: Game, type: Type): Fadable {
                 strengthDesc = "1 bit/%d ticks".format(strength.toInt())
                 upgradeDesc = " -> 1/%d ticks".format(next.toInt())
             }
+            Type.GAIN_CASH_ON_KILL ->
+            {
+                shortDesc = game.resources.getString(R.string.shortdesc_info_on_kill)
+                strengthDesc = "%d bit/kill".format(strength.toInt())
+                upgradeDesc = " -> %d bit/kill".format(next.toInt())
+            }
             Type.INCREASE_REFUND ->
             {
                 shortDesc = game.resources.getString(R.string.shortdesc_refund)
@@ -344,6 +348,7 @@ class Hero(var game: Game, type: Type): Fadable {
             Type.DECREASE_ATT_SPEED -> return 1.0f - level * 0.04f
             Type.DECREASE_ATT_STRENGTH -> return 1.0f - level * 0.1f
             Type.GAIN_CASH -> return (8f - level) * 11
+            Type.GAIN_CASH_ON_KILL -> return level * 1.0f
             Type.INCREASE_REFUND -> return (50f + level * 10)
             Type.INCREASE_CHIP_SUB_RANGE -> return 1.0f + level / 10f
             Type.INCREASE_CHIP_SHR_RANGE -> return 1.0f + level / 10f
@@ -371,7 +376,8 @@ class Hero(var game: Game, type: Type): Fadable {
             Type.DECREASE_ATT_FREQ ->       upgradeLevel(Type.INCREASE_CHIP_SHR_SPEED) >= 3
             Type.DECREASE_ATT_SPEED ->      upgradeLevel(Type.DECREASE_ATT_FREQ) >= 3
             Type.DECREASE_ATT_STRENGTH ->   upgradeLevel(Type.DECREASE_ATT_SPEED) >= 3
-            Type.GAIN_CASH ->               upgradeLevel(Type.INCREASE_STARTING_CASH)>= 4
+            Type.GAIN_CASH ->               upgradeLevel(Type.INCREASE_STARTING_CASH) >= 4
+            Type.GAIN_CASH_ON_KILL ->       upgradeLevel(Type.GAIN_CASH) >= 3
             Type.DECREASE_UPGRADE_COST ->   upgradeLevel(Type.INCREASE_STARTING_CASH) >= 3
             Type.INCREASE_CHIP_MEM_SPEED -> (game.currentStage?.getLevel() ?: 0) >= 10
             Type.INCREASE_CHIP_SUB_RANGE -> upgradeLevel(Type.INCREASE_CHIP_SUB_SPEED) >= 5
@@ -515,6 +521,14 @@ class Hero(var game: Game, type: Type): Fadable {
                     effect = game.resources.getString(R.string.HERO_EFFECT_INFOOVERTIME)
                     vitae = game.resources.getString(R.string.franke)
                     picture = BitmapFactory.decodeResource(game.resources, R.drawable.franke)
+                }
+                Type.GAIN_CASH_ON_KILL ->
+                {
+                    name = "Mandelbrot"
+                    fullName = "Benoît B. Mandelbrot"
+                    effect = game.resources.getString(R.string.HERO_EFFECT_GAININFO)
+                    vitae = game.resources.getString(R.string.mandelbrot)
+                    picture = BitmapFactory.decodeResource(game.resources, R.drawable.mandelbrot)
                 }
                 Type.DECREASE_ATT_SPEED ->
                 {
