@@ -417,7 +417,13 @@ class Game(val gameActivity: MainGameActivity) {
         val maxStage = Stage.Identifier(prefs.getInt("MAXSERIES", 1), prefs.getInt("MAXSTAGE", 0))
         with (prefs.edit())
         {
-            if (currentStage.isGreaterThan(maxStage) || resetProgress)
+            if (resetProgress)
+            {
+                putInt("MAXSTAGE", 0)
+                putInt("MAXSERIES", 1)
+                commit()
+            }
+            if (currentStage.isGreaterThan(maxStage))
             {
                 putInt("MAXSTAGE", currentStage.number)
                 putInt("MAXSERIES", currentStage.series)

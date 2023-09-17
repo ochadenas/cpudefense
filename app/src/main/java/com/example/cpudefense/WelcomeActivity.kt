@@ -8,6 +8,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.example.cpudefense.gameElements.SevenSegmentDisplay
@@ -41,20 +42,29 @@ class WelcomeActivity : AppCompatActivity()
     }
 
     private fun showLevelReached()
+    /** displays the max level reached so far as graphical display */
     {
-        // display as text:
-        var seriesName = if (maxLevel.series == 2) getString(R.string.name_series_2) else getString(R.string.name_series_1)
-        val textMaxLevel = findViewById<TextView>(R.id.highestStageReached)
-        textMaxLevel.text = getString(R.string.stage_reached).format(seriesName, maxLevel.number)
         // display as graphics:
-        val display = SevenSegmentDisplay(2, (50 * resources.displayMetrics.scaledDensity).toInt(), this)
+        var displayLit: Boolean = true
+        val display = SevenSegmentDisplay(2, (60 * resources.displayMetrics.scaledDensity).toInt(), this)
         var imageView = findViewById<ImageView>(R.id.sevenSegmentDisplay)
+        if (maxLevel.number == 0)
+            displayLit = false
         when (maxLevel.series)
         {
-            1 -> imageView.setImageBitmap(display.getDisplayBitmap(maxLevel.number, SevenSegmentDisplay.LedColors.GREEN))
-            2 -> imageView.setImageBitmap(display.getDisplayBitmap(maxLevel.number, SevenSegmentDisplay.LedColors.YELLOW))
-            else -> imageView.setImageBitmap(display.getDisplayBitmap(maxLevel.number, SevenSegmentDisplay.LedColors.RED))
+            1 -> imageView.setImageBitmap(display.getDisplayBitmap(maxLevel.number, SevenSegmentDisplay.LedColors.GREEN, displayLit))
+            2 -> imageView.setImageBitmap(display.getDisplayBitmap(maxLevel.number, SevenSegmentDisplay.LedColors.YELLOW, displayLit))
+            else -> imageView.setImageBitmap(display.getDisplayBitmap(maxLevel.number, SevenSegmentDisplay.LedColors.RED, displayLit))
         }
+    }
+
+    fun showMaxLevelInfo(v: View)
+    {
+        /** displays the max level reached so far as graphical display */
+        var seriesName = if (maxLevel.series == 2) getString(R.string.name_series_2) else getString(R.string.name_series_1)
+        val textToDisplay = getString(R.string.stage_reached).format(seriesName, maxLevel.number)
+        Toast.makeText(this, textToDisplay, Toast.LENGTH_LONG).show()
+
     }
 
     private fun setupButtons()

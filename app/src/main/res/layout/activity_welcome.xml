@@ -7,19 +7,6 @@
     android:background="#000000"
     tools:context=".WelcomeActivity">
 
-    <TextView
-        android:id="@+id/highestStageReached"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:text="@string/stage_reached"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        android:textColor="?attr/colorPrimary"
-        app:layout_constraintBottom_toTopOf="@+id/startGameButton"
-        app:layout_constraintStart_toStartOf="@+id/startGameButton"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.8" />
-
     <Button
         android:id="@+id/startGameButton"
         android:layout_width="wrap_content"
@@ -131,13 +118,16 @@
         app:layout_constraintTop_toTopOf="@+id/continueGameButton"
         app:srcCompat="@drawable/deko" />
 
+
     <ImageView
         android:id="@+id/sevenSegmentDisplay"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/highestStageReached"
-        app:layout_constraintStart_toStartOf="@+id/startGameButton"
-        app:srcCompat="@drawable/digit_8" />
-
+        android:layout_marginBottom="48dp"
+        android:onClick="showMaxLevelInfo"
+        app:layout_constraintBottom_toTopOf="@+id/startGameButton"
+        app:layout_constraintEnd_toEndOf="@+id/deko1"
+        app:srcCompat="@drawable/mask"
+        tools:ignore="SpeakableTextPresentCheck" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

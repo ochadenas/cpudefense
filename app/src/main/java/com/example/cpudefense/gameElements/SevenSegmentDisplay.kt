@@ -13,10 +13,11 @@ import com.example.cpudefense.utils.setTopLeft
 class SevenSegmentDisplay(val numberOfDigits: Int, val size: Int, val activity: Activity): GameElement()
 {
     enum class LedColors { GREEN, RED, YELLOW, WHITE }
-    var digit = List(numberOfDigits) {0}
     var resources = activity.resources
 
-    val mask = listOf<Bitmap>(
+    val casingMask = decodeResource(resources, R.drawable.mask)
+
+    val digitMask = listOf<Bitmap>(
         decodeResource(resources, R.drawable.digit_0),
         decodeResource(resources, R.drawable.digit_1),
         decodeResource(resources, R.drawable.digit_2),
@@ -35,8 +36,8 @@ class SevenSegmentDisplay(val numberOfDigits: Int, val size: Int, val activity: 
         LedColors.WHITE  to decodeResource(resources, R.drawable.led_white)
     )
 
-    val naturalHeight = mask[0].height
-    val naturalWidth = mask[0].width
+    val naturalHeight = digitMask[0].height
+    val naturalWidth = digitMask[0].width
     val margin = 2
 
     val sizeY = size
@@ -46,14 +47,18 @@ class SevenSegmentDisplay(val numberOfDigits: Int, val size: Int, val activity: 
     val paint = Paint()
     val paintBorder = Paint()
 
-    fun getDisplayBitmap(number: Int, ledColor: LedColors): Bitmap
+    override fun update() {
+    }
+
+
+    fun getDisplayBitmap(number: Int, ledColor: LedColors, isLit: Boolean = true): Bitmap
     {
         val bitmap = Bitmap.createBitmap(numberOfDigits*sizeX+2*margin, sizeY+2*margin, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)
         paintBorder.style = Paint.Style.STROKE
         paintBorder.color = activity.resources.getColor(R.color.design_default_color_primary)
         val rectBorder = Rect(0,0,bitmap.width-margin, bitmap.height-margin)
-        canvas.drawRect(rectBorder, paintBorder)
+        // canvas.drawRect(rectBorder, paintBorder)
         var destRect = Rect(0,0,sizeX,sizeY)
         var n = number
         for (d in numberOfDigits-1 downTo  0)
@@ -61,14 +66,13 @@ class SevenSegmentDisplay(val numberOfDigits: Int, val size: Int, val activity: 
             val digit = n % 10
             n /= 10
             destRect.setTopLeft(margin+d*sizeX, margin)
-            canvas.drawBitmap(backgroundLight[ledColor]!!, null, destRect, paint)
-            canvas.drawBitmap(mask[digit], null, destRect, paint)
+            if (isLit) {
+                canvas.drawBitmap(backgroundLight[ledColor]!!, null, destRect, paint)
+                canvas.drawBitmap(digitMask[digit], null, destRect, paint)
+            }
+            canvas.drawBitmap(casingMask, null, destRect, paint)
         }
         return bitmap
-    }
-
-
-    override fun update() {
     }
 
     override fun display(canvas: Canvas, viewport: Viewport) {
