@@ -178,6 +178,7 @@ The record-selling C64 not only had an enormous 64 kiB of RAM, it also featured 
     <string name="shortdesc_lives">Additional lives</string>
     <string name="shortdesc_frequency">Attacker frequency</string>
     <string name="shortdesc_att_speed">Attacker speed</string>
+    <string name="shortdesc_att_strength">Attacker strength</string>
     <string name="shortdesc_info_gain">Information gain</string>
     <string name="shortdesc_range">Chip range</string>
     <string name="shortdesc_refund">Refund when selling chips</string>
@@ -186,11 +187,12 @@ The record-selling C64 not only had an enormous 64 kiB of RAM, it also featured 
     <string name="toast_stage_cleared">Stage cleared</string>
     <string name="HERO_EFFECT_CHIPSPEED">Increases speed of all %s chips</string>
     <string name="HERO_EFFECT_STARTINFO">Increases information at start of level</string>
-    <string name="HERO_EFFECT_UPGRADECOST">Decreases upgrade cost of all chips</string>
+    <string name="HERO_EFFECT_UPGRADECOST">Reduces upgrade cost of all chips</string>
     <string name="HERO_EFFECT_LIVES">Grants additional lives</string>
     <string name="HERO_EFFECT_FREQUENCY">Decreases attacker frequency</string>
     <string name="HERO_EFFECT_INFOOVERTIME">Gains additional bits over time</string>
-    <string name="HERO_EFFECT_ATTSPEED">Decreases attacker speed</string>
+    <string name="HERO_EFFECT_ATTSPEED">Reduces attacker speed</string>
+    <string name="HERO_EFFECT_ATTSTRENGTH">Reduces attacker strength</string>
     <string name="HERO_EFFECT_REFUNDPRICE">Increases refund when selling chips</string>
     <string name="HERO_EFFECT_RANGE">Increases %s chip range</string>
     <string name="toast_loading">Loading ...</string>

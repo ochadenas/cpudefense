@@ -29,9 +29,10 @@ class Hero(var game: Game, type: Type): Fadable {
     - Sid Meier
      */
 
-    enum class Type { INCREASE_CHIP_SUB_SPEED, INCREASE_CHIP_SUB_RANGE, INCREASE_CHIP_SHR_SPEED, INCREASE_CHIP_MEM_SPEED,
-        INCREASE_CHIP_SHR_RANGE, INCREASE_CHIP_MEM_RANGE,
-        DECREASE_ATT_FREQ, DECREASE_ATT_SPEED,
+    enum class Type { INCREASE_CHIP_SUB_SPEED, INCREASE_CHIP_SUB_RANGE,
+        INCREASE_CHIP_SHR_SPEED,  INCREASE_CHIP_SHR_RANGE,
+        INCREASE_CHIP_MEM_SPEED,  INCREASE_CHIP_MEM_RANGE,
+        DECREASE_ATT_FREQ, DECREASE_ATT_SPEED, DECREASE_ATT_STRENGTH,
         INCREASE_STARTING_CASH, GAIN_CASH, DECREASE_UPGRADE_COST, ADDITIONAL_LIVES, INCREASE_REFUND}
     data class Data (
         val type: Type,
@@ -66,19 +67,20 @@ class Hero(var game: Game, type: Type): Fadable {
     var inactiveColor = game.resources.getColor(R.color.upgrade_inactive)
     var activeColor: Int = when(type)
     {
-        Type.INCREASE_STARTING_CASH -> game.resources.getColor(R.color.upgrade_active_eco)
-        Type.DECREASE_UPGRADE_COST -> game.resources.getColor(R.color.upgrade_active_eco)
         Type.INCREASE_CHIP_SUB_SPEED -> game.resources.getColor(R.color.upgrade_active_chip_sub)
+        Type.INCREASE_CHIP_SUB_RANGE -> game.resources.getColor(R.color.upgrade_active_chip_sub)
         Type.INCREASE_CHIP_SHR_SPEED -> game.resources.getColor(R.color.upgrade_active_chip_shr)
+        Type.INCREASE_CHIP_SHR_RANGE -> game.resources.getColor(R.color.upgrade_active_chip_shr)
         Type.INCREASE_CHIP_MEM_SPEED -> game.resources.getColor(R.color.upgrade_active_chip_mem)
-        Type.ADDITIONAL_LIVES -> game.resources.getColor(R.color.upgrade_active_eco)
+        Type.INCREASE_CHIP_MEM_RANGE -> game.resources.getColor(R.color.upgrade_active_chip_mem)
         Type.DECREASE_ATT_FREQ -> game.resources.getColor(R.color.upgrade_active_general)
         Type.DECREASE_ATT_SPEED -> game.resources.getColor(R.color.upgrade_active_general)
+        Type.DECREASE_ATT_STRENGTH -> game.resources.getColor(R.color.upgrade_active_general)
         Type.GAIN_CASH -> game.resources.getColor(R.color.upgrade_active_eco)
         Type.INCREASE_REFUND -> game.resources.getColor(R.color.upgrade_active_eco)
-        Type.INCREASE_CHIP_SUB_RANGE -> game.resources.getColor(R.color.upgrade_active_chip_sub)
-        Type.INCREASE_CHIP_SHR_RANGE -> game.resources.getColor(R.color.upgrade_active_chip_shr)
-        Type.INCREASE_CHIP_MEM_RANGE -> game.resources.getColor(R.color.upgrade_active_chip_mem)
+        Type.ADDITIONAL_LIVES -> game.resources.getColor(R.color.upgrade_active_eco)
+        Type.INCREASE_STARTING_CASH -> game.resources.getColor(R.color.upgrade_active_eco)
+        Type.DECREASE_UPGRADE_COST -> game.resources.getColor(R.color.upgrade_active_eco)
     }
     var maxLevel = 7   // cannot upgrade beyond this level
     var biography: Biography? = null
@@ -315,6 +317,11 @@ class Hero(var game: Game, type: Type): Fadable {
                 strengthDesc = "x %.2f".format(strength)
                 upgradeDesc = " -> %.2f".format(next)
             }
+            Type.DECREASE_ATT_STRENGTH -> {
+                shortDesc = game.resources.getString(R.string.shortdesc_att_strength)
+                strengthDesc = "x %.2f".format(strength)
+                upgradeDesc = " -> %.2f".format(next)
+            }
         }
         upgradeDesc = game.resources.getString(R.string.upgrade_format).format(upgradeDesc, getPrice(data.level))
         if (data.level >= maxLevel)
@@ -335,6 +342,7 @@ class Hero(var game: Game, type: Type): Fadable {
             Type.ADDITIONAL_LIVES -> return level.toFloat()
             Type.DECREASE_ATT_FREQ -> return 1.0f - level * 0.05f
             Type.DECREASE_ATT_SPEED -> return 1.0f - level * 0.04f
+            Type.DECREASE_ATT_STRENGTH -> return 1.0f - level * 0.1f
             Type.GAIN_CASH -> return (8f - level) * 11
             Type.INCREASE_REFUND -> return (50f + level * 10)
             Type.INCREASE_CHIP_SUB_RANGE -> return 1.0f + level / 10f
@@ -359,12 +367,13 @@ class Hero(var game: Game, type: Type): Fadable {
         if (currentStage.series > 1)  // display instructions only for series 1
             return true
         return when (data.type) {
-            Type.DECREASE_UPGRADE_COST ->   upgradeLevel(Type.INCREASE_STARTING_CASH) >= 3
             Type.ADDITIONAL_LIVES ->        upgradeLevel(Type.DECREASE_UPGRADE_COST) >= 3
             Type.DECREASE_ATT_FREQ ->       upgradeLevel(Type.INCREASE_CHIP_SHR_SPEED) >= 3
             Type.DECREASE_ATT_SPEED ->      upgradeLevel(Type.DECREASE_ATT_FREQ) >= 3
+            Type.DECREASE_ATT_STRENGTH ->   upgradeLevel(Type.DECREASE_ATT_SPEED) >= 3
             Type.GAIN_CASH ->               upgradeLevel(Type.INCREASE_STARTING_CASH)>= 4
-            Type.INCREASE_CHIP_MEM_SPEED -> (game.currentStage?.getLevel() ?: 0) >= 9
+            Type.DECREASE_UPGRADE_COST ->   upgradeLevel(Type.INCREASE_STARTING_CASH) >= 3
+            Type.INCREASE_CHIP_MEM_SPEED -> (game.currentStage?.getLevel() ?: 0) >= 10
             Type.INCREASE_CHIP_SUB_RANGE -> upgradeLevel(Type.INCREASE_CHIP_SUB_SPEED) >= 5
             Type.INCREASE_CHIP_SHR_RANGE -> upgradeLevel(Type.INCREASE_CHIP_SHR_SPEED) >= 5
             Type.INCREASE_CHIP_MEM_RANGE -> upgradeLevel(Type.INCREASE_CHIP_MEM_SPEED) >= 5
@@ -515,6 +524,13 @@ class Hero(var game: Game, type: Type): Fadable {
                     vitae = game.resources.getString(R.string.vaughan)
                     picture = BitmapFactory.decodeResource(game.resources, R.drawable.vaughan)
                 }
+                Type.DECREASE_ATT_STRENGTH ->
+                {
+                    name = "Schneier"
+                    fullName = "Bruce Schneier"
+                    effect = game.resources.getString(R.string.HERO_EFFECT_ATTSTRENGTH)
+                    picture = BitmapFactory.decodeResource(game.resources, R.drawable.schneier)
+                }
                 Type.INCREASE_REFUND ->
                 {
                     name = "Tramiel"
@@ -539,12 +555,7 @@ class Hero(var game: Game, type: Type): Fadable {
                     vitae = game.resources.getString(R.string.pascal)
                     picture = BitmapFactory.decodeResource(game.resources, R.drawable.pascal)
                 }
-                else ->
-                {
-                    name = "Schneier"
-                    fullName = "Bruce Schneier"
-                    picture = BitmapFactory.decodeResource(game.resources, R.drawable.schneier)
-                }
+                Type.INCREASE_CHIP_MEM_RANGE -> {}
             }
         }
 
