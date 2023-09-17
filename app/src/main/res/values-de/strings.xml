@@ -98,12 +98,14 @@ Ein Teil der Information wird dir dabei zurückerstattet."
     <string name="franke">"Der Physiker Herbert W. Franke war als Autor von Science-Fiction-Romanen und Sachbüchern bekannt.\n\nEr war ein Pionier in Computerkunst und -grafik und entwickelte das Konzept der \"kybernetischen Ästhetik\": Kunst, die von elektronischen Geräten und numerischen Algorithmen erschaffen wird.\n "</string>
     <string name="vaughan">Dorothy Vaughan war einer der \"menschlichen Computer\" bei der NASA. Sie konnte komplexe mathematische Gleichungen schneller und verlässlicher lösen als die damaligen elektronischen oder mechanischen Geräte. Gemeinsam mit anderen Frauen brachte sie das amerikanische Weltraumprogramm wesentlich voran.\n\nSpäter bereitete sie als Managerin bei der NASA die Einführung elektronischer Computer vor, indem sie sich selbst und ihrem Team die Sprache FORTRAN beibrachte.</string>
     <string name="tramiel">Als Kind überlebte Idek Tramielski Auschwitz. Er emigrierte 1947 in die USA und gründete dort 1954 Commodore International, die Schreibmaschinen baute. Im Jahr 1982 stellte Commodore den C64 vor, den ersten echten Heimcomputer der Welt.\n\nDer C64 brach alle Verkaufsrekorde. Er hatte nicht nur unglaubliche 64 kiB RAM, sondern auch hochauflösende Grafik, digitalen Sound, einen eingebauten BASIC-Interpreter und zwei Joystick-Ports. Für unzählige Menschen bedeutete der \'Brotkasten\' den Einstieg ins Computerzeitalter.\n</string>
+    <string name="pascal">\nBlaise Pascal war ein Universalgelehrter auf vielen Gebieten der Mathematik, Philosophie und Physik. Für das spätere Informationszeitalter waren seine Rechenmaschinen, die \'Pascalinen\', ein früher Vorläufer.\n\nDie Programmiersprache Pascal ist nach ihm benannt.</string>
     <string name="settings_title">Einstellungen</string>
     <string name="settings_about">Info</string>
     <string name="yes">Ja</string>
-    <string name="license">\nDieses Spiel ist Open Source Software.  Mehr Information auf  https://github.com/ochadenas/cpudefense.\n\nDie Bilder der Heldinnen und Helden basieren überwiegend auf gemeinfreien Werken.\n\nAutoren der Originalfotos:\n Alex Handy (CC BY-SA 2.0)\n  Jacob Appelbaum (CC BY-SA 2.5)\n  Rama (CC BY-SA 2.0 fr)\n  Shervinafshar (CC BY-SA 3.0)\n  Tony Bove (CC BY 3.0)\n  Wolfgang Hunscher (CC BY-SA 3.0)\n  Silvano de Gennaro (mit freundlicher Genehmigung)      \n\nBilder der Computerplatinen:\n  Autopilot (CC BY-SA 4.0)\n  Bill Bertram (CC-BY 2.0)\n  Oliver Chadenas (CC BY-SA 3.0)\n  Smial (FAL)\n\nAlle anderen Grafiken:\n  Oliver Chadenas (CC BY-SA 3.0)\n  \n</string>
+    <string name="license">\nDieses Spiel ist Open Source Software.  Mehr Information auf  https://github.com/ochadenas/cpudefense.\n\nDie Bilder der Heldinnen und Helden basieren überwiegend auf gemeinfreien Werken.\n\nAutoren der Originalfotos:\n  Alex Handy (CC BY-SA 2.0)\n  Jacob Appelbaum (CC BY-SA 2.5)\n  Konrad Jacobs (CC BY-SA 2.0 de)\n  Rama (CC BY-SA 2.0 fr)\n  Shervinafshar (CC BY-SA 3.0)\n  Tony Bove (CC BY 3.0)\n  Wolfgang Hunscher (CC BY-SA 3.0)\n  Silvano de Gennaro (courtesy of the author)\n  Clermont Auvergne Métropole (CC BY-SA 4.0)\n  \nBilder der Computerplatinen:\n  Autopilot (CC BY-SA 4.0)\n  Bill Bertram (CC-BY 2.0)\n  Oliver Chadenas (CC BY-SA 3.0)\n  Smial (FAL)\n\nAlle anderen Grafiken:\n  Oliver Chadenas (CC BY-SA 3.0)\n  \n</string>
     <string name="play_level_x">Level %d spielen</string>
     <string name="button_exit">Ende</string>
+    <string name="button_retry">Erneut spielen</string>
     <string name="shortdesc_SUB">Geschw. der SUB-Chips</string>
     <string name="shortdesc_startinfo">Info bei Start</string>
     <string name="shortdesc_SHR">Geschw. SHR-Chips</string>
@@ -114,6 +116,7 @@ Ein Teil der Information wird dir dabei zurückerstattet."
     <string name="shortdesc_frequency">Frequenz der Angreifer</string>
     <string name="shortdesc_att_speed">Geschw. der Angreifer</string>
     <string name="shortdesc_info_gain">Informationsgewinn</string>
+    <string name="shortdesc_range">Chip-Reichweite</string>
     <string name="shortdesc_refund">Erstattung bei Verkauf</string>
     <string name="upgrade_format">%s  [Kosten: %d]</string>
     <string name="toast_next_stage">Level %d</string>
@@ -128,6 +131,7 @@ Ein Teil der Information wird dir dabei zurückerstattet."
     <string name="HERO_EFFECT_INFOOVERTIME">zusätzlicher Informationsgewinn pro Zeit</string>
     <string name="HERO_EFFECT_ATTSPEED">verringert die Geschwindigkeit der Angreifer</string>
     <string name="HERO_EFFECT_REFUNDPRICE">erhöht die Erstattung beim Verkauf von Chips</string>
+    <string name="HERO_EFFECT_RANGE">erhöht die Reichweite der Chips</string>
     <string name="toast_loading">Lade Daten ...</string>
     <string name="name_series_1">Normal</string>
     <string name="name_series_2">Turbo</string>
@@ -139,4 +143,6 @@ Ein Teil der Information wird dir dabei zurückerstattet."
     <string name="series_completed_message_4">\'Turbo\'-Modus spielen.</string>
     <string name="instr_2_1">Im Turbo-Modus sind die Angreifer schneller, stärker und zahlreicher.\n\nZusätzlich sind einige Slots schon mit unerwünschten Chips belegt, mit denen du fertig werden musst.\n</string>
     <string name="wiener">" Norbert Wiener ist als Begründer der Kybernetik bekannt, also der Steuerung und Regelung von Maschinen, und ist damit einer der Wegbereiter von Künstlicher Intelligenz. Der von ihm geprägte Begriff 'cyber' ist heute allgegenwärtig.  Er entwickelte mathematische Theorien, vor allem im Bereich der Mustererkennung und Bildbearbeitung, und bewies eine Reihe von mathematischen Sätzen.  Aufgrund der Erfahrungen im 2. Weltkrieg nahm er eine zunehmend pazifistische Haltung ein und weigerte sich, Werke zu veröffentlichen, die in den Händen von Militaristen Schaden anrichten könnten.     "</string>
+    <string name="settings_disable_background">Hintergrund ausschalten</string>
+    <string name="settings_show_atts_in_range">Angreifer in Reichweite zeigen</string>
 </resources>

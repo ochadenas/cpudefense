@@ -55,6 +55,7 @@ class LevelSelectActivity : AppCompatActivity() {
             })
         )
         prepareStageSelector()
+        // tabLayout.setupWithViewPager(findViewById(R.id.pager))
     }
 
     private fun prepareStageSelector(series: Int = 1)

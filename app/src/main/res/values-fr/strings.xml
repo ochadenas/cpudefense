@@ -49,11 +49,14 @@
     <string name="franke">Herbert W. Franke était un physicien aussi connu comme auteur de romans de science-fiction et d\'ouvrages documentaires.\n\nIl a été un pionnier dans le domaine de l\'art informatique et de l\'infographie et a développé le concept d\'« esthétique cybernétique » – de l\'art créé par des appareils électroniques et des algorithmes numériques.</string>
     <string name="vaughan">Dorothy Vaughan était l\'une des « ordinateurs humains » travaillant pour la NASA. Elle était capable de résoudre des équations mathématiques complexes plus rapidement et de manière plus fiable que les appareils électroniques ou mécaniques disponibles à l\'époque. Avec d’autres femmes, elle a contribué de manière significative à l’avancement du programme spatial américain.\n\nPlus tard, en tant que responsable à la NASA, elle s\'est préparée à l\'introduction des ordinateurs électroniques en apprenant à elle-même ainsi qu\'à son équipe le langage de programmation FORTRAN.\n\n</string>
     <string name="tramiel">Idek Tramielski a survécu à Auschwitz quand il était enfant. En 1947, il émigre aux États-Unis où, en 1954, il fonde Commodore International, une entreprise fabriquant des machines à écrire. En 1982, Commodore a présenté le C64, le premier véritable ordinateur personnel au monde.\n\nLe C64 disposait non seulement d\'un énorme 64 Ko de RAM, mais également des graphiques haute résolution, de son numérique, d\'un interpréteur BASIC intégré et de deux ports pour manettes. D\'innombrables personnes ont fait leurs premiers pas dans l\'ère de l\'information avec cette « boîte à pain ».\n\n</string>
+    <string name="wiener">"Norbert Wiener est connu comme le fondateur de la cybernétique, c'est-à-dire du contrôle et de la régulation des machines, et est donc l'un des précurseurs de l'intelligence artificielle. Le terme 'cyber' qu'il a inventé est aujourd'hui omniprésent.  \n\nIl a développé des théories mathématiques, notamment dans le domaine de la reconnaissance des formes et du traitement des images, et a prouvé un certain nombre de théorèmes mathématiques.  \n\nEn raison de son expérience pendant la Seconde Guerre mondiale, il a adopté une position de plus en plus pacifiste et a refusé de publier des œuvres qui pourraient causer des dommages entre les mains des militaristes. "</string>
+    <string name="pascal">\nBlaise Pascal était un savant universel dans de nombreux domaines des mathématiques, de la philosophie et de la physique. Ses machines à calculer, les \'« pascalines », ont été un précurseur de l\'ère de l\'information.\n\nLe langage de programmation Pascal porte son nom.\n</string>
     <string name="settings_title">Réglages</string>
     <string name="settings_about">A propos de ...</string>
-    <string name="license">"Ce jeu est open source. Visitez https://github.com/ochadenas/cpudefense pour plus d'informations.\n\nLes portraits des héros de l'ère de l'information sont pour la plupart issus d'œuvres du domaine public.\n\nPhotos originales :\n  Alex Handy (CC BY-SA 2.0)\n  Jacob Appelbaum (CC BY-SA 2.5)\n  Rama (CC BY-SA 2.0 fr)\n  Shervinafshar (CC BY-SA 3.0)\n  Tony Bove (CC BY 3.0)\n  Wolfgang Hunscher (CC BY-SA 3.0)\n  Silvano de Gennaro (courtesy of the author)\n\nPlatines d'ordinateur :\n  Autopilot (CC BY-SA 4.0)\n  Bill Bertram (CC-BY 2.0)\n  Oliver Chadenas (CC BY-SA 3.0)\n  Smial (FAL)\n\nToutes autres images :\n  Oliver Chadenas (CC BY-SA 3.0)\n  "</string>
+    <string name="license">"Ce jeu est open source. Visitez https://github.com/ochadenas/cpudefense pour plus d'informations.\n\nLes portraits des héros de l'ère de l'information sont pour la plupart issus d'œuvres du domaine public.\n\nPhotos originales :\n  Alex Handy (CC BY-SA 2.0)\n  Jacob Appelbaum (CC BY-SA 2.5)\n  Konrad Jacobs (CC BY-SA 2.0 de)\n  Rama (CC BY-SA 2.0 fr)\n  Shervinafshar (CC BY-SA 3.0)\n  Tony Bove (CC BY 3.0)\n  Wolfgang Hunscher (CC BY-SA 3.0)\n  Silvano de Gennaro (courtesy of the author)\n  Clermont Auvergne Métropole (CC BY-SA 4.0)\n  \nPlatines d'ordinateur :\n  Autopilot (CC BY-SA 4.0)\n  Bill Bertram (CC-BY 2.0)\n  Oliver Chadenas (CC BY-SA 3.0)\n  Smial (FAL)\n\nToutes autres images :\n  Oliver Chadenas (CC BY-SA 3.0)\n  "</string>
     <string name="play_level_x">Jouer niveau %d</string>
     <string name="button_exit">Sortir</string>
+    <string name="button_retry">Rejouer</string>
     <string name="shortdesc_SUB">vitesse puces SUB</string>
     <string name="shortdesc_startinfo">info initiale</string>
     <string name="shortdesc_SHR">vitesse puces SHR</string>
@@ -64,6 +67,7 @@
     <string name="shortdesc_frequency">frequence attaquants</string>
     <string name="shortdesc_att_speed">vitesse attaquants</string>
     <string name="shortdesc_info_gain">gain d\'info</string>
+    <string name="shortdesc_range">Portée des puces</string>
     <string name="shortdesc_refund">remboursement vente</string>
     <string name="upgrade_format">%s  [coût: %d]</string>
     <string name="toast_next_stage">Niveau %d</string>
@@ -76,6 +80,7 @@
     <string name="HERO_EFFECT_INFOOVERTIME">gagne de l\'information au fil du temps</string>
     <string name="HERO_EFFECT_ATTSPEED">réduit la vitesse des attaquants</string>
     <string name="HERO_EFFECT_REFUNDPRICE">"augmente le remboursement lors "</string>
+    <string name="HERO_EFFECT_RANGE">augmente la portée des puces</string>
     <string name="toast_loading">Chargement ...</string>
     <string name="name_series_1">Normal</string>
     <string name="name_series_2">Turbo</string>
@@ -86,4 +91,6 @@
     <string name="series_completed_message_3">tous les niveaux</string>
     <string name="series_completed_message_4">en mode \'turbo\'.</string>
     <string name="instr_2_1">"En mode turbo, les attaquants sont plus rapides, plus forts et plus nombreux.  De plus, certains slots sont déjà occupés par des puces indésirables que tu dois gérer. "</string>
+    <string name="settings_disable_background">Désactiver l\'arrière-plan</string>
+    <string name="settings_show_atts_in_range">Montrer les attaquants à portée</string>
 </resources>
