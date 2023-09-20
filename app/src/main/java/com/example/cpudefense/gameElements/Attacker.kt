@@ -124,6 +124,7 @@ open class Attacker(network: Network, type: Representation = Representation.BINA
              * @return true if the attacker gets destroyed, false otherwise
              */
     {
+        val extraCashGained = theNetwork.theGame.gameUpgrades[Hero.Type.GAIN_CASH_ON_KILL]?.getStrength()?.toInt() ?: 0 // possible bonus
         when (type)
         {
             Chip.ChipType.SUB ->
@@ -132,7 +133,7 @@ open class Attacker(network: Network, type: Representation = Representation.BINA
                 if (newNumber < 0)
                 {
                     theNetwork.theGame.gameActivity.theGameView.theEffects?.explode(this)
-                    theNetwork.theGame.scoreBoard.addCash(attackerData.bits)
+                    theNetwork.theGame.scoreBoard.addCash(attackerData.bits + extraCashGained)
                     return true
                 }
                 else
@@ -146,7 +147,7 @@ open class Attacker(network: Network, type: Representation = Representation.BINA
             Chip.ChipType.MEM ->
             {
                 theNetwork.theGame.gameActivity.theGameView.theEffects?.fade(this)
-                theNetwork.theGame.scoreBoard.addCash(attackerData.bits)
+                theNetwork.theGame.scoreBoard.addCash(attackerData.bits + extraCashGained)
                 return false // remove() is done after fading
             }
             Chip.ChipType.ADD ->

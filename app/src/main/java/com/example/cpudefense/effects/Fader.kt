@@ -2,9 +2,10 @@ package com.example.cpudefense.effects
 
 import com.example.cpudefense.Game
 
-class Fader(game: Game,
-            private val thing: Fadable,
-            var type: Type = Type.DISAPPEAR, speed: Speed = Speed.FAST, wait: Int = 0)
+class Fader(
+    game: Game,
+    private val thing: Fadable,
+    var type: Fader.Type = Type.DISAPPEAR, speed: Speed = Speed.FAST, wait: Int = 0)
 /**
  * Auxiliary object that handles appearing and disappearing of game elements.
  */

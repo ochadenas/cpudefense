@@ -2,6 +2,7 @@ package com.example.cpudefense.utils
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.Color
 import android.graphics.Matrix
 import android.renderscript.Allocation
 import android.renderscript.Element
@@ -40,4 +41,17 @@ fun Bitmap.flipHorizontally(): Bitmap
 {
     val matrix = Matrix().apply { postScale(-1f, 1f, width / 2f, height / 2f) }
     return Bitmap.createBitmap(this, 0, 0, width, height, matrix, true)
+}
+
+fun Bitmap.flipVertically(): Bitmap
+        /** flips the bitmap vertically. */
+{
+    val matrix = Matrix().apply { postScale(1f, -1f, width / 2f, height / 2f) }
+    return Bitmap.createBitmap(this, 0, 0, width, height, matrix, true)
+}
+
+fun Bitmap.clear()
+/** just a function to make the naming clearer */
+{
+    eraseColor(Color.TRANSPARENT)
 }

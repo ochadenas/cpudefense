@@ -167,6 +167,8 @@ The record-selling C64 not only had an enormous 64 kiB of RAM, it also featured 
 
 The programming language Pascal is named after him."</string>
     <string name="mandelbrot">Benoît B. Mandelbrot was the most important founder of fractal geometry, which can not only be used to describe many structures in nature very well, but also to create fantastic graphics on the computer. \n\nThe representation of the Mandelbrot set went viral and founded a new age of computer art.</string>
+    <string name="schneier"></string>
+Bruce Schneier
     <string name="settings_title">Settings</string>
     <string name="settings_about">About</string>
     <string name="license">\n        \nThis game is open source. Visit https://github.com/ochadenas/cpudefense for more information.\n\nThe portraits of the Information Age Heroes are mostly derived from works of the public domain.\n\nOriginal photos:\n  Alex Handy (CC BY-SA 2.0)\n  Jacob Appelbaum (CC BY-SA 2.5)\n  Konrad Jacobs (CC BY-SA 2.0 de)\n  Rama (CC BY-SA 2.0 fr)\n  Shervinafshar (CC BY-SA 3.0)\n  Tony Bove (CC BY 3.0)\n  Wolfgang Hunscher (CC BY-SA 3.0)\n  Silvano de Gennaro (courtesy of the author)\n  Clermont Auvergne Métropole (CC BY-SA 4.0)\n\nComputer boards:\n  Autopilot (CC BY-SA 4.0)\n  Bill Bertram (CC-BY 2.0)\n  Oliver Chadenas (CC BY-SA 3.0)\n  Smial (FAL)\n\nAll other artwork:\n  Oliver Chadenas (CC BY-SA 3.0)</string>

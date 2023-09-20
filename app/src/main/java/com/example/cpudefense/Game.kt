@@ -8,6 +8,7 @@ import android.view.MotionEvent
 import android.widget.Toast
 import com.example.cpudefense.effects.Background
 import com.example.cpudefense.effects.Fader
+import com.example.cpudefense.effects.Flipper
 import com.example.cpudefense.effects.Mover
 import com.example.cpudefense.gameElements.*
 import com.example.cpudefense.networkmap.GridCoord
@@ -103,6 +104,7 @@ class Game(val gameActivity: MainGameActivity) {
     private var currentWave: Wave? = null
     var movers = CopyOnWriteArrayList<Mover>() // list of all mover objects that are created for game elements
     var faders = CopyOnWriteArrayList<Fader>() // idem for faders
+    var flippers = CopyOnWriteArrayList<Flipper>() // idem for flippers
     val notification = ProgressNotification(this)
 
     /* other temporary variables */
@@ -113,7 +115,6 @@ class Game(val gameActivity: MainGameActivity) {
     enum class GameSpeed { NORMAL, MAX }
 
     val coinIcon: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.cryptocoin)
-    val coinIconReverse = coinIcon.flipHorizontally()
     val cpuImage: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.cpu)
     val playIcon: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.play_active)
     val pauseIcon: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.pause_active)
@@ -195,6 +196,13 @@ class Game(val gameActivity: MainGameActivity) {
         {
             if (m?.type == Fader.Type.NONE)
                 faders.remove(m)
+            else
+                m?.update()
+        }
+        for (m in flippers)
+        {
+            if (m?.type == Flipper.Type.NONE)
+                flippers.remove(m)
             else
                 m?.update()
         }

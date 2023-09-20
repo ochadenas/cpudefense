@@ -278,7 +278,8 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
     {
         internalRegister = attacker
         attacker?.let {
-            theNetwork?.theGame?.scoreBoard?.addCash(it.attackerData.bits)
+            val extraCashGained = theNetwork?.theGame?.gameUpgrades?.get(Hero.Type.GAIN_CASH_ON_KILL)?.getStrength()?.toInt() ?: 0 // possible bonus
+            theNetwork?.theGame?.scoreBoard?.addCash(it.attackerData.bits + extraCashGained)
             it.immuneTo = this
             theNetwork?.theGame?.gameActivity?.theGameView?.theEffects?.fade(it)
         }

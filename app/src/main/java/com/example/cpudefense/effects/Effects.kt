@@ -19,7 +19,7 @@ class Effects(var theGame: Game) {
 
     fun fade(thing: Fadable)
     {
-        faders.add(Fader(theGame, thing, speed=Fader.Speed.SLOW ))
+        faders.add(Fader(theGame, thing, speed =Fader.Speed.SLOW ))
     }
 
     fun updateGraphicalEffects()
