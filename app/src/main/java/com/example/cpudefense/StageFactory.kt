@@ -214,9 +214,9 @@ class StageFactory {
                         createTrack(listOf(1, 2, 4, 5, 6, 8, 10, 11, 12), 0)
                         createTrack(listOf(1, 3, 5, 7, 8, 9, 12), 1)
 
-                        createWave(10, 2, .125f, 1.2f, coins=2)
-                        createWave(15, 3, .120f, 1.1f, coins=2)
-                        createWave(15, 3, .110f, 1.1f, coins=2)
+                        createWave(10, 2, .125f, 1.2f, coins=0)
+                        createWave(15, 3, .120f, 1.1f, coins=0)
+                        createWave(15, 3, .110f, 1.1f, coins=0)
                         createWave(20, 4, .110f, 1.1f)
                         createWave(20, 7, .050f, 1f, coins = 0)
                         createWave(15, 15, .050f, 1f, coins = 0)
