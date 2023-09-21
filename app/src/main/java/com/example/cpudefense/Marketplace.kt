@@ -28,7 +28,7 @@ class Marketplace(val game: Game): GameElement()
     private var upgrades = mutableListOf<Hero>()
     private var selected: Hero? = null
     private var coins = mutableListOf<Coin>()
-    private val coinSize = (32 * game.resources.displayMetrics.scaledDensity).toInt()
+    private var coinSize = (32 * game.resources.displayMetrics.scaledDensity).toInt()
 
     private var nextGameLevel = Stage.Identifier()
 
@@ -42,6 +42,7 @@ class Marketplace(val game: Game): GameElement()
         myArea = Rect(area)
         val topMargin = (80 * game.resources.displayMetrics.scaledDensity).toInt()
         cardsArea = Rect(64, topMargin, ((Game.cardWidth + 20)*game.resources.displayMetrics.scaledDensity).toInt(), myArea.bottom)
+        coinSize = 80 * topMargin / 100
         biographyArea= Rect(cardsArea.right+biographyAreaMargin, topMargin, myArea.right-biographyAreaMargin, myArea.bottom-biographyAreaMargin)
         createButton()
     }

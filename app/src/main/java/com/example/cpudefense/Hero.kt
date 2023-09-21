@@ -28,9 +28,9 @@ class Hero(var game: Game, type: Type): Fadable {
     enum class Type { INCREASE_CHIP_SUB_SPEED, INCREASE_CHIP_SUB_RANGE,
         INCREASE_CHIP_SHR_SPEED,  INCREASE_CHIP_SHR_RANGE,
         INCREASE_CHIP_MEM_SPEED,  INCREASE_CHIP_MEM_RANGE,
-        DECREASE_ATT_FREQ, DECREASE_ATT_SPEED, DECREASE_ATT_STRENGTH,
-        INCREASE_STARTING_CASH, GAIN_CASH, GAIN_CASH_ON_KILL,
-        DECREASE_UPGRADE_COST, ADDITIONAL_LIVES, INCREASE_REFUND}
+        DECREASE_ATT_FREQ, ADDITIONAL_LIVES, DECREASE_ATT_SPEED, DECREASE_ATT_STRENGTH,
+        INCREASE_STARTING_CASH, GAIN_CASH,
+        DECREASE_UPGRADE_COST, INCREASE_REFUND, GAIN_CASH_ON_KILL}
     data class Data (
         val type: Type,
         var level: Int = 0,
@@ -379,7 +379,7 @@ class Hero(var game: Game, type: Type): Fadable {
             Type.INCREASE_REFUND ->         upgradeLevel(Type.DECREASE_UPGRADE_COST) >= 3
             Type.DECREASE_UPGRADE_COST ->   upgradeLevel(Type.GAIN_CASH) >= 3
             Type.GAIN_CASH ->               upgradeLevel(Type.INCREASE_STARTING_CASH) >= 3
-            Type.INCREASE_CHIP_MEM_SPEED -> (game.currentStage?.getLevel() ?: 0) >= 10
+            Type.INCREASE_CHIP_MEM_SPEED -> (game.currentStage?.getLevel() ?: 0) >= 14
             Type.INCREASE_CHIP_SUB_RANGE -> upgradeLevel(Type.INCREASE_CHIP_SUB_SPEED) >= 5
             Type.INCREASE_CHIP_SHR_RANGE -> upgradeLevel(Type.INCREASE_CHIP_SHR_SPEED) >= 5
             Type.INCREASE_CHIP_MEM_RANGE -> upgradeLevel(Type.INCREASE_CHIP_MEM_SPEED) >= 5
