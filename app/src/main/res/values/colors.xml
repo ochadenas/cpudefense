@@ -12,7 +12,8 @@
     <color name="attackers_foreground_bin">#DAFFF2F2</color>
     <color name="attackers_foreground_hex">#FFDC00</color>
     <color name="attackers_glow_bin">#FFFD2222</color>
-    <color name="attackers_glow_hex">#A63500</color>
+    <color name="attackers_glow_hex">#BD5B2D</color>
+    <color name="attackers_glow_coin">#1D96FF</color>
     <color name="attackers_background">#40000000</color>
     <color name="chips_sub_foreground">#DA07DD00</color>
     <color name="chips_sub_glow">#AFFA34</color>
@@ -49,8 +50,8 @@
     <color name="upgrade_active_general">#79D5FF</color>
     <color name="upgrade_active_eco">#FF8400</color>
     <color name="upgrade_active_speed">#E1353B</color>
-    <color name="upgrade_active_chip_sub">#DA07DD00</color>
-    <color name="upgrade_active_chip_shr">#DA649DF3</color>
+    <color name="upgrade_active_chip_sub">#07DD00</color>
+    <color name="upgrade_active_chip_shr">#649DF3</color>
     <color name="upgrade_active_chip_acc">#FFC107</color>
     <color name="upgrade_active_chip_mem">#774CC3</color>
 

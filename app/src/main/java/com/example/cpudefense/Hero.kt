@@ -73,11 +73,11 @@ class Hero(var game: Game, type: Type): Fadable {
         Type.DECREASE_ATT_FREQ -> game.resources.getColor(R.color.upgrade_active_general)
         Type.DECREASE_ATT_SPEED -> game.resources.getColor(R.color.upgrade_active_general)
         Type.DECREASE_ATT_STRENGTH -> game.resources.getColor(R.color.upgrade_active_general)
+        Type.ADDITIONAL_LIVES -> game.resources.getColor(R.color.upgrade_active_general)
         Type.INCREASE_STARTING_CASH -> game.resources.getColor(R.color.upgrade_active_eco)
         Type.GAIN_CASH -> game.resources.getColor(R.color.upgrade_active_eco)
         Type.GAIN_CASH_ON_KILL -> game.resources.getColor(R.color.upgrade_active_eco)
         Type.INCREASE_REFUND -> game.resources.getColor(R.color.upgrade_active_eco)
-        Type.ADDITIONAL_LIVES -> game.resources.getColor(R.color.upgrade_active_eco)
         Type.DECREASE_UPGRADE_COST -> game.resources.getColor(R.color.upgrade_active_eco)
     }
     var maxLevel = 7   // cannot upgrade beyond this level
@@ -368,17 +368,17 @@ class Hero(var game: Game, type: Type): Fadable {
              */
     {
         val currentStage = game.currentStage?.data?.ident ?: Stage.Identifier()
-        // TODO: check conditions!
         if (currentStage.series > 1)  // display instructions only for series 1
             return true
         return when (data.type) {
-            Type.ADDITIONAL_LIVES ->        upgradeLevel(Type.DECREASE_UPGRADE_COST) >= 3
-            Type.DECREASE_ATT_FREQ ->       upgradeLevel(Type.INCREASE_CHIP_SHR_SPEED) >= 3
-            Type.DECREASE_ATT_SPEED ->      upgradeLevel(Type.DECREASE_ATT_FREQ) >= 3
             Type.DECREASE_ATT_STRENGTH ->   upgradeLevel(Type.DECREASE_ATT_SPEED) >= 3
-            Type.GAIN_CASH ->               upgradeLevel(Type.INCREASE_STARTING_CASH) >= 4
-            Type.GAIN_CASH_ON_KILL ->       upgradeLevel(Type.GAIN_CASH) >= 3
-            Type.DECREASE_UPGRADE_COST ->   upgradeLevel(Type.INCREASE_STARTING_CASH) >= 3
+            Type.DECREASE_ATT_SPEED ->      upgradeLevel(Type.ADDITIONAL_LIVES) >= 3
+            Type.ADDITIONAL_LIVES ->        upgradeLevel(Type.DECREASE_ATT_FREQ) >= 3
+            Type.DECREASE_ATT_FREQ ->       upgradeLevel(Type.INCREASE_CHIP_SHR_SPEED) >= 3
+            Type.GAIN_CASH_ON_KILL ->       upgradeLevel(Type.INCREASE_REFUND) >= 3
+            Type.INCREASE_REFUND ->         upgradeLevel(Type.DECREASE_UPGRADE_COST) >= 3
+            Type.DECREASE_UPGRADE_COST ->   upgradeLevel(Type.GAIN_CASH) >= 3
+            Type.GAIN_CASH ->               upgradeLevel(Type.INCREASE_STARTING_CASH) >= 3
             Type.INCREASE_CHIP_MEM_SPEED -> (game.currentStage?.getLevel() ?: 0) >= 10
             Type.INCREASE_CHIP_SUB_RANGE -> upgradeLevel(Type.INCREASE_CHIP_SUB_SPEED) >= 5
             Type.INCREASE_CHIP_SHR_RANGE -> upgradeLevel(Type.INCREASE_CHIP_SHR_SPEED) >= 5
