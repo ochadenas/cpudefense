@@ -429,6 +429,7 @@ class Game(val gameActivity: MainGameActivity) {
             {
                 putInt("MAXSTAGE", 0)
                 putInt("MAXSERIES", 1)
+                putBoolean("TURBO_AVAILABLE", false)
                 commit()
             }
             if (currentStage.isGreaterThan(maxStage))
@@ -437,7 +438,7 @@ class Game(val gameActivity: MainGameActivity) {
                 putInt("MAXSERIES", currentStage.series)
                 commit()
             }
-            if (currentStage.series>1 || currentStage.number==Game.maxLevelAvailable) {
+            if (currentStage.series>1 || currentStage.number==maxLevelAvailable) {
                 putBoolean("TURBO_AVAILABLE", true)
                 commit()
             }

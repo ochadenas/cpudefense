@@ -38,7 +38,6 @@ class WelcomeActivity : AppCompatActivity()
         nextLevelToPlay.series = prefs.getInt("LASTSERIES", 1)
         nextLevelToPlay.number = prefs.getInt("LASTSTAGE", 0)
         turboSeriesAvailable = prefs.getBoolean("TURBO_AVAILABLE", false)
-
     }
 
     private fun showLevelReached()
