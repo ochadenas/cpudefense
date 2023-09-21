@@ -164,7 +164,8 @@ class Marketplace(val game: Game): GameElement()
         for (coin in coins)
         {
             if (coin.myArea.contains(event.x.toInt(), event.y.toInt()))
-                Flipper(game, coin, Flipper.Type.HORIZONTAL)
+                if (!coin.isCurrentlyFlipping)
+                    Flipper(game, coin, Flipper.Type.HORIZONTAL)
         }
 
         return false
@@ -247,12 +248,13 @@ class Marketplace(val game: Game): GameElement()
         }
     }
 
-    class Coin(val game: Game, size: Int): GameElement(), Fadable, Movable, Flippable
+    class Coin(val game: Game, size: Int): GameElement(), Fadable, Flippable
     {
         val paint = Paint()
         val myArea = Rect(0,0,size,size)
         var myBitmap = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888)
         val myCanvas = Canvas(myBitmap)
+        var isCurrentlyFlipping = false
 
         init {
             paint.alpha = 255
@@ -280,15 +282,18 @@ class Marketplace(val game: Game): GameElement()
             return myBitmap
         }
 
-        override fun moveStart() {
+        override fun flipStart() {
+            isCurrentlyFlipping = true
         }
 
-        override fun moveDone() {
+        override fun flipDone() {
+            isCurrentlyFlipping = false
         }
 
-        override fun setCenter(x: Int, y: Int) {
+        fun setCenter(x: Int, y: Int) {
             myArea.setCenter(x, y)
         }
+
 
     }
 }

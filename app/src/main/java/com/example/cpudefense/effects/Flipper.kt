@@ -36,6 +36,7 @@ class Flipper(val theGame: Game, private val thing: Flippable,
             else -> { bitmapVerso = bitmapRecto.copy(bitmapRecto.config, true) }
         }
         theGame.flippers.add(this) // make sure we are in the list so that we can be called during update
+        thing.flipStart()
     }
 
     fun update()
@@ -44,8 +45,8 @@ class Flipper(val theGame: Game, private val thing: Flippable,
             return
         angle += when (speed)
         {
-            Speed.FAST -> 10.0
-            Speed.MEDIUM -> 5.0
+            Speed.FAST -> 16.0
+            Speed.MEDIUM -> 8.0
             Speed.SLOW -> 2.0
             Speed.VERY_SLOW -> 1.0
         }
@@ -74,5 +75,6 @@ class Flipper(val theGame: Game, private val thing: Flippable,
         type = Type.NONE
         actualBitmap = bitmapRecto.copy(bitmapRecto.config, true)
         thing.setBitmap(actualBitmap)
+        thing.flipDone()
     }
 }

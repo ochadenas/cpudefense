@@ -16,6 +16,7 @@ class Cryptocoin(network: com.example.cpudefense.networkmap.Network, number: ULo
 {
     var paint = Paint()
     var myBitmap = theNetwork.theGame.coinIcon.copy(theNetwork.theGame.coinIcon.config, true)
+    var isCurrentlyFlipping = false
 
     init {
         this.attackerData.isCoin = true
@@ -43,7 +44,8 @@ class Cryptocoin(network: com.example.cpudefense.networkmap.Network, number: ULo
                 }
                 else {
                     // coin was hit but not destroyed
-                    Flipper(theNetwork.theGame, this, Flipper.Type.HORIZONTAL, Flipper.Speed.FAST)
+                    if (!isCurrentlyFlipping)
+                        Flipper(theNetwork.theGame, this, Flipper.Type.HORIZONTAL, Flipper.Speed.FAST)
                     return false
                 }
             }
@@ -56,5 +58,13 @@ class Cryptocoin(network: com.example.cpudefense.networkmap.Network, number: ULo
 
     override fun provideBitmap(): Bitmap {
         return theNetwork.theGame.coinIcon.copy(theNetwork.theGame.coinIcon.config, true)
+    }
+
+    override fun flipStart() {
+        isCurrentlyFlipping = true
+    }
+
+    override fun flipDone() {
+        isCurrentlyFlipping = false
     }
 }
