@@ -3,7 +3,7 @@ package com.example.cpudefense
 import android.graphics.*
 import android.view.MotionEvent
 import androidx.appcompat.app.AlertDialog
-import com.example.cpudefense.effects.Fader
+import com.example.cpudefense.effects.*
 import com.example.cpudefense.gameElements.Button
 import com.example.cpudefense.gameElements.GameElement
 import com.example.cpudefense.networkmap.Viewport
@@ -27,6 +27,8 @@ class Marketplace(val game: Game): GameElement()
 
     private var upgrades = mutableListOf<Hero>()
     private var selected: Hero? = null
+    private var coins = mutableListOf<Coin>()
+    private val coinSize = (32 * game.resources.displayMetrics.scaledDensity).toInt()
 
     private var nextGameLevel = Stage.Identifier()
 
@@ -68,6 +70,7 @@ class Marketplace(val game: Game): GameElement()
         }
         arrangeCards(newUpgrades, viewOffset)
         upgrades = newUpgrades
+        coins = MutableList(game.global.coinsTotal) { Coin(game, coinSize) }
     }
 
     private fun arrangeCards(cards: MutableList<Hero>, dY: Float = 0f)
@@ -144,6 +147,7 @@ class Marketplace(val game: Game): GameElement()
                 if (game.global.coinsTotal >= price && it.data.level < it.maxLevel) {
                     game.global.coinsTotal -= price
                     it.data.coinsSpent += price
+                    Fader(game, coins.last(), Fader.Type.DISAPPEAR)
                     it.doUpgrade()
                     fillMarket(nextGameLevel)
                 }
@@ -156,6 +160,13 @@ class Marketplace(val game: Game): GameElement()
                 return true
             }
         selected = null
+
+        for (coin in coins)
+        {
+            if (coin.myArea.contains(event.x.toInt(), event.y.toInt()))
+                Flipper(game, coin, Flipper.Type.HORIZONTAL)
+        }
+
         return false
     }
 
@@ -192,20 +203,36 @@ class Marketplace(val game: Game): GameElement()
             card.display(canvas)
 
         // draw 'total coins' line
-        val textArea = Rect(0, 0, myArea.right, cardsArea.top)
-        canvas.drawRect(textArea, clearPaint)
+        val coinsArea = Rect(0, 0, myArea.right, cardsArea.top)
+        canvas.drawRect(coinsArea, clearPaint)
         paint.color = Color.WHITE
         paint.style = Paint.Style.STROKE
         paint.strokeWidth = 2f * game.resources.displayMetrics.scaledDensity
         paint.alpha = 255
-        val y = textArea.bottom.toFloat() - paint.strokeWidth
+        val y = coinsArea.bottom.toFloat() - paint.strokeWidth
         canvas.drawLine(0f, y, myArea.right.toFloat(), y, paint)
 
+        // determine size and spacing of coins
+        var coinLeftMargin = coinSize / 2
+        var deltaX = coinSize + 2
+        if (game.global.coinsTotal * deltaX + 2*coinLeftMargin > coinsArea.width())  // coins do not fit, must overlap
+            deltaX = (myArea.width() - 2*coinLeftMargin) / game.global.coinsTotal
+        val coinPosY = coinsArea.centerY()
+        var coinPosX = coinLeftMargin
+        for (c in coins)
+        {
+            c.setCenter(coinPosX, coinPosY)
+            c.display(canvas, viewport)
+            coinPosX += deltaX
+        }
+
+        /*
         textPaint.color = Color.WHITE
         textPaint.style = Paint.Style.FILL
         textPaint.textSize = 48f * game.resources.displayMetrics.scaledDensity
         val text = "Total coins: %d".format(game.global.coinsTotal)
         canvas.drawText(text, 20f, y-4*game.resources.displayMetrics.scaledDensity, textPaint)
+         */
 
         // draw buttons
         buttonFinish?.display(canvas)
@@ -219,4 +246,50 @@ class Marketplace(val game: Game): GameElement()
             canvas.drawBitmap(it.bitmap, null, biographyArea, paint)
         }
     }
+
+    class Coin(val game: Game, size: Int): GameElement(), Fadable, Movable, Flippable
+    {
+        val paint = Paint()
+        val myArea = Rect(0,0,size,size)
+        var myBitmap = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888)
+        val myCanvas = Canvas(myBitmap)
+
+        init {
+            paint.alpha = 255
+            myCanvas.drawBitmap(game.coinIcon, null, Rect(0,0,size,size), paint)
+        }
+        override fun update() {
+        }
+
+        override fun display(canvas: Canvas, viewport: Viewport) {
+            canvas.drawBitmap(myBitmap, null, myArea, paint)
+        }
+
+        override fun fadeDone(type: Fader.Type) {
+        }
+
+        override fun setOpacity(opacity: Float) {
+            paint.alpha = (opacity * 255f).toInt()
+        }
+
+        override fun setBitmap(bitmap: Bitmap) {
+            myBitmap = bitmap
+        }
+
+        override fun provideBitmap(): Bitmap {
+            return myBitmap
+        }
+
+        override fun moveStart() {
+        }
+
+        override fun moveDone() {
+        }
+
+        override fun setCenter(x: Int, y: Int) {
+            myArea.setCenter(x, y)
+        }
+
+    }
 }
+

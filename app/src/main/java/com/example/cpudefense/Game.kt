@@ -14,7 +14,6 @@ import com.example.cpudefense.gameElements.*
 import com.example.cpudefense.networkmap.GridCoord
 import com.example.cpudefense.networkmap.Viewport
 import com.example.cpudefense.utils.displayTextCenteredInRect
-import com.example.cpudefense.utils.flipHorizontally
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -23,7 +22,7 @@ import java.util.concurrent.CopyOnWriteArrayList
 
 class Game(val gameActivity: MainGameActivity) {
     companion object Params {
-        val maxLevelAvailable = 26
+        const val maxLevelAvailable = 26
 
         const val defaultMainDelay = 70L
         val chipSize = GridCoord(6,3)

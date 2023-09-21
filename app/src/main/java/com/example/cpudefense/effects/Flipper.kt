@@ -8,6 +8,7 @@ import com.example.cpudefense.Game
 import com.example.cpudefense.utils.clear
 import com.example.cpudefense.utils.flipHorizontally
 import com.example.cpudefense.utils.flipVertically
+import kotlin.math.cos
 
 class Flipper(val theGame: Game, private val thing: Flippable,
               var type: Type = Type.HORIZONTAL, private val speed: Speed = Speed.MEDIUM)
@@ -21,7 +22,6 @@ class Flipper(val theGame: Game, private val thing: Flippable,
     private var width = bitmapRecto.width
     private var height = bitmapRecto.height
     private var actualBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
-    private var canvas = Canvas(actualBitmap)
     private var paint = Paint()
 
     enum class Type { HORIZONTAL, VERTICAL, NONE }
@@ -53,18 +53,19 @@ class Flipper(val theGame: Game, private val thing: Flippable,
             flipDone()
             angle = 0.0
         }
-        val dim_x = (Math.cos(Math.toRadians(angle)) * width).toInt()
+        val dimX = (cos(Math.toRadians(angle)) * width).toInt()
         actualBitmap.clear()
-        if (dim_x < 0)
+        var canvas = Canvas(actualBitmap)
+        if (dimX < 0)
         {
-            var targetRect = Rect((width + dim_x) / 2, 0, (width - dim_x) / 2, height)
+            var targetRect = Rect((width + dimX) / 2, 0, (width - dimX) / 2, height)
             canvas.drawBitmap(bitmapVerso, null, targetRect, paint)
         }
         else {
-            var targetRect = Rect((width - dim_x) / 2, 0, (width + dim_x) / 2, height)
+            var targetRect = Rect((width - dimX) / 2, 0, (width + dimX) / 2, height)
             canvas.drawBitmap(bitmapRecto, null, targetRect, paint)
         }
-        thing.setBitmap(actualBitmap)
+        thing.setBitmap(actualBitmap.copy(actualBitmap.config, true))
         return
     }
 
