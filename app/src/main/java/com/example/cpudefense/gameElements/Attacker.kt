@@ -177,6 +177,16 @@ open class Attacker(network: Network, type: Representation = Representation.BINA
         return Pair(0, 0)
     }
 
+    override val explosionColour: Int?
+        get() = when (attackerData.representation)
+        {
+            Representation.UNDEFINED -> null
+            Representation.BINARY -> theNetwork.theGame.resources.getColor(R.color.attackers_glow_bin)
+            Representation.HEX -> theNetwork.theGame.resources.getColor(R.color.attackers_glow_hex)
+            Representation.DECIMAL -> null
+            Representation.FLOAT -> null
+        }
+
     override fun remove()
     {
         onLink?.let {

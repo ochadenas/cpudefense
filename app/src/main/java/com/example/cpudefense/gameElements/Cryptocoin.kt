@@ -5,6 +5,7 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Rect
 import com.example.cpudefense.Game
+import com.example.cpudefense.R
 import com.example.cpudefense.effects.Fader
 import com.example.cpudefense.effects.Flippable
 import com.example.cpudefense.effects.Flipper
@@ -29,6 +30,9 @@ class Cryptocoin(network: com.example.cpudefense.networkmap.Network, number: ULo
         actualRect.offset(displacement.first, displacement.second)
         canvas.drawBitmap(myBitmap, null, actualRect, paint)
     }
+
+    override val explosionColour: Int?
+        get() = theNetwork.theGame.resources.getColor(R.color.attackers_glow_coin)
 
     override fun onShot(type: Chip.ChipType, power: Int): Boolean
     {
