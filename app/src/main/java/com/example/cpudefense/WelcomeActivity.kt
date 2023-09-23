@@ -45,7 +45,7 @@ class WelcomeActivity : AppCompatActivity()
     {
         // display as graphics:
         var displayLit: Boolean = true
-        val display = SevenSegmentDisplay(2, (60 * resources.displayMetrics.scaledDensity).toInt(), this)
+        val display = SevenSegmentDisplay(2, (80 * resources.displayMetrics.scaledDensity).toInt(), this)
         var imageView = findViewById<ImageView>(R.id.sevenSegmentDisplay)
         if (maxLevel.number == 0)
             displayLit = false
@@ -60,7 +60,7 @@ class WelcomeActivity : AppCompatActivity()
     fun showMaxLevelInfo(v: View)
     {
         /** displays the max level reached so far as graphical display */
-        var seriesName = if (maxLevel.series == 2) getString(R.string.name_series_2) else getString(R.string.name_series_1)
+        val seriesName = if (maxLevel.series == 2) getString(R.string.name_series_2) else getString(R.string.name_series_1)
         val textToDisplay = getString(R.string.stage_reached).format(seriesName, maxLevel.number)
         Toast.makeText(this, textToDisplay, Toast.LENGTH_LONG).show()
 
