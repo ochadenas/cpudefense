@@ -1,19 +1,16 @@
 package com.example.cpudefense
 
 import com.example.cpudefense.gameElements.*
-import com.example.cpudefense.networkmap.Network
-import com.example.cpudefense.networkmap.Node
 import kotlin.random.Random
-import kotlin.random.Random.Default.nextBoolean
 
 class StageFactory {
     companion object {
-        fun createStageWithObstacles(stage: Stage, level: Stage.Identifier)
+        fun createStage(stage: Stage, level: Stage.Identifier)
         {
-            createStage(stage, level)  // make basic layout
+            createStageWithoutObstacles(stage, level)  // make basic layout
             if (level.series == 2)
             {
-                val possibleTypes = setOf<Chip.ChipType>( Chip.ChipType.EMPTY, Chip.ChipType.ADD, Chip.ChipType.SHL)
+                val possibleTypes = setOf( Chip.ChipType.EMPTY, Chip.ChipType.ADD, Chip.ChipType.SHL)
                 val numberOfObstacles = when (level.number)
                 {
                     1 -> 1
@@ -38,11 +35,11 @@ class StageFactory {
                 }
             }
         }
-        fun createStage(stage: Stage, level: Stage.Identifier)
+        private fun createStageWithoutObstacles(stage: Stage, level: Stage.Identifier)
         {
             stage.data.ident = level
             stage.waves.clear()
-            stage.type = Stage.Type.REGULAR
+            stage.data.type = Stage.Type.REGULAR
             stage.data.chipsAllowed =
                 setOf(
                     Chip.ChipUpgrades.ACC,
@@ -1241,7 +1238,7 @@ class StageFactory {
 
                         rewardCoins = 3
 
-                        type = Stage.Type.FINAL
+                        data.type = Stage.Type.FINAL
                     }
                     /**
                      * Template for the creation of new stage data.

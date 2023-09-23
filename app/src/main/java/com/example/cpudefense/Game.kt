@@ -336,7 +336,7 @@ class Game(val gameActivity: MainGameActivity) {
         val nextStage = currentStage.next()
         setSummaryOfStage(currentStage, summaryOfCompletedStage)
         setMaxPlayedStage(currentStage)
-        if (stage.type == Stage.Type.FINAL)
+        if (stage.data.type == Stage.Type.FINAL)
         {
             intermezzo.endOfGame(currentStage, hasWon = true)
         }
@@ -353,7 +353,7 @@ class Game(val gameActivity: MainGameActivity) {
         gameActivity.setGameActivityStatus(MainGameActivity.GameActivityStatus.PLAYING)
         calculateLives()
         calculateStartingCash()
-        StageFactory.createStageWithObstacles(nextStage, level)
+        StageFactory.createStage(nextStage, level)
         if (!nextStage.isInitialized())
             return  // something went wrong, possibly trying to create a level that doesn't exist
         gameActivity.runOnUiThread {
@@ -414,7 +414,7 @@ class Game(val gameActivity: MainGameActivity) {
         }
     }
 
-    fun setMaxPlayedStage(currentStage: Stage.Identifier, resetProgress: Boolean = false)
+    private fun setMaxPlayedStage(currentStage: Stage.Identifier, resetProgress: Boolean = false)
             /** when completing a level, record the level as highest completed, but only if the old max level is not higher.
              * @param currentStage number of the level successfully completed
              * @param resetProgress If true, forces resetting the max stage to the given currentStage

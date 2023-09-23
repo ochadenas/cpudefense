@@ -39,11 +39,10 @@ class Stage(var theGame: Game) {
     var waves = CopyOnWriteArrayList<Wave>()
 
     enum class Type { REGULAR, FINAL }
-    var type = Type.REGULAR
 
     data class Data (
-        var ident: Stage.Identifier = Identifier(series=1, number=0),
-        var series: Int = 1,
+        var ident: Identifier = Identifier(series=1, number=0),
+        var type: Type = Type.REGULAR,
         var gridSizeX: Int = 1,
         var gridSizeY: Int = 1,
         var maxWaves: Int = 0,
