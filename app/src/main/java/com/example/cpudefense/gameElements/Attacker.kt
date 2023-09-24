@@ -332,12 +332,15 @@ open class Attacker(network: Network, type: Representation = Representation.BINA
 
         fun createFromData(stage: Stage, data: Data): Attacker
         {
-            val attacker = Attacker(stage.network, data.representation, data.number, data.vehicle.speed)
+            val attacker = if (data.isCoin)
+                Cryptocoin(stage.network, data.number, data.vehicle.speed)
+            else
+                Attacker(stage.network, data.representation, data.number, data.vehicle.speed)
             attacker.data = data.vehicle
             attacker.attackerData = data
             attacker.onTrack = stage.tracks[data.vehicle.trackId]
             attacker.setOntoLink(stage.network.links[data.vehicle.linkId], stage.chips[data.vehicle.startNodeId])
-            attacker.setCurrentSpeed()
+            // TODO : distancefromlastnode ist hier immer 0! das ist ein Fehelr!
             return attacker
         }
     }
