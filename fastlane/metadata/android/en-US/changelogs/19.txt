@@ -1,0 +1,13 @@
+New Features:
+- graphical improvements throughout the game
+- new welcome screen design
+- heroes added: Bruce Schneier, Benoit B. Mandelbrot
+
+Bugfixes:
+- fixed several bug when resuming game (unfortunately, not all of them)
+- 'turbo' level was still available after restarting the game
+
+Miscellaneous:
+- cleanup of hero "tech tree"
+
+
