@@ -9,5 +9,3 @@ Bugfixes:
 
 Miscellaneous:
 - cleanup of hero "tech tree"
-
-
