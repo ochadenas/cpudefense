@@ -122,7 +122,6 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
                 chipData.color = resources.getColor(R.color.chips_acc_foreground)
                 chipData.glowColor = resources.getColor(R.color.chips_acc_glow)
                 chipData.value = Game.basePrice[ChipUpgrades.ACC] ?: 10
-                // val modifier: Float = network.theGame.gameUpgrades[Hero.Type.INCREASE_CHIP_ACC_SPEED]?.getStrength() ?: 1f
                 val modifier = 1f
                 chipData.cooldown = (16f / modifier).toInt()
                 data.range = 2f
@@ -403,7 +402,8 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
         }
 
         // discard the alternatives that are not allowed for this stage,
-        // but only for series 1
+        // but only for series 1.
+        // In series 2, all upgrades are always possible
         if (network.theGame.currentStage?.getSeries() == 1) {
             val allowed = network.theGame.currentStage?.data?.chipsAllowed ?: setOf()
             for (a in alternatives)
@@ -419,7 +419,9 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
                 Pair(1.0f, -0.5f),
                 Pair(1.0f, +0.5f),
                 Pair(2.0f, -0.5f),
-                Pair(2.0f, +0.5f)
+                Pair(2.0f, +0.5f),
+                Pair(1.0f, -1.5f),
+                Pair(2.0f, -1.5f)
             )
             val factorY = 1.5 * rect.height()
             val factorX: Float

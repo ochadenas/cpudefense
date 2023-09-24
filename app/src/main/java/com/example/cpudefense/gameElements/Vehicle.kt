@@ -53,9 +53,7 @@ open class Vehicle(val theNetwork: Network): GameElement() {
                 setOntoLink(onTrack?.nextLink(it), endNode) // get next link on track, if any
                 data.distanceTravelledOnLink = 0f // and start at the beginning of the link
             }
-            distanceFromLastNode = data.distanceTravelledOnLink
-            // distanceToNextNode = it.getLength() - data.distanceTravelledOnLink
-            distanceToNextNode = it.lengthOnGrid - data.distanceTravelledOnLink
+            setCurrentDistanceOnLink(it)
         }
      }
 
@@ -91,12 +89,19 @@ open class Vehicle(val theNetwork: Network): GameElement() {
         data.startNodeId = startNode?.data?.ident ?: -1
         data.endNodeId = endNode?.data?.ident ?: -1
         onLink = link
+        setCurrentDistanceOnLink(link)
         setCurrentSpeed()
     }
 
     fun setCurrentSpeed()
     {
         currentSpeed = 0.16f * data.speed * theNetwork.theGame.globalSpeedFactor
+    }
+
+    fun setCurrentDistanceOnLink(link: Link)
+    {
+        distanceFromLastNode = data.distanceTravelledOnLink
+        distanceToNextNode = link.lengthOnGrid - data.distanceTravelledOnLink
     }
 
     fun setOntoTrack(track: Track?)

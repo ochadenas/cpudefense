@@ -78,6 +78,11 @@ open class Node(val theNetwork: Network?, x: Float, y: Float): GameElement()
 
     fun distanceTo(vehicle: Vehicle): Float?
     {
+        if (vehicle.startNode != this && vehicle.endNode != this)
+        {
+            // something went wrong
+            return null
+        }
         val dist = distanceToVehicle[vehicle]
         if (dist != null)
             return if (dist>0) dist else -dist
