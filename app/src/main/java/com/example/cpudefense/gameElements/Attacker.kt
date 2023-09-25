@@ -117,6 +117,14 @@ open class Attacker(network: Network, type: Representation = Representation.BINA
         changeNumberTo(n)
     }
 
+    fun extraCashGained(): Int
+    /** possible bonus on kill due to hero */
+    {
+        val strength = theNetwork.theGame.gameUpgrades[Hero.Type.GAIN_CASH_ON_KILL]?.getStrength() ?: return 0
+        val extraCash = Random.nextFloat() * strength * 2.0f // this gives an expectation value of 'strength'
+        return extraCash.toInt()
+    }
+
     open fun onShot(type: Chip.ChipType, power: Int): Boolean
             /** function that gets called when a the attacker gets "hit".
              * @param type the chip's type that effectuates the attack
@@ -124,7 +132,6 @@ open class Attacker(network: Network, type: Representation = Representation.BINA
              * @return true if the attacker gets destroyed, false otherwise
              */
     {
-        val extraCashGained = theNetwork.theGame.gameUpgrades[Hero.Type.GAIN_CASH_ON_KILL]?.getStrength()?.toInt() ?: 0 // possible bonus
         when (type)
         {
             Chip.ChipType.SUB ->
@@ -133,7 +140,7 @@ open class Attacker(network: Network, type: Representation = Representation.BINA
                 if (newNumber < 0)
                 {
                     theNetwork.theGame.gameActivity.theGameView.theEffects?.explode(this)
-                    theNetwork.theGame.scoreBoard.addCash(attackerData.bits + extraCashGained)
+                    theNetwork.theGame.scoreBoard.addCash(attackerData.bits + extraCashGained())
                     return true
                 }
                 else
@@ -147,7 +154,7 @@ open class Attacker(network: Network, type: Representation = Representation.BINA
             Chip.ChipType.MEM ->
             {
                 theNetwork.theGame.gameActivity.theGameView.theEffects?.fade(this)
-                theNetwork.theGame.scoreBoard.addCash(attackerData.bits + extraCashGained)
+                theNetwork.theGame.scoreBoard.addCash(attackerData.bits + extraCashGained())
                 return false // remove() is done after fading
             }
             Chip.ChipType.ADD ->

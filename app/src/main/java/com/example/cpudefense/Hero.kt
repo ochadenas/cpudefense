@@ -347,8 +347,8 @@ class Hero(var game: Game, type: Type): Fadable {
             Type.DECREASE_ATT_FREQ -> return 1.0f - level * 0.05f
             Type.DECREASE_ATT_SPEED -> return 1.0f - level * 0.04f
             Type.DECREASE_ATT_STRENGTH -> return 1.0f - level * 0.1f
-            Type.GAIN_CASH -> return (8f - level) * 11
-            Type.GAIN_CASH_ON_KILL -> return level * 1.0f
+            Type.GAIN_CASH -> return (8f - level) * 9
+            Type.GAIN_CASH_ON_KILL -> return level * 0.5f
             Type.INCREASE_REFUND -> return (50f + level * 10)
             Type.INCREASE_CHIP_SUB_RANGE -> return 1.0f + level / 10f
             Type.INCREASE_CHIP_SHR_RANGE -> return 1.0f + level / 10f
@@ -388,9 +388,13 @@ class Hero(var game: Game, type: Type): Fadable {
     }
 
     fun getPrice(level: Int): Int
+    /**
+     * Cost of next hero upgrade.
+     * @param level The current level of the hero
+     * @return the cost (in coins) for reaching the next level
+     */
     {
-        // return sqrt(level.toDouble()).toInt()+1
-        return (level / 2 ) + 1
+        return level + 1
     }
 
     override fun fadeDone(type: Fader.Type) {
