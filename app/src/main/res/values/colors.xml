@@ -19,7 +19,7 @@
     <color name="chips_sub_glow">#AFFA34</color>
     <color name="chips_shr_foreground">#DA649DF3</color>
     <color name="chips_shr_glow">#DAD2DDEF</color>
-    <color name="chips_mem_foreground">#774CC3</color>
+    <color name="chips_mem_foreground">#895ADC</color>
     <color name="chips_mem_glow">#BCA7E1</color>
     <color name="chips_acc_foreground">#FFEB3B</color>
     <color name="chips_acc_glow">#FFF7AF</color>

@@ -153,4 +153,5 @@ Ein Teil der Information wird dir dabei zurückerstattet."
     <string name="HERO_EFFECT_GAININFO">Erhöht die durch Zerstören der Angreifer gewonnene Information</string>
     <string name="schneier">Bruce Schneier ist ein Experte für Kryptographie und Informationssicherheit. Er hat wichtige Bücher zu diesem Thema geschrieben, vor allem \"Applied Cryptography\", und mehrere kryptographische Algorithmen entwickelt.\n        \nEr scheut sich nicht, Regierungen oder Großkonzerne zu kritisieren, wenn er der Meinung ist, dass ihre Maßnahmen kontraproduktiv für die Sicherheit sind oder das Recht auf Privatsphäre verletzen.</string>
     <string name="cost_desc">[Kosten: %d]</string>
+    <string name="hopper">\nGrace Brewster Murray Hopper hatte die Idee,  Computerprogramme  statt als Abfolge von Einsen und Nullen in einer für den Menschen lesbaren Sprache zu formulieren. \n\nSie entwickelte die Programmiersprache FLOW-MATIC und erfand damit den ersten Compiler.</string>
 </resources>

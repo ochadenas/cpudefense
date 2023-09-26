@@ -13,9 +13,12 @@ class StageFactory {
                 val possibleTypes = setOf( Chip.ChipType.EMPTY, Chip.ChipType.ADD, Chip.ChipType.SHL)
                 val numberOfObstacles = when (level.number)
                 {
-                    1 -> 1
-                    2 -> 1
-                    else -> 2
+                    1 -> 0
+                    2 -> 0
+                    in 3 .. 5 -> 1
+                    in 6 .. 10 -> 2
+                    11 -> 1
+                    else -> 3
                 }
                 for (i in 1 .. numberOfObstacles)  // set or upgrade 2 slots
                 {
@@ -402,7 +405,8 @@ class StageFactory {
                         createChip(10, 5, 1)
                         createChip(40, 5, 2)
                         createChip(10, 20, 3)
-                        createChip(25, 20, 4)
+                        createChip(25, 10, 4)
+                        createChip(25, 30, 9)
                         createChip(40, 20, 5)
                         createChip(10, 35, 6)
                         createChip(25, 35, 7, type = Chip.ChipType.SUB)
@@ -416,20 +420,21 @@ class StageFactory {
                         createLink(51, 4, 4, mask = 0x07)
                         createLink(2, 5, 5, mask = 0x07)
                         createLink(3, 6, 6, mask = 0x0E)
-                        createLink(4, 7, 7, mask = 0x07)
+                        createLink(4, 9, 7, mask = 0x07)
+                        createLink(9, 7, 12, mask = 0x07)
                         createLink(5, 8, 8, mask = 0x07)
                         createLink(6, 999, 9, mask = 0x0E)
                         createLink(7, 999, 10, mask = 0x07)
                         createLink(8, 999, 11, mask = 0x07)
 
                         createTrack(listOf(1, 3, 6, 9), 0)
-                        createTrack(listOf(4, 7, 10), 1)
+                        createTrack(listOf(4, 7, 12, 10), 1)
                         createTrack(listOf(2, 5, 8, 11), 2)
 
-                        createWave(10, 1, .125f, 1.2f)
-                        createWave(10, 1, .125f, 1.1f)
-                        createWave(15, 2, .100f, 1.0f)
-                        createWave(20, 3, .100f, 1.0f)
+                        createWave(12, 1, .125f, 1.2f)
+                        createWave(12, 1, .125f, 1.1f)
+                        createWave(16, 2, .110f, 1.0f)
+                        createWave(20, 3, .110f, 1.0f)
                         createWave(20, 4, .100f, 1.0f)
                         createWave(20, 5, .125f, 1.0f)
                         createWave(20, 6, .05f, 1f, coins = 1)

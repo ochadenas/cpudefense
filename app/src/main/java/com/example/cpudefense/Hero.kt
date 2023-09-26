@@ -23,6 +23,7 @@ class Hero(var game: Game, type: Type): Fadable {
     - Berners-Lee?
     - Torvalds
     - Sid Meier
+    - Leibniz
      */
 
     enum class Type { INCREASE_CHIP_SUB_SPEED, INCREASE_CHIP_SUB_RANGE,
@@ -366,13 +367,13 @@ class Hero(var game: Game, type: Type): Fadable {
         return level ?: 0
     }
 
-    fun isAvailable(): Boolean
+    fun isAvailable(stageIdentifier: Stage.Identifier): Boolean
             /** function that evaluates certain restrictions on upgrades.
              * Some upgrades require others to reach a certain level, etc.
+             * @param stageIdentifier cards may depend on the stage and/or series
              */
     {
-        val currentStage = game.currentStage?.data?.ident ?: Stage.Identifier()
-        if (currentStage.series > 1)  // display instructions only for series 1
+        if (stageIdentifier.series > 1)  // restrictions only apply for series 1
             return true
         return when (data.type) {
             Type.DECREASE_ATT_STRENGTH ->   upgradeLevel(Type.DECREASE_ATT_SPEED) >= 3
@@ -383,7 +384,7 @@ class Hero(var game: Game, type: Type): Fadable {
             Type.INCREASE_REFUND ->         upgradeLevel(Type.DECREASE_UPGRADE_COST) >= 3
             Type.DECREASE_UPGRADE_COST ->   upgradeLevel(Type.GAIN_CASH) >= 3
             Type.GAIN_CASH ->               upgradeLevel(Type.INCREASE_STARTING_CASH) >= 3
-            Type.INCREASE_CHIP_MEM_SPEED -> (game.currentStage?.getLevel() ?: 0) >= 14
+            Type.INCREASE_CHIP_MEM_SPEED -> stageIdentifier.number >= 14
             Type.INCREASE_CHIP_SUB_RANGE -> upgradeLevel(Type.INCREASE_CHIP_SUB_SPEED) >= 5
             Type.INCREASE_CHIP_SHR_RANGE -> upgradeLevel(Type.INCREASE_CHIP_SHR_SPEED) >= 5
             Type.INCREASE_CHIP_MEM_RANGE -> upgradeLevel(Type.INCREASE_CHIP_MEM_SPEED) >= 5
@@ -582,7 +583,14 @@ class Hero(var game: Game, type: Type): Fadable {
                     vitae = game.resources.getString(R.string.pascal)
                     picture = BitmapFactory.decodeResource(game.resources, R.drawable.pascal)
                 }
-                Type.INCREASE_CHIP_MEM_RANGE -> {}
+                Type.INCREASE_CHIP_MEM_RANGE ->
+                {
+                    name = "Hopper"
+                    fullName = "Grace Hopper"
+                    effect = game.resources.getString(R.string.HERO_EFFECT_RANGE).format("MEM")
+                    vitae = game.resources.getString(R.string.hopper)
+                    picture = BitmapFactory.decodeResource(game.resources, R.drawable.hopper)
+                }
             }
         }
 

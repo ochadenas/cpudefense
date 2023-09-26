@@ -104,7 +104,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
                 var modifier: Float = network.theGame.gameUpgrades[Hero.Type.INCREASE_CHIP_SHR_SPEED]?.getStrength() ?: 1f
                 chipData.cooldown = (32f / modifier).toInt()
                 modifier = network.theGame.gameUpgrades[Hero.Type.INCREASE_CHIP_SHR_RANGE]?.getStrength() ?: 1f
-                data.range = 2f
+                data.range = 2f * modifier
             }
             ChipType.MEM -> {
                 chipData.power = 1
@@ -112,9 +112,10 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
                 chipData.color = resources.getColor(R.color.chips_mem_foreground)
                 chipData.glowColor = resources.getColor(R.color.chips_mem_glow)
                 chipData.value = Game.basePrice[ChipUpgrades.MEM] ?: 20
-                val modifier: Float = network.theGame.gameUpgrades[Hero.Type.INCREASE_CHIP_MEM_SPEED]?.getStrength() ?: 1f
+                var modifier: Float = network.theGame.gameUpgrades[Hero.Type.INCREASE_CHIP_MEM_SPEED]?.getStrength() ?: 1f
                 chipData.cooldown = (128f / modifier).toInt()
-                data.range = 2f
+                modifier = network.theGame.gameUpgrades[Hero.Type.INCREASE_CHIP_SHR_RANGE]?.getStrength() ?: 1f
+                data.range = 2f * modifier
             }
             ChipType.ACC -> {
                 chipData.power = 1

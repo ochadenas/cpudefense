@@ -62,7 +62,7 @@ class Marketplace(val game: Game): GameElement()
             var card: Hero? = game.gameUpgrades[type]
             if (card == null)
                card = Hero.createFromData(game, Hero.Data(type))
-            if (card.isAvailable()) {
+            if (card.isAvailable(level)) {
                 card.createBiography(biographyArea)
                 newUpgrades.add(card)
             }
@@ -98,7 +98,7 @@ class Marketplace(val game: Game): GameElement()
     {
         val bottomMargin = 40
         buttonFinish = Button(game.resources.getString(R.string.button_resume),
-            textsize = Game.purchaseButtonTextSize * game.resources.displayMetrics.scaledDensity,
+            textSize = Game.purchaseButtonTextSize * game.resources.displayMetrics.scaledDensity,
             style = 1)
         buttonFinish?.let {
             Fader(game, it, Fader.Type.APPEAR, Fader.Speed.SLOW)
@@ -106,7 +106,7 @@ class Marketplace(val game: Game): GameElement()
             // it.area.setBottomRight(myArea.right-50, myArea.bottom-bottomMargin)
         }
         buttonRefund = Button(game.resources.getString(R.string.button_refund),
-            textsize = Game.purchaseButtonTextSize * game.resources.displayMetrics.scaledDensity,
+            textSize = Game.purchaseButtonTextSize * game.resources.displayMetrics.scaledDensity,
             style = 1)
         buttonRefund?.let {
             Fader(game, it, Fader.Type.APPEAR, Fader.Speed.SLOW)
@@ -114,7 +114,7 @@ class Marketplace(val game: Game): GameElement()
             // it.area.setBottomRight(myArea.right-50, myArea.bottom - bottomMargin - 2*(buttonFinish?.area?.height() ?: 200))
         }
         buttonPurchase = Button(game.resources.getString(R.string.button_purchase),
-            textsize = Game.purchaseButtonTextSize * game.resources.displayMetrics.scaledDensity,
+            textSize = Game.purchaseButtonTextSize * game.resources.displayMetrics.scaledDensity,
             style = 1)
         buttonPurchase?.let {
             Fader(game, it, Fader.Type.APPEAR, Fader.Speed.SLOW)

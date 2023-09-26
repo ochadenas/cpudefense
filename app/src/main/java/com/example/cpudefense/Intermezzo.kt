@@ -120,7 +120,7 @@ class Intermezzo(var game: Game): GameElement(), Fadable {
     {
         val bottomMargin = 40
         buttonContinue = Button(textOnContinueButton,
-            textsize = Game.computerTextSize * game.resources.displayMetrics.scaledDensity,
+            textSize = Game.computerTextSize * game.resources.displayMetrics.scaledDensity,
             color = game.resources.getColor(R.color.text_green))
         val buttonTop = myArea.bottom - (buttonContinue?.area?.height() ?: 20) - bottomMargin
         buttonContinue?.let {
@@ -131,7 +131,7 @@ class Intermezzo(var game: Game): GameElement(), Fadable {
         if (level.number > 6 || level.series > 1)  // level 6 in series 1 is the first one where coins may be present
         {
             buttonPurchase = Button(game.resources.getString(R.string.button_marketplace),
-                textsize = Game.computerTextSize * game.resources.displayMetrics.scaledDensity,
+                textSize = Game.computerTextSize * game.resources.displayMetrics.scaledDensity,
                 color = game.resources.getColor(R.color.text_blue))
             buttonPurchase?.let {
                 Fader(game, it, Fader.Type.APPEAR, Fader.Speed.SLOW)

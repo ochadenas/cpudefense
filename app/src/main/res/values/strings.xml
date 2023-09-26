@@ -167,6 +167,7 @@ The record-selling C64 not only had an enormous 64 kiB of RAM, it also featured 
 "Blaise Pascal was a polymath in many fields of mathematics, philosophy and physics. For the later information age, his calculating machines, the \'Pascalines\', were an early precursor.
 
 The programming language Pascal is named after him."</string>
+    <string name="hopper">"\nGrace Brewster Murray Hopper had the idea that computer programs could be written in human-readable language instead of as sequences of Ones and Zeroes. She designed the FLOW-MATIC programming language, and thus invented the first compiler.\n    "</string>
     <string name="mandelbrot">Benoît Mandelbrot was the most important founder of fractal geometry, which can not only be used to describe many structures in nature very well, but also to create fantastic graphics on the computer. \n\nThe grpahical representation of the Mandelbrot set went viral and founded a new age of computer art.</string>
     <string name="schneier">"Bruce Schneier is an expert on cryptography and information security. He has written important books on the subject, most notably 'Applied Cryptography', and has designed several cryptographic algorithms.\n        \nHe is not afraid of criticizing governments or global companies if he deems their actions counterproductive to security or violating the right of privacy.\n "</string>
     <string name="settings_title">Settings</string>
