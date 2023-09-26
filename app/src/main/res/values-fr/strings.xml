@@ -100,4 +100,5 @@
     <string name="shortdesc_info_on_kill">Gain d\'info additionnel</string>
     <string name="HERO_EFFECT_GAININFO">augmente le gain d\'information en détruisant les attaquants</string>
     <string name="schneier">"Bruce Schneier est un expert en cryptographie et en sécurité de l'information. Il a écrit d'importants ouvrages sur le sujet, notamment \"Applied Cryptography\", et a développé plusieurs algorithmes cryptographiques.\n        \nIl n'hésite pas à critiquer les gouvernements ou les entreprises internationales s'il estime que leurs mesures vont à l'encontre de la sécurité ou violent le droit à la vie privée.\n "</string>
+    <string name="cost_desc">[coût : %s]</string>
 </resources>

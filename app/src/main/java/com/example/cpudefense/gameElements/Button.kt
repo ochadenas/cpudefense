@@ -33,8 +33,8 @@ class Button(var text: String, val textsize: Float, val color: Int = Color.GREEN
         textPaint.style = Paint.Style.FILL
         textPaint.typeface = Typeface.MONOSPACE
         textPaint.textSize = textsize
-        textPaint.getTextBounds(text, 0, text.length, area)
-        area.inflate(area.height()/2)
+        textPaint.getTextBounds("text", 0, text.length, area)  // sample text without descender
+        area.inflate(area.height())
         touchableArea = Rect(area).inflate(textsize.toInt())
     }
 

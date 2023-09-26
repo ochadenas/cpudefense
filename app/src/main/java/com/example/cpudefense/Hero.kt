@@ -56,6 +56,7 @@ class Hero(var game: Game, type: Type): Fadable {
     private var shortDesc: String = "effect description"
     private var strengthDesc: String = "format string"
     private var upgradeDesc: String = " -> next level"
+    private var costDesc: String = "[cost: ]"
     private var hero: Hero = Hero(type)
     var heroOpacity = 0f
     private var levelIndicator = mutableListOf<Rect>()
@@ -307,7 +308,7 @@ class Hero(var game: Game, type: Type): Fadable {
             {
                 shortDesc = game.resources.getString(R.string.shortdesc_range)
                 strengthDesc = "x %.2f".format(strength)
-                    upgradeDesc = " -> %.2f".format(next)
+                upgradeDesc = " -> %.2f".format(next)
             }  
             Type.INCREASE_CHIP_SHR_RANGE ->
             {
@@ -327,9 +328,12 @@ class Hero(var game: Game, type: Type): Fadable {
                 upgradeDesc = " -> %.2f".format(next)
             }
         }
-        upgradeDesc = game.resources.getString(R.string.upgrade_format).format(upgradeDesc, getPrice(data.level))
-        if (data.level >= maxLevel)
+        val cost = getPrice(data.level)
+        costDesc = game.resources.getString(R.string.cost_desc).format(cost)
+        if (data.level >= maxLevel) {
             upgradeDesc = ""
+            costDesc = ""
+        }
     }
 
     fun getStrength(level: Int = data.level): Float
@@ -394,9 +398,14 @@ class Hero(var game: Game, type: Type): Fadable {
      * @return the cost (in coins) for reaching the next level
      */
     {
-        return level + 1
+        return if (level == 0) 1 else level
     }
 
+    fun upgradeInfo(): String
+    /** displays a text with info on the next available upgrade */
+    {
+        return "%s %s\n%s %s".format(shortDesc, strengthDesc, upgradeDesc, costDesc)
+    }
     override fun fadeDone(type: Fader.Type) {
         graphicalState = GraphicalState.NORMAL
         heroOpacity = 1.0f

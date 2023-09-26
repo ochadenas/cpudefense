@@ -2,6 +2,7 @@ package com.example.cpudefense
 
 import android.graphics.*
 import android.view.MotionEvent
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import com.example.cpudefense.effects.*
 import com.example.cpudefense.gameElements.Button
@@ -169,6 +170,15 @@ class Marketplace(val game: Game): GameElement()
                     Flipper(game, coin, Flipper.Type.HORIZONTAL)
         }
 
+        return false
+    }
+
+    fun onLongPress(event: MotionEvent): Boolean {
+        for (card in upgrades)
+            if (card.areaOnScreen.contains(event.x.toInt(), event.y.toInt())) {
+                Toast.makeText(game.gameActivity, card.upgradeInfo(), Toast.LENGTH_LONG).show()
+                return true
+            }
         return false
     }
 

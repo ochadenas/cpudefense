@@ -21,6 +21,7 @@
     <string name="button_marketplace">Heroes</string>
     <string name="button_refund">Reset all</string>
     <string name="button_purchase">Hire</string>
+    <string name="cost_desc">[cost: %d]</string>
     <string name="level_entry">Level %d</string>
     <string name="level_selector">Level Selector</string>
     <string name="query_reset">Do you want to reset all heroes?</string>

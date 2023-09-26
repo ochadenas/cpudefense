@@ -123,7 +123,14 @@ class GameView(context: Context, val theGame: Game):
     }
 
     override fun onLongPress(p0: MotionEvent?) {
-        theGame.currentStage?.network?.onLongPress(p0)
+        p0?.let {
+            when (theGame.state.phase)
+            {
+                Game.GamePhase.RUNNING -> theGame.currentStage?.network?.onLongPress(p0)
+                Game.GamePhase.MARKETPLACE -> theGame.marketplace.onLongPress(p0)
+                else -> {}
+            }
+        }
     }
 
     override fun onFling(p0: MotionEvent?, p1: MotionEvent?, p2: Float, p3: Float): Boolean {
