@@ -557,6 +557,7 @@ class Hero(var game: Game, type: Type): Fadable {
                     name = "Schneier"
                     fullName = "Bruce Schneier"
                     effect = game.resources.getString(R.string.HERO_EFFECT_ATTSTRENGTH)
+                    vitae = game.resources.getString(R.string.schneier)
                     picture = BitmapFactory.decodeResource(game.resources, R.drawable.schneier)
                 }
                 Type.INCREASE_REFUND ->
