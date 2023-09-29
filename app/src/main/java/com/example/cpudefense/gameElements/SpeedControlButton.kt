@@ -8,7 +8,7 @@ import com.example.cpudefense.effects.Fader
 
 class SpeedControlButton(val game: Game, var type: Type = Type.PAUSE, val panel: SpeedControl): Fadable
 {
-    enum class Type { PAUSE, FAST, NORMAL }
+    enum class Type { PAUSE, FAST, NORMAL, RETURN }
 
     var actualSize = Game.speedControlButtonSize * game.resources.displayMetrics.density.toInt()
     var area = Rect(0, 0, actualSize, actualSize)
@@ -44,6 +44,9 @@ class SpeedControlButton(val game: Game, var type: Type = Type.PAUSE, val panel:
                     panel.resetButtons()
                     type = Type.NORMAL
                 }
+                Type.RETURN -> {
+                    game.gameActivity.showReturnDialog()
+                }
 
             }
             return true
@@ -60,6 +63,7 @@ class SpeedControlButton(val game: Game, var type: Type = Type.PAUSE, val panel:
             Type.PAUSE -> bitmap = game.pauseIcon
             Type.NORMAL -> bitmap = game.playIcon
             Type.FAST -> bitmap = game.fastIcon
+            Type.RETURN -> bitmap = game.returnIcon
         }
         canvas.drawRect(area, paint)
         canvas.drawBitmap(bitmap, null, area, paint)

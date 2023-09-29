@@ -10,6 +10,7 @@ import com.example.cpudefense.utils.setCenter
 class SpeedControl(var game: Game) {
     private var button1 = SpeedControlButton(game, SpeedControlButton.Type.FAST, this)
     private var button2 = SpeedControlButton(game, SpeedControlButton.Type.PAUSE, this)
+    private var button_return = SpeedControlButton(game, SpeedControlButton.Type.RETURN, this)
     private var area = Rect(0,0,0,0)
 
     fun setSize(parentArea: Rect)
@@ -22,6 +23,8 @@ class SpeedControl(var game: Game) {
         area.top = area.bottom - actualButtonSize
         button1.area.setCenter(area.left + actualButtonSize / 2, area.centerY())
         button2.area.setCenter(area.right - actualButtonSize / 2, area.centerY())
+        // put the 'return' button on the other side
+        button_return.area.setCenter(parentArea.width()-button2.area.centerX(), area.centerY())
     }
 
     fun resetButtons()
@@ -31,7 +34,7 @@ class SpeedControl(var game: Game) {
     }
 
     fun onDown(p0: MotionEvent): Boolean {
-        return button1.onDown(p0) || button2.onDown(p0)
+        return button1.onDown(p0) || button2.onDown(p0) || button_return.onDown(p0)
     }
 
     fun display(canvas: Canvas, viewport: Viewport) {
@@ -39,5 +42,6 @@ class SpeedControl(var game: Game) {
             return
         button1.display(canvas)
         button2.display(canvas)
+        button_return.display(canvas)
     }
 }

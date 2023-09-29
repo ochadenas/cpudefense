@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.Window
 import android.widget.FrameLayout
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -136,6 +137,17 @@ class MainGameActivity : Activity() {
             mainDelay = Game.defaultMainDelay
             theGame.background?.frozen = false
         }
+    }
+
+    fun showReturnDialog()
+    {
+        val builder = AlertDialog.Builder(this)
+        builder.setMessage(resources.getString(R.string.query_quit))
+            .setCancelable(true)
+            .setPositiveButton(resources.getString(R.string.replay)) { dialog, id -> dialog.dismiss() }
+            .setNegativeButton(resources.getString(R.string.return_to_main_menu)) { dialog, id -> dialog.dismiss() }
+        val alert = builder.create()
+        alert.show()
     }
 
     private fun update()

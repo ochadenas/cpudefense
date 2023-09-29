@@ -57,6 +57,15 @@
             android:text="@string/settings_show_atts_in_range"
             android:textColor="#FFFFFF" />
 
+        <Switch
+            android:id="@+id/switch_use_large_buttons"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="savePrefs"
+            android:text="@string/settings_use_large_buttons"
+            android:textColor="#FFFFFF" />
+
+
     </LinearLayout>
 
     <ImageView
@@ -99,5 +108,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/about_title_view" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
