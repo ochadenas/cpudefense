@@ -112,6 +112,7 @@ class WelcomeActivity : AppCompatActivity()
     {
         val intent = Intent(this, LevelSelectActivity::class.java)
         intent.putExtra("TURBO_AVAILABLE", turboSeriesAvailable)
+        intent.putExtra("NEXT_SERIES", nextLevelToPlay.series)
         startActivity(intent)
     }
 

@@ -54,7 +54,12 @@ class LevelSelectActivity : AppCompatActivity() {
                 }
             })
         )
-        prepareStageSelector()
+        val currentSeries = intent.getIntExtra("NEXT_SERIES", 1)
+        prepareStageSelector(currentSeries)
+        // set the active tab depending on the current series
+        val tab = tabLayout.getTabAt(currentSeries-1);
+        tab?.select();
+
         // tabLayout.setupWithViewPager(findViewById(R.id.pager))
     }
 
