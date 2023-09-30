@@ -11,7 +11,7 @@ import com.example.cpudefense.gameElements.Vehicle
 import com.example.cpudefense.utils.makeSquare
 import com.example.cpudefense.utils.setCenter
 
-open class Node(val theNetwork: Network?, x: Float, y: Float): GameElement()
+open class Node(val theNetwork: Network, x: Float, y: Float): GameElement()
 {
 
     data class Data
@@ -37,7 +37,7 @@ open class Node(val theNetwork: Network?, x: Float, y: Float): GameElement()
         actualRect?.let { rect ->
             val paint = Paint()
             paint.color =
-                theNetwork?.theGame?.resources?.getColor(R.color.network_background) ?: Color.BLACK
+                theNetwork.theGame.resources.getColor(R.color.network_background) ?: Color.BLACK
             paint.style = Paint.Style.FILL
             canvas.drawRect(rect, paint)
             paint.color = Color.WHITE

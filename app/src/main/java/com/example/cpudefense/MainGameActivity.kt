@@ -69,7 +69,7 @@ class MainGameActivity : Activity() {
              */
     {
         super.onResume()
-        loadSettings() // TODO
+        loadSettings()
         when
         {
             resumeGame -> resumeCurrentGame()
@@ -152,10 +152,21 @@ class MainGameActivity : Activity() {
         val builder = AlertDialog.Builder(this)
         builder.setMessage(resources.getString(R.string.query_quit))
             .setCancelable(true)
-            .setPositiveButton(resources.getString(R.string.replay)) { dialog, id -> dialog.dismiss() }
-            .setNegativeButton(resources.getString(R.string.return_to_main_menu)) { dialog, id -> dialog.dismiss() }
+            .setPositiveButton(resources.getString(R.string.replay)) { dialog, id -> replayStage() }
+            .setNegativeButton(resources.getString(R.string.return_to_main_menu)) { dialog, id -> returnToMainMenu() }
         val alert = builder.create()
         alert.show()
+    }
+    
+    fun returnToMainMenu()
+    {
+        saveState()
+        finish()
+    }
+    
+    fun replayStage()
+    {
+        theGame.currentStage?.let { startGameAtLevel(it.data.ident) }
     }
 
     private fun update()
