@@ -37,7 +37,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
     val resources = network.theGame.resources
 
     // some chips have a 'register' where an attacker's value can be held.
-    var internalRegister: Attacker? = null
+    private var internalRegister: Attacker? = null
 
     private var cooldownTimer = 0
     private var upgradePossibilities = CopyOnWriteArrayList<ChipUpgrade>()
@@ -178,30 +178,28 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
         /* this is put here because the viewport / zoom factor may change.
         However, it may be possible to remove this from display()
          */
-        theNetwork?.let {
-            val sizeOnScreen = it.distanceBetweenGridPoints()
-            if (sizeOnScreen != null) {
-                widthOnScreen = sizeOnScreen.first * Game.chipSize.x.toInt()
-                heightOnScreen = sizeOnScreen.second * Game.chipSize.y.toInt()
-                actualRect = Rect(0, 0, widthOnScreen, heightOnScreen)
-            }
-            outlineWidth = 2f * it.theGame.resources.displayMetrics.scaledDensity
+        val sizeOnScreen = theNetwork.distanceBetweenGridPoints()
+        sizeOnScreen?.let {
+            widthOnScreen = it.first * Game.chipSize.x.toInt()
+            heightOnScreen = it.second * Game.chipSize.y.toInt()
+            actualRect = Rect(0, 0, widthOnScreen, heightOnScreen)
         }
+        outlineWidth = 2f * theNetwork.theGame.resources.displayMetrics.scaledDensity
         actualRect?.setCenter(viewport.gridToViewport(posOnGrid))
         actualRect?.let { displayRect(canvas, it) }
-        if (network.theGame.global.configShowAttsInRange && chipData.type != ChipType.EMPTY)
+        if (network.theGame.gameActivity.settings.configShowAttsInRange && chipData.type != ChipType.EMPTY)
             actualRect?.let { displayLineToAttacker(canvas, attackersInRange(), it) }
     }
 
-    fun displayLineToAttacker(canvas: Canvas, attackersInRange: List<Attacker>, chipRect: Rect)
+    private fun displayLineToAttacker(canvas: Canvas, attackersInRange: List<Attacker>, chipRect: Rect)
     {
         paintLines.color = chipData.color
-        attackersInRange.forEach(){ att ->
+        attackersInRange.forEach { att ->
                 canvas.drawLine(chipRect.exactCenterX(), chipRect.exactCenterY(), att.actualRect.exactCenterX(), att.actualRect.exactCenterY(), paintLines)
         }
     }
 
-    fun displayRect(canvas: Canvas, rect: Rect)
+    private fun displayRect(canvas: Canvas, rect: Rect)
     {
         /* draw background */
         paintBackground.color = defaultBackgroundColor
@@ -234,7 +232,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
             upgrade.display(canvas)
     }
 
-    fun attackerInRange(attacker: Attacker): Boolean
+    private fun attackerInRange(attacker: Attacker): Boolean
     {
         val dist: Float? = distanceTo(attacker)
         if (dist != null) {
@@ -278,10 +276,10 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
     {
         internalRegister = attacker
         attacker?.let {
-            val extraCashGained = theNetwork?.theGame?.gameUpgrades?.get(Hero.Type.GAIN_CASH_ON_KILL)?.getStrength()?.toInt() ?: 0 // possible bonus
-            theNetwork?.theGame?.scoreBoard?.addCash(it.attackerData.bits + extraCashGained)
+            val extraCashGained = theNetwork.theGame.gameUpgrades[Hero.Type.GAIN_CASH_ON_KILL]?.getStrength()?.toInt() ?: 0 // possible bonus
+            theNetwork.theGame.scoreBoard.addCash(it.attackerData.bits + extraCashGained)
             it.immuneTo = this
-            theNetwork?.theGame?.gameActivity?.theGameView?.theEffects?.fade(it)
+            theNetwork.theGame.gameActivity.theGameView.theEffects?.fade(it)
         }
     }
 
@@ -430,8 +428,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
                 factorX = -1.2f * rect.width()
             else
                 factorX = +1.2f * rect.width()
-            var i = 0
-            for (upgrade in alternatives) {
+            for ((i, upgrade) in alternatives.withIndex()) {
                 val chipUpgrade = ChipUpgrade(
                     this, upgrade,
                     rect.centerX(), rect.centerY(), Color.WHITE
@@ -442,7 +439,6 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
                     posX + (pos.first * factorX).toInt(), posY + (pos.second * factorY).toInt()
                 )
                 upgradePossibilities.add(chipUpgrade)
-                i++
             }
         }
     }

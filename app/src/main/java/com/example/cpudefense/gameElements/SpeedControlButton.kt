@@ -10,11 +10,19 @@ class SpeedControlButton(val game: Game, var type: Type = Type.PAUSE, val panel:
 {
     enum class Type { PAUSE, FAST, NORMAL, RETURN }
 
-    var actualSize = Game.speedControlButtonSize * game.resources.displayMetrics.density.toInt()
-    var area = Rect(0, 0, actualSize, actualSize)
+    var area = Rect()
     var paint = Paint()
     var alpha = 255
-    lateinit var bitmap: Bitmap
+    private var bitmapOfType = hashMapOf<Type, Bitmap>()
+
+    fun set_size(size: Int)
+    {
+        area = Rect(0, 0, size, size)
+        bitmapOfType[Type.PAUSE] = Bitmap.createScaledBitmap(game.pauseIcon, size, size, true)
+        bitmapOfType[Type.NORMAL] = Bitmap.createScaledBitmap(game.playIcon, size, size, true)
+        bitmapOfType[Type.FAST] = Bitmap.createScaledBitmap(game.fastIcon, size, size, true)
+        bitmapOfType[Type.RETURN] = Bitmap.createScaledBitmap(game.returnIcon, size, size, true)
+    }
 
     override fun fadeDone(type: Fader.Type) {
     }
@@ -58,15 +66,8 @@ class SpeedControlButton(val game: Game, var type: Type = Type.PAUSE, val panel:
     fun display(canvas: Canvas) {
         paint.color = Color.GREEN
         paint.alpha = alpha
-        when (type)
-        {
-            Type.PAUSE -> bitmap = game.pauseIcon
-            Type.NORMAL -> bitmap = game.playIcon
-            Type.FAST -> bitmap = game.fastIcon
-            Type.RETURN -> bitmap = game.returnIcon
-        }
         canvas.drawRect(area, paint)
-        canvas.drawBitmap(bitmap, null, area, paint)
+        bitmapOfType[type]?.let {canvas.drawBitmap(it, null, area, paint) }
     }
 
 }

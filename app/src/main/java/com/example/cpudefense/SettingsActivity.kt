@@ -21,9 +21,11 @@ class SettingsActivity : AppCompatActivity()
     {
         val disableBackgroundView = findViewById<Switch>(R.id.switch_disable_background)
         val showRangeView = findViewById<Switch>(R.id.switch_show_atts_in_range)
+        val useLargeButtons = findViewById<Switch>(R.id.switch_use_large_buttons)
         val prefs = getSharedPreferences(getString(R.string.pref_filename), MODE_PRIVATE)
         disableBackgroundView.isChecked = prefs.getBoolean("DISABLE_BACKGROUND", false)
         showRangeView.isChecked = prefs.getBoolean("SHOW_ATTS_IN_RANGE", false)
+        useLargeButtons.isChecked = prefs.getBoolean("USE_LARGE_BUTTONS", false)
     }
 
     fun savePrefs(v: View)
@@ -32,6 +34,7 @@ class SettingsActivity : AppCompatActivity()
         prefs.edit().apply {
             putBoolean("DISABLE_BACKGROUND", findViewById<Switch>(R.id.switch_disable_background)?.isChecked ?: false)
             putBoolean("SHOW_ATTS_IN_RANGE", findViewById<Switch>(R.id.switch_show_atts_in_range)?.isChecked ?: false)
+            putBoolean("USE_LARGE_BUTTONS", findViewById<Switch>(R.id.switch_use_large_buttons)?.isChecked ?: false)
             commit()
         }
     }

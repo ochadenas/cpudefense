@@ -130,7 +130,7 @@ class Background(val game: Game)
             actualImage = blankImage()
             state = BackgroundState.BLANK
         }
-        if (game.global.configDisableBackground) {
+        if (game.gameActivity.settings.configDisableBackground) {
             actualImage = blankImage()
             state = BackgroundState.DISABLED
         }

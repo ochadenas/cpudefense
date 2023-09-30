@@ -21,6 +21,13 @@ class MainGameActivity : Activity() {
 
     enum class GameActivityStatus { PLAYING, BETWEEN_LEVELS, UNDETERMINED }
 
+    data class Settings(
+        var configDisableBackground: Boolean = true,
+        var configShowAttsInRange: Boolean = false,
+        var configUseLargeButtons: Boolean = false
+    )
+    var settings = Settings()
+
     override fun onCreate(savedInstanceState: Bundle?)
     {
         super.onCreate(savedInstanceState)
@@ -62,6 +69,7 @@ class MainGameActivity : Activity() {
              */
     {
         super.onResume()
+        loadSettings() // TODO
         when
         {
             resumeGame -> resumeCurrentGame()
@@ -70,7 +78,6 @@ class MainGameActivity : Activity() {
         }
         resumeGame = true
         gameIsRunning = true
-        loadGameSettings()
         startGameThreads()
     }
 
@@ -118,12 +125,13 @@ class MainGameActivity : Activity() {
         GlobalScope.launch{ delay(effectsDelay); updateGraphicalEffects(); }
     }
 
-    private fun loadGameSettings()
+    fun loadSettings()
     /** load global configuration and debug settings from preferences */
     {
         val prefs = getSharedPreferences(getString(R.string.pref_filename), MODE_PRIVATE)
-        theGame.global.configDisableBackground = prefs.getBoolean("DISABLE_BACKGROUND", false)
-        theGame.global.configShowAttsInRange = prefs.getBoolean("SHOW_ATTS_IN_RANGE", false)
+        settings.configDisableBackground = prefs.getBoolean("DISABLE_BACKGROUND", false)
+        settings.configShowAttsInRange = prefs.getBoolean("SHOW_ATTS_IN_RANGE", false)
+        settings.configUseLargeButtons = prefs.getBoolean("USE_LARGE_BUTTONS", false)
     }
 
     fun setGameSpeed(speed: Game.GameSpeed)

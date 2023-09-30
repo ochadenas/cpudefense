@@ -78,9 +78,7 @@ class Game(val gameActivity: MainGameActivity) {
 
     data class GlobalData(
         var speed: GameSpeed = GameSpeed.NORMAL,
-        var coinsTotal: Int = 0,
-        var configDisableBackground: Boolean = true,
-        var configShowAttsInRange: Boolean = false
+        var coinsTotal: Int = 0
     )
     var global = GlobalData()
 
@@ -118,9 +116,11 @@ class Game(val gameActivity: MainGameActivity) {
     val playIcon: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.play_active)
     val pauseIcon: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.pause_active)
     val fastIcon: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.fast_active)
+    val returnIcon: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.cancel_active)
 
     fun beginGame(resetProgress: Boolean = false)
     {
+        gameActivity.loadSettings()
         if (!resetProgress) {
             global = gameActivity.loadGlobalData()
             summaryPerLevelOfSeries1 = gameActivity.loadLevelData(1)   // get historical data of levels completed so far
@@ -158,7 +158,7 @@ class Game(val gameActivity: MainGameActivity) {
         }
         if (background == null)
             background = Background(this)
-        if (!global.configDisableBackground)
+        if (!gameActivity.settings.configDisableBackground)
             background?.choose(stage.getLevel())
         background?.state = Background.BackgroundState.UNINITIALIZED
     }
@@ -270,7 +270,7 @@ class Game(val gameActivity: MainGameActivity) {
         }
     }
 
-    fun getSummaryOfStage(stage: Stage.Identifier): Stage.Summary?
+    private fun getSummaryOfStage(stage: Stage.Identifier): Stage.Summary?
     {
         when (stage.series)
         {
@@ -377,7 +377,7 @@ class Game(val gameActivity: MainGameActivity) {
         currentWave = nextStage.nextWave()
 
         currentStage = nextStage
-        if (!global.configDisableBackground)
+        if (!gameActivity.settings.configDisableBackground)
             background?.choose(level.number)
         takeLevelSnapshot()
     }

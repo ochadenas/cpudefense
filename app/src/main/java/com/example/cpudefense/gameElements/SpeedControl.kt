@@ -11,12 +11,15 @@ class SpeedControl(var game: Game) {
     private var button1 = SpeedControlButton(game, SpeedControlButton.Type.FAST, this)
     private var button2 = SpeedControlButton(game, SpeedControlButton.Type.PAUSE, this)
     private var button_return = SpeedControlButton(game, SpeedControlButton.Type.RETURN, this)
+    private var buttons = listOf<SpeedControlButton>( button1, button2, button_return )
     private var area = Rect(0,0,0,0)
 
     fun setSize(parentArea: Rect)
     {
-        val actualButtonSize = Game.speedControlButtonSize * game.resources.displayMetrics.density.toInt()
+        val actualButtonSize = Game.speedControlButtonSize * game.resources.displayMetrics.density.toInt() *
+            if (game.gameActivity.settings.configUseLargeButtons) 2 else 1
         val margin = actualButtonSize / 5   // space between the buttons
+        buttons.forEach() {it.set_size(actualButtonSize)}
         area.right = parentArea.right - margin
         area.bottom = parentArea.bottom - margin
         area.left = area.right - 2 * actualButtonSize - margin
@@ -40,8 +43,6 @@ class SpeedControl(var game: Game) {
     fun display(canvas: Canvas, viewport: Viewport) {
         if (area.left == 0)
             return
-        button1.display(canvas)
-        button2.display(canvas)
-        button_return.display(canvas)
+        buttons.forEach() { it.display(canvas)}
     }
 }
