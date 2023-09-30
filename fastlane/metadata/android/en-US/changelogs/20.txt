@@ -1,0 +1,13 @@
+New Features:
+- new heroine: Grace Hopper
+- added "return/replay" button
+- switch in settings for large buttons
+- hero upgrade details show up when long-tapping the hero card
+
+Bugfixes:
+- level selector always started on "normal"
+- 
+
+Miscellaneous:
+- made stage 22 and 24 easier
+- changed strength of heroe's strengths and upgrade costs
