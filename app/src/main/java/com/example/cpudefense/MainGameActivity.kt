@@ -152,7 +152,7 @@ class MainGameActivity : Activity() {
         val builder = AlertDialog.Builder(this)
         builder.setMessage(resources.getString(R.string.query_quit))
             .setCancelable(true)
-            .setPositiveButton(resources.getString(R.string.replay)) { dialog, id -> replayStage() }
+            .setPositiveButton(resources.getString(R.string.replay)) { dialog, id -> replayLevel() }
             .setNegativeButton(resources.getString(R.string.return_to_main_menu)) { dialog, id -> returnToMainMenu() }
         val alert = builder.create()
         alert.show()
@@ -164,7 +164,7 @@ class MainGameActivity : Activity() {
         finish()
     }
     
-    fun replayStage()
+    fun replayLevel()
     {
         theGame.currentStage?.let { startGameAtLevel(it.data.ident) }
     }
