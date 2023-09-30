@@ -18,6 +18,8 @@ class StageFactory {
                     in 3 .. 5 -> 1
                     in 6 .. 10 -> 2
                     11 -> 1
+                    22 -> 2
+                    24 -> 2
                     else -> 3
                 }
                 for (i in 1 .. numberOfObstacles)  // set or upgrade 2 slots
@@ -1031,12 +1033,13 @@ class StageFactory {
                         createWave(12, 2, .10f, 1.0f)
                         createWave(12, 3, .09f, 1.0f)
                         createWave(12, 4, .08f, 1.0f)
+                        createWave(12, 5, .08f, 1.0f)
                         createWave(12, 6, .09f, 0.9f)
                         createWave(12, 8, .09f, 0.9f)
                         createWave(12, 12, .09f, 0.9f)
                         createWave(12, 16, .10f, 0.9f)
                         createWave(12, 24, .11f, 0.8f)
-                        createWave(12, 38, .12f, 0.8f)
+                        createWave(12, 28, .12f, 0.8f)
                         createWave(12, 32, .14f, 0.9f)
 
                         rewardCoins = 3
