@@ -102,4 +102,8 @@
     <string name="schneier">"Bruce Schneier est un expert en cryptographie et en sécurité de l'information. Il a écrit d'importants ouvrages sur le sujet, notamment \"Applied Cryptography\", et a développé plusieurs algorithmes cryptographiques.\n        \nIl n'hésite pas à critiquer les gouvernements ou les entreprises internationales s'il estime que leurs mesures vont à l'encontre de la sécurité ou violent le droit à la vie privée.\n "</string>
     <string name="cost_desc">[coût : %s]</string>
     <string name="hopper">\nGrace Brewster Murray Hopper a eu l\'idée de formuler les programmes informatiques dans un langage lisible par l\'homme plutôt que comme une suite de uns et de zéros. \n\nElle développa le langage de programmation FLOW-MATIC et a ainsi inventé le premier compilateur.</string>
+    <string name="query_quit">Voulez-vous abandonner le niveau actuel ?</string>
+    <string name="return_to_main_menu">Retour au menu principal</string>
+    <string name="replay">Rejouer le niveau</string>
+    <string name="settings_use_large_buttons">Utiliser de grands boutons</string>
 </resources>
