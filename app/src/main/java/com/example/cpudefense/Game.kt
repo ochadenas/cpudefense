@@ -24,7 +24,6 @@ class Game(val gameActivity: MainGameActivity) {
     companion object Params {
         const val maxLevelAvailable = 26
 
-        const val defaultMainDelay = 70L
         val chipSize = GridCoord(6,3)
         const val viewportMargin = 10
         const val minScoreBoardHeight = 100
@@ -55,7 +54,8 @@ class Game(val gameActivity: MainGameActivity) {
             Chip.ChipUpgrades.SUB to 8, Chip.ChipUpgrades.ACC to 10, Chip.ChipUpgrades.SHR to 16, Chip.ChipUpgrades.MEM to 12 )
     }
 
-    var globalSpeedFactor = 1.0f
+    var globalSpeedFactor = 0.8f
+    var framerate: Double = 0.0 /* for debugging purposes */
 
     data class StateData(
         var phase: GamePhase,       // whether the game is running, paused or between levels
@@ -107,6 +107,7 @@ class Game(val gameActivity: MainGameActivity) {
     /* other temporary variables */
     private var additionalCashDelay = 0
     private var additionalCashTicks = 0
+
 
     enum class GamePhase { START, RUNNING, INTERMEZZO, MARKETPLACE, PAUSED }
     enum class GameSpeed { NORMAL, MAX }

@@ -11,6 +11,7 @@ class ScoreBoard(val game: Game): GameElement() {
     var waves = Waves()
     var lives = Lives()
     var coins = Coins()
+    var debugStatusLine = DebugStatusLine()
     var myColor = Color.WHITE
     var divider = 0  // between the display title and the actual display
 
@@ -22,6 +23,7 @@ class ScoreBoard(val game: Game): GameElement() {
         waves.setSize(area, divider)
         lives.setSize(area, divider)
         coins.setSize(area, divider)
+        debugStatusLine.setSize(area, divider)
         recreateBitmap()
     }
 
@@ -66,6 +68,7 @@ class ScoreBoard(val game: Game): GameElement() {
         waves.display(canvas)
         lives.display(canvas)
         coins.display(canvas)
+        debugStatusLine.display(canvas)
     }
 
     fun displayHeader(canvas: Canvas, area: Rect, text: String)
@@ -308,6 +311,41 @@ class ScoreBoard(val game: Game): GameElement() {
                 rect.setCenter(x - i * deltaX, y)
                 canvas.drawBitmap(game.coinIcon, null, rect, paint)
             }
+        }
+    }
+
+    inner class DebugStatusLine()
+    /** this is an additional text displayed at every tick.
+     * It is meant to hold additional debug info, e. g. the current frame rate
+     */
+    {
+        var area = Rect()
+        var divider: Int = 0
+        val paint = Paint()
+        var bitmap: Bitmap? = null
+        var lastValue = 0.0
+
+        fun setSize(area: Rect, divider: Int) {
+            this.divider = divider
+            this.area = Rect(area.left, 0, area.right, divider)
+            paint.color = Color.YELLOW
+            paint.style = Paint.Style.FILL
+        }
+
+        fun display(canvas: Canvas) {
+            if (game.framerate != lastValue)
+              recreateBitmap()
+            bitmap?.let { canvas.drawBitmap(it, null, area, paint) }
+        }
+
+        fun recreateBitmap() {
+            if (area.width() >0 && area.height() > 0)
+                bitmap = Bitmap.createBitmap(area.width(), area.height(), Bitmap.Config.ARGB_8888)
+            bitmap?.let {
+                val canvas = Canvas(it)
+                displayHeader(canvas, Rect(0, 0, area.width(), area.height()), "time per frame: %.4f ms".format(game.framerate))
+            }
+            lastValue = game.framerate
         }
     }
 }

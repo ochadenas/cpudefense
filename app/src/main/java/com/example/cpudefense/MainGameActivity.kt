@@ -2,6 +2,7 @@ package com.example.cpudefense
 
 import android.app.Activity
 import android.os.Bundle
+import android.os.SystemClock
 import android.view.Window
 import android.widget.FrameLayout
 import android.widget.Toast
@@ -18,6 +19,23 @@ class MainGameActivity : Activity() {
     private var startOnLevel: Stage.Identifier? = null
     private var resumeGame = true
     private var gameIsRunning = true  // flag used to keep the threads running. Set to false when leaving activity
+
+
+    /* properties used for assuring a constant frame rate */
+    /** the desired frame delay */
+    val defaultMainDelay = 50L
+    var timeAtStartOfCycle     = SystemClock.uptimeMillis()
+    var timeAfterCycle         = SystemClock.uptimeMillis()
+    var lastTimeAtStartOfCycle = SystemClock.uptimeMillis()
+    /** time needed for update and display within one cycle */
+    var elapsed: Long = 0
+    /* additional properties for displaying an average frame rate */
+    /** how many samples in one count */
+    val meanCount = 10
+    /** how many samples have been taken */
+    var frameCount = 0
+    /** cumulated time */
+    var frameTimeSum = 0L
 
     enum class GameActivityStatus { PLAYING, BETWEEN_LEVELS, UNDETERMINED }
 
@@ -142,7 +160,7 @@ class MainGameActivity : Activity() {
             theGame.background?.frozen = true
         }
         else {
-            mainDelay = Game.defaultMainDelay
+            mainDelay = defaultMainDelay
             theGame.background?.frozen = false
         }
     }
@@ -172,9 +190,25 @@ class MainGameActivity : Activity() {
     private fun update()
     {
         if (gameIsRunning) {
+            lastTimeAtStartOfCycle = timeAtStartOfCycle
+            timeAtStartOfCycle = SystemClock.uptimeMillis()
+
             theGame.update()
             theGameView.display()
-            GlobalScope.launch { delay(mainDelay); update() }
+
+            timeAfterCycle = SystemClock.uptimeMillis()
+            elapsed =  timeAfterCycle - timeAtStartOfCycle
+            var wait: Long = if (mainDelay>elapsed) mainDelay-elapsed-1 else 0  // rest of time in this cycle
+            frameTimeSum += timeAtStartOfCycle-lastTimeAtStartOfCycle
+            frameCount += 1
+            if (frameCount>=meanCount )
+            {
+                theGame.framerate = (frameTimeSum / frameCount).toDouble()
+                frameCount = 0
+                frameTimeSum = 0
+            }
+
+            GlobalScope.launch { delay(wait); update() }
         }
     }
 

@@ -81,9 +81,6 @@ class GameView(context: Context, val theGame: Game):
         theGame.intermezzo.setSize(Rect(0,0,w,h))
         theGame.marketplace.setSize(Rect(0,0,w,h))
         theGame.notification.setPositionOnScreen(w/2, h/2)
-        // theGame.background = Background(theGame)
-        /* increase speed on larger screens */
-        theGame.globalSpeedFactor = (h / 1024f)
         /* increase attacker size on larger screens */
         // theGame.globalResolutionFactorX = (w / )
         theGame.resources.displayMetrics.scaledDensity = (h / 1024f)
