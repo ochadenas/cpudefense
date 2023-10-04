@@ -39,7 +39,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
     // some chips have a 'register' where an attacker's value can be held.
     private var internalRegister: Attacker? = null
 
-    private var cooldownTimer = 0
+    private var cooldownTimer = 0.0f
     private var upgradePossibilities = CopyOnWriteArrayList<ChipUpgrade>()
 
     private var paintBitmap = Paint()
@@ -69,7 +69,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
             color = Color.WHITE
             glowColor = Color.WHITE
         }
-        cooldownTimer = 0
+        cooldownTimer = 0.0f
         internalRegister = null
         bitmap = null
     }
@@ -162,7 +162,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
         if (chipData.type == ChipType.EMPTY)
             return  //  no need to calculate for empty slots
         if (cooldownTimer>0) {
-            cooldownTimer--
+            cooldownTimer -= network.theGame.globalSpeedFactor()
             return
         }
 
@@ -219,7 +219,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
         if (cooldownTimer>0)
         {
             paintBackground.color = chipData.glowColor
-            paintBackground.alpha = (cooldownTimer*255)/chipData.cooldown
+            paintBackground.alpha = (cooldownTimer*255f/chipData.cooldown).toInt()
             canvas.drawRect(rect, paintBackground)
         }
 
@@ -268,8 +268,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
             return
         if (attacker.immuneTo == this)
             return
-        // cooldownTimer = (chipData.cooldown / network.theGame.globalSpeedFactor()).toInt()
-        cooldownTimer = chipData.cooldown
+        cooldownTimer = chipData.cooldown.toFloat()
         if (chipData.type == ChipType.ACC)
         {
             if (attacker.attackerData.isCoin)
