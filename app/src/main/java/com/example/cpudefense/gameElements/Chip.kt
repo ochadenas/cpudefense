@@ -165,9 +165,20 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
             cooldownTimer--
             return
         }
+
+        /*
         val attackers = attackersInRange()
         if (attackers.isNotEmpty())
             shootAt(attackers[0])
+         */
+        // this is less fancy but faster:
+        distanceToVehicle.forEach { (vehicle, distance) ->
+            val dist: Float? = distanceTo(vehicle)
+            if (dist != null && dist <= data.range) {
+                shootAt(vehicle as Attacker)
+                return
+            }
+        }
     }
 
     override fun display(canvas: Canvas, viewport: Viewport) {
@@ -257,7 +268,8 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
             return
         if (attacker.immuneTo == this)
             return
-        cooldownTimer = (chipData.cooldown / network.theGame.globalSpeedFactor).toInt()
+        // cooldownTimer = (chipData.cooldown / network.theGame.globalSpeedFactor()).toInt()
+        cooldownTimer = chipData.cooldown
         if (chipData.type == ChipType.ACC)
         {
             if (attacker.attackerData.isCoin)
@@ -265,11 +277,8 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
             else
                 processInAccumulator(attacker)
         }
-        else {
-            val kill = attacker.onShot(chipData.type, chipData.power)
-            if (kill)
-                attacker.remove()
-        }
+        else if (attacker.onShot(chipData.type, chipData.power))
+            attacker.remove()
     }
 
     fun storeAttacker(attacker: Attacker?)

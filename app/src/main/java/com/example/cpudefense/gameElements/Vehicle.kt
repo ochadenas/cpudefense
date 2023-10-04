@@ -10,9 +10,13 @@ import com.example.cpudefense.utils.setCenter
 open class Vehicle(val theNetwork: Network): GameElement() {
     data class Data
         (
+        /** speed with respect to the virtual grid, without global speed modifier */
         var speed: Float,
+        /** position on the virtual grid */
         var gridPos: Pair<Float, Float>,
+        /** distance travelled from last node */
         var distanceTravelledOnLink: Float,
+        /** the link we're currently on */
         var linkId: Int,
         var startNodeId: Int,
         var endNodeId: Int,
@@ -44,8 +48,7 @@ open class Vehicle(val theNetwork: Network): GameElement() {
             /* determine which is start and which is end node */
             val startNode = this.startNode ?: it.node1
             val endNode = this.endNode ?: it.node2
-
-            data.distanceTravelledOnLink += currentSpeed
+            data.distanceTravelledOnLink += currentSpeed * theNetwork.theGame.globalSpeedFactor()
             posOnGrid = it.getPositionOnGrid(data.distanceTravelledOnLink, startNode)
             if (posOnGrid == endNode.posOnGrid) // reached end of link
             {
@@ -95,7 +98,7 @@ open class Vehicle(val theNetwork: Network): GameElement() {
 
     fun setCurrentSpeed()
     {
-        currentSpeed = 0.16f * data.speed * theNetwork.theGame.globalSpeedFactor
+        currentSpeed = 0.16f * data.speed
     }
 
     fun setCurrentDistanceOnLink(link: Link)

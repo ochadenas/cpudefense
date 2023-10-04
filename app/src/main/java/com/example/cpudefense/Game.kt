@@ -54,7 +54,7 @@ class Game(val gameActivity: MainGameActivity) {
             Chip.ChipUpgrades.SUB to 8, Chip.ChipUpgrades.ACC to 10, Chip.ChipUpgrades.SHR to 16, Chip.ChipUpgrades.MEM to 12 )
     }
 
-    var globalSpeedFactor = 0.8f
+    var defaultSpeedFactor = 0.64f
     var framerate: Double = 0.0 /* for debugging purposes */
 
     data class StateData(
@@ -162,6 +162,14 @@ class Game(val gameActivity: MainGameActivity) {
         if (!gameActivity.settings.configDisableBackground)
             background?.choose(stage.getLevel())
         background?.state = Background.BackgroundState.UNINITIALIZED
+    }
+
+    inline fun globalSpeedFactor(): Float
+    {
+        if (global.speed == Game.GameSpeed.MAX)
+            return 1.5f
+        else
+            return defaultSpeedFactor
     }
 
     fun update()

@@ -139,7 +139,8 @@ class GameView(context: Context, val theGame: Game):
         val canvas = holder.lockCanvas()
         if (canvas != null)
         {
-            canvas.drawColor(backgroundColour)
+            if (theGame.gameActivity.settings.configDisableBackground)
+                canvas.drawColor(backgroundColour)
 
             theGame.display(canvas)
             theEffects?.display(canvas)
