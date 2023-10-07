@@ -92,19 +92,19 @@ class GameView(context: Context, val theGame: Game):
         return true
     }
 
-    override fun onDown(p0: MotionEvent?): Boolean {
+    override fun onDown(p0: MotionEvent): Boolean {
         p0?.let { theGame.onDown(it) }
         return true
     }
 
-    override fun onShowPress(p0: MotionEvent?) {
+    override fun onShowPress(p0: MotionEvent) {
     }
 
-    override fun onSingleTapUp(p0: MotionEvent?): Boolean {
+    override fun onSingleTapUp(p0: MotionEvent): Boolean {
         return false
     }
 
-    override fun onScroll(p0: MotionEvent?, p1: MotionEvent?, dx: Float, dy: Float): Boolean {
+    override fun onScroll(p0: MotionEvent, p1: MotionEvent, dx: Float, dy: Float): Boolean {
         when (theGame.state.phase)
         {
             Game.GamePhase.MARKETPLACE -> theGame.marketplace.onScroll(p0, p1, dx, dy)
@@ -119,7 +119,7 @@ class GameView(context: Context, val theGame: Game):
         return false
     }
 
-    override fun onLongPress(p0: MotionEvent?) {
+    override fun onLongPress(p0: MotionEvent) {
         p0?.let {
             when (theGame.state.phase)
             {
@@ -130,7 +130,7 @@ class GameView(context: Context, val theGame: Game):
         }
     }
 
-    override fun onFling(p0: MotionEvent?, p1: MotionEvent?, p2: Float, p3: Float): Boolean {
+    override fun onFling(p0: MotionEvent, p1: MotionEvent, p2: Float, p3: Float): Boolean {
         return false
     }
 
