@@ -1,0 +1,6 @@
+New Features:
+- game runs more smoothly
+
+Bugfixes:
+- effect of H. W. Franke was incorrect in fast-forward mode
+
