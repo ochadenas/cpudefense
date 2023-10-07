@@ -106,7 +106,7 @@ class Game(val gameActivity: MainGameActivity) {
 
     /* other temporary variables */
     private var additionalCashDelay = 0
-    private var additionalCashTicks = 0
+    private var additionalCashTicks: Float = 0.0f
 
 
     enum class GamePhase { START, RUNNING, INTERMEZZO, MARKETPLACE, PAUSED }
@@ -165,6 +165,12 @@ class Game(val gameActivity: MainGameActivity) {
     }
 
     inline fun globalSpeedFactor(): Float
+            /** the global speed factor affects the speed of the attackers. Depending on this.
+             * also other delays must be adjusted:
+             * - cooldown of the chips
+             * - cash gain over time
+             * - frequency of attacker generation (this seems not to be necessary, but why?)
+             */
     {
         if (global.speed == Game.GameSpeed.MAX)
             return 1.5f
@@ -469,10 +475,10 @@ class Game(val gameActivity: MainGameActivity) {
     {
         if (additionalCashDelay == 0)
             return
-        additionalCashTicks--
+        additionalCashTicks -= globalSpeedFactor()
         if (additionalCashTicks<0) {
             scoreBoard.addCash(1)
-            additionalCashTicks = additionalCashDelay
+            additionalCashTicks = additionalCashDelay.toFloat()
         }
     }
 
