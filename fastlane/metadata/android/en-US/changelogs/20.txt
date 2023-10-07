@@ -10,4 +10,4 @@ Bugfixes:
 
 Miscellaneous:
 - made stage 22 and 24 easier
-- changed strength of heroe's strengths and upgrade costs
+- changed strength of heroes' strengths and upgrade costs
