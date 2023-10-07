@@ -158,4 +158,5 @@ Ein Teil der Information wird dir dabei zurückerstattet."
     <string name="return_to_main_menu">Zurück zum Hauptmenü</string>
     <string name="replay">Level erneut spielen</string>
     <string name="settings_use_large_buttons">Große Schaltflächen verwenden</string>
+    <string name="settings_show_framerate">Framerate anzeigen</string>
 </resources>

@@ -65,6 +65,14 @@
             android:text="@string/settings_use_large_buttons"
             android:textColor="#FFFFFF" />
 
+        <Switch
+            android:id="@+id/switch_show_framerate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="savePrefs"
+            android:text="@string/settings_show_framerate"
+            android:textColor="#FFFFFF" />
+
 
     </LinearLayout>
 

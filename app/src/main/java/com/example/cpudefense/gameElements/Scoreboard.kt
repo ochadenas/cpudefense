@@ -11,7 +11,7 @@ class ScoreBoard(val game: Game): GameElement() {
     var waves = Waves()
     var lives = Lives()
     var coins = Coins()
-    var debugStatusLine = DebugStatusLine()
+    var debugStatusLine: DebugStatusLine? = null
     var myColor = Color.WHITE
     var divider = 0  // between the display title and the actual display
 
@@ -23,7 +23,10 @@ class ScoreBoard(val game: Game): GameElement() {
         waves.setSize(area, divider)
         lives.setSize(area, divider)
         coins.setSize(area, divider)
-        debugStatusLine.setSize(area, divider)
+        if (game.gameActivity.settings.showFramerate) {
+            debugStatusLine = DebugStatusLine()
+            debugStatusLine?.setSize(area, divider)
+        }
         recreateBitmap()
     }
 
@@ -68,7 +71,7 @@ class ScoreBoard(val game: Game): GameElement() {
         waves.display(canvas)
         lives.display(canvas)
         coins.display(canvas)
-        debugStatusLine.display(canvas)
+        debugStatusLine?.display(canvas)
     }
 
     fun displayHeader(canvas: Canvas, area: Rect, text: String)
@@ -343,7 +346,7 @@ class ScoreBoard(val game: Game): GameElement() {
                 bitmap = Bitmap.createBitmap(area.width(), area.height(), Bitmap.Config.ARGB_8888)
             bitmap?.let {
                 val canvas = Canvas(it)
-                displayHeader(canvas, Rect(0, 0, area.width(), area.height()), "time per frame: %.4f ms".format(game.framerate))
+                displayHeader(canvas, Rect(0, 0, area.width(), area.height()), "time per frame: %.2f ms".format(game.framerate))
             }
             lastValue = game.framerate
         }

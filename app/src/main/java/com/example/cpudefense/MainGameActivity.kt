@@ -37,12 +37,13 @@ class MainGameActivity : Activity() {
     /** cumulated time */
     var frameTimeSum = 0L
 
-    enum class GameActivityStatus { PLAYING, BETWEEN_LEVELS, UNDETERMINED }
+    enum class GameActivityStatus { PLAYING, BETWEEN_LEVELS }
 
     data class Settings(
         var configDisableBackground: Boolean = true,
         var configShowAttsInRange: Boolean = false,
-        var configUseLargeButtons: Boolean = false
+        var configUseLargeButtons: Boolean = false,
+        var showFramerate: Boolean = false
     )
     var settings = Settings()
 
@@ -150,6 +151,7 @@ class MainGameActivity : Activity() {
         settings.configDisableBackground = prefs.getBoolean("DISABLE_BACKGROUND", false)
         settings.configShowAttsInRange = prefs.getBoolean("SHOW_ATTS_IN_RANGE", false)
         settings.configUseLargeButtons = prefs.getBoolean("USE_LARGE_BUTTONS", false)
+        settings.showFramerate = prefs.getBoolean("SHOW_FRAMERATE", false)
     }
 
     fun setGameSpeed(speed: Game.GameSpeed)
@@ -198,7 +200,7 @@ class MainGameActivity : Activity() {
 
             timeAfterCycle = SystemClock.uptimeMillis()
             elapsed =  timeAfterCycle - timeAtStartOfCycle
-            var wait: Long = if (mainDelay>elapsed) mainDelay-elapsed-1 else 0  // rest of time in this cycle
+            val wait: Long = if (mainDelay>elapsed) mainDelay-elapsed-1 else 0  // rest of time in this cycle
             frameTimeSum += timeAtStartOfCycle-lastTimeAtStartOfCycle
             frameCount += 1
             if (frameCount>=meanCount )
@@ -229,7 +231,6 @@ class MainGameActivity : Activity() {
         {
             GameActivityStatus.PLAYING -> editor.putString("STATUS", "running")
             GameActivityStatus.BETWEEN_LEVELS -> editor.putString("STATUS", "complete")
-            else -> editor.putString("STATUS", "complete")
         }
         editor.commit()
     }

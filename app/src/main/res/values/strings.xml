@@ -223,6 +223,7 @@ Furthermore, some slots are already taken by unwanted chips you'll have to deal 
     <string name="return_to_main_menu">Return to main menu</string>
     <string name="replay">Replay stage</string>
     <string name="settings_use_large_buttons">Use large buttons</string>
+    <string name="settings_show_framerate">Show frame rate</string>
 
 
 </resources>
