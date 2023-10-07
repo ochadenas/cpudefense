@@ -132,6 +132,7 @@ class Background(val game: Game)
         }
         if (game.gameActivity.settings.configDisableBackground) {
             actualImage = blankImage()
+            actualImage?.let { Canvas(it).drawColor(game.gameActivity.theGameView.backgroundColour) }
             state = BackgroundState.DISABLED
         }
         // draw background on canvas

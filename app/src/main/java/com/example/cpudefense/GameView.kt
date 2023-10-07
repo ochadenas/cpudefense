@@ -17,7 +17,7 @@ class GameView(context: Context, val theGame: Game):
 {
     var canvas: Canvas? = null
     var theEffects: Effects? = null
-    private var backgroundColour = Color.BLACK
+    var backgroundColour = Color.BLACK
     private var gestureDetector = GestureDetectorCompat(context, this)
 
     fun setup()
@@ -139,9 +139,6 @@ class GameView(context: Context, val theGame: Game):
         val canvas = holder.lockCanvas()
         if (canvas != null)
         {
-            if (theGame.gameActivity.settings.configDisableBackground)
-                canvas.drawColor(backgroundColour)
-
             theGame.display(canvas)
             theEffects?.display(canvas)
 
