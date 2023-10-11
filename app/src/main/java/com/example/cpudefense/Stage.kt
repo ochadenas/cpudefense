@@ -269,7 +269,7 @@ class Stage(var theGame: Game) {
     {
         val series = getSeries()
         val count = if (series==1) attackerCount else (attackerCount * 1.5f).toInt()
-        val strength = if (series==1) attackerStrength else (attackerStrength * 1.2f + 2).toInt()
+        val strength = if (series==1) attackerStrength else (attackerStrength * 1.25f + 2).toInt()
         val frequency = if (series==1) attackerFrequency else attackerFrequency * 1.2f
 
         val waveData = Wave.Data(count, strength, frequency, attackerSpeed,

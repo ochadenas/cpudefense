@@ -22,7 +22,7 @@ import java.util.concurrent.CopyOnWriteArrayList
 
 class Game(val gameActivity: MainGameActivity) {
     companion object Params {
-        const val maxLevelAvailable = 26
+        const val maxLevelAvailable = 28
 
         val chipSize = GridCoord(6,3)
         const val viewportMargin = 10

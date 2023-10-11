@@ -93,7 +93,7 @@ class GameView(context: Context, val theGame: Game):
     }
 
     override fun onDown(p0: MotionEvent): Boolean {
-        p0?.let { theGame.onDown(it) }
+        p0.let { theGame.onDown(it) }
         return true
     }
 
@@ -120,9 +120,8 @@ class GameView(context: Context, val theGame: Game):
     }
 
     override fun onLongPress(p0: MotionEvent) {
-        p0?.let {
-            when (theGame.state.phase)
-            {
+        p0.let {
+            when (theGame.state.phase) {
                 Game.GamePhase.RUNNING -> theGame.currentStage?.network?.onLongPress(p0)
                 Game.GamePhase.MARKETPLACE -> theGame.marketplace.onLongPress(p0)
                 else -> {}

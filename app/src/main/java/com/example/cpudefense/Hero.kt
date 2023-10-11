@@ -14,22 +14,24 @@ import com.example.cpudefense.utils.setTopLeft
 
 class Hero(var game: Game, type: Type): Fadable {
     /*
-    Ideas:
-    - gain additional coins but disable reset of upgrades
-
-    Heroes:
+    potential Heroes for versions to come:
     - John von Neuman?
     - Babbage?
     - Berners-Lee?
     - Torvalds
     - Sid Meier
     - Leibniz
+    - Baudot
+    - Chappe (?)
+    - Jack St. Clair Kilby
+    - John Conway
      */
 
     enum class Type { INCREASE_CHIP_SUB_SPEED, INCREASE_CHIP_SUB_RANGE,
         INCREASE_CHIP_SHR_SPEED,  INCREASE_CHIP_SHR_RANGE,
         INCREASE_CHIP_MEM_SPEED,  INCREASE_CHIP_MEM_RANGE,
         DECREASE_ATT_FREQ, ADDITIONAL_LIVES, DECREASE_ATT_SPEED, DECREASE_ATT_STRENGTH,
+        INCREASE_MAX_HERO_LEVEL,
         INCREASE_STARTING_CASH, GAIN_CASH,
         DECREASE_UPGRADE_COST, INCREASE_REFUND, GAIN_CASH_ON_KILL}
     data class Data (
@@ -61,7 +63,7 @@ class Hero(var game: Game, type: Type): Fadable {
     private var hero: Hero = Hero(type)
     var heroOpacity = 0f
     private var levelIndicator = mutableListOf<Rect>()
-    private var indicatorSize = heroArea.width() / 10  // to be scaled
+    private var indicatorSize = heroArea.width() / 10
 
     var inactiveColor = game.resources.getColor(R.color.upgrade_inactive)
     var activeColor: Int = when(type)
@@ -76,16 +78,22 @@ class Hero(var game: Game, type: Type): Fadable {
         Type.DECREASE_ATT_SPEED -> game.resources.getColor(R.color.upgrade_active_general)
         Type.DECREASE_ATT_STRENGTH -> game.resources.getColor(R.color.upgrade_active_general)
         Type.ADDITIONAL_LIVES -> game.resources.getColor(R.color.upgrade_active_general)
+        Type.INCREASE_MAX_HERO_LEVEL -> game.resources.getColor(R.color.upgrade_active_meta)
         Type.INCREASE_STARTING_CASH -> game.resources.getColor(R.color.upgrade_active_eco)
         Type.GAIN_CASH -> game.resources.getColor(R.color.upgrade_active_eco)
         Type.GAIN_CASH_ON_KILL -> game.resources.getColor(R.color.upgrade_active_eco)
         Type.INCREASE_REFUND -> game.resources.getColor(R.color.upgrade_active_eco)
         Type.DECREASE_UPGRADE_COST -> game.resources.getColor(R.color.upgrade_active_eco)
     }
-    var maxLevel = 7   // cannot upgrade beyond this level
+
     var biography: Biography? = null
     var effect: String = ""
     var vitae: String = ""
+    /** cannot upgrade beyond this level. This value can be modified for certain heroes,
+     * or by the effect of Sid Meier
+      */
+    var maxLevel = 7
+
 
     init {
         paintRect.style = Paint.Style.STROKE
@@ -228,10 +236,13 @@ class Hero(var game: Game, type: Type): Fadable {
     private fun addLevelDecoration(canvas: Canvas)
     {
         paintIndicator.color = if (data.level == 0) inactiveColor else activeColor
-        for (i in 1 .. maxLevel)
+        var verticalIndicatorSize = indicatorSize  // squeeze when max level is greater than 8
+        if (getMaxUpgradeLevel()>8)
+            verticalIndicatorSize = heroArea.height() / (5+getMaxUpgradeLevel())
+        for (i in 1 .. getMaxUpgradeLevel())
         {
-            val rect = Rect(0,0, indicatorSize, indicatorSize)
-            rect.setTopLeft(0, (2*i-1)*indicatorSize)
+            val rect = Rect(0,0, indicatorSize, verticalIndicatorSize)
+            rect.setTopLeft(0, (2*i-1)*verticalIndicatorSize)
             levelIndicator.add(rect)
             paintIndicator.style = if (i<=data.level) Paint.Style.FILL else Paint.Style.STROKE
             canvas.drawRect(rect, paintIndicator)
@@ -287,6 +298,13 @@ class Hero(var game: Game, type: Type): Fadable {
                 strengthDesc = "x %.2f".format(strength)
                 upgradeDesc = " -> %.2f".format(next)
             }
+            Type.INCREASE_MAX_HERO_LEVEL ->
+            {
+                shortDesc = game.resources.getString(R.string.shortdesc_max_hero_upgrade)
+                strengthDesc = "%d".format(strength.toInt())
+                upgradeDesc = " -> %d".format(next.toInt())
+                maxLevel = 3
+            }
             Type.GAIN_CASH ->
             {
                 shortDesc = game.resources.getString(R.string.shortdesc_info_gain)
@@ -331,7 +349,7 @@ class Hero(var game: Game, type: Type): Fadable {
         }
         val cost = getPrice(data.level)
         costDesc = game.resources.getString(R.string.cost_desc).format(cost)
-        if (data.level >= maxLevel) {
+        if (data.level >= getMaxUpgradeLevel()) {
             upgradeDesc = ""
             costDesc = ""
         }
@@ -352,12 +370,29 @@ class Hero(var game: Game, type: Type): Fadable {
             Type.DECREASE_ATT_FREQ -> return 1.0f - level * 0.05f
             Type.DECREASE_ATT_SPEED -> return 1.0f - level * 0.04f
             Type.DECREASE_ATT_STRENGTH -> return 1.0f - level * 0.1f
+            Type.INCREASE_MAX_HERO_LEVEL -> return level.toFloat()
             Type.GAIN_CASH -> return (8f - level) * 9
             Type.GAIN_CASH_ON_KILL -> return level * 0.5f
             Type.INCREASE_REFUND -> return (50f + level * 10)
             Type.INCREASE_CHIP_SUB_RANGE -> return 1.0f + level / 10f
             Type.INCREASE_CHIP_SHR_RANGE -> return 1.0f + level / 10f
             Type.INCREASE_CHIP_MEM_RANGE -> return 1.0f + level / 10f
+        }
+    }
+
+    fun getMaxUpgradeLevel(): Int
+            /** @return The maximal allowed upgrade level for this hero,
+             * taking into account the type of the card and
+             * the possible effect of Sid Meier
+             */
+    {
+        val additionalUpgradePossibility = game.gameUpgrades[Type.INCREASE_MAX_HERO_LEVEL]?.getStrength()?.toInt()
+        when (data.type)
+        {
+            Type.ADDITIONAL_LIVES -> return maxLevel
+            Type.INCREASE_MAX_HERO_LEVEL -> return maxLevel
+            Type.GAIN_CASH -> return maxLevel
+            else -> return maxLevel + (additionalUpgradePossibility ?: 0)
         }
     }
 
@@ -376,6 +411,7 @@ class Hero(var game: Game, type: Type): Fadable {
         if (stageIdentifier.series > 1)  // restrictions only apply for series 1
             return true
         return when (data.type) {
+            Type.INCREASE_MAX_HERO_LEVEL -> upgradeLevel(Type.DECREASE_ATT_STRENGTH) >= 3
             Type.DECREASE_ATT_STRENGTH ->   upgradeLevel(Type.DECREASE_ATT_SPEED) >= 3
             Type.DECREASE_ATT_SPEED ->      upgradeLevel(Type.ADDITIONAL_LIVES) >= 3
             Type.ADDITIONAL_LIVES ->        upgradeLevel(Type.DECREASE_ATT_FREQ) >= 3
@@ -419,7 +455,7 @@ class Hero(var game: Game, type: Type): Fadable {
 
     fun doUpgrade()
     {
-        if (data.level >= maxLevel)
+        if (data.level >= getMaxUpgradeLevel())
             return
         data.level += 1
         setDesc()
@@ -591,6 +627,14 @@ class Hero(var game: Game, type: Type): Fadable {
                     effect = game.resources.getString(R.string.HERO_EFFECT_RANGE).format("MEM")
                     vitae = game.resources.getString(R.string.hopper)
                     picture = BitmapFactory.decodeResource(game.resources, R.drawable.hopper)
+                }
+                Type.INCREASE_MAX_HERO_LEVEL ->
+                {
+                    name = "Meier"
+                    fullName = "Sid Meier"
+                    effect = game.resources.getString(R.string.HERO_EFFECT_MAXHEROUPGRADE)
+                    vitae = game.resources.getString(R.string.meier)
+                    picture = BitmapFactory.decodeResource(game.resources, R.drawable.meier)
                 }
             }
         }

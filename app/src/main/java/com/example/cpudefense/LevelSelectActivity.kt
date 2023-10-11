@@ -116,8 +116,15 @@ class LevelSelectActivity : AppCompatActivity() {
              * @param prefs The preferences, used for loading level thumbnails
              */
     {
+        /* create empty first and last stage, if necessary */
         if (stageSummary.isEmpty())
             stageSummary[1] = Stage.Summary()  // create empty first level
+        // try to determine whether a new level has been added,
+        // and it becomes available directly
+        var highestLevelInList = ArrayList(stageSummary.keys).last()
+        if (highestLevelInList<Game.maxLevelAvailable && (stageSummary[highestLevelInList]?.won == true))
+            stageSummary[highestLevelInList+1] = Stage.Summary()
+
         for ((level, summary) in stageSummary.entries)
         {
             val levelEntryView = Button(this)
@@ -152,6 +159,7 @@ class LevelSelectActivity : AppCompatActivity() {
             levelEntryView.isClickable = true
             levelEntryView.setOnClickListener { onLevelSelect(levelEntryView, level) }
             listView.addView(levelEntryView)
+            highestLevelInList = level
             if (level >= Game.maxLevelAvailable)
                 break
         }

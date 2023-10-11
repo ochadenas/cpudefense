@@ -20,6 +20,7 @@ class StageFactory {
                     11 -> 1
                     22 -> 2
                     24 -> 2
+                    27 -> 2
                     else -> 3
                 }
                 for (i in 1 .. numberOfObstacles)  // set or upgrade 2 slots
@@ -1243,6 +1244,111 @@ class StageFactory {
                         createWaveHex(16,1024, .16f, 1.2f)
                         createWaveHex(16,2048, .16f, 1.6f)
                         createWaveHex(16,4096, .16f, 1.6f)
+
+                        rewardCoins = 3
+                    }
+                    27 -> {
+                        initializeNetwork(50, 60)
+                        createChip(0, 30, ident = 101, type = Chip.ChipType.ENTRY)
+                        createChip(25, 5, ident = 102, type = Chip.ChipType.ENTRY)
+                        createChip(50, 30, ident = 103, type = Chip.ChipType.ENTRY)
+                        createChip(25, 55, ident = 104, type = Chip.ChipType.ENTRY)
+                        createChip(18, 30, 1)
+                        createChip(25, 10, 2)
+                        createChip(25, 20, 3)
+                        createChip(40, 30, 4)
+                        createChip(25, 40, 5)
+                        createChip(25, 50, 6)
+                        createChip(25,30, ident = 900, type = Chip.ChipType.CPU)
+
+                        createLink(101, 1, 1)
+                        createLink(102, 2, 2)
+                        createLink(2, 3, 3)
+                        createLink(103, 4, 4)
+                        createLink(104, 6, 5)
+                        createLink(6, 5, 6)
+                        createLink(1, 3, 7, mask = 0x0C)
+                        createLink(3, 4, 8, mask = 0x03)
+                        createLink(1, 5, 9, mask = 0x0C)
+                        createLink(4, 5, 10, mask = 0x03)
+                        createLink(3, 900, 11, mask = 0x04)
+                        createLink(5, 900, 12, mask = 0x04)
+                        createLink(1, 900, 13, mask = 0x04)
+                        createLink(4, 900, 14, mask = 0x04)
+
+                        createTrack(listOf(1, 7, 8, 10, 9, 13), 0)
+                        createTrack(listOf(2, 3, 7, 9, 10, 8, 11), 1)
+                        createTrack(listOf(4, 10, 9, 7, 8, 14), 2)
+                        createTrack(listOf(5, 6, 10, 8, 7, 9, 12), 3)
+                        createTrack(listOf(2, 3, 7, 9, 10, 8, 11), 4)
+                        createTrack(listOf(5, 6, 10, 8, 7, 9, 12), 5)
+
+                        createWaveHex(16, 16, .12f, 1.0f)
+                        createWaveHex(16, 32, .11f, 1.2f)
+                        createWaveHex(16, 32, .12f, 1.0f)
+                        createWaveHex(16, 32, .10f, 1.4f)
+                        createWaveHex(16, 64, .12f, 1.2f)
+                        createWaveHex(16, 128, .12f, 1.2f)
+                        createWaveHex(16,256, .12f, 1.2f)
+                        createWaveHex(16,512, .12f, 1.2f)
+                        createWaveHex(16,1024, .12f, 1.2f, coins = 1)
+                        createWaveHex(16,1024, .12f, 1.4f)
+
+                        rewardCoins = 3
+                    }
+                    28 -> {
+                        initializeNetwork(50, 60)
+                        createChip(10, 10, ident = 101, type = Chip.ChipType.ENTRY)
+                        createChip(10, 20, 4)
+                        createChip(10, 30, 3)
+                        createChip(10, 40, 2)
+                        createChip(10, 50, 1)
+                        createChip(10, 60, ident = 102, type = Chip.ChipType.ENTRY)
+                        createChip(20, 50, 5)
+                        createChip(20, 38, 6)
+                        createChip(20, 30, 7)
+                        createChip(20, 16, 8)
+                        createChip(30, 20, 11)
+                        createChip(30, 37, 10)
+                        createChip(30, 48, 9)
+                        createChip(40, 20, ident = 901, type = Chip.ChipType.CPU)
+                        createChip(40, 45, ident = 902, type = Chip.ChipType.CPU)
+
+                        createLink(102, 1, 1)
+                        createLink(1, 2, 2)
+                        createLink(2, 3, 3)
+                        createLink(3, 4, 4)
+                        createLink(101, 4, 5)
+                        createLink(1, 5, 6, mask=0x06)
+                        createLink(2, 6, 7, mask=0x06)
+                        createLink(3, 7, 8, mask=0x06)
+                        createLink(4, 8, 9, mask=0x06)
+                        createLink(5, 6, 10)
+                        createLink(6, 7, 11)
+                        createLink(7, 8, 12)
+                        createLink(5, 9, 14, mask=0x06)
+                        createLink(6, 10, 15, mask=0x06)
+                        createLink(8, 11, 16, mask=0x06)
+                        createLink(9, 10, 17)
+                        createLink(10, 11, 18)
+                        createLink(9, 902, 19, mask=0x07)
+                        createLink(11, 901, 20, mask=0x07)
+
+                        createTrack(listOf(5, 4, 3, 7, 11, 12, 16, 18, 17, 19), 0)
+                        createTrack(listOf(5, 4, 3, 2, 6, 10, 15, 18, 20), 1)
+                        createTrack(listOf(1, 2, 3, 8, 11, 10, 14, 17, 18, 20), 2)
+                        createTrack(listOf(1, 2, 3, 4, 9, 12, 11, 15, 17, 19), 3)
+
+                        createWaveHex(16, 16, .12f, 1.0f)
+                        createWaveHex(16, 32, .11f, 1.2f)
+                        createWaveHex(16, 32, .12f, 1.0f)
+                        createWaveHex(16, 32, .10f, 1.4f)
+                        createWaveHex(16, 64, .12f, 1.2f)
+                        createWaveHex(16, 128, .12f, 1.2f)
+                        createWaveHex(16,256, .12f, 1.2f)
+                        createWaveHex(16,512, .12f, 1.2f)
+                        createWaveHex(16,1024, .12f, 1.2f, coins = 1)
+                        createWaveHex(16,2048, .12f, 1.2f)
 
                         rewardCoins = 3
 

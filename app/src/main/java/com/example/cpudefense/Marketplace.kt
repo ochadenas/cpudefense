@@ -146,7 +146,7 @@ class Marketplace(val game: Game): GameElement()
         {
             selected?.let {
                 val price = it.getPrice(it.data.level)
-                if (game.global.coinsTotal >= price && it.data.level < it.maxLevel) {
+                if (game.global.coinsTotal >= price && it.data.level < it.getMaxUpgradeLevel()) {
                     game.global.coinsTotal -= price
                     it.data.coinsSpent += price
                     Fader(game, coins.last(), Fader.Type.DISAPPEAR)
