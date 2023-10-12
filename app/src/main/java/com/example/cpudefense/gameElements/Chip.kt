@@ -9,6 +9,7 @@ import com.example.cpudefense.networkmap.Node
 import com.example.cpudefense.networkmap.Viewport
 import com.example.cpudefense.utils.displayTextCenteredInRect
 import com.example.cpudefense.utils.setCenter
+import java.lang.Math.abs
 import java.util.concurrent.CopyOnWriteArrayList
 
 open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gridX.toFloat(), gridY.toFloat())
@@ -247,7 +248,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
     {
         val dist: Float? = distanceTo(attacker)
         if (dist != null) {
-            return dist <= data.range
+            return dist <= abs(data.range)
         } else return false
     }
 

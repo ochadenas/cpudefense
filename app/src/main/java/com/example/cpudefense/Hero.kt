@@ -411,7 +411,7 @@ class Hero(var game: Game, type: Type): Fadable {
         if (stageIdentifier.series > 1)  // restrictions only apply for series 1
             return true
         return when (data.type) {
-            Type.INCREASE_MAX_HERO_LEVEL -> upgradeLevel(Type.DECREASE_ATT_STRENGTH) >= 3
+            Type.INCREASE_MAX_HERO_LEVEL -> upgradeLevel(Type.DECREASE_ATT_SPEED) >= 5
             Type.DECREASE_ATT_STRENGTH ->   upgradeLevel(Type.DECREASE_ATT_SPEED) >= 3
             Type.DECREASE_ATT_SPEED ->      upgradeLevel(Type.ADDITIONAL_LIVES) >= 3
             Type.ADDITIONAL_LIVES ->        upgradeLevel(Type.DECREASE_ATT_FREQ) >= 3
