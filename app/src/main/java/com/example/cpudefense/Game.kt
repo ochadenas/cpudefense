@@ -152,12 +152,19 @@ class Game(val gameActivity: MainGameActivity) {
         stage.network.validateViewport()
         // viewport.setSize(gameActivity.theGameView.width, gameActivity.theGameView.height)
         viewport.setGridSize(stage.sizeX, stage.sizeY)
-        if (state.phase == GamePhase.MARKETPLACE)
-            marketplace.fillMarket(stage.data.ident)
-        else
+        when (state.phase)
         {
-            state.phase = GamePhase.RUNNING
-            currentWave = if (stage.waves.size > 0) stage.waves[0] else stage.nextWave()
+            GamePhase.MARKETPLACE -> marketplace.fillMarket(stage.data.ident)
+            GamePhase.INTERMEZZO -> {
+                gameActivity.setGameActivityStatus(MainGameActivity.GameActivityStatus.BETWEEN_LEVELS)
+            }
+            GamePhase.START -> {
+                gameActivity.setGameActivityStatus(MainGameActivity.GameActivityStatus.BETWEEN_LEVELS)
+            }
+            else -> {
+                state.phase = GamePhase.RUNNING
+                currentWave = if (stage.waves.size > 0) stage.waves[0] else stage.nextWave()
+            }
         }
         if (background == null)
             background = Background(this)
