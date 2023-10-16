@@ -12,14 +12,15 @@ import com.example.cpudefense.utils.setCenter
 import java.lang.Math.abs
 import java.util.concurrent.CopyOnWriteArrayList
 
-open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gridX.toFloat(), gridY.toFloat())
+open class Chip(open val network: Network, gridX: Int, gridY: Int): Node(network, gridX.toFloat(), gridY.toFloat())
 {
-    enum class ChipType { EMPTY, SUB, SHR, MEM, ACC, SHL, ADD, ENTRY, CPU}
-    enum class ChipUpgrades { POWERUP, REDUCE, SELL, SUB, SHR, MEM, ACC }
+    enum class ChipType { EMPTY, SUB, SHR, MEM, ACC, SHL, ADD, CLK, ENTRY, CPU}
+    enum class ChipUpgrades { POWERUP, REDUCE, SELL, SUB, SHR, MEM, ACC, CLK }
 
     data class Data(
         var type: ChipType = ChipType.EMPTY,
         var power: Int = 0,
+        /** time that this chip needs before it can shoot again */
         var cooldown: Int = 0,
         var value: Int = 0,
         var node: Node.Data,
@@ -90,7 +91,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
                 bitmap = null
                 chipData.color = resources.getColor(R.color.chips_sub_foreground)
                 chipData.glowColor = resources.getColor(R.color.chips_sub_glow)
-                chipData.value = Game.basePrice[ChipUpgrades.SUB] ?: 10
+                chipData.value = Game.basePrice[ChipUpgrades.SUB] ?: 99
                 var modifier: Float = network.theGame.gameUpgrades[Hero.Type.INCREASE_CHIP_SUB_SPEED]?.getStrength() ?: 1f
                 chipData.cooldown = (20f / modifier).toInt()
                 modifier = network.theGame.gameUpgrades[Hero.Type.INCREASE_CHIP_SUB_RANGE]?.getStrength() ?: 1f
@@ -101,7 +102,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
                 bitmap = null
                 chipData.color = resources.getColor(R.color.chips_shr_foreground)
                 chipData.glowColor = resources.getColor(R.color.chips_shr_glow)
-                chipData.value = Game.basePrice[ChipUpgrades.SHR] ?: 10
+                chipData.value = Game.basePrice[ChipUpgrades.SHR] ?: 99
                 var modifier: Float = network.theGame.gameUpgrades[Hero.Type.INCREASE_CHIP_SHR_SPEED]?.getStrength() ?: 1f
                 chipData.cooldown = (32f / modifier).toInt()
                 modifier = network.theGame.gameUpgrades[Hero.Type.INCREASE_CHIP_SHR_RANGE]?.getStrength() ?: 1f
@@ -112,7 +113,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
                 bitmap = null
                 chipData.color = resources.getColor(R.color.chips_mem_foreground)
                 chipData.glowColor = resources.getColor(R.color.chips_mem_glow)
-                chipData.value = Game.basePrice[ChipUpgrades.MEM] ?: 20
+                chipData.value = Game.basePrice[ChipUpgrades.MEM] ?: 99
                 var modifier: Float = network.theGame.gameUpgrades[Hero.Type.INCREASE_CHIP_MEM_SPEED]?.getStrength() ?: 1f
                 chipData.cooldown = (128f / modifier).toInt()
                 modifier = network.theGame.gameUpgrades[Hero.Type.INCREASE_CHIP_SHR_RANGE]?.getStrength() ?: 1f
@@ -123,17 +124,26 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
                 bitmap = null
                 chipData.color = resources.getColor(R.color.chips_acc_foreground)
                 chipData.glowColor = resources.getColor(R.color.chips_acc_glow)
-                chipData.value = Game.basePrice[ChipUpgrades.ACC] ?: 10
+                chipData.value = Game.basePrice[ChipUpgrades.ACC] ?: 99
                 val modifier = 1f
                 chipData.cooldown = (16f / modifier).toInt()
                 data.range = 2f
+            }
+            ChipType.CLK -> {
+                chipData.power = 1
+                bitmap = null
+                chipData.color = resources.getColor(R.color.chips_clk_foreground)
+                chipData.glowColor = resources.getColor(R.color.chips_clk_glow)
+                chipData.value = Game.basePrice[ChipUpgrades.CLK] ?: 99
+                chipData.cooldown = 52f.toInt()
+                data.range = 0f
             }
             ChipType.SHL -> {
                 chipData.power = 1
                 bitmap = null
                 chipData.color = resources.getColor(R.color.chips_shl_foreground)
                 chipData.glowColor = resources.getColor(R.color.chips_shl_glow)
-                chipData.value = Game.basePrice[ChipUpgrades.REDUCE] ?: 20
+                chipData.value = Game.basePrice[ChipUpgrades.REDUCE] ?: 99
                 val modifier = 1.2f
                 chipData.cooldown = (32f / modifier).toInt()
                 data.range = 2f
@@ -143,7 +153,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
                 bitmap = null
                 chipData.color = resources.getColor(R.color.chips_add_foreground)
                 chipData.glowColor = resources.getColor(R.color.chips_add_glow)
-                chipData.value = Game.basePrice[ChipUpgrades.REDUCE] ?: 20
+                chipData.value = Game.basePrice[ChipUpgrades.REDUCE] ?: 99
                 val modifier = 1.2f
                 chipData.cooldown = (20f / modifier).toInt()
                 data.range = 2f
@@ -158,6 +168,25 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
         bitmap = null
     }
 
+    fun getCooldownTime(): Float
+            /** @return the number of ticks that the chip will need to cooldown.
+             * For CLK chips, this depends on the level.
+             */
+    {
+        if (this.chipData.type == ChipType.CLK)
+        {
+            val modifier = (1f + chipData.power)
+            return chipData.cooldown.toFloat() / modifier
+        }
+        else
+            return this.chipData.cooldown.toFloat()
+    }
+
+    fun startCooldown()
+    {
+        cooldownTimer = getCooldownTime()
+    }
+
     override fun update() {
         super.update()
         if (chipData.type == ChipType.EMPTY)
@@ -166,13 +195,12 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
             cooldownTimer -= network.theGame.globalSpeedFactor()
             return
         }
-
-        /*
-        val attackers = attackersInRange()
-        if (attackers.isNotEmpty())
-            shootAt(attackers[0])
-         */
-        // this is less fancy but faster:
+        if (chipData.type == ChipType.CLK)
+        /* come here when the clock 'ticks', i.e. CLK cooldown has passed */ {
+            updateClk()
+            return
+        }
+        /* check if there are attackers that we can shoot at */
         distanceToVehicle.forEach { (vehicle, distance) ->
             val dist: Float? = distanceTo(vehicle)
             if (dist != null && dist <= data.range) {
@@ -180,6 +208,31 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
                 return
             }
         }
+    }
+
+    fun updateClk()
+    /** method that gets executed whenever the clock 'ticks' */
+    {
+        val chipsAffected = listOf<ChipType>( ChipType.SUB,  ChipType.SHR, ChipType.MEM )
+        /*
+        // make affected chip types dependent on CLK chip level
+        val chipsAffected = when (chipData.power)
+        {
+            1 ->  listOf<ChipType>( ChipType.SUB )
+            2 ->  listOf<ChipType>( ChipType.SUB, ChipType.SHR )
+            3 ->  listOf<ChipType>( ChipType.SUB,  ChipType.SHR, ChipType.MEM )
+            else ->  listOf<ChipType>( ChipType.SUB,  ChipType.SHR, ChipType.MEM )
+        }
+         */
+        for (node in theNetwork.nodes.values)
+        {
+            val chip = node as Chip
+            if (chip.chipData.type in chipsAffected) {
+                if (chip.cooldownTimer < chip.getCooldownTime() - 10)
+                    chip.cooldownTimer = 0f
+            }
+        }
+        startCooldown()
     }
 
     override fun display(canvas: Canvas, viewport: Viewport) {
@@ -220,7 +273,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
         if (cooldownTimer>0)
         {
             paintBackground.color = chipData.glowColor
-            paintBackground.alpha = (cooldownTimer*255f/chipData.cooldown).toInt()
+            paintBackground.alpha = (cooldownTimer*255f/getCooldownTime()).toInt()
             canvas.drawRect(rect, paintBackground)
         }
 
@@ -269,7 +322,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
             return
         if (attacker.immuneTo == this)
             return
-        cooldownTimer = chipData.cooldown.toFloat()
+        startCooldown()
         if (chipData.type == ChipType.ACC)
         {
             if (attacker.attackerData.isCoin)
@@ -326,7 +379,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
         {
             ChipType.SUB -> return createBitmap("SUB %d".format(chipData.power))
             ChipType.SHR -> return createBitmap("SHR %d".format(chipData.power))
-            ChipType.MEM -> return createBitmap("MEM %d".format(chipData.power))
+            ChipType.MEM -> return createBitmap("MEM")
             ChipType.ACC -> return when (chipData.power)
             {
                 1 -> createBitmap("ACC +")
@@ -335,6 +388,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
             }
             ChipType.SHL -> return createBitmap("SHL %d".format(chipData.power))
             ChipType.ADD -> return createBitmap("ADD %d".format(chipData.power))
+            ChipType.CLK -> return createBitmap("CLK %d".format(chipData.power))
             else -> return null
         }
     }
@@ -382,6 +436,8 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
                 alternatives.add(ChipUpgrades.SHR)
                 alternatives.add(ChipUpgrades.ACC)
                 alternatives.add(ChipUpgrades.MEM)
+                if (theNetwork.theGame.currentStage?.chipCount(ChipType.CLK) == 0)
+                    alternatives.add(ChipUpgrades.CLK) // only one allowed
             }
             ChipType.SUB -> {
                 alternatives.add(ChipUpgrades.POWERUP)
@@ -392,12 +448,15 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
                 alternatives.add(ChipUpgrades.SELL)
             }
             ChipType.ACC -> {
-                if (chipData.power < 3) {
+                if (chipData.power < 3)
                     alternatives.add(ChipUpgrades.POWERUP)
-                    alternatives.add(ChipUpgrades.SELL)
-                }
+                alternatives.add(ChipUpgrades.SELL)
             }
             ChipType.MEM -> {
+                alternatives.add(ChipUpgrades.SELL)
+            }
+            ChipType.CLK -> {
+                alternatives.add(ChipUpgrades.POWERUP)
                 alternatives.add(ChipUpgrades.SELL)
             }
             ChipType.SHL -> {
@@ -428,8 +487,8 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
                 Pair(1.0f, +0.5f),
                 Pair(2.0f, -0.5f),
                 Pair(2.0f, +0.5f),
-                Pair(1.0f, -1.5f),
-                Pair(2.0f, -1.5f)
+                Pair(3.0f, -0.5f),
+                Pair(3.0f, +0.5f)
             )
             val factorY = 1.5 * rect.height()
             val factorX: Float
@@ -494,4 +553,3 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
         }
     }
 }
-

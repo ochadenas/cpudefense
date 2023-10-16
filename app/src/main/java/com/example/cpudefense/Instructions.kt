@@ -31,6 +31,7 @@ class Instructions(val game: Game, var stage: Stage.Identifier, var callback: ((
                 23 -> game.resources.getString(R.string.instr_12)
                 10 -> game.resources.getString(R.string.instr_11)
                 21 -> game.resources.getString(R.string.instr_13)
+                27 -> game.resources.getString(R.string.instr_14)
 
                 else -> ""
             }

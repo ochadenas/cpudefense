@@ -96,6 +96,7 @@ class ChipUpgrade(val chipToUpgrade: Chip, val type: Chip.ChipUpgrades,
             Chip.ChipUpgrades.SHR -> chipToUpgrade.setType(Chip.ChipType.SHR)
             Chip.ChipUpgrades.ACC -> chipToUpgrade.setType(Chip.ChipType.ACC)
             Chip.ChipUpgrades.MEM -> chipToUpgrade.setType(Chip.ChipType.MEM)
+            Chip.ChipUpgrades.CLK -> chipToUpgrade.setType(Chip.ChipType.CLK)
             else -> {}
         }
         game.state.cash -= price
@@ -116,6 +117,7 @@ class ChipUpgrade(val chipToUpgrade: Chip, val type: Chip.ChipUpgrades,
             Chip.ChipUpgrades.SHR -> "SHR"
             Chip.ChipUpgrades.ACC -> "ACC"
             Chip.ChipUpgrades.MEM -> "MEM"
+            Chip.ChipUpgrades.CLK -> "CLK"
             else -> "?"
         }
         val bitmap = Bitmap.createBitmap(actualRect.width(), actualRect.height(), Bitmap.Config.ARGB_8888)
@@ -133,7 +135,7 @@ class ChipUpgrade(val chipToUpgrade: Chip, val type: Chip.ChipUpgrades,
         canvas.drawBitmap(bitmap, null, actualRect, paintText)
 
         paintBackground.color = game.resources.getColor(R.color.network_background) ?: Color.BLACK
-        paintBackground.alpha = 80
+        paintBackground.alpha = 120
         paintBackground.style = Paint.Style.FILL
         canvas.drawRect(actualRect, paintBackground)
 

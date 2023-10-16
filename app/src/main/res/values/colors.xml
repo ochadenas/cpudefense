@@ -23,8 +23,8 @@
     <color name="chips_mem_glow">#BCA7E1</color>
     <color name="chips_acc_foreground">#FFEB3B</color>
     <color name="chips_acc_glow">#FFF7AF</color>
-    <color name="chips_clk_foreground">#5E2500</color>
-    <color name="chips_clk_glow">#683615</color>
+    <color name="chips_clk_foreground">#FF973B</color>
+    <color name="chips_clk_glow">#CAA288</color>
     <color name="chips_shl_foreground">#BA0600</color>
     <color name="chips_shl_glow">#CF605C</color>
     <color name="chips_add_foreground">#FF4B14</color>

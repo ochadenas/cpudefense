@@ -52,6 +52,7 @@ class StageFactory {
                     Chip.ChipUpgrades.SUB,
                     Chip.ChipUpgrades.SHR,
                     Chip.ChipUpgrades.MEM,
+                    Chip.ChipUpgrades.CLK,
                     Chip.ChipUpgrades.POWERUP,
                     Chip.ChipUpgrades.REDUCE,
                     Chip.ChipUpgrades.SELL
@@ -1043,6 +1044,16 @@ class StageFactory {
                         createWave(12, 28, .12f, 0.8f)
                         createWave(12, 32, .14f, 0.9f)
 
+                        data.chipsAllowed = setOf(
+                            Chip.ChipUpgrades.SUB,
+                            Chip.ChipUpgrades.POWERUP,
+                            Chip.ChipUpgrades.SELL,
+                            Chip.ChipUpgrades.SHR,
+                            Chip.ChipUpgrades.MEM,
+                            Chip.ChipUpgrades.ACC,
+                            Chip.ChipUpgrades.REDUCE
+                        )
+
                         rewardCoins = 3
                     }
                     23 -> {
@@ -1097,6 +1108,15 @@ class StageFactory {
                         createWave(24, 128, .12f, 1.4f, coins = 0)
                         createWave(24, 160, .12f, 1.4f, coins = 0)
 
+                        data.chipsAllowed = setOf(
+                            Chip.ChipUpgrades.SUB,
+                            Chip.ChipUpgrades.POWERUP,
+                            Chip.ChipUpgrades.SELL,
+                            Chip.ChipUpgrades.SHR,
+                            Chip.ChipUpgrades.MEM,
+                            Chip.ChipUpgrades.ACC,
+                            Chip.ChipUpgrades.REDUCE
+                        )
                         rewardCoins = 3
                     }
                     24 -> {
@@ -1142,6 +1162,15 @@ class StageFactory {
                         createWave(10, 50, .16f, 1.8f, coins = 1)
                         createWave(10, 80, .16f, 2.0f)
 
+                        data.chipsAllowed = setOf(
+                            Chip.ChipUpgrades.SUB,
+                            Chip.ChipUpgrades.POWERUP,
+                            Chip.ChipUpgrades.SELL,
+                            Chip.ChipUpgrades.SHR,
+                            Chip.ChipUpgrades.MEM,
+                            Chip.ChipUpgrades.ACC,
+                            Chip.ChipUpgrades.REDUCE
+                        )
                         rewardCoins = 3
                     }
                     25 -> {
@@ -1189,6 +1218,15 @@ class StageFactory {
                         createWave(16, 50, .16f, 1.2f)
                         createWave(16, 80, .16f, 1.2f)
 
+                        data.chipsAllowed = setOf(
+                            Chip.ChipUpgrades.SUB,
+                            Chip.ChipUpgrades.POWERUP,
+                            Chip.ChipUpgrades.SELL,
+                            Chip.ChipUpgrades.SHR,
+                            Chip.ChipUpgrades.MEM,
+                            Chip.ChipUpgrades.ACC,
+                            Chip.ChipUpgrades.REDUCE
+                        )
                         rewardCoins = 3
                     }
                     26 -> {
@@ -1245,6 +1283,15 @@ class StageFactory {
                         createWaveHex(16,2048, .16f, 1.6f)
                         createWaveHex(16,4096, .16f, 1.6f)
 
+                        data.chipsAllowed = setOf(
+                            Chip.ChipUpgrades.SUB,
+                            Chip.ChipUpgrades.POWERUP,
+                            Chip.ChipUpgrades.SELL,
+                            Chip.ChipUpgrades.SHR,
+                            Chip.ChipUpgrades.MEM,
+                            Chip.ChipUpgrades.ACC,
+                            Chip.ChipUpgrades.REDUCE
+                        )
                         rewardCoins = 3
                     }
                     27 -> {
@@ -1258,7 +1305,7 @@ class StageFactory {
                         createChip(25, 20, 3)
                         createChip(40, 30, 4)
                         createChip(25, 40, 5)
-                        createChip(25, 50, 6)
+                        createChip(25, 50, 6).setType(Chip.ChipType.CLK)
                         createChip(25,30, ident = 900, type = Chip.ChipType.CPU)
 
                         createLink(101, 1, 1)
@@ -1281,7 +1328,7 @@ class StageFactory {
                         createTrack(listOf(4, 10, 9, 7, 8, 14), 2)
                         createTrack(listOf(5, 6, 10, 8, 7, 9, 12), 3)
 
-                        createWaveHex(16, 8, .10f, 1.0f)
+                        createWaveHex(16, 8, .09f, 1.0f)
                         createWaveHex(16, 16, .10f, 1.0f)
                         createWaveHex(16, 32, .11f, 1.2f)
                         createWaveHex(16, 32, .10f, 1.0f)
