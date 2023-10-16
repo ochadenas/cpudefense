@@ -12,7 +12,7 @@ class SpeedControlButton(val game: Game, var type: Type = Type.PAUSE, val panel:
 
     var area = Rect()
     var paint = Paint()
-    var alpha = 255
+    var alpha = 160
     private var bitmapOfType = hashMapOf<Type, Bitmap>()
 
     fun set_size(size: Int)
@@ -64,9 +64,9 @@ class SpeedControlButton(val game: Game, var type: Type = Type.PAUSE, val panel:
     }
 
     fun display(canvas: Canvas) {
-        paint.color = Color.GREEN
+        paint.color = Color.BLACK
         paint.alpha = alpha
-        canvas.drawRect(area, paint)
+        // canvas.drawRect(area, paint)
         bitmapOfType[type]?.let {canvas.drawBitmap(it, null, area, paint) }
     }
 
