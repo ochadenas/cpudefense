@@ -30,8 +30,8 @@ class Hero(var game: Game, type: Type): Fadable {
     enum class Type { INCREASE_CHIP_SUB_SPEED, INCREASE_CHIP_SUB_RANGE,
         INCREASE_CHIP_SHR_SPEED,  INCREASE_CHIP_SHR_RANGE,
         INCREASE_CHIP_MEM_SPEED,  INCREASE_CHIP_MEM_RANGE,
-        DECREASE_ATT_FREQ, ADDITIONAL_LIVES, DECREASE_ATT_SPEED, DECREASE_ATT_STRENGTH,
-        INCREASE_MAX_HERO_LEVEL,
+        DECREASE_ATT_FREQ, DECREASE_ATT_SPEED, DECREASE_ATT_STRENGTH,
+        ADDITIONAL_LIVES, INCREASE_MAX_HERO_LEVEL,
         INCREASE_STARTING_CASH, GAIN_CASH,
         DECREASE_UPGRADE_COST, INCREASE_REFUND, GAIN_CASH_ON_KILL}
     data class Data (
@@ -301,8 +301,8 @@ class Hero(var game: Game, type: Type): Fadable {
             Type.INCREASE_MAX_HERO_LEVEL ->
             {
                 shortDesc = game.resources.getString(R.string.shortdesc_max_hero_upgrade)
-                strengthDesc = "%d".format(strength.toInt())
-                upgradeDesc = " -> %d".format(next.toInt())
+                strengthDesc = "+%d".format(strength.toInt())
+                upgradeDesc = " -> +%d".format(next.toInt())
                 maxLevel = 3
             }
             Type.GAIN_CASH ->
@@ -411,10 +411,10 @@ class Hero(var game: Game, type: Type): Fadable {
         if (stageIdentifier.series > 1)  // restrictions only apply for series 1
             return true
         return when (data.type) {
-            Type.INCREASE_MAX_HERO_LEVEL -> upgradeLevel(Type.ADDITIONAL_LIVES) >= 5
+            Type.INCREASE_MAX_HERO_LEVEL -> upgradeLevel(Type.ADDITIONAL_LIVES) >= 3
             Type.DECREASE_ATT_STRENGTH ->   upgradeLevel(Type.DECREASE_ATT_SPEED) >= 3
             Type.DECREASE_ATT_SPEED ->      upgradeLevel(Type.DECREASE_ATT_FREQ) >= 3
-            Type.ADDITIONAL_LIVES ->        upgradeLevel(Type.DECREASE_ATT_SPEED) >= 3
+            Type.ADDITIONAL_LIVES ->        upgradeLevel(Type.DECREASE_ATT_SPEED) >= 5
             Type.DECREASE_ATT_FREQ ->       upgradeLevel(Type.INCREASE_CHIP_SHR_SPEED) >= 3
             Type.GAIN_CASH_ON_KILL ->       upgradeLevel(Type.INCREASE_REFUND) >= 3
             Type.INCREASE_REFUND ->         upgradeLevel(Type.DECREASE_UPGRADE_COST) >= 3

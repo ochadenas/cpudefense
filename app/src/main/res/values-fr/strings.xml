@@ -73,7 +73,7 @@
     <string name="shortdesc_info_gain">gain d\'info</string>
     <string name="shortdesc_range">Portée des puces</string>
     <string name="shortdesc_refund">remboursement vente</string>
-    <string name="shortdesc_max_hero_upgrade">augmentation du niveau max des héros</string>
+    <string name="shortdesc_max_hero_upgrade">niveau max des héros</string>
     <string name="upgrade_format">%s  [coût: %d]</string>
     <string name="toast_next_stage">Niveau %d</string>
     <string name="toast_stage_cleared">Niveau réussi</string>

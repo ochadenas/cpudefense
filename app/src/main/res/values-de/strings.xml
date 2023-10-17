@@ -122,7 +122,7 @@ Ein Teil der Information wird dir dabei zurückerstattet."
     <string name="shortdesc_info_gain">Informationsgewinn</string>
     <string name="shortdesc_range">Chip-Reichweite</string>
     <string name="shortdesc_refund">Erstattung bei Verkauf</string>
-    <string name="shortdesc_max_hero_upgrade">Erhöhung der max. Helden-Stärke</string>
+    <string name="shortdesc_max_hero_upgrade">max. Helden-Stärke</string>
     <string name="upgrade_format">%s  [Kosten: %d]</string>
     <string name="toast_next_stage">Level %d</string>
     <string name="toast_stage_cleared">Level geschafft</string>

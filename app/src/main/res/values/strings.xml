@@ -192,7 +192,7 @@ The programming language Pascal is named after him."</string>
     <string name="shortdesc_info_gain">Information gain</string>
     <string name="shortdesc_range">Chip range</string>
     <string name="shortdesc_refund">Refund when selling chips</string>
-    <string name="shortdesc_max_hero_upgrade">Increase of max hero level</string>
+    <string name="shortdesc_max_hero_upgrade">max hero level</string>
     <string name="upgrade_format">%s  [cost: %d]</string>
     <string name="toast_next_stage">Stage %d</string>
     <string name="toast_stage_cleared">Stage cleared</string>
