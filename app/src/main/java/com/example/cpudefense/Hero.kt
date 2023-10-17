@@ -77,7 +77,7 @@ class Hero(var game: Game, type: Type): Fadable {
         Type.DECREASE_ATT_FREQ -> game.resources.getColor(R.color.upgrade_active_general)
         Type.DECREASE_ATT_SPEED -> game.resources.getColor(R.color.upgrade_active_general)
         Type.DECREASE_ATT_STRENGTH -> game.resources.getColor(R.color.upgrade_active_general)
-        Type.ADDITIONAL_LIVES -> game.resources.getColor(R.color.upgrade_active_general)
+        Type.ADDITIONAL_LIVES -> game.resources.getColor(R.color.upgrade_active_meta)
         Type.INCREASE_MAX_HERO_LEVEL -> game.resources.getColor(R.color.upgrade_active_meta)
         Type.INCREASE_STARTING_CASH -> game.resources.getColor(R.color.upgrade_active_eco)
         Type.GAIN_CASH -> game.resources.getColor(R.color.upgrade_active_eco)
@@ -411,10 +411,10 @@ class Hero(var game: Game, type: Type): Fadable {
         if (stageIdentifier.series > 1)  // restrictions only apply for series 1
             return true
         return when (data.type) {
-            Type.INCREASE_MAX_HERO_LEVEL -> upgradeLevel(Type.DECREASE_ATT_SPEED) >= 5
+            Type.INCREASE_MAX_HERO_LEVEL -> upgradeLevel(Type.ADDITIONAL_LIVES) >= 5
             Type.DECREASE_ATT_STRENGTH ->   upgradeLevel(Type.DECREASE_ATT_SPEED) >= 3
-            Type.DECREASE_ATT_SPEED ->      upgradeLevel(Type.ADDITIONAL_LIVES) >= 3
-            Type.ADDITIONAL_LIVES ->        upgradeLevel(Type.DECREASE_ATT_FREQ) >= 3
+            Type.DECREASE_ATT_SPEED ->      upgradeLevel(Type.DECREASE_ATT_FREQ) >= 3
+            Type.ADDITIONAL_LIVES ->        upgradeLevel(Type.DECREASE_ATT_SPEED) >= 3
             Type.DECREASE_ATT_FREQ ->       upgradeLevel(Type.INCREASE_CHIP_SHR_SPEED) >= 3
             Type.GAIN_CASH_ON_KILL ->       upgradeLevel(Type.INCREASE_REFUND) >= 3
             Type.INCREASE_REFUND ->         upgradeLevel(Type.DECREASE_UPGRADE_COST) >= 3
