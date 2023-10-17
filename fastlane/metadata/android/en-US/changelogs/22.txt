@@ -1,0 +1,13 @@
+New Features:
+- hero added: Sid Meier
+- new chip type: CLK
+- two more levels: 27, 28
+- new setting 'use large game elements'
+
+Bugfixes:
+- during the stage intermezzo, the game state was not restored correctly
+- tapping area of attackers was too small on high-res screens
+
+Miscellaneous:
+- changes in the hero 'tech tree'
+- changed appearance of speed control buttons
