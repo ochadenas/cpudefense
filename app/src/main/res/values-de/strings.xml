@@ -74,6 +74,7 @@ MEM-Chips sind mächtig, weil sie jeden Angreifer neutralisieren können, aber s
 
 In Hex gibt es die Ziffern von 0 bis 9 und dann von A bis F. Die Hex-Zahl 0x0F entspricht 15 dezimal bzw. 1111 im Binärsystem."
     </string>
+    <string name="instr_14">Ein weiterer Chip ist verfügbar! \n\nDer CLK-Chip (\'clock\', hier: Taktgeber) hat selber keinen Einfluss auf die Angreifer. Stattdessen beschleunigt er die anderen Chips auf dem Board. Jedes Mal, wenn CLK tickt, wird der Cooldown-Timer aller anderen Chips zurückgesetzt, und sie sind wieder betriebsbereit.\n\nEine Aufrüstung erhöht die CLK-Frequenz.</string>
     <string name="turing">
 "Alan Turing war eine der wichtigsten Persönlichkeiten in der Computerwissenschaft. Er legte viele der Grundlagen der theoretischen Informatik, unter anderem durch die Turing-Maschine und den Turing-Test. Außerdem entschlüsselte er den Enigma-Code im zweiten Weltkrieg. Sein Einfluss auf den Verlauf des Krieges kann kaum überschätzt werden.
 
@@ -100,6 +101,7 @@ Ein Teil der Information wird dir dabei zurückerstattet."
     <string name="vaughan">Dorothy Vaughan war einer der \"menschlichen Computer\" bei der NASA. Sie konnte komplexe mathematische Gleichungen schneller und verlässlicher lösen als die damaligen elektronischen oder mechanischen Geräte. Gemeinsam mit anderen Frauen brachte sie das amerikanische Weltraumprogramm wesentlich voran.\n\nSpäter bereitete sie als Managerin bei der NASA die Einführung elektronischer Computer vor, indem sie sich selbst und ihrem Team die Sprache FORTRAN beibrachte.</string>
     <string name="tramiel">Als Kind überlebte Idek Tramielski Auschwitz. Er emigrierte 1947 in die USA und gründete dort 1954 Commodore International, die Schreibmaschinen baute. Im Jahr 1982 stellte Commodore den C64 vor, den ersten echten Heimcomputer der Welt.\n\nDer C64 brach alle Verkaufsrekorde. Er hatte nicht nur unglaubliche 64 kiB RAM, sondern auch hochauflösende Grafik, digitalen Sound, einen eingebauten BASIC-Interpreter und zwei Joystick-Ports. Für unzählige Menschen bedeutete der \'Brotkasten\' den Einstieg ins Computerzeitalter.\n</string>
     <string name="pascal">\nBlaise Pascal war ein Universalgelehrter auf vielen Gebieten der Mathematik, Philosophie und Physik. Für das spätere Informationszeitalter waren seine Rechenmaschinen, die \'Pascalinen\', ein früher Vorläufer.\n\nDie Programmiersprache Pascal ist nach ihm benannt.</string>
+    <string name="meier">Sidney K. Meier hat einige der einflussreichsten Strategiespiele geschaffen und dieses Genre revolutioniert. Mit vergleichsweise einfachen Regeln simulieren seine Spiele die komplexen Zusammenhänge der Realität erstaunlich gut. Und sie erzählen immer eine Geschichte: Vom Zeitalter der Eisenbahn, von der amerikanischen Revolution, oder aber - wie in seinem bekanntesten Werk \'Civilization\' - von 6000 Jahren menschlicher Geschichte.</string>
     <string name="settings_title">Einstellungen</string>
     <string name="settings_about">Info</string>
     <string name="yes">Ja</string>
@@ -120,6 +122,7 @@ Ein Teil der Information wird dir dabei zurückerstattet."
     <string name="shortdesc_info_gain">Informationsgewinn</string>
     <string name="shortdesc_range">Chip-Reichweite</string>
     <string name="shortdesc_refund">Erstattung bei Verkauf</string>
+    <string name="shortdesc_max_hero_upgrade">Erhöhung der max. Helden-Stärke</string>
     <string name="upgrade_format">%s  [Kosten: %d]</string>
     <string name="toast_next_stage">Level %d</string>
     <string name="toast_stage_cleared">Level geschafft</string>
@@ -133,6 +136,7 @@ Ein Teil der Information wird dir dabei zurückerstattet."
     <string name="HERO_EFFECT_INFOOVERTIME">zusätzlicher Informationsgewinn pro Zeit</string>
     <string name="HERO_EFFECT_ATTSPEED">verringert die Geschwindigkeit der Angreifer</string>
     <string name="HERO_EFFECT_ATTSTRENGTH">verringert die Stärke der Angreifer</string>
+    <string name="HERO_EFFECT_MAXHEROUPGRADE">erhöht die maximale Stufe der anderen Helden</string>
     <string name="HERO_EFFECT_REFUNDPRICE">höhere Erstattung beim Verkauf von Chips</string>
     <string name="HERO_EFFECT_RANGE">erhöht die Reichweite der Chips</string>
     <string name="toast_loading">Lade Daten ...</string>
