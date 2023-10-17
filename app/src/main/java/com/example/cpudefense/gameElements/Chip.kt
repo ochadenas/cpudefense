@@ -401,7 +401,8 @@ open class Chip(open val network: Network, gridX: Int, gridY: Int): Node(network
             val canvas = Canvas(bitmap)
             val paint = Paint()
 
-            paint.textSize = (Game.chipTextSize * resources.displayMetrics.scaledDensity)
+            paint.textSize = (Game.chipTextSize * resources.displayMetrics.scaledDensity) *
+                    if (theNetwork.theGame.gameActivity.settings.configUseLargeButtons) 1.2f else 1.0f
             paint.alpha = 255
             paint.typeface = Typeface.create("sans-serif-condensed", Typeface.BOLD)
             paint.textAlign = Paint.Align.CENTER
