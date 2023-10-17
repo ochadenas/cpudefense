@@ -8,10 +8,7 @@ import com.example.cpudefense.effects.Fadable
 import com.example.cpudefense.effects.Fader
 import com.example.cpudefense.networkmap.Network
 import com.example.cpudefense.networkmap.Viewport
-import com.example.cpudefense.utils.center
-import com.example.cpudefense.utils.displayTextCenteredInRect
-import com.example.cpudefense.utils.scaleAndSetCenter
-import com.example.cpudefense.utils.setCenter
+import com.example.cpudefense.utils.*
 import kotlin.math.log2
 import kotlin.random.Random
 
@@ -294,9 +291,8 @@ open class Attacker(network: Network, type: Representation = Representation.BINA
     }
 
     fun onDown(event: MotionEvent): Boolean {
-        val boundingRecSize = 50
-        val boundingRect = Rect(0, 0, boundingRecSize, boundingRecSize)
-        boundingRect.setCenter(actualRect.center())
+        val boundingRect = Rect(actualRect)
+        boundingRect.inflate(10).setCenter(actualRect.center())
         if (boundingRect.contains(event.x.toInt(), event.y.toInt())) // gesture is inside this object
         {
             invertNumber()
