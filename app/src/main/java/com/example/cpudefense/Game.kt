@@ -57,7 +57,7 @@ class Game(val gameActivity: MainGameActivity) {
     }
 
     var defaultSpeedFactor = 0.64f
-    var framerate: Double = 0.0 /* for debugging purposes */
+    var frameRate: Double = 0.0 /* for debugging purposes */
 
     data class StateData(
         var phase: GamePhase,       // whether the game is running, paused or between levels
@@ -181,7 +181,7 @@ class Game(val gameActivity: MainGameActivity) {
              * - frequency of attacker generation (this seems not to be necessary, but why?)
              */
     {
-        if (global.speed == Game.GameSpeed.MAX)
+        if (global.speed == GameSpeed.MAX)
             return 1.5f
         else
             return defaultSpeedFactor

@@ -12,7 +12,7 @@ import com.example.cpudefense.effects.Fader
 class Instructions(val game: Game, var stage: Stage.Identifier, var callback: (()->Unit)? ): Fadable {
     var alpha = 0
 
-    fun instructionText(level: Int): String
+    private fun instructionText(level: Int): String
     {
         if (stage.series == 1)
             return when (level)
@@ -60,7 +60,7 @@ class Instructions(val game: Game, var stage: Stage.Identifier, var callback: ((
         canvas.save()
 
         canvas.translate(2*margin.toFloat(), margin.toFloat())
-        var text = instructionText(stage.number)
+        val text = instructionText(stage.number)
         val textPaint = TextPaint()
         textPaint.textSize = Game.instructionTextSize * game.resources.displayMetrics.scaledDensity
         textPaint.color = Color.WHITE

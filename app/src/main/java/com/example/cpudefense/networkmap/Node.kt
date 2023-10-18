@@ -37,7 +37,7 @@ open class Node(val theNetwork: Network, x: Float, y: Float): GameElement()
         actualRect?.let { rect ->
             val paint = Paint()
             paint.color =
-                theNetwork.theGame.resources.getColor(R.color.network_background) ?: Color.BLACK
+                theNetwork.theGame.resources.getColor(R.color.network_background)
             paint.style = Paint.Style.FILL
             canvas.drawRect(rect, paint)
             paint.color = Color.WHITE
@@ -53,7 +53,7 @@ open class Node(val theNetwork: Network, x: Float, y: Float): GameElement()
              */
     {
         val factor = 3.0f
-        val dist = theNetwork?.distanceBetweenGridPoints()
+        val dist = theNetwork.distanceBetweenGridPoints()
         return dist?.let {
             if (it.first>0 && it.second>0) {
                 val distX = it.first * factor

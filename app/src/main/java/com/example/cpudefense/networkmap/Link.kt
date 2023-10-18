@@ -22,16 +22,16 @@ class Link(@Suppress("UNUSED_PARAMETER") val theNetwork: Network, var node1: Nod
         mask = mask
     )
 
-    var startPoint: GridCoord = node1.posOnGrid
-    var endPoint: GridCoord = node2.posOnGrid
-    var interPoint: GridCoord? = null
+    private var startPoint: GridCoord = node1.posOnGrid
+    private var endPoint: GridCoord = node2.posOnGrid
+    private var interPoint: GridCoord? = null
 
     var lengthOnGrid: Float = 0f
-    var connectorWidth = 6f
-    var connectorRadius = 8f
-    val paintConnector = Paint()
-    val paintBackground = Paint()
-    var paintLineBackground = Paint()
+    private var connectorWidth = 6f
+    private var connectorRadius = 8f
+    private val paintConnector = Paint()
+    private val paintBackground = Paint()
+    private var paintLineBackground = Paint()
 
     init {
         calculateIntermediatePointPosition()
@@ -45,16 +45,16 @@ class Link(@Suppress("UNUSED_PARAMETER") val theNetwork: Network, var node1: Nod
 
     private fun calculateIntermediatePointPosition()
     {
-        val distHori = endPoint.x - startPoint.x
-        val distVert = endPoint.y - startPoint.y
+        val distHorizontal = endPoint.x - startPoint.x
+        val distVertical = endPoint.y - startPoint.y
 
-        if (distHori>0 && distVert>0)
+        if (distHorizontal>0 && distVertical>0)
             calculate1stQuadrant(startPoint, endPoint)
-        else if (distHori<0 && distVert<0)
+        else if (distHorizontal<0 && distVertical<0)
             calculate1stQuadrant(endPoint, startPoint)
-        else if (distHori>0 && distVert<0)
+        else if (distHorizontal>0 && distVertical<0)
             calculate4thQuadrant(startPoint, endPoint)
-        else if (distHori<0 && distVert>0)
+        else if (distHorizontal<0 && distVertical>0)
             calculate4thQuadrant(endPoint, startPoint)
         else
             interPoint = null
@@ -66,13 +66,13 @@ class Link(@Suppress("UNUSED_PARAMETER") val theNetwork: Network, var node1: Nod
      * from 1st to 2nd point is positive.
      */
     {
-        val distHori: Float = abs(point2.x - point1.x)
-        val distVert: Float = abs(point2.y - point1.y)
+        val distHorizontal: Float = abs(point2.x - point1.x)
+        val distVertical: Float = abs(point2.y - point1.y)
 
-        if (distVert > distHori)
-            interPoint = GridCoord(point1.x, point2.y - distHori)
-        else if (distVert < distHori)
-            interPoint = GridCoord(point2.x-distVert, point1.y)
+        if (distVertical > distHorizontal)
+            interPoint = GridCoord(point1.x, point2.y - distHorizontal)
+        else if (distVertical < distHorizontal)
+            interPoint = GridCoord(point2.x-distVertical, point1.y)
     }
 
     private fun calculate4thQuadrant(point1: GridCoord, point2: GridCoord)
@@ -80,13 +80,13 @@ class Link(@Suppress("UNUSED_PARAMETER") val theNetwork: Network, var node1: Nod
      * from 1st to 2nd point is positive and vertical is negative
      */
     {
-        val distHori: Float = abs(point2.x - point1.x)
-        val distVert: Float = abs(point2.y - point1.y)
+        val distHorizontal: Float = abs(point2.x - point1.x)
+        val distVertical: Float = abs(point2.y - point1.y)
 
-        if (distVert < distHori)
-            interPoint = GridCoord(point2.x - distVert, point1.y)
-        else if (distVert > distHori)
-            interPoint = GridCoord(point1.x, point2.y + distHori)
+        if (distVertical < distHorizontal)
+            interPoint = GridCoord(point2.x - distVertical, point1.y)
+        else if (distVertical > distHorizontal)
+            interPoint = GridCoord(point1.x, point2.y + distHorizontal)
     }
 
     private fun getLength(): Float
@@ -174,7 +174,7 @@ class Link(@Suppress("UNUSED_PARAMETER") val theNetwork: Network, var node1: Nod
     }
 
     private fun displayLine(canvas: Canvas, viewport: Viewport, startGridPoint: GridCoord, endGridPoint: GridCoord)
-    /** draws one single line from start point to end point, in grid coords */
+    /** draws one single line from start point to end point, in grid coordinates */
     {
         val startPoint = viewport.gridToViewport(startGridPoint)
         val endPoint = viewport.gridToViewport(endGridPoint)

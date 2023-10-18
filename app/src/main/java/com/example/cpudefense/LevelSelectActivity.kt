@@ -57,8 +57,8 @@ class LevelSelectActivity : AppCompatActivity() {
         val currentSeries = intent.getIntExtra("NEXT_SERIES", 1)
         prepareStageSelector(currentSeries)
         // set the active tab depending on the current series
-        val tab = tabLayout.getTabAt(currentSeries-1);
-        tab?.select();
+        val tab = tabLayout.getTabAt(currentSeries-1)
+        tab?.select()
 
         // tabLayout.setupWithViewPager(findViewById(R.id.pager))
     }
@@ -159,7 +159,6 @@ class LevelSelectActivity : AppCompatActivity() {
             levelEntryView.isClickable = true
             levelEntryView.setOnClickListener { onLevelSelect(levelEntryView, level) }
             listView.addView(levelEntryView)
-            highestLevelInList = level
             if (level >= Game.maxLevelAvailable)
                 break
         }

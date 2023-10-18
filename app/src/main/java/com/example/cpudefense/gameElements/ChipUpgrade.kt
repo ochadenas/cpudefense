@@ -12,10 +12,10 @@ class ChipUpgrade(val chipToUpgrade: Chip, val type: Chip.ChipUpgrades,
 {
     val game = chipToUpgrade.network.theGame
     var actualRect = Rect(chipToUpgrade.actualRect)
-    var price = calculatePrice()
-    val paintBackground = Paint()
-    val paintText = Paint()
-    val paintFrame = Paint()
+    private var price = calculatePrice()
+    private val paintBackground = Paint()
+    private val paintText = Paint()
+    private val paintFrame = Paint()
 
     fun calculatePrice(): Int
     {
@@ -28,8 +28,7 @@ class ChipUpgrade(val chipToUpgrade: Chip, val type: Chip.ChipUpgrades,
                 return upgradePrice.toInt()
             }
             Chip.ChipUpgrades.REDUCE -> {
-                var upgradePrice = chipToUpgrade.chipData.value
-                return upgradePrice.toInt()
+                return chipToUpgrade.chipData.value
             }
             Chip.ChipUpgrades.SELL -> {
                 val refund = - chipToUpgrade.chipData.value * (game.gameUpgrades[Hero.Type.INCREASE_REFUND]?.getStrength() ?: 50f) * 0.01f
@@ -39,12 +38,11 @@ class ChipUpgrade(val chipToUpgrade: Chip, val type: Chip.ChipUpgrades,
                 // ACC chips are more expensive if there are already chips of the same type
                 game.currentStage?.let {
                     val count = it.chipCount(Chip.ChipType.ACC)
-                    penalty = count*count*count
+                    penalty = count * count * count
                 }
-                val p = Game.basePrice.getOrElse(Chip.ChipUpgrades.ACC, {20}) + penalty
-                return p
+                return Game.basePrice.getOrElse(Chip.ChipUpgrades.ACC) { 20 } + penalty
             }
-            else -> return Game.basePrice.getOrElse(type, { 20 } )
+            else -> return Game.basePrice.getOrElse(type) { 20 }
         }
     }
 
@@ -97,7 +95,6 @@ class ChipUpgrade(val chipToUpgrade: Chip, val type: Chip.ChipUpgrades,
             Chip.ChipUpgrades.ACC -> chipToUpgrade.setType(Chip.ChipType.ACC)
             Chip.ChipUpgrades.MEM -> chipToUpgrade.setType(Chip.ChipType.MEM)
             Chip.ChipUpgrades.CLK -> chipToUpgrade.setType(Chip.ChipType.CLK)
-            else -> {}
         }
         game.state.cash -= price
     }
@@ -118,7 +115,6 @@ class ChipUpgrade(val chipToUpgrade: Chip, val type: Chip.ChipUpgrades,
             Chip.ChipUpgrades.ACC -> "ACC"
             Chip.ChipUpgrades.MEM -> "MEM"
             Chip.ChipUpgrades.CLK -> "CLK"
-            else -> "?"
         }
         val bitmap = Bitmap.createBitmap(actualRect.width(), actualRect.height(), Bitmap.Config.ARGB_8888)
         val rect = Rect(0, 0, bitmap.width, bitmap.height)
@@ -128,13 +124,13 @@ class ChipUpgrade(val chipToUpgrade: Chip, val type: Chip.ChipUpgrades,
         val newCanvas = Canvas(bitmap)
         paintText.textSize = Game.chipTextSize * game.resources.displayMetrics.scaledDensity
         paintText.alpha = 255
-        paintText.setTypeface(Typeface.create("sans-serif-condensed", Typeface.BOLD))
+        paintText.typeface = Typeface.create("sans-serif-condensed", Typeface.BOLD)
         paintText.textAlign = Paint.Align.CENTER
         paintText.color = paintFrame.color
         rect.displayTextCenteredInRect(newCanvas, text, paintText)
         canvas.drawBitmap(bitmap, null, actualRect, paintText)
 
-        paintBackground.color = game.resources.getColor(R.color.network_background) ?: Color.BLACK
+        paintBackground.color = game.resources.getColor(R.color.network_background)
         paintBackground.alpha = 120
         paintBackground.style = Paint.Style.FILL
         canvas.drawRect(actualRect, paintBackground)

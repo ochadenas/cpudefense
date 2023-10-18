@@ -34,8 +34,8 @@ class Network(val theGame: Game, x: Int, y: Int): GameElement() {
     fun provideData(): Data
     /** serializes the network into a 'data' structure that can be stored as string. */
     {
-        nodes.forEach() { (key, value) -> data.nodes[key] = value.data }
-        links.forEach() { (key, value) -> data.links[key] = value.data }
+        nodes.forEach { (key, value) -> data.nodes[key] = value.data }
+        links.forEach { (key, value) -> data.links[key] = value.data }
         return data
     }
 
@@ -45,11 +45,9 @@ class Network(val theGame: Game, x: Int, y: Int): GameElement() {
     }
 
     companion object {
-        fun createNetworkFromData(game: Game, data: Data): Network
-        {
-            var network = Network(game, data.gridSizeX, data.gridSizeY)
+        fun createNetworkFromData(game: Game, data: Data): Network {
 
-            return network
+            return Network(game, data.gridSizeX, data.gridSizeY)
         }
     }
 
@@ -63,7 +61,7 @@ class Network(val theGame: Game, x: Int, y: Int): GameElement() {
     {
         if (gridPointDistance != null)
             return gridPointDistance // no need to recalculate
-        if (validateViewport() == true) {
+        if (validateViewport()) {
             val point0 = theGame.viewport.gridToViewport(GridCoord(0, 0))
             val point1 = theGame.viewport.gridToViewport(GridCoord(1, 1))
             gridPointDistance = Pair(point1.first - point0.first, point1.second - point0.second)
@@ -136,9 +134,9 @@ class Network(val theGame: Game, x: Int, y: Int): GameElement() {
             /** draws an outline around the network area, e.g. for testing purposes.
              */
     {
-        val cornerTopleft = viewport.gridToViewport(GridCoord(0, 0))
-        val cornerBottomright = viewport.gridToViewport(GridCoord(data.gridSizeX, data.gridSizeY))
-        val actualRect = Rect(cornerTopleft.first, cornerTopleft.second, cornerBottomright.first, cornerBottomright.second)
+        val cornerTopLeft = viewport.gridToViewport(GridCoord(0, 0))
+        val cornerBottomRight = viewport.gridToViewport(GridCoord(data.gridSizeX, data.gridSizeY))
+        val actualRect = Rect(cornerTopLeft.first, cornerTopLeft.second, cornerBottomRight.first, cornerBottomRight.second)
         val paint = Paint()
         paint.color = Color.WHITE
         paint.style = Paint.Style.STROKE
@@ -178,7 +176,7 @@ class Network(val theGame: Game, x: Int, y: Int): GameElement() {
     {
         if (node == null)
             return -1
-        var nodeId = if (ident >= 0) ident else nodes.size + 1
+        val nodeId = if (ident >= 0) ident else nodes.size + 1
         node.let { nodes[nodeId] = it }
         return nodeId
     }
@@ -188,7 +186,7 @@ class Network(val theGame: Game, x: Int, y: Int): GameElement() {
     {
         if (gridX<=0 || gridX>=data.gridSizeX || gridY<=0 || gridY>data.gridSizeY)
             return null
-        var node = Node(this, gridX.toFloat(), gridY.toFloat())
+        val node = Node(this, gridX.toFloat(), gridY.toFloat())
         addNode(node, ident)
         return node
     }
@@ -209,7 +207,7 @@ class Network(val theGame: Game, x: Int, y: Int): GameElement() {
         var track = Track(this)
         track.data.linkIdents = linkIdents
         track.data.isCircle = isCircle
-        linkIdents.forEach() { track.links.add(links[it]) }
+        linkIdents.forEach { track.links.add(links[it]) }
         return track
     }
 

@@ -15,14 +15,14 @@ import kotlin.random.Random
 class Intermezzo(var game: Game): GameElement(), Fadable {
     var level = Stage.Identifier()
     var alpha = 0
-    var myArea = Rect()
-    var typewriter: Typewriter? = null
-    var buttonContinue: Button? = null
-    var buttonPurchase: Button? = null
-    var instructions: Instructions? = null
+    private var myArea = Rect()
+    private var typewriter: Typewriter? = null
+    private var buttonContinue: Button? = null
+    private var buttonPurchase: Button? = null
+    private var instructions: Instructions? = null
     var coinsGathered = 0
 
-    var textOnContinueButton = ""
+    private var textOnContinueButton = ""
 
     enum class Type {STARTING_LEVEL, NORMAL_LEVEL, GAME_LOST, GAME_WON}
     var type = Type.NORMAL_LEVEL
@@ -42,7 +42,7 @@ class Intermezzo(var game: Game): GameElement(), Fadable {
         instructions = Instructions(game, level) { displayText() }
     }
 
-    fun displayText()
+    private fun displayText()
     {
         val lines = CopyOnWriteArrayList<String>()
         when (type)
@@ -87,7 +87,7 @@ class Intermezzo(var game: Game): GameElement(), Fadable {
         typewriter = Typewriter(game, myArea, lines) { onTypewriterDone() }
     }
 
-    fun displayFireworks()
+    private fun displayFireworks()
     {
         if (myArea.width()==0)
             return
@@ -111,12 +111,12 @@ class Intermezzo(var game: Game): GameElement(), Fadable {
                     colour.first, colour.second))
     }
 
-    fun onTypewriterDone()
+    private fun onTypewriterDone()
     {
         showButton()
     }
 
-    fun showButton()
+    private fun showButton()
     {
         val bottomMargin = 40
         buttonContinue = Button(textOnContinueButton,
@@ -189,7 +189,7 @@ class Intermezzo(var game: Game): GameElement(), Fadable {
         game.gameActivity.setGameActivityStatus(MainGameActivity.GameActivityStatus.BETWEEN_LEVELS)
     }
 
-    fun startMarketplace()
+    private fun startMarketplace()
     {
         clear()
         game.marketplace.fillMarket(level)

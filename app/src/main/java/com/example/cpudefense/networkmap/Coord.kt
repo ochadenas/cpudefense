@@ -3,7 +3,7 @@ package com.example.cpudefense.networkmap
 import kotlin.math.sqrt
 
 class GridCoord(var x: Float = 0.0f, var y: Float = 0.0f) {
-    constructor(xInt: Int = 0, yInt: Int = 0): this (xInt.toFloat(), yInt.toFloat()) {}
+    constructor(xInt: Int = 0, yInt: Int = 0): this (xInt.toFloat(), yInt.toFloat())
     constructor(pos: Pair<Float, Float>): this (pos.first, pos.second)
 
     fun asPair(): Pair<Float, Float>
@@ -20,7 +20,7 @@ class GridCoord(var x: Float = 0.0f, var y: Float = 0.0f) {
 
     fun plus(other: GridCoord): GridCoord
     {
-        var result = GridCoord(0, 0)
+        val result = GridCoord(0, 0)
         result.x = this.x + other.x
         result.y = this.y + other.y
         return result
@@ -28,13 +28,13 @@ class GridCoord(var x: Float = 0.0f, var y: Float = 0.0f) {
 
     fun minus(other: GridCoord): GridCoord
     {
-        var result = GridCoord(0, 0)
+        val result = GridCoord(0, 0)
         result.x = this.x - other.x
         result.y = this.y - other.y
         return result
     }
 
-    fun lengthSquared(): Float
+    private fun lengthSquared(): Float
     {
         return x*x + y*y
     }
@@ -44,7 +44,7 @@ class GridCoord(var x: Float = 0.0f, var y: Float = 0.0f) {
         return sqrt(lengthSquared())
     }
 
-    fun distanceToSquared(other: GridCoord?): Float
+    private fun distanceToSquared(other: GridCoord?): Float
     {
         if (other == null)
             return 0f

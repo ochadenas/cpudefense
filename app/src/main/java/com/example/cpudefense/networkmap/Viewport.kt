@@ -13,18 +13,18 @@ class Viewport
     var viewportWidth: Int = 0
     var viewportHeight: Int = 0
     var screen = Rect()
-    var gridSizeX: Int = 0
-    var gridSizeY: Int = 0
-    var scaleX = 1.0f
-    var scaleY = 1.0f
-    var offsetX = 0
-    var offsetY = 0
-    var userScale = 1.0f // zoom factor chosen by the player
+    private var gridSizeX: Int = 0
+    private var gridSizeY: Int = 0
+    private var scaleX = 1.0f
+    private var scaleY = 1.0f
+    private var offsetX = 0
+    private var offsetY = 0
+    private var userScale = 1.0f // zoom factor chosen by the player
     var isValid = false
 
     /* default grid size that fits on screen without scrolling */
-    val standardGridSizeX = 50
-    val standardGridSizeY = 60
+    private val standardGridSizeX = 50
+    private val standardGridSizeY = 60
 
     fun setScreenSize(width: Int, height: Int)
     {
@@ -88,8 +88,8 @@ class Viewport
 
     fun gridToViewport(gridPos: GridCoord): Pair<Int, Int>
     {
-        var posX = gridPos.x * scaleX + Game.viewportMargin + offsetX
-        var posY = gridPos.y * scaleY + Game.viewportMargin + offsetY
+        val posX = gridPos.x * scaleX + Game.viewportMargin + offsetX
+        val posY = gridPos.y * scaleY + Game.viewportMargin + offsetY
         return Pair(posX.toInt(), posY.toInt())
     }
 

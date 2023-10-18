@@ -58,7 +58,7 @@ class Hero(var game: Game, type: Type): Fadable {
     private val paintHero = Paint()
     private var shortDesc: String = "effect description"
     private var strengthDesc: String = "format string"
-    private var upgradeDesc: String = " -> next level"
+    private var upgradeDesc: String = " → next level"
     private var costDesc: String = "[cost: ]"
     private var hero: Hero = Hero(type)
     var heroOpacity = 0f
@@ -92,7 +92,7 @@ class Hero(var game: Game, type: Type): Fadable {
     /** cannot upgrade beyond this level. This value can be modified for certain heroes,
      * or by the effect of Sid Meier
       */
-    var maxLevel = 7
+    private var maxLevel = 7
 
 
     init {
@@ -259,92 +259,93 @@ class Hero(var game: Game, type: Type): Fadable {
             Type.INCREASE_CHIP_SUB_SPEED -> {
                 shortDesc = game.resources.getString(R.string.shortdesc_SUB)
                 strengthDesc = "x %.2f".format(strength)
-                upgradeDesc = " -> x %.2f".format(next)
+                upgradeDesc = " → x %.2f".format(next)
             }
             Type.INCREASE_STARTING_CASH ->
             {
                 shortDesc = game.resources.getString(R.string.shortdesc_startinfo)
                 strengthDesc = "%d bits".format(strength.toInt())
-                upgradeDesc = " -> %d bits".format(next.toInt())
+                upgradeDesc = " → %d bits".format(next.toInt())
             }
             Type.INCREASE_CHIP_SHR_SPEED ->             {
                 shortDesc = game.resources.getString(R.string.shortdesc_SHR)
                 strengthDesc = "x %.2f".format(strength)
-                upgradeDesc = " -> %.2f".format(next)
+                upgradeDesc = " → %.2f".format(next)
             }
             Type.INCREASE_CHIP_MEM_SPEED -> {
                 shortDesc = game.resources.getString(R.string.shortdesc_MEM)
                 strengthDesc = "x %.2f".format(strength)
-                upgradeDesc = " -> %.2f".format(next)
+                upgradeDesc = " → %.2f".format(next)
             }
             Type.DECREASE_UPGRADE_COST ->             {
                 shortDesc = game.resources.getString(R.string.shortdesc_upgrade)
                 strengthDesc = "-%d%%".format(strength.toInt())
-                upgradeDesc = " -> -%d%%".format(next.toInt())
+                upgradeDesc = " → -%d%%".format(next.toInt())
             }
             Type.ADDITIONAL_LIVES -> {
                 shortDesc = game.resources.getString(R.string.shortdesc_lives)
                 strengthDesc = "%d".format(strength.toInt())
-                upgradeDesc = " -> %d".format(next.toInt())
+                upgradeDesc = " → %d".format(next.toInt())
                 maxLevel = 3
             }
             Type.DECREASE_ATT_FREQ -> {
                 shortDesc = game.resources.getString(R.string.shortdesc_frequency)
                 strengthDesc = "x %.2f".format(strength)
-                upgradeDesc = " -> %.2f".format(next)
+                upgradeDesc = " → %.2f".format(next)
             }
             Type.DECREASE_ATT_SPEED -> {
                 shortDesc = game.resources.getString(R.string.shortdesc_att_speed)
                 strengthDesc = "x %.2f".format(strength)
-                upgradeDesc = " -> %.2f".format(next)
+                upgradeDesc = " → %.2f".format(next)
             }
             Type.INCREASE_MAX_HERO_LEVEL ->
             {
                 shortDesc = game.resources.getString(R.string.shortdesc_max_hero_upgrade)
                 strengthDesc = "+%d".format(strength.toInt())
-                upgradeDesc = " -> +%d".format(next.toInt())
+                upgradeDesc = " → +%d".format(next.toInt())
                 maxLevel = 3
             }
             Type.GAIN_CASH ->
             {
                 shortDesc = game.resources.getString(R.string.shortdesc_info_gain)
                 strengthDesc = "1 bit/%d ticks".format(strength.toInt())
-                upgradeDesc = " -> 1/%d ticks".format(next.toInt())
+                upgradeDesc = " → 1/%d ticks".format(next.toInt())
             }
             Type.GAIN_CASH_ON_KILL ->
             {
                 shortDesc = game.resources.getString(R.string.shortdesc_info_on_kill)
                 strengthDesc = "%d bit/kill".format(strength.toInt())
-                upgradeDesc = " -> %d bit/kill".format(next.toInt())
+                upgradeDesc = " → %d bit/kill".format(next.toInt())
             }
             Type.INCREASE_REFUND ->
             {
                 shortDesc = game.resources.getString(R.string.shortdesc_refund)
                 strengthDesc = "%d%%".format(strength.toInt())
-                upgradeDesc = " -> %d%%".format(next.toInt())
+                upgradeDesc = " → %d%%".format(next.toInt())
+                maxLevel = 6  // even at level 6, refund is more than 100%
             }
             Type.INCREASE_CHIP_SUB_RANGE ->
             {
                 shortDesc = game.resources.getString(R.string.shortdesc_range)
                 strengthDesc = "x %.2f".format(strength)
-                upgradeDesc = " -> %.2f".format(next)
+                upgradeDesc = " → %.2f".format(next)
             }  
             Type.INCREASE_CHIP_SHR_RANGE ->
             {
                 shortDesc = game.resources.getString(R.string.shortdesc_range)
                 strengthDesc = "x %.2f".format(strength)
-                upgradeDesc = " -> %.2f".format(next)
+                upgradeDesc = " → %.2f".format(next)
             }
             Type.INCREASE_CHIP_MEM_RANGE ->
             {
                 shortDesc = game.resources.getString(R.string.shortdesc_range)
                 strengthDesc = "x %.2f".format(strength)
-                upgradeDesc = " -> %.2f".format(next)
+                upgradeDesc = " → %.2f".format(next)
             }
             Type.DECREASE_ATT_STRENGTH -> {
                 shortDesc = game.resources.getString(R.string.shortdesc_att_strength)
                 strengthDesc = "x %.2f".format(strength)
-                upgradeDesc = " -> %.2f".format(next)
+                upgradeDesc = " → %.2f".format(next)
             }
         }
         val cost = getPrice(data.level)
@@ -396,7 +397,7 @@ class Hero(var game: Game, type: Type): Fadable {
         }
     }
 
-    fun upgradeLevel(type: Type): Int
+    private fun upgradeLevel(type: Type): Int
     {
         val level = game.gameUpgrades[type]?.data?.level
         return level ?: 0
@@ -641,7 +642,7 @@ class Hero(var game: Game, type: Type): Fadable {
 
     }
 
-    inner class Biography(var myArea: Rect)
+    inner class Biography(private var myArea: Rect)
     {
         var bitmap: Bitmap = createBitmap(myArea.width(), myArea.height(), Bitmap.Config.ARGB_8888)
         private var canvas = Canvas(bitmap)

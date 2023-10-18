@@ -23,19 +23,19 @@ class MainGameActivity : Activity() {
 
     /* properties used for assuring a constant frame rate */
     /** the desired frame delay */
-    val defaultMainDelay = 50L
-    var timeAtStartOfCycle     = SystemClock.uptimeMillis()
-    var timeAfterCycle         = SystemClock.uptimeMillis()
-    var lastTimeAtStartOfCycle = SystemClock.uptimeMillis()
+    private val defaultMainDelay = 50L
+    private var timeAtStartOfCycle     = SystemClock.uptimeMillis()
+    private var timeAfterCycle         = SystemClock.uptimeMillis()
+    private var lastTimeAtStartOfCycle = SystemClock.uptimeMillis()
     /** time needed for update and display within one cycle */
-    var elapsed: Long = 0
+    private var elapsed: Long = 0
     /* additional properties for displaying an average frame rate */
     /** how many samples in one count */
-    val meanCount = 10
+    private val meanCount = 10
     /** how many samples have been taken */
-    var frameCount = 0
+    private var frameCount = 0
     /** cumulated time */
-    var frameTimeSum = 0L
+    private var frameTimeSum = 0L
 
     enum class GameActivityStatus { PLAYING, BETWEEN_LEVELS }
 
@@ -174,6 +174,7 @@ class MainGameActivity : Activity() {
             .setCancelable(true)
             .setPositiveButton(resources.getString(R.string.replay)) { dialog, id -> replayLevel() }
             .setNegativeButton(resources.getString(R.string.return_to_main_menu)) { dialog, id -> returnToMainMenu() }
+            .setNeutralButton("Continue") { dialog, id -> returnToMainMenu() }
         val alert = builder.create()
         alert.show()
     }
@@ -205,7 +206,7 @@ class MainGameActivity : Activity() {
             frameCount += 1
             if (frameCount>=meanCount )
             {
-                theGame.framerate = (frameTimeSum / frameCount).toDouble()
+                theGame.frameRate = (frameTimeSum / frameCount).toDouble()
                 frameCount = 0
                 frameTimeSum = 0
             }

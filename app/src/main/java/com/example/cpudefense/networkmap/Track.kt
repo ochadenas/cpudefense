@@ -1,6 +1,5 @@
 package com.example.cpudefense.networkmap
 
-import com.example.cpudefense.Game
 import com.example.cpudefense.Stage
 import java.util.concurrent.CopyOnWriteArrayList
 
