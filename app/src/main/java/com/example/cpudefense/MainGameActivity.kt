@@ -1,9 +1,14 @@
 package com.example.cpudefense
 
 import android.app.Activity
+import android.app.Dialog
 import android.os.Bundle
 import android.os.SystemClock
+import android.view.ContextThemeWrapper
+import android.view.ViewGroup.LayoutParams.MATCH_PARENT
+import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.view.Window
+import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -169,14 +174,27 @@ class MainGameActivity : Activity() {
 
     fun showReturnDialog()
     {
-        val builder = AlertDialog.Builder(this)
+        val dialog = Dialog(this)
+        dialog.setContentView(R.layout.layout_dialog)
+        dialog.window?.setLayout(MATCH_PARENT, WRAP_CONTENT)
+        dialog.setCancelable(true)
+        dialog.findViewById<Button>(R.id.button_return)?.setOnClickListener { dialog.dismiss(); returnToMainMenu() }
+        dialog.findViewById<Button>(R.id.button_replay)?.setOnClickListener { dialog.dismiss(); replayLevel() }
+
+
+        dialog.show()
+        /*
+        val builder = AlertDialog.Builder(
+            ContextThemeWrapper(this, R.style.CustomAlertDialog))
         builder.setMessage(resources.getString(R.string.query_quit))
             .setCancelable(true)
             .setPositiveButton(resources.getString(R.string.replay)) { dialog, id -> replayLevel() }
             .setNegativeButton(resources.getString(R.string.return_to_main_menu)) { dialog, id -> returnToMainMenu() }
-            .setNeutralButton("Continue") { dialog, id -> returnToMainMenu() }
-        val alert = builder.create()
-        alert.show()
+            .setNeutralButton(resources.getString(R.string.continue_game), null)
+        val alertDialog = builder.create()
+        alertDialog.show()
+
+         */
     }
     
     fun returnToMainMenu()

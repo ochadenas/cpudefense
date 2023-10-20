@@ -71,7 +71,7 @@ class Intermezzo(var game: Game): GameElement(), Fadable {
             }
             Type.STARTING_LEVEL -> {
                 lines.add(game.resources.getString(R.string.game_start))
-                textOnContinueButton = game.resources.getString(R.string.continue_game)
+                textOnContinueButton = game.resources.getString(R.string.enter_game)
                 game.setLastPlayedStage(level)
             }
             Type.NORMAL_LEVEL ->
@@ -80,7 +80,7 @@ class Intermezzo(var game: Game): GameElement(), Fadable {
                 if (coinsGathered>0)
                     lines.add(game.resources.getString(R.string.coins_gathered).format(coinsGathered))
                 lines.add(game.resources.getString(R.string.next_stage).format(level.number))
-                textOnContinueButton = game.resources.getString(R.string.continue_game)
+                textOnContinueButton = game.resources.getString(R.string.enter_game)
                 game.setLastPlayedStage(level)
             }
         }

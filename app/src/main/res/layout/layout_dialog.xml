@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/deko_dialog"
+    android:scaleType="fitCenter"
+    >
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="257dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="208dp"
+        android:text="@string/query_quit"
+        android:textColor="@color/text_amber"
+        android:textSize="24sp"
+        android:fontFamily="monospace"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.415"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+    <Button
+        android:id="@+id/button_return"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="56dp"
+        android:layout_marginTop="32dp"
+        android:background="@color/black"
+        android:backgroundTint="@color/black"
+        android:backgroundTintMode="src_over"
+        android:fontFamily="monospace"
+        android:text="@string/return_to_main_menu"
+        android:textAllCaps="false"
+        android:textColor="@color/text_green"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+    <Button
+        android:id="@+id/button_replay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/black"
+        android:fontFamily="monospace"
+        android:textAllCaps="false"
+        android:textColor="@color/text_lightgreen"
+        android:textSize="20sp"
+        android:layout_marginTop="32dp"
+        android:text="@string/replay"
+        app:layout_constraintStart_toStartOf="@+id/button_return"
+        app:layout_constraintTop_toBottomOf="@+id/button_return" />
+</androidx.constraintlayout.widget.ConstraintLayout>

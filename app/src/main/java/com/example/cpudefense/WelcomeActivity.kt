@@ -4,6 +4,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.view.ContextThemeWrapper
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
@@ -124,10 +125,10 @@ class WelcomeActivity : AppCompatActivity()
 
     fun startNewGame(@Suppress("UNUSED_PARAMETER") v: View)
     {
-        val builder = AlertDialog.Builder(this)
-        builder.setMessage("Really start new game? This will reset all your progress.")
-                .setCancelable(false)
-                .setPositiveButton("Yes") { dialog, id ->
+        val builder = AlertDialog.Builder(ContextThemeWrapper(this, R.style.CustomAlertDialog))
+        builder.setMessage(getString(R.string.query_restart_game))
+                .setCancelable(true)
+                .setNegativeButton("Yes") { dialog, id ->
                     val intent = Intent(this, MainGameActivity::class.java)
                     intent.putExtra("RESET_PROGRESS", true)
                     intent.putExtra("START_ON_STAGE", 1)
@@ -135,7 +136,8 @@ class WelcomeActivity : AppCompatActivity()
                     startActivity(intent)
                     setupButtons()
                 }
-                .setNegativeButton("No") { dialog, id -> dialog.dismiss() }
+                .setPositiveButton("No") { dialog, id -> dialog.dismiss() }
+
         val alert = builder.create()
         alert.show()
     }

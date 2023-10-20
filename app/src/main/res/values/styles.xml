@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="CustomAlertDialog" parent="android:Theme.Material.Dialog.Alert">
+        <item name="android:background">@color/black</item>
+        <item name="android:textColorPrimary">@color/text_amber</item> <!-- influences title -->
+        <item name="android:textSize">16dp</item> <!-- influences the button text -->
+        <item name="android:typeface">monospace</item> <!-- influences the button text -->
+        <item name="android:textColor">@color/text_lightgreen</item> <!-- influences nothing -->
+        <item name="android:borderlessButtonStyle">@style/PositiveButtonStyle</item>
+        <item name="android:buttonBarPositiveButtonStyle">@style/PositiveButtonStyle</item>
+        <item name="android:buttonBarNegativeButtonStyle">@style/NegativeButtonStyle</item>
+        <item name="android:negativeButtonText">TEST</item> <!-- sets text, but is overridden in source code -->
+        <!--
+        <item name="colorPrimary">@color/text_amber</item>
+        <item name="android:textColorPrimary">@color/text_green</item>
+        <item name="titleTextStyle">@style/TitleStyle</item>
+        <item name="materialAlertDialogBodyTextStyle">@style/TitleStyle</item>
+        <item name="android:textAppearance">@style/TitleStyle</item>
+
+        <item name="buttonBarNeutralButtonStyle">@style/NeutralButtonStyle</item>
+    </style>
+
+    <style name="NeutralButtonStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textColor">@color/text_green</item>
+    </style>
+    <style name="TitleStyle" parent="MaterialAlertDialog.MaterialComponents.Title.Text">
+        <item name="android:textColor">@color/text_amber</item>
+        <item name="android:textSize">16dp</item>
+        <item name="android:typeface">monospace</item>
+    </style>
+    -->
+    </style>
+    <style name="NegativeButtonStyle" parent="android:Widget.Material.Button">
+        <item name="android:textColor">@color/text_lightgreen</item>
+        <item name="android:textColorPrimary">@color/text_lightgreen</item>
+        <item name="android:textColorSecondary">@color/text_lightgreen</item>
+    </style>
+    <style name="PositiveButtonStyle">
+        <item name="android:textColor">@color/text_lightgreen</item>
+    </style>
+    <style name="textStyle">
+        <item name="android:textColor">@color/text_lightgreen</item>
+    </style>
+</resources>
