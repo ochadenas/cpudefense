@@ -156,6 +156,12 @@ class Marketplace(val game: Game): GameElement()
             }
             return true
         }
+        for (coin in coins)
+        {
+            if (coin.myArea.contains(event.x.toInt(), event.y.toInt()))
+                if (!coin.isCurrentlyFlipping)
+                    Flipper(game, coin, Flipper.Type.HORIZONTAL)
+        }
         for (card in upgrades)
             if (card.areaOnScreen.contains(event.x.toInt(), event.y.toInt())) {
                 selected = card
@@ -163,12 +169,6 @@ class Marketplace(val game: Game): GameElement()
             }
         selected = null
 
-        for (coin in coins)
-        {
-            if (coin.myArea.contains(event.x.toInt(), event.y.toInt()))
-                if (!coin.isCurrentlyFlipping)
-                    Flipper(game, coin, Flipper.Type.HORIZONTAL)
-        }
 
         return false
     }

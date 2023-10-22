@@ -268,12 +268,17 @@ class Stage(var theGame: Game) {
                            coins: Int = 0, representation: Attacker.Representation = Attacker.Representation.UNDEFINED)
     {
         val series = getSeries()
-        val count = if (series==1) attackerCount else (attackerCount * 1.5f).toInt()
-        val strength = if (series==1) attackerStrength else (attackerStrength * 1.25f + 2).toInt()
-        val frequency = if (series==1) attackerFrequency else attackerFrequency * 1.2f
-
+        var count = attackerCount
+        var strength = attackerStrength
+        var frequency = attackerFrequency
+        if (series==2)  // modifications in strength for turbo mode
+        {
+            count = (attackerCount * 1.5f).toInt()
+            strength = (attackerStrength * ( 1 + waves.size*0.2f ) + 4).toInt()
+            frequency = attackerFrequency * 1.2f
+        }
         val waveData = Wave.Data(count, strength, frequency, attackerSpeed,
-            coins, currentCount = attackerCount, representation = representation)
+            coins, currentCount = count, representation = representation)
         waves.add(Wave(theGame, waveData))
     }
 

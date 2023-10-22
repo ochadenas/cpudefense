@@ -3,7 +3,7 @@ package com.example.cpudefense
 import com.example.cpudefense.gameElements.*
 import kotlin.random.Random
 
-class StageFactory {
+class StageCatalog {
     companion object {
         fun createStage(stage: Stage, level: Stage.Identifier)
         {

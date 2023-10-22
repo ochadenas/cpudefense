@@ -42,7 +42,7 @@ class Viewport
     fun reset()
     {
         offsetX = 0
-        offsetY = 0
+        offsetY = 20
         userScale = 1.0f
     }
 

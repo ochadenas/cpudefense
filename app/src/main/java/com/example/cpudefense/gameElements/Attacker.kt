@@ -292,7 +292,7 @@ open class Attacker(network: Network, type: Representation = Representation.BINA
 
     fun onDown(event: MotionEvent): Boolean {
         val boundingRect = Rect(actualRect)
-        boundingRect.inflate(10).setCenter(actualRect.center())
+        boundingRect.inflate(20).setCenter(actualRect.center())
         if (boundingRect.contains(event.x.toInt(), event.y.toInt())) // gesture is inside this object
         {
             invertNumber()
