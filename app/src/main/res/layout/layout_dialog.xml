@@ -2,43 +2,44 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/deko_dialog"
-    android:scaleType="fitCenter"
-    >
+    android:scaleType="centerCrop">
 
     <TextView
         android:id="@+id/textView"
-        android:layout_width="257dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="208dp"
-        android:text="@string/query_quit"
-        android:textColor="@color/text_amber"
-        android:textSize="24sp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
         android:fontFamily="monospace"
+        android:text="@string/query_quit"
+        android:textColor="@color/text_lightamber"
+        android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.415"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/button_return"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="56dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="0dp"
         android:background="@color/black"
         android:backgroundTint="@color/black"
         android:backgroundTintMode="src_over"
         android:fontFamily="monospace"
         android:text="@string/return_to_main_menu"
-        android:textAllCaps="false"
+        android:textAllCaps="true"
         android:textColor="@color/text_green"
-        android:textSize="20sp"
+        android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toBottomOf="@id/textView"
+        app:layout_constraintBottom_toTopOf="@id/button_replay" />
 
     <Button
         android:id="@+id/button_replay"
@@ -46,11 +47,12 @@
         android:layout_height="wrap_content"
         android:background="@color/black"
         android:fontFamily="monospace"
-        android:textAllCaps="false"
-        android:textColor="@color/text_lightgreen"
-        android:textSize="20sp"
-        android:layout_marginTop="32dp"
         android:text="@string/replay"
+        android:textAllCaps="true"
+        android:textColor="@color/text_lightgreen"
+        android:textSize="24sp"
+        android:layout_marginBottom="16dp"
         app:layout_constraintStart_toStartOf="@+id/button_return"
-        app:layout_constraintTop_toBottomOf="@+id/button_return" />
+        app:layout_constraintBottom_toBottomOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
