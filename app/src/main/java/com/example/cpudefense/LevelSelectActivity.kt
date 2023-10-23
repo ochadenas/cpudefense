@@ -191,7 +191,7 @@ class LevelSelectActivity : AppCompatActivity() {
 
         // draw outline around selected button
         selectedLevelView = v as Button
-        selectedLevelView?.setBackgroundResource(R.drawable.button_border)
+        selectedLevelView?.setBackgroundResource(R.drawable.button_border_white)
     }
 
     fun startGame(@Suppress("UNUSED_PARAMETER") v: View)

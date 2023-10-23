@@ -195,13 +195,13 @@ class MainGameActivity : Activity() {
          */
     }
     
-    fun returnToMainMenu()
+    private fun returnToMainMenu()
     {
         saveState()
         finish()
     }
     
-    fun replayLevel()
+    private fun replayLevel()
     {
         theGame.currentStage?.let { startGameAtLevel(it.data.ident) }
     }

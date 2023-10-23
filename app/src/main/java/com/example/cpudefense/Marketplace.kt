@@ -1,9 +1,10 @@
 package com.example.cpudefense
 
+import android.app.Dialog
 import android.graphics.*
 import android.view.MotionEvent
+import android.view.ViewGroup
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import com.example.cpudefense.effects.*
 import com.example.cpudefense.gameElements.Button
 import com.example.cpudefense.gameElements.GameElement
@@ -133,13 +134,21 @@ class Marketplace(val game: Game): GameElement()
         }
         if (buttonRefund?.area?.contains(event.x.toInt(), event.y.toInt()) == true)
         {
-            val builder = AlertDialog.Builder(game.gameActivity)
-            builder.setMessage(game.resources.getString(R.string.query_reset))
-                .setCancelable(false)
-                .setPositiveButton(game.resources.getString(R.string.yes)) { dialog, id -> refundAll() }
-                .setNegativeButton(game.resources.getString(R.string.no)) { dialog, id -> dialog.dismiss() }
-            val alert = builder.create()
-            alert.show()
+            val dialog = Dialog(game.gameActivity)
+            dialog.setContentView(R.layout.layout_dialog_heroes)
+            dialog.window?.setLayout(
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+            )
+            dialog.setCancelable(true)
+            dialog.findViewById<android.widget.TextView>(R.id.question).text = game.resources.getText(R.string.query_reset)
+            val button1 = dialog.findViewById<android.widget.Button>(R.id.button1)
+            val button2 = dialog.findViewById<android.widget.Button>(R.id.button2)
+            button2?.text = game.resources.getText(R.string.yes)
+            button1?.text = game.resources.getText(R.string.no)
+            button2?.setOnClickListener { dialog.dismiss(); refundAll() }
+            button1?.setOnClickListener { dialog.dismiss() }
+            dialog.show()
             return true
         }
         if (buttonPurchase?.area?.contains(event.x.toInt(), event.y.toInt()) == true)
@@ -263,8 +272,8 @@ class Marketplace(val game: Game): GameElement()
     {
         val paint = Paint()
         val myArea = Rect(0,0,size,size)
-        var myBitmap = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888)
-        val myCanvas = Canvas(myBitmap)
+        private var myBitmap: Bitmap = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888)
+        private val myCanvas = Canvas(myBitmap)
         var isCurrentlyFlipping = false
 
         init {
