@@ -136,11 +136,26 @@ fun Rect.displayTextCenteredInRect(canvas: Canvas, text: String, paint: Paint): 
     val bounds = Rect()
     paint.getTextBounds(text, 0, text.length, bounds)
     paint.textAlign = Paint.Align.LEFT
-    val rect = Rect(this.centerX() - bounds.width()/2, this.centerY() + bounds.height()/2, this.centerX() + bounds.width()/2, this.centerY() - bounds.height()/2)
-    canvas.drawText(text, rect.left.toFloat(), rect.top.toFloat(), paint)
+    val rect = Rect(this.centerX() - bounds.width()/2, this.centerY() - bounds.height()/2, this.centerX() + bounds.width()/2, this.centerY() + bounds.height()/2)
+    canvas.drawText(text, rect.left.toFloat(), rect.bottom.toFloat(), paint)
     return rect
 }
 
+fun Rect.displayTextLeftAlignedInRect(canvas: Canvas, text: String, paint: Paint): Rect
+        /**
+         * draws text left-aligned and centered to the vertical center of this rectangle, using the actual text size.
+         * @param text text to be drawn in the rectangle
+         * @param paint paint that is used for the text
+         * @returns the rectangle that bounds the text actually drawn
+         */
+{
+    val bounds = Rect()
+    paint.getTextBounds(text, 0, text.length, bounds)
+    paint.textAlign = Paint.Align.LEFT
+    val rect = Rect(0, this.centerY() - bounds.height()/2, bounds.width(), this.centerY() + bounds.height()/2)
+    canvas.drawText(text, rect.left.toFloat(), rect.bottom.toFloat(), paint)
+    return rect
+}
 fun Rect.drawOutline(canvas: Canvas)
 /**
  * for debugging purposes. Shows the rectangle by drawing a white outline around it

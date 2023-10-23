@@ -74,7 +74,7 @@ class ScoreBoard(val game: Game): GameElement() {
         debugStatusLine?.display(canvas)
     }
 
-    fun displayHeader(canvas: Canvas, area: Rect, text: String)
+    fun displayHeader(canvas: Canvas, area: Rect, text: String, centered: Boolean = true)
             /**
              * Display text in 'header' text size
              *
@@ -89,7 +89,10 @@ class ScoreBoard(val game: Game): GameElement() {
         paint.color = game.resources.getColor(R.color.scoreboard_text)
         paint.typeface = Typeface.create("sans-serif", Typeface.NORMAL)
         paint.textSize = Game.scoreHeaderSize * game.resources.displayMetrics.scaledDensity
-        rect.displayTextCenteredInRect(canvas, text, paint)
+        if (centered)
+            rect.displayTextCenteredInRect(canvas, text, paint)
+        else
+            rect.displayTextLeftAlignedInRect(canvas, text, paint)
     }
 
     fun recreateBitmap()
@@ -176,7 +179,7 @@ class ScoreBoard(val game: Game): GameElement() {
         fun recreateBitmap() {
             bitmap = Bitmap.createBitmap(area.width(), area.height(), Bitmap.Config.ARGB_8888)
             val canvas = Canvas(bitmap)
-            displayHeader(canvas, Rect(0,0, area.width(), area.height()), game.resources.getString(R.string.scoreboard_waves))
+            displayHeader(canvas, Rect(0,0, area.width(), area.height()), game.resources.getString(R.string.scoreboard_waves), centered = false)
             val rect = Rect(0, divider, area.width(), area.height())
             val bounds = Rect()
             paint.typeface = Typeface.create("sans-serif", Typeface.NORMAL)
