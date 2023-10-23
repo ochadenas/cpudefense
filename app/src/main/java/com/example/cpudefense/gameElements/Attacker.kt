@@ -38,7 +38,8 @@ open class Attacker(network: Network, type: Representation = Representation.BINA
     var immuneTo: Chip? = null
     var animationCount = 0
     val animationCountMax = 8
-    private var numberFontSize = 24f
+    private var baseNumberFontSize = 24f
+    var numberFontSize = baseNumberFontSize  // must be scaled
     var displacement = Pair(Random.nextInt(5)-1, Random.nextInt(7)-2) // small shift in display to avoid over-crowding on the screen
     private val paintBitmap = Paint()
     var scale: Float = 1.0f
@@ -47,7 +48,7 @@ open class Attacker(network: Network, type: Representation = Representation.BINA
         this.data.speed = speed
         if (attackerData.bits == 0)
             calculateNumberOfDigits()
-        numberFontSize *= theNetwork.theGame.resources.displayMetrics.scaledDensity *
+        numberFontSize = baseNumberFontSize * theNetwork.theGame.resources.displayMetrics.scaledDensity *
                 if (theNetwork.theGame.gameActivity.settings.configUseLargeButtons) 1.5f else 1.0f
         makeNumber(this)
     }
