@@ -11,9 +11,10 @@
     <ImageView
         android:id="@+id/settings_title_image"
         android:layout_width="0dp"
-        android:layout_height="45dp"
+        android:layout_height="0dp"
         android:layout_marginStart="32dp"
-        android:padding="4dp"
+        android:adjustViewBounds="true"
+        android:cropToPadding="false"
         android:scaleType="fitStart"
         app:layout_constraintBottom_toBottomOf="@+id/settings_title_view"
         app:layout_constraintEnd_toStartOf="@+id/settings_title_view"
@@ -28,7 +29,7 @@
         android:layout_marginTop="40dp"
         android:layout_marginEnd="32dp"
         android:text="@string/settings_title"
-        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:textSize="24sp"
         android:textColor="#FFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -42,14 +43,15 @@
         app:layout_constraintStart_toStartOf="@+id/settings_title_image"
         app:layout_constraintTop_toBottomOf="@+id/settings_title_view">
 
-        <Switch
+        <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/switch_disable_background"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="savePrefs"
             android:text="@string/settings_disable_background"
-            android:textColor="#FFFFFF" />
-        <Switch
+            android:textColor="#FFFFFF"
+            />
+        <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/switch_show_atts_in_range"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -57,7 +59,7 @@
             android:text="@string/settings_show_atts_in_range"
             android:textColor="#FFFFFF" />
 
-        <Switch
+        <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/switch_use_large_buttons"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -65,7 +67,7 @@
             android:text="@string/settings_use_large_buttons"
             android:textColor="#FFFFFF" />
 
-        <Switch
+        <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/switch_show_framerate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -80,14 +82,12 @@
         android:id="@+id/about_title_image"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:padding="4dp"
         android:scaleType="fitStart"
+        android:adjustViewBounds="true"
         app:layout_constraintBottom_toBottomOf="@+id/about_title_view"
         app:layout_constraintEnd_toEndOf="@+id/settings_title_image"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="@+id/settings_title_image"
         app:layout_constraintTop_toTopOf="@+id/about_title_view"
-        app:layout_constraintVertical_bias="1.0"
         app:srcCompat="@drawable/cryptocoin" />
 
     <TextView
@@ -96,9 +96,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="64dp"
         android:text="@string/settings_about"
-        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:textSize="24sp"
         android:textColor="#FFFFFF"
-        app:layout_constraintStart_toEndOf="@+id/settings_title_image"
+        app:layout_constraintStart_toStartOf="@id/settings_title_view"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
     <TextView
