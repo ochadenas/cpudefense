@@ -9,6 +9,8 @@
     <color name="white">#FFFFFFFF</color>
     <color name="deco_blue">#0C65EA</color>
     <color name="deco_white">#FFFFFF</color>
+    <color name="circuit">#fdd300</color>
+    <color name="circuit_edge">#eb6909</color>
 
     <color name="network_background">#F0292215</color>
     <color name="connectors">#F0e79c00</color>

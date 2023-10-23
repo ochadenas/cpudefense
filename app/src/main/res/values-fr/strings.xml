@@ -22,6 +22,7 @@
     <string name="level_entry">Niveau %d</string>
     <string name="level_selector">Sélection de niveau</string>
     <string name="button_refund">Remise à zéro</string>
+    <string name="query_restart_game">Vraiment commencer une nouvelle partie ?  Cela remettra toute la progression à zéro.</string>
     <string name="no">Non</string>
     <string name="yes">Oui</string>
     <string name="button_purchase">Recruter</string>

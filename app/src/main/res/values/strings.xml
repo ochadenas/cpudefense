@@ -25,7 +25,7 @@
     <string name="level_entry">Level %d</string>
     <string name="level_selector">Level Selector</string>
     <string name="query_reset">Do you want to reset all heroes?</string>
-    <string name="query_restart_game">Really start new game? This will reset all your progress.</string>
+    <string name="query_restart_game">Wirklich ein neues Spiel beginnen?  Dadurch wird der gesamte Fortschritt zurück auf Null gesetzt.</string>
     <string name="no">No</string>
     <string name="yes">Yes</string>
 

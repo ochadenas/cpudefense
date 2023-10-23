@@ -1,56 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:background="@drawable/shape_border_yellow"
-    android:scaleType="centerCrop">
+    android:scaleType="centerCrop"
+    >
 
-    <TextView
-        android:id="@+id/question"
-        android:layout_width="240sp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="16dp"
-        android:text="Question"
-        android:textColor="@color/connectors"
-        android:textSize="24sp"
+    <ImageView
+        android:id="@+id/deko"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginEnd="8dp"
+        android:adjustViewBounds="true"
+        android:padding="0dp"
+        android:scaleType="fitEnd"
+        app:layout_constraintBottom_toBottomOf="@id/inner_layout"
+        app:layout_constraintEnd_toStartOf="@id/inner_layout"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@id/inner_layout"
+        app:srcCompat="@drawable/deko_border" />
 
-    <Button
-        android:id="@+id/button1"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/inner_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="32dp"
-        android:background="@color/black"
-        app:backgroundTint="@null"
-        android:text="Answer 1"
-        android:textAllCaps="true"
-        android:textColor="@color/text_amber"
-        android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/question" />
-
-    <Button
-        android:id="@+id/button2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginEnd="24dp"
-        android:background="@color/black"
-        app:backgroundTint="@null"
-        android:text="Answer 2"
-        android:textAllCaps="true"
-        android:textColor="@color/text_lightamber"
-        android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="@id/button1"
+        app:layout_constraintStart_toEndOf="@id/deko"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/button1"
-        app:layout_constraintTop_toTopOf="@id/button1" />
+        >
 
+        <TextView
+            android:id="@+id/question"
+            android:layout_width="160sp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="16dp"
+            android:text="Question"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/button1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="24dp"
+            android:background="@color/black"
+            android:text="Answer 1"
+            android:textAllCaps="true"
+            android:textColor="@color/circuit_edge"
+            app:backgroundTint="@null"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/question" />
+
+        <Button
+            android:id="@+id/button2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:background="@color/black"
+            android:text="Answer 2"
+            android:textAllCaps="true"
+            android:textColor="@color/circuit"
+            android:textSize="12sp"
+            app:backgroundTint="@null"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/button1"
+            app:layout_constraintStart_toStartOf="@+id/button1"
+            app:layout_constraintTop_toBottomOf="@id/button1" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
