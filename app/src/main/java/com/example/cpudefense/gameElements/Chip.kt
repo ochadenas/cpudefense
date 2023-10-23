@@ -228,7 +228,8 @@ open class Chip(open val network: Network, gridX: Int, gridY: Int): Node(network
         {
             val chip = node as Chip
             if (chip.chipData.type in chipsAffected) {
-                if (chip.cooldownTimer < chip.getCooldownTime() - 10)
+                // avoid resetting when clock tick comes _too_ soon after the regular reset
+                if (chip.cooldownTimer < chip.getCooldownTime() * 0.25f)
                     chip.cooldownTimer = 0f
             }
         }
