@@ -7,6 +7,9 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="deco_blue">#0C65EA</color>
+    <color name="deco_white">#FFFFFF</color>
+
     <color name="network_background">#F0292215</color>
     <color name="connectors">#F0e79c00</color>
     <color name="attackers_foreground_bin">#DAFFF2F2</color>
@@ -47,6 +50,7 @@
     <color name="text_lightamber">#fdd300</color>
     <color name="text_white">#FFFFFF</color>
     <color name="text_blue">#1BB8FF</color>
+    <color name="text_lightblue">#7AC8EC</color>
 
     <color name="upgrade_inactive">#7C878C</color>
     <color name="upgrade_active_general">#79D5FF</color>
