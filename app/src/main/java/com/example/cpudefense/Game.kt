@@ -146,6 +146,8 @@ class Game(val gameActivity: MainGameActivity) {
 
     fun resumeGame()
     {
+        summaryPerLevelOfSeries1 = gameActivity.loadLevelData(1)   // get historical data of levels completed so far
+        summaryPerLevelOfSeries2 = gameActivity.loadLevelData(2)
         currentStage = Stage.createStageFromData(this, stageData)
         val stage = currentStage ?: return beginGame()
 
@@ -294,7 +296,7 @@ class Game(val gameActivity: MainGameActivity) {
         }
     }
 
-    private fun getSummaryOfStage(stage: Stage.Identifier): Stage.Summary?
+    fun getSummaryOfStage(stage: Stage.Identifier): Stage.Summary?
     {
         when (stage.series)
         {

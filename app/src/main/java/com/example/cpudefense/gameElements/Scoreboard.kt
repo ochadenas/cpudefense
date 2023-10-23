@@ -178,12 +178,21 @@ class ScoreBoard(val game: Game): GameElement() {
             val canvas = Canvas(bitmap)
             displayHeader(canvas, Rect(0,0, area.width(), area.height()), game.resources.getString(R.string.scoreboard_waves))
             val rect = Rect(0, divider, area.width(), area.height())
+            val bounds = Rect()
             paint.typeface = Typeface.create("sans-serif", Typeface.NORMAL)
             paint.style = Paint.Style.FILL
             paint.color = myColor
-            paint.textSize = Game.scoreTextSize * game.resources.displayMetrics.scaledDensity
+            paint.textAlign = Paint.Align.LEFT
             game.currentStage?.let {
-                rect.displayTextCenteredInRect(canvas, "%d / %d".format(it.data.countOfWaves, it.data.maxWaves ), paint)
+                val currentWave = "%d".format(it.data.countOfWaves)
+                paint.textSize = Game.scoreTextSize * game.resources.displayMetrics.scaledDensity
+                paint.getTextBounds(currentWave, 0, currentWave.length, bounds)
+                val verticalMargin = (rect.height()-bounds.height())/2
+                val rectLeft = Rect(0, rect.top+verticalMargin, bounds.width(), rect.bottom-verticalMargin)
+                val rectRight = Rect(rectLeft.right, rectLeft.top, rect.right, rectLeft.bottom)
+                canvas.drawText(currentWave, rectLeft.left.toFloat(), rectLeft.bottom.toFloat(), paint)
+                paint.textSize *= 0.6f
+                canvas.drawText("  / %d".format(it.data.maxWaves), rectRight.left.toFloat(), rectRight.bottom.toFloat(), paint)
             }
         }
     }

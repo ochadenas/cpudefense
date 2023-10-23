@@ -149,7 +149,11 @@ class Stage(var theGame: Game) {
                 val attacker = Attacker.createFromData(stage, attackerData)
                 stage.network.addVehicle(attacker)
             }
-            stage.calculateRewardCoins(game.summaryPerLevelOfSeries1[stage.getLevel()])
+            // set summary and available coins
+            game.getSummaryOfStage(stage.data.ident)?.let {
+                stage.summary = it
+                game.state.coinsInLevel = it.coinsAvailable ?: 0
+            }
             return stage
         }
     }
