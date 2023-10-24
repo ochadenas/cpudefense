@@ -12,21 +12,24 @@
         <profileable android:shell="true" />
         <activity
             android:name=".MainGameActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".LevelSelectActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".WelcomeActivity"
+            android:screenOrientation="portrait"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".SettingsActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
     </application>
 
