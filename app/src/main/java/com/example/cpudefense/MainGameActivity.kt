@@ -7,6 +7,7 @@ import android.os.SystemClock
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.view.Window
+import android.view.WindowManager
 import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.Toast
@@ -56,6 +57,7 @@ class MainGameActivity : Activity() {
         /* here, the size of the surfaces might not be known */
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         setContentView(R.layout.activity_main_game)
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         theGame = Game(this)
         theGameView = GameView(this, theGame)
 
