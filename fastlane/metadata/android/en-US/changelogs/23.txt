@@ -1,0 +1,11 @@
+New Features:
+- new background pictures
+- hero costs are shown on the 'hire' button
+- overall small graphical improvements
+
+Bugfixes:
+- game stays in portrait mode, keeps the device awake
+- corrected coin count and size of attackers when resuming game
+
+Miscellaneous:
+- replaced Android system style dialogs by custom design
