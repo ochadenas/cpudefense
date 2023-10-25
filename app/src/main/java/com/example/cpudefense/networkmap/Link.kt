@@ -163,11 +163,11 @@ class Link(@Suppress("UNUSED_PARAMETER") val theNetwork: Network, var node1: Nod
                 displayLine(canvas, viewport, point1, point2)
             }
             else  // connection via intermediate point
-            interPoint?.let {
-                val point0 = GridCoord(it.x+displacementX, it.y+displacementY)
-                displayLine(canvas, viewport, point1, point0)
-                displayLine(canvas, viewport, point0, point2)
-            }
+                interPoint?.let {
+                    val point0 = GridCoord(it.x+displacementX, it.y+displacementY)
+                    displayLine(canvas, viewport, point1, point0)
+                    displayLine(canvas, viewport, point0, point2)
+                }
             displayConnectorCircle(canvas, viewport, point1)
             displayConnectorCircle(canvas, viewport, point2)
         }
