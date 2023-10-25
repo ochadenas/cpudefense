@@ -20,12 +20,13 @@
     <string name="play_selected_level">Play selected level</string>
     <string name="button_marketplace">Heroes</string>
     <string name="button_refund">Reset all</string>
-    <string name="button_purchase">Hire</string>
+    <string name="button_purchase">Hire [1 coin] </string>
+    <string name="button_purchase_plural">Hire [%d coins]</string>
     <string name="cost_desc">[cost: %d]</string>
     <string name="level_entry">Level %d</string>
     <string name="level_selector">Level Selector</string>
     <string name="query_reset">Do you want to reset all heroes?</string>
-    <string name="query_restart_game">Wirklich ein neues Spiel beginnen?  Dadurch wird der gesamte Fortschritt zurück auf Null gesetzt.</string>
+    <string name="query_restart_game">Really start a new game? This will reset all your progress.</string>
     <string name="no">No</string>
     <string name="yes">Yes</string>
 
@@ -170,7 +171,7 @@ The record-selling C64 not only had an enormous 64 kiB of RAM, it also featured 
 
 The programming language Pascal is named after him."</string>
     <string name="hopper">"\nGrace Brewster Murray Hopper had the idea that computer programs could be written in human-readable language instead of as sequences of Ones and Zeroes. She designed the FLOW-MATIC programming language, and thus invented the first compiler.\n    "</string>
-    <string name="mandelbrot">Benoît Mandelbrot was the most important founder of fractal geometry, which can not only be used to describe many structures in nature very well, but also to create fantastic graphics on the computer. \n\nThe grpahical representation of the Mandelbrot set went viral and founded a new age of computer art.</string>
+    <string name="mandelbrot">Benoît Mandelbrot was the most important founder of fractal geometry, which can not only be used to describe many structures in nature very well, but also to create fantastic graphics on the computer. \n\nThe graphical representation of the Mandelbrot set went viral and founded a new age of computer art.</string>
     <string name="schneier">"Bruce Schneier is an expert on cryptography and information security. He has written important books on the subject, most notably 'Applied Cryptography', and has designed several cryptographic algorithms.\n        \nHe is not afraid of criticizing governments or global companies if he deems their actions counterproductive to security or violating the right of privacy.\n "</string>
     <string name="meier">Sidney K. Meier has created some of the most influential strategy games and revolutionised the genre. With comparatively simple rules, his games simulate the complexities of reality amazingly well. And they always tell a story: of the age of the railways, of the American Revolution, or - as in his most famous work \'Civilization\' - of 6000 years of human history.</string>
     <string name="settings_title">Settings</string>

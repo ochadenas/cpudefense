@@ -25,7 +25,7 @@
     <string name="query_restart_game">Vraiment commencer une nouvelle partie ?  Cela remettra toute la progression à zéro.</string>
     <string name="no">Non</string>
     <string name="yes">Oui</string>
-    <string name="button_purchase">Recruter</string>
+    <string name="button_purchase">"Recruter [1 écu] "</string>
     <string name="query_reset">Remettre à zéro tous les héros et héroïnes ?</string>
     <string name="instr_1">Votre ordinateur est envahi par un virus. Des fragments de code maléfique - représentés par des uns et des zéros - tentent d\'atteindre le processeur.\n\nTapez sur l\'emplacement vide pour ajouter une puce comme défense contre l\'attaque, puis tapez à nouveau pour confirmer votre choix.\n\nLa puce la plus basique est \'SUB 1\' qui soustrait 1 à la valeur de l\'attaquant : les 1 deviennent des 0, et les 0 disparaissent et ne constituent plus une menace.</string>
     <string name="instr_2">Vous pouvez appuyer sur un attaquant. Cela inversera sa valeur : 1 devient 0 et 0 devient 1.\n\nInverser un 0 rendra en fait l\'attaquant plus dangereux, alors faites attention de ne pas taper sur tout ce que vous voyez.</string>
@@ -109,7 +109,9 @@
     <string name="hopper">\nGrace Brewster Murray Hopper a eu l\'idée de formuler les programmes informatiques dans un langage lisible par l\'homme plutôt que comme une suite de uns et de zéros. \n\nElle développa le langage de programmation FLOW-MATIC et a ainsi inventé le premier compilateur.</string>
     <string name="query_quit">Voulez-vous abandonner le niveau actuel ?</string>
     <string name="return_to_main_menu">Retour au menu principal</string>
+    <string name="continue_game">Continuer à jouer</string>
     <string name="replay">Rejouer le niveau</string>
     <string name="settings_use_large_buttons">Utiliser de grands boutons</string>
     <string name="settings_show_framerate">Afficher le frame-rate</string>
+    <string name="button_purchase_plural">"Recruter [1 écus] "</string>
 </resources>

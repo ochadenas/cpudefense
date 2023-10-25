@@ -114,7 +114,7 @@ class Marketplace(val game: Game): GameElement()
             it.alignRight(myArea.right, myArea.bottom - bottomMargin - 3*it.area.height())
             // it.area.setBottomRight(myArea.right-50, myArea.bottom - bottomMargin - 2*(buttonFinish?.area?.height() ?: 200))
         }
-        buttonPurchase = Button(game.resources.getString(R.string.button_purchase),
+        buttonPurchase = Button(purchaseButtonText(null),
             textSize = Game.purchaseButtonTextSize * game.resources.displayMetrics.scaledDensity,
             style = 1)
         buttonPurchase?.let {
@@ -174,6 +174,7 @@ class Marketplace(val game: Game): GameElement()
         for (card in upgrades)
             if (card.areaOnScreen.contains(event.x.toInt(), event.y.toInt())) {
                 selected = card
+                buttonPurchase?.text = purchaseButtonText(card)
                 return true
             }
         selected = null
@@ -246,26 +247,27 @@ class Marketplace(val game: Game): GameElement()
             c.display(canvas, viewport)
             coinPosX += deltaX
         }
-
-        /*
-        textPaint.color = Color.WHITE
-        textPaint.style = Paint.Style.FILL
-        textPaint.textSize = 48f * game.resources.displayMetrics.scaledDensity
-        val text = "Total coins: %d".format(game.global.coinsTotal)
-        canvas.drawText(text, 20f, y-4*game.resources.displayMetrics.scaledDensity, textPaint)
-         */
-
         // draw buttons
         buttonFinish?.display(canvas)
         buttonRefund?.display(canvas)
         selected?.let {
             buttonPurchase?.display(canvas)
         }
-
         // draw biography
         selected?.biography?.let {
             canvas.drawBitmap(it.bitmap, null, biographyArea, paint)
         }
+    }
+
+    fun purchaseButtonText(card: Hero?): String
+    {
+        var text: String? = card?.let {
+            if (it.data.level == 1)
+                game.resources.getString(R.string.button_purchase)
+            else
+                game.resources.getString(R.string.button_purchase_plural).format(it.getPrice(card.data.level))
+            }
+        return text ?: game.resources.getString(R.string.button_purchase)
     }
 
     class Coin(val game: Game, size: Int): GameElement(), Fadable, Flippable
