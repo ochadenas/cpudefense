@@ -175,6 +175,7 @@ class Marketplace(val game: Game): GameElement()
         for (card in upgrades)
             if (card.areaOnScreen.contains(event.x.toInt(), event.y.toInt())) {
                 selected = card
+                biographyViewOffset = 0f
                 buttonPurchase?.text = purchaseButtonText(card)
                 return true
             }
@@ -267,7 +268,7 @@ class Marketplace(val game: Game): GameElement()
         }
         // draw biography
         selected?.biography?.let {
-            val sourceRect = Rect(0, -biographyViewOffset.toInt(), it.bitmap.width, it.bitmap.height-biographyViewOffset.toInt())
+            val sourceRect = Rect(0, -biographyViewOffset.toInt(), it.bitmap.width, it.myArea.height()-biographyViewOffset.toInt())
             canvas.drawBitmap(it.bitmap, sourceRect, biographyArea, paint)
         }
     }

@@ -642,7 +642,7 @@ class Hero(var game: Game, type: Type): Fadable {
 
     }
 
-    inner class Biography(private var myArea: Rect)
+    inner class Biography(var myArea: Rect)
     {
         var bitmap: Bitmap = createBitmap(myArea.width(), myArea.height(), Bitmap.Config.ARGB_8888)
         private var canvas = Canvas(bitmap)
