@@ -7,7 +7,7 @@ import com.example.cpudefense.utils.*
 
 class ScoreBoard(val game: Game): GameElement() {
     var area = Rect()
-    var score = Score()
+    var information = Information()
     var waves = Waves()
     var lives = Lives()
     var coins = Coins()
@@ -15,14 +15,21 @@ class ScoreBoard(val game: Game): GameElement() {
     var myColor = Color.WHITE
     var divider = 0  // between the display title and the actual display
 
-    fun setSize(area: Rect) {
+    val fractionOfScoreBoardUsedForInf = 0.3f
+
+    fun setSize(area: Rect)
+            /** sets the size of the score board and determines the dimensions of all components.
+             * @param area The rectangle that the score board shall occupy
+              */
+    {
         this.area = Rect(area)
         // divider between title line and actual status indicators
         divider = /* this.area.top + */ this.area.height() * 32 / 100
-        score.setSize(area, divider)
-        waves.setSize(area, divider)
-        lives.setSize(area, divider)
-        coins.setSize(area, divider)
+        var areaRemaining = Rect(area)
+        areaRemaining = information.setSize(areaRemaining, divider)
+        areaRemaining = waves.setSize(areaRemaining, divider)
+        areaRemaining = coins.setSize(areaRemaining, divider)
+        areaRemaining = lives.setSize(areaRemaining, divider)
         if (game.gameActivity.settings.showFramerate) {
             debugStatusLine = DebugStatusLine()
             debugStatusLine?.setSize(area, divider)
@@ -67,7 +74,7 @@ class ScoreBoard(val game: Game): GameElement() {
         canvas.drawRect(area, paint)
 
         if (game.currentStage?.getSeries() ?: 1 > 1 || game.currentStage?.getLevel() ?: 3 > 2)
-            score.display(canvas)
+            information.display(canvas)
         waves.display(canvas)
         lives.display(canvas)
         coins.display(canvas)
@@ -101,14 +108,14 @@ class ScoreBoard(val game: Game): GameElement() {
              */
     {
         if (area.width()>0 && area.height()>0) {
-            score.recreateBitmap()
+            information.recreateBitmap()
             waves.recreateBitmap()
             lives.recreateBitmap()
             coins.recreateBitmap()
         }
     }
 
-    inner class Score()
+    inner class Information()
     /** display of current amount of information ('cash') */
     {
         var area = Rect()
@@ -118,10 +125,17 @@ class ScoreBoard(val game: Game): GameElement() {
         lateinit var bitmap: Bitmap
         val paint = Paint()
 
-        fun setSize(area: Rect, divider: Int) {
-            this.area = Rect(area.left, area.top, 200, area.bottom)
+        fun setSize(area: Rect, divider: Int): Rect
+                /** sets the area that is taken up by the information count.
+                 * @param area The whole area of the score board
+                 * @divider hieght of the line between header and contents
+                 * @return The rectangle that remains (original area minus occupied area)
+                  */
+        {
+            this.area = Rect(area.left, area.top, (area.width()*fractionOfScoreBoardUsedForInf).toInt(), area.bottom)
             bitmap = Bitmap.createBitmap(this.area.width(), this.area.height(), Bitmap.Config.ARGB_8888)
             this.divider = divider
+            return Rect(this.area.right, area.top, area.right, area.bottom)
         }
 
         fun display(canvas: Canvas)
@@ -159,10 +173,12 @@ class ScoreBoard(val game: Game): GameElement() {
         lateinit var bitmap: Bitmap
         val paint = Paint()
 
-        fun setSize(area: Rect, divider: Int) {
-            this.area = Rect(240, area.top, area.centerX(), area.bottom)
+        fun setSize(area: Rect, divider: Int): Rect
+        {
+            this.area = Rect(area.left, area.top, (area.left+area.width()*0.3).toInt(), area.bottom)
             bitmap = Bitmap.createBitmap(this.area.width(), this.area.height(), Bitmap.Config.ARGB_8888)
             this.divider = divider
+            return Rect(this.area.right, area.top, area.right, area.bottom)
         }
 
         fun display(canvas: Canvas)
@@ -208,10 +224,12 @@ class ScoreBoard(val game: Game): GameElement() {
         lateinit var bitmap: Bitmap
         val paint = Paint()
 
-        fun setSize(area: Rect, divider: Int) {
-            this.area = Rect((area.width() * 0.7f).toInt(), area.top, area.right, area.bottom)
+        fun setSize(area: Rect, divider: Int): Rect
+        {
+            this.area = Rect(area)
             bitmap = Bitmap.createBitmap(this.area.width(), this.area.height(), Bitmap.Config.ARGB_8888)
             this.divider = divider
+            return Rect(this.area.right, area.top, area.right, area.bottom)
         }
 
         fun display(canvas: Canvas)
@@ -287,12 +305,14 @@ class ScoreBoard(val game: Game): GameElement() {
         lateinit var bitmap: Bitmap
         val paint = Paint()
 
-        fun setSize(area: Rect, divider: Int) {
+        fun setSize(area: Rect, divider: Int): Rect
+        {
             actualSize = (Game.coinSizeOnScoreboard * game.resources.displayMetrics.scaledDensity).toInt()
-            this.area = Rect(waves.area.right, area.top, lives.area.left, area.bottom)
+            this.area = Rect(waves.area.right, area.top, area.centerX(), area.bottom)
             bitmap =
                 Bitmap.createBitmap(this.area.width(), this.area.height(), Bitmap.Config.ARGB_8888)
             this.divider = divider
+            return Rect(this.area.right, area.top, area.right, area.bottom)
         }
 
         fun display(canvas: Canvas) {

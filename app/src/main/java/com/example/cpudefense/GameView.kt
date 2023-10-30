@@ -135,13 +135,11 @@ class GameView(context: Context, val theGame: Game):
 
     @Synchronized fun display()
     {
-        val canvas = holder.lockCanvas()
-        if (canvas != null)
+        holder.lockCanvas()?.let()
         {
-            theGame.display(canvas)
-            theEffects?.display(canvas)
-
-            holder.unlockCanvasAndPost(canvas)
+            theGame.display(it)
+            theEffects?.display(it)
+            holder.unlockCanvasAndPost(it)
         }
     }
 }
