@@ -25,7 +25,8 @@ class Marketplace(val game: Game): GameElement()
     private var clearPaint = Paint()
     private val textPaint = Paint()
     private var paint = Paint()
-    private var viewOffset = 0f  // used for scrolling
+    private var cardViewOffset = 0f  // used for scrolling
+    private var biographyViewOffset = 0f  // used for scrolling
 
     private var upgrades = mutableListOf<Hero>()
     private var selected: Hero? = null
@@ -71,7 +72,7 @@ class Marketplace(val game: Game): GameElement()
             card.setSize()
             card.createBitmap()
         }
-        arrangeCards(newUpgrades, viewOffset)
+        arrangeCards(newUpgrades, cardViewOffset)
         upgrades = newUpgrades
         coins = MutableList(game.global.coinsTotal) { Coin(game, coinSize) }
     }
@@ -177,8 +178,10 @@ class Marketplace(val game: Game): GameElement()
                 buttonPurchase?.text = purchaseButtonText(card)
                 return true
             }
-        selected = null
-
+        if (cardsArea.contains(event.x.toInt(), event.y.toInt())) {
+            selected = null
+            return true
+        }
 
         return false
     }
@@ -206,9 +209,18 @@ class Marketplace(val game: Game): GameElement()
     }
 
     fun onScroll(event1: MotionEvent?, event2: MotionEvent?, dX: Float, dY: Float): Boolean {
-        if (dY != 0f) {
-            viewOffset -= dY / 2.0f
-            arrangeCards(upgrades, viewOffset)
+        if (dY == 0f)
+            return false  // only vertical movements are considered here
+        event1?.let {
+            val posX = it.x.toInt()
+            val posY = it.y.toInt()
+            if (cardsArea.contains(posX, posY)) {
+                cardViewOffset -= dY / 2.0f
+                arrangeCards(upgrades, cardViewOffset)
+            } else if (biographyArea.contains(posX, posY))
+            {
+                biographyViewOffset -= dY / 2.0f
+            }
         }
         return true
     }
@@ -255,7 +267,8 @@ class Marketplace(val game: Game): GameElement()
         }
         // draw biography
         selected?.biography?.let {
-            canvas.drawBitmap(it.bitmap, null, biographyArea, paint)
+            val sourceRect = Rect(0, -biographyViewOffset.toInt(), it.bitmap.width, it.bitmap.height-biographyViewOffset.toInt())
+            canvas.drawBitmap(it.bitmap, sourceRect, biographyArea, paint)
         }
     }
 

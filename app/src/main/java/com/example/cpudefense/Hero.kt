@@ -660,6 +660,9 @@ class Hero(var game: Game, type: Type): Fadable {
                 text = "%s\n\n%s".format(hero.fullName, effect)
                 paintBiography.color = selected?.inactiveColor ?: Color.WHITE
             }
+
+
+
             canvas.drawColor(Color.BLACK)
             paintBiography.textSize = Game.biographyTextSize*game.resources.displayMetrics.scaledDensity
             paintBiography.alpha = 255
@@ -670,6 +673,12 @@ class Hero(var game: Game, type: Type): Fadable {
                 0.0f,
                 false
             )
+            // if the text exceeds the area provided, enlarge the bitmap
+            if (textLayout.height>this.bitmap.height)
+            {
+                this.bitmap = createBitmap(myArea.width(), textLayout.height, Bitmap.Config.ARGB_8888)
+                canvas = Canvas(bitmap)
+            }
             textLayout.draw(canvas)
         }
     }
