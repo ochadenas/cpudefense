@@ -3,7 +3,11 @@ package com.example.cpudefense
 import com.example.cpudefense.gameElements.*
 import kotlin.random.Random
 
-class StageCatalog {
+class StageCatalog
+{
+    /** This class is used to create all the pre-defined stages in series 1 and 2.
+     * It is not meant to be instantiated.
+     */
     companion object {
         fun createStage(stage: Stage, level: Stage.Identifier)
         {

@@ -246,17 +246,25 @@ class Stage(var theGame: Game) {
         return chip
     }
 
-    fun createLink(from: Int, to: Int, ident: Int, mask: Int = 0xF)
+    fun createLink(from: Int, to: Int, ident: Int, mask: Int = 0xF): Link?
     /** adds a link between two existing nodes, referenced by ID
      * @param from Ident of first node
      * @param to Ident of 2nd node
      * @param ident Ident of the link, or -1 to choose a new one
+     * @return the new link
      * */
     {
-        val node1 = network.nodes[from] ?: return
-        val node2 = network.nodes[to] ?: return
-        val link = Link(network, node1, node2, ident, mask)
-        network.addLink(link, ident)
+        val node1 = network.nodes[from] ?: return null
+        val node2 = network.nodes[to] ?: return null
+        if (network.links.containsKey(ident))
+        {  // link already present, do not create a new one
+            return network.links[ident]
+        }
+        else {
+            val link = Link(network, node1, node2, ident, mask)
+            network.addLink(link, ident)
+            return link
+        }
     }
 
     fun createTrack(linkIdents: List<Int>, ident: Int)

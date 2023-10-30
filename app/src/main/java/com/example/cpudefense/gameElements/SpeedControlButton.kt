@@ -49,6 +49,7 @@ class SpeedControlButton(val game: Game, var type: Type = Type.PAUSE, val panel:
                 }
                 Type.FAST -> {
                     game.gameActivity.setGameSpeed(Game.GameSpeed.MAX)
+                    game.state.phase = Game.GamePhase.RUNNING
                     panel.resetButtons()
                     type = Type.NORMAL
                 }

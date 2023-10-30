@@ -286,11 +286,15 @@ class Game(val gameActivity: MainGameActivity) {
             GamePhase.MARKETPLACE ->
                 return marketplace.onDown(p0)
             GamePhase.PAUSED ->
+                return speedControlPanel.onDown(p0)
+            /*
             {
                 state.phase = GamePhase.RUNNING
                 speedControlPanel.resetButtons()
                 return true
             }
+
+             */
             else ->
                 return false
         }
