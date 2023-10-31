@@ -324,7 +324,8 @@ open class Attacker(network: Network, type: Representation = Representation.BINA
 
         val powerOfTwo: HashMap<Int, UInt> = hashMapOf(
             0 to 1u, 1 to 2u, 2 to 4u, 3 to 8u, 4 to 16u,
-            5 to 32u, 6 to 64u, 7 to 128u, 8 to 256u)
+            5 to 32u, 6 to 64u, 7 to 128u, 8 to 256u,
+            9 to 512u, 10 to 1024u, 11 to 2048u, 12 to 4096u)
 
         val maskBinary: HashMap<Int, ULong> = hashMapOf(
             1 to 0x01uL, 2 to 0x03uL,  4 to 0x0FuL,

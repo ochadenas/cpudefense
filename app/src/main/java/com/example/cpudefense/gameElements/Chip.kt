@@ -479,6 +479,11 @@ open class Chip(open val network: Network, gridX: Int, gridY: Int): Node(network
                 if (a !in allowed)
                     alternatives.remove(a)
         }
+        // discard the possibility for upgrade if the chip is already very high powered
+        if (chipData.power >= 12)
+        {
+            alternatives.remove(ChipUpgrades.POWERUP)
+        }
 
         // calculate screen coordinates for the alternative boxes
         actualRect?.let { rect ->
