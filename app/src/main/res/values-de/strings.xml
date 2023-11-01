@@ -84,7 +84,7 @@ Turing wurde aufgrund seiner Homosexualität massiv diskriminiert. Er starb 1954
     <string name="query_reset">Möchtest du alle Heldinnen und Helden zurücksetzen?</string>
     <string name="query_restart_game">Wirklich ein neues Spiel beginnen?  Dadurch wird der gesamte Fortschritt zurück auf Null gesetzt.</string>
     <string name="no">Nein</string>
-    <string name="instr_7a">Tipp:\n\nWenn du nicht weiter kommst, kannst du einen der niedrigeren Level erneut spielen, um dort einen Cryptocoin einzufangen.\n</string>
+    <string name="instr_7a">Einige Tipps:\n\nDenke daran, dass SHR-Chips zwar stark sind, aber Angreifer nicht ausschalten können. Sie schwächen Angreifer mit hohen Werten, aber gegen Horden schwacher Angreifer können mehrere SUB-Chips eine effektivere Verteidigung darstellen.\n\nDie Chips müssen zwischen zwei Operationen abkühlen. Stelle Helden ein, um die Wahrscheinlichkeit zu verringern, dass Chips von einem massiven Ansturm überwältigt werden.\n\nWenn du nicht weiter kommst, kannst du einen der niedrigeren Level erneut spielen, um dort einen Cryptocoin einzufangen.\n</string>
     <string name="instr_8">
 "Du kannst Chips wieder verkaufen und so ihren Steckplatz neu verwenden.
 

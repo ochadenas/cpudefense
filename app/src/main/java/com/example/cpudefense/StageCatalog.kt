@@ -11,37 +11,44 @@ class StageCatalog
     companion object {
         fun createStage(stage: Stage, level: Stage.Identifier)
         {
-            createStageWithoutObstacles(stage, level)  // make basic layout
-            if (level.series == 2)
+            when (level.series)
             {
-                val possibleTypes = setOf( Chip.ChipType.EMPTY, Chip.ChipType.ADD, Chip.ChipType.SHL)
-                val numberOfObstacles = when (level.number)
+                1 -> return createStageWithoutObstacles(stage, level)
+                2 ->
                 {
-                    1 -> 0
-                    2 -> 0
-                    in 3 .. 5 -> 1
-                    in 6 .. 10 -> 2
-                    11 -> 1
-                    22 -> 2
-                    24 -> 2
-                    27 -> 2
-                    else -> 3
-                }
-                for (i in 1 .. numberOfObstacles)  // set or upgrade 2 slots
-                {
-                    var slot: Chip? = null
-                    while (slot?.chipData?.type !in possibleTypes)
+                    createStageWithoutObstacles(stage, level)  // make basic layout
+                    val possibleTypes =
+                        setOf(Chip.ChipType.EMPTY, Chip.ChipType.ADD, Chip.ChipType.SHL)
+                    val numberOfObstacles = when (level.number) {
+                        1 -> 0
+                        2 -> 0
+                        in 3..5 -> 1
+                        in 6..10 -> 2
+                        11 -> 1
+                        22 -> 2
+                        24 -> 2
+                        27 -> 2
+                        else -> 3
+                    }
+                    for (i in 1..numberOfObstacles)  // set or upgrade 2 slots
                     {
-                        slot = stage.chips.values.random()
+                        var slot: Chip? = null
+                        while (slot?.chipData?.type !in possibleTypes) {
+                            slot = stage.chips.values.random()
+                        }
+                        when (slot?.chipData?.type) {
+                            Chip.ChipType.ADD -> slot.addPower(1)
+                            Chip.ChipType.SHL -> slot.addPower(1)
+                            else -> if (Random.nextBoolean())
+                                slot?.setType(Chip.ChipType.SHL)
+                            else
+                                slot?.setType(Chip.ChipType.ADD)
+                        }
                     }
-                    when (slot?.chipData?.type) {
-                        Chip.ChipType.ADD -> slot.addPower(1)
-                        Chip.ChipType.SHL -> slot.addPower(1)
-                        else -> if (Random.nextBoolean())
-                            slot?.setType(Chip.ChipType.SHL)
-                        else
-                            slot?.setType(Chip.ChipType.ADD)
-                    }
+                    return
+                }
+                3 -> {
+                    EndlessStageCreator.createStage(stage, level)
                 }
             }
         }
@@ -279,16 +286,16 @@ class StageCatalog
                         rewardCoins = 3
                     }
                     8 -> {
-                        initializeNetwork(50, 50)
+                        initializeNetwork(55, 50)
 
                         createChip(1, 25, type = Chip.ChipType.ENTRY)
-                        createChip(20, 15, 1)
-                        createChip(35, 15, 2)
-                        createChip(20, 25, 3)
-                        createChip(35, 25, 4)
-                        createChip(20, 35, 5)
-                        createChip(35, 35, 6)
-                        createChip(45, 25, type = Chip.ChipType.CPU)
+                        createChip(27, 15, 1)
+                        createChip(42, 15, 2)
+                        createChip(27, 25, 3)
+                        createChip(42, 25, 4)
+                        createChip(27, 35, 5)
+                        createChip(42, 35, 6)
+                        createChip(50, 25, type = Chip.ChipType.CPU)
 
 
                         createLink(0, 3, 1)
@@ -307,11 +314,13 @@ class StageCatalog
                         createTrack(listOf(1, 5, 8, 7, 6, 5, 9), 3)
                         createTrack(listOf(1, 5, 9), 4)
 
-                        createWave(15, 2, .150f, 1.4f)
+                        createWave(10, 2, .120f, 1.2f)
+                        createWave(16, 2, .150f, 1.4f)
                         createWave(16, 2, .160f, 1.5f)
-                        createWave(25, 2, .180f, 1.7f)
-                        createWave(25, 2, .220f, 2.0f)
-                        createWave(40, 2, .300f, 2.2f)
+                        createWave(20, 2, .180f, 1.7f)
+                        createWave(25, 2, .220f, 1.9f)
+                        createWave(20, 2, .300f, 2.1f)
+                        createWave(20, 2, .340f, 2.2f)
 
                         data.chipsAllowed =
                             setOf(
