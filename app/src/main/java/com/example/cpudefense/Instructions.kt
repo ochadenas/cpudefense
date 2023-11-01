@@ -35,7 +35,7 @@ class Instructions(val game: Game, var stage: Stage.Identifier, var callback: ((
 
                 else -> ""
             }
-        else
+        else (stage.series == 2)
             return when (level)
             {
                 1 -> game.resources.getString(R.string.instr_2_1)

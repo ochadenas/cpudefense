@@ -5,7 +5,7 @@ import com.example.cpudefense.effects.Fadable
 import com.example.cpudefense.effects.Fader
 import com.example.cpudefense.utils.*
 
-class Button(var text: String, val textSize: Float, val color: Int = Color.GREEN, val style: Int = 0): Fadable
+class Button(var text: String, val textSize: Float, val color: Int = Color.GREEN, val style: Int = 0, val preferredWidth: Int = 0): Fadable
 {
     var alpha = 0
     var area = Rect()
@@ -37,7 +37,9 @@ class Button(var text: String, val textSize: Float, val color: Int = Color.GREEN
         textPaint.getTextBounds("Tg", 0, "Tg".length, area) // sample text with descender
         val height = area.height() * 2
         textPaint.getTextBounds(text, 0, text.length, area)
-        val width = area.width() + height
+        var width = area.width() + height
+        if (width<preferredWidth)
+            width = preferredWidth
         area = Rect(0,0,width,height)
         touchableArea = Rect(area).inflate(textSize.toInt())
     }
