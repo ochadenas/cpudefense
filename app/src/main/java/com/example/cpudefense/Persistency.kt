@@ -15,7 +15,7 @@ class Persistency(var game: Game?) {
             )
 
     // designators of the level data in the prefs
-    val seriesKey = hashMapOf<Int, String>(1 to "levels", 2 to "levels_series2")
+    val seriesKey = hashMapOf<Int, String>(1 to "levels", 2 to "levels_series2", 3 to "levels_endless")
 
     data class SerializableLevelData (
         val level: HashMap<Int, Stage.Summary> = HashMap()
@@ -89,6 +89,10 @@ class Persistency(var game: Game?) {
             editor.putString(seriesKey[1], json)
             // same for series 2:
             data = SerializableLevelData(it.summaryPerLevelOfSeries2)
+            json = Gson().toJson(data)
+            editor.putString(seriesKey[2], json)
+            // for endless series:
+            data = SerializableLevelData(it.summaryPerLevelOfSeries3)
             json = Gson().toJson(data)
             editor.putString(seriesKey[2], json)
         }

@@ -23,16 +23,16 @@ class EndlessStageCreator
                 data.ident = level
                 waves.clear()
                 data.type = Stage.Type.REGULAR
-                val dimX = 60
-                val dimY = 60
+                val dimX = 40
+                val dimY = 40
                 data.chipsAllowed =
                     setOf(Chip.ChipUpgrades.ACC, Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.SHR,
                         Chip.ChipUpgrades.MEM, Chip.ChipUpgrades.CLK, Chip.ChipUpgrades.POWERUP,
                         Chip.ChipUpgrades.REDUCE, Chip.ChipUpgrades.SELL )
                 initializeNetwork(dimX, dimY)
 
-                val identOfEntry = 10000
-                val identOfCpu = 9999
+                val identOfEntry = 80  // values 80 to 89 reserved for entry points
+                val identOfCpu = 90  // values 90 to 99 reserved for cpus
 
                 createChip(2, 2, type = Chip.ChipType.ENTRY, ident = identOfEntry)
                 createChip(dimX-2, dimY-2, type = Chip.ChipType.CPU, ident = identOfCpu)
@@ -43,35 +43,36 @@ class EndlessStageCreator
                 {
                     createChip(Random.nextInt(dimX), Random.nextInt(dimY), id)
                 }
-                var path = List(3) { Path() }
-                for (p in path)
+                var path = List(3) { Path(this) }
+                for ((id, p) in path.withIndex())
                 {
                     p.nodeIds.add(identOfEntry)
                     p.nodeIds.addAll(nodeIds.shuffled())
                     p.nodeIds.add(identOfCpu)
-                    // create a Track and the Links
-                    var prevNode = p.nodeIds[0]
-                    for (nodeId in p.nodeIds.drop(1))
-                    {
-                        val link = createLink(prevNode, nodeId, prevNode*100+nodeId)
-                        link?.let {
-                            
-                        }
-                        prevNode = nodeId
-                    }
-
+                    createTrack(p.createTrackFromNodes(), id)
                 }
-
-
-
+                createWave(10, 5, 0.01f, 1.5f)
             }
+            return
         }
 
-        class Path()
+        class Path(val stage: Stage)
         /** list of node IDs that are later connected by a Track */
         {
             var nodeIds = CopyOnWriteArrayList<Int>()
             var links = CopyOnWriteArrayList<Link>()
+
+            fun createTrackFromNodes(): List<Int>
+            {
+                var prevNodeId = nodeIds[0]
+                for (nodeId in nodeIds.drop(1))  // loop through the idents, starting with 2nd element
+                {
+                    val link = stage.createLink(prevNodeId, nodeId, prevNodeId*100+nodeId)
+                    links.add(link)
+                    prevNodeId = nodeId
+                }
+                return links.map { it.data.ident }
+            }
         }
 
     }
