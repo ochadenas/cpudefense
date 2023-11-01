@@ -12,35 +12,38 @@
         android:id="@+id/settings_title_image"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginStart="32dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="32dp"
         android:adjustViewBounds="true"
-        android:cropToPadding="false"
         android:scaleType="fitStart"
         app:layout_constraintBottom_toBottomOf="@+id/settings_title_view"
-        app:layout_constraintEnd_toStartOf="@+id/settings_title_view"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/settings_title_view"
+        app:layout_constraintStart_toStartOf="@id/linearLayout"
         app:layout_constraintTop_toTopOf="@+id/settings_title_view"
         app:srcCompat="@drawable/dip" />
 
     <TextView
         android:id="@+id/settings_title_view"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:layout_marginEnd="32dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:padding="8dp"
         android:text="@string/settings_title"
-        android:textSize="24sp"
         android:textColor="#FFFFFF"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:textSize="24sp"
+        app:layout_constraintStart_toEndOf="@+id/settings_title_image"
+        app:layout_constraintTop_toTopOf="parent"
+        />
 
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="32dp"
         android:orientation="vertical"
-        app:layout_constraintStart_toStartOf="@+id/settings_title_image"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/settings_title_view">
 
         <androidx.appcompat.widget.SwitchCompat
@@ -49,8 +52,8 @@
             android:layout_height="wrap_content"
             android:onClick="savePrefs"
             android:text="@string/settings_disable_background"
-            android:textColor="#FFFFFF"
-            />
+            android:textColor="#FFFFFF" />
+
         <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/switch_show_atts_in_range"
             android:layout_width="match_parent"
@@ -78,44 +81,41 @@
 
     </LinearLayout>
 
+
+
     <ImageView
-        android:id="@+id/about_title_image"
+        android:id="@+id/deko"
         android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:scaleType="fitStart"
-        android:adjustViewBounds="true"
-        app:layout_constraintBottom_toBottomOf="@+id/about_title_view"
-        app:layout_constraintEnd_toEndOf="@+id/settings_title_image"
-        app:layout_constraintStart_toStartOf="@+id/settings_title_image"
-        app:layout_constraintTop_toTopOf="@+id/about_title_view"
-        app:srcCompat="@drawable/cryptocoin" />
-
-    <TextView
-        android:id="@+id/about_title_view"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="64dp"
-        android:text="@string/settings_about"
-        android:textSize="24sp"
-        android:textColor="#FFFFFF"
-        app:layout_constraintStart_toStartOf="@id/settings_title_view"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
-
-    <TextView
-        android:id="@+id/about_text_view"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:gravity="start"
-        android:maxEms="20"
-        android:padding="8dp"
-        android:scrollbars="vertical"
-        android:text="@string/license"
-        android:textAlignment="viewStart"
-        android:textColor="#939393"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:adjustViewBounds="true"
+        android:scaleType="fitXY"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/about_title_view" />
+        app:srcCompat="@drawable/deko_border_horizontal" />
+
+    <Button
+        android:id="@+id/button3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:onClick="about"
+        android:text="@string/button_about"
+        app:layout_constraintBottom_toTopOf="@+id/deko"
+        app:layout_constraintStart_toStartOf="@+id/deko" />
+
+    <Button
+        android:id="@+id/button_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="dismiss"
+        android:text="@string/button_back"
+        app:layout_constraintBottom_toBottomOf="@+id/button3"
+        app:layout_constraintEnd_toEndOf="@+id/deko"
+        app:layout_constraintTop_toTopOf="@+id/button3" />
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

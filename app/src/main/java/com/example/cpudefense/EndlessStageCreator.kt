@@ -51,7 +51,8 @@ class EndlessStageCreator
                     p.nodeIds.add(identOfCpu)
                     createTrack(p.createTrackFromNodes(), id)
                 }
-                createWave(10, 5, 0.01f, 1.5f)
+                createWave(10, 5, 0.1f, 1.5f)
+                data.maxWaves = waves.size
             }
             return
         }
