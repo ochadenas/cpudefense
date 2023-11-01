@@ -45,7 +45,9 @@
     <color name="led_blue_glow">#006A9A</color>
     <color name="led_turbo">#FFFF00</color>
     <color name="led_turbo_glow">#FDD300</color>
-    <color name="led_panel">#131313</color>
+    <color name="led_off">#191919</color>
+    <color name="led_off_glow">#101010</color>
+    <color name="led_panel">#333333</color>
     <color name="text_green">#009700</color>
     <color name="text_lightgreen">#79CD79</color>
     <color name="text_amber">#B9921C</color>
@@ -53,6 +55,8 @@
     <color name="text_white">#FFFFFF</color>
     <color name="text_blue">#1BB8FF</color>
     <color name="text_lightblue">#7AC8EC</color>
+    <color name="text_red">#D50000</color>
+    <color name="text_lightred">#F86B6B</color>
 
     <color name="upgrade_inactive">#7C878C</color>
     <color name="upgrade_active_general">#79D5FF</color>

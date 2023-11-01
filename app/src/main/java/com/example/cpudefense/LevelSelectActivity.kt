@@ -11,6 +11,7 @@ import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.tabs.TabItem
 import com.google.android.material.tabs.TabLayout
 
 @Suppress("DEPRECATION")
@@ -20,6 +21,8 @@ class LevelSelectActivity : AppCompatActivity() {
     private var selectedLevel: Int = 0
     private var selectedSeries: Int = 0
     private var isTurboAvailable = false
+    private var isEndlessAvailable = true
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,6 +41,12 @@ class LevelSelectActivity : AppCompatActivity() {
     private fun setupSelector()
     {
         val tabLayout = findViewById<TabLayout>(R.id.tab_layout)
+        if (isEndlessAvailable)
+        {
+            val tab = tabLayout.newTab().setText("Endless")
+            tabLayout.addTab(tab)
+        }
+
         tabLayout.setOnTabSelectedListener(
             (object : TabLayout.OnTabSelectedListener {
 
@@ -92,6 +101,25 @@ class LevelSelectActivity : AppCompatActivity() {
                 {
                     val textView = TextView(this)
                     textView.text = getString(R.string.message_series_unavailable)
+                    textView.textSize = 8f * resources.displayMetrics.scaledDensity
+                    textView.isAllCaps = false
+                    textView.setPadding(20, 0, 0, 0)
+                    textView.setBackgroundColor(Color.BLACK)
+                    textView.setTextColor(resources.getColor(R.color.text_white))
+                    textView.gravity = Gravity.START
+                    listView.addView(textView)
+                }
+            }
+            3 -> {
+                if (isEndlessAvailable) {
+                    levels = Persistency(null).loadLevelSummaries(prefs, 3) ?: HashMap()
+                    populateStageList(listView, levels, prefs,
+                        resources.getColor(R.color.text_red), resources.getColor(R.color.text_lightred))
+                }
+                else
+                {
+                    val textView = TextView(this)
+                    textView.text = getString(R.string.message_endless_unavailable)
                     textView.textSize = 8f * resources.displayMetrics.scaledDensity
                     textView.isAllCaps = false
                     textView.setPadding(20, 0, 0, 0)

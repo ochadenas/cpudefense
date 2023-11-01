@@ -268,26 +268,28 @@ class ScoreBoard(val game: Game): GameElement() {
                 val rect = Rect(0, 0, sizeLedX, sizeLedY)
                 rect.setCenter(ledArea.right - i * deltaX, ledArea.centerY())
                 val glowRect = Rect(rect).inflate(3)
-                when (game.currentStage?.getSeries())
+                if (i <= game.state.lives)
+                    when (game.currentStage?.getSeries())
+                    {
+                        1 -> {
+                            paint.color = resources.getColor(R.color.led_green)
+                            glowPaint.color = resources.getColor(R.color.led_green)
+                        }
+                        2 -> {
+                            paint.color = resources.getColor(R.color.led_turbo)
+                            glowPaint.color = resources.getColor(R.color.led_turbo_glow)
+                        }
+                        3 -> {
+                            paint.color = resources.getColor(R.color.led_red)
+                            glowPaint.color = resources.getColor(R.color.led_red_glow)
+                        }
+                    }
+                else if (i > game.state.lives)
                 {
-                    1 -> {
-                        paint.color = resources.getColor(R.color.led_green)
-                        glowPaint.color = resources.getColor(R.color.led_green)
-                    }
-                    2 -> {
-                        paint.color = resources.getColor(R.color.led_turbo)
-                        glowPaint.color = resources.getColor(R.color.led_turbo_glow)
-                    }
-                    else -> {
-                        paint.color = resources.getColor(R.color.led_green)
-                        glowPaint.color = resources.getColor(R.color.led_green)
-                    }
+                    paint.color = resources.getColor(R.color.led_off)
+                    glowPaint.color = resources.getColor(R.color.led_off_glow)
                 }
-                if (i > game.state.lives)
-                {
-                    paint.color = resources.getColor(R.color.led_red)
-                    glowPaint.color = resources.getColor(R.color.led_red_glow)
-                }
+
                 canvas.drawRect(glowRect, glowPaint)
                 canvas.drawRect(rect, paint)
             }

@@ -89,6 +89,7 @@ class Game(val gameActivity: MainGameActivity) {
     var stageData: Stage.Data? = null
     var summaryPerLevelOfSeries1 = HashMap<Int, Stage.Summary>()
     var summaryPerLevelOfSeries2 = HashMap<Int, Stage.Summary>()
+    var summaryPerLevelOfSeries3 = HashMap<Int, Stage.Summary>()
     var levelThumbnail = HashMap<Int, Bitmap?>()  // level snapshots (common for series 1 and 2)
     var gameUpgrades = HashMap<Hero.Type, Hero>()
 
@@ -127,7 +128,8 @@ class Game(val gameActivity: MainGameActivity) {
         if (!resetProgress) {
             global = gameActivity.loadGlobalData()
             summaryPerLevelOfSeries1 = gameActivity.loadLevelData(1)   // get historical data of levels completed so far
-            summaryPerLevelOfSeries2 = gameActivity.loadLevelData(2)   // get historical data of levels completed so far
+            summaryPerLevelOfSeries2 = gameActivity.loadLevelData(2)
+            summaryPerLevelOfSeries3 = gameActivity.loadLevelData(3)
             gameUpgrades = gameActivity.loadUpgrades()       // load the upgrades gained so far
             additionalCashDelay = gameUpgrades[Hero.Type.GAIN_CASH]?.getStrength()?.toInt() ?: 0
             intermezzo.prepareLevel(state.startingLevel, true)
@@ -306,6 +308,7 @@ class Game(val gameActivity: MainGameActivity) {
         {
             1 -> return summaryPerLevelOfSeries1[stage.number]
             2 -> return summaryPerLevelOfSeries2[stage.number]
+            3 -> return summaryPerLevelOfSeries3[stage.number]
             else -> return null
         }
     }
@@ -316,6 +319,7 @@ class Game(val gameActivity: MainGameActivity) {
             when (stage.series) {
                 1 -> summaryPerLevelOfSeries1[stage.number] = it
                 2 -> summaryPerLevelOfSeries2[stage.number] = it
+                3 -> summaryPerLevelOfSeries3[stage.number] = it
                 else -> return
             }
         }
