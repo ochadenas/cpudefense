@@ -23,7 +23,7 @@ class ChipUpgrade(val chipToUpgrade: Chip, val type: Chip.ChipUpgrades,
         when (type){
             Chip.ChipUpgrades.POWERUP -> {
                 var upgradePrice = chipToUpgrade.chipData.value * 1.5
-                val discount = game.gameUpgrades[Hero.Type.DECREASE_UPGRADE_COST]?.getStrength() ?: 0f
+                val discount = game.heroes[Hero.Type.DECREASE_UPGRADE_COST]?.getStrength() ?: 0f
                 upgradePrice = upgradePrice * (100f - discount) / 100
                 return upgradePrice.toInt()
             }
@@ -31,7 +31,7 @@ class ChipUpgrade(val chipToUpgrade: Chip, val type: Chip.ChipUpgrades,
                 return chipToUpgrade.chipData.value
             }
             Chip.ChipUpgrades.SELL -> {
-                val refund = - chipToUpgrade.chipData.value * (game.gameUpgrades[Hero.Type.INCREASE_REFUND]?.getStrength() ?: 50f) * 0.01f
+                val refund = - chipToUpgrade.chipData.value * (game.heroes[Hero.Type.INCREASE_REFUND]?.getStrength() ?: 50f) * 0.01f
                 return refund.toInt()
             }
             Chip.ChipUpgrades.ACC -> {

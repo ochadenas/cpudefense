@@ -266,15 +266,15 @@ class MainGameActivity : Activity() {
     {
         val prefs = getSharedPreferences(getString(R.string.pref_filename), MODE_PRIVATE)
         val editor = prefs.edit()
-        Persistency(theGame).saveUpgrades(editor)
+        Persistency(theGame).saveHeroes(editor)
         editor.commit()
     }
 
-    fun saveThumbnail(level: Int)
+    fun saveThumbnail(stage: Stage)
     {
         val prefs = getSharedPreferences(getString(R.string.pref_filename), MODE_PRIVATE)
         val editor = prefs.edit()
-        Persistency(theGame).saveThumbnailOfLevel(editor, level)
+        Persistency(theGame).saveThumbnailOfLevel(editor, stage)
         editor.commit()
     }
 
@@ -302,6 +302,6 @@ class MainGameActivity : Activity() {
     fun loadUpgrades(): HashMap<Hero.Type, Hero>
     {
         val prefs = getSharedPreferences(getString(R.string.pref_filename), MODE_PRIVATE)
-        return Persistency(theGame).loadUpgrades(prefs)
+        return Persistency(theGame).loadHeroes(prefs)
     }
 }

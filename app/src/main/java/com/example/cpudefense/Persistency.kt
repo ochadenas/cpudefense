@@ -15,7 +15,10 @@ class Persistency(var game: Game?) {
             )
 
     // designators of the level data in the prefs
-    val seriesKey = hashMapOf<Int, String>(1 to "levels", 2 to "levels_series2", 3 to "levels_endless")
+    val seriesKey = hashMapOf<Int, String>(
+        Game.SERIES_NORMAL to "levels",
+        Game.SERIES_TURBO to "levels_series2",
+        Game.SERIES_ENDLESS to "levels_endless")
 
     data class SerializableLevelData (
         val level: HashMap<Int, Stage.Summary> = HashMap()
@@ -25,8 +28,8 @@ class Persistency(var game: Game?) {
         val thumbnail: HashMap<Int, String> = HashMap()
     )
 
-    data class SerializableUpgradeData (
-        val upgrades: MutableList<Hero.Data> = mutableListOf<Hero.Data>()
+    data class SerializableHeroData (
+        val heroes: MutableList<Hero.Data> = mutableListOf<Hero.Data>()
     )
 
     fun saveState(editor: SharedPreferences.Editor)
@@ -49,7 +52,7 @@ class Persistency(var game: Game?) {
             editor.putString("state", json)
 
             // save upgrades got so far:
-            saveUpgrades(editor)
+            saveHeroes(editor)
 
             // save level data:
             saveLevels(editor)
@@ -60,14 +63,15 @@ class Persistency(var game: Game?) {
     {
         game?.let {
             // get level data
-            it.summaryPerLevelOfSeries1 = loadLevelSummaries(sharedPreferences, 1) ?: HashMap()
-            it.summaryPerLevelOfSeries2 = loadLevelSummaries(sharedPreferences, 2) ?: HashMap()
+            it.summaryPerNormalLevel = loadLevelSummaries(sharedPreferences, Game.SERIES_NORMAL) ?: HashMap()
+            it.summaryPerTurboSeries = loadLevelSummaries(sharedPreferences, Game.SERIES_TURBO) ?: HashMap()
+            it.summaryPerEndlessLevel = loadLevelSummaries(sharedPreferences, Game.SERIES_ENDLESS) ?: HashMap()
 
             // get global data
             it.global = loadGlobalData(sharedPreferences)
 
             // get upgrades
-            it.gameUpgrades = loadUpgrades(sharedPreferences)
+            it.heroes = loadHeroes(sharedPreferences)
 
             // get state of running game
             var json = sharedPreferences.getString("state", "none")
@@ -84,42 +88,50 @@ class Persistency(var game: Game?) {
     {
         game?.let {
             // level summary for series 1:
-            var data = SerializableLevelData(it.summaryPerLevelOfSeries1)
+            var data = SerializableLevelData(it.summaryPerNormalLevel)
             var json = Gson().toJson(data)
-            editor.putString(seriesKey[1], json)
+            editor.putString(seriesKey[Game.SERIES_NORMAL], json)
             // same for series 2:
-            data = SerializableLevelData(it.summaryPerLevelOfSeries2)
+            data = SerializableLevelData(it.summaryPerTurboSeries)
             json = Gson().toJson(data)
-            editor.putString(seriesKey[2], json)
+            editor.putString(seriesKey[Game.SERIES_TURBO], json)
             // for endless series:
-            data = SerializableLevelData(it.summaryPerLevelOfSeries3)
+            data = SerializableLevelData(it.summaryPerEndlessLevel)
             json = Gson().toJson(data)
-            editor.putString(seriesKey[2], json)
+            editor.putString(seriesKey[Game.SERIES_ENDLESS], json)
         }
     }
 
-    fun saveThumbnailOfLevel(editor: SharedPreferences.Editor, level: Int) {
+    fun saveThumbnailOfLevel(editor: SharedPreferences.Editor, stage: Stage) {
         game?.let {
-            val level = it.currentStage?.getLevel() ?: 0
-            if (level != 0) {
+            val levelIdent = stage.data.ident
+            if (levelIdent.number != 0) {
                 var outputStream = ByteArrayOutputStream()
-                var snapshot: Bitmap? = it.levelThumbnail[level]
+                var snapshot: Bitmap? = when (levelIdent.series)
+                {
+                    Game.SERIES_ENDLESS -> it.levelThumbnailEndless[levelIdent.number]
+                    else -> it.levelThumbnail[levelIdent.number]
+                }
                 snapshot?.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
                 val encodedImage: String =
                     Base64.encodeToString(outputStream.toByteArray(), Base64.DEFAULT)
-                var key: String = "thumbnail_%d".format(level)
+                var key: String = when (levelIdent.series)
+                {
+                    Game.SERIES_ENDLESS -> "thumbnail_%d_endless".format(levelIdent.number)
+                    else -> "thumbnail_%d".format(levelIdent.number)
+                }
                 editor.putString(key, encodedImage)
             }
         }
     }
 
-    fun saveUpgrades(editor: SharedPreferences.Editor)
+    fun saveHeroes(editor: SharedPreferences.Editor)
     {
         game?.let {
-            val upgradeData = SerializableUpgradeData()
-            for (upgrade in it.gameUpgrades.values)
-                upgradeData.upgrades.add(upgrade.data)
-            var json = Gson().toJson(upgradeData)
+            val heroData = SerializableHeroData()
+            for (hero in it.heroes.values)
+                heroData.heroes.add(hero.data)
+            var json = Gson().toJson(heroData)
             editor.putString("upgrades", json)
         }
     }
@@ -150,9 +162,13 @@ class Persistency(var game: Game?) {
         }
     }
 
-    fun loadThumbnailOfLevel(sharedPreferences: SharedPreferences, level: Int): Bitmap?
+    fun loadThumbnailOfLevel(sharedPreferences: SharedPreferences, level: Int, series: Int): Bitmap?
     {
-        var key: String = "thumbnail_%d".format(level)
+        var key: String = when(series)
+        {
+            Game.SERIES_ENDLESS -> "thumbnail_%d_endless".format(level)
+            else -> "thumbnail_%d".format(level)
+        }
         var encodedString = sharedPreferences.getString(key, "")
         // reconstruct bitmap from string saved in preferences
         var snapshot: Bitmap? = null
@@ -168,21 +184,21 @@ class Persistency(var game: Game?) {
         return snapshot
     }
 
-    fun loadUpgrades(sharedPreferences: SharedPreferences): HashMap<Hero.Type, Hero>
+    fun loadHeroes(sharedPreferences: SharedPreferences): HashMap<Hero.Type, Hero>
     {
-        val upgradeMap = HashMap<Hero.Type, Hero>()
+        val heroMap = HashMap<Hero.Type, Hero>()
         val json = sharedPreferences.getString("upgrades", "none")
         if (json != "none") game?.let {
-            val data: SerializableUpgradeData = Gson().fromJson(json, SerializableUpgradeData::class.java)
-            for (upgradeData in data.upgrades) {
+            val data: SerializableHeroData = Gson().fromJson(json, SerializableHeroData::class.java)
+            for (heroData in data.heroes) {
                 try {
-                    upgradeMap[upgradeData.type] = Hero.createFromData(it, upgradeData)
+                    heroMap[heroData.type] = Hero.createFromData(it, heroData)
                 }
                 catch(ex: NullPointerException) {
                     /* may happen if a previously existing hero type is definitely removed from the game */
                 }
             }
         }
-        return upgradeMap
+        return heroMap
     }
 }

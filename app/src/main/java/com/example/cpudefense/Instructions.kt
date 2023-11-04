@@ -14,9 +14,8 @@ class Instructions(val game: Game, var stage: Stage.Identifier, var callback: ((
 
     private fun instructionText(level: Int): String
     {
-        if (stage.series == 1)
-            return when (level)
-            {
+        if (stage.series == Game.SERIES_NORMAL) {
+            return when (level) {
                 1 -> game.resources.getString(R.string.instr_1)
                 2 -> game.resources.getString(R.string.instr_2)
                 3 -> game.resources.getString(R.string.instr_3)
@@ -35,12 +34,15 @@ class Instructions(val game: Game, var stage: Stage.Identifier, var callback: ((
 
                 else -> ""
             }
-        else (stage.series == 2)
-            return when (level)
-            {
+        }
+        else if (stage.series == Game.SERIES_TURBO) {
+            return when (level) {
                 1 -> game.resources.getString(R.string.instr_2_1)
                 else -> ""
             }
+        }
+        else
+            return ""
     }
 
     init { Fader(game, this, Fader.Type.APPEAR, Fader.Speed.SLOW) }

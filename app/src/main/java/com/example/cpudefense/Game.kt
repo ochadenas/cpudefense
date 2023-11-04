@@ -50,6 +50,11 @@ class Game(val gameActivity: MainGameActivity) {
 
         const val levelSnapshotIconSize = 120
 
+        const val SERIES_NORMAL  = 1
+        const val SERIES_TURBO   = 2
+        const val SERIES_ENDLESS = 3
+
+
         val basePrice = mapOf(Chip.ChipUpgrades.REDUCE to 20,
             Chip.ChipUpgrades.SUB to 8, Chip.ChipUpgrades.ACC to 10,
             Chip.ChipUpgrades.SHR to 16, Chip.ChipUpgrades.MEM to 12,
@@ -87,11 +92,12 @@ class Game(val gameActivity: MainGameActivity) {
     val resources: Resources = (gameActivity as Activity).resources
 
     var stageData: Stage.Data? = null
-    var summaryPerLevelOfSeries1 = HashMap<Int, Stage.Summary>()
-    var summaryPerLevelOfSeries2 = HashMap<Int, Stage.Summary>()
-    var summaryPerLevelOfSeries3 = HashMap<Int, Stage.Summary>()
+    var summaryPerNormalLevel  = HashMap<Int, Stage.Summary>()
+    var summaryPerTurboSeries  = HashMap<Int, Stage.Summary>()
+    var summaryPerEndlessLevel = HashMap<Int, Stage.Summary>()
     var levelThumbnail = HashMap<Int, Bitmap?>()  // level snapshots (common for series 1 and 2)
-    var gameUpgrades = HashMap<Hero.Type, Hero>()
+    var levelThumbnailEndless = HashMap<Int, Bitmap?>()  // level snapshots for series 3
+    var heroes = HashMap<Hero.Type, Hero>()
 
     /* game elements */
     val viewport = Viewport()
@@ -127,17 +133,17 @@ class Game(val gameActivity: MainGameActivity) {
         gameActivity.loadSettings()
         if (!resetProgress) {
             global = gameActivity.loadGlobalData()
-            summaryPerLevelOfSeries1 = gameActivity.loadLevelData(1)   // get historical data of levels completed so far
-            summaryPerLevelOfSeries2 = gameActivity.loadLevelData(2)
-            summaryPerLevelOfSeries3 = gameActivity.loadLevelData(3)
-            gameUpgrades = gameActivity.loadUpgrades()       // load the upgrades gained so far
-            additionalCashDelay = gameUpgrades[Hero.Type.GAIN_CASH]?.getStrength()?.toInt() ?: 0
+            summaryPerNormalLevel = gameActivity.loadLevelData(Game.SERIES_NORMAL)   // get historical data of levels completed so far
+            summaryPerTurboSeries = gameActivity.loadLevelData(Game.SERIES_TURBO)
+            summaryPerEndlessLevel = gameActivity.loadLevelData(Game.SERIES_ENDLESS)
+            heroes = gameActivity.loadUpgrades()       // load the upgrades gained so far
+            additionalCashDelay = heroes[Hero.Type.GAIN_CASH]?.getStrength()?.toInt() ?: 0
             intermezzo.prepareLevel(state.startingLevel, true)
         }
         else {
             state.startingLevel = Stage.Identifier(1,1)
-            summaryPerLevelOfSeries1 = HashMap()
-            summaryPerLevelOfSeries2 = HashMap()
+            summaryPerNormalLevel = HashMap()
+            summaryPerTurboSeries = HashMap()
             setLastPlayedStage(state.startingLevel)
             setMaxPlayedStage(state.startingLevel, resetProgress=true)
             intermezzo.prepareLevel(state.startingLevel, true)
@@ -148,8 +154,8 @@ class Game(val gameActivity: MainGameActivity) {
 
     fun resumeGame()
     {
-        summaryPerLevelOfSeries1 = gameActivity.loadLevelData(1)   // get historical data of levels completed so far
-        summaryPerLevelOfSeries2 = gameActivity.loadLevelData(2)
+        summaryPerNormalLevel = gameActivity.loadLevelData(1)   // get historical data of levels completed so far
+        summaryPerTurboSeries = gameActivity.loadLevelData(2)
         currentStage = Stage.createStageFromData(this, stageData)
         val stage = currentStage ?: return beginGame()
 
@@ -182,7 +188,7 @@ class Game(val gameActivity: MainGameActivity) {
              * also other delays must be adjusted:
              * - cooldown of the chips
              * - cash gain over time
-             * - frequency of attacker generation (this seems not to be necessary, but why?)
+             * - frequency of attacker generation
              */
     {
         if (global.speed == GameSpeed.MAX)
@@ -306,9 +312,9 @@ class Game(val gameActivity: MainGameActivity) {
     {
         when (stage.series)
         {
-            1 -> return summaryPerLevelOfSeries1[stage.number]
-            2 -> return summaryPerLevelOfSeries2[stage.number]
-            3 -> return summaryPerLevelOfSeries3[stage.number]
+            Game.SERIES_NORMAL  -> return summaryPerNormalLevel[stage.number]
+            Game.SERIES_TURBO   -> return summaryPerTurboSeries[stage.number]
+            Game.SERIES_ENDLESS -> return summaryPerEndlessLevel[stage.number]
             else -> return null
         }
     }
@@ -317,9 +323,9 @@ class Game(val gameActivity: MainGameActivity) {
     {
         summary?.let {
             when (stage.series) {
-                1 -> summaryPerLevelOfSeries1[stage.number] = it
-                2 -> summaryPerLevelOfSeries2[stage.number] = it
-                3 -> summaryPerLevelOfSeries3[stage.number] = it
+                Game.SERIES_NORMAL  -> summaryPerNormalLevel[stage.number] = it
+                Game.SERIES_TURBO   -> summaryPerTurboSeries[stage.number] = it
+                Game.SERIES_ENDLESS -> summaryPerEndlessLevel[stage.number] = it
                 else -> return
             }
         }
@@ -333,7 +339,8 @@ class Game(val gameActivity: MainGameActivity) {
     fun onEndOfWave()
     {
         currentWave = null
-        GlobalScope.launch { delay(3000L); startNextWave() }
+        val pauseBetweenWaves = (4000f*defaultSpeedFactor/globalSpeedFactor()).toLong()
+        GlobalScope.launch { delay(pauseBetweenWaves); startNextWave() }
     }
 
     fun onEndOfStage()
@@ -479,13 +486,13 @@ class Game(val gameActivity: MainGameActivity) {
     }
     private fun calculateLives()
     {
-        val extraLives = gameUpgrades[Hero.Type.ADDITIONAL_LIVES]?.getStrength()
+        val extraLives = heroes[Hero.Type.ADDITIONAL_LIVES]?.getStrength()
         state.currentMaxLives = state.maxLives + (extraLives ?: 0f).toInt()
         state.lives = state.currentMaxLives
     }
     private fun calculateStartingCash()
     {
-        val cash = gameUpgrades[Hero.Type.INCREASE_STARTING_CASH]?.getStrength()?.toInt()
+        val cash = heroes[Hero.Type.INCREASE_STARTING_CASH]?.getStrength()?.toInt()
         state.cash = cash ?: minimalAmountOfCash
     }
 
@@ -504,8 +511,11 @@ class Game(val gameActivity: MainGameActivity) {
     private fun takeLevelSnapshot()
     {
         currentStage?.let {
-            levelThumbnail[it.getLevel()] = it.takeSnapshot(levelSnapshotIconSize)
-            gameActivity.saveThumbnail(it.getLevel())
+            if (it.getSeries() == Game.SERIES_ENDLESS)
+                levelThumbnailEndless[it.getLevel()] = it.takeSnapshot(levelSnapshotIconSize)
+            else
+                levelThumbnail[it.getLevel()] = it.takeSnapshot(levelSnapshotIconSize)
+            gameActivity.saveThumbnail(it)
         }
     }
 

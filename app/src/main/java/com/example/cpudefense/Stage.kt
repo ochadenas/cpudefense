@@ -10,7 +10,6 @@ import com.example.cpudefense.networkmap.Viewport
 import com.example.cpudefense.utils.blur
 import java.util.concurrent.CopyOnWriteArrayList
 import kotlin.random.Random
-import kotlin.random.nextULong
 
 class Stage(var theGame: Game) {
 
@@ -39,6 +38,7 @@ class Stage(var theGame: Game) {
     var waves = CopyOnWriteArrayList<Wave>()
 
     enum class Type { REGULAR, FINAL }
+
 
     data class Data (
         var ident: Identifier = Identifier(series=1, number=0),
@@ -161,12 +161,12 @@ class Stage(var theGame: Game) {
     fun createNewAttacker(maxNumber: Int, speed: Float, isCoin: Boolean = false,
                           representation: Attacker.Representation = Attacker.Representation.BINARY)
     {
-        val actualSpeed = speed * (theGame.gameUpgrades[Hero.Type.DECREASE_ATT_SPEED]?.getStrength() ?: 1.0f)
+        val actualSpeed = speed * (theGame.heroes[Hero.Type.DECREASE_ATT_SPEED]?.getStrength() ?: 1.0f)
         val attacker = if (isCoin)
             Cryptocoin(network, (maxNumber*1.5).toULong(), actualSpeed )
         else {
             var strength = Random.nextInt(maxNumber + 1)
-            strength = (strength.toFloat() * (theGame.gameUpgrades[Hero.Type.DECREASE_ATT_STRENGTH]?.getStrength() ?: 1.0f)).toInt()
+            strength = (strength.toFloat() * (theGame.heroes[Hero.Type.DECREASE_ATT_STRENGTH]?.getStrength() ?: 1.0f)).toInt()
             Attacker(network, representation, strength.toULong(), actualSpeed)
         }
         network.addVehicle(attacker)
@@ -191,16 +191,22 @@ class Stage(var theGame: Game) {
 
     fun nextWave(): Wave?
     {
-        if (theGame.state.phase != Game.GamePhase.RUNNING)
-            return null
-        else if (waves.size == 0)
+        when (theGame.state.phase)
         {
-            theGame.onEndOfStage()
-            return null
-        }
-        else {
-            data.countOfWaves++
-            return waves.removeFirst()
+            Game.GamePhase.START -> return null
+            Game.GamePhase.INTERMEZZO -> return null
+            Game.GamePhase.MARKETPLACE -> return null
+            else -> {
+                if (waves.size == 0)
+                {
+                    theGame.onEndOfStage()
+                    return null
+                }
+                else {
+                    data.countOfWaves++
+                    return waves.removeFirst()
+                }
+            }
         }
     }
 

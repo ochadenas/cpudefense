@@ -387,7 +387,7 @@ class Hero(var game: Game, type: Type): Fadable {
              * the possible effect of Sid Meier
              */
     {
-        val additionalUpgradePossibility = game.gameUpgrades[Type.INCREASE_MAX_HERO_LEVEL]?.getStrength()?.toInt()
+        val additionalUpgradePossibility = game.heroes[Type.INCREASE_MAX_HERO_LEVEL]?.getStrength()?.toInt()
         when (data.type)
         {
             Type.ADDITIONAL_LIVES -> return maxLevel
@@ -399,7 +399,7 @@ class Hero(var game: Game, type: Type): Fadable {
 
     private fun upgradeLevel(type: Type): Int
     {
-        val level = game.gameUpgrades[type]?.data?.level
+        val level = game.heroes[type]?.data?.level
         return level ?: 0
     }
 
@@ -460,7 +460,7 @@ class Hero(var game: Game, type: Type): Fadable {
             return
         data.level += 1
         setDesc()
-        game.gameUpgrades[this.data.type] = this
+        game.heroes[this.data.type] = this
         game.gameActivity.saveUpgrades()
         // start graphical transition */
         if (data.level == 1) {

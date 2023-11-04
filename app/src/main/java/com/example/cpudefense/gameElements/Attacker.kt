@@ -120,7 +120,7 @@ open class Attacker(network: Network, type: Representation = Representation.BINA
     fun extraCashGained(): Int
     /** possible bonus on kill due to hero */
     {
-        val strength = theNetwork.theGame.gameUpgrades[Hero.Type.GAIN_CASH_ON_KILL]?.getStrength() ?: return 0
+        val strength = theNetwork.theGame.heroes[Hero.Type.GAIN_CASH_ON_KILL]?.getStrength() ?: return 0
         val extraCash = Random.nextFloat() * strength * 2.0f // this gives an expectation value of 'strength'
         return extraCash.toInt()
     }

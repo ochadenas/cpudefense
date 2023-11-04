@@ -61,7 +61,7 @@ class Marketplace(val game: Game): GameElement()
             get it from the game data. Otherwise, create an empty card.
             Only add upgrades that are allowed (available) at present.
              */
-            var card: Hero? = game.gameUpgrades[type]
+            var card: Hero? = game.heroes[type]
             if (card == null)
                card = Hero.createFromData(game, Hero.Data(type))
             if (card.isAvailable(level)) {

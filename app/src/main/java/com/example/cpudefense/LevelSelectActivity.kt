@@ -21,7 +21,7 @@ class LevelSelectActivity : AppCompatActivity() {
     private var selectedLevel: Int = 0
     private var selectedSeries: Int = 0
     private var isTurboAvailable = false
-    private var isEndlessAvailable = true
+    private var isEndlessAvailable = false // feature toggle
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -87,14 +87,14 @@ class LevelSelectActivity : AppCompatActivity() {
         when (series)
         {
             1 -> {
-                levels = Persistency(null).loadLevelSummaries(prefs, 1) ?: HashMap()
-                populateStageList(listView, levels, prefs,
+                levels = Persistency(null).loadLevelSummaries(prefs, Game.SERIES_NORMAL) ?: HashMap()
+                populateStageList(listView, levels, prefs, Game.SERIES_NORMAL,
                     resources.getColor(R.color.text_green), resources.getColor(R.color.text_lightgreen))
             }
             2 -> {
                 if (isTurboAvailable) {
-                    levels = Persistency(null).loadLevelSummaries(prefs, 2) ?: HashMap()
-                    populateStageList(listView, levels, prefs,
+                    levels = Persistency(null).loadLevelSummaries(prefs, Game.SERIES_TURBO) ?: HashMap()
+                    populateStageList(listView, levels, prefs, Game.SERIES_NORMAL,
                         resources.getColor(R.color.text_amber), resources.getColor(R.color.text_lightamber))
                 }
                 else
@@ -113,7 +113,7 @@ class LevelSelectActivity : AppCompatActivity() {
             3 -> {
                 if (isEndlessAvailable) {
                     levels = Persistency(null).loadLevelSummaries(prefs, 3) ?: HashMap()
-                    populateStageList(listView, levels, prefs,
+                    populateStageList(listView, levels, prefs, Game.SERIES_ENDLESS,
                         resources.getColor(R.color.text_red), resources.getColor(R.color.text_lightred))
                 }
                 else
@@ -134,7 +134,7 @@ class LevelSelectActivity : AppCompatActivity() {
 
     private fun populateStageList(
         listView: LinearLayout, stageSummary: HashMap<Int, Stage.Summary>, prefs: SharedPreferences,
-        colorFinished: Int, colorUnfinished: Int
+        series: Int, colorFinished: Int, colorUnfinished: Int
     )
             /**
              * Populate the scrollable list for a given set of levels, depending on the series.
@@ -171,7 +171,7 @@ class LevelSelectActivity : AppCompatActivity() {
             levelEntryView.setBackgroundColor(Color.BLACK)
             levelEntryView.gravity = Gravity.START
 
-            val thumbnail = Persistency(null).loadThumbnailOfLevel(prefs, level)
+            val thumbnail = Persistency(null).loadThumbnailOfLevel(prefs, level, series)
             addLevelIcon(levelEntryView, thumbnail)
 
             levelEntryView.setTextAppearance(this, R.style.TextAppearance_AppCompat_Medium)

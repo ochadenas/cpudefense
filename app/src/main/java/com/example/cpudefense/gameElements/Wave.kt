@@ -24,8 +24,8 @@ class Wave(var game: Game, var data: Data)
         else if (ticks > 0)
             ticks--
         else {
-            val frequency = data.attackerFrequency * (game.gameUpgrades[Hero.Type.DECREASE_ATT_FREQ]?.getStrength() ?: 1f)
-            ticks = (4.0f / frequency).toInt() // do not apply global speed factor here
+            val frequency = data.attackerFrequency * (game.heroes[Hero.Type.DECREASE_ATT_FREQ]?.getStrength() ?: 1f)
+            ticks = (4.0f * game.defaultSpeedFactor / (frequency*game.globalSpeedFactor()) ).toInt() // apply global speed factor here?!
             if (data.coins>0 && Random.nextFloat() > 0.8)
             {
                 data.coins--
