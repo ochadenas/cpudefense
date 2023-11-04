@@ -8,33 +8,32 @@
     android:background="@drawable/shape_border_yellow"
     tools:context=".SettingsActivity">
 
-    <ImageView
-        android:id="@+id/settings_title_image"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginEnd="32dp"
-        android:adjustViewBounds="true"
-        android:scaleType="fitStart"
-        app:layout_constraintBottom_toBottomOf="@+id/settings_title_view"
-        app:layout_constraintEnd_toStartOf="@id/settings_title_view"
-        app:layout_constraintStart_toStartOf="@id/linearLayout"
-        app:layout_constraintTop_toTopOf="@+id/settings_title_view"
-        app:srcCompat="@drawable/dip" />
-
     <TextView
         android:id="@+id/settings_title_view"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
         android:layout_marginTop="24dp"
-        android:padding="8dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
         android:text="@string/settings_title"
         android:textColor="#FFFFFF"
         android:textSize="24sp"
-        app:layout_constraintStart_toEndOf="@+id/settings_title_image"
-        app:layout_constraintTop_toTopOf="parent"
-        />
+        app:layout_constraintStart_toStartOf="@id/linearLayout"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <ImageView
+        android:id="@+id/settings_title_image"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginEnd="24dp"
+        android:adjustViewBounds="true"
+        android:scaleType="fitStart"
+        app:layout_constraintBottom_toBottomOf="@+id/settings_title_view"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/settings_title_view"
+        app:srcCompat="@drawable/dip" />
+
 
     <LinearLayout
         android:id="@+id/linearLayout"

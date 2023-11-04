@@ -9,17 +9,6 @@
     tools:context=".AboutActivity">
 
 
-    <ImageView
-        android:id="@+id/about_title_image"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:scaleType="fitStart"
-        app:layout_constraintBottom_toBottomOf="@+id/about_title_view"
-        app:layout_constraintEnd_toStartOf="@id/about_title_view"
-        app:layout_constraintStart_toStartOf="@+id/about_text_view"
-        app:layout_constraintTop_toTopOf="@+id/about_title_view"
-        app:srcCompat="@drawable/cryptocoin" />
-
     <TextView
         android:id="@+id/about_title_view"
         android:layout_width="0dp"
@@ -29,9 +18,22 @@
         android:text="@string/settings_about"
         android:textColor="#FFFFFF"
         android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="@id/about_text_view"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+    <ImageView
+        android:id="@+id/about_title_image"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:scaleType="fitEnd"
+        app:layout_constraintBottom_toBottomOf="@+id/about_title_view"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/about_title_image"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toEndOf="@+id/about_title_view"
+        app:layout_constraintTop_toTopOf="@+id/about_title_view"
+        app:srcCompat="@drawable/cryptocoin"
+    />
+
 
     <TextView
         android:id="@+id/about_text_view"

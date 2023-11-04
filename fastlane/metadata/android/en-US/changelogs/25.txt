@@ -1,0 +1,11 @@
+New Features:
+- new "settings" and "about" dialog
+- hero biography is now scrollable
+
+Bugfixes:
+- numbers are shown in B and kiB also for chip sell prices
+- SHR 9 (and higher) chips had no effect
+
+Miscellaneous:
+- stage 8 made easier
+- LEDs now go out instead of turning red
