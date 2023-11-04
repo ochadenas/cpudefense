@@ -37,6 +37,8 @@ class Stage(var theGame: Game) {
     var tracks = hashMapOf<Int, Track>()
     var waves = CopyOnWriteArrayList<Wave>()
 
+    var ticksUntilFirstAttacker: Long = 0
+
     enum class Type { REGULAR, FINAL }
 
 
@@ -296,7 +298,8 @@ class Stage(var theGame: Game) {
             frequency = attackerFrequency * 1.2f
         }
         val waveData = Wave.Data(count, strength, frequency, attackerSpeed,
-            coins, currentCount = count, representation = representation)
+            coins, currentCount = count, representation = representation, ticksUntilNextAttacker = ticksUntilFirstAttacker.toDouble())
+        ticksUntilFirstAttacker = (4 * 20).toLong()  // after first wave, set a delay here. 20 ticks equal one second
         waves.add(Wave(theGame, waveData))
     }
 

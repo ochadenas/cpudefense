@@ -224,7 +224,7 @@ class MainGameActivity : Activity() {
             frameCount += 1
             if (frameCount>=meanCount )
             {
-                theGame.frameRate = (frameTimeSum / frameCount).toDouble()
+                theGame.timeBetweenTicks = (frameTimeSum / frameCount).toDouble()
                 frameCount = 0
                 frameTimeSum = 0
             }

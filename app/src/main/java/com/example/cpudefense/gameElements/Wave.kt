@@ -13,19 +13,18 @@ class Wave(var game: Game, var data: Data)
         var attackerSpeed: Float,
         var coins: Int = 0,
         var representation: Attacker.Representation = Attacker.Representation.UNDEFINED,
-        var currentCount: Int
+        var currentCount: Int,
+        var ticksUntilNextAttacker: Double // one tick equals approx. 50 ms.
             )
-
-    var ticks = 0
 
     fun update() {
         if (data.currentCount == 0)
             game.onEndOfWave()
-        else if (ticks > 0)
-            ticks--
+        else if (data.ticksUntilNextAttacker > 0)
+            data.ticksUntilNextAttacker -= game.globalSpeedFactor()/game.defaultSpeedFactor
         else {
             val frequency = data.attackerFrequency * (game.heroes[Hero.Type.DECREASE_ATT_FREQ]?.getStrength() ?: 1f)
-            ticks = (4.0f * game.defaultSpeedFactor / (frequency*game.globalSpeedFactor()) ).toInt() // apply global speed factor here?!
+            data.ticksUntilNextAttacker = 4.0 / frequency
             if (data.coins>0 && Random.nextFloat() > 0.8)
             {
                 data.coins--

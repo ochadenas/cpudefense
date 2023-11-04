@@ -370,7 +370,7 @@ class ScoreBoard(val game: Game): GameElement() {
         }
 
         fun display(canvas: Canvas) {
-            if (game.frameRate != lastValue)
+            if (game.timeBetweenTicks != lastValue)
               recreateBitmap()
             bitmap?.let { canvas.drawBitmap(it, null, area, paint) }
         }
@@ -380,9 +380,9 @@ class ScoreBoard(val game: Game): GameElement() {
                 bitmap = Bitmap.createBitmap(area.width(), area.height(), Bitmap.Config.ARGB_8888)
             bitmap?.let {
                 val canvas = Canvas(it)
-                displayHeader(canvas, Rect(0, 0, area.width(), area.height()), "time per frame: %.2f ms".format(game.frameRate))
+                displayHeader(canvas, Rect(0, 0, area.width(), area.height()), "time per frame: %.2f ms".format(game.timeBetweenTicks))
             }
-            lastValue = game.frameRate
+            lastValue = game.timeBetweenTicks
         }
     }
 }

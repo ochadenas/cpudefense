@@ -62,7 +62,7 @@ class Game(val gameActivity: MainGameActivity) {
     }
 
     var defaultSpeedFactor = 0.64f
-    var frameRate: Double = 0.0 /* for debugging purposes */
+    var timeBetweenTicks: Double = 20.0 /* in ms. Used by wait cycles in the game */
 
     data class StateData(
         var phase: GamePhase,       // whether the game is running, paused or between levels
@@ -339,8 +339,8 @@ class Game(val gameActivity: MainGameActivity) {
     fun onEndOfWave()
     {
         currentWave = null
-        val pauseBetweenWaves = (4000f*defaultSpeedFactor/globalSpeedFactor()).toLong()
-        GlobalScope.launch { delay(pauseBetweenWaves); startNextWave() }
+        // GlobalScope.launch { startNextWave() }
+        startNextWave()
     }
 
     fun onEndOfStage()
