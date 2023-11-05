@@ -93,7 +93,7 @@ class Game(val gameActivity: MainGameActivity) {
 
     var stageData: Stage.Data? = null
     var summaryPerNormalLevel  = HashMap<Int, Stage.Summary>()
-    var summaryPerTurboSeries  = HashMap<Int, Stage.Summary>()
+    var summaryPerTurboLevel  = HashMap<Int, Stage.Summary>()
     var summaryPerEndlessLevel = HashMap<Int, Stage.Summary>()
     var levelThumbnail = HashMap<Int, Bitmap?>()  // level snapshots (common for series 1 and 2)
     var levelThumbnailEndless = HashMap<Int, Bitmap?>()  // level snapshots for series 3
@@ -136,16 +136,17 @@ class Game(val gameActivity: MainGameActivity) {
         if (!resetProgress) {
             global = gameActivity.loadGlobalData()
             summaryPerNormalLevel = gameActivity.loadLevelData(Game.SERIES_NORMAL)   // get historical data of levels completed so far
-            summaryPerTurboSeries = gameActivity.loadLevelData(Game.SERIES_TURBO)
+            summaryPerTurboLevel = gameActivity.loadLevelData(Game.SERIES_TURBO)
             summaryPerEndlessLevel = gameActivity.loadLevelData(Game.SERIES_ENDLESS)
             heroes = gameActivity.loadUpgrades()       // load the upgrades gained so far
+            correctNumberOfCoins()
             additionalCashDelay = heroes[Hero.Type.GAIN_CASH]?.getStrength()?.toInt() ?: 0
             intermezzo.prepareLevel(state.startingLevel, true)
         }
         else {
             state.startingLevel = Stage.Identifier(1,1)
             summaryPerNormalLevel = HashMap()
-            summaryPerTurboSeries = HashMap()
+            summaryPerTurboLevel = HashMap()
             setLastPlayedStage(state.startingLevel)
             setMaxPlayedStage(state.startingLevel, resetProgress=true)
             intermezzo.prepareLevel(state.startingLevel, true)
@@ -157,7 +158,7 @@ class Game(val gameActivity: MainGameActivity) {
     fun resumeGame()
     {
         summaryPerNormalLevel = gameActivity.loadLevelData(1)   // get historical data of levels completed so far
-        summaryPerTurboSeries = gameActivity.loadLevelData(2)
+        summaryPerTurboLevel = gameActivity.loadLevelData(2)
         currentStage = Stage.createStageFromData(this, stageData)
         val stage = currentStage ?: return beginGame()
 
@@ -315,7 +316,7 @@ class Game(val gameActivity: MainGameActivity) {
         when (stage.series)
         {
             Game.SERIES_NORMAL  -> return summaryPerNormalLevel[stage.number]
-            Game.SERIES_TURBO   -> return summaryPerTurboSeries[stage.number]
+            Game.SERIES_TURBO   -> return summaryPerTurboLevel[stage.number]
             Game.SERIES_ENDLESS -> return summaryPerEndlessLevel[stage.number]
             else -> return null
         }
@@ -326,7 +327,7 @@ class Game(val gameActivity: MainGameActivity) {
         summary?.let {
             when (stage.series) {
                 Game.SERIES_NORMAL  -> summaryPerNormalLevel[stage.number] = it
-                Game.SERIES_TURBO   -> summaryPerTurboSeries[stage.number] = it
+                Game.SERIES_TURBO   -> summaryPerTurboLevel[stage.number] = it
                 Game.SERIES_ENDLESS -> summaryPerEndlessLevel[stage.number] = it
                 else -> return
             }
@@ -519,6 +520,32 @@ class Game(val gameActivity: MainGameActivity) {
                 levelThumbnail[it.getLevel()] = it.takeSnapshot(levelSnapshotIconSize)
             gameActivity.saveThumbnail(it)
         }
+    }
+
+    fun correctNumberOfCoins()
+            /** the purpose of this method is to verify if the total number of coins spent
+             * corresponds to the coins got, and to correct this number if coins have been "lost"
+             * due to corrupt save files etc.
+             */
+    {
+        var sumCoinsGot = 0
+        for (summary in summaryPerNormalLevel.values)
+            sumCoinsGot += summary.coinsGot
+        for (summary in summaryPerTurboLevel.values)
+            sumCoinsGot += summary.coinsGot
+        for (summary in summaryPerEndlessLevel.values)
+            sumCoinsGot += summary.coinsGot
+        var sumCoinsSpent = 0
+        for (hero in heroes.values)
+            sumCoinsSpent += hero.data.coinsSpent
+        val theoreticalAmountOfCoins = sumCoinsGot - sumCoinsSpent
+        if (global.coinsTotal < theoreticalAmountOfCoins)
+        /** we've got a problem here. Coins are missing.
+         * Unfortunately, we're unable to determine the exact number, because
+         * the extra coins are not taken into account.
+         * Let's assume that for every 4 coins "regularly" got there is one extra coin gahered.
+         */
+           global.coinsTotal = theoreticalAmountOfCoins + sumCoinsGot / 4
     }
 
 }
