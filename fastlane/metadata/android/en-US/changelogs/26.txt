@@ -1,5 +1,1 @@
-New Features:
-
-Bugfixes:
-
-Miscellaneous:
+Version withdrawn due to a serious bug.
