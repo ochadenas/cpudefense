@@ -29,7 +29,7 @@ class Persistency(var game: Game?) {
     )
 
     data class SerializableHeroData (
-        val heroes: MutableList<Hero.Data> = mutableListOf<Hero.Data>()
+        val upgrades: MutableList<Hero.Data> = mutableListOf<Hero.Data>()
     )
 
     fun saveState(editor: SharedPreferences.Editor)
@@ -64,7 +64,7 @@ class Persistency(var game: Game?) {
         game?.let {
             // get level data
             it.summaryPerNormalLevel = loadLevelSummaries(sharedPreferences, Game.SERIES_NORMAL) ?: HashMap()
-            it.summaryPerTurboSeries = loadLevelSummaries(sharedPreferences, Game.SERIES_TURBO) ?: HashMap()
+            it.summaryPerTurboLevel = loadLevelSummaries(sharedPreferences, Game.SERIES_TURBO) ?: HashMap()
             it.summaryPerEndlessLevel = loadLevelSummaries(sharedPreferences, Game.SERIES_ENDLESS) ?: HashMap()
 
             // get global data
@@ -92,7 +92,7 @@ class Persistency(var game: Game?) {
             var json = Gson().toJson(data)
             editor.putString(seriesKey[Game.SERIES_NORMAL], json)
             // same for series 2:
-            data = SerializableLevelData(it.summaryPerTurboSeries)
+            data = SerializableLevelData(it.summaryPerTurboLevel)
             json = Gson().toJson(data)
             editor.putString(seriesKey[Game.SERIES_TURBO], json)
             // for endless series:
@@ -130,7 +130,7 @@ class Persistency(var game: Game?) {
         game?.let {
             val heroData = SerializableHeroData()
             for (hero in it.heroes.values)
-                heroData.heroes.add(hero.data)
+                heroData.upgrades.add(hero.data)
             var json = Gson().toJson(heroData)
             editor.putString("upgrades", json)
         }
@@ -190,7 +190,7 @@ class Persistency(var game: Game?) {
         val json = sharedPreferences.getString("upgrades", "none")
         if (json != "none") game?.let {
             val data: SerializableHeroData = Gson().fromJson(json, SerializableHeroData::class.java)
-            for (heroData in data.heroes) {
+            for (heroData in data.upgrades) {
                 try {
                     heroMap[heroData.type] = Hero.createFromData(it, heroData)
                 }
