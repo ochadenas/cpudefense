@@ -1,13 +1,1 @@
-New Features:
-- new "settings" and "about" dialog
-- hero biography is now scrollable
-
-Bugfixes:
-- chip sell prices were not converted to B or kiB
-- SHR 9 (and higher) chips had no effect
-- attackers stopped appearing when pausing the game between two waves
-- corrected delay between waves in "fast forward" mode
-
-Miscellaneous:
-- stage 8 made easier
-- LEDs now go out instead of turning red
+Version withdrawn due to a serious bug.

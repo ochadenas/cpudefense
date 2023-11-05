@@ -1,1 +1,16 @@
-Version withdrawn due to a serious bug.
+New Features:
+- new "settings" and "about" dialog
+- hero biography is now scrollable
+- added button to lock scrolling of the game viewport
+
+Bugfixes:
+- fixed a bug that led to loss of heroes in version 1.25.
+  Added correction code to refund coins lost due to this bug.
+- chip sell prices were not converted to B or kiB
+- SHR 9 (and higher) chips had no effect
+- attackers stopped appearing when pausing the game between two waves
+- corrected delay between waves in "fast forward" mode
+
+Miscellaneous:
+- stage 8 made easier
+- LEDs now go out instead of turning red
