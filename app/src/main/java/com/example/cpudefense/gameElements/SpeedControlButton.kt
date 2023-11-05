@@ -8,7 +8,7 @@ import com.example.cpudefense.effects.Fader
 
 class SpeedControlButton(val game: Game, var type: Type = Type.PAUSE, val panel: SpeedControl): Fadable
 {
-    enum class Type { PAUSE, FAST, NORMAL, RETURN }
+    enum class Type { PAUSE, FAST, NORMAL, RETURN, LOCK, UNLOCK }
 
     var area = Rect()
     var paint = Paint()
@@ -22,6 +22,8 @@ class SpeedControlButton(val game: Game, var type: Type = Type.PAUSE, val panel:
         bitmapOfType[Type.NORMAL] = Bitmap.createScaledBitmap(game.playIcon, size, size, true)
         bitmapOfType[Type.FAST] = Bitmap.createScaledBitmap(game.fastIcon, size, size, true)
         bitmapOfType[Type.RETURN] = Bitmap.createScaledBitmap(game.returnIcon, size, size, true)
+        bitmapOfType[Type.LOCK] = Bitmap.createScaledBitmap(game.moveLockIcon, size, size, true)
+        bitmapOfType[Type.UNLOCK] = Bitmap.createScaledBitmap(game.moveUnlockIcon, size, size, true)
     }
 
     override fun fadeDone(type: Fader.Type) {
@@ -56,7 +58,14 @@ class SpeedControlButton(val game: Game, var type: Type = Type.PAUSE, val panel:
                 Type.RETURN -> {
                     game.gameActivity.showReturnDialog()
                 }
-
+                Type.LOCK -> {
+                    game.gameActivity.theGameView.scrollAllowed = true
+                    type = Type.UNLOCK
+                }
+                Type.UNLOCK -> {
+                    game.gameActivity.theGameView.scrollAllowed = false
+                    type = Type.LOCK
+                }
             }
             return true
         }

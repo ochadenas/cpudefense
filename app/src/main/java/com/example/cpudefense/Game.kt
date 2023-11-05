@@ -127,6 +127,8 @@ class Game(val gameActivity: MainGameActivity) {
     val pauseIcon: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.pause_active)
     val fastIcon: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.fast_active)
     val returnIcon: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.cancel_active)
+    val moveLockIcon: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.move_lock)
+    val moveUnlockIcon: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.move_unlock)
 
     fun beginGame(resetProgress: Boolean = false)
     {

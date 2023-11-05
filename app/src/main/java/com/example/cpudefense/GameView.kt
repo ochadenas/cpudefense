@@ -18,6 +18,7 @@ class GameView(context: Context, val theGame: Game):
     var canvas: Canvas? = null
     var theEffects: Effects? = null
     var backgroundColour = Color.BLACK
+    var scrollAllowed = true // whether the viewport can be moved by scrolling
     private var gestureDetector = GestureDetectorCompat(context, this)
 
     fun setup()
@@ -110,8 +111,10 @@ class GameView(context: Context, val theGame: Game):
             Game.GamePhase.MARKETPLACE -> theGame.marketplace.onScroll(p0, p1, dx, dy)
             else ->
             {
-                theGame.viewport.addOffset(-dx, -dy)
-                theGame.currentStage?.network?.recreateNetworkImage(theGame.viewport)
+                if (scrollAllowed) {
+                    theGame.viewport.addOffset(-dx, -dy)
+                    theGame.currentStage?.network?.recreateNetworkImage(theGame.viewport)
+                }
             }
         }
 
