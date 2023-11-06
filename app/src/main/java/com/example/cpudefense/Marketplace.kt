@@ -162,6 +162,8 @@ class Marketplace(val game: Game): GameElement()
                     Fader(game, coins.last(), Fader.Type.DISAPPEAR)
                     it.doUpgrade()
                     fillMarket(nextGameLevel)
+                    // update text on the button
+                    buttonPurchase?.text = purchaseButtonText(it)
                 }
             }
             return true
@@ -209,6 +211,7 @@ class Marketplace(val game: Game): GameElement()
         game.gameActivity.saveUpgrades()
         game.gameActivity.saveState()
         fillMarket(nextGameLevel)
+        buttonPurchase?.text = purchaseButtonText(null)
     }
 
     fun onScroll(event1: MotionEvent?, event2: MotionEvent?, dX: Float, dY: Float): Boolean {
@@ -278,7 +281,7 @@ class Marketplace(val game: Game): GameElement()
     fun purchaseButtonText(card: Hero?): String
     {
         var text: String? = card?.let {
-            if (it.data.level == 1)
+            if (it.data.level <= 1)
                 game.resources.getString(R.string.button_purchase)
             else
                 game.resources.getString(R.string.button_purchase_plural).format(it.getPrice(card.data.level))
