@@ -14,9 +14,9 @@ class EndlessStageCreator(val stage: Stage)
  */
 {
     val dimX = 50
-    val dimY = 50
+    val dimY = 55
     val sectorSizeX = dimX / 3
-    val sectorSizeY = (dimY -5) / 3
+    val sectorSizeY = (dimY - 5) / 4
     val numberOfSectorsX = dimX / sectorSizeX
     val numberOfSectorsY = dimY / sectorSizeY
     var sectors = mutableListOf<Sector>()
@@ -46,61 +46,69 @@ class EndlessStageCreator(val stage: Stage)
         val identOfEntry = 80  // values 80 to 89 reserved for entry points
         val identOfCpu = 90  // values 90 to 99 reserved for cpus
 
-        val entry = stage.createChip(2, 2, type = Chip.ChipType.ENTRY, ident = identOfEntry)
-        val cpu = stage.createChip(dimX-2, dimY-2, type = Chip.ChipType.CPU, ident = identOfCpu)
+        val entry = listOf<Chip>(
+            stage.createChip(2, 2, type = Chip.ChipType.ENTRY, ident = identOfEntry),
+            stage.createChip(dimX-2, 2, type = Chip.ChipType.ENTRY, ident = identOfEntry+1))
+        val cpu = listOf<Chip>(
+            stage.createChip(dimX-2, dimY-2, type = Chip.ChipType.CPU, ident = identOfCpu))
+        val exitPos = SectorCoord(numberOfSectorsX-1, numberOfSectorsY-1)
 
         // cut the stage area into sectors
         val sectorArea = Rect(0, 0, sectorSizeX, sectorSizeY)
-        for (x in 0 until dimX/sectorSizeX)
-            for (y in 0 until dimY/sectorSizeY) {
+        for (x in 0 until numberOfSectorsX)
+            for (y in 0 until numberOfSectorsY) {
                 var sectorIdent = SectorCoord(x, y)
                 var sector = Sector(sectorIdent, Rect(sectorArea).setTopLeft(x*sectorSizeX, y*sectorSizeY))
-                sector.createNodes(1)
+                sector.createNodes()
                 sectors.add(sector)
+                if (sectorIdent.isEqual(exitPos))
+                    sector.isExit = true
             }
 
-        // create random paths of sectors
-        var sectorPath = mutableListOf<Sector>()
-        var firstSector = sectors[0] // starting sector becomes first element
-        firstSector?.let {
-            var sector = it
-            do {
-                var nextSector = getRandomNeighbour(sector, sectorPath)
-                nextSector?.let {
-                    sectorPath.add(it)
-                    sector = it
-                }} while (nextSector != null)
-        }
-
-        var path = mutableListOf<Chip>()
-        sectorPath.forEach() {
-            path += it.makePath()
-        }
-        var track = makeTrackFromPath(stage, path, entry, cpu)
-        stage.createTrack(track, 0)
-
-        /*
-
-        val numberOfSlots = Random.nextInt(2, 4)
-        var nodeIds = (1 .. numberOfSlots).asSequence()
-        /** list of idents for each slot, excluding entry and CPU */
-        for (id in nodeIds)
+        for (trackNumber in 0 until 10)
         {
-            createChip(Random.nextInt(dimX), Random.nextInt(dimY), id)
-        }
-        var path = List(3) { Path(this) }
-        for ((id, p) in path.withIndex())
-        {
-            p.nodeIds.add(identOfEntry)
-            p.nodeIds.addAll(nodeIds.shuffled())
-            p.nodeIds.add(identOfCpu)
-            createTrack(p.createTrackFromNodes(), id)
+            var sectorPath = createPath(sectors[0])
+            var path = mutableListOf<Chip>()
+            sectorPath?.forEach() {
+                path += it.makePath()
+            }
+            var track = makeTrackFromPath(stage, path, entry[0], cpu[0])
+            stage.createTrack(track, trackNumber)
         }
 
-         */
         stage.createWave(10, 5, 0.1f, 1.5f)
         stage.data.maxWaves = stage.waves.size
         return
+    }
+    
+    fun createPath(firstSector: Sector): MutableList<Sector>?
+    /** tries to find a path to an exit sector.
+     * @param firstSector Start of path
+     * @return list of sectores, or null if no path is found */
+    {
+        for (count in 1 .. 10) // number of tries
+            pathToExit(firstSector)?.let { return it}
+        return null
+    }
+
+    fun pathToExit(firstSector: Sector): MutableList<Sector>?
+    /** create a random path of sectors, starting with firstSector.
+     * @return a list of sectors ending with an "exit" sector, or null if
+     * the path does not reach an exit sector */
+    {
+        var sectorPath = mutableListOf<Sector>()
+        var sector = firstSector
+        var nextSector: Sector? = null
+        do {
+            nextSector = getRandomNeighbour(sector, sectorPath)
+            nextSector?.let {
+                sectorPath.add(it)
+                sector = it
+                if (nextSector.isExit)
+                    return sectorPath
+            }
+        } while (nextSector != null)
+        return null
     }
 
     fun makeTrackFromPath(stage: Stage, nodes: List<Chip>, entry: Chip, exit: Chip): MutableList<Int>
@@ -113,11 +121,21 @@ class EndlessStageCreator(val stage: Stage)
         var lastNode = entry
         for (node in nodes)
         {
-            stage.createLink(lastNode.data.ident, node.data.ident, linkIdent(lastNode, node), mask = 0x02)?.let { linkList.add(it.ident) }
+            stage.createLink(lastNode.data.ident, node.data.ident, linkIdent(lastNode, node), mask = getMask())?.let { linkList.add(it.ident) }
             lastNode = node
         }
-        stage.createLink(lastNode.data.ident, exit.data.ident, linkIdent(lastNode, exit), mask = 0x06)?.let { linkList.add(it.ident) }
+        stage.createLink(lastNode.data.ident, exit.data.ident, linkIdent(lastNode, exit), mask = 0x07)?.let { linkList.add(it.ident) }
         return linkList
+    }
+
+    fun getMask(): Int
+    {
+        return when (Random.nextInt(5))
+        {
+            0 -> 0x06
+            1 -> 0x03
+            else -> 0x02
+        }
     }
 
     fun getNeighbour(sector: Sector, direction: Direction): Sector?
@@ -170,25 +188,6 @@ class EndlessStageCreator(val stage: Stage)
         }
     }
 
-    class Path(val stage: Stage)
-    /** list of node IDs that are later connected by a Track */
-    {
-        var nodeIds = CopyOnWriteArrayList<Int>()
-        var links = CopyOnWriteArrayList<Link>()
-
-        fun createTrackFromNodes(): List<Int>
-        {
-            var prevNodeId = nodeIds[0]
-            for (nodeId in nodeIds.drop(1))  // loop through the idents, starting with 2nd element
-            {
-                val link = stage.createLink(prevNodeId, nodeId, prevNodeId*100+nodeId)
-                links.add(link)
-                prevNodeId = nodeId
-            }
-            return links.map { it.data.ident }
-        }
-    }
-
     inner class Sector(val ident: SectorCoord, val area: Rect)
     /** representing a (virtual) part of the stage that may contain one or several nodes.
      * @param ident: Pair numbering the sectors. NOT the grid position. For instance,
@@ -196,15 +195,40 @@ class EndlessStageCreator(val stage: Stage)
      * @param area The size of the sector, in grid coordinates.
      */
     {
+        var isEntry = false
+        var isExit = false
         var nodes = CopyOnWriteArrayList<Chip>()
+        val model = Random.nextInt(20)
 
-        fun createNodes(count: Int = 1)
+        fun createNodes()
         {
-            for (i in 1 .. count)
+            when (model)
             {
-                val newChip = stage.createChip(Random.nextInt(area.left+1, area.right-1),
-                    Random.nextInt(area.top+1, area.bottom-1), nextIdent())
-                nodes.add(newChip)
+                in 0..2 -> {
+                    val chip1 = stage.createChip(area.centerX(), (area.top+area.centerY())/2, nextIdent())
+                    val chip2 = stage.createChip(area.centerX(), (area.bottom+area.centerY())/2, nextIdent())
+                    nodes.add(chip1)
+                    nodes.add(chip2)
+                }
+                in 3 .. 5 -> {
+                    val chip1 = stage.createChip((area.centerX()+area.right)/2, area.centerY(), nextIdent())
+                    val chip2 = stage.createChip((area.centerX()+area.left)/2, area.centerY(), nextIdent())
+                    nodes.add(chip1)
+                    nodes.add(chip2)
+                }
+                6 -> {
+                    val chip1 = stage.createChip(area.centerX(), (area.top+area.centerY())/2, nextIdent())
+                    val chip2 = stage.createChip(area.centerX(), (area.centerY()), nextIdent())
+                    val chip3 = stage.createChip(area.centerX(), (area.bottom+area.centerY())/2, nextIdent())
+                    nodes.add(chip1)
+                    nodes.add(chip2)
+                    nodes.add(chip3)
+                }
+                else -> {
+                    val newChip = stage.createChip(Random.nextInt(area.left+1, area.right-1),
+                        Random.nextInt(area.top+1, area.bottom-1), nextIdent())
+                    nodes.add(newChip)
+                }
             }
         }
 
