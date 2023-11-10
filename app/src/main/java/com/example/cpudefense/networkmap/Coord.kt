@@ -2,7 +2,7 @@ package com.example.cpudefense.networkmap
 
 import kotlin.math.sqrt
 
-class GridCoord(var x: Float = 0.0f, var y: Float = 0.0f) {
+class Coord(var x: Float = 0.0f, var y: Float = 0.0f) {
     constructor(xInt: Int = 0, yInt: Int = 0): this (xInt.toFloat(), yInt.toFloat())
     constructor(pos: Pair<Float, Float>): this (pos.first, pos.second)
 
@@ -11,24 +11,24 @@ class GridCoord(var x: Float = 0.0f, var y: Float = 0.0f) {
         return Pair(x, y)
     }
 
-    fun multiplyBy(f: Float): GridCoord
+    fun multiplyBy(f: Float): Coord
     {
         x *= f
         y *= f
         return this
     }
 
-    fun plus(other: GridCoord): GridCoord
+    fun plus(other: Coord): Coord
     {
-        val result = GridCoord(0, 0)
+        val result = Coord(0, 0)
         result.x = this.x + other.x
         result.y = this.y + other.y
         return result
     }
 
-    fun minus(other: GridCoord): GridCoord
+    fun minus(other: Coord): Coord
     {
-        val result = GridCoord(0, 0)
+        val result = Coord(0, 0)
         result.x = this.x - other.x
         result.y = this.y - other.y
         return result
@@ -44,7 +44,7 @@ class GridCoord(var x: Float = 0.0f, var y: Float = 0.0f) {
         return sqrt(lengthSquared())
     }
 
-    private fun distanceToSquared(other: GridCoord?): Float
+    private fun distanceToSquared(other: Coord?): Float
     {
         if (other == null)
             return 0f
@@ -52,10 +52,10 @@ class GridCoord(var x: Float = 0.0f, var y: Float = 0.0f) {
         return delta.lengthSquared()
     }
 
-    fun distanceTo(other: GridCoord?): Float
+    fun distanceTo(other: Coord?): Float
     { return sqrt(distanceToSquared(other))}
 
-    fun direction(other: GridCoord?): Network.Dir
+    fun direction(other: Coord?): Network.Dir
     {
         if (other == null)
             return Network.Dir.UNDEFINED

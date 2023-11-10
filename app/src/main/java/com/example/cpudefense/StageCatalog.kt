@@ -48,7 +48,7 @@ class StageCatalog
                     return
                 }
                 3 -> {
-                    EndlessStageCreator.createStage(stage, level)
+                    EndlessStageCreator(stage).createStage(level)
                 }
             }
         }

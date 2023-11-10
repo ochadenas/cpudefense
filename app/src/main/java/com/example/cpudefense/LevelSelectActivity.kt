@@ -21,7 +21,7 @@ class LevelSelectActivity : AppCompatActivity() {
     private var selectedLevel: Int = 0
     private var selectedSeries: Int = 0
     private var isTurboAvailable = false
-    private var isEndlessAvailable = false // feature toggle
+    private var isEndlessAvailable = true // feature toggle
 
 
     override fun onCreate(savedInstanceState: Bundle?) {

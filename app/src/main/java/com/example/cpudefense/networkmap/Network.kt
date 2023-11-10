@@ -62,8 +62,8 @@ class Network(val theGame: Game, x: Int, y: Int): GameElement() {
         if (gridPointDistance != null)
             return gridPointDistance // no need to recalculate
         if (validateViewport()) {
-            val point0 = theGame.viewport.gridToViewport(GridCoord(0, 0))
-            val point1 = theGame.viewport.gridToViewport(GridCoord(1, 1))
+            val point0 = theGame.viewport.gridToViewport(Coord(0, 0))
+            val point1 = theGame.viewport.gridToViewport(Coord(1, 1))
             gridPointDistance = Pair(point1.first - point0.first, point1.second - point0.second)
         }
         else
@@ -134,8 +134,8 @@ class Network(val theGame: Game, x: Int, y: Int): GameElement() {
             /** draws an outline around the network area, e.g. for testing purposes.
              */
     {
-        val cornerTopLeft = viewport.gridToViewport(GridCoord(0, 0))
-        val cornerBottomRight = viewport.gridToViewport(GridCoord(data.gridSizeX, data.gridSizeY))
+        val cornerTopLeft = viewport.gridToViewport(Coord(0, 0))
+        val cornerBottomRight = viewport.gridToViewport(Coord(data.gridSizeX, data.gridSizeY))
         val actualRect = Rect(cornerTopLeft.first, cornerTopLeft.second, cornerBottomRight.first, cornerBottomRight.second)
         val paint = Paint()
         paint.color = Color.WHITE

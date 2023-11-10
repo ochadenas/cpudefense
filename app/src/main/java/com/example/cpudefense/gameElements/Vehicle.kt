@@ -33,7 +33,7 @@ open class Vehicle(val theNetwork: Network): GameElement() {
         trackId = -1
     )
 
-    var posOnGrid: GridCoord? = null
+    var posOnGrid: Coord? = null
     var onLink: Link? = null
     var onTrack: Track? = null
     var startNode: Node? = null

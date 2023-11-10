@@ -86,7 +86,7 @@ class Viewport
             offsetY = - maxY
     }
 
-    fun gridToViewport(gridPos: GridCoord): Pair<Int, Int>
+    fun gridToViewport(gridPos: Coord): Pair<Int, Int>
     {
         val posX = gridPos.x * scaleX + Game.viewportMargin + offsetX
         val posY = gridPos.y * scaleY + Game.viewportMargin + offsetY

@@ -2,40 +2,47 @@ package com.example.cpudefense.utils
 
 import android.graphics.*
 
-inline fun Rect.setCenter(x: Int, y: Int)
+inline fun Rect.setCenter(x: Int, y: Int): Rect
 {
     this.set(x-width()/2, y-height()/2, x+width()/2, y+height()/2)
+    return this
 }
 
-inline fun Rect.setCenter(coord: Pair<Int, Int>)
+inline fun Rect.setCenter(coord: Pair<Int, Int>): Rect
 {
     this.setCenter(coord.first, coord.second)
+    return this
 }
 
-inline fun Rect.setTop(y: Int)
+inline fun Rect.setTop(y: Int): Rect
 {
     this.set(left, y, right, y+height())
+    return this
 }
 
-inline fun Rect.setLeft(x: Int)
+inline fun Rect.setLeft(x: Int): Rect
 {
     this.set(x, top, x+width(), bottom)
+    return this
 }
 
 
-inline fun Rect.setRight(x: Int)
+inline fun Rect.setRight(x: Int): Rect
 {
     this.set(x-width(), top, x, bottom)
+    return this
 }
 
-inline fun Rect.setTopLeft(x: Int, y: Int)
+inline fun Rect.setTopLeft(x: Int, y: Int): Rect
 {
     this.set(x, y, x+width(), y+height())
+    return this
 }
 
-inline fun Rect.setBottomRight(x: Int, y: Int)
+inline fun Rect.setBottomRight(x: Int, y: Int): Rect
 {
     this.set(x-width(), y-height(), x, y)
+    return this
 }
 
 inline fun Rect.center(): Pair<Int, Int>

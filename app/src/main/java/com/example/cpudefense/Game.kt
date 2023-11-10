@@ -11,7 +11,7 @@ import com.example.cpudefense.effects.Fader
 import com.example.cpudefense.effects.Flipper
 import com.example.cpudefense.effects.Mover
 import com.example.cpudefense.gameElements.*
-import com.example.cpudefense.networkmap.GridCoord
+import com.example.cpudefense.networkmap.Coord
 import com.example.cpudefense.networkmap.Viewport
 import com.example.cpudefense.utils.displayTextCenteredInRect
 import kotlinx.coroutines.GlobalScope
@@ -24,7 +24,7 @@ class Game(val gameActivity: MainGameActivity) {
     companion object Params {
         const val maxLevelAvailable = 28
 
-        val chipSize = GridCoord(6,3)
+        val chipSize = Coord(6,3)
         const val viewportMargin = 10
         const val minScoreBoardHeight = 100
         const val maxScoreBoardHeight = 320

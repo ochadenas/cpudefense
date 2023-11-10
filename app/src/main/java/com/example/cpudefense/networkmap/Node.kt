@@ -23,7 +23,7 @@ open class Node(val theNetwork: Network, x: Float, y: Float): GameElement()
                 )
 
     var data = Data(ident = -1, gridX = x, gridY = y, range = 0.0f)
-    var posOnGrid = GridCoord(Pair(x,y))
+    var posOnGrid = Coord(Pair(x,y))
 
     var distanceToVehicle: HashMap<Vehicle, Float> = HashMap()
     open var actualRect: Rect? = null
