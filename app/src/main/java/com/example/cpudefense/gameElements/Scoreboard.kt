@@ -16,6 +16,7 @@ class ScoreBoard(val game: Game): GameElement() {
     var divider = 0  // between the display title and the actual display
 
     val fractionOfScoreBoardUsedForInf = 0.3f
+    private val scoreboardBorderWidth = 4.0f
 
     fun setSize(area: Rect)
             /** sets the size of the score board and determines the dimensions of all components.
@@ -25,7 +26,7 @@ class ScoreBoard(val game: Game): GameElement() {
         this.area = Rect(area)
         // divider between title line and actual status indicators
         divider = /* this.area.top + */ this.area.height() * 32 / 100
-        var areaRemaining = Rect(area)
+        var areaRemaining = Rect(area).inflate(-scoreboardBorderWidth.toInt())
         areaRemaining = information.setSize(areaRemaining, divider)
         areaRemaining = waves.setSize(areaRemaining, divider)
         areaRemaining = coins.setSize(areaRemaining, divider)
@@ -70,7 +71,7 @@ class ScoreBoard(val game: Game): GameElement() {
         canvas.drawRect(area, paint)
         paint.color = myColor
         paint.style = Paint.Style.STROKE
-        paint.strokeWidth = 4f
+        paint.strokeWidth = scoreboardBorderWidth
         canvas.drawRect(area, paint)
 
         if (game.currentStage?.getSeries() ?: 1 > 1 || game.currentStage?.getLevel() ?: 3 > 2)
@@ -267,7 +268,7 @@ class ScoreBoard(val game: Game): GameElement() {
             for (i in 1..game.state.currentMaxLives) {
                 val rect = Rect(0, 0, sizeLedX, sizeLedY)
                 rect.setCenter(ledArea.right - i * deltaX, ledArea.centerY())
-                val glowRect = Rect(rect).inflate(3)
+                val glowRect = Rect(rect).inflate(4)
                 if (i <= game.state.lives)
                     when (game.currentStage?.getSeries())
                     {

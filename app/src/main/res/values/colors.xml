@@ -37,14 +37,14 @@
     <color name="chips_background">#FF000000</color>
 
     <color name="scoreboard_text">#FFFFFF</color>
-    <color name="led_red">#FF3E25</color>
-    <color name="led_red_glow">#C10000</color>
-    <color name="led_green">#00EF18</color>
-    <color name="led_green_glow">#00A511</color>
+    <color name="led_red">#FACEA7</color>
+    <color name="led_red_glow">#fa0011</color>
+    <color name="led_green">#1CFB3A</color>
+    <color name="led_green_glow">#009b42</color>
     <color name="led_blue">#1BB8FF</color>
     <color name="led_blue_glow">#006A9A</color>
-    <color name="led_turbo">#FFFF00</color>
-    <color name="led_turbo_glow">#FDD300</color>
+    <color name="led_turbo">#fefbd3</color>
+    <color name="led_turbo_glow">#ffd501</color>
     <color name="led_off">#191919</color>
     <color name="led_off_glow">#101010</color>
     <color name="led_panel">#333333</color>
