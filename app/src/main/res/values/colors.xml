@@ -37,7 +37,7 @@
     <color name="chips_background">#FF000000</color>
 
     <color name="scoreboard_text">#FFFFFF</color>
-    <color name="led_red">#FF1F18</color>
+    <color name="led_red">#FF3E25</color>
     <color name="led_red_glow">#C10000</color>
     <color name="led_green">#00EF18</color>
     <color name="led_green_glow">#00A511</color>

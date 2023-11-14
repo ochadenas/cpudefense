@@ -21,8 +21,6 @@ class LevelSelectActivity : AppCompatActivity() {
     private var selectedLevel: Int = 0
     private var selectedSeries: Int = 0
     private var isTurboAvailable = false
-    private var isEndlessAvailable = true // feature toggle
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,7 +39,7 @@ class LevelSelectActivity : AppCompatActivity() {
     private fun setupSelector()
     {
         val tabLayout = findViewById<TabLayout>(R.id.tab_layout)
-        if (isEndlessAvailable)
+        if (Game.isEndlessAvailable)
         {
             val tab = tabLayout.newTab().setText("Endless")
             tabLayout.addTab(tab)
@@ -111,7 +109,7 @@ class LevelSelectActivity : AppCompatActivity() {
                 }
             }
             3 -> {
-                if (isEndlessAvailable) {
+                if (Game.isEndlessAvailable) {
                     levels = Persistency(null).loadLevelSummaries(prefs, 3) ?: HashMap()
                     populateStageList(listView, levels, prefs, Game.SERIES_ENDLESS,
                         resources.getColor(R.color.text_red), resources.getColor(R.color.text_lightred))
