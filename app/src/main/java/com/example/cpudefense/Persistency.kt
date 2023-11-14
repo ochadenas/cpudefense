@@ -1,6 +1,7 @@
 package com.example.cpudefense
 
 import android.content.SharedPreferences
+import android.content.SharedPreferences.Editor
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.Base64
@@ -20,12 +21,16 @@ class Persistency(var game: Game?) {
         Game.SERIES_TURBO to "levels_series2",
         Game.SERIES_ENDLESS to "levels_endless")
 
-    data class SerializableLevelData (
+    data class SerializableLevelSummary (
         val level: HashMap<Int, Stage.Summary> = HashMap()
             )
 
     data class SerializableThumbnailData (
         val thumbnail: HashMap<Int, String> = HashMap()
+    )
+
+    data class SerializableLevelData (
+        val level: HashMap<Int, Stage.Data> = HashMap()
     )
 
     data class SerializableHeroData (
@@ -88,15 +93,15 @@ class Persistency(var game: Game?) {
     {
         game?.let {
             // level summary for series 1:
-            var data = SerializableLevelData(it.summaryPerNormalLevel)
+            var data = SerializableLevelSummary(it.summaryPerNormalLevel)
             var json = Gson().toJson(data)
             editor.putString(seriesKey[Game.SERIES_NORMAL], json)
             // same for series 2:
-            data = SerializableLevelData(it.summaryPerTurboLevel)
+            data = SerializableLevelSummary(it.summaryPerTurboLevel)
             json = Gson().toJson(data)
             editor.putString(seriesKey[Game.SERIES_TURBO], json)
             // for endless series:
-            data = SerializableLevelData(it.summaryPerEndlessLevel)
+            data = SerializableLevelSummary(it.summaryPerEndlessLevel)
             json = Gson().toJson(data)
             editor.putString(seriesKey[Game.SERIES_ENDLESS], json)
         }
@@ -152,8 +157,8 @@ class Persistency(var game: Game?) {
     {
         try {
             val json = sharedPreferences.getString(seriesKey[series], "none")
-            val data: SerializableLevelData =
-                Gson().fromJson(json, SerializableLevelData::class.java)
+            val data: SerializableLevelSummary =
+                Gson().fromJson(json, SerializableLevelSummary::class.java)
             return data.level
         }
         catch (e: Exception)
@@ -184,6 +189,8 @@ class Persistency(var game: Game?) {
         return snapshot
     }
 
+
+
     fun loadHeroes(sharedPreferences: SharedPreferences): HashMap<Hero.Type, Hero>
     {
         val heroMap = HashMap<Hero.Type, Hero>()
@@ -200,5 +207,29 @@ class Persistency(var game: Game?) {
             }
         }
         return heroMap
+    }
+
+    fun saveLevelStructure(editor: SharedPreferences.Editor, series: Int, data: HashMap<Int, Stage.Data>)
+            /** saves the structure data for all 'endless' levels.
+             */
+    {
+        val levelData = SerializableLevelData(data)
+        val json = Gson().toJson(levelData)
+        editor.putString("series_%d".format(series), json)
+    }
+    fun loadLevelStructure(sharedPreferences: SharedPreferences, series: Int): HashMap<Int, Stage.Data>
+    {
+        try {
+            var json = sharedPreferences.getString("series_%d".format(series), "none")
+            if (json == "none")
+                return hashMapOf()
+            val data: SerializableLevelData =
+                Gson().fromJson(json, SerializableLevelData::class.java)
+            return data.level
+        }
+        catch (e: Exception)
+        {
+            return hashMapOf()
+        }
     }
 }

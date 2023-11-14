@@ -1,6 +1,7 @@
 package com.example.cpudefense
 
 import android.graphics.Rect
+import com.example.cpudefense.gameElements.Attacker
 import com.example.cpudefense.gameElements.Chip
 import com.example.cpudefense.networkmap.Link
 import com.example.cpudefense.utils.setTopLeft
@@ -66,25 +67,48 @@ class EndlessStageCreator(val stage: Stage)
             }
 
         for (trackNumber in 0 until 10)
-        {
-            var sectorPath = createPath(sectors[0])
-            var path = mutableListOf<Chip>()
-            sectorPath?.forEach() {
-                path += it.makePath()
-            }
-            var track = makeTrackFromPath(stage, path, entry[0], cpu[0])
-            stage.createTrack(track, trackNumber)
-        }
+            createTrack(sectors[0], trackNumber, entry, cpu)
 
-        stage.createWave(10, 5, 0.1f, 1.5f)
-        stage.data.maxWaves = stage.waves.size
+        createWaves()
+        stage.rewardCoins = 3
         return
+    }
+
+    fun createWaves()
+    {
+        val levelNumber = stage.data.ident.number
+        for (waveNumber in 1 .. (levelNumber + 3)) {
+            val attackerCount = 16
+            val strength = waveNumber+levelNumber
+            val attackerStrength = (Attacker.powerOfTwo[strength] ?: 65526u).toInt()
+            val attackerSpeed = (10 + strength) * 0.08f
+            val attackerFrequency = (10 + strength) * 0.01f
+            val coins = if (Random.nextFloat()>0.92) 1 else 0
+            stage.createWave(attackerCount, attackerStrength, attackerFrequency, attackerSpeed, coins = coins)
+        }
+        stage.data.maxWaves = stage.waves.size
+    }
+
+    fun createTrack(startSector: Sector, ident: Int, entries: List<Chip>, exits: List<Chip>): Unit
+    /** creates a random Track object in the Stage with the given ident
+     * starting on startSector
+     * @param entries List of nodes that can be used as entry points
+     * @param exits List of nodes that can be used as exit points
+     */
+    {
+        var sectorPath = createPath(startSector)
+        var path = mutableListOf<Chip>()
+        sectorPath?.forEach() {
+            path += it.makePath()
+        }
+        var track = makeTrackFromPath(stage, path, entries[0], exits[0])
+        stage.createTrack(track, ident)
     }
     
     fun createPath(firstSector: Sector): MutableList<Sector>?
     /** tries to find a path to an exit sector.
      * @param firstSector Start of path
-     * @return list of sectores, or null if no path is found */
+     * @return list of sectors, or null if no path is found */
     {
         for (count in 1 .. 10) // number of tries
             pathToExit(firstSector)?.let { return it}

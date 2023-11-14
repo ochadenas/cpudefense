@@ -278,6 +278,14 @@ class MainGameActivity : Activity() {
         editor.commit()
     }
 
+    fun saveStructureOfAllStages(series: Int, structure: HashMap<Int, Stage.Data>)
+    {
+        val prefs_structure = getSharedPreferences(getString(R.string.pref_filename_level_structure), MODE_PRIVATE)
+        val editor = prefs_structure.edit()
+        Persistency(theGame).saveLevelStructure(editor, series, structure)
+        editor.commit()
+    }
+
     private fun loadState()
     {
         val prefs = getSharedPreferences(getString(R.string.pref_filename), MODE_PRIVATE)
@@ -303,5 +311,11 @@ class MainGameActivity : Activity() {
     {
         val prefs = getSharedPreferences(getString(R.string.pref_filename), MODE_PRIVATE)
         return Persistency(theGame).loadHeroes(prefs)
+    }
+
+    fun loadStructureOfAllStages(series: Int): HashMap<Int, Stage.Data>
+    {
+        val prefs = getSharedPreferences(getString(R.string.pref_filename_level_structure), MODE_PRIVATE)
+        return Persistency(theGame).loadLevelStructure(prefs, series)
     }
 }

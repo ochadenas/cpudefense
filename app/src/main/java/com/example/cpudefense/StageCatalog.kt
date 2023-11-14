@@ -13,8 +13,8 @@ class StageCatalog
         {
             when (level.series)
             {
-                1 -> return createStageWithoutObstacles(stage, level)
-                2 ->
+                Game.SERIES_NORMAL -> return createStageWithoutObstacles(stage, level)
+                Game.SERIES_TURBO ->
                 {
                     createStageWithoutObstacles(stage, level)  // make basic layout
                     val possibleTypes =
@@ -47,8 +47,19 @@ class StageCatalog
                     }
                     return
                 }
-                3 -> {
+                Game.SERIES_ENDLESS -> {
+                    // if the stage is in the save file (from an earlier try on this level),
+                    // restore the structure. Otherwise, create an empty level.
+                    val structure: HashMap<Int, Stage.Data> = stage.theGame.gameActivity.loadStructureOfAllStages(Game.SERIES_ENDLESS)
+                    structure[level.number]?.let {
+                        Stage.fillEmptyStageWithData(stage, it)
+                        EndlessStageCreator(stage).createWaves()
+                        return
+                    }
                     EndlessStageCreator(stage).createStage(level)
+                    stage.provideStructureData()
+                    structure[level.number] = stage.data
+                    stage.theGame.gameActivity.saveStructureOfAllStages(Game.SERIES_ENDLESS, structure)
                 }
             }
         }

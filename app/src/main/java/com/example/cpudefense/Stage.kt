@@ -90,7 +90,7 @@ class Stage(var theGame: Game) {
         return summary.coinsAvailable
     }
 
-    fun provideData(): Data
+    fun provideStructureData(): Data
             /** serialize all objects that belong to this stage
              * and return the data object
              * for saving and restoring the game.
@@ -110,6 +110,15 @@ class Stage(var theGame: Game) {
         data.waves.clear()
         waves.forEach()
         { data.waves.add(it.data) }
+        return data
+    }
+    fun provideData(): Data
+            /** serialize all objects that belong to this stage
+             * and return the data object
+             * for saving and restoring the game.
+             */
+    {
+        provideStructureData()
         data.attackers.clear()
         network.vehicles.forEach()
         { data.attackers.add((it as Attacker).provideData())}
@@ -117,14 +126,17 @@ class Stage(var theGame: Game) {
     }
 
     companion object {
-        fun createStageFromData(game: Game, stageData: Data?): Stage?
+        fun fillEmptyStageWithData(stage: Stage, stageData: Data)
+        /** restores the fixed part of a stage: Nodes, Links, Tracks.
+         * @param stage The empty stage that must be filled
+         * @param stageData the data structure used to create the stage */
         {
-            val data = stageData ?: return null
-            val stage = Stage(game)
-            stage.data = data
-            stage.sizeX = data.gridSizeX
-            stage.sizeY = data.gridSizeY
-            stage.network = Network(game, stage.sizeX, stage.sizeY)
+            if (stageData.gridSizeX <= 1 || stageData.gridSizeY <= 1)
+                return
+            stage.data = stageData
+            stage.sizeX = stage.data.gridSizeX
+            stage.sizeY = stage.data.gridSizeY
+            stage.network = Network(stage.theGame, stage.sizeX, stage.sizeY)
             for ((id, chipData) in stage.data.chips)
             {
                 val chip = Chip.createFromData(stage.network, chipData)
@@ -141,6 +153,16 @@ class Stage(var theGame: Game) {
                 val track = Track.createFromData(stage, trackData)
                 stage.tracks[id] = track
             }
+            // set summary and available coins
+            stage.theGame.getSummaryOfStage(stage.data.ident)?.let {
+                stage.summary = it
+                stage.theGame.state.coinsInLevel = it.coinsAvailable ?: 0
+            }
+        }
+        fun createStageFromData(game: Game, stageData: Data): Stage?
+        {
+            val stage = Stage(game)
+            fillEmptyStageWithData(stage, stageData) ?: return null
             for (waveData in stage.data.waves)
             {
                 val wave = Wave.createFromData(game, waveData)
@@ -150,11 +172,6 @@ class Stage(var theGame: Game) {
             {
                 val attacker = Attacker.createFromData(stage, attackerData)
                 stage.network.addVehicle(attacker)
-            }
-            // set summary and available coins
-            game.getSummaryOfStage(stage.data.ident)?.let {
-                stage.summary = it
-                game.state.coinsInLevel = it.coinsAvailable ?: 0
             }
             return stage
         }

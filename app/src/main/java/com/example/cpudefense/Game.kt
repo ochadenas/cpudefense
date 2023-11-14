@@ -159,7 +159,9 @@ class Game(val gameActivity: MainGameActivity) {
     {
         summaryPerNormalLevel = gameActivity.loadLevelData(1)   // get historical data of levels completed so far
         summaryPerTurboLevel = gameActivity.loadLevelData(2)
-        currentStage = Stage.createStageFromData(this, stageData)
+        stageData?.let {
+            currentStage = Stage.createStageFromData(this, it)
+        }
         val stage = currentStage ?: return beginGame()
 
         stage.network.validateViewport()
