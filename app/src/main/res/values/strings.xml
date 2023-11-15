@@ -113,6 +113,8 @@ In hex, you have digits from 0 to 9 and then from A to F. The hex number 0x0F eq
 "Note that cryptocoins are unaffected by ACC and also by MEM chips."
     </string>
     <string name="instr_14">Another chip becomes available! \n\nThe CLK (clock) chip does not affect the attackers itself. Instead, it speeds up the other chips on the board. Each time the CLK ticks, the cooldown timer of all other chips is reset, and they become ready to operate anew.\n\nUpgrading increases the CLK frequency.</string>
+    <string name="instr_endless">You have successfully cleared all stages and won the game!\n\nIf you want, you can continue in <i>endless</i> mode, with randomly generated circuits that get more and more difficult.\n\nHow far will you get?</string>
+
 
     <string name="turing">
 "Alan Turing was one of the most important persons in computer science. He created many of the foundations in theoretical computing, such as the Turing machine and the Turing test, but he is also famous for cracking the Enigma code in World War 2. His impact on the outcome of the war can hardly be overestimated.
@@ -209,7 +211,7 @@ The programming language Pascal is named after him."</string>
     <string name="HERO_EFFECT_REFUNDPRICE">Increases refund when selling chips</string>
     <string name="HERO_EFFECT_GAININFO">Increases information gain through destroying attackers</string>
     <string name="HERO_EFFECT_RANGE">Increases %s chip range</string>
-    <string name="toast_loading">Loading ...</string>
+    <string name="toast_loading">Loading …</string>
     <string name="name_series_1">Normal</string>
     <string name="name_series_2">Turbo</string>
     <string name="message_series_unavailable">Complete all levels in \'normal\' mode first.</string>
@@ -232,7 +234,13 @@ Furthermore, some slots are already taken by unwanted chips you'll have to deal 
     <string name="settings_use_large_buttons">Use large objects</string>
     <string name="settings_show_framerate">Show frame rate</string>
     <string name="button_back">Close</string>
-    <string name="button_about">About ...</string>
-
+    <string name="button_about">About …</string>
+    <string name="instr_did_you_know">Did you know?</string>
+    <string-array name="fun_fact">
+        <item>Until 1999, the amount of 1024 B was called a <i>kilobyte</i> (kB). For consistency with other SI units, the kilobyte\'s meaning was changed to 1 kB = 1000 B. To keep the former definition, the kibibyte was invented, with 1 KiB = 1024 B.</item>
+        <item>An actual computer bug was found in a Harvard Mark II computer in 1947. A small insect had gotten into a relay, making programs fail.\n\nThe term \"bug\" for programming errors, however, had been coined long time ago.</item>
+        <item>\"Bread bin\" (or \"breadbox\") was a nickname for the Commodore C64, due to its characteristic form.</item>
+        <item>The question of which was the first modern computer can be answered like this:\nThe Z3 by Konrad Zuse was completed in 1941, four years before ENIAC. It worked with relays and was therefore the first <i>electromechanical</i> computer, while ENIAC used vacuum tubes and is considered the first <i>electronic</i> computer.</item>
+    </string-array>
 
 </resources>

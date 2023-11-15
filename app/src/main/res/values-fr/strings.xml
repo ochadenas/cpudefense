@@ -114,4 +114,9 @@
     <string name="settings_use_large_buttons">Utiliser de grands boutons</string>
     <string name="settings_show_framerate">Afficher le frame-rate</string>
     <string name="button_purchase_plural">"Recruter [%d écus] "</string>
+    <string name="button_back">Fermer</string>
+    <string name="button_about">A propos de ...</string>
+    <string name="instr_endless">Vous avez réussi tous les niveaux et gagné le jeu !\n\nSi vous voulez, vous pouvez maintenant continuer en mode \"infini\", avec des niveaux générés aléatoirement qui deviennent de plus en plus difficiles.\n\nJusqu\'où irez-vous ?\n\n\n\n</string>
+    <string name="message_endless_unavailable">Disponible après avoir terminé tous les niveaux précédents.</string>
+    <string name="instr_did_you_know">Le saviez-vous ?</string>
 </resources>

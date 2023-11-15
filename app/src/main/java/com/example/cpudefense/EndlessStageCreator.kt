@@ -122,7 +122,7 @@ class EndlessStageCreator(val stage: Stage)
     {
         var sectorPath = mutableListOf<Sector>()
         var sector = firstSector
-        var nextSector: Sector? = null
+        var nextSector: Sector?
         do {
             nextSector = getRandomNeighbour(sector, sectorPath)
             nextSector?.let {

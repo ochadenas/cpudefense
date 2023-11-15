@@ -12,6 +12,8 @@ import com.example.cpudefense.effects.Fader
 class Instructions(val game: Game, var stage: Stage.Identifier, var callback: (()->Unit)? ): Fadable {
     var alpha = 0
 
+    var funFact = game.resources.getStringArray(R.array.fun_fact).random()
+
     private fun instructionText(level: Int): String
     {
         if (stage.series == Game.SERIES_NORMAL) {
@@ -40,6 +42,14 @@ class Instructions(val game: Game, var stage: Stage.Identifier, var callback: ((
                 1 -> game.resources.getString(R.string.instr_2_1)
                 else -> ""
             }
+        }
+        else if (stage.series == Game.SERIES_ENDLESS)
+        {
+            return when (level) {
+                1 -> game.resources.getString(R.string.instr_endless)
+                else -> game.resources.getString(R.string.instr_did_you_know) + "\n\n" + funFact
+            }
+
         }
         else
             return ""
