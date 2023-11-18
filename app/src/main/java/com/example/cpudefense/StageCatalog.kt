@@ -51,7 +51,7 @@ class StageCatalog
                     // if the stage is in the save file (from an earlier try on this level),
                     // restore the structure. Otherwise, create an empty level.
                     // For development purposes, always create a new random level.
-                    val structure: HashMap<Int, Stage.Data> = stage.theGame.gameActivity.loadStructureOfAllStages(Game.SERIES_ENDLESS)
+                    val structure: HashMap<Int, Stage.Data> = Persistency(stage.theGame.gameActivity).loadLevelStructure(Game.SERIES_ENDLESS)
                     if (!Game.alwaysCreateNewRandomLevelInEndless)
                         structure[level.number]?.let {
                             Stage.fillEmptyStageWithData(stage, it)
@@ -61,7 +61,7 @@ class StageCatalog
                     EndlessStageCreator(stage).createStage(level)
                     stage.provideStructureData()
                     structure[level.number] = stage.data
-                    stage.theGame.gameActivity.saveStructureOfAllStages(Game.SERIES_ENDLESS, structure)
+                    Persistency(stage.theGame.gameActivity).saveLevelStructure(Game.SERIES_ENDLESS, structure)
                 }
             }
         }

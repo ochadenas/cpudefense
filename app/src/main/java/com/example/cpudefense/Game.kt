@@ -137,11 +137,12 @@ class Game(val gameActivity: MainGameActivity) {
     {
         gameActivity.loadSettings()
         if (!resetProgress) {
-            global = gameActivity.loadGlobalData()
-            summaryPerNormalLevel = gameActivity.loadLevelData(Game.SERIES_NORMAL)   // get historical data of levels completed so far
-            summaryPerTurboLevel = gameActivity.loadLevelData(Game.SERIES_TURBO)
-            summaryPerEndlessLevel = gameActivity.loadLevelData(Game.SERIES_ENDLESS)
-            heroes = gameActivity.loadUpgrades()       // load the upgrades gained so far
+            val persistency = Persistency(gameActivity)
+            global = persistency.loadGlobalData()
+            summaryPerNormalLevel  = persistency.loadLevelSummaries(Game.SERIES_NORMAL)
+            summaryPerTurboLevel   = persistency.loadLevelSummaries(Game.SERIES_TURBO)
+            summaryPerEndlessLevel = persistency.loadLevelSummaries(Game.SERIES_ENDLESS)
+            heroes = persistency.loadHeroes(this) // load the upgrades gained so far
             correctNumberOfCoins()
             additionalCashDelay = heroes[Hero.Type.GAIN_CASH]?.getStrength()?.toInt() ?: 0
             intermezzo.prepareLevel(state.startingLevel, true)
@@ -160,19 +161,25 @@ class Game(val gameActivity: MainGameActivity) {
 
     fun resumeGame()
     {
-        summaryPerNormalLevel = gameActivity.loadLevelData(1)   // get historical data of levels completed so far
-        summaryPerTurboLevel = gameActivity.loadLevelData(2)
+        // get historical data of levels completed so far
+        val persistency = Persistency(gameActivity)
+        summaryPerNormalLevel  = persistency.loadLevelSummaries(Game.SERIES_NORMAL)
+        summaryPerTurboLevel   = persistency.loadLevelSummaries(Game.SERIES_TURBO)
+        summaryPerEndlessLevel = persistency.loadLevelSummaries(Game.SERIES_ENDLESS)
+        // persistency.loadState(this)
         stageData?.let {
             currentStage = Stage.createStageFromData(this, it)
         }
-        val stage = currentStage ?: return beginGame()
-
-        stage.network.validateViewport()
-        // viewport.setSize(gameActivity.theGameView.width, gameActivity.theGameView.height)
-        viewport.setGridSize(stage.sizeX, stage.sizeY)
+        currentStage?.let {
+            it.network.validateViewport()
+            viewport.setGridSize(it.sizeX, it.sizeY)
+        }
         when (state.phase)
         {
-            GamePhase.MARKETPLACE -> marketplace.fillMarket(stage.data.ident)
+            GamePhase.MARKETPLACE -> {
+                marketplace.nextGameLevel = state.startingLevel
+                gameActivity.setGameActivityStatus(MainGameActivity.GameActivityStatus.BETWEEN_LEVELS)
+            }
             GamePhase.INTERMEZZO -> {
                 gameActivity.setGameActivityStatus(MainGameActivity.GameActivityStatus.BETWEEN_LEVELS)
             }
@@ -181,13 +188,16 @@ class Game(val gameActivity: MainGameActivity) {
             }
             else -> {
                 state.phase = GamePhase.RUNNING
-                currentWave = if (stage.waves.size > 0) stage.waves[0] else stage.nextWave()
+                currentStage?.let {
+                    currentWave = if (it.waves.size > 0) it.waves[0]
+                    else it.nextWave()
+                }
             }
         }
         if (background == null)
             background = Background(this)
         if (!gameActivity.settings.configDisableBackground)
-            background?.choose(stage.getLevel())
+            background?.choose(currentStage?.getLevel() ?: 0)
         background?.state = Background.BackgroundState.UNINITIALIZED
     }
 
@@ -253,13 +263,6 @@ class Game(val gameActivity: MainGameActivity) {
     {
         if (state.phase == GamePhase.RUNNING || state.phase == GamePhase.PAUSED)
         {
-            /*
-            if (! global.configDisableBackground)
-                background?.actualImage?.let {
-                    canvas.drawBitmap(it, null, viewport.screen, paintBitmap)
-                }
-
-             */
             currentStage?.network?.display(canvas, viewport)
             scoreBoard.display(canvas, viewport)
             speedControlPanel.display(canvas, viewport)
@@ -362,7 +365,7 @@ class Game(val gameActivity: MainGameActivity) {
                 GlobalScope.launch { delay(2000L); onEndOfStage() }
             else {
                 onStageCleared(it)
-                gameActivity.saveState()
+                Persistency(gameActivity).saveState(this)
                 gameActivity.setGameActivityStatus(MainGameActivity.GameActivityStatus.BETWEEN_LEVELS)
             }
         }
@@ -419,7 +422,7 @@ class Game(val gameActivity: MainGameActivity) {
         gameActivity.setGameSpeed(GameSpeed.NORMAL)  // reset speed to normal when starting next stage
         speedControlPanel.resetButtons()
         viewport.reset()
-        gameActivity.saveState()
+        Persistency(gameActivity).saveState(this)
 
         viewport.setGridSize(nextStage.network.data.gridSizeX, nextStage.network.data.gridSizeY)
         state.phase = GamePhase.RUNNING
@@ -523,7 +526,7 @@ class Game(val gameActivity: MainGameActivity) {
                 levelThumbnailEndless[it.getLevel()] = it.takeSnapshot(levelSnapshotIconSize)
             else
                 levelThumbnail[it.getLevel()] = it.takeSnapshot(levelSnapshotIconSize)
-            gameActivity.saveThumbnail(it)
+            Persistency(gameActivity).saveThumbnailOfLevel(this, it)
         }
     }
 

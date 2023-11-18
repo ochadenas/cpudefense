@@ -95,7 +95,7 @@ class Background(val game: Game)
         }
     }
 
-    fun choose(number: Int, opacity: Float = 0.6f)
+    fun choose(number: Int?, opacity: Float = 0.6f)
             /** chooses the background to use,
              * and selects a random part of it
              * @param number selects one of the available backgrounds
@@ -103,7 +103,8 @@ class Background(val game: Game)
              */
     {
         loadBitmaps()
-        backgroundNumber = number % availableBitmaps.size + 1
+        val n = number ?: 0
+        backgroundNumber = n % availableBitmaps.size + 1
         this.opacity = opacity
         angle = Random.nextDouble() * 2 * Math.PI
         projX = cos(angle)

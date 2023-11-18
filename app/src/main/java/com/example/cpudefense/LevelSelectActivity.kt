@@ -85,13 +85,13 @@ class LevelSelectActivity : AppCompatActivity() {
         when (series)
         {
             1 -> {
-                levels = Persistency(null).loadLevelSummaries(prefs, Game.SERIES_NORMAL) ?: HashMap()
+                levels = Persistency(this).loadLevelSummaries(Game.SERIES_NORMAL) ?: HashMap()
                 populateStageList(listView, levels, prefs, Game.SERIES_NORMAL,
                     resources.getColor(R.color.text_green), resources.getColor(R.color.text_lightgreen))
             }
             2 -> {
                 if (isTurboAvailable) {
-                    levels = Persistency(null).loadLevelSummaries(prefs, Game.SERIES_TURBO) ?: HashMap()
+                    levels = Persistency(this).loadLevelSummaries(Game.SERIES_TURBO) ?: HashMap()
                     populateStageList(listView, levels, prefs, Game.SERIES_NORMAL,
                         resources.getColor(R.color.text_amber), resources.getColor(R.color.text_lightamber))
                 }
@@ -110,7 +110,7 @@ class LevelSelectActivity : AppCompatActivity() {
             }
             3 -> {
                 if (Game.isEndlessAvailable) {
-                    levels = Persistency(null).loadLevelSummaries(prefs, 3) ?: HashMap()
+                    levels = Persistency(this).loadLevelSummaries(Game.SERIES_ENDLESS) ?: HashMap()
                     populateStageList(listView, levels, prefs, Game.SERIES_ENDLESS,
                         resources.getColor(R.color.text_red), resources.getColor(R.color.text_lightred))
                 }
@@ -169,7 +169,7 @@ class LevelSelectActivity : AppCompatActivity() {
             levelEntryView.setBackgroundColor(Color.BLACK)
             levelEntryView.gravity = Gravity.START
 
-            val thumbnail = Persistency(null).loadThumbnailOfLevel(prefs, level, series)
+            val thumbnail = Persistency(this).loadThumbnailOfLevel(level, series)
             addLevelIcon(levelEntryView, thumbnail)
 
             levelEntryView.setTextAppearance(this, R.style.TextAppearance_AppCompat_Medium)

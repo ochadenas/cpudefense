@@ -461,7 +461,7 @@ class Hero(var game: Game, type: Type): Fadable {
         data.level += 1
         setDesc()
         game.heroes[this.data.type] = this
-        game.gameActivity.saveUpgrades()
+        Persistency(game.gameActivity).saveHeroes(game)
         // start graphical transition */
         if (data.level == 1) {
             Fader(game, this, Fader.Type.APPEAR, Fader.Speed.VERY_SLOW)

@@ -33,7 +33,7 @@ class Marketplace(val game: Game): GameElement()
     private var coins = mutableListOf<Coin>()
     private var coinSize = (32 * game.resources.displayMetrics.scaledDensity).toInt()
 
-    private var nextGameLevel = Stage.Identifier()
+    var nextGameLevel = Stage.Identifier()
 
     init {
         clearPaint.color = Color.BLACK
@@ -105,7 +105,6 @@ class Marketplace(val game: Game): GameElement()
         buttonFinish?.let {
             Fader(game, it, Fader.Type.APPEAR, Fader.Speed.SLOW)
             it.alignRight(myArea.right, myArea.bottom - bottomMargin - it.area.height())
-            // it.area.setBottomRight(myArea.right-50, myArea.bottom-bottomMargin)
         }
         buttonRefund = Button(game.resources.getString(R.string.button_refund),
             textSize = Game.purchaseButtonTextSize * game.resources.displayMetrics.scaledDensity,
@@ -113,7 +112,6 @@ class Marketplace(val game: Game): GameElement()
         buttonRefund?.let {
             Fader(game, it, Fader.Type.APPEAR, Fader.Speed.SLOW)
             it.alignRight(myArea.right, myArea.bottom - bottomMargin - 3*it.area.height())
-            // it.area.setBottomRight(myArea.right-50, myArea.bottom - bottomMargin - 2*(buttonFinish?.area?.height() ?: 200))
         }
         buttonPurchase = Button(purchaseButtonText(null),
             textSize = Game.purchaseButtonTextSize * game.resources.displayMetrics.scaledDensity,
@@ -121,7 +119,6 @@ class Marketplace(val game: Game): GameElement()
         buttonPurchase?.let {
             Fader(game, it, Fader.Type.APPEAR, Fader.Speed.SLOW)
             it.alignRight(myArea.right, myArea.bottom - bottomMargin - 5*it.area.height())
-            // it.area.setBottomRight(myArea.right-50, myArea.bottom - bottomMargin - 4*(buttonFinish?.area?.height() ?: 200))
         }
         biographyArea.bottom = ((buttonPurchase?.area?.top ?: buttonFinish?.area?.top) ?: myArea.bottom ) - biographyAreaMargin
     }
@@ -208,8 +205,8 @@ class Marketplace(val game: Game): GameElement()
             game.global.coinsTotal += refund
             card.resetUpgrade()
         }
-        game.gameActivity.saveUpgrades()
-        game.gameActivity.saveState()
+        Persistency(game.gameActivity).saveHeroes(game)
+        Persistency(game.gameActivity).saveState(game)
         fillMarket(nextGameLevel)
         buttonPurchase?.text = purchaseButtonText(null)
     }
@@ -234,6 +231,17 @@ class Marketplace(val game: Game): GameElement()
     override fun display(canvas: Canvas, viewport: Viewport) {
         if (game.state.phase != Game.GamePhase.MARKETPLACE)
             return
+        if (myArea.width() == 0 || myArea.height() == 0)
+        {
+            val width = game.gameActivity.theGameView.width
+            val height = game.gameActivity.theGameView.height
+            if (width > 0 && height > 0) {
+                setSize(Rect(0, 0, width, height))
+                fillMarket(nextGameLevel)
+            }
+            else
+                return
+        }
 
         canvas.drawColor(Color.BLACK)
 
