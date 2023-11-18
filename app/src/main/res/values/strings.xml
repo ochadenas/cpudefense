@@ -238,7 +238,7 @@ Furthermore, some slots are already taken by unwanted chips you'll have to deal 
     <string name="instr_did_you_know">Did you know?</string>
     <string-array name="fun_fact">
         <item>Until 1999, the amount of 1024 B was called a <i>kilobyte</i> (kB). For consistency with other SI units, the kilobyte\'s meaning was changed to 1 kB = 1000 B. To keep the former definition, the kibibyte was invented, with 1 KiB = 1024 B.</item>
-        <item>An actual computer bug was found in a Harvard Mark II computer in 1947. A small insect had gotten into a relay, making programs fail.\n\nThe term \"bug\" for programming errors, however, had been coined long time ago.</item>
+        <item>An actual computer bug was found in a Harvard Mark II computer in 1947. A small insect had gotten into a relay, making programs fail.\n\nThe term \"bug\" for computer errors, however, had already been used before. Already in the 19th century small defects in mechanical devices were called bugs.</item>
         <item>\"Bread bin\" (or \"breadbox\") was a nickname for the Commodore C64, due to its characteristic form.</item>
         <item>The question of which was the first modern computer can be answered like this:\nThe Z3 by Konrad Zuse was completed in 1941, four years before ENIAC. It worked with relays and was therefore the first <i>electromechanical</i> computer, while ENIAC used vacuum tubes and is considered the first <i>electronic</i> computer.</item>
         <item>In the 1980s, a hole punch was an important tool for computer users, as it allowed the storage capacity of a floppy disc to be doubled.\n
