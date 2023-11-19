@@ -42,7 +42,7 @@ open class Chip(open val network: Network, gridX: Int, gridY: Int): Node(network
     private var internalRegister: Attacker? = null
 
     private var cooldownTimer = 0.0f
-    private var upgradePossibilities = CopyOnWriteArrayList<ChipUpgrade>()
+    var upgradePossibilities = CopyOnWriteArrayList<ChipUpgrade>()
 
     private var paintBitmap = Paint()
     private var paintOutline = Paint()
@@ -520,11 +520,14 @@ open class Chip(open val network: Network, gridX: Int, gridY: Int): Node(network
 
     override fun onDown(event: MotionEvent): Boolean {
         /* first, check if the click is inside one of the upgrade alternative boxes */
+        /*
         for (upgrade in upgradePossibilities)
             if (upgrade.onDown(event)) {
                 upgradePossibilities.clear()
                 return true
             }
+
+         */
 
         if (actualRect?.contains(event.x.toInt(), event.y.toInt()) == true
             && upgradePossibilities.isEmpty()) // gesture is inside this chip

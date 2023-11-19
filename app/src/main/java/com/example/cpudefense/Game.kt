@@ -12,6 +12,7 @@ import com.example.cpudefense.effects.Flipper
 import com.example.cpudefense.effects.Mover
 import com.example.cpudefense.gameElements.*
 import com.example.cpudefense.networkmap.Coord
+import com.example.cpudefense.networkmap.Network
 import com.example.cpudefense.networkmap.Viewport
 import com.example.cpudefense.utils.displayTextCenteredInRect
 import kotlinx.coroutines.GlobalScope
@@ -288,15 +289,14 @@ class Game(val gameActivity: MainGameActivity) {
         {
             GamePhase.RUNNING ->
             {
-                speedControlPanel.onDown(p0)
+                if (speedControlPanel.onDown(p0))
+                    return true
                 currentStage?.network?.let {
-                    for (obj in it.nodes.values)
-                        if (obj.onDown(p0))
-                            return true
+                    if (processClickOnNodes(it, p0))
+                        return true
                     for (obj in it.vehicles)
                         if ((obj as Attacker).onDown(p0))
                             return true
-                    return false
                 }
                 return false
             }
@@ -305,18 +305,37 @@ class Game(val gameActivity: MainGameActivity) {
             GamePhase.MARKETPLACE ->
                 return marketplace.onDown(p0)
             GamePhase.PAUSED ->
-                return speedControlPanel.onDown(p0)
-            /*
             {
-                state.phase = GamePhase.RUNNING
-                speedControlPanel.resetButtons()
-                return true
+                if (speedControlPanel.onDown(p0))
+                    return true
+                currentStage?.network?.let {
+                    if (processClickOnNodes(it, p0))
+                        return true
+                }
             }
-
-             */
             else ->
                 return false
         }
+        return false
+    }
+
+    fun processClickOnNodes(network: Network, p0: MotionEvent): Boolean
+    {
+        /* first, check if the click is inside one of the upgrade boxes
+        * of _any_ node */
+        for (obj in network.nodes.values) {
+            val chip = obj as Chip
+            for (upgrade in chip.upgradePossibilities)
+                if (upgrade.onDown(p0)) {
+                    chip.upgradePossibilities.clear()
+                    return true
+                }
+        }
+        /* check the nodes themselves */
+        for (obj in network.nodes.values)
+            if (obj.onDown(p0))
+                return true
+        return false
     }
 
     fun getSummaryOfStage(stage: Stage.Identifier): Stage.Summary?
