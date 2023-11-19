@@ -1,8 +1,6 @@
 package com.example.cpudefense
 
 import android.app.Activity
-import android.content.SharedPreferences
-import android.content.SharedPreferences.Editor
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.Base64
@@ -120,7 +118,7 @@ class Persistency(val activity: Activity) {
     }
 
     fun saveThumbnailOfLevel(game: Game?, stage: Stage) {
-        val editor = prefs.edit()
+        val editor = prefsThumbnails.edit()
         game?.let {
             val levelIdent = stage.data.ident
             if (levelIdent.number != 0) {
@@ -194,6 +192,19 @@ class Persistency(val activity: Activity) {
             else -> "thumbnail_%d".format(level)
         }
         var encodedString = prefs.getString(key, "")
+        if (encodedString != "")
+        {
+            // migrate into new thumbnails file
+            val editorOfNewFile = prefsThumbnails.edit()
+            editorOfNewFile.putString(key, encodedString)
+            editorOfNewFile.apply()
+            val editorOfOldFile = prefs.edit()
+            editorOfOldFile.remove(key)
+            editorOfOldFile.apply()
+        }
+        else
+            encodedString = prefsThumbnails.getString(key, "")
+
         // reconstruct bitmap from string saved in preferences
         var snapshot: Bitmap? = null
         try {
