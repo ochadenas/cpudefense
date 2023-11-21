@@ -174,9 +174,10 @@ Ein Teil der Information wird dir dabei zurückerstattet."
         <item>Bis 1999 war ein <i>Kilobyte</i> (kB) noch 1024 Bytes "wert". Aus Gründen der Konsistenz mit anderen SI-Einheiten wurde die Bedeutung zu \"1000 Bytes\" geändert.\n\nGleichzeitig wurde das <i>Kibibyte</i> (kiB) erfunden. Es gilt: 1 KiB = 1024 B.</item>
         <item>Ein echter "Bug" wurde 1947 in einem Harvard Mark II Computer gefunden. Ein kleines Insekt - englisch <i>bug</i> - war in ein Relais geraten, was zu Programmfehlern führte.\n\nDer Begriff "Bug" für Computerfehler wurde jedoch schon vorher verwendet. Bereits im 19. Jahrhundert wurden kleine Störungen in mechanischen Geräten im Englischen als "Bugs" bezeichnet.</item>
         <item>"Breadbin" (or "breadbox") was a nickname for the Commodore C64, due to its characteristic form.</item>
-        <item>Die Frage, welches der erste moderne Computer war, lässt sich salomonisch so beantworten:\nDie Z3 von Konrad Zuse war 1941 fertig gestellt und damit vier Jahre vor dem ENIAC. Sie arbeitete mit Relais und war damit der erste <i>elektromechanische</i> Computer, während ENIAC Vakuumröhren verwendete und daher als der erste <i>elektronische</i> Computer gilt.</item>
+        <item>Die Frage, welches der erste moderne Computer war, lässt sich salomonisch so beantworten:\n\nDie Z3 von Konrad Zuse war 1941 fertig gestellt und damit vier Jahre vor dem ENIAC. Sie arbeitete mit Relais und war damit der erste <i>elektromechanische</i> Computer, während ENIAC Vakuumröhren verwendete und daher als der erste <i>elektronische</i> Computer gilt.\n\nFraglich ist allerdings, ob die ENIAC-Erbauer überhaupt von Zuses Arbeiten wussten.</item>
         <item></item>
         <item></item>
+        <item>Das allererste Computer-Adventure "ADVENT" wurde von William Crowther entwickelt, der außerdem ein passionierter Höhlenforscher war.\n\nDie "Colossal Cave" aus dem Spiel gibt es wirklich, wenn auch leider ohne Drachen, Zwerge und Schätze.</item>
     </string-array>
     <string name="instr_did_you_know">Schon gewusst?</string>
 </resources>

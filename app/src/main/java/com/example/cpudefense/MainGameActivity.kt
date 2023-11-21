@@ -51,7 +51,8 @@ class MainGameActivity : Activity() {
         var configDisableBackground: Boolean = true,
         var configShowAttsInRange: Boolean = false,
         var configUseLargeButtons: Boolean = false,
-        var showFramerate: Boolean = false
+        var showFramerate: Boolean = false,
+        var keepLevels: Boolean = false,
     )
 
     var settings = Settings()
@@ -161,6 +162,7 @@ class MainGameActivity : Activity() {
         settings.configShowAttsInRange = prefs.getBoolean("SHOW_ATTS_IN_RANGE", false)
         settings.configUseLargeButtons = prefs.getBoolean("USE_LARGE_BUTTONS", false)
         settings.showFramerate = prefs.getBoolean("SHOW_FRAMERATE", false)
+        settings.keepLevels = prefs.getBoolean("KEEP_LEVELS", false)
     }
 
     fun setGameSpeed(speed: Game.GameSpeed) {

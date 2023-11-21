@@ -49,6 +49,7 @@
             android:id="@+id/switch_disable_background"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:minHeight="36dp"
             android:onClick="savePrefs"
             android:text="@string/settings_disable_background"
             android:textColor="#FFFFFF" />
@@ -57,6 +58,7 @@
             android:id="@+id/switch_show_atts_in_range"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:minHeight="36dp"
             android:onClick="savePrefs"
             android:text="@string/settings_show_atts_in_range"
             android:textColor="#FFFFFF" />
@@ -65,6 +67,7 @@
             android:id="@+id/switch_use_large_buttons"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:minHeight="36dp"
             android:onClick="savePrefs"
             android:text="@string/settings_use_large_buttons"
             android:textColor="#FFFFFF" />
@@ -73,10 +76,19 @@
             android:id="@+id/switch_show_framerate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:minHeight="36dp"
             android:onClick="savePrefs"
             android:text="@string/settings_show_framerate"
             android:textColor="#FFFFFF" />
 
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/switch_keep_levels"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="36dp"
+            android:onClick="savePrefs"
+            android:text="@string/settings_keep_levels"
+            android:textColor="#FFFFFF" />
 
     </LinearLayout>
 

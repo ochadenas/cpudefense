@@ -3,7 +3,6 @@ package com.example.cpudefense
 import android.graphics.Rect
 import com.example.cpudefense.gameElements.Attacker
 import com.example.cpudefense.gameElements.Chip
-import com.example.cpudefense.networkmap.Link
 import com.example.cpudefense.utils.setTopLeft
 import java.util.concurrent.CopyOnWriteArrayList
 import kotlin.random.Random
@@ -25,7 +24,7 @@ class EndlessStageCreator(val stage: Stage)
     var chipIdent = 0
     /** global count for the chips */
 
-    enum class Direction {UP, DOWN, LEFT, RIGHT}
+    enum class Direction {UP, DOWN, LEFT, RIGHT, DOWNLEFT}
 
     fun nextIdent(): Int
     { chipIdent++; return chipIdent }
@@ -66,7 +65,7 @@ class EndlessStageCreator(val stage: Stage)
                     sector.isExit = true
             }
 
-        for (trackNumber in 0 until 10)
+        for (trackNumber in 0 until 5)
             createTrack(sectors[0], trackNumber, entry, cpu)
 
         createWaves()
@@ -80,9 +79,9 @@ class EndlessStageCreator(val stage: Stage)
         for (waveNumber in 1 .. (levelNumber + 3)) {
             val attackerCount = 16
             val strength = waveNumber+levelNumber
-            val attackerStrength = (Attacker.powerOfTwo[strength] ?: 65526u).toInt()
-            val attackerSpeed = (10 + strength) * 0.08f
-            val attackerFrequency = (10 + strength) * 0.01f
+            val attackerStrength = (Attacker.powerOfTwo[strength] ?: 1048576u).toInt()
+            val attackerSpeed = (12 + strength) * 0.07f
+            val attackerFrequency = (12 + strength) * 0.008f
             val coins = if (Random.nextFloat()>0.92) 1 else 0
             stage.createWave(attackerCount, attackerStrength, attackerFrequency, attackerSpeed, coins = coins)
         }
@@ -163,28 +162,30 @@ class EndlessStageCreator(val stage: Stage)
     }
 
     fun getNeighbour(sector: Sector, direction: Direction): Sector?
+            /** returns the sector in the indicated direction, or null if
+             * there is no such direction
+             */
     {
-        val displacement = when (direction)
-        {
-            Direction.UP -> SectorCoord(0,-1)
-            Direction.DOWN -> SectorCoord(0,1)
-            Direction.LEFT -> SectorCoord(-1,0)
-            Direction.RIGHT -> SectorCoord(1,0)
-        }
-        val identOfTarget = sector.ident.plus(displacement)
+        val identOfTarget = sector.ident.plus(direction)
         val res = sectors.find { sec -> sec.ident.isEqual(identOfTarget) }
         return res
     }
-    fun getRandomNeighbour(sector: Sector, exclude: MutableList<Sector>): Sector?
+    fun getRandomNeighbour(thisSector: Sector, exclude: MutableList<Sector>): Sector?
             /** returns a random neighbour of this sector that is not already
              * included in the list */
     {
-        var neighbours = mutableListOf<Sector>()
-        for (dir in Direction.values())
-            getNeighbour(sector, dir)?.let { neighbours.add(it) }
-        for (sec in neighbours.shuffled()) {
-            if (sec in this.sectors && sec !in exclude)
-                return sec
+        val possibleDirections = Direction.values()
+        possibleDirections.shuffle()
+
+        for (dir in possibleDirections)
+        {
+            val otherSector = getNeighbour(thisSector, dir)
+            if (otherSector !in exclude)
+                otherSector?.let {
+                    thisSector.exitsUsed.add(dir)
+                    it.entriesUsed.add(dir)
+                    return it
+            }
         }
         return null
     }
@@ -210,6 +211,34 @@ class EndlessStageCreator(val stage: Stage)
             }
             return this
         }
+
+        private fun displacement(direction: Direction): SectorCoord {
+            return when (direction) {
+                Direction.UP -> SectorCoord(0, -1)
+                Direction.DOWN -> SectorCoord(0, 1)
+                Direction.LEFT -> SectorCoord(-1, 0)
+                Direction.RIGHT -> SectorCoord(1, 0)
+                Direction.DOWNLEFT -> SectorCoord(-1, 1)
+            }
+        }
+
+        fun plus(direction: Direction): SectorCoord
+        {
+            return this.plus(displacement(direction))
+        }
+
+        fun minus(other: SectorCoord?): SectorCoord
+        {
+            other?.let {
+                return SectorCoord(horizontal-it.horizontal, vertical-other.vertical)
+            }
+            return this
+        }
+
+        fun minus(direction: Direction): SectorCoord
+        {
+            return this.minus(displacement(direction))
+        }
     }
 
     inner class Sector(val ident: SectorCoord, val area: Rect)
@@ -223,43 +252,145 @@ class EndlessStageCreator(val stage: Stage)
         var isExit = false
         var nodes = CopyOnWriteArrayList<Chip>()
         val model = Random.nextInt(20)
+        var possibleEntries = Direction.values() // per default, all directions are permitted
+        var possibleExits = Direction.values()
+        var exitsUsed = mutableSetOf<Direction>()
+        var entriesUsed = mutableSetOf<Direction>()
 
-        fun createNodes()
+        fun selectModel(): Model
+                /** returns a sector "model" based on which entries/exits are already used,
+                 * and which are permitted by the model.
+                 *
+                 */
         {
-            when (model)
+            lateinit var model: Model
+            for (i in 0 .. 4)
             {
-                in 0..2 -> {
-                    val chip1 = stage.createChip(area.centerX(), (area.top+area.centerY())/2, nextIdent())
-                    val chip2 = stage.createChip(area.centerX(), (area.bottom+area.centerY())/2, nextIdent())
-                    nodes.add(chip1)
-                    nodes.add(chip2)
-                }
-                in 3 .. 5 -> {
-                    val chip1 = stage.createChip((area.centerX()+area.right)/2, area.centerY(), nextIdent())
-                    val chip2 = stage.createChip((area.centerX()+area.left)/2, area.centerY(), nextIdent())
-                    nodes.add(chip1)
-                    nodes.add(chip2)
-                }
-                6 -> {
-                    val chip1 = stage.createChip(area.centerX(), (area.top+area.centerY())/2, nextIdent())
-                    val chip2 = stage.createChip(area.centerX(), (area.centerY()), nextIdent())
-                    val chip3 = stage.createChip(area.centerX(), (area.bottom+area.centerY())/2, nextIdent())
-                    nodes.add(chip1)
-                    nodes.add(chip2)
-                    nodes.add(chip3)
-                }
-                else -> {
-                    val newChip = stage.createChip(Random.nextInt(area.left+1, area.right-1),
-                        Random.nextInt(area.top+1, area.bottom-1), nextIdent())
-                    nodes.add(newChip)
-                }
+                model = Model(i)
+                if (model.isCompatibleWith(entriesUsed, exitsUsed))
+                    break
             }
+            return Model(5)
         }
 
-        fun makePath(): CopyOnWriteArrayList<Chip>
-        {
+        fun createNodes() {
+            var model = selectModel()
+            model.createNodes.invoke(stage, area)
+        }
+
+        fun makePath(): CopyOnWriteArrayList<Chip> {
             return nodes
         }
-    }
 
+        inner class Model(val number: Int) {
+            lateinit var createNodes: (Stage, Rect) -> Unit
+            var possibleEntries = Direction.values()
+            var possibleExits = Direction.values()
+
+            init {
+                when (number) {
+                    1 -> {
+                        createNodes = { stage: Stage, area: Rect ->
+                            val chip1 = stage.createChip(
+                                area.centerX(), (area.top + area.centerY()) / 2,
+                                nextIdent()
+                            )
+                            val chip2 = stage.createChip(
+                                area.centerX(), (area.bottom + area.centerY()) / 2,
+                                nextIdent()
+                            )
+                            nodes.add(chip1)
+                            nodes.add(chip2)
+                        }
+                        possibleEntries = arrayOf(Direction.DOWN)
+                        possibleExits = arrayOf(
+                            Direction.DOWN,
+                            Direction.LEFT,
+                            Direction.RIGHT,
+                            Direction.DOWNLEFT
+                        )
+                    }
+
+                    2 -> {
+                        createNodes = { stage: Stage, area: Rect ->
+                            val chip1 = stage.createChip(
+                                (area.centerX() + area.left) / 2, area.centerY(),
+                                nextIdent()
+                            )
+                            val chip2 = stage.createChip(
+                                (area.centerX() + area.right) / 2, area.centerY(),
+                                nextIdent()
+                            )
+                            nodes.add(chip1)
+                            nodes.add(chip2)
+                        }
+                        possibleEntries = arrayOf(Direction.RIGHT)
+                        possibleExits = arrayOf(Direction.RIGHT, Direction.UP, Direction.DOWN)
+                    }
+
+                    3 -> {
+                        createNodes = { stage: Stage, area: Rect ->
+                            val chip1 = stage.createChip(
+                                area.centerX(), (2 * area.top + area.centerY()) / 3,
+                                nextIdent()
+                            )
+                            val chip2 =
+                                stage.createChip(area.centerX(), (area.centerY()), nextIdent())
+                            val chip3 = stage.createChip(
+                                area.centerX(), (2 * area.bottom + area.centerY()) / 3,
+                                nextIdent()
+                            )
+                            nodes.add(chip1)
+                            nodes.add(chip2)
+                            nodes.add(chip3)
+                        }
+                        possibleEntries = arrayOf(Direction.DOWN)
+                        possibleExits = arrayOf(Direction.DOWN)
+                    }
+
+                    4 -> {
+                        createNodes = { stage: Stage, area: Rect ->
+                            val chip1 = stage.createChip(
+                                (area.centerX() + area.right) / 2,
+                                (area.centerY() + area.bottom) / 2,
+                                nextIdent()
+                            )
+                            val chip2 = stage.createChip(
+                                (area.centerX() + area.left) / 2,
+                                (area.centerY() + area.top) / 2,
+                                nextIdent()
+                            )
+                            nodes.add(chip1)
+                            nodes.add(chip2)
+                        }
+                        possibleEntries = arrayOf(Direction.LEFT, Direction.UP)
+                        possibleExits = arrayOf(Direction.LEFT, Direction.UP)
+                    }
+                    5 -> {
+                        createNodes = { stage: Stage, area: Rect ->
+                            val newChip = stage.createChip(
+                                Random.nextInt(area.left + 1, area.right - 1),
+                                Random.nextInt(area.top + 1, area.bottom - 1), nextIdent()
+                            )
+                            nodes.add(newChip)
+                        }
+                    }
+                }
+            }
+
+            fun isCompatibleWith(entries: Set<Direction>, exits: Set<Direction>): Boolean
+            {
+                for (dir in entries){
+                    if (dir !in possibleEntries)
+                        return false
+                }
+                for (dir in exits)
+                {
+                    if (dir !in possibleExits)
+                        return false
+                }
+                return true
+            }
+        }
+    }
 }

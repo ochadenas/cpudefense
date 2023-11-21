@@ -62,7 +62,7 @@ class Game(val gameActivity: MainGameActivity) {
 
         // feature toggles:
         val isEndlessAvailable = true
-        val alwaysCreateNewRandomLevelInEndless = false
+        val alwaysCreateNewRandomLevelInEndless = true
     }
 
     var defaultSpeedFactor = 0.64f

@@ -9,6 +9,8 @@ class StageCatalog
      * It is not meant to be instantiated.
      */
     companion object {
+        val possibleObstacleTypes =
+            setOf(Chip.ChipType.EMPTY, Chip.ChipType.ADD, Chip.ChipType.SHL)
         fun createStage(stage: Stage, level: Stage.Identifier)
         {
             when (level.series)
@@ -17,8 +19,6 @@ class StageCatalog
                 Game.SERIES_TURBO ->
                 {
                     createStageWithoutObstacles(stage, level)  // make basic layout
-                    val possibleTypes =
-                        setOf(Chip.ChipType.EMPTY, Chip.ChipType.ADD, Chip.ChipType.SHL)
                     val numberOfObstacles = when (level.number) {
                         1 -> 0
                         2 -> 0
@@ -30,38 +30,45 @@ class StageCatalog
                         27 -> 2
                         else -> 3
                     }
-                    for (i in 1..numberOfObstacles)  // set or upgrade 2 slots
-                    {
-                        var slot: Chip? = null
-                        while (slot?.chipData?.type !in possibleTypes) {
-                            slot = stage.chips.values.random()
-                        }
-                        when (slot?.chipData?.type) {
-                            Chip.ChipType.ADD -> slot.addPower(1)
-                            Chip.ChipType.SHL -> slot.addPower(1)
-                            else -> if (Random.nextBoolean())
-                                slot?.setType(Chip.ChipType.SHL)
-                            else
-                                slot?.setType(Chip.ChipType.ADD)
-                        }
-                    }
+                    createObstacles(stage, numberOfObstacles)
                     return
                 }
                 Game.SERIES_ENDLESS -> {
                     // if the stage is in the save file (from an earlier try on this level),
                     // restore the structure. Otherwise, create an empty level.
-                    // For development purposes, always create a new random level.
+                    // Depending on the settings, always create a new random level.
                     val structure: HashMap<Int, Stage.Data> = Persistency(stage.theGame.gameActivity).loadLevelStructure(Game.SERIES_ENDLESS)
-                    if (!Game.alwaysCreateNewRandomLevelInEndless)
+                    if (stage.theGame.gameActivity.settings.keepLevels)
                         structure[level.number]?.let {
                             Stage.fillEmptyStageWithData(stage, it)
                             EndlessStageCreator(stage).createWaves()
                             return
                         }
                     EndlessStageCreator(stage).createStage(level)
+                    val numberOfObstacles = level.number / 8
+                    createObstacles(stage, numberOfObstacles)
                     stage.provideStructureData()
                     structure[level.number] = stage.data
                     Persistency(stage.theGame.gameActivity).saveLevelStructure(Game.SERIES_ENDLESS, structure)
+                }
+            }
+        }
+
+        private fun createObstacles(stage: Stage, numberOfObstacles: Int)
+        {
+            for (i in 1..numberOfObstacles)  // set or upgrade the slots
+            {
+                var slot: Chip? = null
+                while (slot?.chipData?.type !in possibleObstacleTypes) {
+                    slot = stage.chips.values.random()
+                }
+                when (slot?.chipData?.type) {
+                    Chip.ChipType.ADD -> slot.addPower(1)
+                    Chip.ChipType.SHL -> slot.addPower(1)
+                    else -> if (Random.nextBoolean())
+                        slot?.setType(Chip.ChipType.SHL)
+                    else
+                        slot?.setType(Chip.ChipType.ADD)
                 }
             }
         }

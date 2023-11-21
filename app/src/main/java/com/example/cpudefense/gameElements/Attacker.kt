@@ -326,7 +326,8 @@ open class Attacker(network: Network, type: Representation = Representation.BINA
             0 to 1u, 1 to 2u, 2 to 4u, 3 to 8u, 4 to 16u,
             5 to 32u, 6 to 64u, 7 to 128u, 8 to 256u,
             9 to 512u, 10 to 1024u, 11 to 2048u, 12 to 4096u,
-            13 to 8192u, 14 to 16384u, 15 to 32768u, 16 to 65536u
+            13 to 8192u, 14 to 16384u, 15 to 32768u, 16 to 65536u,
+            17 to 131072u, 18 to 262144u, 19 to 524288u, 20 to 1048576u
         )
 
         val maskBinary: HashMap<Int, ULong> = hashMapOf(

@@ -24,11 +24,13 @@ class SettingsActivity : AppCompatActivity()
         val showRangeView = findViewById<SwitchCompat>(R.id.switch_show_atts_in_range)
         val useLargeButtons = findViewById<SwitchCompat>(R.id.switch_use_large_buttons)
         val showFrameRate = findViewById<SwitchCompat>(R.id.switch_show_framerate)
+        val keepLevels = findViewById<SwitchCompat>(R.id.switch_keep_levels)
         val prefs = getSharedPreferences(getString(R.string.pref_filename), MODE_PRIVATE)
         disableBackgroundView.isChecked = prefs.getBoolean("DISABLE_BACKGROUND", false)
         showRangeView.isChecked = prefs.getBoolean("SHOW_ATTS_IN_RANGE", false)
         useLargeButtons.isChecked = prefs.getBoolean("USE_LARGE_BUTTONS", false)
         showFrameRate.isChecked = prefs.getBoolean("SHOW_FRAMERATE", false)
+        keepLevels.isChecked = prefs.getBoolean("KEEP_LEVELS", false)
     }
 
     fun savePrefs(v: View)
@@ -39,6 +41,7 @@ class SettingsActivity : AppCompatActivity()
             putBoolean("SHOW_ATTS_IN_RANGE", findViewById<SwitchCompat>(R.id.switch_show_atts_in_range)?.isChecked ?: false)
             putBoolean("USE_LARGE_BUTTONS", findViewById<SwitchCompat>(R.id.switch_use_large_buttons)?.isChecked ?: false)
             putBoolean("SHOW_FRAMERATE", findViewById<SwitchCompat>(R.id.switch_show_framerate)?.isChecked ?: false)
+            putBoolean("KEEP_LEVELS", findViewById<SwitchCompat>(R.id.switch_keep_levels)?.isChecked ?: false)
             commit()
         }
     }
