@@ -379,9 +379,10 @@ class ScoreBoard(val game: Game): GameElement() {
         fun recreateBitmap() {
             if (area.width() >0 && area.height() > 0)
                 bitmap = Bitmap.createBitmap(area.width(), area.height(), Bitmap.Config.ARGB_8888)
+            var textToDisplay = "time per frame: %.2f ms. heat: %.1f".format(game.timeBetweenTicks, game.state.heat.toFloat())
             bitmap?.let {
                 val canvas = Canvas(it)
-                displayHeader(canvas, Rect(0, 0, area.width(), area.height()), "time per frame: %.2f ms".format(game.timeBetweenTicks))
+                displayHeader(canvas, Rect(0, 0, area.width(), area.height()), textToDisplay)
             }
             lastValue = game.timeBetweenTicks
         }

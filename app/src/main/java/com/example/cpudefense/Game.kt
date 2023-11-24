@@ -76,7 +76,8 @@ class Game(val gameActivity: MainGameActivity) {
         var lives: Int,             // current number of lives
         var cash: Int,              // current amount of 'information' currency in bits
         var coinsInLevel: Int = 0,  // cryptocoins that can be obtained by completing the current level
-        var coinsExtra: Int = 0     // cryptocoins that have been acquired by collecting moving coins
+        var coinsExtra: Int = 0,     // cryptocoins that have been acquired by collecting moving coins
+        var heat: Double = 0.0
         )
     var state = StateData(
         phase = GamePhase.START,
