@@ -119,4 +119,9 @@
     <string name="instr_endless">Vous avez réussi tous les niveaux et gagné le jeu !\n\nSi vous voulez, vous pouvez maintenant continuer en mode \"infini\", avec des niveaux générés aléatoirement qui deviennent de plus en plus difficiles.\n\nJusqu\'où irez-vous ?\n\n\n\n</string>
     <string name="message_endless_unavailable">Disponible après avoir terminé tous les niveaux précédents.</string>
     <string name="instr_did_you_know">Le saviez-vous ?</string>
+    <string-array name="fun_fact">
+        <item>Il y a 10 types de personnes dans le monde : Ceux qui comprennent le binaire, et ceux qui ne le comprennent pas.\n\n(Vieille blague de programmeur.)</item>
+        <item>Dans une nouvelle de Stanisław Lem, le vaisseau spatial "Ariel" s\'écrase sur Mars lors de l\'atterrissage. Il s\'avère que l\'ordinateur de bord souffrait d\'une sorte de névrose obsessionnelle. Plus la situation devenait critique, plus il demandait d\'informations dans sa folie de contrôle, jusqu\'à ce qu\'il ne puisse plus traiter la quantité de données.\n\nUne situation similaire s\'est produite en réalité lors du premier alunissage. Heureusement pour les astronautes, l\'ordinateur de bord avait toutefois été programmé par Margaret Hamilton et son équipe de manière à ce que, dans des situation de stress, il n\'exécute tout simplement plus les tâches moins importantes et restait ainsi opérationnel.</item>
+    </string-array>
+    <string name="settings_keep_levels">Conserver les niveaux en mode infini</string>
 </resources>

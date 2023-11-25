@@ -60,13 +60,16 @@ class Game(val gameActivity: MainGameActivity) {
             Chip.ChipUpgrades.SHR to 16, Chip.ChipUpgrades.MEM to 12,
             Chip.ChipUpgrades.CLK to 32)
 
+        // temperature control:
+        val baseTemperature = 17
+        val heatPerDegree = 300
+        val temperatureCooldownFactor = 0.99990
+
         // feature toggles:
         val isEndlessAvailable = true
-        val alwaysCreateNewRandomLevelInEndless = true
     }
 
     var defaultSpeedFactor = 0.64f
-    var timeBetweenTicks: Double = 20.0 /* in ms. Used by wait cycles in the game */
 
     data class StateData(
         var phase: GamePhase,       // whether the game is running, paused or between levels
@@ -122,6 +125,7 @@ class Game(val gameActivity: MainGameActivity) {
     private var additionalCashDelay = 0
     private var additionalCashTicks: Float = 0.0f
 
+    var timeBetweenTicks: Double = 20.0 /* in ms. Used by wait cycles in the game */
 
     enum class GamePhase { START, RUNNING, INTERMEZZO, MARKETPLACE, PAUSED }
     enum class GameSpeed { NORMAL, MAX }
@@ -193,6 +197,7 @@ class Game(val gameActivity: MainGameActivity) {
                 currentStage?.let {
                     currentWave = if (it.waves.size > 0) it.waves[0]
                     else it.nextWave()
+                    speedControlPanel.resetButtons()
                 }
             }
         }
@@ -221,7 +226,7 @@ class Game(val gameActivity: MainGameActivity) {
     {
         if (state.phase == GamePhase.RUNNING)
         {
-            state.heat *= 0.9999  // reduce heat. TODO: consider global speed factor
+            state.heat *= temperatureCooldownFactor  // reduce heat. TODO: consider global speed factor
             currentStage?.network?.let {
                 if (background?.update() == true) {
                     it.backgroundImage = background?.actualImage

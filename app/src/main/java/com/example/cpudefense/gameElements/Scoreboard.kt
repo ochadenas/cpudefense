@@ -333,7 +333,7 @@ class ScoreBoard(val game: Game): GameElement() {
         fun setSize(area: Rect, divider: Int): Rect
         {
             actualSize = (Game.coinSizeOnScoreboard * game.resources.displayMetrics.scaledDensity).toInt()
-            this.area = Rect(area.left, area.top, area.centerX(), area.bottom)
+            this.area = Rect(area.left, area.top, (area.left+area.width()*0.36).toInt(), area.bottom)
             bitmap =
                 Bitmap.createBitmap(this.area.width(), this.area.height(), Bitmap.Config.ARGB_8888)
             this.divider = divider
@@ -377,7 +377,7 @@ class ScoreBoard(val game: Game): GameElement() {
     inner class Temperature {
         var area = Rect()
         var divider = 0
-        var temperature: Int = 0
+        var temperature: Int = Game.baseTemperature
         var lastValue = -1   // used to detect value changes
         var actualSize = Game.coinSizeOnScoreboard
         var sevenSegmentDisplay: SevenSegmentDisplay? = null
@@ -392,13 +392,13 @@ class ScoreBoard(val game: Game): GameElement() {
             actualSize = this.area.height() - divider
             sevenSegmentDisplay = SevenSegmentDisplay(2, actualSize, game.gameActivity)
             sevenSegmentDisplay?.let {
-                bitmap = it.getDisplayBitmap(0, SevenSegmentDisplay.LedColors.YELLOW)
+                bitmap = it.getDisplayBitmap(0, SevenSegmentDisplay.LedColors.WHITE)
             }
             return Rect(this.area.right, area.top, area.right, area.bottom)
         }
 
         fun display(canvas: Canvas) {
-        temperature = (game.state.heat/100 + 17).toInt()
+        temperature = (game.state.heat/Game.heatPerDegree + Game.baseTemperature).toInt()
         if (temperature != lastValue) {
             lastValue = temperature
             recreateBitmap()
@@ -413,9 +413,12 @@ class ScoreBoard(val game: Game): GameElement() {
                 val displayRect = Rect(0, divider, area.width(), area.height())
                 val headerRect = Rect(0, 0, area.width(), area.height())
                 displayRect.shrink(margin)
-                canvas.drawBitmap(
-                    it.getDisplayBitmap(temperature, SevenSegmentDisplay.LedColors.YELLOW),
-                    null, displayRect, paint)
+                when (temperature)
+                {
+                    in 0..60 -> canvas.drawBitmap(it.getDisplayBitmap(temperature, SevenSegmentDisplay.LedColors.WHITE), null, displayRect, paint)
+                    in 61..80 -> canvas.drawBitmap(it.getDisplayBitmap(temperature, SevenSegmentDisplay.LedColors.YELLOW), null, displayRect, paint)
+                    else -> canvas.drawBitmap(it.getDisplayBitmap(temperature, SevenSegmentDisplay.LedColors.RED), null, displayRect, paint)
+                }
                 displayHeader(canvas, headerRect, "Temp")
             }
         }
