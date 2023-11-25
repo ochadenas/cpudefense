@@ -9,6 +9,8 @@ import com.example.cpudefense.networkmap.Node
 import com.example.cpudefense.networkmap.Viewport
 import com.example.cpudefense.utils.displayTextCenteredInRect
 import com.example.cpudefense.utils.setCenter
+import java.lang.Double.max
+import java.lang.Float.min
 import java.lang.Math.abs
 import java.util.concurrent.CopyOnWriteArrayList
 
@@ -229,7 +231,8 @@ open class Chip(open val network: Network, gridX: Int, gridY: Int): Node(network
             val chip = node as Chip
             if (chip.chipData.type in chipsAffected) {
                 // avoid resetting when clock tick comes _too_ soon after the regular reset
-                if (chip.cooldownTimer < chip.getCooldownTime() * 0.8f) {
+                val minDelay = kotlin.math.min(chip.getCooldownTime() * 0.2f, this.getCooldownTime())
+                if (chip.cooldownTimer <= chip.getCooldownTime()-minDelay) {
                     theNetwork.theGame.state.heat += chip.cooldownTimer
                     chip.cooldownTimer = 0f
                 }

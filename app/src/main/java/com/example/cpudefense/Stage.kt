@@ -184,8 +184,10 @@ class Stage(var theGame: Game) {
         val attacker = if (isCoin)
             Cryptocoin(network, (maxNumber*1.5).toULong(), actualSpeed )
         else {
-            var strength = Random.nextInt(maxNumber + 1)
-            strength = (strength.toFloat() * (theGame.heroes[Hero.Type.DECREASE_ATT_STRENGTH]?.getStrength() ?: 1.0f)).toInt()
+            var strength = Random.nextFloat()*(maxNumber+1)
+            theGame.heroes[Hero.Type.DECREASE_ATT_STRENGTH]?.let {
+                strength *= it.getStrength()
+            }
             Attacker(network, representation, strength.toULong(), actualSpeed)
         }
         network.addVehicle(attacker)

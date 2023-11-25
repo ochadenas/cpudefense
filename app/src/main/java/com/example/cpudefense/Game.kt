@@ -221,6 +221,7 @@ class Game(val gameActivity: MainGameActivity) {
     {
         if (state.phase == GamePhase.RUNNING)
         {
+            state.heat *= 0.9999  // reduce heat. TODO: consider global speed factor
             currentStage?.network?.let {
                 if (background?.update() == true) {
                     it.backgroundImage = background?.actualImage
@@ -439,6 +440,7 @@ class Game(val gameActivity: MainGameActivity) {
         state.coinsInLevel = nextStage.calculateRewardCoins(getSummaryOfStage(level))
         state.coinsExtra = 0
         setSummaryOfStage(level, nextStage.summary)
+        state.heat = 0.0
         gameActivity.setGameSpeed(GameSpeed.NORMAL)  // reset speed to normal when starting next stage
         speedControlPanel.resetButtons()
         viewport.reset()

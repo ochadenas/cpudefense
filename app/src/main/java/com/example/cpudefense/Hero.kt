@@ -7,10 +7,12 @@ import android.text.StaticLayout
 import android.text.TextPaint
 import com.example.cpudefense.effects.Fadable
 import com.example.cpudefense.effects.Fader
+import com.example.cpudefense.gameElements.Attacker
 import com.example.cpudefense.utils.center
 import com.example.cpudefense.utils.displayTextCenteredInRect
 import com.example.cpudefense.utils.setCenter
 import com.example.cpudefense.utils.setTopLeft
+import kotlin.math.exp
 
 class Hero(var game: Game, type: Type): Fadable {
     /*
@@ -370,7 +372,7 @@ class Hero(var game: Game, type: Type): Fadable {
             Type.ADDITIONAL_LIVES -> return level.toFloat()
             Type.DECREASE_ATT_FREQ -> return 1.0f - level * 0.05f
             Type.DECREASE_ATT_SPEED -> return 1.0f - level * 0.04f
-            Type.DECREASE_ATT_STRENGTH -> return 1.0f - level * 0.1f
+            Type.DECREASE_ATT_STRENGTH -> return exp(- level / 3.0).toFloat()
             Type.INCREASE_MAX_HERO_LEVEL -> return level.toFloat()
             Type.GAIN_CASH -> return (8f - level) * 9
             Type.GAIN_CASH_ON_KILL -> return level * 0.5f
@@ -378,6 +380,7 @@ class Hero(var game: Game, type: Type): Fadable {
             Type.INCREASE_CHIP_SUB_RANGE -> return 1.0f + level / 10f
             Type.INCREASE_CHIP_SHR_RANGE -> return 1.0f + level / 10f
             Type.INCREASE_CHIP_MEM_RANGE -> return 1.0f + level / 10f
+            else -> return level.toFloat()
         }
     }
 

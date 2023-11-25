@@ -4,13 +4,20 @@ import android.graphics.*
 import com.example.cpudefense.*
 import com.example.cpudefense.networkmap.Viewport
 import com.example.cpudefense.utils.*
+import java.lang.StrictMath.min
+import kotlin.math.min
 
 class ScoreBoard(val game: Game): GameElement() {
+    // default or min sizes
+    var margin = 4   // between LED area and edge
+    var preferredSizeOfLED = 8 // horizontal size of LEDs, can be smaller if there is too little space
+
     var area = Rect()
     var information = Information()
     var waves = Waves()
     var lives = Lives()
     var coins = Coins()
+    var temperature = Temperature()
     var debugStatusLine: DebugStatusLine? = null
     var myColor = Color.WHITE
     var divider = 0  // between the display title and the actual display
@@ -31,6 +38,7 @@ class ScoreBoard(val game: Game): GameElement() {
         areaRemaining = waves.setSize(areaRemaining, divider)
         areaRemaining = coins.setSize(areaRemaining, divider)
         areaRemaining = lives.setSize(areaRemaining, divider)
+        areaRemaining = temperature.setSize(areaRemaining, divider)
         if (game.gameActivity.settings.showFramerate) {
             debugStatusLine = DebugStatusLine()
             debugStatusLine?.setSize(area, divider)
@@ -79,6 +87,7 @@ class ScoreBoard(val game: Game): GameElement() {
         waves.display(canvas)
         lives.display(canvas)
         coins.display(canvas)
+        temperature.display(canvas)
         debugStatusLine?.display(canvas)
     }
 
@@ -91,6 +100,8 @@ class ScoreBoard(val game: Game): GameElement() {
              * @param text The actual string to be displayed
              */
     {
+        // TODO: Problem is that text with letters below the line (such as 'Temp') is slightly off-center vertically
+        // due to calculation in rect.displayTextCenteredInRect
         var rect = Rect(area)
         rect.bottom = divider
         val paint = Paint()
@@ -113,6 +124,7 @@ class ScoreBoard(val game: Game): GameElement() {
             waves.recreateBitmap()
             lives.recreateBitmap()
             coins.recreateBitmap()
+            temperature.recreateBitmap()
         }
     }
 
@@ -176,7 +188,7 @@ class ScoreBoard(val game: Game): GameElement() {
 
         fun setSize(area: Rect, divider: Int): Rect
         {
-            this.area = Rect(area.left, area.top, (area.left+area.width()*0.3).toInt(), area.bottom)
+            this.area = Rect(area.left, area.top, (area.left+area.width()*0.25).toInt(), area.bottom)
             bitmap = Bitmap.createBitmap(this.area.width(), this.area.height(), Bitmap.Config.ARGB_8888)
             this.divider = divider
             return Rect(this.area.right, area.top, area.right, area.bottom)
@@ -224,12 +236,25 @@ class ScoreBoard(val game: Game): GameElement() {
         var lastValue = -1   // used to detect value changes
         lateinit var bitmap: Bitmap
         val paint = Paint()
+        var ledAreaHeight: Int = 0
+        var ledAreaWidth: Int = 0
+        val preferredSizeLedX = (preferredSizeOfLED * game.resources.displayMetrics.scaledDensity).toInt()
+        private var sizeLedX = preferredSizeLedX
+        private var sizeLedY = 0 // will be calculated in setSize
+        private var deltaX = 0
+
 
         fun setSize(area: Rect, divider: Int): Rect
         {
-            this.area = Rect(area)
+            this.area = Rect(area.left, area.top, (area.left+area.width()*0.7f).toInt(), area.bottom)
             bitmap = Bitmap.createBitmap(this.area.width(), this.area.height(), Bitmap.Config.ARGB_8888)
             this.divider = divider
+            // calculate size and spacing of LEDs
+            sizeLedY = (area.height()-divider-2*margin)*74/100
+            val maxPossibleDeltaX = area.width()/(game.state.currentMaxLives + 0.0f)
+            deltaX = kotlin.math.min(preferredSizeLedX * 1.2f, maxPossibleDeltaX).toInt()
+            ledAreaWidth = (game.state.currentMaxLives + 1) * deltaX
+            sizeLedX = kotlin.math.min(preferredSizeLedX.toFloat(), deltaX / 1.2f).toInt()
             return Rect(this.area.right, area.top, area.right, area.bottom)
         }
 
@@ -247,12 +272,9 @@ class ScoreBoard(val game: Game): GameElement() {
         fun recreateBitmap()
         {
             bitmap = Bitmap.createBitmap(area.width(), area.height(), Bitmap.Config.ARGB_8888)
-            var canvas = Canvas(bitmap)
-            val sizeLedX = 12
-            val sizeLedY = (area.height() * 0.3).toInt()
-            val deltaX = 14 + sizeLedX
-            val ledAreaHeight = sizeLedY + deltaX
-            val ledAreaWidth = (game.state.currentMaxLives + 1) * deltaX
+            val canvas = Canvas(bitmap)
+            ledAreaHeight = (area.height()-divider) - 2*margin
+            ledAreaWidth = (game.state.currentMaxLives + 1) * deltaX
             val ledArea = Rect(0, 0, ledAreaWidth, ledAreaHeight)
             // var ledArea = Rect(0, divider+(area.height()-ledAreaHeight)/2, ledAreaWidth, ledAreaHeight)
             // determine the exact position of the LEDs. This is a bit frickelig
@@ -266,9 +288,9 @@ class ScoreBoard(val game: Game): GameElement() {
             val glowPaint = Paint(paint)
             canvas.drawRect(ledArea, paint)
             for (i in 1..game.state.currentMaxLives) {
-                val rect = Rect(0, 0, sizeLedX, sizeLedY)
-                rect.setCenter(ledArea.right - i * deltaX, ledArea.centerY())
-                val glowRect = Rect(rect).inflate(4)
+                val glowRect = Rect(0, 0, sizeLedX, sizeLedY)
+                glowRect.setCenter(ledArea.right - i * deltaX, ledArea.centerY())
+                val ledRect = Rect(glowRect).inflate(-4)
                 if (i <= game.state.lives)
                     when (game.currentStage?.getSeries())
                     {
@@ -292,7 +314,7 @@ class ScoreBoard(val game: Game): GameElement() {
                 }
 
                 canvas.drawRect(glowRect, glowPaint)
-                canvas.drawRect(rect, paint)
+                canvas.drawRect(ledRect, paint)
             }
             displayHeader(canvas, Rect(0,0, area.width(), area.height()), game.resources.getString(R.string.scoreboard_status))
         }
@@ -311,7 +333,7 @@ class ScoreBoard(val game: Game): GameElement() {
         fun setSize(area: Rect, divider: Int): Rect
         {
             actualSize = (Game.coinSizeOnScoreboard * game.resources.displayMetrics.scaledDensity).toInt()
-            this.area = Rect(waves.area.right, area.top, area.centerX(), area.bottom)
+            this.area = Rect(area.left, area.top, area.centerX(), area.bottom)
             bitmap =
                 Bitmap.createBitmap(this.area.width(), this.area.height(), Bitmap.Config.ARGB_8888)
             this.divider = divider
@@ -352,6 +374,53 @@ class ScoreBoard(val game: Game): GameElement() {
         }
     }
 
+    inner class Temperature {
+        var area = Rect()
+        var divider = 0
+        var temperature: Int = 0
+        var lastValue = -1   // used to detect value changes
+        var actualSize = Game.coinSizeOnScoreboard
+        var sevenSegmentDisplay: SevenSegmentDisplay? = null
+
+        lateinit var bitmap: Bitmap
+        val paint = Paint()
+
+        fun setSize(area: Rect, divider: Int): Rect
+        {
+            this.divider = divider
+            this.area = Rect(area.left, area.top, area.right, area.bottom)
+            actualSize = this.area.height() - divider
+            sevenSegmentDisplay = SevenSegmentDisplay(2, actualSize, game.gameActivity)
+            sevenSegmentDisplay?.let {
+                bitmap = it.getDisplayBitmap(0, SevenSegmentDisplay.LedColors.YELLOW)
+            }
+            return Rect(this.area.right, area.top, area.right, area.bottom)
+        }
+
+        fun display(canvas: Canvas) {
+        temperature = (game.state.heat/100 + 17).toInt()
+        if (temperature != lastValue) {
+            lastValue = temperature
+            recreateBitmap()
+            }
+            bitmap.let { canvas.drawBitmap(it, null, area, paint) }
+        }
+
+        fun recreateBitmap() {
+            bitmap = Bitmap.createBitmap(area.width(), area.height(), Bitmap.Config.ARGB_8888)
+            val canvas = Canvas(bitmap)
+            sevenSegmentDisplay?.let {
+                val displayRect = Rect(0, divider, area.width(), area.height())
+                val headerRect = Rect(0, 0, area.width(), area.height())
+                displayRect.shrink(margin)
+                canvas.drawBitmap(
+                    it.getDisplayBitmap(temperature, SevenSegmentDisplay.LedColors.YELLOW),
+                    null, displayRect, paint)
+                displayHeader(canvas, headerRect, "Temp")
+            }
+        }
+    }
+
     inner class DebugStatusLine()
     /** this is an additional text displayed at every tick.
      * It is meant to hold additional debug info, e. g. the current frame rate
@@ -379,7 +448,7 @@ class ScoreBoard(val game: Game): GameElement() {
         fun recreateBitmap() {
             if (area.width() >0 && area.height() > 0)
                 bitmap = Bitmap.createBitmap(area.width(), area.height(), Bitmap.Config.ARGB_8888)
-            var textToDisplay = "time per frame: %.2f ms. heat: %.1f".format(game.timeBetweenTicks, game.state.heat.toFloat())
+            var textToDisplay = "time per frame: %.2f ms. heat: %.2f".format(game.timeBetweenTicks, game.state.heat.toFloat())
             bitmap?.let {
                 val canvas = Canvas(it)
                 displayHeader(canvas, Rect(0, 0, area.width(), area.height()), textToDisplay)
