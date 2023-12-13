@@ -328,16 +328,14 @@ open class Chip(open val network: Network, gridX: Int, gridY: Int): Node(network
             return
         if (attacker.immuneTo == this)
             return
-        startCooldown()
+        if (chipData.type in listOf<ChipType>(ChipType.ACC, ChipType.MEM, ChipType.CLK)
+            && attacker.attackerData.isCoin)
+            return  // coins are unaffected by certain chip types
         if (chipData.type == ChipType.ACC)
-        {
-            if (attacker.attackerData.isCoin)
-                return // ACC does not affect coins
-            else
-                processInAccumulator(attacker)
-        }
+            processInAccumulator(attacker)
         else if (attacker.onShot(chipData.type, chipData.power))
             attacker.remove()
+        startCooldown()
     }
 
     fun storeAttacker(attacker: Attacker?)
