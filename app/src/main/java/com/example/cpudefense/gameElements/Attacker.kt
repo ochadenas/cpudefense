@@ -168,6 +168,10 @@ open class Attacker(network: Network, type: Representation = Representation.BINA
                 changeNumberTo((attackerData.number * factor))
 
             }
+            Chip.ChipType.NOOP ->
+            {
+                // does nothing
+            }
             else -> return false
         }
         return false

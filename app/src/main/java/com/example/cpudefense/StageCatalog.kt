@@ -10,7 +10,7 @@ class StageCatalog
      */
     companion object {
         val possibleObstacleTypes =
-            setOf(Chip.ChipType.EMPTY, Chip.ChipType.ADD, Chip.ChipType.SHL)
+            setOf(Chip.ChipType.EMPTY, Chip.ChipType.ADD, Chip.ChipType.SHL, Chip.ChipType.NOOP)
         fun createStage(stage: Stage, level: Stage.Identifier)
         {
             when (level.series)
@@ -65,12 +65,10 @@ class StageCatalog
                     slot = stage.chips.values.random()
                 }
                 when (slot?.chipData?.type) {
+                    Chip.ChipType.NOOP -> {}
                     Chip.ChipType.ADD -> slot.addPower(1)
                     Chip.ChipType.SHL -> slot.addPower(1)
-                    else -> if (Random.nextBoolean())
-                        slot?.setType(Chip.ChipType.SHL)
-                    else
-                        slot?.setType(Chip.ChipType.ADD)
+                    else -> slot?.setType( possibleObstacleTypes.random() )
                 }
             }
         }
@@ -1108,7 +1106,7 @@ class StageCatalog
                         createChip(35, 30, 8)
                         createChip(12, 40, 9)
                         createChip(35, 40, 10)
-                        createChip(20, 20, 11).setType(Chip.ChipType.SHL)
+                        createChip(20, 20, 11).setType(Chip.ChipType.NOOP)
                         createChip(12, 50, ident = 900, type = Chip.ChipType.CPU)
 
                         createLink(100, 1, 1)

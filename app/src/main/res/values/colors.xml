@@ -34,6 +34,8 @@
     <color name="chips_shl_glow">#CF605C</color>
     <color name="chips_add_foreground">#FF4B14</color>
     <color name="chips_add_glow">#C85E3E</color>
+    <color name="chips_noop_foreground">#FAD7CD</color>
+    <color name="chips_noop_glow">#9A837C</color>
     <color name="chips_background">#FF000000</color>
 
     <color name="scoreboard_text">#FFFFFF</color>

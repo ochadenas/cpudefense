@@ -87,7 +87,8 @@ class ScoreBoard(val game: Game): GameElement() {
         waves.display(canvas)
         lives.display(canvas)
         coins.display(canvas)
-        temperature.display(canvas)
+        if (game.currentStage?.getSeries() ?: 1 > 1)
+            temperature.display(canvas)
         debugStatusLine?.display(canvas)
     }
 

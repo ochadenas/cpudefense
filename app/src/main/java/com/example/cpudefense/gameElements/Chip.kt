@@ -16,7 +16,7 @@ import java.util.concurrent.CopyOnWriteArrayList
 
 open class Chip(open val network: Network, gridX: Int, gridY: Int): Node(network, gridX.toFloat(), gridY.toFloat())
 {
-    enum class ChipType { EMPTY, SUB, SHR, MEM, ACC, SHL, ADD, CLK, ENTRY, CPU}
+    enum class ChipType { EMPTY, SUB, SHR, MEM, ACC, SHL, ADD, NOOP, CLK, ENTRY, CPU}
     enum class ChipUpgrades { POWERUP, REDUCE, SELL, SUB, SHR, MEM, ACC, CLK }
 
     data class Data(
@@ -159,6 +159,13 @@ open class Chip(open val network: Network, gridX: Int, gridY: Int): Node(network
                 val modifier = 1.2f
                 chipData.cooldown = (20f / modifier).toInt()
                 data.range = 2f
+            }
+            ChipType.NOOP -> {
+                chipData.power = 1
+                bitmap = null
+                chipData.color = resources.getColor(R.color.chips_noop_foreground)
+                chipData.glowColor = resources.getColor(R.color.chips_noop_glow)
+                chipData.value = Game.basePrice[ChipUpgrades.REDUCE] ?: 99
             }
             else -> {}
         }
@@ -393,6 +400,7 @@ open class Chip(open val network: Network, gridX: Int, gridY: Int): Node(network
             ChipType.SHL -> return createBitmap("SHL %d".format(chipData.power))
             ChipType.ADD -> return createBitmap("ADD %d".format(chipData.power))
             ChipType.CLK -> return createBitmap("CLK %d".format(chipData.power))
+            ChipType.CLK -> return createBitmap("NOOP")
             else -> return null
         }
     }
@@ -468,6 +476,9 @@ open class Chip(open val network: Network, gridX: Int, gridY: Int): Node(network
                 alternatives.add(ChipUpgrades.REDUCE)
             }
             ChipType.ADD -> {
+                alternatives.add(ChipUpgrades.REDUCE)
+            }
+            ChipType.NOOP -> {
                 alternatives.add(ChipUpgrades.REDUCE)
             }
                 else -> {}
