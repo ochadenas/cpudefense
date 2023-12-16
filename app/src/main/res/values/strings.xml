@@ -113,6 +113,7 @@ In hex, you have digits from 0 to 9 and then from A to F. The hex number 0x0F eq
 "Note that cryptocoins are unaffected by ACC and also by MEM chips."
     </string>
     <string name="instr_14">Another chip becomes available! \n\nThe CLK (clock) chip does not affect the attackers itself. Instead, it speeds up the other chips on the board. Each time the CLK ticks, the cooldown timer of all other chips is reset, and they become ready to operate anew.\n\nUpgrading increases the CLK frequency.</string>
+    <string name="instr_15">Overclocking the CPU can be dangerous: The faster your chips work, the hotter they will get.\n\nEach time your clock resets a chip, a small amount of heat is produced. Temperatures of more than %d degrees can damage the CPU, that means: they can cost you a life.</string>
     <string name="instr_endless">You have successfully cleared all stages and won the game!\n\nIf you want, you can continue in <i>endless</i> mode, with randomly generated circuits that get more and more difficult.\n\nHow far will you get?</string>
 
 
@@ -247,5 +248,6 @@ Furthermore, some slots are already taken by unwanted chips you'll have to deal 
         <item>The very first computer adventure game "ADVENT" was developed by William Crowther, who was also a passionate speleologist (a cave explorer).\n\nThe \"Colossal Cave\" from the game really exists, albeit unfortunately without dragons, dwarfs, or treasures.</item>
         <item>There are 10 types of people in this world: Those who understand binary, and those who don\'t.\n\n\n(Old programmers\' joke.)</item>
         <item>In the "Tales of Pirx the Pilot" by Stanisław Lem, the spaceship "Ariel" crashes on Mars during its landing approach. It turns out that the on-board computer was suffering from a kind of obsessive-compulsive disorder. The more critical the situation became, the more information it requested in its control mania until it could no longer process the amount of data.\n\nA similar situation occurred in reality during the first moon landing. Fortunately for the astronauts, however, the on-board computer was programmed by Margaret Hamilton and her team in such a way that it simply stopped performing less important tasks under stress. Thus it remained operational, and the \"Eagle\" landed safely on the moon.</item>
+        <item>The development of storage capacity over a period of around 60 years is astonishing: a punch card (surface area approx. 156 cm²) has a storage capacity of 80 bytes. A standard microSD memory card today with a surface area of approx. 1.65 cm² and only slightly thicker has a capacity of 256 GB.\n\nThat is a ratio of approx. 1 : 25,600,000,000,000.\n\nHowever, the back of the punch card can be used to take notes, or write a shopping list. This is not possible with the memory card.</item>
     </string-array>
 </resources>

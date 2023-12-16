@@ -21,6 +21,8 @@ class Instructions(val game: Game, var stage: Stage.Identifier, var callback: ((
 
     private fun instructionText(level: Int): String
     {
+        if (game.intermezzo.type in setOf(Intermezzo.Type.GAME_LOST, Intermezzo.Type.GAME_WON))
+            return ""
         if (stage.series == Game.SERIES_NORMAL) {
             return when (level) {
                 1 -> game.resources.getString(R.string.instr_1)
@@ -38,7 +40,7 @@ class Instructions(val game: Game, var stage: Stage.Identifier, var callback: ((
                 10 -> game.resources.getString(R.string.instr_11)
                 21 -> game.resources.getString(R.string.instr_13)
                 27 -> game.resources.getString(R.string.instr_14)
-
+                28 -> game.resources.getString(R.string.instr_15).format(Game.temperatureLimit)
                 else -> ""
             }
         }

@@ -19,6 +19,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.concurrent.CopyOnWriteArrayList
+import kotlin.random.Random
 
 
 class Game(val gameActivity: MainGameActivity) {
@@ -62,8 +63,10 @@ class Game(val gameActivity: MainGameActivity) {
 
         // temperature control:
         val baseTemperature = 17
-        val heatPerDegree = 300
-        val temperatureCooldownFactor = 0.99990
+        val heatPerDegree = 200
+        val temperatureCooldownFactor = 0.99995
+        val temperatureWarnThreshold = 60
+        val temperatureLimit = 85
 
         // feature toggles:
         val isEndlessAvailable = true
@@ -226,7 +229,7 @@ class Game(val gameActivity: MainGameActivity) {
     {
         if (state.phase == GamePhase.RUNNING)
         {
-            state.heat *= temperatureCooldownFactor  // reduce heat. TODO: consider global speed factor
+            checkTemperature()
             currentStage?.network?.let {
                 if (background?.update() == true) {
                     it.backgroundImage = background?.actualImage
@@ -543,6 +546,23 @@ class Game(val gameActivity: MainGameActivity) {
         if (additionalCashTicks<0) {
             scoreBoard.addCash(1)
             additionalCashTicks = additionalCashDelay.toFloat()
+        }
+    }
+
+    private fun checkTemperature()
+    {
+        if (state.heat == 0.0)
+            return
+        state.heat *= temperatureCooldownFactor  // reduce heat. TODO: consider global speed factor
+        val overheat = state.heat - temperatureLimit*Game.heatPerDegree
+        if (overheat > 0 && Random.nextFloat() > overheat*0.002)  // chance of damaging the CPU
+        {
+            gameActivity.runOnUiThread {
+                val toast: Toast = Toast.makeText(gameActivity, "CPU damage from overheating", Toast.LENGTH_SHORT)
+                toast.show()
+            }
+            state.heat *= 0.6f
+            removeOneLife()
         }
     }
 
