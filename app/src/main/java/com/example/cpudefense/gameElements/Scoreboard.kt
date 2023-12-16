@@ -53,20 +53,17 @@ class ScoreBoard(val game: Game): GameElement() {
     fun informationToString(number: Int): String {
         if (number < 512 && number > -512)
             return "%d bit".format(number)
-        var bytes = number / 8
-        if (bytes < 1000 && bytes > -1000)
+        var bytes = number/8
+        if (bytes < 800 && bytes > -800)
             return "%d B".format(bytes)
-        bytes /= 1024
-        if (bytes < 1000 && bytes > -1000)
-            return "%d KiB".format(bytes)
-        bytes /= 1024
-        if (bytes < 1000 && bytes > -1000)
-            return "%d MiB".format(bytes)
-        bytes /= 1024
-        if (bytes < 1000 && bytes > -1000)
-            return "%d GiB".format(bytes)
-        bytes /= 1024
-        return "%d TiB".format(bytes)
+        val kiB = bytes.toFloat()/1024.0
+        if (kiB < 800 && bytes > -1000)
+            return "%0.1f KiB".format(kiB)
+        val MiB = kiB/1024.0
+        if (MiB < 800 && MiB > -800)
+            return "%0.1f MiB".format(MiB)
+        val  GiB = MiB/1024.0
+        return "%0.1f GiB".format(GiB)
     }
 
     override fun update() {
@@ -81,12 +78,13 @@ class ScoreBoard(val game: Game): GameElement() {
         paint.style = Paint.Style.STROKE
         paint.strokeWidth = scoreboardBorderWidth
         canvas.drawRect(area, paint)
-
-        if (game.currentStage?.getSeries() ?: 1 > 1 || game.currentStage?.getLevel() ?: 3 > 2)
-            information.display(canvas)
+        game.currentStage?.let { if (it.getSeries() > 1 || it.getLevel() > 2)
+            information.display(canvas) }
         waves.display(canvas)
         lives.display(canvas)
         coins.display(canvas)
+        game.currentStage?.let { if (it.getSeries() > 1 || it.getLevel() > 27)
+            temperature.display(canvas) }
         if (game.currentStage?.getSeries() ?: 1 > 1)
             temperature.display(canvas)
         debugStatusLine?.display(canvas)
@@ -416,8 +414,8 @@ class ScoreBoard(val game: Game): GameElement() {
                 displayRect.shrink(margin)
                 when (temperature)
                 {
-                    in 0..60 -> canvas.drawBitmap(it.getDisplayBitmap(temperature, SevenSegmentDisplay.LedColors.WHITE), null, displayRect, paint)
-                    in 61..80 -> canvas.drawBitmap(it.getDisplayBitmap(temperature, SevenSegmentDisplay.LedColors.YELLOW), null, displayRect, paint)
+                    in 0 until Game.temperatureWarnThreshold -> canvas.drawBitmap(it.getDisplayBitmap(temperature, SevenSegmentDisplay.LedColors.WHITE), null, displayRect, paint)
+                    in Game.temperatureWarnThreshold until Game.temperatureLimit -> canvas.drawBitmap(it.getDisplayBitmap(temperature, SevenSegmentDisplay.LedColors.YELLOW), null, displayRect, paint)
                     else -> canvas.drawBitmap(it.getDisplayBitmap(temperature, SevenSegmentDisplay.LedColors.RED), null, displayRect, paint)
                 }
                 displayHeader(canvas, headerRect, "Temp")
