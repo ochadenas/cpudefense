@@ -10,7 +10,7 @@ import kotlin.math.min
 class ScoreBoard(val game: Game): GameElement() {
     // default or min sizes
     var margin = 4   // between LED area and edge
-    var preferredSizeOfLED = 8 // horizontal size of LEDs, can be smaller if there is too little space
+    var preferredSizeOfLED = 10 // horizontal size of LEDs, can be smaller if there is too little space
 
     var area = Rect()
     var information = Information()
@@ -237,7 +237,7 @@ class ScoreBoard(val game: Game): GameElement() {
         val paint = Paint()
         var ledAreaHeight: Int = 0
         var ledAreaWidth: Int = 0
-        val preferredSizeLedX = (preferredSizeOfLED * game.resources.displayMetrics.scaledDensity).toInt()
+        val preferredSizeLedX = (preferredSizeOfLED * game.resources.displayMetrics.density).toInt()
         private var sizeLedX = preferredSizeLedX
         private var sizeLedY = 0 // will be calculated in setSize
         private var deltaX = 0
@@ -273,7 +273,8 @@ class ScoreBoard(val game: Game): GameElement() {
             bitmap = Bitmap.createBitmap(area.width(), area.height(), Bitmap.Config.ARGB_8888)
             val canvas = Canvas(bitmap)
             ledAreaHeight = (area.height()-divider) - 2*margin
-            ledAreaWidth = (game.state.currentMaxLives + 1) * deltaX
+            // ledAreaWidth = (game.state.currentMaxLives + 1) * deltaX
+            ledAreaWidth = this.area.width()- 2*margin
             val ledArea = Rect(0, 0, ledAreaWidth, ledAreaHeight)
             // var ledArea = Rect(0, divider+(area.height()-ledAreaHeight)/2, ledAreaWidth, ledAreaHeight)
             // determine the exact position of the LEDs. This is a bit frickelig
@@ -311,7 +312,6 @@ class ScoreBoard(val game: Game): GameElement() {
                     paint.color = resources.getColor(R.color.led_off)
                     glowPaint.color = resources.getColor(R.color.led_off_glow)
                 }
-
                 canvas.drawRect(glowRect, glowPaint)
                 canvas.drawRect(ledRect, paint)
             }
@@ -450,7 +450,7 @@ class ScoreBoard(val game: Game): GameElement() {
         fun recreateBitmap() {
             if (area.width() >0 && area.height() > 0)
                 bitmap = Bitmap.createBitmap(area.width(), area.height(), Bitmap.Config.ARGB_8888)
-            var textToDisplay = "time per frame: %.2f ms. heat: %.2f".format(game.timeBetweenTicks, game.state.heat.toFloat())
+            var textToDisplay = "time per frame: %.2f ms.".format(game.timeBetweenTicks)
             bitmap?.let {
                 val canvas = Canvas(it)
                 displayHeader(canvas, Rect(0, 0, area.width(), area.height()), textToDisplay)
