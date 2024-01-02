@@ -113,7 +113,8 @@ In hex, you have digits from 0 to 9 and then from A to F. The hex number 0x0F eq
 "Note that cryptocoins are unaffected by ACC and also by MEM chips."
     </string>
     <string name="instr_14">Another chip becomes available! \n\nThe CLK (clock) chip does not affect the attackers itself. Instead, it speeds up the other chips on the board. Each time the CLK ticks, the cooldown timer of all other chips is reset, and they become ready to operate anew.\n\nUpgrading increases the CLK frequency.</string>
-    <string name="instr_15">Overclocking the CPU can be dangerous: The faster your chips work, the hotter they will get.\n\nEach time your clock resets a chip, a small amount of heat is produced. Temperatures of more than %d degrees can damage the CPU, that means: they can cost you a life.</string>
+    <string name="instr_15">Overclocking the CPU can be dangerous: The faster your chips work, the hotter they will get.\n\nEach time your clock resets a chip, a small amount of heat is produced. Temperatures of more than %d degrees can damage the CPU, that means, that they can cost you a life.</string>
+    <string name="instr_16">The NOP chip ("No operation") does nothing. But it takes up one slot, so you might want to remove it.\n\nA NOP 2 chip also does nothing, but twice.</string>
     <string name="instr_endless">You have successfully cleared all stages and won the game!\n\nIf you want, you can continue in <i>endless</i> mode, with randomly generated circuits that get more and more difficult.\n\nHow far will you get?</string>
 
 

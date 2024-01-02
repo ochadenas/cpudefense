@@ -9,14 +9,12 @@ import com.example.cpudefense.networkmap.Node
 import com.example.cpudefense.networkmap.Viewport
 import com.example.cpudefense.utils.displayTextCenteredInRect
 import com.example.cpudefense.utils.setCenter
-import java.lang.Double.max
-import java.lang.Float.min
 import java.lang.Math.abs
 import java.util.concurrent.CopyOnWriteArrayList
 
-open class Chip(open val network: Network, gridX: Int, gridY: Int): Node(network, gridX.toFloat(), gridY.toFloat())
+open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gridX.toFloat(), gridY.toFloat())
 {
-    enum class ChipType { EMPTY, SUB, SHR, MEM, ACC, SHL, ADD, NOOP, CLK, ENTRY, CPU}
+    enum class ChipType { EMPTY, SUB, SHR, MEM, ACC, SHL, ADD, NOP, CLK, ENTRY, CPU}
     enum class ChipUpgrades { POWERUP, REDUCE, SELL, SUB, SHR, MEM, ACC, CLK }
 
     data class Data(
@@ -160,7 +158,7 @@ open class Chip(open val network: Network, gridX: Int, gridY: Int): Node(network
                 chipData.cooldown = (20f / modifier).toInt()
                 data.range = 2f
             }
-            ChipType.NOOP -> {
+            ChipType.NOP -> {
                 chipData.power = 1
                 bitmap = null
                 chipData.color = resources.getColor(R.color.chips_noop_foreground)
@@ -400,7 +398,8 @@ open class Chip(open val network: Network, gridX: Int, gridY: Int): Node(network
             ChipType.SHL -> return createBitmap("SHL %d".format(chipData.power))
             ChipType.ADD -> return createBitmap("ADD %d".format(chipData.power))
             ChipType.CLK -> return createBitmap("CLK %d".format(chipData.power))
-            ChipType.CLK -> return createBitmap("NOOP")
+            ChipType.NOP -> return if (chipData.power == 1)  createBitmap("NOP")
+                else createBitmap("NOP %d".format(chipData.power))
             else -> return null
         }
     }
@@ -478,7 +477,7 @@ open class Chip(open val network: Network, gridX: Int, gridY: Int): Node(network
             ChipType.ADD -> {
                 alternatives.add(ChipUpgrades.REDUCE)
             }
-            ChipType.NOOP -> {
+            ChipType.NOP -> {
                 alternatives.add(ChipUpgrades.REDUCE)
             }
                 else -> {}

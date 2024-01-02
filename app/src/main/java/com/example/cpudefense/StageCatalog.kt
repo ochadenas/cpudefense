@@ -9,8 +9,10 @@ class StageCatalog
      * It is not meant to be instantiated.
      */
     companion object {
-        val possibleObstacleTypes =
-            setOf(Chip.ChipType.EMPTY, Chip.ChipType.ADD, Chip.ChipType.SHL, Chip.ChipType.NOOP)
+        val possibleSlotsForObstacles =
+            setOf(Chip.ChipType.EMPTY, Chip.ChipType.ADD, Chip.ChipType.SHL, Chip.ChipType.NOP)
+        val obstacleTypes =
+            setOf(Chip.ChipType.ADD, Chip.ChipType.SHL, Chip.ChipType.NOP)
         fun createStage(stage: Stage, level: Stage.Identifier)
         {
             when (level.series)
@@ -61,14 +63,14 @@ class StageCatalog
             for (i in 1..numberOfObstacles)  // set or upgrade the slots
             {
                 var slot: Chip? = null
-                while (slot?.chipData?.type !in possibleObstacleTypes) {
+                while (slot?.chipData?.type !in possibleSlotsForObstacles) {
                     slot = stage.chips.values.random()
                 }
                 when (slot?.chipData?.type) {
-                    Chip.ChipType.NOOP -> {}
+                    Chip.ChipType.NOP -> slot.addPower(1)
                     Chip.ChipType.ADD -> slot.addPower(1)
                     Chip.ChipType.SHL -> slot.addPower(1)
-                    else -> slot?.setType( possibleObstacleTypes.random() )
+                    else -> slot?.setType( obstacleTypes.random() )
                 }
             }
         }
@@ -1098,15 +1100,15 @@ class StageCatalog
                         createChip(35, 50, ident = 103, type = Chip.ChipType.ENTRY)
                         createChip(10, 10, 1)
                         createChip(25, 10, 2)
-                        createChip(40, 10, 3)
+                        createChip(40, 10, 3).setType(Chip.ChipType.SHL)
                         createChip(10, 20, 4)
                         createChip(30, 20, 5)
-                        createChip(40, 20, 6).setType(Chip.ChipType.ADD)
+                        createChip(40, 20, 6)
                         createChip(12, 30, 7)
                         createChip(35, 30, 8)
                         createChip(12, 40, 9)
-                        createChip(35, 40, 10)
-                        createChip(20, 20, 11).setType(Chip.ChipType.NOOP)
+                        createChip(35, 40, 10).setType(Chip.ChipType.ADD)
+                        createChip(20, 20, 11)
                         createChip(12, 50, ident = 900, type = Chip.ChipType.CPU)
 
                         createLink(100, 1, 1)
@@ -1156,11 +1158,11 @@ class StageCatalog
                         initializeNetwork(50, 55)
 
                         createChip(25, 0, ident = 100, type = Chip.ChipType.ENTRY)
-                        createChip(25, 12, 1).setType(Chip.ChipType.SHL)
+                        createChip(25, 12, 1)
                         createChip(25, 20, 2)
-                        createChip(25, 28, 3)
+                        createChip(25, 28, 3).setType(Chip.ChipType.NOP)
                         createChip(25, 36, 4)
-                        createChip(25, 44, 5).setType(Chip.ChipType.ADD)
+                        createChip(25, 44, 5)
                         createChip(25, 52, ident = 900, type = Chip.ChipType.CPU)
                         createChip(12, 22, 6)
                         createChip(38, 30, 7)
