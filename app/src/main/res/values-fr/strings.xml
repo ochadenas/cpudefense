@@ -72,7 +72,7 @@
     <string name="shortdesc_att_speed">vitesse attaquants</string>
     <string name="shortdesc_att_strength">puissance attaquants</string>
     <string name="shortdesc_info_gain">gain d\'info</string>
-    <string name="shortdesc_range">Portée des puces</string>
+    <string name="shortdesc_range">Portée puces %s</string>
     <string name="shortdesc_refund">remboursement vente</string>
     <string name="shortdesc_max_hero_upgrade">niveau max des héros</string>
     <string name="upgrade_format">%s  [coût: %d]</string>
@@ -88,7 +88,7 @@
     <string name="HERO_EFFECT_ATTSTRENGTH">réduit la puissance des attaquants</string>
     <string name="HERO_EFFECT_MAXHEROUPGRADE">Augmente le niveau maximal des autres héros</string>
     <string name="HERO_EFFECT_REFUNDPRICE">"augmente le remboursement lors "</string>
-    <string name="HERO_EFFECT_RANGE">augmente la portée des puces</string>
+    <string name="HERO_EFFECT_RANGE">augmente la portée des puces %s</string>
     <string name="toast_loading">Chargement ...</string>
     <string name="name_series_1">Normal</string>
     <string name="name_series_2">Turbo</string>
@@ -129,6 +129,6 @@
     <string name="game_paused">PAUSE</string>
     <string name="settings_fast_fast_forward">\"Fast forward\" rapide</string>
     <string name="kilby">Jack St. Clair Kilby a eu l\'idée de regrouper les éléments semi-conducteurs - tels que les transistors ou les diodes - dans un circuit intégré (CI) au lieu de câbler les composants individuellement sur une plaque. C\'était l\'origine des micro-puces et des processeurs et c\'est ce qui a rendu possible toute l\'électronique moderne avec sa miniaturisation.\n\n\nJack Kilby est également considéré comme l\'inventeur de la calculatrice de poche et de l\'imprimante thermique.</string>
-    <string name="shortdesc_limit_unwanted">nombre de puces indésirables</string>
+    <string name="shortdesc_limit_unwanted">puces indésirables</string>
     <string name="HERO_EFFECT_LIMITUNWANTED">Réduit le nombre de puces indésirables</string>
 </resources>

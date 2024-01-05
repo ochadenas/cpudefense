@@ -196,7 +196,7 @@ The programming language Pascal is named after him."</string>
     <string name="shortdesc_att_speed">Attacker speed</string>
     <string name="shortdesc_att_strength">Attacker strength</string>
     <string name="shortdesc_info_gain">Information gain</string>
-    <string name="shortdesc_range">Chip range</string>
+    <string name="shortdesc_range">%s chip range</string>
     <string name="shortdesc_refund">Refund when selling chips</string>
     <string name="shortdesc_max_hero_upgrade">max hero level</string>
     <string name="shortdesc_limit_unwanted">unwanted chip count</string>

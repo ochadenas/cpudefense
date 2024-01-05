@@ -332,19 +332,19 @@ class Hero(var game: Game, type: Type): Fadable {
             }
             Type.INCREASE_CHIP_SUB_RANGE ->
             {
-                shortDesc = game.resources.getString(R.string.shortdesc_range)
+                shortDesc = game.resources.getString(R.string.shortdesc_range).format("SUB")
                 strengthDesc = "x %.2f".format(strength)
                 upgradeDesc = " → %.2f".format(next)
             }  
             Type.INCREASE_CHIP_SHR_RANGE ->
             {
-                shortDesc = game.resources.getString(R.string.shortdesc_range)
+                shortDesc = game.resources.getString(R.string.shortdesc_range).format("SHR")
                 strengthDesc = "x %.2f".format(strength)
                 upgradeDesc = " → %.2f".format(next)
             }
             Type.INCREASE_CHIP_MEM_RANGE ->
             {
-                shortDesc = game.resources.getString(R.string.shortdesc_range)
+                shortDesc = game.resources.getString(R.string.shortdesc_range).format("MEM")
                 strengthDesc = "x %.2f".format(strength)
                 upgradeDesc = " → %.2f".format(next)
             }

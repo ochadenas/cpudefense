@@ -122,7 +122,7 @@ Ein Teil der Information wird dir dabei zurückerstattet."
     <string name="shortdesc_att_speed">Geschw. der Angreifer</string>
     <string name="shortdesc_att_strength">Stärke der Angreifer</string>
     <string name="shortdesc_info_gain">Informationsgewinn</string>
-    <string name="shortdesc_range">Chip-Reichweite</string>
+    <string name="shortdesc_range">Reichweite %s-Chips</string>
     <string name="shortdesc_refund">Erstattung bei Verkauf</string>
     <string name="shortdesc_max_hero_upgrade">max. Helden-Stärke</string>
     <string name="upgrade_format">%s  [Kosten: %d]</string>
@@ -140,7 +140,7 @@ Ein Teil der Information wird dir dabei zurückerstattet."
     <string name="HERO_EFFECT_ATTSTRENGTH">verringert die Stärke der Angreifer</string>
     <string name="HERO_EFFECT_MAXHEROUPGRADE">erhöht die maximale Stufe der anderen Helden</string>
     <string name="HERO_EFFECT_REFUNDPRICE">höhere Erstattung beim Verkauf von Chips</string>
-    <string name="HERO_EFFECT_RANGE">erhöht die Reichweite der Chips</string>
+    <string name="HERO_EFFECT_RANGE">erhöht die Reichweite der %s Chips</string>
     <string name="toast_loading">Lade Daten …</string>
     <string name="name_series_1">Normal</string>
     <string name="name_series_2">Turbo</string>
@@ -189,12 +189,15 @@ Ein Teil der Information wird dir dabei zurückerstattet."
         <item>In den 1990ern war das Programm xsnow auf Unix-Rechnern sehr beliebt. Es ließ auf dem Desktop-Hintergrund Schneeflocken herunterrieseln, die auf den Programmfenstern liegen blieben. Von Zeit zu Zeit wurden die Flocken vom Wind verwirbelt, und manchmal sah man den Weihnachtsmann in einem Rentierschlitten über den Bildschirm fliegen. Die Option -showrudolph legte fest, ob das vorderste Rentier eine rote Nase hatte.</item>
         <item>Snacks are good in moderation.\n\n\n("Tipp des Tages" bei Civilization IV)</item>
         <item>Um im Binärsystem eine Zahl von einer anderen abzuziehen, muss man nicht subtrahieren können. Stattdessen invertiert man sie, zählt 1 dazu und addiert das Ergebnis zur Ausgangszahl.\n\nWarum funktioniert das?\nWenn man eine Zahl invertiert, zum Beispiel 0101 1110 (x5E) zu 1010 0001 (xA1), und beide addiert, erhält man immer 1111 1111 (also xFF). Wenn man noch 1 addiert und den Übertrag verwirft, erhält man 0000 0000.\n\nMan kann daher die Zahl xA2 (also xA1 plus 1) als "minus x5E" betrachten, denn die Summe aus beiden ist x00. Beispiel: x7F - x5E ist x21,  und 0x7F + xA2 (gekürzt auf 8 Bit) ist ebenfalls x21.</item>
+        <item>74xx chips</item>
+        <item>HP pocket calculators</item>
+        <item>pizza box form factor</item>
     </string-array>
     <string name="instr_did_you_know">Schon gewusst?</string>
     <string name="settings_keep_levels">Level im Endlos-Modus beibehalten</string>
     <string name="game_paused">PAUSE</string>
     <string name="settings_fast_fast_forward">Schnelles \"Fast Forward\"</string>
     <string name="kilby">Jack St. Clair Kilby hatte die Idee, Halbleiterelemente - also etwa Transistoren oder Dioden - in einer integrierten Schaltung (IC) zusammenzufassen, statt die Bauteile einzeln auf einer Leiterplatine zu verdrahten. Dies war die Grundlage für Mikrochips und Prozessoren und machte die gesamte moderne Elektronik mit ihrer Miniaturisierung erst möglich.\n\nJack Kilby gilt auch als Mit-Erfinder von Taschenrechner und Thermodrucker.\n</string>
-    <string name="shortdesc_limit_unwanted">Anzahl unerwünschter Chips\n</string>
+    <string name="shortdesc_limit_unwanted">Unerwünschte Chips\n</string>
     <string name="HERO_EFFECT_LIMITUNWANTED">Reduziert die Anzahl unerwünschter Chips</string>
 </resources>
