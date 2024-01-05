@@ -17,15 +17,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class MainGameActivity : Activity() {
-    /* properties used for assuring a constant frame rate */
-    /** delta T in normal operation */
-    private val defaultDelay = 40L
-    /** delta T when accelerated */
-    private val fastForwardDelay = 7L
-    private val fastFastForwardDelay = 3L
-
-    private var updateDelay: Long = defaultDelay
-    private val effectsDelay: Long = 15
     lateinit var theGame: Game
     lateinit var theGameView: GameView
     private var startOnLevel: Stage.Identifier? = null
@@ -33,16 +24,23 @@ class MainGameActivity : Activity() {
     private var gameIsRunning =
         true  // flag used to keep the threads running. Set to false when leaving activity
 
+    /* properties used for assuring a constant frame rate */
+    /** delta T in normal operation */
+    private val defaultDelay = 40L
+    /** delta T when accelerated */
+    private val fastForwardDelay = 7L
+    private val fastFastForwardDelay = 3L
+    private var updateDelay: Long = defaultDelay
+    private val effectsDelay: Long = 15
+
     /** additional properties for displaying an average frame rate */
     private var timeOfLastFrame = SystemClock.uptimeMillis()
     /** how many samples in one count */
     private val meanCount = 10
     private var updateJob: Job? = null
     private var displayJob: Job? = null
-
     /** how many samples have been taken */
     private var frameCount = 0
-
     /** cumulated time */
     private var frameTimeSum = 0L
 

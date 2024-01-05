@@ -21,11 +21,8 @@ class Hero(var game: Game, type: Type): Fadable {
     - Babbage?
     - Berners-Lee?
     - Torvalds
-    - Sid Meier
-    - Leibniz
     - Baudot
     - Chappe (?)
-    - Jack St. Clair Kilby
     - John Conway
      */
 
@@ -33,7 +30,7 @@ class Hero(var game: Game, type: Type): Fadable {
         INCREASE_CHIP_SHR_SPEED,  INCREASE_CHIP_SHR_RANGE,
         INCREASE_CHIP_MEM_SPEED,  INCREASE_CHIP_MEM_RANGE,
         DECREASE_ATT_FREQ, DECREASE_ATT_SPEED, DECREASE_ATT_STRENGTH,
-        ADDITIONAL_LIVES, INCREASE_MAX_HERO_LEVEL,
+        ADDITIONAL_LIVES, INCREASE_MAX_HERO_LEVEL, LIMIT_UNWANTED_CHIPS,
         INCREASE_STARTING_CASH, GAIN_CASH,
         DECREASE_UPGRADE_COST, INCREASE_REFUND, GAIN_CASH_ON_KILL}
     data class Data (
@@ -81,6 +78,7 @@ class Hero(var game: Game, type: Type): Fadable {
         Type.DECREASE_ATT_STRENGTH -> game.resources.getColor(R.color.upgrade_active_general)
         Type.ADDITIONAL_LIVES -> game.resources.getColor(R.color.upgrade_active_meta)
         Type.INCREASE_MAX_HERO_LEVEL -> game.resources.getColor(R.color.upgrade_active_meta)
+        Type.LIMIT_UNWANTED_CHIPS -> game.resources.getColor(R.color.upgrade_active_meta)
         Type.INCREASE_STARTING_CASH -> game.resources.getColor(R.color.upgrade_active_eco)
         Type.GAIN_CASH -> game.resources.getColor(R.color.upgrade_active_eco)
         Type.GAIN_CASH_ON_KILL -> game.resources.getColor(R.color.upgrade_active_eco)
@@ -307,6 +305,12 @@ class Hero(var game: Game, type: Type): Fadable {
                 upgradeDesc = " → +%d".format(next.toInt())
                 maxLevel = 3
             }
+            Type.LIMIT_UNWANTED_CHIPS ->
+            {
+                shortDesc = game.resources.getString(R.string.shortdesc_limit_unwanted)
+                strengthDesc = "-%d".format(strength.toInt())
+                upgradeDesc = " → -%d".format(next.toInt())
+            }
             Type.GAIN_CASH ->
             {
                 shortDesc = game.resources.getString(R.string.shortdesc_info_gain)
@@ -374,6 +378,7 @@ class Hero(var game: Game, type: Type): Fadable {
             Type.DECREASE_ATT_SPEED -> return 1.0f - level * 0.04f
             Type.DECREASE_ATT_STRENGTH -> return exp(- level / 3.0).toFloat()
             Type.INCREASE_MAX_HERO_LEVEL -> return level.toFloat()
+            Type.LIMIT_UNWANTED_CHIPS -> return level.toFloat()
             Type.GAIN_CASH -> return (8f - level) * 9
             Type.GAIN_CASH_ON_KILL -> return level * 0.5f
             Type.INCREASE_REFUND -> return (50f + level * 10)
@@ -415,6 +420,7 @@ class Hero(var game: Game, type: Type): Fadable {
         if (stageIdentifier.series > 1)  // restrictions only apply for series 1
             return true
         return when (data.type) {
+            Type.LIMIT_UNWANTED_CHIPS ->    upgradeLevel(Type.INCREASE_MAX_HERO_LEVEL) >= 3
             Type.INCREASE_MAX_HERO_LEVEL -> upgradeLevel(Type.ADDITIONAL_LIVES) >= 3
             Type.DECREASE_ATT_STRENGTH ->   upgradeLevel(Type.DECREASE_ATT_SPEED) >= 3
             Type.DECREASE_ATT_SPEED ->      upgradeLevel(Type.DECREASE_ATT_FREQ) >= 3
@@ -559,6 +565,14 @@ class Hero(var game: Game, type: Type): Fadable {
                     effect = game.resources.getString(R.string.HERO_EFFECT_LIVES)
                     vitae = game.resources.getString(R.string.zuse)
                     picture = BitmapFactory.decodeResource(game.resources, R.drawable.zuse)
+                }
+                Type.LIMIT_UNWANTED_CHIPS ->
+                {
+                    name = "Kilby"
+                    fullName = "Jack Kilby"
+                    effect = game.resources.getString(R.string.HERO_EFFECT_LIMITUNWANTED)
+                    vitae = game.resources.getString(R.string.kilby)
+                    picture = BitmapFactory.decodeResource(game.resources, R.drawable.kilby)
                 }
                 Type.DECREASE_ATT_FREQ ->
                 {

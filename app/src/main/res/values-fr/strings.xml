@@ -116,6 +116,8 @@
     <string name="button_purchase_plural">"Recruter [%d écus] "</string>
     <string name="button_back">Fermer</string>
     <string name="button_about">A propos de ...</string>
+    <string name="instr_15">Le surcadençage du processeur peut être dangereux : Plus vos puces fonctionnent rapidement, plus elles chauffent.\n\n\nChaque fois que votre horloge CLK réinitialise une puce, une petite quantité de chaleur est produite. Des températures supérieures à %d degrés peuvent endommager le processeur, ce qui signifie qu\'elles peuvent vous coûter une vie.</string>
+    <string name="instr_16">La puce NOP (No operation) ne fait rien. Mais comme elle occupe un emplacement, il peut être utile de la retirer.\n\n\nUne puce NOP 2 ne fait rien non plus. Même deux fois rien.</string>
     <string name="instr_endless">Vous avez réussi tous les niveaux et gagné le jeu !\n\nSi vous voulez, vous pouvez maintenant continuer en mode \"infini\", avec des niveaux générés aléatoirement qui deviennent de plus en plus difficiles.\n\nJusqu\'où irez-vous ?\n\n\n\n</string>
     <string name="message_endless_unavailable">Disponible après avoir terminé tous les niveaux précédents.</string>
     <string name="instr_did_you_know">Le saviez-vous ?</string>
@@ -126,4 +128,7 @@
     <string name="settings_keep_levels">Conserver les niveaux en mode infini</string>
     <string name="game_paused">PAUSE</string>
     <string name="settings_fast_fast_forward">\"Fast forward\" rapide</string>
+    <string name="kilby">Jack St. Clair Kilby a eu l\'idée de regrouper les éléments semi-conducteurs - tels que les transistors ou les diodes - dans un circuit intégré (CI) au lieu de câbler les composants individuellement sur une plaque. C\'était l\'origine des micro-puces et des processeurs et c\'est ce qui a rendu possible toute l\'électronique moderne avec sa miniaturisation.\n\n\nJack Kilby est également considéré comme l\'inventeur de la calculatrice de poche et de l\'imprimante thermique.</string>
+    <string name="shortdesc_limit_unwanted">nombre de puces indésirables</string>
+    <string name="HERO_EFFECT_LIMITUNWANTED">Réduit le nombre de puces indésirables</string>
 </resources>

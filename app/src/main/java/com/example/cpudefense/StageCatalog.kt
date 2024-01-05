@@ -60,19 +60,22 @@ class StageCatalog
 
         private fun createObstacles(stage: Stage, numberOfObstacles: Int)
         {
-            for (i in 1..numberOfObstacles)  // set or upgrade the slots
-            {
-                var slot: Chip? = null
-                while (slot?.chipData?.type !in possibleSlotsForObstacles) {
-                    slot = stage.chips.values.random()
+            val reduce = stage.theGame.heroes[Hero.Type.LIMIT_UNWANTED_CHIPS]?.getStrength() ?: 0
+            val reducedNumberOfObstacles = numberOfObstacles - reduce.toInt()
+            if (reducedNumberOfObstacles > 0)
+                for (i in 1..reducedNumberOfObstacles)  // set or upgrade the slots
+                {
+                    var slot: Chip? = null
+                    while (slot?.chipData?.type !in possibleSlotsForObstacles) {
+                        slot = stage.chips.values.random()
+                    }
+                    when (slot?.chipData?.type) {
+                        Chip.ChipType.NOP -> slot.addPower(1)
+                        Chip.ChipType.ADD -> slot.addPower(1)
+                        Chip.ChipType.SHL -> slot.addPower(1)
+                        else -> slot?.setType( obstacleTypes.random() )
+                    }
                 }
-                when (slot?.chipData?.type) {
-                    Chip.ChipType.NOP -> slot.addPower(1)
-                    Chip.ChipType.ADD -> slot.addPower(1)
-                    Chip.ChipType.SHL -> slot.addPower(1)
-                    else -> slot?.setType( obstacleTypes.random() )
-                }
-            }
         }
         private fun createStageWithoutObstacles(stage: Stage, level: Stage.Identifier)
         {
