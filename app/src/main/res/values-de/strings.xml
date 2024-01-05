@@ -169,6 +169,7 @@ Ein Teil der Information wird dir dabei zurückerstattet."
     <string name="button_purchase_plural">Anheuern [%d Coins]</string>
     <string name="button_back">Schließen</string>
     <string name="button_about">Über …</string>
+    <string name="instr_16">Der NOP Chip (für \"no operation\") tut gar nichts, belegt allerdings einen wertvollen Slot.\n\nEin NOP 2 Chip tut ebenfalls nicht, und das gleich zwei Mal.\n</string>
     <string name="instr_endless">Du hast alle Level geschafft und das Spiel gewonnen!\n\nWenn du willst, kannst du nun im \"Endlos\"-Modus weitermachen, mit zufällig generierten Leveln, die immer schwieriger werden.\n\nWie weit kommst du?\n</string>
     <string name="message_endless_unavailable">Verfügbar nach Abschluss aller vorherigen Level.</string>
     <string-array name="fun_fact">
@@ -191,4 +192,6 @@ Ein Teil der Information wird dir dabei zurückerstattet."
     </string-array>
     <string name="instr_did_you_know">Schon gewusst?</string>
     <string name="settings_keep_levels">Level im Endlos-Modus beibehalten</string>
+    <string name="game_paused">PAUSE</string>
+    <string name="settings_fast_fast_forward">Schnelles \"Fast Forward\"</string>
 </resources>

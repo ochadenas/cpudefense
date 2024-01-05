@@ -81,6 +81,16 @@
             android:text="@string/settings_show_framerate"
             android:textColor="#FFFFFF" />
 
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/switch_fast_fast_forward"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="36dp"
+            android:onClick="savePrefs"
+            android:text="@string/settings_fast_fast_forward"
+            android:textColor="#FFFFFF" />
+
         <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/switch_keep_levels"
             android:layout_width="match_parent"

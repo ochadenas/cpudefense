@@ -112,7 +112,7 @@ class Background(val game: Game)
         state = BackgroundState.UNINITIALIZED
     }
 
-    fun update(): Boolean
+    fun mustBeChanged(): Boolean
             /** called in regular time intervals.
              * @return true if the background image must be changed, false otherwise
              */

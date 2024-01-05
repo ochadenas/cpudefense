@@ -4,8 +4,6 @@ import android.graphics.*
 import com.example.cpudefense.*
 import com.example.cpudefense.networkmap.Viewport
 import com.example.cpudefense.utils.*
-import java.lang.StrictMath.min
-import kotlin.math.min
 
 class ScoreBoard(val game: Game): GameElement() {
     // default or min sizes
@@ -442,7 +440,7 @@ class ScoreBoard(val game: Game): GameElement() {
         }
 
         fun display(canvas: Canvas) {
-            if (game.timeBetweenTicks != lastValue)
+            if (game.timeBetweenFrames != lastValue || true)
               recreateBitmap()
             bitmap?.let { canvas.drawBitmap(it, null, area, paint) }
         }
@@ -450,12 +448,13 @@ class ScoreBoard(val game: Game): GameElement() {
         fun recreateBitmap() {
             if (area.width() >0 && area.height() > 0)
                 bitmap = Bitmap.createBitmap(area.width(), area.height(), Bitmap.Config.ARGB_8888)
-            var textToDisplay = "time per frame: %.2f ms.".format(game.timeBetweenTicks)
+            var textToDisplay = "time per frame: %.2f ms.".format(game.timeBetweenFrames)
+            // var textToDisplay = "time per frame: %.2f ms. Ticks %d, frames %d.".format(game.timeBetweenFrames, game.ticksCount, game.frameCount)
             bitmap?.let {
                 val canvas = Canvas(it)
                 displayHeader(canvas, Rect(0, 0, area.width(), area.height()), textToDisplay)
             }
-            lastValue = game.timeBetweenTicks
+            lastValue = game.timeBetweenFrames
         }
     }
 }

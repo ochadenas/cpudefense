@@ -292,6 +292,9 @@ class StageCatalog
 
                         createTrack(listOf(1, 2, 3, 4, 5, 6, 7, 8, 0), 0)
 
+                        // for testing purposes
+                        // createWave(1, 2, .125f, 1.2f)
+
                         createWave(10, 2, .125f, 1.2f)
                         createWave(15, 3, .120f, 1.1f)
                         createWave(15, 3, .110f, 1.1f)

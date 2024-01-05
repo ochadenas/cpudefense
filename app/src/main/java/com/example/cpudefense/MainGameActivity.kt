@@ -12,11 +12,19 @@ import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.Toast
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class MainGameActivity : Activity() {
-    private var mainDelay: Long = 0
+    /* properties used for assuring a constant frame rate */
+    /** delta T in normal operation */
+    private val defaultDelay = 40L
+    /** delta T when accelerated */
+    private val fastForwardDelay = 7L
+    private val fastFastForwardDelay = 3L
+
+    private var updateDelay: Long = defaultDelay
     private val effectsDelay: Long = 15
     lateinit var theGame: Game
     lateinit var theGameView: GameView
@@ -25,19 +33,12 @@ class MainGameActivity : Activity() {
     private var gameIsRunning =
         true  // flag used to keep the threads running. Set to false when leaving activity
 
-
-    /* properties used for assuring a constant frame rate */
-    /** the desired frame delay */
-    private val defaultMainDelay = 50L
-    private var timeAtStartOfCycle = SystemClock.uptimeMillis()
-    private var timeAfterCycle = SystemClock.uptimeMillis()
-    private var lastTimeAtStartOfCycle = SystemClock.uptimeMillis()
-
-    /** time needed for update and display within one cycle */
-    private var elapsed: Long = 0
-    /* additional properties for displaying an average frame rate */
+    /** additional properties for displaying an average frame rate */
+    private var timeOfLastFrame = SystemClock.uptimeMillis()
     /** how many samples in one count */
     private val meanCount = 10
+    private var updateJob: Job? = null
+    private var displayJob: Job? = null
 
     /** how many samples have been taken */
     private var frameCount = 0
@@ -52,6 +53,7 @@ class MainGameActivity : Activity() {
         var configShowAttsInRange: Boolean = false,
         var configUseLargeButtons: Boolean = false,
         var showFramerate: Boolean = false,
+        var fastFastForward: Boolean = false,
         var keepLevels: Boolean = false,
     )
 
@@ -149,7 +151,7 @@ class MainGameActivity : Activity() {
 
     private fun startGameThreads() {
 
-        GlobalScope.launch { delay(mainDelay); update(); }
+        updateJob = GlobalScope.launch { delay(updateDelay); update(); }
 
         GlobalScope.launch { delay(effectsDelay); updateGraphicalEffects(); }
     }
@@ -163,15 +165,20 @@ class MainGameActivity : Activity() {
         settings.configUseLargeButtons = prefs.getBoolean("USE_LARGE_BUTTONS", false)
         settings.showFramerate = prefs.getBoolean("SHOW_FRAMERATE", false)
         settings.keepLevels = prefs.getBoolean("KEEP_LEVELS", false)
+        settings.fastFastForward = prefs.getBoolean("USE_FAST_FAST_FORWARD", false)
     }
 
     fun setGameSpeed(speed: Game.GameSpeed) {
         theGame.global.speed = speed
         if (speed == Game.GameSpeed.MAX) {
-            mainDelay = 0
+            updateDelay = when (settings.fastFastForward)
+            {
+                true -> fastFastForwardDelay
+                false -> fastForwardDelay
+            }
             theGame.background?.frozen = true
         } else {
-            mainDelay = defaultMainDelay
+            updateDelay = defaultDelay
             theGame.background?.frozen = false
         }
     }
@@ -188,18 +195,6 @@ class MainGameActivity : Activity() {
 
 
         dialog.show()
-        /*
-        val builder = AlertDialog.Builder(
-            ContextThemeWrapper(this, R.style.CustomAlertDialog))
-        builder.setMessage(resources.getString(R.string.query_quit))
-            .setCancelable(true)
-            .setPositiveButton(resources.getString(R.string.replay)) { dialog, id -> replayLevel() }
-            .setNegativeButton(resources.getString(R.string.return_to_main_menu)) { dialog, id -> returnToMainMenu() }
-            .setNeutralButton(resources.getString(R.string.continue_game), null)
-        val alertDialog = builder.create()
-        alertDialog.show()
-
-         */
     }
 
     private fun returnToMainMenu() {
@@ -211,31 +206,50 @@ class MainGameActivity : Activity() {
         theGame.currentStage?.let { startGameAtLevel(it.data.ident) }
     }
 
-    private fun update() {
+    private fun update()
+    /** Thread for all physical processes on the screen, i.e. movement of attackers, cool-down times, etc.
+     * THis thread must run on a fixed pace. When accelerating the game, the delay of this thread is shortened. */
+    {
         if (gameIsRunning) {
-            lastTimeAtStartOfCycle = timeAtStartOfCycle
-            timeAtStartOfCycle = SystemClock.uptimeMillis()
-
+            val timeAtStartOfCycle = SystemClock.uptimeMillis()
+            theGame.ticksCount++
             theGame.update()
-            theGameView.display()
 
-            timeAfterCycle = SystemClock.uptimeMillis()
-            elapsed = timeAfterCycle - timeAtStartOfCycle
+            // determine whether to update the display
+            if (timeAtStartOfCycle-timeOfLastFrame > 30 && !(displayJob?.isActive == true))
+                displayJob = GlobalScope.launch { display() }
+            val elapsed = SystemClock.uptimeMillis() - timeAtStartOfCycle
             val wait: Long =
-                if (mainDelay > elapsed) mainDelay - elapsed - 1 else 0  // rest of time in this cycle
-            frameTimeSum += timeAtStartOfCycle - lastTimeAtStartOfCycle
-            frameCount += 1
-            if (frameCount >= meanCount) {
-                theGame.timeBetweenTicks = (frameTimeSum / frameCount).toDouble()
-                frameCount = 0
-                frameTimeSum = 0
-            }
-
-            GlobalScope.launch { delay(wait); update() }
+                if (updateDelay > elapsed) updateDelay - elapsed - 1 else 0  // rest of time in this cycle
+            updateJob = GlobalScope.launch { delay(wait); update() }
         }
     }
 
-    private fun updateGraphicalEffects() {
+    private fun display()
+    /** Thread for refreshing the display on the screen.
+     * The delay between two executions may vary. */
+    {
+        if (gameIsRunning) {
+            theGame.frameCount++
+            val timeAtStartOfFrame = SystemClock.uptimeMillis()
+            val timeSinceLastFrame = timeAtStartOfFrame - timeOfLastFrame
+            timeOfLastFrame = timeAtStartOfFrame
+            theGameView.display()
+            /* calculate mean time per frame */
+            frameTimeSum += timeSinceLastFrame
+            frameCount += 1
+            if (frameCount >= meanCount) {
+                theGame.timeBetweenFrames = (frameTimeSum / frameCount).toDouble()
+                frameCount = 0
+                frameTimeSum = 0
+            }
+        }
+    }
+
+
+    private fun updateGraphicalEffects()
+    /** do all faders, explosions etc. This thread is independent of the update() cycle. */
+    {
         if (gameIsRunning) {
             theGame.updateEffects()
             theGameView.theEffects?.updateGraphicalEffects()

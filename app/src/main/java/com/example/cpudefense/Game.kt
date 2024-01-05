@@ -72,7 +72,7 @@ class Game(val gameActivity: MainGameActivity) {
         val isEndlessAvailable = true
     }
 
-    var defaultSpeedFactor = 0.64f
+    var defaultSpeedFactor = 0.512f
 
     data class StateData(
         var phase: GamePhase,       // whether the game is running, paused or between levels
@@ -128,7 +128,9 @@ class Game(val gameActivity: MainGameActivity) {
     private var additionalCashDelay = 0
     private var additionalCashTicks: Float = 0.0f
 
-    var timeBetweenTicks: Double = 20.0 /* in ms. Used by wait cycles in the game */
+    var timeBetweenFrames: Double = 20.0 /* in ms. Used by wait cycles in the game */
+    var ticksCount = 0
+    var frameCount = 0
 
     enum class GamePhase { START, RUNNING, INTERMEZZO, MARKETPLACE, PAUSED }
     enum class GameSpeed { NORMAL, MAX }
@@ -220,7 +222,7 @@ class Game(val gameActivity: MainGameActivity) {
              */
     {
         if (global.speed == GameSpeed.MAX)
-            return 1.5f
+            return defaultSpeedFactor
         else
             return defaultSpeedFactor
     }
@@ -231,7 +233,7 @@ class Game(val gameActivity: MainGameActivity) {
         {
             checkTemperature()
             currentStage?.network?.let {
-                if (background?.update() == true) {
+                if (background?.mustBeChanged() == true) {
                     it.backgroundImage = background?.actualImage
                     it.recreateNetworkImage(viewport)
                 }
@@ -286,7 +288,7 @@ class Game(val gameActivity: MainGameActivity) {
             paint.typeface = Typeface.DEFAULT_BOLD
             viewport.let {
                 val rect = Rect(0, 0, it.viewportWidth, it.viewportHeight)
-                rect.displayTextCenteredInRect(canvas, "GAME PAUSED", paint)
+                rect.displayTextCenteredInRect(canvas, gameActivity.getString(R.string.game_paused), paint)
             }
         }
         intermezzo.display(canvas, viewport)

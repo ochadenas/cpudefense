@@ -239,6 +239,8 @@ Furthermore, some slots are already taken by unwanted chips you'll have to deal 
     <string name="button_about">About …</string>
     <string name="instr_did_you_know">Did you know?</string>
     <string name="settings_keep_levels">Keep created stages in \'endless\' mode</string>
+    <string name="settings_fast_fast_forward">Use really fast forward</string>
+    <string name="game_paused">GAME PAUSED</string>
     <string-array name="fun_fact">
         <item>Until 1999, the amount of 1024 B was called a <i>kilobyte</i> (kB). For consistency with other SI units, the kilobyte\'s meaning was changed to 1 kB = 1000 B. To keep the former definition, the kibibyte was invented, with 1 KiB = 1024 B.</item>
         <item>An actual computer bug was found in a Harvard Mark II computer in 1947. A small insect had gotten into a relay, making programs fail.\n\nThe term \"bug\" for computer errors, however, had been used well before. Already in the 19th century small defects in mechanical devices were called bugs.</item>
