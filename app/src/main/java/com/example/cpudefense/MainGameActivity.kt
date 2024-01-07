@@ -169,11 +169,9 @@ class MainGameActivity : Activity() {
     fun setGameSpeed(speed: Game.GameSpeed) {
         theGame.global.speed = speed
         if (speed == Game.GameSpeed.MAX) {
-            updateDelay = when (settings.fastFastForward)
-            {
-                true -> fastFastForwardDelay
-                false -> fastForwardDelay
-            }
+            updateDelay = fastForwardDelay
+            if (settings.fastFastForward)
+                updateDelay = fastFastForwardDelay
             theGame.background?.frozen = true
         } else {
             updateDelay = defaultDelay

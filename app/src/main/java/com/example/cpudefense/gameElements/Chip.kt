@@ -208,12 +208,18 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
             return
         }
         /* check if there are attackers that we can shoot at */
-        distanceToVehicle.forEach { (vehicle, distance) ->
-            val dist: Float? = distanceTo(vehicle)
-            if (dist != null && dist <= data.range) {
-                shootAt(vehicle as Attacker)
-                return
+        try {
+            distanceToVehicle.forEach { (vehicle, distance) ->
+                val dist: Float? = distanceTo(vehicle)
+                if (dist != null && dist <= data.range) {
+                    shootAt(vehicle as Attacker)
+                    return
+                }
             }
+        }
+        catch (exception: ConcurrentModificationException)
+        {
+            // just ignore this
         }
     }
 
@@ -347,7 +353,9 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
     {
         internalRegister = attacker
         attacker?.let {
-            val extraCashGained = theNetwork.theGame.heroes[Hero.Type.GAIN_CASH_ON_KILL]?.getStrength()?.toInt() ?: 0 // possible bonus
+            val extraCashGained =
+                theNetwork.theGame.heroes[Hero.Type.GAIN_CASH_ON_KILL]?.getStrength()?.toInt()
+                    ?: 0 // possible bonus
             theNetwork.theGame.scoreBoard.addCash(it.attackerData.bits + extraCashGained)
             it.immuneTo = this
             theNetwork.theGame.gameActivity.theGameView.theEffects?.fade(it)

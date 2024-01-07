@@ -401,6 +401,7 @@ class Hero(var game: Game, type: Type): Fadable {
             Type.ADDITIONAL_LIVES -> return maxLevel
             Type.INCREASE_MAX_HERO_LEVEL -> return maxLevel
             Type.GAIN_CASH -> return maxLevel
+            Type.INCREASE_REFUND -> return maxLevel
             else -> return maxLevel + (additionalUpgradePossibility ?: 0)
         }
     }

@@ -69,7 +69,7 @@ class Game(val gameActivity: MainGameActivity) {
         val temperatureLimit = 85
 
         // feature toggles:
-        val isEndlessAvailable = true
+        val isEndlessAvailable = false
     }
 
     var defaultSpeedFactor = 0.512f
