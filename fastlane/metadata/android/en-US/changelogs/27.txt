@@ -1,0 +1,16 @@
+New Features:
+- Chips can be bought and sold even when game is paused.
+- Introduction of "heat". Overheating may result in loss of one life.
+- Temperature sensor added to score board.
+- New chip type: NOP
+- New hero: Jack Kilby
+
+Bugfixes:
+- Passing coins do no longer activate MEM chips.
+- Chip type is shown on description of range-extending heroes.
+- Text on "Hire" button did not change on purchase or reset.
+- Score board layout improved.
+
+Miscellaneous:
+- Re-organization of preferences / saved games file
+- Changed the way how "game speed" is handled
