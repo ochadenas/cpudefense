@@ -15,11 +15,24 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:padding="8dp"
-        android:text="@string/settings_about"
+        android:text="@string/about_title"
         android:textColor="#FFFFFF"
         android:textSize="24sp"
         app:layout_constraintStart_toStartOf="@id/about_text_view"
         app:layout_constraintTop_toTopOf="parent"
+        />
+
+    <TextView
+        android:id="@+id/about_version"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="0dp"
+        android:padding="8dp"
+        android:text="Version"
+        android:textColor="#FFFFFF"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="@id/about_text_view"
+        app:layout_constraintTop_toBottomOf="@id/about_title_view"
         />
 
     <ImageView
@@ -34,7 +47,6 @@
         app:srcCompat="@drawable/cryptocoin"
     />
 
-
     <TextView
         android:id="@+id/about_text_view"
         android:layout_width="0dp"
@@ -47,7 +59,7 @@
         android:paddingEnd="8dp"
         android:paddingBottom="8dp"
         android:scrollbars="vertical"
-        android:text="@string/license"
+        android:text="@string/about_license"
         android:textAlignment="viewStart"
         android:textColor="#939393"
         app:layout_constraintBottom_toTopOf="@+id/button_back"
@@ -55,6 +67,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/about_title_view"
         app:layout_constraintVertical_bias="0.0" />
+
+    <Button
+        android:id="@+id/button_wiki"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="wiki"
+        android:text="@string/link_wiki"
+        app:layout_constraintTop_toTopOf="@+id/button_back"
+        app:layout_constraintStart_toStartOf="@+id/about_text_view"
+        app:layout_constraintBottom_toBottomOf="@+id/button_back" />
 
     <Button
         android:id="@+id/button_back"
