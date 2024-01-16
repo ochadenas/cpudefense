@@ -107,7 +107,7 @@ Ein Teil der Information wird dir dabei zurückerstattet."
     <string name="settings_title">Einstellungen</string>
     <string name="about_title">Info</string>
     <string name="yes">Ja</string>
-    <string name="about_license">\nDieses Spiel ist Open Source Software.  Mehr Information auf  https://github.com/ochadenas/cpudefense.\n\nDie Bilder der Heldinnen und Helden basieren überwiegend auf gemeinfreien Werken.\n\nAutoren der Originalfotos:\n  Alex Handy (CC BY-SA 2.0)\n  Jacob Appelbaum (CC BY-SA 2.5)\n  Konrad Jacobs (CC BY-SA 2.0 de)\n  Rama (CC BY-SA 2.0 fr)\n  Shervinafshar (CC BY-SA 3.0)\n  Tony Bove (CC BY 3.0)\n  Wolfgang Hunscher (CC BY-SA 3.0)\n  Silvano de Gennaro (mit freundlicher Genehmigung)\n  Clermont Auvergne Métropole (CC BY-SA 4.0)\n  Jean-Frédéric (CC BY 2.0)\n    \nBilder der Computerplatinen:\n  Autopilot (CC BY-SA 4.0)\n  Bill Bertram (CC-BY 2.0)\n  Oliver Chadenas (CC BY-SA 3.0)\n  Smial (FAL)\n\nAlle anderen Grafiken:\n  Oliver Chadenas (CC BY-SA 3.0)\n  \n</string>
+    <string name="about_license">\nDieses Spiel ist Open Source Software. Mehr Information auf <a href="https://github.com/ochadenas/cpudefense">github.com/ochadenas/cpudefense</a>\n\nDie Bilder der Heldinnen und Helden basieren überwiegend auf gemeinfreien Werken.\n\nAutoren der Originalfotos:\n  Alex Handy (CC BY-SA 2.0)\n  Jacob Appelbaum (CC BY-SA 2.5)\n  Konrad Jacobs (CC BY-SA 2.0 de)\n  Rama (CC BY-SA 2.0 fr)\n  Shervinafshar (CC BY-SA 3.0)\n  Tony Bove (CC BY 3.0)\n  Wolfgang Hunscher (CC BY-SA 3.0)\n  Silvano de Gennaro (mit freundlicher Genehmigung)\n  Clermont Auvergne Métropole (CC BY-SA 4.0)\n  Jean-Frédéric (CC BY 2.0)\n    \nBilder der Computerplatinen:\n  Autopilot (CC BY-SA 4.0)\n  Bill Bertram (CC-BY 2.0)\n  Oliver Chadenas (CC BY-SA 3.0)\n  Smial (FAL)\n\nAlle anderen Grafiken:\n  Oliver Chadenas (CC BY-SA 3.0)\n  \n</string>
     <string name="play_level_x">Level %d spielen</string>
     <string name="link_wiki">Wiki</string>
     <string name="button_exit">Ende</string>
@@ -201,4 +201,5 @@ Ein Teil der Information wird dir dabei zurückerstattet."
     <string name="kilby">Jack St. Clair Kilby hatte die Idee, Halbleiterelemente - also etwa Transistoren oder Dioden - in einer integrierten Schaltung (IC) zusammenzufassen, statt die Bauteile einzeln auf einer Leiterplatine zu verdrahten. Dies war die Grundlage für Mikrochips und Prozessoren und machte die gesamte moderne Elektronik mit ihrer Miniaturisierung erst möglich.\n\nJack Kilby gilt auch als Mit-Erfinder von Taschenrechner und Thermodrucker.\n</string>
     <string name="shortdesc_limit_unwanted">Unerwünschte Chips\n</string>
     <string name="HERO_EFFECT_LIMITUNWANTED">Reduziert die Anzahl unerwünschter Chips</string>
+    <string name="about_version">Version %s.</string>
 </resources>
