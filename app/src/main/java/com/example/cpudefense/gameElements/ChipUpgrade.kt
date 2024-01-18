@@ -87,9 +87,9 @@ class ChipUpgrade(val chipToUpgrade: Chip, val type: Chip.ChipUpgrades,
             {
                 chipToUpgrade.addPower(-1)
                 if (chipToUpgrade.chipData.power == 0)
-                    chipToUpgrade.resetToEmptyChip()
+                    chipToUpgrade.sellChip()
             }
-            Chip.ChipUpgrades.SELL -> chipToUpgrade.resetToEmptyChip()
+            Chip.ChipUpgrades.SELL -> chipToUpgrade.sellChip()
             Chip.ChipUpgrades.SUB -> chipToUpgrade.setType(Chip.ChipType.SUB)
             Chip.ChipUpgrades.SHR -> chipToUpgrade.setType(Chip.ChipType.SHR)
             Chip.ChipUpgrades.ACC -> chipToUpgrade.setType(Chip.ChipType.ACC)

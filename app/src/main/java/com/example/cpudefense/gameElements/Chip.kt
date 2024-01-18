@@ -22,10 +22,13 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
         var power: Int = 0,
         /** time that this chip needs before it can shoot again */
         var cooldown: Int = 0,
+        /** current state of the timer */
+        var cooldownTimer: Float = 0.0f,
         var value: Int = 0,
         var node: Node.Data,
         var color: Int = Color.WHITE,
-        var glowColor: Int = Color.WHITE
+        var glowColor: Int = Color.WHITE,
+        var sold: Boolean = false  // this is an indicator that the chip has been sold, but is not removed yet
     )
 
     var chipData = Data(
@@ -41,7 +44,6 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
     // some chips have a 'register' where an attacker's value can be held.
     private var internalRegister: Attacker? = null
 
-    private var cooldownTimer = 0.0f
     var upgradePossibilities = CopyOnWriteArrayList<ChipUpgrade>()
 
     private var paintBitmap = Paint()
@@ -61,7 +63,25 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
         paintLines.strokeWidth = 4.0f
     }
 
+    fun sellChip()
+            /** marks this chip as sold, but does not remove it directly.
+             * Final removal is done after the cooldown expires.
+             */
+    {
+        with (chipData)
+        {
+            if (cooldownTimer > 0.0f) {
+                color = resources.getColor(R.color.chips_soldstate_foreground)
+                glowColor = resources.getColor(R.color.chips_soldstate_glow)
+                sold = true
+                bitmap = null // force re-draw of the chip, using new colours
+            } else
+                resetToEmptyChip()
+        }
+    }
+
     fun resetToEmptyChip()
+    /** called when a sold chip is definitely removed */
     {
         with (chipData)
         {
@@ -70,12 +90,12 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
             value = 0
             color = Color.WHITE
             glowColor = Color.WHITE
+            sold = false
+            cooldownTimer = 0.0f
         }
-        cooldownTimer = 0.0f
         internalRegister = null
         bitmap = null
     }
-
     fun setIdent(ident: Int)
     {
         data.ident = ident
@@ -167,6 +187,11 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
             }
             else -> {}
         }
+        if (chipData.sold)
+        {
+            chipData.color = resources.getColor(R.color.chips_soldstate_foreground)
+            chipData.glowColor = resources.getColor(R.color.chips_soldstate_glow)
+        }
     }
 
     fun addPower(amount: Int)
@@ -191,15 +216,19 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
 
     fun startCooldown()
     {
-        cooldownTimer = getCooldownTime()
+        chipData.cooldownTimer = getCooldownTime()
     }
 
     override fun update() {
         super.update()
         if (chipData.type == ChipType.EMPTY)
             return  //  no need to calculate for empty slots
-        if (cooldownTimer>0) {
-            cooldownTimer -= network.theGame.globalSpeedFactor()
+        if (chipData.cooldownTimer>0) {
+            chipData.cooldownTimer -= network.theGame.globalSpeedFactor()
+            return
+        }
+        if (chipData.sold) {
+            resetToEmptyChip()
             return
         }
         if (chipData.type == ChipType.CLK)
@@ -227,25 +256,15 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
     /** method that gets executed whenever the clock 'ticks' */
     {
         val chipsAffected = listOf<ChipType>( ChipType.SUB,  ChipType.SHR, ChipType.MEM )
-        /*
-        // make affected chip types dependent on CLK chip level
-        val chipsAffected = when (chipData.power)
-        {
-            1 ->  listOf<ChipType>( ChipType.SUB )
-            2 ->  listOf<ChipType>( ChipType.SUB, ChipType.SHR )
-            3 ->  listOf<ChipType>( ChipType.SUB,  ChipType.SHR, ChipType.MEM )
-            else ->  listOf<ChipType>( ChipType.SUB,  ChipType.SHR, ChipType.MEM )
-        }
-         */
         for (node in theNetwork.nodes.values)
         {
             val chip = node as Chip
             if (chip.chipData.type in chipsAffected) {
                 // avoid resetting when clock tick comes _too_ soon after the regular reset
                 val minDelay = kotlin.math.min(chip.getCooldownTime() * 0.2f, this.getCooldownTime())
-                if (chip.cooldownTimer <= chip.getCooldownTime()-minDelay) {
-                    theNetwork.theGame.state.heat += chip.cooldownTimer
-                    chip.cooldownTimer = 0f
+                if (chip.chipData.cooldownTimer <= chip.getCooldownTime()-minDelay) {
+                    theNetwork.theGame.state.heat += chip.chipData.cooldownTimer
+                    chip.chipData.cooldownTimer = 0f
                 }
             }
         }
@@ -287,10 +306,10 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
         paintBackground.color = defaultBackgroundColor
         paintBackground.alpha = 255
         canvas.drawRect(rect, paintBackground)
-        if (cooldownTimer>0)
+        if (chipData.cooldownTimer>0)
         {
             paintBackground.color = chipData.glowColor
-            paintBackground.alpha = (cooldownTimer*255f/getCooldownTime()).toInt()
+            paintBackground.alpha = (chipData.cooldownTimer*255f/getCooldownTime()).toInt()
             canvas.drawRect(rect, paintBackground)
         }
 
@@ -449,6 +468,8 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
     }
 
     fun showUpgrades() {
+        if (chipData.sold)
+            return
         val alternatives = CopyOnWriteArrayList<ChipUpgrades>()
         when (chipData.type) {
             ChipType.EMPTY -> {

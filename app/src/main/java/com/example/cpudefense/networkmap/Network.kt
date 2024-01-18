@@ -117,7 +117,6 @@ class Network(val theGame: Game, x: Int, y: Int): GameElement() {
             obj.display(canvas, viewport)
         for (obj in nodes.values) {
             obj.display(canvas, viewport)
-            (obj as Chip).displayUpgrades(canvas)
         }
     }
 

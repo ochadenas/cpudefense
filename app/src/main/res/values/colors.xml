@@ -36,6 +36,8 @@
     <color name="chips_add_glow">#C85E3E</color>
     <color name="chips_noop_foreground">#FAD7CD</color>
     <color name="chips_noop_glow">#9A837C</color>
+    <color name="chips_soldstate_foreground">#707070</color>
+    <color name="chips_soldstate_glow">#CFCFCF</color>
     <color name="chips_background">#FF000000</color>
 
     <color name="scoreboard_text">#FFFFFF</color>
