@@ -51,17 +51,17 @@ class ScoreBoard(val game: Game): GameElement() {
     fun informationToString(number: Int): String {
         if (number < 512 && number > -512)
             return "%d bit".format(number)
-        var bytes = number/8
+        var bytes: Int = number/8
         if (bytes < 800 && bytes > -800)
             return "%d B".format(bytes)
-        val kiB = bytes.toFloat()/1024.0
-        if (kiB < 800 && bytes > -1000)
-            return "%0.1f KiB".format(kiB)
-        val MiB = kiB/1024.0
+        val kiB: Float = bytes.toFloat()/1024.0f
+        if (kiB < 800 && kiB > -800)
+            return "%.1f KiB".format(kiB)
+        val MiB: Float = kiB/1024.0f
         if (MiB < 800 && MiB > -800)
-            return "%0.1f MiB".format(MiB)
-        val  GiB = MiB/1024.0
-        return "%0.1f GiB".format(GiB)
+            return "%.1f MiB".format(MiB)
+        val  GiB: Float = MiB/1024.0f
+        return "%.1f GiB".format(GiB)
     }
 
     override fun update() {
