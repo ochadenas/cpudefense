@@ -131,7 +131,7 @@ class ChipUpgrade(val chipToUpgrade: Chip, val type: Chip.ChipUpgrades,
         canvas.drawBitmap(bitmap, null, actualRect, paintText)
 
         paintBackground.color = game.resources.getColor(R.color.network_background)
-        paintBackground.alpha = 120
+        paintBackground.alpha = 180
         paintBackground.style = Paint.Style.FILL
         canvas.drawRect(actualRect, paintBackground)
 

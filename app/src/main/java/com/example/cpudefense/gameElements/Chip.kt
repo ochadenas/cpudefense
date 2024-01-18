@@ -532,25 +532,29 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
             val posX = rect.centerX()
             val posY = rect.centerY()
             val positions = listOf(
-                Pair(1.0f, -0.5f),
-                Pair(1.0f, +0.5f),
-                Pair(2.0f, -0.5f),
-                Pair(2.0f, +0.5f),
-                Pair(3.0f, -0.5f),
-                Pair(3.0f, +0.5f)
+                Pair(1.0f, 0.0f),
+                Pair(1.0f, -1.0f),
+                Pair(0.0f, -1.0f),
+                Pair(-1.0f, -1.0f),
+                Pair(-1.0f, 0.0f),
+                Pair(-1.0f, 1.0f),
+                Pair(0.0f, 1.0f),
+                Pair(1.0f, 1.0f)
             )
             val factorY = 1.5 * rect.height()
             val factorX: Float
             if (network.theGame.viewport.isInRightHalfOfViewport(posX))
-                factorX = -1.2f * rect.width()
+                factorX = +1.3f * rect.width()
             else
-                factorX = +1.2f * rect.width()
+                factorX = +1.3f * rect.width()
             for ((i, upgrade) in alternatives.withIndex()) {
                 val chipUpgrade = ChipUpgrade(
                     this, upgrade,
                     rect.centerX(), rect.centerY(), Color.WHITE
                 )
-                val pos: Pair<Float, Float> = positions[i]
+                var pos: Pair<Float, Float> = positions[i]
+                if (chipUpgrade.type == ChipUpgrades.POWERUP)
+                    pos = Pair(0f, 0f)
                 Mover(
                     network.theGame, chipUpgrade, rect.centerX(), rect.centerY(),
                     posX + (pos.first * factorX).toInt(), posY + (pos.second * factorY).toInt()
