@@ -11,6 +11,7 @@ import com.example.cpudefense.utils.displayTextCenteredInRect
 import com.example.cpudefense.utils.setCenter
 import java.lang.Math.abs
 import java.util.concurrent.CopyOnWriteArrayList
+import kotlin.random.Random
 
 open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gridX.toFloat(), gridY.toFloat())
 {
@@ -396,6 +397,9 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
                 else -> number1 and number2
             }
             attacker.changeNumberTo(newValue)
+            var change_in_speed = attacker.data.speed * Random.nextFloat() * 0.3f
+            attacker.data.speed += change_in_speed
+            attacker.setCurrentSpeed()
             internalRegister = null
             attacker.immuneTo = this
         }
