@@ -15,22 +15,31 @@ class EndlessStageCreator(val stage: Stage)
 {
     val dimX = 50
     val dimY = 55
-    val sectorSizeX = dimX / 3
-    val sectorSizeY = (dimY - 5) / 4
-    val numberOfSectorsX = dimX / sectorSizeX
-    val numberOfSectorsY = dimY / sectorSizeY
-    var sectors = mutableListOf<Sector>()
+    private val sectorSizeX = dimX / 3
+    private val sectorSizeY = (dimY - 5) / 4
+    private val numberOfSectorsX = dimX / sectorSizeX
+    private val numberOfSectorsY = dimY / sectorSizeY
+    private var sectors = mutableListOf<Sector>()
+    private val paths = mutableListOf<Path>()
 
-    var chipIdent = 0
+    private var chipIdent = 0
     /** global count for the chips */
 
     enum class Direction {UP, DOWN, LEFT, RIGHT, DOWNLEFT}
+    enum class SectorType { ENTRY, EXIT, NORMAL }
 
-    fun nextIdent(): Int
+    private fun nextIdent(): Int
     { chipIdent++; return chipIdent }
 
     fun createStage(level: Stage.Identifier)
         /**
+         * Main method for the stage creation algorithm. It works as follows:
+         * First, the whole stage is divided into a coarse grid of Sectors.
+         * Through the Sectors, several Paths are laid that run from a start sector
+         * to the exit sector.
+         * Then the Sectors are populated with nodes, according to the incoming and
+         * outgoing connections. Finally, Tracks are created from all nodes of the
+         * Sectors on the Path.
          * @param level The identifier of the level to be created
          */
     {
@@ -43,31 +52,34 @@ class EndlessStageCreator(val stage: Stage)
                 Chip.ChipUpgrades.REDUCE, Chip.ChipUpgrades.SELL )
         stage.initializeNetwork(dimX, dimY)
 
-        val identOfEntry = 80  // values 80 to 89 reserved for entry points
-        val identOfCpu = 90  // values 90 to 99 reserved for cpus
-
-        val entry = listOf<Chip>(
-            stage.createChip(2, 2, type = Chip.ChipType.ENTRY, ident = identOfEntry),
-            stage.createChip(dimX-2, 2, type = Chip.ChipType.ENTRY, ident = identOfEntry+1))
-        val cpu = listOf<Chip>(
-            stage.createChip(dimX-2, dimY-2, type = Chip.ChipType.CPU, ident = identOfCpu))
-        val exitPos = SectorCoord(numberOfSectorsX-1, numberOfSectorsY-1)
-
         // cut the stage area into sectors
-        val sectorArea = Rect(0, 0, sectorSizeX, sectorSizeY)
+        val areaOfOneSector = Rect(0, 0, sectorSizeX, sectorSizeY)  // area in grid coordinates
         for (x in 0 until numberOfSectorsX)
-            for (y in 0 until numberOfSectorsY) {
+            for (y in 0 until numberOfSectorsY)
+            {
                 var sectorIdent = SectorCoord(x, y)
-                var sector = Sector(sectorIdent, Rect(sectorArea).setTopLeft(x*sectorSizeX, y*sectorSizeY))
-                sector.createNodes()
+                var sector = Sector(sectorIdent, Rect(areaOfOneSector).setTopLeft(x*sectorSizeX, y*sectorSizeY))
                 sectors.add(sector)
-                if (sectorIdent.isEqual(exitPos))
-                    sector.isExit = true
             }
+        // determine entries and exits
+        val entry: Sector = getByCoordinate(SectorCoord(Random.nextInt(numberOfSectorsX),0))!!
+        val exit: Sector = getByCoordinate(SectorCoord(numberOfSectorsX-1,numberOfSectorsY-1))!!
+        entry.type = SectorType.ENTRY
+        exit.type = SectorType.EXIT
+        // TODO: deal with the case entry/exit == null
 
-        for (trackNumber in 0 until 5)
-            createTrack(sectors[0], trackNumber, entry, cpu)
+        for (count in 1 .. 5)
+            createPath(entry)?.let { paths.add(it) }
 
+        for (sector in sectors)
+            sector.createNodes()
+
+        paths.forEachIndexed { ident, path ->
+            path.makeListOfNodes()
+            val track = createTrackFromPath(path)
+            stage.createTrack(track, ident)
+        }
+        
         createWaves()
         stage.rewardCoins = 3
         return
@@ -88,7 +100,8 @@ class EndlessStageCreator(val stage: Stage)
         stage.data.maxWaves = stage.waves.size
     }
 
-    fun createTrack(startSector: Sector, ident: Int, entries: List<Chip>, exits: List<Chip>): Unit
+    /*
+    fun createTrack(startSector: Sector, ident: Int, entries: List<Chip>, exits: List<Chip>)
     /** creates a random Track object in the Stage with the given ident
      * starting on startSector
      * @param entries List of nodes that can be used as entry points
@@ -103,8 +116,10 @@ class EndlessStageCreator(val stage: Stage)
         var track = makeTrackFromPath(stage, path, entries[0], exits[0])
         stage.createTrack(track, ident)
     }
+
+     */
     
-    fun createPath(firstSector: Sector): MutableList<Sector>?
+    fun createPath(firstSector: Sector): Path?
     /** tries to find a path to an exit sector.
      * @param firstSector Start of path
      * @return list of sectors, or null if no path is found */
@@ -114,44 +129,29 @@ class EndlessStageCreator(val stage: Stage)
         return null
     }
 
-    fun pathToExit(firstSector: Sector): MutableList<Sector>?
+    fun pathToExit(firstSector: Sector): Path?
     /** create a random path of sectors, starting with firstSector.
      * @return a list of sectors ending with an "exit" sector, or null if
      * the path does not reach an exit sector */
     {
-        var sectorPath = mutableListOf<Sector>()
+        var sectorPath = Path()
+        sectorPath.sectors.add(firstSector)
         var sector = firstSector
         var nextSector: Sector?
         do {
-            nextSector = getRandomNeighbour(sector, sectorPath)
+            nextSector = getRandomNeighbour(sector, sectorPath.sectors)
             nextSector?.let {
-                sectorPath.add(it)
+                sectorPath.sectors.add(it)
                 sector = it
-                if (nextSector.isExit)
+                if (nextSector.type == SectorType.EXIT)
                     return sectorPath
             }
         } while (nextSector != null)
         return null
     }
 
-    fun makeTrackFromPath(stage: Stage, nodes: List<Chip>, entry: Chip, exit: Chip): MutableList<Int>
-            /** converts a list of nodes into a list of links between them.
-             * Entry and exit are added to the list.
-             * @return list of link idents
-             */
-    {
-        var linkList = mutableListOf<Int>()
-        var lastNode = entry
-        for (node in nodes)
-        {
-            stage.createLink(lastNode.data.ident, node.data.ident, linkIdent(lastNode, node), mask = getMask())?.let { linkList.add(it.ident) }
-            lastNode = node
-        }
-        stage.createLink(lastNode.data.ident, exit.data.ident, linkIdent(lastNode, exit), mask = 0x07)?.let { linkList.add(it.ident) }
-        return linkList
-    }
-
     fun getMask(): Int
+    /** returns a random value for the link mask */
     {
         return when (Random.nextInt(5))
         {
@@ -161,18 +161,21 @@ class EndlessStageCreator(val stage: Stage)
         }
     }
 
-    fun getNeighbour(sector: Sector, direction: Direction): Sector?
-            /** returns the sector in the indicated direction, or null if
-             * there is no such direction
-             */
+    fun getByCoordinate(coord: SectorCoord): Sector?
     {
-        val identOfTarget = sector.ident.plus(direction)
-        val res = sectors.find { sec -> sec.ident.isEqual(identOfTarget) }
-        return res
+        return sectors.find { sec -> sec.ident.isEqual(coord) }
+    }
+
+    fun getNeighbour(sector: Sector, direction: Direction): Sector?
+    /** returns the sector in the indicated direction, or null if
+     * there is no such direction
+     */
+    {
+        return getByCoordinate(sector.ident.plus(direction))
     }
     fun getRandomNeighbour(thisSector: Sector, exclude: MutableList<Sector>): Sector?
-            /** returns a random neighbour of this sector that is not already
-             * included in the list */
+    /** returns a random neighbour of this sector that is not already
+     * included in the list */
     {
         val possibleDirections = Direction.values()
         possibleDirections.shuffle()
@@ -191,11 +194,30 @@ class EndlessStageCreator(val stage: Stage)
     }
 
     fun linkIdent(node1: Chip, node2: Chip): Int
+    /** @returns a unique ident for the connection between node1 and node2 */
     {
         return "%02d%02d".format(node1.data.ident, node2.data.ident).toInt()
     }
 
+    private fun createTrackFromPath(path: Path): MutableList<Int>
+    {
+        var linkList = mutableListOf<Int>()
+        try {
+            var lastNode = path.nodes[0]
+            for (node in path.nodes.subList(1, path.nodes.size))
+            {
+                stage.createLink(lastNode.data.ident, node.data.ident, linkIdent(lastNode, node),
+                    mask = getMask())?.let { linkList.add(it.ident) }
+                lastNode = node
+            }
+        }
+        catch (ex: Exception)
+        {}
+        return linkList
+    }
+
     class SectorCoord(var horizontal: Int, var vertical: Int)
+    /** coordinate of a sector, consisting of horizontal and vertical component */
     {
         fun isEqual (other: SectorCoord?): Boolean
         {
@@ -241,6 +263,19 @@ class EndlessStageCreator(val stage: Stage)
         }
     }
 
+    class Path()
+    /** a list of sectors that constitute a continuous path from an entry to an exit point */
+    {
+        var sectors = mutableListOf<Sector>()
+        var nodes = mutableListOf<Chip>()
+
+        fun makeListOfNodes()
+        {
+            for (sector in sectors)
+                nodes.addAll(sector.nodes)
+        }
+    }
+
     inner class Sector(val ident: SectorCoord, val area: Rect)
     /** representing a (virtual) part of the stage that may contain one or several nodes.
      * @param ident: Pair numbering the sectors. NOT the grid position. For instance,
@@ -248,8 +283,7 @@ class EndlessStageCreator(val stage: Stage)
      * @param area The size of the sector, in grid coordinates.
      */
     {
-        var isEntry = false
-        var isExit = false
+        var type: SectorType = SectorType.NORMAL
         var nodes = CopyOnWriteArrayList<Chip>()
         val model = Random.nextInt(20)
         var possibleEntries = Direction.values() // per default, all directions are permitted
@@ -274,8 +308,18 @@ class EndlessStageCreator(val stage: Stage)
         }
 
         fun createNodes() {
-            var model = selectModel()
-            model.createNodes.invoke(stage, area)
+
+            val identOfEntry = 80  // values 80 to 89 reserved for entry points
+            val identOfCpu = 90  // values 90 to 99 reserved for cpus
+            when (type)
+            {
+                SectorType.ENTRY -> nodes.add(stage.createChip(area.centerX(), area.centerY(), type = Chip.ChipType.ENTRY, ident = identOfEntry))
+                SectorType.EXIT -> nodes.add(stage.createChip(area.centerX(), area.centerY(), type = Chip.ChipType.CPU, ident = identOfCpu))
+                SectorType.NORMAL -> {
+                    var model = selectModel()
+                    model.createNodes.invoke(stage, area)
+                }
+            }
         }
 
         fun makePath(): CopyOnWriteArrayList<Chip> {
@@ -369,8 +413,8 @@ class EndlessStageCreator(val stage: Stage)
                     5 -> {
                         createNodes = { stage: Stage, area: Rect ->
                             val newChip = stage.createChip(
-                                Random.nextInt(area.left + 1, area.right - 1),
-                                Random.nextInt(area.top + 1, area.bottom - 1), nextIdent()
+                                Random.nextInt(area.left + 2, area.right - 2),
+                                Random.nextInt(area.top + 2, area.bottom - 2), nextIdent()
                             )
                             nodes.add(newChip)
                         }

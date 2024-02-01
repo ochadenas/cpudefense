@@ -26,6 +26,9 @@ class Game(val gameActivity: MainGameActivity) {
     companion object Params {
         const val maxLevelAvailable = 28
 
+        // feature toggles:
+        val isEndlessAvailable = true
+
         val chipSize = Coord(6,3)
         const val viewportMargin = 10
         const val minScoreBoardHeight = 100
@@ -67,9 +70,6 @@ class Game(val gameActivity: MainGameActivity) {
         val temperatureCooldownFactor = 0.99995
         val temperatureWarnThreshold = 60
         val temperatureLimit = 85
-
-        // feature toggles:
-        val isEndlessAvailable = false
     }
 
     var defaultSpeedFactor = 0.512f

@@ -20,7 +20,8 @@ open class Vehicle(val theNetwork: Network): GameElement() {
         var linkId: Int,
         var startNodeId: Int,
         var endNodeId: Int,
-        var trackId: Int
+        var trackId: Int,
+        var sizeOnScreenInDp: Float,
         )
 
     var data = Data(
@@ -30,7 +31,8 @@ open class Vehicle(val theNetwork: Network): GameElement() {
         linkId = -1,
         startNodeId = -1,
         endNodeId = -1,
-        trackId = -1
+        trackId = -1,
+        sizeOnScreenInDp = 0.0f
     )
 
     var posOnGrid: Coord? = null

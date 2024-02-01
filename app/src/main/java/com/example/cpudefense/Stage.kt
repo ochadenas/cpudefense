@@ -13,7 +13,9 @@ import kotlin.random.Random
 
 class Stage(var theGame: Game) {
 
-    class Identifier(var series: Int =1, var number: Int =0) {
+    class Identifier(var series: Int =1, var number: Int =0)
+    /** A stage is identified by the combination of series (1 to 3) and the level number. */
+    {
         fun next(): Identifier
         /** returns an identifier of the next level */
         { return Identifier(series, number+1)}
