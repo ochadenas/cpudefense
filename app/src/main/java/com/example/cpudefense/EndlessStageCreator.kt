@@ -14,9 +14,9 @@ class EndlessStageCreator(val stage: Stage)
  */
 {
     val dimX = 50
-    val dimY = 55
+    val dimY = 60
     private val sectorSizeX = dimX / 3
-    private val sectorSizeY = (dimY - 5) / 4
+    private val sectorSizeY = dimY / 4
     private val numberOfSectorsX = dimX / sectorSizeX
     private val numberOfSectorsY = dimY / sectorSizeY
     private var sectors = mutableListOf<Sector>()
@@ -57,19 +57,30 @@ class EndlessStageCreator(val stage: Stage)
         for (x in 0 until numberOfSectorsX)
             for (y in 0 until numberOfSectorsY)
             {
-                var sectorIdent = SectorCoord(x, y)
-                var sector = Sector(sectorIdent, Rect(areaOfOneSector).setTopLeft(x*sectorSizeX, y*sectorSizeY))
+                val sectorIdent = SectorCoord(x, y)
+                val sector = Sector(sectorIdent, Rect(areaOfOneSector).setTopLeft(x*sectorSizeX, y*sectorSizeY))
                 sectors.add(sector)
             }
         // determine entries and exits
-        val entry: Sector = getByCoordinate(SectorCoord(Random.nextInt(numberOfSectorsX),0))!!
-        val exit: Sector = getByCoordinate(SectorCoord(numberOfSectorsX-1,numberOfSectorsY-1))!!
-        entry.type = SectorType.ENTRY
-        exit.type = SectorType.EXIT
-        // TODO: deal with the case entry/exit == null
+        var entrySectors = mutableListOf<Sector?>()
+        if (Random.nextFloat() < .7)
+            entrySectors.add(getByCoordinate(SectorCoord(0,0)))
+        if (Random.nextFloat() < .5)
+            entrySectors.add(getByCoordinate(SectorCoord(2,0)))
+        if (Random.nextFloat() < .2)
+            entrySectors.add(getByCoordinate(SectorCoord(1,0)))
+        if (Random.nextFloat() < .3)
+            entrySectors.add(getByCoordinate(SectorCoord(0,1)))
+        entrySectors.forEach {
+            it?.type = SectorType.ENTRY
+        }
+        val exit = getByCoordinate(SectorCoord(numberOfSectorsX-1,numberOfSectorsY-1))
+        exit?.type = SectorType.EXIT
 
         for (count in 1 .. 5)
-            createPath(entry)?.let { paths.add(it) }
+            entrySectors.random()?.let { sector ->
+                createPath(sector)?.let { path -> paths.add(path)}
+            }
 
         for (sector in sectors)
             sector.createNodes()
@@ -153,10 +164,13 @@ class EndlessStageCreator(val stage: Stage)
     fun getMask(): Int
     /** returns a random value for the link mask */
     {
-        return when (Random.nextInt(5))
+        return when (Random.nextInt(10))
         {
-            0 -> 0x06
-            1 -> 0x03
+            in 0..1 -> 0x06
+            in 2..3 -> 0x03
+            in 4..5 -> 0x07
+            6 -> 0x0f
+            in 7 .. 8 -> 0x04
             else -> 0x02
         }
     }
@@ -173,9 +187,10 @@ class EndlessStageCreator(val stage: Stage)
     {
         return getByCoordinate(sector.ident.plus(direction))
     }
-    fun getRandomNeighbour(thisSector: Sector, exclude: MutableList<Sector>): Sector?
+    fun getRandomNeighbour(thisSector: Sector, exclude: MutableList<Sector>, allowEntries: Boolean = false): Sector?
     /** returns a random neighbour of this sector that is not already
-     * included in the list */
+     * included in the list
+     * @param allowEntries: whether to avoid entries as possible neighbour (false) or allow them (true) */
     {
         val possibleDirections = Direction.values()
         possibleDirections.shuffle()
@@ -183,7 +198,8 @@ class EndlessStageCreator(val stage: Stage)
         for (dir in possibleDirections)
         {
             val otherSector = getNeighbour(thisSector, dir)
-            if (otherSector !in exclude)
+            if (otherSector !in exclude &&
+                (allowEntries || otherSector?.type != SectorType.ENTRY))
                 otherSector?.let {
                     thisSector.exitsUsed.add(dir)
                     it.entriesUsed.add(dir)
@@ -298,23 +314,20 @@ class EndlessStageCreator(val stage: Stage)
                  */
         {
             lateinit var model: Model
-            for (i in 0 .. 4)
+            for (i in 1 .. 5)
             {
                 model = Model(i)
                 if (model.isCompatibleWith(entriesUsed, exitsUsed))
                     break
             }
-            return Model(5)
+            return model
         }
 
         fun createNodes() {
-
-            val identOfEntry = 80  // values 80 to 89 reserved for entry points
-            val identOfCpu = 90  // values 90 to 99 reserved for cpus
             when (type)
             {
-                SectorType.ENTRY -> nodes.add(stage.createChip(area.centerX(), area.centerY(), type = Chip.ChipType.ENTRY, ident = identOfEntry))
-                SectorType.EXIT -> nodes.add(stage.createChip(area.centerX(), area.centerY(), type = Chip.ChipType.CPU, ident = identOfCpu))
+                SectorType.ENTRY -> nodes.add(stage.createChip(area.centerX(), area.centerY(), type = Chip.ChipType.ENTRY, ident = nextIdent()))
+                SectorType.EXIT -> nodes.add(stage.createChip(area.centerX(), area.centerY(), type = Chip.ChipType.CPU, ident = nextIdent()))
                 SectorType.NORMAL -> {
                     var model = selectModel()
                     model.createNodes.invoke(stage, area)
@@ -410,7 +423,7 @@ class EndlessStageCreator(val stage: Stage)
                         possibleEntries = arrayOf(Direction.LEFT, Direction.UP)
                         possibleExits = arrayOf(Direction.LEFT, Direction.UP)
                     }
-                    5 -> {
+                    else -> {
                         createNodes = { stage: Stage, area: Rect ->
                             val newChip = stage.createChip(
                                 Random.nextInt(area.left + 2, area.right - 2),
