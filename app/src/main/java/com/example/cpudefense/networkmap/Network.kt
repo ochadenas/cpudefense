@@ -2,6 +2,7 @@ package com.example.cpudefense.networkmap
 
 import android.graphics.*
 import android.view.MotionEvent
+import com.example.cpudefense.EndlessStageCreator
 import com.example.cpudefense.Game
 import com.example.cpudefense.gameElements.Chip
 import com.example.cpudefense.gameElements.GameElement
@@ -15,7 +16,9 @@ class Network(val theGame: Game, x: Int, y: Int): GameElement() {
         var nodes: HashMap<Int, Node.Data> = hashMapOf(),
         var links: HashMap<Int, Link.Data> = hashMapOf(),
         var tracks: HashMap<Int, Track.Data> = hashMapOf(),
-        var vehicles: List<Vehicle.Data> = listOf()
+        var vehicles: List<Vehicle.Data> = listOf(),
+        var sectorSizeX: Int = 0,  // only relevant for debugging purposes, if the network is divided in sectors
+        var sectorSizeY: Int = 0,
     )
 
     var data = Data(gridSizeX = x, gridSizeY = y)
@@ -109,6 +112,8 @@ class Network(val theGame: Game, x: Int, y: Int): GameElement() {
             obj.display(canvas, viewport)
         for (obj in nodes.values)
             (obj as Chip).displayUpgrades(canvas)
+        //if (data.sectorSizeX > 0 && data.sectorSizeY > 0)
+        //    EndlessStageCreator.displaySectors(canvas, viewport, data)
     }
 
     fun makeSnapshot(canvas: Canvas, viewport: Viewport)

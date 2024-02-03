@@ -247,11 +247,12 @@ class Persistency(val activity: Activity) {
         val levelData = SerializableLevelData(data)
         val json = Gson().toJson(levelData)
         editor.putString("series_%d".format(series), json)
+        editor.commit()
     }
     fun loadLevelStructure(series: Int): HashMap<Int, Stage.Data>
     {
         try {
-            var json = prefs.getString("series_%d".format(series), "none")
+            var json = prefsStructure.getString("series_%d".format(series), "none")
             if (json == "none")
                 return hashMapOf()
             val data: SerializableLevelData =

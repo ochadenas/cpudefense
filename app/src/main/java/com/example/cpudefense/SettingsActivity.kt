@@ -32,7 +32,7 @@ class SettingsActivity : AppCompatActivity()
         useLargeButtons.isChecked = prefs.getBoolean("USE_LARGE_BUTTONS", false)
         showFrameRate.isChecked = prefs.getBoolean("SHOW_FRAMERATE", false)
         fastFastForward.isChecked = prefs.getBoolean("USE_FAST_FAST_FORWARD", false)
-        keepLevels.isChecked = prefs.getBoolean("KEEP_LEVELS", false)
+        keepLevels.isChecked = prefs.getBoolean("KEEP_LEVELS", true)
     }
 
     fun savePrefs(v: View)
@@ -44,7 +44,7 @@ class SettingsActivity : AppCompatActivity()
             putBoolean("USE_LARGE_BUTTONS", findViewById<SwitchCompat>(R.id.switch_use_large_buttons)?.isChecked ?: false)
             putBoolean("SHOW_FRAMERATE", findViewById<SwitchCompat>(R.id.switch_show_framerate)?.isChecked ?: false)
             putBoolean("USE_FAST_FAST_FORWARD", findViewById<SwitchCompat>(R.id.switch_fast_fast_forward)?.isChecked ?: false)
-            putBoolean("KEEP_LEVELS", findViewById<SwitchCompat>(R.id.switch_keep_levels)?.isChecked ?: false)
+            putBoolean("KEEP_LEVELS", findViewById<SwitchCompat>(R.id.switch_keep_levels)?.isChecked ?: true)
             commit()
         }
     }

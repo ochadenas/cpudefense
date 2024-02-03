@@ -56,7 +56,7 @@ class Stage(var theGame: Game) {
         var tracks: HashMap<Int, Track.Data> = hashMapOf(),
         var waves: CopyOnWriteArrayList<Wave.Data> = CopyOnWriteArrayList<Wave.Data>(),
         var attackers: CopyOnWriteArrayList<Attacker.Data> = CopyOnWriteArrayList<Attacker.Data>(),
-        var chipsAllowed: Set<Chip.ChipUpgrades> = setOf()
+        var chipsAllowed: Set<Chip.ChipUpgrades> = setOf(),
     )
     var data = Data()
 

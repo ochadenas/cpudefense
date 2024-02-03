@@ -52,7 +52,7 @@ class MainGameActivity : Activity() {
         var configUseLargeButtons: Boolean = false,
         var showFramerate: Boolean = false,
         var fastFastForward: Boolean = false,
-        var keepLevels: Boolean = false,
+        var keepLevels: Boolean = true,
     )
 
     var settings = Settings()
@@ -162,7 +162,7 @@ class MainGameActivity : Activity() {
         settings.configShowAttsInRange = prefs.getBoolean("SHOW_ATTS_IN_RANGE", false)
         settings.configUseLargeButtons = prefs.getBoolean("USE_LARGE_BUTTONS", false)
         settings.showFramerate = prefs.getBoolean("SHOW_FRAMERATE", false)
-        settings.keepLevels = prefs.getBoolean("KEEP_LEVELS", false)
+        settings.keepLevels = prefs.getBoolean("KEEP_LEVELS", true)
         settings.fastFastForward = prefs.getBoolean("USE_FAST_FAST_FORWARD", false)
     }
 

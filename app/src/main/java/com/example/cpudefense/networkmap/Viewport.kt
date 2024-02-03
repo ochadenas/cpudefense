@@ -93,6 +93,13 @@ class Viewport
         return Pair(posX.toInt(), posY.toInt())
     }
 
+    fun rectToViewport(rectInGridCoord: Rect): Rect
+    {
+        val upperleft = gridToViewport(Coord(rectInGridCoord.left, rectInGridCoord.top))
+        val lowerright = gridToViewport(Coord(rectInGridCoord.right, rectInGridCoord.bottom))
+        return Rect(upperleft.first, upperleft.second, lowerright.first, lowerright.second)
+    }
+
     fun isInRightHalfOfViewport(posX: Int): Boolean
     {
         return posX > viewportWidth / 2

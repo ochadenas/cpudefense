@@ -1,8 +1,13 @@
 package com.example.cpudefense
 
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
 import android.graphics.Rect
 import com.example.cpudefense.gameElements.Attacker
 import com.example.cpudefense.gameElements.Chip
+import com.example.cpudefense.networkmap.Network
+import com.example.cpudefense.networkmap.Viewport
 import com.example.cpudefense.utils.setTopLeft
 import java.util.concurrent.CopyOnWriteArrayList
 import kotlin.random.Random
@@ -13,19 +18,19 @@ class EndlessStageCreator(val stage: Stage)
  * Like StageCatalog, it is not meant to be instantiated.
  */
 {
-    val dimX = 50
-    val dimY = 60
-    private val sectorSizeX = dimX / 3
-    private val sectorSizeY = dimY / 4
-    private val numberOfSectorsX = dimX / sectorSizeX
-    private val numberOfSectorsY = dimY / sectorSizeY
+    private var sectorSizeX = 16
+    private var sectorSizeY = 12
+    private var dimX: Int = 0
+    private var dimY: Int = 0
+    private var numberOfSectorsX = 0
+    private var numberOfSectorsY = 0
     private var sectors = mutableListOf<Sector>()
     private val paths = mutableListOf<Path>()
 
     private var chipIdent = 0
     /** global count for the chips */
 
-    enum class Direction {UP, DOWN, LEFT, RIGHT, DOWNLEFT}
+    enum class Direction {UP, DOWN, LEFT, RIGHT }
     enum class SectorType { ENTRY, EXIT, NORMAL }
 
     private fun nextIdent(): Int
@@ -50,7 +55,19 @@ class EndlessStageCreator(val stage: Stage)
             setOf(Chip.ChipUpgrades.ACC, Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.SHR,
                 Chip.ChipUpgrades.MEM, Chip.ChipUpgrades.CLK, Chip.ChipUpgrades.POWERUP,
                 Chip.ChipUpgrades.REDUCE, Chip.ChipUpgrades.SELL )
+
+        numberOfSectorsX = if (Random.nextInt(10) < 8) 3 else 4
+        numberOfSectorsY = when (Random.nextInt(10))
+        {
+            in 0..6 -> 4
+            in 7 .. 8 -> 5
+            else -> 3
+        }
+        dimX = numberOfSectorsX * sectorSizeX
+        dimY = numberOfSectorsY * sectorSizeY
         stage.initializeNetwork(dimX, dimY)
+        stage.network.data.sectorSizeX = sectorSizeX
+        stage.network.data.sectorSizeY = sectorSizeY
 
         // cut the stage area into sectors
         val areaOfOneSector = Rect(0, 0, sectorSizeX, sectorSizeY)  // area in grid coordinates
@@ -256,7 +273,7 @@ class EndlessStageCreator(val stage: Stage)
                 Direction.DOWN -> SectorCoord(0, 1)
                 Direction.LEFT -> SectorCoord(-1, 0)
                 Direction.RIGHT -> SectorCoord(1, 0)
-                Direction.DOWNLEFT -> SectorCoord(-1, 1)
+                // Direction.DOWNLEFT -> SectorCoord(-1, 1)
             }
         }
 
@@ -302,8 +319,6 @@ class EndlessStageCreator(val stage: Stage)
         var type: SectorType = SectorType.NORMAL
         var nodes = CopyOnWriteArrayList<Chip>()
         val model = Random.nextInt(20)
-        var possibleEntries = Direction.values() // per default, all directions are permitted
-        var possibleExits = Direction.values()
         var exitsUsed = mutableSetOf<Direction>()
         var entriesUsed = mutableSetOf<Direction>()
 
@@ -313,14 +328,16 @@ class EndlessStageCreator(val stage: Stage)
                  *
                  */
         {
-            lateinit var model: Model
-            for (i in 1 .. 5)
+            var model: Model? = null
+            for (i in (1..11).toList().shuffled())
             {
-                model = Model(i)
-                if (model.isCompatibleWith(entriesUsed, exitsUsed))
+                if (Model(i).isCompatibleWith(entriesUsed, exitsUsed))
+                {
+                    model = Model(i)
                     break
+                }
             }
-            return model
+            return model ?: Model(0)
         }
 
         fun createNodes() {
@@ -340,52 +357,14 @@ class EndlessStageCreator(val stage: Stage)
         }
 
         inner class Model(val number: Int) {
-            lateinit var createNodes: (Stage, Rect) -> Unit
+            var createNodes: (Stage, Rect) -> Unit
             var possibleEntries = Direction.values()
             var possibleExits = Direction.values()
 
             init {
                 when (number) {
-                    1 -> {
-                        createNodes = { stage: Stage, area: Rect ->
-                            val chip1 = stage.createChip(
-                                area.centerX(), (area.top + area.centerY()) / 2,
-                                nextIdent()
-                            )
-                            val chip2 = stage.createChip(
-                                area.centerX(), (area.bottom + area.centerY()) / 2,
-                                nextIdent()
-                            )
-                            nodes.add(chip1)
-                            nodes.add(chip2)
-                        }
-                        possibleEntries = arrayOf(Direction.DOWN)
-                        possibleExits = arrayOf(
-                            Direction.DOWN,
-                            Direction.LEFT,
-                            Direction.RIGHT,
-                            Direction.DOWNLEFT
-                        )
-                    }
-
-                    2 -> {
-                        createNodes = { stage: Stage, area: Rect ->
-                            val chip1 = stage.createChip(
-                                (area.centerX() + area.left) / 2, area.centerY(),
-                                nextIdent()
-                            )
-                            val chip2 = stage.createChip(
-                                (area.centerX() + area.right) / 2, area.centerY(),
-                                nextIdent()
-                            )
-                            nodes.add(chip1)
-                            nodes.add(chip2)
-                        }
-                        possibleEntries = arrayOf(Direction.RIGHT)
-                        possibleExits = arrayOf(Direction.RIGHT, Direction.UP, Direction.DOWN)
-                    }
-
-                    3 -> {
+                    in 1..2 -> {
+                        // three nodes in a vertical line
                         createNodes = { stage: Stage, area: Rect ->
                             val chip1 = stage.createChip(
                                 area.centerX(), (2 * area.top + area.centerY()) / 3,
@@ -401,11 +380,11 @@ class EndlessStageCreator(val stage: Stage)
                             nodes.add(chip2)
                             nodes.add(chip3)
                         }
-                        possibleEntries = arrayOf(Direction.DOWN)
-                        possibleExits = arrayOf(Direction.DOWN)
+                        possibleEntries = arrayOf(Direction.DOWN, Direction.LEFT, Direction.RIGHT)
+                        possibleExits = arrayOf(Direction.DOWN, Direction.LEFT, Direction.RIGHT)
                     }
-
-                    4 -> {
+                    3 -> {
+                        // two chips diagonal
                         createNodes = { stage: Stage, area: Rect ->
                             val chip1 = stage.createChip(
                                 (area.centerX() + area.right) / 2,
@@ -423,7 +402,88 @@ class EndlessStageCreator(val stage: Stage)
                         possibleEntries = arrayOf(Direction.LEFT, Direction.UP)
                         possibleExits = arrayOf(Direction.LEFT, Direction.UP)
                     }
+                    4 -> {
+                        // two chips diagonal
+                        createNodes = { stage: Stage, area: Rect ->
+                            val chip1 = stage.createChip(
+                                (area.centerX() + area.right) / 2,
+                                (area.centerY() + area.top) / 2,
+                                nextIdent()
+                            )
+                            val chip2 = stage.createChip(
+                                (area.centerX() + area.left) / 2,
+                                (area.centerY() + area.bottom) / 2,
+                                nextIdent()
+                            )
+                            nodes.add(chip1)
+                            nodes.add(chip2)
+                        }
+                        possibleEntries = arrayOf(Direction.LEFT, Direction.DOWN)
+                        possibleExits = arrayOf(Direction.LEFT, Direction.DOWN)
+                    }
+                    5 -> {
+                        // two nodes in a vertical line
+                        createNodes = { stage: Stage, area: Rect ->
+                            val chip1 = stage.createChip(
+                                area.centerX(), (area.top + area.centerY()) / 2,
+                                nextIdent()
+                            )
+                            val chip2 = stage.createChip(
+                                area.centerX(), (area.bottom + area.centerY()) / 2,
+                                nextIdent()
+                            )
+                            nodes.add(chip1)
+                            nodes.add(chip2)
+                        }
+                        possibleEntries = arrayOf(Direction.DOWN, Direction.LEFT, Direction.RIGHT)
+                        possibleExits = arrayOf(Direction.DOWN, Direction.LEFT, Direction.RIGHT)
+                    }
+                    6-> {
+                        // two nodes in a horizontal line
+                        createNodes = { stage: Stage, area: Rect ->
+                            val chip1 = stage.createChip(
+                                (area.centerX() + area.left) / 2, area.centerY(),
+                                nextIdent()
+                            )
+                            val chip2 = stage.createChip(
+                                (area.centerX() + area.right) / 2, area.centerY(),
+                                nextIdent()
+                            )
+                            nodes.add(chip1)
+                            nodes.add(chip2)
+                        }
+                        possibleEntries = arrayOf(Direction.RIGHT, Direction.UP, Direction.DOWN)
+                        possibleExits = arrayOf(Direction.RIGHT, Direction.UP, Direction.DOWN)
+                    }
+                    in 7..10 -> {
+                        // four nodes
+                        createNodes = { stage: Stage, area: Rect ->
+                            val chip1 = stage.createChip(
+                                (area.centerX()+area.left)/2, (area.centerY()+area.top)/2,
+                                nextIdent()
+                            )
+                            val chip2 = stage.createChip(
+                                (area.centerX()+area.right)/2, (area.centerY()+area.top)/2,
+                                nextIdent()
+                            )
+                            val chip3 = stage.createChip(
+                                (area.centerX()+area.right)/2, (area.centerY()+area.bottom)/2,
+                                nextIdent()
+                            )
+                            val chip4 = stage.createChip(
+                                (area.centerX()+area.left)/2, (area.centerY()+area.bottom)/2,
+                                nextIdent()
+                            )
+                            nodes.add(chip1)
+                            nodes.add(chip2)
+                            nodes.add(chip3)
+                            nodes.add(chip4)
+                        }
+                        possibleEntries = arrayOf(Direction.RIGHT, Direction.DOWN)
+                        possibleExits = arrayOf(Direction.LEFT, Direction.DOWN)
+                    }
                     else -> {
+                        // one node
                         createNodes = { stage: Stage, area: Rect ->
                             val newChip = stage.createChip(
                                 Random.nextInt(area.left + 2, area.right - 2),
@@ -448,6 +508,23 @@ class EndlessStageCreator(val stage: Stage)
                 }
                 return true
             }
+        }
+    }
+
+    companion object {
+        fun displaySectors(canvas: Canvas, viewport: Viewport, data: Network.Data)
+        {
+            val numberSectorsX = data.gridSizeX / data.sectorSizeX
+            val numberSectorsY = data.gridSizeY / data.sectorSizeY
+            val paint = Paint()
+            paint.color = Color.WHITE
+            paint.style = Paint.Style.STROKE
+            for (x in 0 until numberSectorsX)
+                for (y in 0 until numberSectorsY)
+                {
+                    val sector = Rect(x*data.sectorSizeX, y*data.sectorSizeY, (x+1)*data.sectorSizeX, (y+1)*data.sectorSizeY)
+                    canvas.drawRect(viewport.rectToViewport(sector), paint)
+                }
         }
     }
 }
