@@ -13,6 +13,7 @@ import com.example.cpudefense.utils.displayTextCenteredInRect
 import com.example.cpudefense.utils.setCenter
 import com.example.cpudefense.utils.setTopLeft
 import kotlin.math.exp
+import kotlin.math.truncate
 
 class Hero(var game: Game, type: Type): Fadable {
     /*
@@ -380,7 +381,7 @@ class Hero(var game: Game, type: Type): Fadable {
             Type.INCREASE_MAX_HERO_LEVEL -> return level.toFloat()
             Type.LIMIT_UNWANTED_CHIPS -> return level.toFloat()
             Type.GAIN_CASH -> return (8f - level) * 9
-            Type.GAIN_CASH_ON_KILL -> return level * 0.5f
+            Type.GAIN_CASH_ON_KILL -> return truncate((level+1) * 0.5f)
             Type.INCREASE_REFUND -> return (50f + level * 10)
             Type.INCREASE_CHIP_SUB_RANGE -> return 1.0f + level / 10f
             Type.INCREASE_CHIP_SHR_RANGE -> return 1.0f + level / 10f
