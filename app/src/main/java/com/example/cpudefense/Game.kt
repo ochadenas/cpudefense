@@ -27,7 +27,7 @@ class Game(val gameActivity: MainGameActivity) {
         const val maxLevelAvailable = 28
 
         // feature toggles:
-        val isEndlessAvailable = true
+        val isEndlessAvailable = false
 
         val chipSize = Coord(6,3)
         const val viewportMargin = 10
