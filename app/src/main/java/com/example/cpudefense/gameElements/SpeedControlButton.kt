@@ -6,7 +6,7 @@ import com.example.cpudefense.Game
 import com.example.cpudefense.effects.Fadable
 import com.example.cpudefense.effects.Fader
 
-class SpeedControlButton(val game: Game, var type: Type = Type.PAUSE, val panel: SpeedControl): Fadable
+class SpeedControlButton(val game: Game, var type: Type = Type.PAUSE, private val panel: SpeedControl): Fadable
 {
     enum class Type { PAUSE, FAST, NORMAL, RETURN, LOCK, UNLOCK }
 
@@ -15,7 +15,7 @@ class SpeedControlButton(val game: Game, var type: Type = Type.PAUSE, val panel:
     var alpha = 160
     private var bitmapOfType = hashMapOf<Type, Bitmap>()
 
-    fun set_size(size: Int)
+    fun setSize(size: Int)
     {
         area = Rect(0, 0, size, size)
         bitmapOfType[Type.PAUSE] = Bitmap.createScaledBitmap(game.pauseIcon, size, size, true)

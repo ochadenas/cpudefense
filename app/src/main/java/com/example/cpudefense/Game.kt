@@ -278,7 +278,7 @@ class Game(val gameActivity: MainGameActivity) {
         {
             currentStage?.network?.display(canvas, viewport)
             scoreBoard.display(canvas, viewport)
-            speedControlPanel.display(canvas, viewport)
+            speedControlPanel.display(canvas)
         }
         if (state.phase == GamePhase.PAUSED)
         {
