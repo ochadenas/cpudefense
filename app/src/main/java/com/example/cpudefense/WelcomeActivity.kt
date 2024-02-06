@@ -27,10 +27,11 @@ class WelcomeActivity : AppCompatActivity()
         gameVersion?.text = versionName
     }
 
-    var gameState: String? = null
-    var nextLevelToPlay = Stage.Identifier()
-    var maxLevel = Stage.Identifier()
-    var turboSeriesAvailable = false
+    private var gameState: String? = null
+    private var nextLevelToPlay = Stage.Identifier()
+    private var maxLevel = Stage.Identifier()
+    private var turboSeriesAvailable = false
+    private var endlessSeriesAvailable = false
 
     private fun determineLevels(prefs: SharedPreferences)
     {
@@ -39,15 +40,16 @@ class WelcomeActivity : AppCompatActivity()
         nextLevelToPlay.series = prefs.getInt("LASTSERIES", 1)
         nextLevelToPlay.number = prefs.getInt("LASTSTAGE", 0)
         turboSeriesAvailable = prefs.getBoolean("TURBO_AVAILABLE", false)
+        endlessSeriesAvailable = prefs.getBoolean("ENDLESS_AVAILABLE", false)
     }
 
     private fun showLevelReached()
     /** displays the max level reached so far as graphical display */
     {
         // display as graphics:
-        var displayLit: Boolean = true
+        var displayLit = true
         val display = SevenSegmentDisplay(2, (80 * resources.displayMetrics.scaledDensity).toInt(), this)
-        var imageView = findViewById<ImageView>(R.id.sevenSegmentDisplay)
+        val imageView = findViewById<ImageView>(R.id.sevenSegmentDisplay)
         if (maxLevel.number == 0)
             displayLit = false
         when (maxLevel.series)
@@ -113,6 +115,7 @@ class WelcomeActivity : AppCompatActivity()
     {
         val intent = Intent(this, LevelSelectActivity::class.java)
         intent.putExtra("TURBO_AVAILABLE", turboSeriesAvailable)
+        intent.putExtra("ENDLESS_AVAILABLE", endlessSeriesAvailable)
         intent.putExtra("NEXT_SERIES", nextLevelToPlay.series)
         startActivity(intent)
     }

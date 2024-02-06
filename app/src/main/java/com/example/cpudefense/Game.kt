@@ -27,7 +27,7 @@ class Game(val gameActivity: MainGameActivity) {
         const val maxLevelAvailable = 28
 
         // feature toggles:
-        val isEndlessAvailable = false
+        val enableEndlessMode = true
 
         val chipSize = Coord(6,3)
         const val viewportMargin = 10
@@ -513,6 +513,7 @@ class Game(val gameActivity: MainGameActivity) {
                 putInt("MAXSTAGE", 0)
                 putInt("MAXSERIES", 1)
                 putBoolean("TURBO_AVAILABLE", false)
+                putBoolean("ENDLESS_AVAILABLE", false)
                 commit()
             }
             if (currentStage.isGreaterThan(maxStage))
@@ -521,10 +522,23 @@ class Game(val gameActivity: MainGameActivity) {
                 putInt("MAXSERIES", currentStage.series)
                 commit()
             }
-            if (currentStage.series>1 || currentStage.number==maxLevelAvailable) {
-                putBoolean("TURBO_AVAILABLE", true)
-                commit()
+            // make advanced series available
+            when (currentStage.series)
+            {
+                1 ->
+                    if (currentStage.number==maxLevelAvailable)
+                        putBoolean("TURBO_AVAILABLE", true)
+                2 -> {
+                    putBoolean("TURBO_AVAILABLE", true)
+                    if (currentStage.number == maxLevelAvailable)
+                        putBoolean("ENDLESS_AVAILABLE", true)
+                }
+                3 -> {
+                    putBoolean("TURBO_AVAILABLE", true)
+                    putBoolean("ENDLESS_AVAILABLE", true)
+                }
             }
+            commit()
         }
     }
     private fun calculateLives()

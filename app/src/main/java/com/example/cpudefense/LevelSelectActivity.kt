@@ -11,7 +11,6 @@ import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.material.tabs.TabItem
 import com.google.android.material.tabs.TabLayout
 
 @Suppress("DEPRECATION")
@@ -21,10 +20,12 @@ class LevelSelectActivity : AppCompatActivity() {
     private var selectedLevel: Int = 0
     private var selectedSeries: Int = 0
     private var isTurboAvailable = false
+    private var isEndlessAvailable = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         isTurboAvailable = intent.getBooleanExtra("TURBO_AVAILABLE", false)
+        isEndlessAvailable = intent.getBooleanExtra("ENDLESS_AVAILABLE", false)
         setContentView(R.layout.activity_level)
         setupSelector()
     }
@@ -33,13 +34,14 @@ class LevelSelectActivity : AppCompatActivity() {
     {
         super.onActivityReenter(resultCode, data)
         isTurboAvailable = intent.getBooleanExtra("TURBO_AVAILABLE", false)
+        isEndlessAvailable = intent.getBooleanExtra("ENDLESS_AVAILABLE", false)
         setupSelector()
     }
 
     private fun setupSelector()
     {
         val tabLayout = findViewById<TabLayout>(R.id.tab_layout)
-        if (Game.isEndlessAvailable)
+        if (Game.enableEndlessMode)
         {
             val tab = tabLayout.newTab().setText("Endless")
             tabLayout.addTab(tab)
@@ -85,13 +87,13 @@ class LevelSelectActivity : AppCompatActivity() {
         when (series)
         {
             1 -> {
-                levels = Persistency(this).loadLevelSummaries(Game.SERIES_NORMAL) ?: HashMap()
+                levels = Persistency(this).loadLevelSummaries(Game.SERIES_NORMAL)
                 populateStageList(listView, levels, prefs, Game.SERIES_NORMAL,
                     resources.getColor(R.color.text_green), resources.getColor(R.color.text_lightgreen))
             }
             2 -> {
                 if (isTurboAvailable) {
-                    levels = Persistency(this).loadLevelSummaries(Game.SERIES_TURBO) ?: HashMap()
+                    levels = Persistency(this).loadLevelSummaries(Game.SERIES_TURBO)
                     populateStageList(listView, levels, prefs, Game.SERIES_NORMAL,
                         resources.getColor(R.color.text_amber), resources.getColor(R.color.text_lightamber))
                 }
@@ -109,8 +111,8 @@ class LevelSelectActivity : AppCompatActivity() {
                 }
             }
             3 -> {
-                if (Game.isEndlessAvailable) {
-                    levels = Persistency(this).loadLevelSummaries(Game.SERIES_ENDLESS) ?: HashMap()
+                if (isEndlessAvailable) {
+                    levels = Persistency(this).loadLevelSummaries(Game.SERIES_ENDLESS)
                     populateStageList(listView, levels, prefs, Game.SERIES_ENDLESS,
                         resources.getColor(R.color.text_red), resources.getColor(R.color.text_lightred))
                 }
@@ -147,7 +149,7 @@ class LevelSelectActivity : AppCompatActivity() {
             stageSummary[1] = Stage.Summary()  // create empty first level
         // try to determine whether a new level has been added,
         // and it becomes available directly
-        var highestLevelInList = ArrayList(stageSummary.keys).last()
+        val highestLevelInList = ArrayList(stageSummary.keys).last()
         if (highestLevelInList<Game.maxLevelAvailable && (stageSummary[highestLevelInList]?.won == true))
             stageSummary[highestLevelInList+1] = Stage.Summary()
 
