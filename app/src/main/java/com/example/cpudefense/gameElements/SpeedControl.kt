@@ -19,8 +19,8 @@ class SpeedControl(var game: Game) {
 
     fun setSize(parentArea: Rect)
     {
-        val actualButtonSize = Game.speedControlButtonSize * game.resources.displayMetrics.density.toInt() *
-            if (game.gameActivity.settings.configUseLargeButtons) 2 else 1
+        val actualButtonSize = (Game.speedControlButtonSize * game.resources.displayMetrics.density.toInt() *
+            if (game.gameActivity.settings.configUseLargeButtons) 1.6f else 1.0f).toInt()
         val margin = actualButtonSize / 5   // space between the buttons
         buttons.forEach() {it.set_size(actualButtonSize)}
         area_right.right = parentArea.right - margin
