@@ -10,3 +10,5 @@ Miscellaneous:
 - decreased overall attacker frequency
 - slightly increased Mandelbrot's effect
 - Attackers now have their speed slightly altered by ACC chips
+- several adjustments to game play
+
