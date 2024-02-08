@@ -570,8 +570,8 @@ class Game(val gameActivity: MainGameActivity) {
         if (state.heat == 0.0)
             return
         state.heat *= temperatureCooldownFactor  // reduce heat. TODO: consider global speed factor
-        val overheat = state.heat - temperatureLimit*Game.heatPerDegree
-        if (overheat > 0 && Random.nextFloat() > overheat*0.002)  // chance of damaging the CPU
+        val overheat = state.heat - temperatureLimit*heatPerDegree
+        if (overheat > 0 && Random.nextFloat() < overheat*0.0001)  // chance of damaging the CPU
         {
             gameActivity.runOnUiThread {
                 val toast: Toast = Toast.makeText(gameActivity, "CPU damage from overheating", Toast.LENGTH_SHORT)
