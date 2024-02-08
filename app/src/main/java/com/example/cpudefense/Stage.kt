@@ -312,13 +312,15 @@ class Stage(var theGame: Game) {
         var count = attackerCount
         var strength = attackerStrength
         var frequency = attackerFrequency
+        var speed = attackerSpeed
         if (series==2)  // modifications in strength for turbo mode
         {
             count = (attackerCount * 1.5f).toInt()
             strength = (attackerStrength * ( 1 + waves.size*waves.size*0.2f ) + 4).toInt()
-            frequency = attackerFrequency * 1.2f
+            frequency = attackerFrequency * 1.6f
+            speed = attackerSpeed * 1.2f
         }
-        val waveData = Wave.Data(count, strength, frequency, attackerSpeed,
+        val waveData = Wave.Data(count, strength, frequency, speed,
             coins, currentCount = count, representation = representation, ticksUntilNextAttacker = ticksUntilFirstAttacker.toDouble())
         ticksUntilFirstAttacker = (4 * 20).toLong()  // after first wave, set a delay here. 20 ticks equal one second
         waves.add(Wave(theGame, waveData))

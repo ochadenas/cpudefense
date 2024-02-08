@@ -24,15 +24,19 @@ class StageCatalog
                     val numberOfObstacles = when (level.number) {
                         1 -> 0
                         2 -> 0
-                        in 3..5 -> 1
-                        in 6..7 -> 2
+                        3 -> 1
+                        4 -> 1
+                        5 -> 2
+                        6 -> 2
+                        7 -> 3
                         8 -> 0
-                        in 9..10 -> 2
-                        11 -> 1
+                        9 -> 2
+                        10 -> 3
+                        11 -> 2
                         22 -> 2
-                        24 -> 2
-                        27 -> 2
-                        else -> 3
+                        24 -> 3
+                        27 -> 3
+                        else -> 4
                     }
                     createObstacles(stage, numberOfObstacles)
                     return

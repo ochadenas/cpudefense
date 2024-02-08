@@ -1,0 +1,12 @@
+New Features:
+- New "endless" level series
+- In the "About" screen, added links for accessing the game wiki and the license on the Internet.
+- Chips are not removed instantly after being sold. Instead, they complete their current cooldown.
+
+Bugfixes:
+- The game crashed when trying to display kiB values
+
+Miscellaneous:
+- decreased overall attacker frequency
+- slightly increased Mandelbrot's effect
+- Attackers now have their speed slightly altered by ACC chips
