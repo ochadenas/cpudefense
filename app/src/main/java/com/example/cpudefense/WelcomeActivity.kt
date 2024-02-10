@@ -76,6 +76,7 @@ class WelcomeActivity : AppCompatActivity()
         determineLevels(prefs)
         showLevelReached()
         val buttonResume = findViewById<Button>(R.id.continueGameButton)
+        buttonResume.background = resources.getDrawable(R.drawable.button_border_white)
         when (gameState)
         {
             "running" -> buttonResume.text = getString(R.string.button_resume)
