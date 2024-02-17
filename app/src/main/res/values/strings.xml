@@ -4,8 +4,8 @@
     <string name="pref_filename" translatable="false">prefs.xml</string>
     <string name="pref_filename_level_structure" translatable="false">structure</string>
     <string name="button_resume">Resume game</string>
-    <string name="button_playlevel">Play level</string>
-    <string name="button_nextlevel">Play next level</string>
+    <string name="button_playlevel">Play stage</string>
+    <string name="button_nextlevel">Play next stage</string>
     <string name="failed">Failed to clear stage.</string>
     <string name="success">All stages cleared!</string>
     <string name="cleared">Stage cleared.</string>
@@ -38,7 +38,7 @@
 
 Tap on the empty slot to add a chip as defense against the attack, and then tap again to confirm your choice.
 
-The most basic chip is 'SUB 1' which subtracts 1 from the attacker's value: 1's become 0's, and 0's disappear and are no longer a threat."
+The most basic chip is 'SUB 1' which subtracts 1 from the attacker's value. It turns 1's into 0's, and it makes 0's disappear. Only then they are no longer a threat."
     </string>
     <string name="instr_2">
 "You may also tap on an attacker. This will invert its value: 1 becomes 0, and 0 becomes 1.
@@ -85,9 +85,11 @@ But be careful. The moving cryptocoin is stronger than ordinary attackers, and i
     <string name="instr_7a">Some hints:\n\nRemember that SHR chips are powerful but cannot eliminate attackers. They quickly reduce large values, but against hordes of weak attackers, multiple SUB chips may be a more cost-effective defence.\n\nChips need to cool down between operations. Hire heroes to reduce the chance of grouped attackers overwhelming a chip.\n\nIf you are stuck, you can replay a lower level trying to catch a running cryptocoin.\n</string>
     <string name="instr_8">"\nYou can sell existing chips and re-use their slot. Most, but not all of the information will be refunded.\n\nNote that an activated chip will complete its current cooldown cycle before disappearing. "</string>
     <string name="instr_9">
-"Let's introduce another chip. The MEM (for memory) chip takes a number and stores it safely away in memory.
+"Let\'s introduce another chip. The MEM (for memory) chip takes a number and stores it safely away in memory.
 
-MEM chips are powerful because they can take out any attacker, but they are very slow."
+You can tell from the thick border that there is a number inside. In this state, the MEM chip cannot store any further number. It must first be \'read out\' (by tapping on it). Once you have tapped on the chip, it\'s cool down cycle starts, and only after that it'll be able to swallow the next attacker.
+
+MEM chips are powerful because they can take out any attacker, but they require your attention, and they are quite slow."
     </string>
     <string name="instr_10">
 "The accumulator chip (ACC) is a bit more complex than the others, but it can be very effective against large numbers of attackers. It takes two numbers and combines them into one result.

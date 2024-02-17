@@ -136,7 +136,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
                 chipData.glowColor = resources.getColor(R.color.chips_mem_glow)
                 chipData.value = Game.basePrice[ChipUpgrades.MEM] ?: 99
                 var modifier: Float = network.theGame.heroes[Hero.Type.INCREASE_CHIP_MEM_SPEED]?.getStrength() ?: 1f
-                chipData.cooldown = (128f / modifier).toInt()
+                chipData.cooldown = (72f / modifier).toInt() // was 128f
                 modifier = network.theGame.heroes[Hero.Type.INCREASE_CHIP_SHR_RANGE]?.getStrength() ?: 1f
                 data.range = 2f * modifier
             }
@@ -362,24 +362,31 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
         if (chipData.type in listOf<ChipType>(ChipType.ACC, ChipType.MEM, ChipType.CLK)
             && attacker.attackerData.isCoin)
             return  // coins are unaffected by certain chip types
-        if (chipData.type == ChipType.ACC)
-            processInAccumulator(attacker)
-        else if (attacker.onShot(chipData.type, chipData.power))
-            attacker.remove()
+        when (chipData.type)
+        {
+            ChipType.ACC -> { processInAccumulator(attacker) }
+            ChipType.MEM -> {
+                if (internalRegister == null)
+                    storeAttacker(attacker)
+                return
+            }
+            else -> {
+                if (attacker.onShot(chipData.type, chipData.power))
+                    attacker.remove()
+            }
+        }
         startCooldown()
     }
 
-    fun storeAttacker(attacker: Attacker?)
+    fun storeAttacker(attacker: Attacker)
     {
         internalRegister = attacker
-        attacker?.let {
-            val extraCashGained =
-                theNetwork.theGame.heroes[Hero.Type.GAIN_CASH_ON_KILL]?.getStrength()?.toInt()
-                    ?: 0 // possible bonus
-            theNetwork.theGame.scoreBoard.addCash(it.attackerData.bits + extraCashGained)
-            it.immuneTo = this
-            theNetwork.theGame.gameActivity.theGameView.theEffects?.fade(it)
-        }
+        val extraCashGained =
+            theNetwork.theGame.heroes[Hero.Type.GAIN_CASH_ON_KILL]?.getStrength()?.toInt()
+                ?: 0 // possible bonus
+        theNetwork.theGame.scoreBoard.addCash(attacker.attackerData.bits + extraCashGained)
+        attacker.immuneTo = this
+        theNetwork.theGame.gameActivity.theGameView.theEffects?.fade(attacker)
     }
 
     fun processInAccumulator(attacker: Attacker)
@@ -410,7 +417,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
              * depending on its type.
              */
     {
-        return (chipData.type == ChipType.ACC && internalRegister != null)
+        return (chipData.type in listOf(ChipType.ACC, ChipType.MEM) && internalRegister != null)
     }
 
     private fun createBitmapForType(): Bitmap?
@@ -565,27 +572,26 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
     }
 
     override fun onDown(event: MotionEvent): Boolean {
-        /* first, check if the click is inside one of the upgrade alternative boxes */
-        /*
-        for (upgrade in upgradePossibilities)
-            if (upgrade.onDown(event)) {
-                upgradePossibilities.clear()
-                return true
-            }
-
-         */
-
-        if (actualRect?.contains(event.x.toInt(), event.y.toInt()) == true
-            && upgradePossibilities.isEmpty()) // gesture is inside this chip
-        {
-            showUpgrades()
-            return true
-        }
-        else
+        if (actualRect?.contains(event.x.toInt(), event.y.toInt()) == false)
+        // gesture is inside this chip
         {
             upgradePossibilities.clear()
             return false
         }
+        if (chipData.type == ChipType.MEM)
+            // activated MEM chips are cleared through tapping
+        {
+            if (isActivated())
+            {
+                internalRegister = null
+                startCooldown()
+                return true
+            }
+        }
+
+        if (upgradePossibilities.isEmpty())
+            showUpgrades()
+        return true
     }
 
     companion object

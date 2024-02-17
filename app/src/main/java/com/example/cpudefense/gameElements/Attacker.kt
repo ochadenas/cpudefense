@@ -153,9 +153,7 @@ open class Attacker(network: Network, type: Representation = Representation.BINA
             }
             Chip.ChipType.MEM ->
             {
-                theNetwork.theGame.gameActivity.theGameView.theEffects?.fade(this)
-                theNetwork.theGame.scoreBoard.addCash(attackerData.bits + extraCashGained())
-                return false // remove() is done after fading
+                // theNetwork.theGame.scoreBoard.addCash(attackerData.bits + extraCashGained())
             }
             Chip.ChipType.ADD ->
             {

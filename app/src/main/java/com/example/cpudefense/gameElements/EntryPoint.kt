@@ -1,6 +1,7 @@
 package com.example.cpudefense.gameElements
 
 import android.graphics.Canvas
+import android.graphics.Rect
 import com.example.cpudefense.networkmap.Network
 import com.example.cpudefense.networkmap.Viewport
 
@@ -8,6 +9,7 @@ class EntryPoint(network: Network, gridX: Int, gridY: Int): Chip(network, gridX,
 {
     init {
         chipData.type = ChipType.ENTRY
+        actualRect = Rect(0,0,0,0)
     }
 
     override fun update() {

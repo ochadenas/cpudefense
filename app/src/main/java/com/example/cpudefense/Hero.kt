@@ -278,7 +278,7 @@ class Hero(var game: Game, type: Type): Fadable {
                 strengthDesc = "x %.2f".format(strength)
                 upgradeDesc = " → %.2f".format(next)
             }
-            Type.DECREASE_UPGRADE_COST ->             {
+            Type.DECREASE_UPGRADE_COST -> {
                 shortDesc = game.resources.getString(R.string.shortdesc_upgrade)
                 strengthDesc = "-%d%%".format(strength.toInt())
                 upgradeDesc = " → -%d%%".format(next.toInt())
