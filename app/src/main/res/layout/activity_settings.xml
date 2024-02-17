@@ -57,7 +57,7 @@
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         >
 
@@ -135,8 +135,8 @@
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/button_back"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
+        android:layout_width="60dp"
+        android:layout_height="48dp"
         android:layout_marginBottom="24dp"
         android:background="@drawable/hp_key_back"
         android:onClick="dismiss"
