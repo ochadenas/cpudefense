@@ -22,9 +22,6 @@ class WelcomeActivity : AppCompatActivity()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_welcome)
         val info = packageManager.getPackageInfo(this.packageName, PackageManager.GET_ACTIVITIES)
-        val versionName = "Version %s ".format(info.versionName)
-        val gameVersion = findViewById<TextView>(R.id.versionText)
-        gameVersion?.text = versionName
     }
 
     private var gameState: String? = null
@@ -76,7 +73,6 @@ class WelcomeActivity : AppCompatActivity()
         determineLevels(prefs)
         showLevelReached()
         val buttonResume = findViewById<Button>(R.id.continueGameButton)
-        buttonResume.background = resources.getDrawable(R.drawable.button_border_white)
         when (gameState)
         {
             "running" -> buttonResume.text = getString(R.string.button_resume)
@@ -125,32 +121,12 @@ class WelcomeActivity : AppCompatActivity()
     {
         val intent = Intent(this, SettingsActivity::class.java)
         startActivity(intent)
+        setupButtons()
     }
 
-    fun startNewGame(@Suppress("UNUSED_PARAMETER") v: View)
+    fun displayAboutDialog(@Suppress("UNUSED_PARAMETER") v: View)
     {
-        val dialog = Dialog(this)
-        dialog.setContentView(R.layout.layout_dialog_new_game)
-        dialog.window?.setLayout(
-            ViewGroup.LayoutParams.WRAP_CONTENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT
-        )
-        dialog.setCancelable(true)
-        dialog.findViewById<TextView>(R.id.question).text = resources.getText(R.string.query_restart_game)
-        val button1 = dialog.findViewById<Button>(R.id.button1)
-        val button2 = dialog.findViewById<Button>(R.id.button2)
-        button2?.text = resources.getText(R.string.yes)
-        button1?.text = resources.getText(R.string.no)
-        button2?.setOnClickListener {
-            dialog.dismiss()
-            val intent = Intent(this, MainGameActivity::class.java)
-            intent.putExtra("RESET_PROGRESS", true)
-            intent.putExtra("START_ON_STAGE", 1)
-            intent.putExtra("CONTINUE_GAME", false)
-            startActivity(intent)
-            setupButtons()
-            }
-        button1?.setOnClickListener { dialog.dismiss() }
-        dialog.show()
+        val intent = Intent(this, AboutActivity::class.java)
+        startActivity(intent)
     }
 }

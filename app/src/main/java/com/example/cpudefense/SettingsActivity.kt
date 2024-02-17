@@ -1,9 +1,12 @@
 package com.example.cpudefense
 
+import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
 import android.text.method.ScrollingMovementMethod
 import android.view.View
+import android.view.ViewGroup
+import android.widget.Button
 import android.widget.Switch
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -58,6 +61,32 @@ class SettingsActivity : AppCompatActivity()
     {
         val intent = Intent(this, AboutActivity::class.java)
         startActivity(intent)
+    }
+
+    fun startNewGame(@Suppress("UNUSED_PARAMETER") v: View)
+    {
+        val dialog = Dialog(this)
+        dialog.setContentView(R.layout.layout_dialog_new_game)
+        dialog.window?.setLayout(
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        )
+        dialog.setCancelable(true)
+        dialog.findViewById<TextView>(R.id.question).text = resources.getText(R.string.query_restart_game)
+        val button1 = dialog.findViewById<Button>(R.id.button1)
+        val button2 = dialog.findViewById<Button>(R.id.button2)
+        button2?.text = resources.getText(R.string.yes)
+        button1?.text = resources.getText(R.string.no)
+        button2?.setOnClickListener {
+            dialog.dismiss()
+            val intent = Intent(this, MainGameActivity::class.java)
+            intent.putExtra("RESET_PROGRESS", true)
+            intent.putExtra("START_ON_STAGE", 1)
+            intent.putExtra("CONTINUE_GAME", false)
+            startActivity(intent)
+        }
+        button1?.setOnClickListener { dialog.dismiss() }
+        dialog.show()
     }
 
 }

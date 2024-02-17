@@ -38,6 +38,10 @@
     <style name="PositiveButtonStyle">
         <item name="android:textColor">@color/text_lightgreen</item>
     </style>
+    <style name="WelcomeButtonStyle">
+        <item name="android:textColor">@color/text_lightgreen</item>
+        <item name="android:background">@color/black</item>
+    </style>
     <style name="textStyle">
         <item name="android:textColor">@color/text_lightgreen</item>
     </style>

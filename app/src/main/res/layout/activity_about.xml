@@ -8,6 +8,79 @@
     android:background="@drawable/shape_border_yellow"
     tools:context=".AboutActivity">
 
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/info_section"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintBottom_toTopOf="@id/about_title_view"
+    app:layout_constraintStart_toStartOf="@id/about_title_view"
+    app:layout_constraintEnd_toEndOf="@id/button_back"
+    >
+
+    <TextView
+        android:id="@+id/info_title_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:padding="8dp"
+        android:text="@string/about_info_title"
+        android:textColor="#FFFFFF"
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+    <TextView
+        android:id="@+id/about_version"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="0dp"
+        android:padding="8dp"
+        android:text="Version"
+        android:textColor="@color/circuit"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/info_title_view"
+        />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/button_wiki"
+        android:layout_width="128dp"
+        android:layout_height="48dp"
+        android:layout_marginBottom="24dp"
+        android:text="@string/link_wiki"
+        android:textColor="@color/white"
+        android:background="@drawable/hp_key"
+        android:onClick="wiki"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/info_text_view"
+        />
+
+    <TextView
+        android:id="@+id/info_text_view"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="0dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginBottom="0dp"
+        android:gravity="start"
+        android:maxEms="20"
+        android:paddingEnd="8dp"
+        android:paddingStart="0dp"
+        android:paddingBottom="8dp"
+        android:text="@string/about_info_text"
+        android:textAlignment="viewStart"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toStartOf="@id/button_wiki"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/about_version"
+     />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+
 
     <TextView
         android:id="@+id/about_title_view"
@@ -19,44 +92,20 @@
         android:textColor="#FFFFFF"
         android:textSize="24sp"
         app:layout_constraintStart_toStartOf="@id/about_text_view"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/info_section"
         />
-
-    <TextView
-        android:id="@+id/about_version"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="0dp"
-        android:padding="8dp"
-        android:text="Version"
-        android:textColor="#FFFFFF"
-        android:textSize="12sp"
-        app:layout_constraintStart_toStartOf="@id/about_text_view"
-        app:layout_constraintTop_toBottomOf="@id/about_title_view"
-        />
-
-    <ImageView
-        android:id="@+id/about_title_image"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:scaleType="fitEnd"
-        app:layout_constraintBottom_toBottomOf="@+id/about_title_view"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/about_title_view"
-        app:layout_constraintTop_toTopOf="@+id/about_title_view"
-        app:srcCompat="@drawable/cryptocoin"
-    />
 
     <TextView
         android:id="@+id/about_text_view"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="0dp"
         android:layout_marginBottom="8dp"
         android:gravity="start"
         android:maxEms="20"
         android:paddingEnd="8dp"
+        android:paddingStart="0dp"
         android:paddingBottom="8dp"
         android:scrollbars="vertical"
         android:text="@string/about_license"
@@ -68,25 +117,16 @@
         app:layout_constraintTop_toBottomOf="@+id/about_title_view"
         app:layout_constraintVertical_bias="0.0" />
 
-    <Button
-        android:id="@+id/button_wiki"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="wiki"
-        android:text="@string/link_wiki"
-        app:layout_constraintTop_toTopOf="@+id/button_back"
-        app:layout_constraintStart_toStartOf="@+id/about_text_view"
-        app:layout_constraintBottom_toBottomOf="@+id/button_back" />
-
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/button_back"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
         android:layout_marginBottom="24dp"
+        android:background="@drawable/hp_key_back"
         android:onClick="dismiss"
-        android:text="@string/button_back"
-        app:layout_constraintBottom_toTopOf="@id/deko"
-        app:layout_constraintEnd_toEndOf="@id/deko" />
+        app:layout_constraintEnd_toEndOf="@+id/deko"
+        app:layout_constraintBottom_toTopOf="@+id/deko"
+        />
 
     <ImageView
         android:id="@+id/deko"

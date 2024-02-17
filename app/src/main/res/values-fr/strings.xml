@@ -58,6 +58,8 @@
     <string name="settings_title">Réglages</string>
     <string name="about_title">A propos de ...</string>
     <string name="about_license">"Ce jeu est open source. Visitez <a href="https://github.com/ochadenas/cpudefense">github.com/ochadenas/cpudefense</a> pour plus d\'informations.\n\nLes portraits des héros de l\'ère de l\'information sont pour la plupart issus d\'œuvres du domaine public.\n\nPhotos originales :\n  Alex Handy (CC BY-SA 2.0)\n  Jacob Appelbaum (CC BY-SA 2.5)\n  Konrad Jacobs (CC BY-SA 2.0 de)\n  Rama (CC BY-SA 2.0 fr)\n  Shervinafshar (CC BY-SA 3.0)\n  Tony Bove (CC BY 3.0)\n  Wolfgang Hunscher (CC BY-SA 3.0)\n  Silvano de Gennaro (courtesy of the author)\n  Clermont Auvergne Métropole (CC BY-SA 4.0)\n  Jean-Frédéric (CC BY 2.0)\n    \nPlatines d\'ordinateur :\n  Autopilot (CC BY-SA 4.0)\n  Bill Bertram (CC-BY 2.0)\n  Oliver Chadenas (CC BY-SA 3.0)\n  Smial (FAL)\n\nToutes autres images :\n  Oliver Chadenas (CC BY-SA 3.0)\n  "</string>
+    <string name="about_info_title">Info</string>
+    <string name="about_info_text">Des informations complémentaires et des astuces pour jouer se trouvent en ligne dans le wiki du jeu.</string>
     <string name="play_level_x">Jouer niveau %d</string>
     <string name="link_wiki">Wiki</string>
     <string name="button_exit">Sortir</string>
@@ -116,7 +118,8 @@
     <string name="settings_show_framerate">Afficher le frame-rate</string>
     <string name="button_purchase_plural">"Recruter [%d écus] "</string>
     <string name="button_back">Fermer</string>
-    <string name="button_about">A propos de ...</string>
+    <string name="button_info">Info</string>
+    <string name="text_about">A propos de ...</string>
     <string name="instr_15">Le surcadençage du processeur peut être dangereux : Plus vos puces fonctionnent rapidement, plus elles chauffent.\n\n\nChaque fois que votre horloge CLK réinitialise une puce, une petite quantité de chaleur est produite. Des températures supérieures à %d degrés peuvent endommager le processeur, ce qui signifie qu\'elles peuvent vous coûter une vie.</string>
     <string name="instr_16">La puce NOP (No operation) ne fait rien. Mais comme elle occupe un emplacement, il peut être utile de la retirer.\n\n\nUne puce NOP 2 ne fait rien non plus. Même deux fois rien.</string>
     <string name="instr_endless">Vous avez réussi tous les niveaux et gagné le jeu !\n\nSi vous voulez, vous pouvez maintenant continuer en mode \"infini\", avec des niveaux générés aléatoirement qui deviennent de plus en plus difficiles.\n\nJusqu\'où irez-vous ?\n\n\n\n</string>

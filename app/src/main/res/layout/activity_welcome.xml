@@ -7,84 +7,87 @@
     android:background="#000000"
     tools:context=".WelcomeActivity">
 
-    <Button
-        android:id="@+id/startGameButton"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:background="@color/purple_500"
-        android:clickable="true"
-        android:focusable="true"
-        android:onClick="startNewGame"
-        android:text="@string/button_startGame"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-
-    <Button
-        android:id="@+id/selectLevelButton"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="@color/purple_500"
-        android:clickable="true"
-        android:focusable="true"
-        android:onClick="startLevelSelection"
-        android:text="@string/selectLevel"
-        app:layout_constraintBottom_toTopOf="@id/continueGameButton"
-        app:layout_constraintEnd_toEndOf="@+id/startGameButton"
-        app:layout_constraintStart_toStartOf="@+id/startGameButton"
-        app:layout_constraintTop_toBottomOf="@id/startGameButton" />
-
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/continueGameButton"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="@color/purple_500"
+        android:layout_width="200dp"
+        android:layout_height="48dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="40dp"
+        android:background="@drawable/hp_key"
         android:clickable="true"
         android:focusable="true"
         android:onClick="resumeGame"
         android:text="@string/button_resume"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/selectLevelButton"
-        app:layout_constraintStart_toStartOf="@+id/startGameButton"
-        app:layout_constraintTop_toBottomOf="@+id/startGameButton" />
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/selectLevelButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
 
-    <Button
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/selectLevelButton"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:layout_marginBottom="40dp"
+        android:background="@drawable/hp_key"
+        android:clickable="true"
+        android:focusable="true"
+        android:onClick="startLevelSelection"
+        android:text="@string/selectLevel"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/startNewGameButton"
+        app:layout_constraintEnd_toEndOf="@+id/continueGameButton"
+        app:layout_constraintStart_toStartOf="@+id/continueGameButton"
+        />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/startNewGameButton"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:layout_marginBottom="40dp"
+        android:background="@drawable/hp_key"
+        android:clickable="true"
+        android:focusable="true"
+        android:onClick="displayAboutDialog"
+        android:text="@string/button_info"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/settingsButton"
+        app:layout_constraintEnd_toEndOf="@+id/continueGameButton"
+        app:layout_constraintStart_toStartOf="@+id/continueGameButton"
+        />
+
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/settingsButton"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="@color/purple_500"
+        android:layout_height="48dp"
+        android:layout_marginBottom="64dp"
+        android:background="@drawable/hp_key"
         android:clickable="true"
         android:focusable="true"
         android:onClick="displaySettingsDialog"
         android:text="@string/settings_title"
+        android:textColor="@color/white"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/continueGameButton"
-        app:layout_constraintStart_toStartOf="@+id/startGameButton"
-        app:layout_constraintTop_toBottomOf="@+id/continueGameButton" />
-
-    <TextView
-        android:id="@+id/versionText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Version"
-        android:textColor="@android:color/primary_text_dark"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toStartOf="@+id/continueGameButton"
+        />
 
     <ImageButton
-        android:id="@+id/settings_button"
+        android:id="@+id/image_settings"
         android:layout_width="96dp"
-        android:layout_height="60dp"
+        android:layout_height="48dp"
         android:layout_marginEnd="8dp"
         android:background="@android:color/transparent"
         android:onClick="displaySettingsDialog"
         android:scaleType="centerInside"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/startGameButton"
-        app:layout_constraintTop_toBottomOf="@+id/continueGameButton"
-        app:srcCompat="@drawable/dip"
+        app:layout_constraintBottom_toBottomOf="@id/settingsButton"
+        app:layout_constraintEnd_toStartOf="@+id/settingsButton"
+        app:layout_constraintTop_toTopOf="@+id/settingsButton"
+        app:srcCompat="@drawable/dip_with_relief"
         tools:ignore="SpeakableTextPresentCheck" />
 
     <ImageView
@@ -93,9 +96,9 @@
         android:layout_height="0dp"
         android:layout_marginEnd="8dp"
         android:scaleType="fitEnd"
-        app:layout_constraintBottom_toBottomOf="@+id/startGameButton"
-        app:layout_constraintEnd_toStartOf="@+id/startGameButton"
-        app:layout_constraintTop_toTopOf="@+id/startGameButton"
+        app:layout_constraintBottom_toBottomOf="@+id/continueGameButton"
+        app:layout_constraintEnd_toStartOf="@+id/continueGameButton"
+        app:layout_constraintTop_toTopOf="@+id/continueGameButton"
         app:srcCompat="@drawable/deko" />
 
     <ImageView
@@ -115,9 +118,9 @@
         android:layout_height="0dp"
         android:layout_marginEnd="8dp"
         android:scaleType="fitEnd"
-        app:layout_constraintBottom_toBottomOf="@+id/continueGameButton"
-        app:layout_constraintEnd_toStartOf="@+id/continueGameButton"
-        app:layout_constraintTop_toTopOf="@+id/continueGameButton"
+        app:layout_constraintBottom_toBottomOf="@+id/startNewGameButton"
+        app:layout_constraintEnd_toStartOf="@+id/startNewGameButton"
+        app:layout_constraintTop_toTopOf="@+id/startNewGameButton"
         app:srcCompat="@drawable/deko" />
 
 
@@ -125,10 +128,11 @@
         android:id="@+id/sevenSegmentDisplay"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="80dp"
         android:onClick="showMaxLevelInfo"
-        app:layout_constraintBottom_toTopOf="@+id/startGameButton"
-        app:layout_constraintEnd_toEndOf="@+id/startGameButton"
+        app:layout_constraintBottom_toTopOf="@+id/continueGameButton"
+        app:layout_constraintEnd_toEndOf="@+id/continueGameButton"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.8"
         app:srcCompat="@drawable/mask"
         tools:ignore="SpeakableTextPresentCheck" />
 

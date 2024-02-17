@@ -13,37 +13,53 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
         android:paddingTop="8dp"
         android:paddingBottom="8dp"
         android:text="@string/settings_title"
         android:textColor="#FFFFFF"
         android:textSize="24sp"
-        app:layout_constraintStart_toStartOf="@id/linearLayout"
-        app:layout_constraintTop_toTopOf="parent" />
-
-
-    <ImageView
-        android:id="@+id/settings_title_image"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_marginEnd="24dp"
-        android:adjustViewBounds="true"
-        android:scaleType="fitStart"
-        app:layout_constraintBottom_toBottomOf="@+id/settings_title_view"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/startNewGameButton"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/settings_title_view"
-        app:srcCompat="@drawable/dip" />
+        />
 
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/startNewGameButton"
+        android:layout_width="194dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/hp_key"
+        android:clickable="true"
+        android:focusable="true"
+        android:onClick="startNewGame"
+        android:text="@string/button_startGame"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/button_back"
+        />
+
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="0dp"
+        android:layout_marginEnd="0dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintStart_toStartOf="@id/settings_title_view"
+        app:layout_constraintEnd_toEndOf="@id/button_back"
+        app:layout_constraintTop_toBottomOf="@+id/settings_title_view"
+        app:layout_constraintBottom_toTopOf="@id/button_back">
 
     <LinearLayout
         android:id="@+id/linearLayout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="32dp"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
         android:orientation="vertical"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/settings_title_view">
+        >
 
         <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/switch_disable_background"
@@ -102,7 +118,7 @@
 
     </LinearLayout>
 
-
+    </ScrollView>
 
     <ImageView
         android:id="@+id/deko"
@@ -117,25 +133,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@drawable/deko_border_horizontal" />
 
-    <Button
-        android:id="@+id/button3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="24dp"
-        android:onClick="about"
-        android:text="@string/button_about"
-        app:layout_constraintBottom_toTopOf="@+id/deko"
-        app:layout_constraintStart_toStartOf="@+id/deko" />
-
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/button_back"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_marginBottom="24dp"
+        android:background="@drawable/hp_key_back"
         android:onClick="dismiss"
-        android:text="@string/button_back"
-        app:layout_constraintBottom_toBottomOf="@+id/button3"
         app:layout_constraintEnd_toEndOf="@+id/deko"
-        app:layout_constraintTop_toTopOf="@+id/button3" />
+        app:layout_constraintBottom_toTopOf="@+id/deko"
+        />
 
 
 

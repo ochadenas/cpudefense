@@ -38,5 +38,13 @@ class AboutActivity : AppCompatActivity()
         catch (exception: Exception) {}  // come here if no external app can handle the request
     }
 
+    fun show_licence(@Suppress("UNUSED_PARAMETER") v: View)
+    {
+        val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/ochadenas/cpudefense#MIT-1-ov-file"))
+        try {
+            startActivity(browserIntent)
+        }
+        catch (exception: Exception) {}  // come here if no external app can handle the request
+    }
 
 }
