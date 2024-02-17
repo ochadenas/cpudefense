@@ -212,17 +212,18 @@ class Marketplace(val game: Game): GameElement()
     }
 
     fun onScroll(event1: MotionEvent?, event2: MotionEvent?, dX: Float, dY: Float): Boolean {
+        val scrollfactor = 0.8f  // higher values make scrolling faster
         if (dY == 0f)
             return false  // only vertical movements are considered here
         event1?.let {
             val posX = it.x.toInt()
             val posY = it.y.toInt()
             if (cardsArea.contains(posX, posY)) {
-                cardViewOffset -= dY / 2.0f
+                cardViewOffset -= dY * scrollfactor
                 arrangeCards(upgrades, cardViewOffset)
             } else if (biographyArea.contains(posX, posY))
             {
-                biographyViewOffset -= dY / 2.0f
+                biographyViewOffset -= dY * scrollfactor
             }
         }
         return true
