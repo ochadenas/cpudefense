@@ -99,7 +99,7 @@ class Marketplace(val game: Game): GameElement()
     private fun createButton()
     {
         val bottomMargin = 40
-        buttonFinish = Button(game.resources.getString(R.string.button_resume),
+        buttonFinish = Button(game.resources.getString(R.string.button_playlevel),
             textSize = Game.purchaseButtonTextSize * game.resources.displayMetrics.scaledDensity,
             style = 1, preferredWidth = biographyArea.width())
         buttonFinish?.let {

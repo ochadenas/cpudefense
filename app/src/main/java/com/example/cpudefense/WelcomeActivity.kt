@@ -13,6 +13,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.cpudefense.gameElements.SevenSegmentDisplay
+import kotlin.math.max
 
 
 class WelcomeActivity : AppCompatActivity()
@@ -73,10 +74,11 @@ class WelcomeActivity : AppCompatActivity()
         determineLevels(prefs)
         showLevelReached()
         val buttonResume = findViewById<Button>(R.id.continueGameButton)
-        when (gameState)
+        when
         {
-            "running" -> buttonResume.text = getString(R.string.button_resume)
-            "complete" -> {
+            maxLevel.number == 0 -> buttonResume.text =  getString(R.string.button_startGame)
+            gameState == "running" -> buttonResume.text = getString(R.string.button_resume)
+            gameState == "complete" -> {
                 buttonResume.text = getString(R.string.play_level_x).format(nextLevelToPlay.number)
             }
             else -> buttonResume.isEnabled = false
@@ -95,16 +97,26 @@ class WelcomeActivity : AppCompatActivity()
     fun resumeGame(@Suppress("UNUSED_PARAMETER") v: View)
     {
         val intent = Intent(this, MainGameActivity::class.java)
-        if (gameState == "running") {
-            intent.putExtra("RESUME_GAME", true)
-            startActivity(intent)
-        }
-        else
-        {
-            intent.putExtra("START_ON_STAGE", nextLevelToPlay.number)
-            intent.putExtra("START_ON_SERIES", nextLevelToPlay.series)
-            intent.putExtra("CONTINUE_GAME", false)  // TODO: wie heißt es nun wirklich?
-            startActivity(intent)
+        when {
+            maxLevel.number == 0 -> {
+                // start new game
+                intent.putExtra("RESET_PROGRESS", true)
+                intent.putExtra("START_ON_STAGE", 1)
+                intent.putExtra("START_ON_SERIES", 0)
+                intent.putExtra("CONTINUE_GAME", false)
+                startActivity(intent)
+            }
+            gameState == "running" -> {
+                intent.putExtra("RESUME_GAME", true)
+                startActivity(intent)
+            }
+            else ->
+            {
+                intent.putExtra("START_ON_STAGE", nextLevelToPlay.number)
+                intent.putExtra("START_ON_SERIES", nextLevelToPlay.series)
+                intent.putExtra("CONTINUE_GAME", false)
+                startActivity(intent)
+            }
         }
     }
 

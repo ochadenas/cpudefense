@@ -118,7 +118,7 @@
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/button_back"
-        android:layout_width="60dp"
+        android:layout_width="54dp"
         android:layout_height="48dp"
         android:layout_marginBottom="24dp"
         android:background="@drawable/hp_key_back"
