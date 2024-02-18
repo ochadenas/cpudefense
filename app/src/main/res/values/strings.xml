@@ -247,6 +247,7 @@ Furthermore, some slots are already taken by unwanted chips you'll have to deal 
     <string name="settings_show_framerate">Show frame rate</string>
     <string name="button_back">Close</string>
     <string name="button_info">Info</string>
+    <string name="button_releasenotes">Release Notes</string>
     <string name="text_about">About …</string>
     <string name="instr_did_you_know">Did you know?</string>
     <string name="settings_keep_levels">Keep created stages in \'endless\' mode</string>
@@ -269,4 +270,27 @@ Furthermore, some slots are already taken by unwanted chips you'll have to deal 
         <item>Snacks are good in moderation.\n\n\n("Tip of the day" in Civilization IV)</item>
         <item>To subtract one number from another in the binary system, you don\'t need to know how to subtract. Instead, you invert the number, add 1 and add the result.\n\nWhy does this work? If you invert a number - for example 0101 1110 (x5E) into 1010 0001 (xA1) - and add the two together, you always get 1111 1111 (i.e. xFF). Add 1 and discard the carry, this will yield 0000 0000. You can therefore interpret the number xA2 (i.e. xA1 plus 1) as "minus x5E". Example: x7F - x5E is x21, and 0x7F + xA2 (shortened to 8 bits) is also x21.</item>
     </string-array>
+    <string name="release_notes">"
+Release Notes
+
+Version 1.29
+============
+
+Version 1.28
+============
+New Features:
+- New "endless" level series
+- In the "About" screen, added links for accessing the game wiki and the license on the Internet.
+- Chips are not removed instantly after being sold. Instead, they complete their current cooldown.
+
+Bugfixes:
+- The game crashed when trying to display kiB values
+
+Miscellaneous:
+- decreased overall attacker frequency
+- slightly increased Mandelbrot's effect
+- Attackers now have their speed slightly altered by ACC chips
+- several adjustments to game play
+"</string>
+
 </resources>

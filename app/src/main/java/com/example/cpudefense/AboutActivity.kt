@@ -2,6 +2,7 @@ package com.example.cpudefense
 
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.text.method.LinkMovementMethod
@@ -9,6 +10,7 @@ import android.text.method.ScrollingMovementMethod
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.setPadding
 
 
 class AboutActivity : AppCompatActivity()
@@ -38,5 +40,21 @@ class AboutActivity : AppCompatActivity()
         catch (exception: Exception) {}  // come here if no external app can handle the request
     }
 
+    fun releasenotes(@Suppress("UNUSED_PARAMETER") v: View)
+    {
+        try {
+
+            val contentView = findViewById<androidx.constraintlayout.widget.ConstraintLayout>(R.id.contents_section)
+            contentView.removeAllViews()
+            val textView = TextView(this)
+            textView.text = getString(R.string.release_notes)
+            textView.setPadding(8)
+            textView.setTextColor(Color.WHITE)
+            textView.textSize = 12f
+            textView.movementMethod = ScrollingMovementMethod()
+            contentView.addView(textView)
+        }
+        catch (exception: Exception) {}
+    }
 
 }

@@ -15,8 +15,8 @@
     <string name="last_stage">Le dernier niveau était %d.</string>
     <string name="cleared">Niveau réussi.</string>
     <string name="success">Tous les niveaus réussis.</string>
-    <string name="button_playlevel">Jouer le niveau</string>
-    <string name="button_nextlevel">Jouer le niveau suivant</string>
+    <string name="button_playlevel">Jouer ce niveau</string>
+    <string name="button_nextlevel">Niveau suivant</string>
     <string name="failed">Niveau échoué.</string>
     <string name="selectLevel">Choix de niveau</string>
     <string name="play_selected_level">Jouer le niveau choisi</string>
