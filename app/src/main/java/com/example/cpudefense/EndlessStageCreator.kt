@@ -87,13 +87,18 @@ class EndlessStageCreator(val stage: Stage)
             entrySectors.add(getByCoordinate(SectorCoord(2,0)))
         if (Random.nextFloat() < .2)
             entrySectors.add(getByCoordinate(SectorCoord(1,0)))
-        if (Random.nextFloat() < .3)
+        if (Random.nextFloat() < .3 || entrySectors.isEmpty())
             entrySectors.add(getByCoordinate(SectorCoord(0,1)))
-        entrySectors.forEach {
-            it?.type = SectorType.ENTRY
-        }
-        val exit = getByCoordinate(SectorCoord(numberOfSectorsX-1,numberOfSectorsY-1))
-        exit?.type = SectorType.EXIT
+        entrySectors.forEach { it?.type = SectorType.ENTRY }
+
+        var exitSectors = mutableListOf<Sector?>()
+        if (Random.nextFloat() < .3)
+            exitSectors.add(getByCoordinate(SectorCoord(0,numberOfSectorsY-1)))
+        if (Random.nextFloat() < .1)
+            exitSectors.add(getByCoordinate(SectorCoord(numberOfSectorsX-1,numberOfSectorsY-2)))
+        if (Random.nextFloat() < 0.8 || exitSectors.isEmpty())
+            exitSectors.add(getByCoordinate(SectorCoord(numberOfSectorsX-1,numberOfSectorsY-1)))
+        exitSectors.forEach { it?.type = SectorType.EXIT }
 
         for (count in 1 .. 5)
             entrySectors.random()?.let { sector ->
@@ -385,7 +390,7 @@ class EndlessStageCreator(val stage: Stage)
 
             init {
                 when (number) {
-                    in 1..2 -> {
+                    1 -> {
                         // three nodes in a vertical line
                         createNodes = { stage: Stage, area: Rect ->
                             val chip1 = stage.createChip(
@@ -404,6 +409,23 @@ class EndlessStageCreator(val stage: Stage)
                         }
                         possibleEntries = arrayOf(Direction.DOWN, Direction.LEFT, Direction.RIGHT)
                         possibleExits = arrayOf(Direction.DOWN, Direction.LEFT, Direction.RIGHT)
+                    }
+                    2 -> {
+                        // three chips, angled
+                        createNodes = { stage: Stage, area: Rect ->
+                            val x1 = (area.left + area.centerX()) / 2
+                            val x2 = (2 * area.right + area.centerX()) / 3
+                            val y1 = (area.top + area.centerY()) / 2
+                            val y2 = (area.bottom + area.centerY()) / 2
+                            val chip1 = stage.createChip(x1, y1, nextIdent())
+                            val chip2 = stage.createChip(x2, y1, nextIdent())
+                            val chip3 = stage.createChip(x2, y2, nextIdent())
+                            nodes.add(chip1)
+                            nodes.add(chip2)
+                            nodes.add(chip3)
+                        }
+                        possibleEntries = arrayOf(Direction.DOWN, Direction.RIGHT)
+                        possibleExits = arrayOf(Direction.DOWN, Direction.RIGHT)
                     }
                     3 -> {
                         // two chips diagonal
@@ -477,7 +499,24 @@ class EndlessStageCreator(val stage: Stage)
                         possibleEntries = arrayOf(Direction.RIGHT, Direction.UP, Direction.DOWN)
                         possibleExits = arrayOf(Direction.RIGHT, Direction.UP, Direction.DOWN)
                     }
-                    in 7..10 -> {
+                    7 -> {
+                        // three chips, angled
+                        createNodes = { stage: Stage, area: Rect ->
+                            val x1 = (area.left + area.centerX()) / 2
+                            val x2 = (2 * area.right + area.centerX()) / 3
+                            val y1 = (area.top + area.centerY()) / 2
+                            val y2 = (area.bottom + area.centerY()) / 2
+                            val chip1 = stage.createChip(x2, y1, nextIdent())
+                            val chip2 = stage.createChip(x1, y1, nextIdent())
+                            val chip3 = stage.createChip(x1, y2, nextIdent())
+                            nodes.add(chip1)
+                            nodes.add(chip2)
+                            nodes.add(chip3)
+                        }
+                        possibleEntries = arrayOf(Direction.DOWN, Direction.RIGHT)
+                        possibleExits = arrayOf(Direction.DOWN, Direction.RIGHT)
+                    }
+                    8 -> {
                         // four nodes
                         createNodes = { stage: Stage, area: Rect ->
                             val chip1 = stage.createChip(
@@ -504,13 +543,20 @@ class EndlessStageCreator(val stage: Stage)
                         possibleEntries = arrayOf(Direction.RIGHT, Direction.DOWN)
                         possibleExits = arrayOf(Direction.LEFT, Direction.DOWN)
                     }
-                    else -> {
+                    in 9 .. 10 -> {
                         // one node
                         createNodes = { stage: Stage, area: Rect ->
                             val newChip = stage.createChip(
                                 Random.nextInt(area.left + 2, area.right - 2),
                                 Random.nextInt(area.top + 2, area.bottom - 2), nextIdent()
                             )
+                            nodes.add(newChip)
+                        }
+                    }
+                    else -> {
+                        // one node, centered
+                        createNodes = { stage: Stage, area: Rect ->
+                            val newChip = stage.createChip(area.centerX(), area.centerY(), nextIdent())
                             nodes.add(newChip)
                         }
                     }

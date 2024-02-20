@@ -112,8 +112,9 @@ class Network(val theGame: Game, x: Int, y: Int): GameElement() {
             obj.display(canvas, viewport)
         for (obj in nodes.values)
             (obj as Chip).displayUpgrades(canvas)
-        //if (data.sectorSizeX > 0 && data.sectorSizeY > 0)
-        //    EndlessStageCreator.displaySectors(canvas, viewport, data)
+        if (false)  // for debugging purposes
+            if (data.sectorSizeX > 0 && data.sectorSizeY > 0)
+                EndlessStageCreator.displaySectors(canvas, viewport, data)
     }
 
     fun makeSnapshot(canvas: Canvas, viewport: Viewport)
