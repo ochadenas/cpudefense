@@ -163,7 +163,7 @@ class WelcomeActivity : AppCompatActivity()
             ViewGroup.LayoutParams.WRAP_CONTENT,
             ViewGroup.LayoutParams.WRAP_CONTENT
         )
-        dialog.setCancelable(true)
+        dialog.setCancelable(false)
         dialog.findViewById<TextView>(R.id.question).text = resources.getText(R.string.message_of_the_day)
         val button1 = dialog.findViewById<Button>(R.id.button1)
         button1?.text = resources.getText(R.string.close)
