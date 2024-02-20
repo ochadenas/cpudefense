@@ -513,8 +513,8 @@ class EndlessStageCreator(val stage: Stage)
                             nodes.add(chip2)
                             nodes.add(chip3)
                         }
-                        possibleEntries = arrayOf(Direction.DOWN, Direction.RIGHT)
-                        possibleExits = arrayOf(Direction.DOWN, Direction.RIGHT)
+                        possibleEntries = arrayOf(Direction.DOWN, Direction.LEFT)
+                        possibleExits = arrayOf(Direction.DOWN, Direction.RIGHT, Direction.LEFT)
                     }
                     8 -> {
                         // four nodes
