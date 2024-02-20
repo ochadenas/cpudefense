@@ -1,0 +1,12 @@
+New Features:
+- New design for welcome screen. Moved "start new game" to "settings". Added Release Notes in "info" section.
+- Revised generation of levels in "endless" series and made these levels clearer. Multiple CPUs are now possible.
+
+Bugfixes:
+- Attackers were accelerated too much in ACC chips
+- Correction of speed control button size
+- Scrolling hero list was too slow
+
+Miscellaneous:
+- IMPORTANT: MEM chips must now be cleared "by hand" before they can absorb next attackers.
+
