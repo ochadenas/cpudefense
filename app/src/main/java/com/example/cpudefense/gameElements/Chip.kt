@@ -404,7 +404,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
                 else -> number1 and number2
             }
             attacker.changeNumberTo(newValue)
-            var change_in_speed = attacker.data.speed * Random.nextFloat() * 0.3f
+            var change_in_speed = attacker.data.speed * (Random.nextFloat() - 0.5f) * 0.3f
             attacker.data.speed += change_in_speed
             attacker.setCurrentSpeed()
             internalRegister = null
