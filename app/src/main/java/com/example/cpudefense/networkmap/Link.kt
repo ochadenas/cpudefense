@@ -27,6 +27,7 @@ class Link(val theNetwork: Network, var node1: Node, var node2: Node, var ident:
     var interPointOnGrid: Coord? = null
 
     var lengthOnGrid: Float = 0f
+    var usageCount: Int = 0 // number of times this link is in a track. Used during creation.
     var connectorWidth = 6f
     var connectorRadius = 8f
     val paintConnector = Paint()

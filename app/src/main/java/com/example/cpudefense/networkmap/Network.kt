@@ -211,7 +211,12 @@ class Network(val theGame: Game, x: Int, y: Int): GameElement() {
         var track = Track(this)
         track.data.linkIdents = linkIdents
         track.data.isCircle = isCircle
-        linkIdents.forEach { track.links.add(links[it]) }
+        linkIdents.forEach {ident ->
+            links[ident]?.let {
+                track.links.add(it)
+                it.usageCount += 1
+            }
+        }
         return track
     }
 

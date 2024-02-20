@@ -10,6 +10,7 @@ import com.example.cpudefense.gameElements.GameElement
 import com.example.cpudefense.gameElements.Vehicle
 import com.example.cpudefense.utils.makeSquare
 import com.example.cpudefense.utils.setCenter
+import java.util.concurrent.CopyOnWriteArrayList
 
 open class Node(val theNetwork: Network, x: Float, y: Float): GameElement()
 {
@@ -24,6 +25,7 @@ open class Node(val theNetwork: Network, x: Float, y: Float): GameElement()
 
     var data = Data(ident = -1, gridX = x, gridY = y, range = 0.0f)
     var posOnGrid = Coord(Pair(x,y))
+    var connectedLinks = CopyOnWriteArrayList<Link>() // used during level setup
 
     var distanceToVehicle: HashMap<Vehicle, Float> = HashMap()
     open var actualRect: Rect? = null

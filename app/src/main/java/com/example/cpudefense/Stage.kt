@@ -292,6 +292,8 @@ class Stage(var theGame: Game) {
         else {
             val link = Link(network, node1, node2, ident, mask)
             network.addLink(link, ident)
+            node1.connectedLinks.add(link)
+            node2.connectedLinks.add(link)
             return link
         }
     }

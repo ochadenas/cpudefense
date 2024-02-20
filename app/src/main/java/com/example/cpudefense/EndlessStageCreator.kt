@@ -6,6 +6,7 @@ import android.graphics.Paint
 import android.graphics.Rect
 import com.example.cpudefense.gameElements.Attacker
 import com.example.cpudefense.gameElements.Chip
+import com.example.cpudefense.networkmap.Link
 import com.example.cpudefense.networkmap.Network
 import com.example.cpudefense.networkmap.Viewport
 import com.example.cpudefense.utils.setTopLeft
@@ -107,7 +108,22 @@ class EndlessStageCreator(val stage: Stage)
             val track = createTrackFromPath(path)
             stage.createTrack(track, ident)
         }
-        
+
+        // remove isolated chips
+        // stage.network.nodes.entries.removeIf { it.value.connectedLinks.size == 0 }  // preferred solution, but requires API24
+
+        // clumsy solution:
+        val iterator = stage.network.nodes.entries.iterator()
+        while (iterator.hasNext()) {
+            val node = iterator.next().value
+            if (node.connectedLinks.size == 0)
+                iterator.remove()
+        }
+
+        // set mask for the graphical representations of the links
+        for (link in stage.network.links.values)
+            setMask(link)
+
         createWaves()
         stage.rewardCoins = 3
         return
@@ -178,17 +194,22 @@ class EndlessStageCreator(val stage: Stage)
         return null
     }
 
-    fun getMask(): Int
+    fun getMask(link: Link? = null): Int
     /** returns a random value for the link mask */
     {
-        return when (Random.nextInt(10))
-        {
-            in 0..1 -> 0x06
-            in 2..3 -> 0x03
-            in 4..5 -> 0x07
-            6 -> 0x0f
-            in 7 .. 8 -> 0x04
-            else -> 0x02
+        return 0x06
+    }
+
+    fun setMask(link: Link?)
+    {
+        link?.let {
+            when (link.usageCount) {
+                0 -> it.mask = 0x08 // should not happen
+                1 -> it.mask = 0x01
+                2 -> it.mask = 0x06
+                3 -> it.mask = 0x07
+                else -> it?.mask = 0x0F
+            }
         }
     }
 
@@ -209,7 +230,8 @@ class EndlessStageCreator(val stage: Stage)
      * included in the list
      * @param allowEntries: whether to avoid entries as possible neighbour (false) or allow them (true) */
     {
-        val possibleDirections = Direction.values()
+        // val possibleDirections = Direction.values()
+        val possibleDirections = mutableListOf(Direction.DOWN, Direction.LEFT, Direction.RIGHT)
         possibleDirections.shuffle()
 
         for (dir in possibleDirections)
