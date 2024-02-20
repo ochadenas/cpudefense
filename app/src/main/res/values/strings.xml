@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">ChipDefense</string>
     <string name="button_startGame">Start new game</string>
+    <string name="quit">Quit</string>
     <string name="pref_filename" translatable="false">prefs.xml</string>
     <string name="pref_filename_level_structure" translatable="false">structure</string>
     <string name="button_resume">Resume game</string>
@@ -32,6 +33,7 @@
     <string name="query_restart_game">Really start a new game? This will reset all your progress.</string>
     <string name="no">No</string>
     <string name="yes">Yes</string>
+    <string name="close">Close</string>
 
     <string name="instr_1">
 "Your computer is being invaded by an evil virus. Rogue code fragments - shown as Ones and Zeroes - try to get through to the cpu.
@@ -270,7 +272,8 @@ Furthermore, some slots are already taken by unwanted chips you'll have to deal 
         <item>Snacks are good in moderation.\n\n\n("Tip of the day" in Civilization IV)</item>
         <item>To subtract one number from another in the binary system, you don\'t need to know how to subtract. Instead, you invert the number, add 1 and add the result.\n\nWhy does this work? If you invert a number - for example 0101 1110 (x5E) into 1010 0001 (xA1) - and add the two together, you always get 1111 1111 (i.e. xFF). Add 1 and discard the carry, this will yield 0000 0000. You can therefore interpret the number xA2 (i.e. xA1 plus 1) as "minus x5E". Example: x7F - x5E is x21, and 0x7F + xA2 (shortened to 8 bits) is also x21.</item>
     </string-array>
-    <string name="release_notes">"
+    <string name="message_of_the_day">There have been changes to game play, notably to the MEM chips. Check out the Release Notes in the INFO screen.</string>
+    <string name="release_notes" translatable="false">"
 Release Notes
 
 Version 1.29
@@ -291,6 +294,97 @@ Miscellaneous:
 - slightly increased Mandelbrot's effect
 - Attackers now have their speed slightly altered by ACC chips
 - several adjustments to game play
+
+Version 1.27
+============
+New Features:
+- Chips can be bought and sold even when game is paused.
+- Introduction of "heat". Overheating may result in loss of one life.
+- Temperature sensor added to score board.
+- New chip type: NOP
+- New hero: Jack Kilby
+
+Bugfixes:
+- Passing coins do no longer activate MEM chips.
+- Chip type is shown on description of range-extending heroes.
+- Text on "Hire" button did not change on purchase or reset.
+- Score board layout improved.
+
+Miscellaneous:
+- Re-organization of preferences / saved games file
+- Changed the way how "game speed" is handled
+
+Version 1.26
+============
+New Features:
+- new "settings" and "about" dialog
+- hero biography is now scrollable
+- added button to lock scrolling of the game viewport
+
+Bugfixes:
+- fixed a bug that led to loss of heroes in version 1.25.
+  Added correction code to refund coins lost due to this bug.
+- chip sell prices were not converted to B or kiB
+- SHR 9 (and higher) chips had no effect
+- attackers stopped appearing when pausing the game between two waves
+- corrected delay between waves in "fast forward" mode
+
+Miscellaneous:
+- stage 8 made easier
+- LEDs now go out instead of turning red
+
+Version 1.25
+============
+New Features:
+- Chips can be bought and sold even when game is paused.
+- Introduction of "heat". Overheating may result in loss of one life.
+- Temperature sensor added to score board.
+- New chip type: NOP
+- New hero: Jack Kilby
+
+Bugfixes:
+- Passing coins do no longer activate MEM chips.
+- Chip type is shown on description of range-extending heroes.
+- Text on "Hire" button did not change on purchase or reset.
+- Score board layout improved.
+
+Miscellaneous:
+- Re-organization of preferences / saved games file
+- Changed the way how "game speed" is handled
+
+
+Version 1.24
+============
+New Features:
+- new background pictures
+- hero costs are shown on the 'hire' button
+- overall small graphical improvements
+
+Bugfixes:
+- game stays in portrait mode, keeps the device awake
+- corrected coin count and size of attackers when resuming game
+
+Miscellaneous:
+- replaced Android system style dialogs by custom design
+
+Version 1.22
+============
+New Features:
+- Chips can be bought and sold even when game is paused.
+- Introduction of "heat". Overheating may result in loss of one life.
+- Temperature sensor added to score board.
+- New chip type: NOP
+- New hero: Jack Kilby
+
+Bugfixes:
+- Passing coins do no longer activate MEM chips.
+- Chip type is shown on description of range-extending heroes.
+- Text on "Hire" button did not change on purchase or reset.
+- Score board layout improved.
+
+Miscellaneous:
+- Re-organization of preferences / saved games file
+- Changed the way how "game speed" is handled
 "</string>
 
 </resources>

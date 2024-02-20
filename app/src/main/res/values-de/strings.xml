@@ -2,6 +2,7 @@
 <resources>
     <string name="app_name">ChipDefense</string>
     <string name="button_startGame">Neues Spiel</string>
+    <string name="quit">Ende</string>
     <string name="button_resume">Spiel fortsetzen</string>
     <string name="button_playlevel">Level spielen</string>
     <string name="button_nextlevel">Nächsten Level spielen</string>
@@ -24,6 +25,7 @@
     <string name="level_entry">Level %d</string>
     <string name="level_selector">Level-Auswahl</string>
     <string name="button_refund">Zurücksetzen</string>
+    <string name="close">Schließen</string>
     <string name="instr_1">
 "Dein Computer ist von einem üblen Virus befallen. Stücke von Schadcode - dargestellt als Einsen und Nullen - versuchen, zur CPU zu gelangen.
 
@@ -166,6 +168,7 @@ Turing wurde aufgrund seiner Homosexualität massiv diskriminiert. Er starb 1954
     <string name="button_purchase_plural">Anheuern [%d Coins]</string>
     <string name="button_back">Schließen</string>
     <string name="button_info">Info</string>
+    <string name="button_releasenotes">Release Notes</string>
     <string name="text_about">Über …</string>
     <string name="instr_16">Der NOP Chip (für \"no operation\") tut gar nichts, belegt allerdings einen wertvollen Slot.\n\nEin NOP 2 Chip tut ebenfalls nicht, und das gleich zwei Mal.\n</string>
     <string name="instr_endless">Du hast alle Level geschafft und das Spiel gewonnen!\n\nWenn du willst, kannst du nun im \"Endlos\"-Modus weitermachen, mit zufällig generierten Leveln, die immer schwieriger werden.\n\nWie weit kommst du?\n</string>
@@ -195,4 +198,5 @@ Turing wurde aufgrund seiner Homosexualität massiv diskriminiert. Er starb 1954
     <string name="shortdesc_limit_unwanted">Unerwünschte Chips\n</string>
     <string name="HERO_EFFECT_LIMITUNWANTED">Reduziert die Anzahl unerwünschter Chips</string>
     <string name="about_version">Version %s.</string>
+    <string name="message_of_the_day">Es wurden Änderungen am Spiel vorgenommen, vor allem an den MEM-Chips. Lesen Sie die Versionshinweise unter INFO.</string>
 </resources>

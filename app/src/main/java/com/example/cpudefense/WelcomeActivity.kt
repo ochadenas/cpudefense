@@ -3,6 +3,7 @@ package com.example.cpudefense
 import android.app.Dialog
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.View
@@ -18,11 +19,12 @@ import kotlin.math.max
 
 class WelcomeActivity : AppCompatActivity()
 {
-    // TODO: do not use standard buttons, but define styles for active and inactive versions
+    var info: PackageInfo? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_welcome)
-        val info = packageManager.getPackageInfo(this.packageName, PackageManager.GET_ACTIVITIES)
+        info = packageManager.getPackageInfo(this.packageName, PackageManager.GET_ACTIVITIES)
     }
 
     private var gameState: String? = null
@@ -83,6 +85,17 @@ class WelcomeActivity : AppCompatActivity()
             }
             else -> buttonResume.isEnabled = false
         }
+        // display version message, if not already displayed earlier
+        info?.let {
+            val messageDisplayed = prefs.getString("VERSIONMESSAGE_SEEN", "")
+            if (messageDisplayed != it.versionName) {
+                showMessageOfTheDay()
+                with(prefs.edit()) {
+                    putString("VERSIONMESSAGE_SEEN", it.versionName)
+                    commit()
+                }
+            }
+        }
     }
 
     override fun onActivityReenter(resultCode: Int, data: Intent?) {
@@ -140,5 +153,26 @@ class WelcomeActivity : AppCompatActivity()
     {
         val intent = Intent(this, AboutActivity::class.java)
         startActivity(intent)
+    }
+
+    fun showMessageOfTheDay()
+    {
+        val dialog = Dialog(this)
+        dialog.setContentView(R.layout.layout_dialog_message_of_the_day)
+        dialog.window?.setLayout(
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        )
+        dialog.setCancelable(true)
+        dialog.findViewById<TextView>(R.id.question).text = resources.getText(R.string.message_of_the_day)
+        val button1 = dialog.findViewById<Button>(R.id.button1)
+        button1?.text = resources.getText(R.string.close)
+        button1?.setOnClickListener { dialog.dismiss() }
+        dialog.show()
+    }
+
+    fun exitActivity(@Suppress("UNUSED_PARAMETER") v: View)
+    {
+        finish()
     }
 }

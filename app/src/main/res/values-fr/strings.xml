@@ -2,6 +2,7 @@
 <resources>
     <string name="app_name">ChipDefense</string>
     <string name="button_startGame">Nouveau jeu</string>
+    <string name="quit">Quitter</string>
     <string name="button_resume">Reprendre le jeu</string>
     <string name="scoreboard_waves">Vague</string>
     <string name="scoreboard_inf">Inf</string>
@@ -29,6 +30,7 @@
     <string name="yes">Oui</string>
     <string name="button_purchase">"Recruter [1 écu] "</string>
     <string name="query_reset">Remettre à zéro tous les héros et héroïnes ?</string>
+    <string name="close">Fermer</string>
     <string name="instr_1">Votre ordinateur est envahi par un virus. Des fragments de code maléfique - représentés par des uns et des zéros - tentent d\'atteindre le processeur.\n\nTapez sur l\'emplacement vide pour ajouter une puce comme défense contre l\'attaque, puis tapez à nouveau pour confirmer votre choix.\n\nLa puce la plus basique est \'SUB 1\' qui soustrait 1 à la valeur de l\'attaquant : les 1 deviennent des 0, et les 0 disparaissent et ne constituent plus une menace.</string>
     <string name="instr_2">Vous pouvez appuyer sur un attaquant. Cela inversera sa valeur : 1 devient 0 et 0 devient 1.\n\nInverser un 0 rendra en fait l\'attaquant plus dangereux, alors faites attention de ne pas taper sur tout ce que vous voyez.</string>
     <string name="instr_3">La monnaie dans ce jeu est l\'information. Elle est affichée en bas à gauche.\n\nDétruisez les attaquants pour obtenir de l\'information sur le virus. Utilisez-la pour acheter des puces supplémentaires ou pour améliorer celles existantes.</string>
@@ -121,6 +123,7 @@
     <string name="button_purchase_plural">"Recruter [%d écus] "</string>
     <string name="button_back">Fermer</string>
     <string name="button_info">Info</string>
+    <string name="button_releasenotes">Release Notes</string>
     <string name="text_about">A propos de ...</string>
     <string name="instr_15">Le surcadençage du processeur peut être dangereux : Plus vos puces fonctionnent rapidement, plus elles chauffent.\n\n\nChaque fois que votre horloge CLK réinitialise une puce, une petite quantité de chaleur est produite. Des températures supérieures à %d degrés peuvent endommager le processeur, ce qui signifie qu\'elles peuvent vous coûter une vie.</string>
     <string name="instr_16">La puce NOP (No operation) ne fait rien. Mais comme elle occupe un emplacement, il peut être utile de la retirer.\n\n\nUne puce NOP 2 ne fait rien non plus. Même deux fois rien.</string>
@@ -151,4 +154,5 @@
     <string name="shortdesc_limit_unwanted">puces indésirables</string>
     <string name="HERO_EFFECT_LIMITUNWANTED">Réduit le nombre de puces indésirables</string>
     <string name="about_version">Version %s.</string>
+    <string name="message_of_the_day">Des modifications ont été apportées au jeu, notamment au niveau des puces MEM. Consultez les notes de version dans l\'écran INFO.</string>
 </resources>
