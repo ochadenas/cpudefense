@@ -70,6 +70,7 @@
     <color name="upgrade_active_chip_shr">#649DF3</color>
     <color name="upgrade_active_chip_acc">#FFC107</color>
     <color name="upgrade_active_chip_mem">#774CC3</color>
+    <color name="upgrade_active_chip_clk">#FF973B</color>
 
 
 </resources>

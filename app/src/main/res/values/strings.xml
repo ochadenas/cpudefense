@@ -182,6 +182,7 @@ The programming language Pascal is named after him."</string>
     <string name="schneier">"Bruce Schneier is an expert on cryptography and information security. He has written important books on the subject, most notably 'Applied Cryptography', and has designed several cryptographic algorithms.\n        \nHe is not afraid of criticizing governments or global companies if he deems their actions counterproductive to security or violating the right of privacy.\n "</string>
     <string name="meier">Sidney K. Meier has created some of the most influential strategy games and revolutionised the genre. With comparatively simple rules, his games simulate the complexities of reality amazingly well. And they always tell a story: of the age of the railways, of the American Revolution, or - as in his most famous work \'Civilization\' - of 6000 years of human history.</string>
     <string name="kilby">Jack St. Clair Kilby had the idea of combining semiconductor elements - such as transistors or diodes - in an integrated circuit (IC) instead of wiring the components individually on a board. This was the basis for microchips and processors and made modern electronics with its miniaturisation possible in the first place.\n\n\nJack Kilby is also regarded as co-inventor of the pocket calculator and thermal printer.</string>
+    <string name="chappe">Together with his four brothers Ignace, Pierre François, René and Abraham, Claude Chappe developed the optical telegraph. His tachygraph was the first system with which information could be transmitted quickly over long distances, making it the forerunner of all modern communication. Around 1830, the Chappe semaphore system connected Paris with many important cities in France and Europe.</string>
     <string name="settings_title">Settings</string>
     <string name="about_title">About</string>
     <string name="about_version">Version %s.</string>
@@ -199,6 +200,7 @@ The programming language Pascal is named after him."</string>
     <string name="shortdesc_SHR">SHR chip speed</string>
     <string name="shortdesc_ACC">ACC chip speed</string>
     <string name="shortdesc_MEM">MEM chip speed</string>
+    <string name="shortdesc_heat">Generated heat</string>
     <string name="shortdesc_upgrade">Chip upgrade cost</string>
     <string name="shortdesc_lives">Additional lives</string>
     <string name="shortdesc_frequency">Attacker frequency</string>
@@ -213,6 +215,7 @@ The programming language Pascal is named after him."</string>
     <string name="toast_next_stage">Stage %d</string>
     <string name="toast_stage_cleared">Stage cleared</string>
     <string name="HERO_EFFECT_CHIPSPEED">Decreases cooldown time of all %s chips</string>
+    <string name="HERO_EFFECT_HEAT">Reduces the amount of generated heat</string>
     <string name="HERO_EFFECT_STARTINFO">Increases information at start of level</string>
     <string name="HERO_EFFECT_UPGRADECOST">Reduces upgrade cost of all chips</string>
     <string name="HERO_EFFECT_LIVES">Grants additional lives</string>

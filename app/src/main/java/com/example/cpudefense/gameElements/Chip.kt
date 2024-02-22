@@ -264,7 +264,10 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
                 // avoid resetting when clock tick comes _too_ soon after the regular reset
                 val minDelay = kotlin.math.min(chip.getCooldownTime() * 0.2f, this.getCooldownTime())
                 if (chip.chipData.cooldownTimer <= chip.getCooldownTime()-minDelay) {
-                    theNetwork.theGame.state.heat += chip.chipData.cooldownTimer
+                    var generatedHeat = chip.chipData.cooldownTimer
+                    val factor = 100f - (network.theGame.heroes[Hero.Type.REDUCE_HEAT]?.getStrength() ?: 0f)
+                    generatedHeat *= (factor / 100f)
+                    theNetwork.theGame.state.heat += generatedHeat
                     chip.chipData.cooldownTimer = 0f
                 }
             }
