@@ -17,8 +17,7 @@ import com.example.cpudefense.gameElements.SevenSegmentDisplay
 import kotlin.math.max
 
 
-class WelcomeActivity : AppCompatActivity()
-{
+class WelcomeActivity : AppCompatActivity() {
     var info: PackageInfo? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,8 +32,7 @@ class WelcomeActivity : AppCompatActivity()
     private var turboSeriesAvailable = false
     private var endlessSeriesAvailable = false
 
-    private fun determineLevels(prefs: SharedPreferences)
-    {
+    private fun determineLevels(prefs: SharedPreferences) {
         maxLevel.series = prefs.getInt("MAXSERIES", 1)
         maxLevel.number = prefs.getInt("MAXSTAGE", 0)
         nextLevelToPlay.series = prefs.getInt("LASTSERIES", 1)
@@ -44,58 +42,65 @@ class WelcomeActivity : AppCompatActivity()
     }
 
     private fun showLevelReached()
-    /** displays the max level reached so far as graphical display */
+            /** displays the max level reached so far as graphical display */
     {
         // display as graphics:
         var displayLit = true
-        val display = SevenSegmentDisplay(2, (80 * resources.displayMetrics.scaledDensity).toInt(), this)
+        val display =
+            SevenSegmentDisplay(2, (80 * resources.displayMetrics.scaledDensity).toInt(), this)
         val imageView = findViewById<ImageView>(R.id.sevenSegmentDisplay)
         if (maxLevel.number == 0)
             displayLit = false
-        when (maxLevel.series)
-        {
-            1 -> imageView.setImageBitmap(display.getDisplayBitmap(maxLevel.number, SevenSegmentDisplay.LedColors.GREEN, displayLit))
-            2 -> imageView.setImageBitmap(display.getDisplayBitmap(maxLevel.number, SevenSegmentDisplay.LedColors.YELLOW, displayLit))
-            else -> imageView.setImageBitmap(display.getDisplayBitmap(maxLevel.number, SevenSegmentDisplay.LedColors.RED, displayLit))
+        when (maxLevel.series) {
+            1 -> imageView.setImageBitmap(
+                display.getDisplayBitmap(
+                    maxLevel.number,
+                    SevenSegmentDisplay.LedColors.GREEN,
+                    displayLit
+                )
+            )
+            2 -> imageView.setImageBitmap(
+                display.getDisplayBitmap(
+                    maxLevel.number,
+                    SevenSegmentDisplay.LedColors.YELLOW,
+                    displayLit
+                )
+            )
+            else -> imageView.setImageBitmap(
+                display.getDisplayBitmap(
+                    maxLevel.number,
+                    SevenSegmentDisplay.LedColors.RED,
+                    displayLit
+                )
+            )
         }
     }
 
-    fun showMaxLevelInfo(v: View)
-    {
+    fun showMaxLevelInfo(v: View) {
         /** displays the max level reached so far as graphical display */
-        val seriesName = if (maxLevel.series == 2) getString(R.string.name_series_2) else getString(R.string.name_series_1)
+        val seriesName =
+            if (maxLevel.series == 2) getString(R.string.name_series_2) else getString(R.string.name_series_1)
         val textToDisplay = getString(R.string.stage_reached).format(seriesName, maxLevel.number)
         Toast.makeText(this, textToDisplay, Toast.LENGTH_LONG).show()
 
     }
 
-    private fun setupButtons()
-    {
+    private fun setupButtons() {
         val prefs = getSharedPreferences(getString(R.string.pref_filename), MODE_PRIVATE)
         gameState = prefs.getString("STATUS", "")
         determineLevels(prefs)
         showLevelReached()
         val buttonResume = findViewById<Button>(R.id.continueGameButton)
-        when
-        {
-            maxLevel.number == 0 -> buttonResume.text =  getString(R.string.button_startGame)
+        when {
+            maxLevel.number == 0 -> buttonResume.text = getString(R.string.button_startGame)
             gameState == "running" -> buttonResume.text = getString(R.string.button_resume)
             gameState == "complete" -> {
                 buttonResume.text = getString(R.string.play_level_x).format(nextLevelToPlay.number)
             }
             else -> buttonResume.isEnabled = false
         }
-        // display version message, if not already displayed earlier
-        info?.let {
-            val messageDisplayed = prefs.getString("VERSIONMESSAGE_SEEN", "")
-            if (messageDisplayed != it.versionName) {
-                showMessageOfTheDay()
-                with(prefs.edit()) {
-                    putString("VERSIONMESSAGE_SEEN", it.versionName)
-                    commit()
-                }
-            }
-        }
+        // uncomment if there is a message to display
+        // showVersionMessage()
     }
 
     override fun onActivityReenter(resultCode: Int, data: Intent?) {
@@ -107,8 +112,7 @@ class WelcomeActivity : AppCompatActivity()
         setupButtons()
     }
 
-    fun resumeGame(@Suppress("UNUSED_PARAMETER") v: View)
-    {
+    fun resumeGame(@Suppress("UNUSED_PARAMETER") v: View) {
         val intent = Intent(this, MainGameActivity::class.java)
         when {
             maxLevel.number == 0 -> {
@@ -123,8 +127,7 @@ class WelcomeActivity : AppCompatActivity()
                 intent.putExtra("RESUME_GAME", true)
                 startActivity(intent)
             }
-            else ->
-            {
+            else -> {
                 intent.putExtra("START_ON_STAGE", nextLevelToPlay.number)
                 intent.putExtra("START_ON_SERIES", nextLevelToPlay.series)
                 intent.putExtra("CONTINUE_GAME", false)
@@ -133,8 +136,7 @@ class WelcomeActivity : AppCompatActivity()
         }
     }
 
-    fun startLevelSelection(@Suppress("UNUSED_PARAMETER") v: View)
-    {
+    fun startLevelSelection(@Suppress("UNUSED_PARAMETER") v: View) {
         val intent = Intent(this, LevelSelectActivity::class.java)
         intent.putExtra("TURBO_AVAILABLE", turboSeriesAvailable)
         intent.putExtra("ENDLESS_AVAILABLE", endlessSeriesAvailable)
@@ -142,17 +144,31 @@ class WelcomeActivity : AppCompatActivity()
         startActivity(intent)
     }
 
-    fun displaySettingsDialog(@Suppress("UNUSED_PARAMETER") v: View)
-    {
+    fun displaySettingsDialog(@Suppress("UNUSED_PARAMETER") v: View) {
         val intent = Intent(this, SettingsActivity::class.java)
         startActivity(intent)
         setupButtons()
     }
 
-    fun displayAboutDialog(@Suppress("UNUSED_PARAMETER") v: View)
-    {
+    fun displayAboutDialog(@Suppress("UNUSED_PARAMETER") v: View) {
         val intent = Intent(this, AboutActivity::class.java)
         startActivity(intent)
+    }
+
+    fun showVersionMessage()
+    /** display version message, if not already displayed earlier */
+    {
+        val prefs = getSharedPreferences(getString(R.string.pref_filename), MODE_PRIVATE)
+        info?.let {
+            val messageDisplayed = prefs.getString("VERSIONMESSAGE_SEEN", "")
+            if (messageDisplayed != it.versionName) {
+                showMessageOfTheDay()
+                with(prefs.edit()) {
+                    putString("VERSIONMESSAGE_SEEN", it.versionName)
+                    commit()
+                }
+            }
+        }
     }
 
     fun showMessageOfTheDay()
