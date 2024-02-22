@@ -150,7 +150,8 @@ class LevelSelectActivity : AppCompatActivity() {
         // try to determine whether a new level has been added,
         // and it becomes available directly
         val highestLevelInList = ArrayList(stageSummary.keys).last()
-        if (highestLevelInList<Game.maxLevelAvailable && (stageSummary[highestLevelInList]?.won == true))
+        if ((highestLevelInList<Game.maxLevelAvailable || series == 3)
+                    && (stageSummary[highestLevelInList]?.won == true))
             stageSummary[highestLevelInList+1] = Stage.Summary()
 
         for ((level, summary) in stageSummary.entries)

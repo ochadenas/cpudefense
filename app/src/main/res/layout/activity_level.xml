@@ -87,18 +87,21 @@
 
     </ScrollView>
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/playLevelButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@color/chips_shr_foreground"
+        android:layout_width="200dp"
+        android:layout_height="48dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="32dp"
+        android:background="@drawable/hp_key"
+        android:clickable="true"
+        android:focusable="true"
         android:onClick="startGame"
         android:text="@string/play_selected_level"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         />
-
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
