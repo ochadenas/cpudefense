@@ -101,7 +101,7 @@ Turing wurde aufgrund seiner Homosexualität massiv diskriminiert. Er starb 1954
     <string name="tramiel">Als Kind überlebte Idek Tramielski Auschwitz. Er emigrierte 1947 in die USA und gründete dort 1954 Commodore International, die Schreibmaschinen baute. Im Jahr 1982 stellte Commodore den C64 vor, den ersten echten Heimcomputer der Welt.\n\nDer C64 brach alle Verkaufsrekorde. Er hatte nicht nur unglaubliche 64 kiB RAM, sondern auch hochauflösende Grafik, digitalen Sound, einen eingebauten BASIC-Interpreter und zwei Joystick-Ports. Für unzählige Menschen bedeutete der \'Brotkasten\' den Einstieg ins Computerzeitalter.\n</string>
     <string name="pascal">\nBlaise Pascal war ein Universalgelehrter auf vielen Gebieten der Mathematik, Philosophie und Physik. Für das spätere Informationszeitalter waren seine Rechenmaschinen, die \'Pascalinen\', ein früher Vorläufer.\n\nDie Programmiersprache Pascal ist nach ihm benannt.</string>
     <string name="meier">Sidney K. Meier hat einige der einflussreichsten Strategiespiele geschaffen und dieses Genre revolutioniert. Mit vergleichsweise einfachen Regeln simulieren seine Spiele die komplexen Zusammenhänge der Realität erstaunlich gut. Und sie erzählen immer eine Geschichte: Vom Zeitalter der Eisenbahn, von der amerikanischen Revolution, oder aber - wie in seinem bekanntesten Werk \'Civilization\' - von 6000 Jahren menschlicher Geschichte.</string>
-    <string name="chappe">"Zusammen mit seinen vier Brüdern Ignace, Pierre François, René und Abraham entwickelte Claude Chappe den optischen Telegrafen. Sein Tachygraph war das erste System, mit dem Informationen schnell über große Distanz übertragen werden konnten, und damit der Vorläufer aller moderner Kommunikation. Um 1830 verband das Chappe-Semaphorensystem Paris mit vielen wichtigen Städten in Frankreich und Europa.\n "</string>
+    <string name="chappe">"Zusammen mit seinen vier Brüdern Ignace, Pierre François, René und Abraham entwickelte Claude Chappe den optischen Telegrafen. Sein Tachygraph war das erste System, mit dem Informationen schnell über große Distanz übertragen werden konnten, und damit der Vorläufer aller moderner Kommunikation. Um 1830 war Paris über Chappe-Semaphoren mit vielen wichtigen Städten in Frankreich und Europa verbunden.\n "</string>
     <string name="settings_title">Einstellungen</string>
     <string name="about_title">Über dieses Spiel</string>
     <string name="yes">Ja</string>
@@ -117,6 +117,7 @@ Turing wurde aufgrund seiner Homosexualität massiv diskriminiert. Er starb 1954
     <string name="shortdesc_SHR">Geschw. SHR-Chips</string>
     <string name="shortdesc_ACC">Geschw. ACC-Chips</string>
     <string name="shortdesc_MEM">Geschw. MEM-Chips</string>
+    <string name="shortdesc_heat">Wärmeerzeugung</string>
     <string name="shortdesc_upgrade">Kosten für Upgrade</string>
     <string name="shortdesc_lives">Extra-Leben</string>
     <string name="shortdesc_frequency">Frequenz der Angreifer</string>
@@ -132,6 +133,7 @@ Turing wurde aufgrund seiner Homosexualität massiv diskriminiert. Er starb 1954
     <string name="instr_12">Zwei weitere Chiparten: ADD und SHL.\n\nDiese tun das Gegenteil von SUB und SHR: Sie addieren 1 zu der Zahl bzw. schieben die Bits nach links.\n\nDas ist natürlich unerwünscht, denn es macht die Zahlen größer. Für diese Chips bedeutet ein \'Upgrade\', dass sie schwächer werden oder ganz verschwinden.</string>
     <string name="instr_13">"Beachte, dass CryptoCoins weder von ACC- noch von MEM-Chips beeinflusst werden.\n "</string>
     <string name="HERO_EFFECT_CHIPSPEED">verringert die Abklingzeit aller %s Chips</string>
+    <string name="HERO_EFFECT_HEAT">verringert die Wärmeerzeugung</string>
     <string name="HERO_EFFECT_STARTINFO">startet alle Level mit mehr Information</string>
     <string name="HERO_EFFECT_UPGRADECOST">verringert die Kosten für Upgrades</string>
     <string name="HERO_EFFECT_LIVES">gewährt zusätzliche Leben</string>
@@ -157,7 +159,7 @@ Turing wurde aufgrund seiner Homosexualität massiv diskriminiert. Er starb 1954
     <string name="settings_show_atts_in_range">Angreifer in Reichweite zeigen</string>
     <string name="mandelbrot">Der Mathematiker Benoît Mandelbrot war der wichtigste Begründer der Fraktalen Geometrie, mit der sich nicht nur viele Strukturen in der Natur sehr gut beschreiben, sondern auch phantastische Grafiken am Rechner erzeugen lassen. \n\nDie grafischen Darstellungen der Mandelbrot-Menge, die sogenannten Apfelmännchen, gingen viral und begründeten ein neues Zeitalter der Computerkunst.\n</string>
     <string name="shortdesc_info_on_kill">Infogewinn</string>
-    <string name="HERO_EFFECT_GAININFO">Erhöht die durch Zerstören der Angreifer gewonnene Information</string>
+    <string name="HERO_EFFECT_GAININFO">erhöht die durch Zerstören der Angreifer gewonnene Information</string>
     <string name="schneier">Bruce Schneier ist ein Experte für Kryptographie und Informationssicherheit. Er hat wichtige Bücher zu diesem Thema geschrieben, vor allem \"Applied Cryptography\", und mehrere kryptographische Algorithmen entwickelt.\n        \nEr scheut sich nicht, Regierungen oder Großkonzerne zu kritisieren, wenn er der Meinung ist, dass ihre Maßnahmen kontraproduktiv für die Sicherheit sind oder das Recht auf Privatsphäre verletzen.</string>
     <string name="cost_desc">[Kosten: %d]</string>
     <string name="hopper">\nGrace Brewster Murray Hopper hatte die Idee,  Computerprogramme  statt als Abfolge von Einsen und Nullen in einer für den Menschen lesbaren Sprache zu formulieren. \n\nSie entwickelte die Programmiersprache FLOW-MATIC und erfand damit den ersten Compiler.</string>
@@ -198,7 +200,7 @@ Turing wurde aufgrund seiner Homosexualität massiv diskriminiert. Er starb 1954
     <string name="settings_fast_fast_forward">Schnelles \"Fast Forward\"</string>
     <string name="kilby">Jack St. Clair Kilby hatte die Idee, Halbleiterelemente - also etwa Transistoren oder Dioden - in einer integrierten Schaltung (IC) zusammenzufassen, statt die Bauteile einzeln auf einer Leiterplatine zu verdrahten. Dies war die Grundlage für Mikrochips und Prozessoren und machte die gesamte moderne Elektronik mit ihrer Miniaturisierung erst möglich.\n\nJack Kilby gilt auch als Mit-Erfinder von Taschenrechner und Thermodrucker.\n</string>
     <string name="shortdesc_limit_unwanted">Unerwünschte Chips\n</string>
-    <string name="HERO_EFFECT_LIMITUNWANTED">Reduziert die Anzahl unerwünschter Chips</string>
+    <string name="HERO_EFFECT_LIMITUNWANTED">reduziert die Anzahl unerwünschter Chips</string>
     <string name="about_version">Version %s.</string>
     <string name="message_of_the_day">Es wurden Änderungen am Spiel vorgenommen, vor allem an den MEM-Chips. Lesen Sie die Versionshinweise unter INFO.</string>
 </resources>

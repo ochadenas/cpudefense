@@ -266,7 +266,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
                 if (chip.chipData.cooldownTimer <= chip.getCooldownTime()-minDelay) {
                     var generatedHeat = chip.chipData.cooldownTimer
                     val factor = 100f - (network.theGame.heroes[Hero.Type.REDUCE_HEAT]?.getStrength() ?: 0f)
-                    generatedHeat *= (factor / 100f)
+                    generatedHeat *= (factor * Game.heatAdjustmentFactor / 100f)
                     theNetwork.theGame.state.heat += generatedHeat
                     chip.chipData.cooldownTimer = 0f
                 }

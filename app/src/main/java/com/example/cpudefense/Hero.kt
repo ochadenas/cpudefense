@@ -281,8 +281,8 @@ class Hero(var game: Game, type: Type): Fadable {
             }
             Type.REDUCE_HEAT -> {
                 shortDesc = game.resources.getString(R.string.shortdesc_heat)
-                strengthDesc = "-%d".format(strength.toInt())
-                upgradeDesc = " → -%d".format(next.toInt())
+                strengthDesc = "-%d%%".format(strength.toInt())
+                upgradeDesc = " → -%d%%".format(next.toInt())
             }
             Type.DECREASE_UPGRADE_COST -> {
                 shortDesc = game.resources.getString(R.string.shortdesc_upgrade)
@@ -556,7 +556,7 @@ class Hero(var game: Game, type: Type): Fadable {
                 {
                     name = "Chappe"
                     fullName = "Claude Chappe"
-                    effect = game.resources.getString(R.string.HERO_EFFECT_CHIPSPEED)
+                    effect = game.resources.getString(R.string.HERO_EFFECT_HEAT)
                     vitae = game.resources.getString(R.string.chappe)
                     picture = BitmapFactory.decodeResource(game.resources, R.drawable.chappe)
                 }

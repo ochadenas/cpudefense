@@ -65,6 +65,7 @@ class Game(val gameActivity: MainGameActivity) {
             Chip.ChipUpgrades.CLK to 32)
 
         // temperature control:
+        val heatAdjustmentFactor = 1.6f // how many heat is generated per shortened tick
         val baseTemperature = 17
         val heatPerDegree = 200
         val temperatureCooldownFactor = 0.99995
@@ -570,11 +571,11 @@ class Game(val gameActivity: MainGameActivity) {
         if (state.heat == 0.0)
             return
         state.heat *= temperatureCooldownFactor  // reduce heat. TODO: consider global speed factor
-        val overheat = state.heat - temperatureLimit*heatPerDegree
-        if (overheat > 0 && Random.nextFloat() < overheat*0.0001)  // chance of damaging the CPU
+        val overheat = state.heat - (temperatureLimit- baseTemperature)*heatPerDegree
+        if ((overheat > 0) && (Random.nextDouble() < (overheat * 0.00001)))  // chance of damaging the CPU
         {
             gameActivity.runOnUiThread {
-                val toast: Toast = Toast.makeText(gameActivity, "CPU damage from overheating", Toast.LENGTH_SHORT)
+                val toast: Toast = Toast.makeText(gameActivity, resources.getString(R.string.overheat), Toast.LENGTH_SHORT)
                 toast.show()
             }
             state.heat *= 0.6f
