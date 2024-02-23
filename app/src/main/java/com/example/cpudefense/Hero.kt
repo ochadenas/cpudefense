@@ -24,6 +24,7 @@ class Hero(var game: Game, type: Type): Fadable {
     - Torvalds
     - Baudot
     - John Conway
+    - M. Hamilton
      */
 
     enum class Type { INCREASE_CHIP_SUB_SPEED, INCREASE_CHIP_SUB_RANGE,

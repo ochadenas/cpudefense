@@ -8,6 +8,7 @@ import com.example.cpudefense.networkmap.Network
 import com.example.cpudefense.networkmap.Node
 import com.example.cpudefense.networkmap.Viewport
 import com.example.cpudefense.utils.displayTextCenteredInRect
+import com.example.cpudefense.utils.drawOutline
 import com.example.cpudefense.utils.setCenter
 import java.lang.Math.abs
 import java.util.concurrent.CopyOnWriteArrayList
@@ -49,6 +50,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
 
     private var paintBitmap = Paint()
     private var paintOutline = Paint()
+    private var paintUpgradesBackground = Paint()
     private var outlineWidth = 2f
     private val paintBackground = Paint()
     private var paintLines = Paint()
@@ -59,9 +61,13 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
         paintOutline.color = Color.WHITE
         paintOutline.style = Paint.Style.STROKE
         paintBackground.style = Paint.Style.FILL
+        paintBackground.alpha = 255
         paintLines.style = Paint.Style.STROKE
         paintLines.color = Color.WHITE
         paintLines.strokeWidth = 4.0f
+        paintUpgradesBackground.color = Color.WHITE
+        paintUpgradesBackground.strokeWidth = 16.0f
+        paintUpgradesBackground.style = Paint.Style.STROKE
     }
 
     fun sellChip()
@@ -333,8 +339,16 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
     fun displayUpgrades(canvas: Canvas)
     /** if applicable, show the different upgrade possibilities */
     {
+        if (upgradePossibilities.size == 0)
+            return
         for (upgrade in upgradePossibilities)
             upgrade.display(canvas)
+
+        var upgradesArea = upgradePossibilities.first().actualRect
+        for (upgrade in upgradePossibilities)
+            upgradesArea.union(upgrade.actualRect)
+        paintUpgradesBackground.color = chipData.color
+        canvas.drawRect(upgradesArea, paintUpgradesBackground)
     }
 
     private fun attackerInRange(attacker: Attacker): Boolean
