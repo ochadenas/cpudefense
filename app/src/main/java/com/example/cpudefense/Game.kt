@@ -452,6 +452,7 @@ class Game(val gameActivity: MainGameActivity) {
         state.coinsExtra = 0
         setSummaryOfStage(level, nextStage.summary)
         state.heat = 0.0
+        state.phase = GamePhase.RUNNING
         gameActivity.setGameSpeed(GameSpeed.NORMAL)  // reset speed to normal when starting next stage
         speedControlPanel.resetButtons()
         viewport.reset()
