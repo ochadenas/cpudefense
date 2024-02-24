@@ -247,12 +247,15 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
         }
         /* check if there are attackers that we can shoot at */
         try {
-            distanceToVehicle.forEach { (vehicle, distance) ->
-                val dist: Float? = distanceTo(vehicle)
-                if (dist != null && dist <= data.range) {
-                    shootAt(vehicle as Attacker)
-                    return
+            val vehiclesInRange = distanceToVehicle.toList().filter {distanceTo(it.first)?.let { it <= data.range } ?: false }
+            if (!vehiclesInRange.isEmpty()) {
+                val possibleTargets = vehiclesInRange.sortedBy { (it.first as Attacker).attackerData.number }
+                val target = when (this.chipData.type)
+                {
+                    ChipType.SUB -> possibleTargets.first().first
+                    else -> possibleTargets.last().first
                 }
+                shootAt(target as Attacker)
             }
         }
         catch (exception: ConcurrentModificationException)
