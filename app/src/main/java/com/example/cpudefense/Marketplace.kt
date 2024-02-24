@@ -52,7 +52,6 @@ class Marketplace(val game: Game): GameElement()
 
     fun fillMarket(level: Stage.Identifier)
     {
-        // upgrades.clear()
         nextGameLevel = level
         val newUpgrades = mutableListOf<Hero>()
         for (type in Hero.Type.values())

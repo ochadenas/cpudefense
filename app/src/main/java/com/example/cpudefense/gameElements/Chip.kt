@@ -9,6 +9,7 @@ import com.example.cpudefense.networkmap.Node
 import com.example.cpudefense.networkmap.Viewport
 import com.example.cpudefense.utils.displayTextCenteredInRect
 import com.example.cpudefense.utils.drawOutline
+import com.example.cpudefense.utils.inflate
 import com.example.cpudefense.utils.setCenter
 import java.lang.Math.abs
 import java.util.concurrent.CopyOnWriteArrayList
@@ -65,9 +66,10 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
         paintLines.style = Paint.Style.STROKE
         paintLines.color = Color.WHITE
         paintLines.strokeWidth = 4.0f
-        paintUpgradesBackground.color = Color.WHITE
+        paintUpgradesBackground.color = Color.BLACK
         paintUpgradesBackground.strokeWidth = 16.0f
-        paintUpgradesBackground.style = Paint.Style.STROKE
+        paintUpgradesBackground.style = Paint.Style.FILL
+        paintUpgradesBackground.alpha = 240
     }
 
     fun sellChip()
@@ -341,14 +343,17 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
     {
         if (upgradePossibilities.size == 0)
             return
+        var upgradesArea = Rect(0,0,0,0)  // start with empty rect
+        /* create a rectangle that contains all update boxes including their labels */
+        for (upgrade in upgradePossibilities) {
+            upgradesArea.union(upgrade.actualRect)
+            upgradesArea.union(upgrade.labelRect)
+        }
+        upgradesArea.inflate(16)
+        canvas.drawRect(upgradesArea, paintUpgradesBackground)
+        /* display the upgrade boxes */
         for (upgrade in upgradePossibilities)
             upgrade.display(canvas)
-
-        var upgradesArea = upgradePossibilities.first().actualRect
-        for (upgrade in upgradePossibilities)
-            upgradesArea.union(upgrade.actualRect)
-        paintUpgradesBackground.color = chipData.color
-        canvas.drawRect(upgradesArea, paintUpgradesBackground)
     }
 
     private fun attackerInRange(attacker: Attacker): Boolean
@@ -567,7 +572,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
                 Pair(3.0f, -0.5f),
                 Pair(3.0f, +0.5f)
             )
-            val factorY = 1.5 * rect.height()
+            val factorY = 1.6 * rect.height()
             val factorX: Float
             if (network.theGame.viewport.isInRightHalfOfViewport(posX))
                 factorX = -1.2f * rect.width()

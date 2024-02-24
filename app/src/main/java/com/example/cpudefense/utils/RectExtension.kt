@@ -45,6 +45,12 @@ inline fun Rect.setBottomRight(x: Int, y: Int): Rect
     return this
 }
 
+inline fun Rect.setBottomLeft(x: Int, y: Int): Rect
+{
+    this.set(x, y-height(), x+width(), y)
+    return this
+}
+
 inline fun Rect.center(): Pair<Int, Int>
 {
     return Pair(this.centerX(), this.centerY())
@@ -159,7 +165,7 @@ fun Rect.displayTextLeftAlignedInRect(canvas: Canvas, text: String, paint: Paint
     val bounds = Rect()
     paint.getTextBounds(text, 0, text.length, bounds)
     paint.textAlign = Paint.Align.LEFT
-    val rect = Rect(0, this.centerY() - bounds.height()/2, bounds.width(), this.centerY() + bounds.height()/2)
+    val rect = Rect(this.left, this.centerY() - bounds.height()/2, this.left+bounds.width(), this.centerY() + bounds.height()/2)
     canvas.drawText(text, rect.left.toFloat(), rect.bottom.toFloat(), paint)
     return rect
 }

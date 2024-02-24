@@ -4,14 +4,14 @@ import android.graphics.*
 import android.view.MotionEvent
 import com.example.cpudefense.*
 import com.example.cpudefense.effects.Movable
-import com.example.cpudefense.utils.displayTextCenteredInRect
-import com.example.cpudefense.utils.setCenter
+import com.example.cpudefense.utils.*
 
 class ChipUpgrade(val chipToUpgrade: Chip, val type: Chip.ChipUpgrades,
                   var posX: Int, var posY: Int, val color: Int): Movable
 {
     val game = chipToUpgrade.network.theGame
     var actualRect = Rect(chipToUpgrade.actualRect)
+    var labelRect = Rect(0,0,0,0)
     private var price = calculatePrice()
     private val paintBackground = Paint()
     private val paintText = Paint()
@@ -142,13 +142,18 @@ class ChipUpgrade(val chipToUpgrade: Chip, val type: Chip.ChipUpgrades,
         canvas.drawRect(actualRect, paintFrame)
 
         /* display the price */
-        val priceRect = Rect(actualRect.right - 10, actualRect.top - 20, actualRect.right+50, actualRect.top)
-        paintBackground.alpha = 160
-        canvas.drawRect(priceRect, paintBackground)
+        paintBackground.alpha = 40
+        paintBackground.color = Color.BLACK
         paintText.typeface = Typeface.create("sans-serif-condensed", Typeface.ITALIC)
         paintText.textSize = (Game.chipTextSize - 0) * game.resources.displayMetrics.scaledDensity
-                paintText.color = if (canAfford()) paintFrame.color else Color.YELLOW
-        canvas.drawText(game.scoreBoard.informationToString(price), actualRect.right.toFloat()-4, actualRect.top.toFloat()+6, paintText)
+        paintText.color = if (canAfford()) paintFrame.color else Color.YELLOW
+        val priceText = game.scoreBoard.informationToString(price)
+        paintText.getTextBounds(priceText, 0, priceText.length, labelRect)
+        //
+        labelRect.setBottomLeft(actualRect.centerX(), actualRect.top+2)
+        labelRect.inflate(1)
+        canvas.drawRect(labelRect, paintBackground)
+        canvas.drawText(priceText, labelRect.left.toFloat(), labelRect.bottom.toFloat(), paintText)
     }
 }
 

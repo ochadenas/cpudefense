@@ -199,12 +199,12 @@ class Game(val gameActivity: MainGameActivity) {
                 gameActivity.setGameActivityStatus(MainGameActivity.GameActivityStatus.BETWEEN_LEVELS)
             }
             else -> {
-                state.phase = GamePhase.RUNNING
                 currentStage?.let {
                     currentWave = if (it.waves.size > 0) it.waves[0]
                     else it.nextWave()
                     speedControlPanel.resetButtons()
                 }
+                state.phase = GamePhase.RUNNING
             }
         }
         if (background == null)
@@ -343,6 +343,9 @@ class Game(val gameActivity: MainGameActivity) {
                     chip.upgradePossibilities.clear()
                     return true
                 }
+            /* if we come here, then the click was not on an update. */
+            if (chip.actualRect?.contains(p0.x.toInt(), p0.y.toInt()) == false)
+                chip.upgradePossibilities.clear()  // clear update boxes of other chips
         }
         /* check the nodes themselves */
         for (obj in network.nodes.values)
@@ -452,16 +455,15 @@ class Game(val gameActivity: MainGameActivity) {
         state.coinsExtra = 0
         setSummaryOfStage(level, nextStage.summary)
         state.heat = 0.0
-        state.phase = GamePhase.RUNNING
         gameActivity.setGameSpeed(GameSpeed.NORMAL)  // reset speed to normal when starting next stage
         speedControlPanel.resetButtons()
+        scoreBoard.recreateBitmap()
         viewport.reset()
         Persistency(gameActivity).saveState(this)
 
         viewport.setGridSize(nextStage.network.data.gridSizeX, nextStage.network.data.gridSizeY)
         state.phase = GamePhase.RUNNING
         currentWave = nextStage.nextWave()
-
         currentStage = nextStage
         if (!gameActivity.settings.configDisableBackground)
             background?.choose(level.number)
