@@ -23,7 +23,6 @@ class Marketplace(val game: Game): GameElement()
     private var biographyArea = Rect()
     private var biographyAreaMargin = 20
     private var clearPaint = Paint()
-    private val textPaint = Paint()
     private var paint = Paint()
     private var cardViewOffset = 0f  // used for scrolling
     private var biographyViewOffset = 0f  // used for scrolling
@@ -82,7 +81,7 @@ class Marketplace(val game: Game): GameElement()
     {
         val space = 20
         val offset = (Game.cardHeight*game.resources.displayMetrics.scaledDensity).toInt() + space
-        var pos = offset + dY.toInt()
+        var pos = cardsArea.top + space + dY.toInt()
         for (card in cards)
         {
             card.setSize()
@@ -217,12 +216,18 @@ class Marketplace(val game: Game): GameElement()
         event1?.let {
             val posX = it.x.toInt()
             val posY = it.y.toInt()
-            if (cardsArea.contains(posX, posY)) {
-                cardViewOffset -= dY * scrollfactor
-                arrangeCards(upgrades, cardViewOffset)
-            } else if (biographyArea.contains(posX, posY))
-            {
-                biographyViewOffset -= dY * scrollfactor
+            when {
+                cardsArea.contains(posX, posY) -> {
+                    cardViewOffset -= dY * scrollfactor
+                    if (cardViewOffset>0f)
+                        cardViewOffset=0f
+                    arrangeCards(upgrades, cardViewOffset)
+                }
+                biographyArea.contains(posX, posY) -> {
+                    biographyViewOffset -= dY * scrollfactor
+                    if (biographyViewOffset>0f) // avoid scrolling when already at end of area
+                        biographyViewOffset=0f
+                }
             }
         }
         return true
