@@ -24,7 +24,7 @@ import kotlin.random.Random
 
 class Game(val gameActivity: MainGameActivity) {
     companion object Params {
-        const val maxLevelAvailable = 28
+        const val maxLevelAvailable = 29
 
         // feature toggles:
         val enableEndlessMode = true

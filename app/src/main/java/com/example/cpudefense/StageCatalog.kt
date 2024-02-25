@@ -1,6 +1,7 @@
 package com.example.cpudefense
 
 import com.example.cpudefense.gameElements.*
+import com.example.cpudefense.networkmap.Link
 import kotlin.random.Random
 
 class StageCatalog
@@ -318,41 +319,45 @@ class StageCatalog
                         rewardCoins = 3
                     }
                     8 -> {
-                        initializeNetwork(55, 50)
+                        initializeNetwork(50, 50)
 
-                        createChip(1, 25, type = Chip.ChipType.ENTRY)
-                        createChip(27, 15, 1)
-                        createChip(42, 15, 2)
-                        createChip(27, 25, 3)
-                        createChip(42, 25, 4)
-                        createChip(27, 35, 5)
-                        createChip(42, 35, 6)
-                        createChip(50, 25, type = Chip.ChipType.CPU)
+                        createChip(23, 45, 0, type = Chip.ChipType.ENTRY)
+                        createChip(12, 40, 1)
+                        createChip(5, 30, 2)
+                        createChip(5, 20, 3)
+                        createChip(12, 10, 4)
+                        createChip(25, 5, 5)
+                        createChip(38, 10, 6)
+                        createChip(45, 20, 7)
+                        createChip(45, 30, 8)
+                        createChip(38, 40, 9)
+                        createChip(28, 45, 10, type = Chip.ChipType.CPU)
 
+                        createLink(0, 1, 1, variant = Link.Variant.CONCAVE)
+                        createLink(1, 2, 2)
+                        createLink(2, 3, 3)
+                        createLink(3, 4, 4)
+                        createLink(5, 4, 5, variant = Link.Variant.CONCAVE)
+                        createLink(5, 6, 6)
+                        createLink(6, 7, 7, variant = Link.Variant.CONCAVE)
+                        createLink(7, 8, 8)
+                        createLink(8, 9, 9, variant = Link.Variant.CONCAVE)
+                        createLink(9,10,10)
+                        createLink(2, 8,11,0x06)
+                        createLink(3, 7,12,0x06)
 
-                        createLink(0, 3, 1)
-                        createLink(3, 1, 2)
-                        createLink(1, 2, 3)
-                        createLink(2, 4, 4)
-                        createLink(3, 4, 5)
-                        createLink(3, 5, 6)
-                        createLink(5, 6, 7)
-                        createLink(6, 4, 8)
-                        createLink(4, 999, 9)
+                        createTrack(listOf(1, 2, 11, 9, 10), 0)
+                        createTrack(listOf(1, 2, 3, 12, 8, 9, 10), 1)
+                        createTrack(listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10), 2)
+                        createTrack(listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10), 3)
+                        createTrack(listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10), 4)
 
-                        createTrack(listOf(1, 5, 4, 3, 2, 5, 9), 0)
-                        createTrack(listOf(1, 5, 8, 7, 6, 5, 9), 1)
-                        createTrack(listOf(1, 5, 4, 3, 2, 5, 9), 2)
-                        createTrack(listOf(1, 5, 8, 7, 6, 5, 9), 3)
-                        createTrack(listOf(1, 5, 9), 4)
-
-                        createWave(10, 2, .120f, 1.2f)
-                        createWave(16, 2, .150f, 1.4f)
-                        createWave(16, 2, .160f, 1.5f)
-                        createWave(20, 2, .180f, 1.7f)
-                        createWave(25, 2, .220f, 1.9f)
-                        createWave(20, 2, .300f, 2.1f)
-                        createWave(20, 2, .340f, 2.2f)
+                        createWave(16, 2, .125f, 1.1f)
+                        createWave(20, 4, .120f, 1.3f)
+                        createWave(20, 7, .110f, 1.6f)
+                        createWave(20, 11, .110f, 1.8f)
+                        createWave(20, 15, .090f, 2.0f, coins = 1)
+                        createWave(20, 24, .080f, 2.2f, coins = 0)
 
                         data.chipsAllowed =
                             setOf(
@@ -463,7 +468,7 @@ class StageCatalog
                         createChip(25, 42, type = Chip.ChipType.CPU)
                         chips[7]?.setType(Chip.ChipType.SUB)
 
-                        createLink(50, 1, 1, mask = 0x0E)
+                        createLink(50, 1, 1, mask = 0x0E, variant = Link.Variant.CONCAVE)
                         createLink(52, 2, 2, mask = 0x07)
                         createLink(1, 3, 3, mask = 0x0E)
                         createLink(51, 4, 4, mask = 0x07)
@@ -472,7 +477,7 @@ class StageCatalog
                         createLink(4, 9, 7, mask = 0x07)
                         createLink(9, 7, 12, mask = 0x07)
                         createLink(5, 8, 8, mask = 0x07)
-                        createLink(6, 999, 9, mask = 0x0E)
+                        createLink(6, 999, 9, mask = 0x0E, variant = Link.Variant.CONCAVE)
                         createLink(7, 999, 10, mask = 0x07)
                         createLink(8, 999, 11, mask = 0x07)
 
@@ -1040,65 +1045,48 @@ class StageCatalog
                         rewardCoins = 3
                     }
                     22 -> {
-                        initializeNetwork(50, 50)
+                        initializeNetwork(55, 50)
 
-                        createChip(10, 45, ident = 100, type = Chip.ChipType.ENTRY)
-                        createChip(11, 40, 1)
-                        createChip(8, 22, 2)
-                        createChip(11, 10, 3)
-                        createChip(20, 10, ident = 900, type = Chip.ChipType.CPU)
+                        createChip(1, 25, type = Chip.ChipType.ENTRY)
+                        createChip(27, 15, 1)
+                        createChip(42, 15, 2)
+                        createChip(27, 25, 3)
+                        createChip(42, 25, 4)
+                        createChip(27, 35, 5)
+                        createChip(42, 35, 6)
+                        createChip(50, 25, type = Chip.ChipType.CPU)
 
-                        createChip(30, 45, ident = 101, type = Chip.ChipType.ENTRY)
-                        createChip(30, 40, 4)
-                        createChip(21, 40, 5)
-                        createChip(18, 22, 6)
-                        createChip(30, 25, ident = 901, type = Chip.ChipType.CPU)
 
-                        createChip(30, 5, ident = 102, type = Chip.ChipType.ENTRY)
-                        createChip(30, 10, 7)
-                        createChip(40, 10, 8)
-                        createChip(43, 22, 9)
-                        createChip(40, 40, ident = 902, type = Chip.ChipType.CPU)
-
-                        createLink(100, 1, 1)
-                        createLink(1, 2, 2)
-                        createLink(2, 3, 3)
-                        createLink(3, 900, 4)
-                        createLink(101, 4, 5)
-                        createLink(4, 5, 6)
+                        createLink(0, 3, 1)
+                        createLink(3, 1, 2)
+                        createLink(1, 2, 3)
+                        createLink(2, 4, 4)
+                        createLink(3, 4, 5)
+                        createLink(3, 5, 6)
                         createLink(5, 6, 7)
-                        createLink(6, 901, 8)
-                        createLink(102, 7, 9)
-                        createLink(7, 8, 10)
-                        createLink(8, 9, 11)
-                        createLink(9, 902, 12)
+                        createLink(6, 4, 8)
+                        createLink(4, 999, 9)
 
-                        createTrack(listOf(1, 2, 3, 4), 0)
-                        createTrack(listOf(5, 6, 7, 8), 1)
-                        createTrack(listOf(9, 10, 11, 12), 2)
+                        createTrack(listOf(1, 5, 4, 3, 2, 5, 9), 0)
+                        createTrack(listOf(1, 5, 8, 7, 6, 5, 9), 1)
+                        createTrack(listOf(1, 5, 4, 3, 2, 5, 9), 2)
+                        createTrack(listOf(1, 5, 8, 7, 6, 5, 9), 3)
+                        createTrack(listOf(1, 5, 9), 4)
 
-                        createWave(12, 2, .10f, 1.0f)
-                        createWave(12, 3, .09f, 1.0f)
-                        createWave(12, 4, .08f, 1.0f)
-                        createWave(12, 5, .08f, 1.0f)
-                        createWave(12, 6, .09f, 0.9f)
-                        createWave(12, 8, .09f, 0.9f)
-                        createWave(12, 12, .09f, 0.9f)
-                        createWave(12, 16, .10f, 0.9f)
-                        createWave(12, 24, .11f, 0.8f)
-                        createWave(12, 28, .12f, 0.8f)
-                        createWave(12, 32, .14f, 0.9f)
+                        createWave(10, 2, .120f, 1.2f)
+                        createWave(16, 2, .150f, 1.4f)
+                        createWave(16, 2, .160f, 1.5f)
+                        createWave(20, 2, .180f, 1.7f)
+                        createWave(25, 2, .220f, 1.9f)
+                        createWave(20, 2, .300f, 2.1f)
+                        createWave(20, 2, .340f, 2.2f)
 
-                        data.chipsAllowed = setOf(
-                            Chip.ChipUpgrades.SUB,
-                            Chip.ChipUpgrades.POWERUP,
-                            Chip.ChipUpgrades.SELL,
-                            Chip.ChipUpgrades.SHR,
-                            Chip.ChipUpgrades.MEM,
-                            Chip.ChipUpgrades.ACC,
-                            Chip.ChipUpgrades.REDUCE
-                        )
-
+                        data.chipsAllowed =
+                            setOf(
+                                Chip.ChipUpgrades.SUB,
+                                Chip.ChipUpgrades.POWERUP,
+                                Chip.ChipUpgrades.SHR
+                            )
                         rewardCoins = 3
                     }
                     23 -> {
@@ -1439,8 +1427,70 @@ class StageCatalog
                         createWaveHex(16,4096, .14f, 1.2f)
 
                         rewardCoins = 3
+                    }
+                    29 -> {
+                        initializeNetwork(50, 50)
+
+                        createChip(10, 45, ident = 100, type = Chip.ChipType.ENTRY)
+                        createChip(11, 40, 1)
+                        createChip(8, 22, 2)
+                        createChip(11, 10, 3)
+                        createChip(20, 10, ident = 900, type = Chip.ChipType.CPU)
+
+                        createChip(30, 45, ident = 101, type = Chip.ChipType.ENTRY)
+                        createChip(30, 40, 4)
+                        createChip(21, 40, 5)
+                        createChip(18, 22, 6)
+                        createChip(30, 25, ident = 901, type = Chip.ChipType.CPU)
+
+                        createChip(30, 5, ident = 102, type = Chip.ChipType.ENTRY)
+                        createChip(30, 10, 7)
+                        createChip(40, 10, 8)
+                        createChip(43, 22, 9)
+                        createChip(40, 40, ident = 902, type = Chip.ChipType.CPU)
+
+                        createLink(100, 1, 1)
+                        createLink(1, 2, 2)
+                        createLink(2, 3, 3)
+                        createLink(3, 900, 4)
+                        createLink(101, 4, 5)
+                        createLink(4, 5, 6)
+                        createLink(5, 6, 7)
+                        createLink(6, 901, 8)
+                        createLink(102, 7, 9)
+                        createLink(7, 8, 10)
+                        createLink(8, 9, 11)
+                        createLink(9, 902, 12)
+
+                        createTrack(listOf(1, 2, 3, 4), 0)
+                        createTrack(listOf(5, 6, 7, 8), 1)
+                        createTrack(listOf(9, 10, 11, 12), 2)
+
+                        createWave(12, 2, .10f, 1.0f)
+                        createWave(12, 3, .09f, 1.0f)
+                        createWave(12, 4, .08f, 1.0f)
+                        createWave(12, 5, .08f, 1.0f)
+                        createWave(12, 6, .09f, 0.9f)
+                        createWave(12, 8, .09f, 0.9f)
+                        createWave(12, 12, .09f, 0.9f)
+                        createWave(12, 16, .10f, 0.9f)
+                        createWave(12, 24, .11f, 0.8f)
+                        createWave(12, 28, .12f, 0.8f)
+                        createWave(12, 32, .14f, 0.9f)
+
+                        data.chipsAllowed = setOf(
+                            Chip.ChipUpgrades.SUB,
+                            Chip.ChipUpgrades.POWERUP,
+                            Chip.ChipUpgrades.SELL,
+                            Chip.ChipUpgrades.SHR,
+                            Chip.ChipUpgrades.MEM,
+                            Chip.ChipUpgrades.ACC,
+                            Chip.ChipUpgrades.CLK,
+                            Chip.ChipUpgrades.REDUCE
+                        )
 
                         data.type = Stage.Type.FINAL
+                        rewardCoins = 3
                     }
                     /**
                      * Template for the creation of new stage data.

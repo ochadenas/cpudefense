@@ -5,22 +5,26 @@ import com.example.cpudefense.*
 import com.example.cpudefense.gameElements.GameElement
 import kotlin.math.abs
 
-class Link(val theNetwork: Network, var node1: Node, var node2: Node, var ident: Int, var mask: Int = 0x0F): GameElement() {
+class Link(val theNetwork: Network, var node1: Node, var node2: Node, var ident: Int, var mask: Int = 0x0F, var variant: Variant = Variant.CONVEX): GameElement() {
 
     data class Data
         (
         var ident: Int,
         var startId: Int,
         var endId: Int,
-        var mask: Int
+        var mask: Int,
+        var variant: Variant
     )
 
     var data = Data(
         ident = ident,
         startId = node1.data.ident,
         endId = node2.data.ident,
-        mask = mask
+        mask = mask,
+        variant = variant,
     )
+
+    enum class Variant { CONCAVE, CONVEX }
 
     var startPointOnGrid: Coord = node1.posOnGrid
     var endPointOnGrid: Coord = node2.posOnGrid
@@ -50,33 +54,20 @@ class Link(val theNetwork: Network, var node1: Node, var node2: Node, var ident:
         val distVert = endPointOnGrid.y - startPointOnGrid.y
 
         if (distHori>0 && distVert>0)
-            calculate1stQuadrant(startPointOnGrid, endPointOnGrid)
-        else if (distHori<0 && distVert<0)
-            calculate1stQuadrant(endPointOnGrid, startPointOnGrid)
-        else if (distHori>0 && distVert<0)
             calculate4thQuadrant(startPointOnGrid, endPointOnGrid)
-        else if (distHori<0 && distVert>0)
+        else if (distHori<0 && distVert<0)
             calculate4thQuadrant(endPointOnGrid, startPointOnGrid)
+        else if (distHori>0 && distVert<0)
+            calculate1stQuadrant(startPointOnGrid, endPointOnGrid)
+        else if (distHori<0 && distVert>0)
+            calculate1stQuadrant(endPointOnGrid, startPointOnGrid)
         else
             interPointOnGrid = null
         lengthOnGrid = getLength()
     }
 
+
     private fun calculate1stQuadrant(point1: Coord, point2: Coord)
-            /** determines link coordinates in case that both horizontal and vertical distance
-             * from 1st to 2nd point is positive.
-             */
-    {
-        val distHori: Float = abs(point2.x - point1.x)
-        val distVert: Float = abs(point2.y - point1.y)
-
-        if (distVert > distHori)
-            interPointOnGrid = Coord(point1.x, point2.y - distHori)
-        else if (distVert < distHori)
-            interPointOnGrid = Coord(point2.x-distVert, point1.y)
-    }
-
-    private fun calculate4thQuadrant(point1: Coord, point2: Coord)
             /** determines link coordinates in case that horizontal distance
              * from 1st to 2nd point is positive and vertical is negative
              */
@@ -84,10 +75,45 @@ class Link(val theNetwork: Network, var node1: Node, var node2: Node, var ident:
         val distHori: Float = abs(point2.x - point1.x)
         val distVert: Float = abs(point2.y - point1.y)
 
-        if (distVert < distHori)
-            interPointOnGrid = Coord(point2.x - distVert, point1.y)
-        else if (distVert > distHori)
-            interPointOnGrid = Coord(point1.x, point2.y + distHori)
+        when (data.variant) {
+            Variant.CONCAVE -> {
+                if (distVert < distHori)
+                    interPointOnGrid = Coord(point1.x+distVert, point2.y)  // done
+                else if (distVert > distHori)
+                    interPointOnGrid = Coord(point2.x, point1.y-distHori) // done
+            }
+            Variant.CONVEX -> {
+                if (distVert < distHori)
+                    interPointOnGrid = Coord(point2.x-distVert, point1.y)
+                else if (distVert > distHori)
+                    interPointOnGrid = Coord(point1.x, point2.y + distHori)
+            }
+        }
+    }
+
+    private fun calculate4thQuadrant(point1: Coord, point2: Coord)
+            /** determines link coordinates in case that both horizontal and vertical distance
+             * from 1st to 2nd point is positive.
+             */
+    {
+        val distHori: Float = abs(point2.x - point1.x)
+        val distVert: Float = abs(point2.y - point1.y)
+
+        when (data.variant)
+        {
+            Variant.CONCAVE -> {
+                if (distVert > distHori)
+                    interPointOnGrid = Coord(point2.x, point1.y+distHori) // done
+                else if (distVert < distHori)
+                    interPointOnGrid = Coord(point1.x+distVert, point2.y) // done
+            }
+            Variant.CONVEX -> {
+                if (distVert > distHori)
+                    interPointOnGrid = Coord(point1.x, point2.y-distHori)
+                else if (distVert < distHori)
+                    interPointOnGrid = Coord(point2.x-distVert, point1.y)
+            }
+        }
     }
 
     private fun getLength(): Float

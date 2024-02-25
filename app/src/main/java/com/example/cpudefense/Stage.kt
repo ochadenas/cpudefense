@@ -8,6 +8,7 @@ import com.example.cpudefense.networkmap.Network
 import com.example.cpudefense.networkmap.Track
 import com.example.cpudefense.networkmap.Viewport
 import com.example.cpudefense.utils.blur
+import java.sql.SQLIntegrityConstraintViolationException
 import java.util.concurrent.CopyOnWriteArrayList
 import kotlin.random.Random
 
@@ -275,7 +276,7 @@ class Stage(var theGame: Game) {
         return chip
     }
 
-    fun createLink(from: Int, to: Int, ident: Int, mask: Int = 0xF): Link?
+    fun createLink(from: Int, to: Int, ident: Int, mask: Int = 0xF, variant: Link.Variant = Link.Variant.CONVEX): Link?
     /** adds a link between two existing nodes, referenced by ID
      * @param from Ident of first node
      * @param to Ident of 2nd node
@@ -290,7 +291,7 @@ class Stage(var theGame: Game) {
             return network.links[ident]
         }
         else {
-            val link = Link(network, node1, node2, ident, mask)
+            val link = Link(network, node1, node2, ident, mask, variant)
             network.addLink(link, ident)
             node1.connectedLinks.add(link)
             node2.connectedLinks.add(link)
