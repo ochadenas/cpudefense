@@ -24,20 +24,21 @@ class StageCatalog
                     createStageWithoutObstacles(stage, level)  // make basic layout
                     val numberOfObstacles = when (level.number) {
                         1 -> 0
-                        2 -> 0
-                        3 -> 1
-                        4 -> 1
-                        5 -> 2
-                        6 -> 2
-                        7 -> 3
-                        8 -> 0
-                        9 -> 2
-                        10 -> 3
-                        11 -> 2
+                        2 -> 1
+                        3 -> 2
+                        4 -> 2
+                        5 -> 3
+                        6 -> 3
+                        7 -> 4
+                        8 -> 4
+                        9 -> 3
+                        10 -> 4
+                        11 -> 3
                         22 -> 2
-                        24 -> 3
-                        27 -> 3
-                        else -> 4
+                        24 -> 4
+                        27 -> 4
+                        29 -> 3
+                        else -> 6
                     }
                     createObstacles(stage, numberOfObstacles)
                     return
@@ -422,9 +423,9 @@ class StageCatalog
 
                         createLink(0, 1, 1, mask = 0x0C)
                         createLink(1, 2, 2, mask = 0x0C)
-                        createLink(2, 3, 3, mask = 0x03)
+                        createLink(2, 3, 3, mask = 0x03, variant= Link.Variant.CONCAVE)
                         createLink(2, 4, 4, mask = 0x0C)
-                        createLink(2, 5, 5, mask = 0x03)
+                        createLink(2, 5, 5, mask = 0x03, variant= Link.Variant.CONCAVE)
                         createLink(3, 4, 7, mask = 0x06)
                         createLink(5, 6, 6, mask = 0x06)
                         createLink(6, 999, 8, mask = 0x06)
@@ -1287,16 +1288,16 @@ class StageCatalog
 
                         createLink(100, 1, 1)
                         createLink(1, 2, 2)
-                        createLink(2, 3, 3)
-                        createLink(3, 4, 4)
+                        createLink(2, 3, 3, variant= Link.Variant.CONCAVE)
+                        createLink(3, 4, 4, variant= Link.Variant.CONCAVE)
                         createLink(4, 5, 5)
                         createLink(5, 6, 6)
                         createLink(6, 7, 7)
                         createLink(7, 8, 8)
-                        createLink(8, 9, 9)
-                        createLink(9, 10, 10)
-                        createLink(10, 11, 11)
-                        createLink(11, 12, 12)
+                        createLink(8, 9, 9, variant= Link.Variant.CONCAVE)
+                        createLink(9, 10, 10, variant= Link.Variant.CONCAVE)
+                        createLink(10, 11, 11, variant= Link.Variant.CONCAVE)
+                        createLink(11, 12, 12, variant= Link.Variant.CONCAVE)
                         createLink(12, 900, 13)
                         createLink(3, 12, 14, 0x02)
 

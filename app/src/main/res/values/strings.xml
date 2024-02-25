@@ -84,7 +84,7 @@ If you do not get all the coins, you can always replay the level. However, once 
 
 But be careful. The moving cryptocoin is stronger than ordinary attackers, and if it reaches the CPU, it will take one of your lives."
     </string>
-    <string name="instr_7a">Some hints:\n\nRemember that SHR chips are powerful but cannot eliminate attackers. They quickly reduce large values, but against hordes of weak attackers, multiple SUB chips may be a more cost-effective defence.\n\nChips need to cool down between operations. Hire heroes to reduce the chance of grouped attackers overwhelming a chip.\n\nIf you are stuck, you can replay a lower level trying to catch a running cryptocoin.\n</string>
+    <string name="instr_7a">Chips need to cool down between operations. Hire heroes to reduce the chance of grouped attackers overwhelming a chip.\n\nIf you are stuck, you can replay a lower level trying to catch a running cryptocoin.\n</string>
     <string name="instr_8">"\nYou can sell existing chips and re-use their slot. Most, but not all of the information will be refunded.\n\nNote that an activated chip will complete its current cooldown cycle before disappearing. "</string>
     <string name="instr_9">
 "Let\'s introduce another chip. The MEM (for memory) chip takes a number and stores it safely away in memory.
@@ -119,6 +119,7 @@ In hex, you have digits from 0 to 9 and then from A to F. The hex number 0x0F eq
     <string name="instr_14">Another chip becomes available! \n\nThe CLK (clock) chip does not affect the attackers itself. Instead, it speeds up the other chips on the board. Each time the CLK ticks, the cooldown timer of all other chips is reset, and they become ready to operate anew.\n\nUpgrading increases the CLK frequency.</string>
     <string name="instr_15">Overclocking the CPU can be dangerous: The faster your chips work, the hotter they will get.\n\nEach time your clock resets a chip, a small amount of heat is produced. Temperatures of more than %d degrees can damage the CPU, that means, that they can cost you one life.</string>
     <string name="instr_16">The NOP chip (No operation) does nothing. But since it occupies a slot, you might want to remove it.\n\nA NOP 2 chip also does nothing, but twice.</string>
+    <string name="instr_22">Remember that SHR chips are powerful but cannot eliminate attackers. They quickly reduce large values, but against hordes of weak attackers, multiple SUB chips may be a more cost-effective defence.</string>
     <string name="instr_endless">You have successfully cleared all stages and won the game!\n\nIf you want, you can continue in <i>endless</i> mode, with randomly generated circuits that get more and more difficult.\n\nHow far will you get?</string>
 
 
