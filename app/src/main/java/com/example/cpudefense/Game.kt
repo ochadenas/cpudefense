@@ -210,7 +210,7 @@ class Game(val gameActivity: MainGameActivity) {
         if (background == null)
             background = Background(this)
         if (!gameActivity.settings.configDisableBackground)
-            background?.choose(currentStage?.getLevel() ?: 0)
+            background?.choose(currentStage?.data?.ident)
         background?.state = Background.BackgroundState.UNINITIALIZED
     }
 
@@ -467,7 +467,7 @@ class Game(val gameActivity: MainGameActivity) {
         currentWave = nextStage.nextWave()
         currentStage = nextStage
         if (!gameActivity.settings.configDisableBackground)
-            background?.choose(level.number)
+            background?.choose(level)
         takeLevelSnapshot()
     }
 

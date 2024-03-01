@@ -18,6 +18,7 @@ class Background(val game: Game)
   */
 {
     private var backgroundNumber: Int = 0 // the selected background
+    private var useSpecialBackground = false  // special background on selected levels
     private var wholeImageOfCurrentStage: Bitmap? = null
     private var angle = 0.0
     var x = 0.0
@@ -35,6 +36,7 @@ class Background(val game: Game)
     companion object {
         var bitmapsLoaded = false
         var availableBitmaps = hashMapOf<Int, Bitmap>()
+        var specialBitmap: Bitmap? = null
     }
     // TODO: this should be moved to the application
 
@@ -68,20 +70,8 @@ class Background(val game: Game)
                 game.notification.showProgress(0.80f)
                 availableBitmaps[9] = BitmapFactory.decodeResource(game.resources, R.drawable.background_9)
                 game.notification.showProgress(0.90f)
-                /*
-                // code to provoke an Out Of Memory issue
-                val myBitmaps = hashMapOf<Int, Bitmap>()
-                for (i in 0 until 100)
-                {
-                    try {
-                        myBitmaps[i] = BitmapFactory.decodeResource(game.resources, R.drawable.background_6)
-                    }
-                    catch (e: java.lang.Exception)
-                    {
-                    }
-                }
-                 */
-                 bitmapsLoaded = true
+                specialBitmap = BitmapFactory.decodeResource(game.resources, R.drawable.background_flowers)
+                bitmapsLoaded = true
             }
             catch (e: java.lang.Exception)
             {
@@ -95,7 +85,7 @@ class Background(val game: Game)
         }
     }
 
-    fun choose(number: Int?, opacity: Float = 0.6f)
+    fun choose(stageIdent: Stage.Identifier?, opacity: Float = 0.6f)
             /** chooses the background to use,
              * and selects a random part of it
              * @param number selects one of the available backgrounds
@@ -103,8 +93,14 @@ class Background(val game: Game)
              */
     {
         loadBitmaps()
-        val n = number ?: 0
-        backgroundNumber = n % availableBitmaps.size + 1
+        if (stageIdent?.let {it.series < 3 && it.number == 8 } == true)
+            useSpecialBackground = true
+        else
+        {
+            useSpecialBackground = false
+            val n = stageIdent?.number ?: 0
+            backgroundNumber = n % availableBitmaps.size + 1
+        }
         this.opacity = opacity
         angle = Random.nextDouble() * 2 * Math.PI
         projX = cos(angle)
@@ -149,7 +145,7 @@ class Background(val game: Game)
                 BackgroundState.UNINITIALIZED -> it // should not happen
                 BackgroundState.BLANK -> {
                     loadBitmaps()
-                    wholeImageOfCurrentStage = availableBitmaps[backgroundNumber]
+                    wholeImageOfCurrentStage = if (useSpecialBackground) specialBitmap else availableBitmaps[backgroundNumber]
                     if (bitmapsLoaded)
                         state = BackgroundState.INITIALIZED
                     paintOnBackgroundImage(it)
