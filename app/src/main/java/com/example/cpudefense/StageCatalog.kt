@@ -54,8 +54,11 @@ class StageCatalog
                             EndlessStageCreator(stage).createWaves()
                             return
                         }
-                    EndlessStageCreator(stage).createStage(level)
-                    val numberOfObstacles = level.number / 8
+                    while (stage.difficulty > 900f) {
+                        EndlessStageCreator(stage).createStage(level)
+                        stage.calculateDifficulty()
+                    }
+                    val numberOfObstacles = level.number - stage.difficulty.toInt()
                     createObstacles(stage, numberOfObstacles)
                     stage.provideStructureData()
                     structure[level.number] = stage.data

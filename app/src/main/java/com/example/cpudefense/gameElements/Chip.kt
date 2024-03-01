@@ -209,6 +209,11 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
         bitmap = null
     }
 
+    fun isObstacle(): Boolean
+    {
+        return chipData.type in StageCatalog.obstacleTypes
+    }
+
     fun getCooldownTime(): Float
             /** @return the number of ticks that the chip will need to cooldown.
              * For CLK chips, this depends on the level.

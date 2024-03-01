@@ -57,13 +57,26 @@ class EndlessStageCreator(val stage: Stage)
                 Chip.ChipUpgrades.MEM, Chip.ChipUpgrades.CLK, Chip.ChipUpgrades.POWERUP,
                 Chip.ChipUpgrades.REDUCE, Chip.ChipUpgrades.SELL )
 
-        numberOfSectorsX = if (Random.nextInt(10) < 8) 3 else 4
-        numberOfSectorsY = when (Random.nextInt(10))
+        /* determine difficulties based on level */
+        val numberOfSectors: Pair<Int, Int> = when (Random.nextInt(level.number+7))
         {
-            in 0..6 -> 4
-            in 7 .. 8 -> 5
-            else -> 3
+            in 0 .. 5 -> Pair(4, 4)
+            in 6 .. 8 -> Pair(3, 5)
+            in 9 .. 10 -> Pair(3, 4)
+            in 11 .. 12 -> Pair(4, 2)
+            in 13 .. 15 -> Pair(2, 4)
+            else -> Pair(3, 3)
         }
+        numberOfSectorsX = numberOfSectors.first
+        numberOfSectorsY = numberOfSectors.second
+
+        val numberOfPaths = when (level.number)
+        {
+            in 0..3 -> 3
+            in 4 .. 10 -> level.number
+            else -> 10
+        }
+
         dimX = numberOfSectorsX * sectorSizeX
         dimY = numberOfSectorsY * sectorSizeY
         stage.initializeNetwork(dimX, dimY)
@@ -100,7 +113,7 @@ class EndlessStageCreator(val stage: Stage)
             exitSectors.add(getByCoordinate(SectorCoord(numberOfSectorsX-1,numberOfSectorsY-1)))
         exitSectors.forEach { it?.type = SectorType.EXIT }
 
-        for (count in 1 .. 5)
+        for (count in 1 .. numberOfPaths)
             entrySectors.random()?.let { sector ->
                 createPath(sector)?.let { path -> paths.add(path)}
             }
@@ -356,7 +369,7 @@ class EndlessStageCreator(val stage: Stage)
                  */
         {
             var model: Model? = null
-            for (i in (1..11).toList().shuffled())
+            for (i in (1..14).toList().shuffled())
             {
                 if (Model(i).isCompatibleWith(entriesUsed, exitsUsed))
                 {

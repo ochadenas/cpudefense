@@ -448,6 +448,7 @@ class ScoreBoard(val game: Game): GameElement() {
         fun recreateBitmap() {
             if (area.width() >0 && area.height() > 0)
                 bitmap = Bitmap.createBitmap(area.width(), area.height(), Bitmap.Config.ARGB_8888)
+            // var textToDisplay = "Level %d, difficulty %.2f".format(game.currentStage?.data?.ident?.number, game.currentStage?.difficulty)
             var textToDisplay = "time per frame: %.2f ms.".format(game.timeBetweenFrames)
             // var textToDisplay = "time per frame: %.2f ms. Ticks %d, frames %d.".format(game.timeBetweenFrames, game.ticksCount, game.frameCount)
             bitmap?.let {

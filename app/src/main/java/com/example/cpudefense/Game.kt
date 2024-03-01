@@ -441,6 +441,7 @@ class Game(val gameActivity: MainGameActivity) {
         calculateLives()
         calculateStartingCash()
         StageCatalog.createStage(nextStage, level)
+        nextStage.calculateDifficulty()
         if (!nextStage.isInitialized())
             return  // something went wrong, possibly trying to create a level that doesn't exist
         gameActivity.runOnUiThread {

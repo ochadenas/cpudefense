@@ -69,6 +69,7 @@ class Stage(var theGame: Game) {
     )
     lateinit var summary: Summary
 
+    var difficulty: Float = 999.0f
     var rewardCoins = 0  // number of coins that can be obtained by completing the level
 
     fun getLevel(): Int {return data.ident.number}
@@ -339,7 +340,24 @@ class Stage(var theGame: Game) {
         val attacker = Attacker.createFromData(this, data)
         network.addVehicle(attacker)
     }
-
+    fun calculateDifficulty()
+    {
+        var minLength = 999
+        var sumLength = 0
+        for (track in tracks.values)
+        {
+            sumLength += track.links.size
+            if (minLength>track.links.size)
+                minLength = track.links.size
+        }
+        if (minLength<3 || tracks.size == 0) {
+            difficulty = 999f  // too difficult
+            return
+        }
+        difficulty = 11-(sumLength.toFloat()/tracks.size)
+        val obstacles = chips.values.filter { it.isObstacle() }
+        difficulty += obstacles.size.toFloat()  //  add number of obstacles
+    }
     fun takeSnapshot(size: Int): Bitmap?
             /** gets a miniature picture of the current level
              * @param size snapshot size in pixels (square)
