@@ -1,0 +1,15 @@
+New Features:
+- new hero: Claude Chappe
+- Clearer design for buying and selling chips
+- Chips now choose their target intelligently (with more than one attacker in range)
+- Added an easter egg
+
+Bugfixes:
+- No new "endless" stages were available in the level selector beyond level 28.
+- Heat generation and damage corrected and adjusted
+- Fixed yet another bug when resuming the game
+
+Miscellaneous:
+- Changes in "endless" stage generation. Difficulty of the stage layout increases with the level. Impossible configurations are avoided.
+- Changed the order of some levels in "normal" mode to make the difficulty progress more consistently.
+
