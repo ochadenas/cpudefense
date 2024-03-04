@@ -320,7 +320,7 @@ class Stage(var theGame: Game) {
         if (series==2)  // modifications in strength for turbo mode
         {
             count = (attackerCount * 1.5f).toInt()
-            strength = (attackerStrength * ( 1 + waves.size*waves.size*0.2f ) + 4).toInt()
+            strength = (attackerStrength * ( 1 + waves.size*waves.size*0.2f + waves.size ) + 4).toInt()
             frequency = attackerFrequency * 1.6f
             speed = attackerSpeed * 1.2f
         }
