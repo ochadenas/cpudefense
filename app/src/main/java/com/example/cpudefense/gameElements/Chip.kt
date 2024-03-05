@@ -17,7 +17,7 @@ import kotlin.random.Random
 
 open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gridX.toFloat(), gridY.toFloat())
 {
-    enum class ChipType { EMPTY, SUB, SHR, MEM, ACC, SHL, ADD, NOP, CLK, ENTRY, CPU}
+    enum class ChipType { EMPTY, SUB, SHR, MEM, ACC, SHL, ADD, NOP, SPLT, CLK, ENTRY, CPU}
     enum class ChipUpgrades { POWERUP, REDUCE, SELL, SUB, SHR, MEM, ACC, CLK }
 
     data class Data(
@@ -194,7 +194,16 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
                 chipData.glowColor = resources.getColor(R.color.chips_noop_glow)
                 chipData.value = Game.basePrice[ChipUpgrades.REDUCE] ?: 99
             }
-            else -> {}
+            ChipType.SPLT -> {
+                chipData.power = 1
+                bitmap = null
+                chipData.color = resources.getColor(R.color.chips_split_foreground)
+                chipData.glowColor = resources.getColor(R.color.chips_split_glow)
+                chipData.value = Game.basePrice[ChipUpgrades.REDUCE] ?: 99
+            }
+            ChipType.ENTRY -> {}
+            ChipType.CPU -> {}
+            ChipType.EMPTY -> {}
         }
         if (chipData.sold)
         {
@@ -211,7 +220,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
 
     fun isObstacle(): Boolean
     {
-        return chipData.type in StageCatalog.obstacleTypes
+        return chipData.type in obstacleTypes
     }
 
     fun getCooldownTime(): Float
@@ -452,23 +461,26 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
 
     private fun createBitmapForType(): Bitmap?
     {
-        when (chipData.type)
+        return when (chipData.type)
         {
-            ChipType.SUB -> return createBitmap("SUB %d".format(chipData.power))
-            ChipType.SHR -> return createBitmap("SHR %d".format(chipData.power))
-            ChipType.MEM -> return createBitmap("MEM")
-            ChipType.ACC -> return when (chipData.power)
+            ChipType.SUB -> createBitmap("SUB %d".format(chipData.power))
+            ChipType.SHR -> createBitmap("SHR %d".format(chipData.power))
+            ChipType.MEM -> createBitmap("MEM")
+            ChipType.ACC -> when (chipData.power)
             {
                 1 -> createBitmap("ACC +")
                 2 -> createBitmap("ACC v")
                 else -> createBitmap("ACC &")
             }
-            ChipType.SHL -> return createBitmap("SHL %d".format(chipData.power))
-            ChipType.ADD -> return createBitmap("ADD %d".format(chipData.power))
-            ChipType.CLK -> return createBitmap("CLK %d".format(chipData.power))
-            ChipType.NOP -> return if (chipData.power == 1)  createBitmap("NOP")
+            ChipType.SHL -> createBitmap("SHL %d".format(chipData.power))
+            ChipType.ADD -> createBitmap("ADD %d".format(chipData.power))
+            ChipType.CLK -> createBitmap("CLK %d".format(chipData.power))
+            ChipType.SPLT -> createBitmap("SPLT")
+            ChipType.NOP -> if (chipData.power == 1)  createBitmap("NOP")
                 else createBitmap("NOP %d".format(chipData.power))
-            else -> return null
+            ChipType.ENTRY -> null
+            ChipType.CPU -> null
+            ChipType.EMPTY -> null
         }
     }
 
@@ -550,7 +562,11 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
             ChipType.NOP -> {
                 alternatives.add(ChipUpgrades.REDUCE)
             }
-                else -> {}
+            ChipType.SPLT -> {
+                alternatives.add(ChipUpgrades.REDUCE)
+            }
+            ChipType.ENTRY -> {}
+            ChipType.CPU -> {}
         }
 
         // discard the alternatives that are not allowed for this stage,
@@ -626,6 +642,8 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
 
     companion object
     {
+        val obstacleTypes =
+            setOf(ChipType.ADD, ChipType.SHL, ChipType.NOP, ChipType.SPLT)
         fun createFromData(network: Network, data: Data): Chip
                 /** reconstruct an object based on the saved data
                  * and set all inner proprieties

@@ -10,10 +10,8 @@ class StageCatalog
      * It is not meant to be instantiated.
      */
     companion object {
-        val possibleSlotsForObstacles =
+        private val possibleTypesForObstacles =
             setOf(Chip.ChipType.EMPTY, Chip.ChipType.ADD, Chip.ChipType.SHL, Chip.ChipType.NOP)
-        val obstacleTypes =
-            setOf(Chip.ChipType.ADD, Chip.ChipType.SHL, Chip.ChipType.NOP)
         fun createStage(stage: Stage, level: Stage.Identifier)
         {
             when (level.series)
@@ -69,20 +67,21 @@ class StageCatalog
 
         private fun createObstacles(stage: Stage, numberOfObstacles: Int)
         {
-            val reduce = stage.theGame.heroes[Hero.Type.LIMIT_UNWANTED_CHIPS]?.getStrength() ?: 0
+            val reduce = stage.theGame.heroes[Hero.Type.LIMIT_UNWANTED_CHIPS]?.getStrength() ?: 0 // consider Kilby's effect
             val reducedNumberOfObstacles = numberOfObstacles - reduce.toInt()
             if (reducedNumberOfObstacles > 0)
                 for (i in 1..reducedNumberOfObstacles)  // set or upgrade the slots
                 {
-                    var slot: Chip? = null
-                    while (slot?.chipData?.type !in possibleSlotsForObstacles) {
-                        slot = stage.chips.values.random()
-                    }
-                    when (slot?.chipData?.type) {
-                        Chip.ChipType.NOP -> slot.addPower(1)
-                        Chip.ChipType.ADD -> slot.addPower(1)
-                        Chip.ChipType.SHL -> slot.addPower(1)
-                        else -> slot?.setType( obstacleTypes.random() )
+                    val possibleSlotsForObstacles = stage.chips.values.filter { it.chipData.type in possibleTypesForObstacles }
+                    if (possibleSlotsForObstacles.isNotEmpty())
+                    {
+                        val obstacleSlot = possibleSlotsForObstacles.random()
+                        when (obstacleSlot.chipData.type)
+                        {
+                            in listOf( Chip.ChipType.ADD, Chip.ChipType.SHL, Chip.ChipType.NOP) -> obstacleSlot.addPower(1)
+                            Chip.ChipType.EMPTY -> obstacleSlot.setType(possibleTypesForObstacles.random())
+                            else -> {}
+                        }
                     }
                 }
         }
@@ -126,7 +125,7 @@ class StageCatalog
                         initializeNetwork(40, 40)
 
                         createChip(20, 1, type = Chip.ChipType.ENTRY)
-                        createChip(15, 20, 1)
+                        createChip(15, 20, 1).setType(Chip.ChipType.SPLT)
                         createChip(20, 38, type = Chip.ChipType.CPU)
 
                         createLink(0, 1, 0, mask = 0x06)
@@ -144,7 +143,7 @@ class StageCatalog
 
                         createChip(8, 1, type = Chip.ChipType.ENTRY)
                         createChip(20, 18, 1)
-                        createChip(20, 22, 2)
+                        createChip(20, 22, 2).setType(Chip.ChipType.SPLT)
                         createChip(45, 30, 3)
                         createChip(45, 40, type = Chip.ChipType.CPU)
 
