@@ -6,14 +6,13 @@ import com.example.cpudefense.*
 import com.example.cpudefense.effects.Explodable
 import com.example.cpudefense.effects.Fadable
 import com.example.cpudefense.effects.Fader
-import com.example.cpudefense.networkmap.Network
-import com.example.cpudefense.networkmap.Viewport
+import com.example.cpudefense.networkmap.*
 import com.example.cpudefense.utils.*
 import kotlin.math.log2
 import kotlin.random.Random
 
 
-open class Attacker(network: Network, type: Representation = Representation.BINARY,
+open class Attacker(network: Network, representation: Representation = Representation.BINARY,
                     number: ULong = 1u, speed: Float = 1.0f):
     Vehicle(network), Explodable, Fadable {
     enum class Representation { UNDEFINED, BINARY, HEX, DECIMAL, FLOAT }
@@ -28,7 +27,7 @@ open class Attacker(network: Network, type: Representation = Representation.BINA
         var vehicle: Vehicle.Data
     )
 
-    var attackerData = Data( representation = type, number = number, binaryDigits = 0, hexDigits = 0,
+    var attackerData = Data( representation = representation, number = number, binaryDigits = 0, hexDigits = 0,
         bits = 0, vehicle = super.data
     )
     private var numberBitmap: Bitmap = Bitmap.createBitmap(100, 32, Bitmap.Config.ARGB_8888)
@@ -51,6 +50,24 @@ open class Attacker(network: Network, type: Representation = Representation.BINA
         numberFontSize = baseNumberFontSize * theNetwork.theGame.resources.displayMetrics.scaledDensity *
                 if (theNetwork.theGame.gameActivity.settings.configUseLargeButtons) 1.5f else 1.0f
         makeNumber(this)
+    }
+
+    fun copy(): Attacker
+    {
+        val newAttacker = Attacker(network = theNetwork, representation = attackerData.representation, number = attackerData.number, speed = data.speed )
+        newAttacker.data = data.copy()
+        newAttacker.attackerData = attackerData.copy()
+        newAttacker.onTrack = onTrack
+        newAttacker.actualRect = Rect(actualRect)
+        newAttacker.scale = scale
+        newAttacker.posOnGrid = posOnGrid
+        newAttacker.onLink = onLink
+        newAttacker.startNode = startNode
+        newAttacker.endNode= endNode
+        newAttacker.currentSpeed = currentSpeed
+        newAttacker.distanceFromLastNode = distanceFromLastNode
+        newAttacker.distanceToNextNode = distanceToNextNode
+        return newAttacker
     }
 
     private fun calculateNumberOfDigits()
@@ -117,7 +134,7 @@ open class Attacker(network: Network, type: Representation = Representation.BINA
         changeNumberTo(n)
     }
 
-    fun extraCashGained(): Int
+    private fun extraCashGained(): Int
     /** possible bonus on kill due to hero */
     {
         val strength = theNetwork.theGame.heroes[Hero.Type.GAIN_CASH_ON_KILL]?.getStrength() ?: return 0

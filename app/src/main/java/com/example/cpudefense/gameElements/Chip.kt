@@ -8,7 +8,6 @@ import com.example.cpudefense.networkmap.Network
 import com.example.cpudefense.networkmap.Node
 import com.example.cpudefense.networkmap.Viewport
 import com.example.cpudefense.utils.displayTextCenteredInRect
-import com.example.cpudefense.utils.drawOutline
 import com.example.cpudefense.utils.inflate
 import com.example.cpudefense.utils.setCenter
 import java.lang.Math.abs
@@ -17,21 +16,24 @@ import kotlin.random.Random
 
 open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gridX.toFloat(), gridY.toFloat())
 {
-    enum class ChipType { EMPTY, SUB, SHR, MEM, ACC, SHL, ADD, NOP, SPLT, CLK, ENTRY, CPU}
+    enum class ChipType { EMPTY, SUB, SHR, MEM, ACC, SHL, ADD, NOP, SPLT, DUP, CLK, ENTRY, CPU}
     enum class ChipUpgrades { POWERUP, REDUCE, SELL, SUB, SHR, MEM, ACC, CLK }
 
     data class Data(
         var type: ChipType = ChipType.EMPTY,
+        /** level, or strength, of the chip */
         var power: Int = 0,
         /** time that this chip needs before it can shoot again */
         var cooldown: Int = 0,
         /** current state of the timer */
         var cooldownTimer: Float = 0.0f,
+        /** the price paid for the chip and its upgrades */
         var value: Int = 0,
         var node: Node.Data,
         var color: Int = Color.WHITE,
         var glowColor: Int = Color.WHITE,
-        var sold: Boolean = false  // this is an indicator that the chip has been sold, but is not removed yet
+        /** indicator that the chip has been sold, but is not removed yet */
+        var sold: Boolean = false
     )
 
     var chipData = Data(
@@ -44,7 +46,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
 
     val resources = network.theGame.resources
 
-    // some chips have a 'register' where an attacker's value can be held.
+    /** some chips have a 'register' where an attacker's value can be held. */
     private var internalRegister: Attacker? = null
 
     var upgradePossibilities = CopyOnWriteArrayList<ChipUpgrade>()
@@ -199,6 +201,17 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
                 bitmap = null
                 chipData.color = resources.getColor(R.color.chips_split_foreground)
                 chipData.glowColor = resources.getColor(R.color.chips_split_glow)
+                val modifier = 1.2f
+                chipData.cooldown = (24f / modifier).toInt()
+                chipData.value = Game.basePrice[ChipUpgrades.REDUCE] ?: 99
+            }
+            ChipType.DUP -> {
+                chipData.power = 1
+                bitmap = null
+                chipData.color = resources.getColor(R.color.chips_split_foreground)
+                chipData.glowColor = resources.getColor(R.color.chips_split_glow)
+                val modifier = 1.2f
+                chipData.cooldown = (32f / modifier).toInt()
                 chipData.value = Game.basePrice[ChipUpgrades.REDUCE] ?: 99
             }
             ChipType.ENTRY -> {}
@@ -262,19 +275,23 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
         /* check if there are attackers that we can shoot at */
         try {
             val vehiclesInRange = distanceToVehicle.toList().filter {distanceTo(it.first)?.let { it <= data.range } ?: false }
-            if (!vehiclesInRange.isEmpty()) {
-                val possibleTargets = vehiclesInRange.sortedBy { (it.first as Attacker).attackerData.number }
-                val target = when (this.chipData.type)
-                {
-                    ChipType.SUB -> possibleTargets.first().first
-                    else -> possibleTargets.last().first
-                }
-                shootAt(target as Attacker)
-            }
+            if (vehiclesInRange.isNotEmpty())
+                shootAt(selectTarget(vehiclesInRange))
         }
         catch (exception: ConcurrentModificationException)
         {
             // just ignore this
+        }
+    }
+
+    private fun selectTarget(possibleTargets: List<Pair<Vehicle, Float>>): Attacker
+    /** intelligently determine the targeted attacker, based on chip type and attacker's properties */
+    {
+        val sortedTargets = possibleTargets.sortedBy { (it.first as Attacker).attackerData.number }
+        return when (this.chipData.type)
+        {
+            ChipType.SUB -> sortedTargets.first().first as Attacker
+            else -> sortedTargets.last().first as Attacker
         }
     }
 
@@ -404,6 +421,8 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
         when (chipData.type)
         {
             ChipType.ACC -> { processInAccumulator(attacker) }
+            ChipType.SPLT -> { splitAttacker(attacker) }
+            ChipType.DUP -> { duplicateAttacker(attacker) }
             ChipType.MEM -> {
                 if (internalRegister == null)
                     storeAttacker(attacker)
@@ -426,6 +445,46 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
         theNetwork.theGame.scoreBoard.addCash(attacker.attackerData.bits + extraCashGained)
         attacker.immuneTo = this
         theNetwork.theGame.gameActivity.theGameView.theEffects?.fade(attacker)
+    }
+
+    fun splitAttacker(attacker: Attacker): Attacker
+    {
+        val newAttacker = duplicateAttacker(attacker)
+        val number = attacker.attackerData.number
+        when (newAttacker.attackerData.bits)
+        {
+            in 0..4 -> {
+                attacker.attackerData.number = number and 0x03u
+            }
+            in 5 .. 8 -> {
+                attacker.attackerData.number = number and 0x0Fu
+            }
+            in 9 .. 16 -> {
+                attacker.attackerData.number = number and 0x00FFu
+            }
+            else ->
+            {
+                attacker.attackerData.number = number and 0xFFFFu
+            }
+        }
+        newAttacker.attackerData.number -= attacker.attackerData.number
+        Attacker.makeNumber(attacker)
+        Attacker.makeNumber(newAttacker)
+        return newAttacker
+    }
+
+    fun duplicateAttacker(attacker: Attacker): Attacker
+    {
+        var change_in_speed = attacker.data.speed * (Random.nextFloat() * 0.1f)
+        attacker.data.speed += change_in_speed
+        val newAttacker = attacker.copy()
+        change_in_speed = newAttacker.data.speed * (Random.nextFloat() * 0.2f + 0.1f)
+        newAttacker.data.speed -= change_in_speed
+        network.addVehicle(newAttacker)
+        newAttacker.setOntoLink(attacker.onLink, newAttacker.startNode)
+        attacker.immuneTo = this
+        newAttacker.immuneTo = this
+        return newAttacker
     }
 
     fun processInAccumulator(attacker: Attacker)
@@ -476,6 +535,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
             ChipType.ADD -> createBitmap("ADD %d".format(chipData.power))
             ChipType.CLK -> createBitmap("CLK %d".format(chipData.power))
             ChipType.SPLT -> createBitmap("SPLT")
+            ChipType.DUP -> createBitmap("DUP")
             ChipType.NOP -> if (chipData.power == 1)  createBitmap("NOP")
                 else createBitmap("NOP %d".format(chipData.power))
             ChipType.ENTRY -> null
@@ -565,6 +625,9 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
             ChipType.SPLT -> {
                 alternatives.add(ChipUpgrades.REDUCE)
             }
+            ChipType.DUP -> {
+                alternatives.add(ChipUpgrades.REDUCE)
+            }
             ChipType.ENTRY -> {}
             ChipType.CPU -> {}
         }
@@ -643,7 +706,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
     companion object
     {
         val obstacleTypes =
-            setOf(ChipType.ADD, ChipType.SHL, ChipType.NOP, ChipType.SPLT)
+            setOf(ChipType.ADD, ChipType.SHL, ChipType.NOP, ChipType.SPLT, ChipType.DUP)
         fun createFromData(network: Network, data: Data): Chip
                 /** reconstruct an object based on the saved data
                  * and set all inner proprieties

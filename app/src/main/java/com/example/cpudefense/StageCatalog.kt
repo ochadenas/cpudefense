@@ -10,7 +10,7 @@ class StageCatalog
      * It is not meant to be instantiated.
      */
     companion object {
-        private val possibleTypesForObstacles =
+        private val possibleChiptypesWhereObstaclesCanBePut =
             setOf(Chip.ChipType.EMPTY, Chip.ChipType.ADD, Chip.ChipType.SHL, Chip.ChipType.NOP)
         fun createStage(stage: Stage, level: Stage.Identifier)
         {
@@ -72,14 +72,14 @@ class StageCatalog
             if (reducedNumberOfObstacles > 0)
                 for (i in 1..reducedNumberOfObstacles)  // set or upgrade the slots
                 {
-                    val possibleSlotsForObstacles = stage.chips.values.filter { it.chipData.type in possibleTypesForObstacles }
+                    val possibleSlotsForObstacles = stage.chips.values.filter { it.chipData.type in possibleChiptypesWhereObstaclesCanBePut }
                     if (possibleSlotsForObstacles.isNotEmpty())
                     {
                         val obstacleSlot = possibleSlotsForObstacles.random()
                         when (obstacleSlot.chipData.type)
                         {
                             in listOf( Chip.ChipType.ADD, Chip.ChipType.SHL, Chip.ChipType.NOP) -> obstacleSlot.addPower(1)
-                            Chip.ChipType.EMPTY -> obstacleSlot.setType(possibleTypesForObstacles.random())
+                            Chip.ChipType.EMPTY -> obstacleSlot.setType(Chip.obstacleTypes.random())
                             else -> {}
                         }
                     }
@@ -125,7 +125,7 @@ class StageCatalog
                         initializeNetwork(40, 40)
 
                         createChip(20, 1, type = Chip.ChipType.ENTRY)
-                        createChip(15, 20, 1).setType(Chip.ChipType.SPLT)
+                        createChip(15, 20, 1)
                         createChip(20, 38, type = Chip.ChipType.CPU)
 
                         createLink(0, 1, 0, mask = 0x06)
@@ -143,7 +143,7 @@ class StageCatalog
 
                         createChip(8, 1, type = Chip.ChipType.ENTRY)
                         createChip(20, 18, 1)
-                        createChip(20, 22, 2).setType(Chip.ChipType.SPLT)
+                        createChip(20, 22, 2)
                         createChip(45, 30, 3)
                         createChip(45, 40, type = Chip.ChipType.CPU)
 
