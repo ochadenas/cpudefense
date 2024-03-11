@@ -99,21 +99,21 @@ class Marketplace(val game: Game): GameElement()
         val bottomMargin = 40
         buttonFinish = Button(game.resources.getString(R.string.button_playlevel),
             textSize = Game.purchaseButtonTextSize * game.resources.displayMetrics.scaledDensity,
-            style = 1, preferredWidth = biographyArea.width())
+            style = Button.Style.HPKEY, preferredWidth = biographyArea.width())
         buttonFinish?.let {
             Fader(game, it, Fader.Type.APPEAR, Fader.Speed.SLOW)
             it.alignRight(myArea.right, myArea.bottom - bottomMargin - it.area.height())
         }
         buttonRefund = Button(game.resources.getString(R.string.button_refund),
             textSize = Game.purchaseButtonTextSize * game.resources.displayMetrics.scaledDensity,
-            style = 1, preferredWidth = biographyArea.width())
+            style = Button.Style.HPKEY, preferredWidth = biographyArea.width())
         buttonRefund?.let {
             Fader(game, it, Fader.Type.APPEAR, Fader.Speed.SLOW)
             it.alignRight(myArea.right, myArea.bottom - bottomMargin - 3*it.area.height())
         }
         buttonPurchase = Button(purchaseButtonText(null),
             textSize = Game.purchaseButtonTextSize * game.resources.displayMetrics.scaledDensity,
-            style = 1, preferredWidth = biographyArea.width())
+            style = Button.Style.HPKEY, preferredWidth = biographyArea.width())
         buttonPurchase?.let {
             Fader(game, it, Fader.Type.APPEAR, Fader.Speed.SLOW)
             it.alignRight(myArea.right, myArea.bottom - bottomMargin - 5*it.area.height())

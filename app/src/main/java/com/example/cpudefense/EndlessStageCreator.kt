@@ -94,7 +94,7 @@ class EndlessStageCreator(val stage: Stage)
                 sectors.add(sector)
             }
         // determine entries and exits
-        var entrySectors = mutableListOf<Sector?>()
+        val entrySectors = mutableListOf<Sector?>()
         if (Random.nextFloat() < .7)
             entrySectors.add(getByCoordinate(SectorCoord(0,0)))
         if (Random.nextFloat() < .5)
@@ -105,7 +105,7 @@ class EndlessStageCreator(val stage: Stage)
             entrySectors.add(getByCoordinate(SectorCoord(0,1)))
         entrySectors.forEach { it?.type = SectorType.ENTRY }
 
-        var exitSectors = mutableListOf<Sector?>()
+        val exitSectors = mutableListOf<Sector?>()
         if (Random.nextFloat() < .3)
             exitSectors.add(getByCoordinate(SectorCoord(0,numberOfSectorsY-1)))
         if (Random.nextFloat() < .1)
@@ -134,6 +134,7 @@ class EndlessStageCreator(val stage: Stage)
         // solution by copying the whole hash map:
         val nodesWithConnectors: Map<Int, Node> = stage.network.nodes.filter { it.value.connectedLinks.size > 0 }
         stage.network.nodes = nodesWithConnectors as HashMap<Int, Node>
+        stage.chips = nodesWithConnectors as HashMap<Int, Chip>
 
         // set mask for the graphical representations of the links
         for (link in stage.network.links.values)
@@ -193,7 +194,7 @@ class EndlessStageCreator(val stage: Stage)
      * @return a list of sectors ending with an "exit" sector, or null if
      * the path does not reach an exit sector */
     {
-        var sectorPath = Path()
+        val sectorPath = Path()
         sectorPath.sectors.add(firstSector)
         var sector = firstSector
         var nextSector: Sector?
@@ -223,7 +224,7 @@ class EndlessStageCreator(val stage: Stage)
                 1 -> it.mask = 0x01
                 2 -> it.mask = 0x06
                 3 -> it.mask = 0x07
-                else -> it?.mask = 0x0F
+                else -> it.mask = 0x0F
             }
         }
     }
@@ -271,7 +272,7 @@ class EndlessStageCreator(val stage: Stage)
 
     private fun createTrackFromPath(path: Path): MutableList<Int>
     {
-        var linkList = mutableListOf<Int>()
+        val linkList = mutableListOf<Int>()
         try {
             var lastNode = path.nodes[0]
             for (node in path.nodes.subList(1, path.nodes.size))
@@ -333,7 +334,7 @@ class EndlessStageCreator(val stage: Stage)
         }
     }
 
-    class Path()
+    class Path
     /** a list of sectors that constitute a continuous path from an entry to an exit point */
     {
         var sectors = mutableListOf<Sector>()
@@ -355,7 +356,6 @@ class EndlessStageCreator(val stage: Stage)
     {
         var type: SectorType = SectorType.NORMAL
         var nodes = CopyOnWriteArrayList<Chip>()
-        val model = Random.nextInt(20)
         var exitsUsed = mutableSetOf<Direction>()
         var entriesUsed = mutableSetOf<Direction>()
 
@@ -387,10 +387,6 @@ class EndlessStageCreator(val stage: Stage)
                     model.createNodes.invoke(stage, area)
                 }
             }
-        }
-
-        fun makePath(): CopyOnWriteArrayList<Chip> {
-            return nodes
         }
 
         inner class Model(val number: Int) {

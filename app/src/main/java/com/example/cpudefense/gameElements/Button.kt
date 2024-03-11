@@ -5,7 +5,7 @@ import com.example.cpudefense.effects.Fadable
 import com.example.cpudefense.effects.Fader
 import com.example.cpudefense.utils.*
 
-class Button(var text: String, val textSize: Float, val color: Int = Color.GREEN, val style: Int = 0, val preferredWidth: Int = 0): Fadable
+class Button(var text: String, val textSize: Float, val color: Int = Color.GREEN, val style: Style = Style.FILLED, val preferredWidth: Int = 0): Fadable
 {
     var alpha = 0
     var area = Rect()
@@ -13,20 +13,29 @@ class Button(var text: String, val textSize: Float, val color: Int = Color.GREEN
     var buttonPaint = Paint()
     var textPaint = Paint()
 
+    enum class Style { FRAME, FILLED, HPKEY}
+
     init {
         when (style)
         {
-            1 ->
+            Style.FRAME ->
             {
                 buttonPaint.color = Color.WHITE  // default, should be overridden
                 buttonPaint.style = Paint.Style.STROKE
                 buttonPaint.strokeWidth = 2f
                 textPaint.color = Color.WHITE
             }
-            else -> {
+            Style.FILLED -> {
                 buttonPaint.color = color
                 buttonPaint.style = Paint.Style.FILL
                 textPaint.color = Color.BLACK
+            }
+            Style.HPKEY ->
+            {
+                buttonPaint.color = Color.WHITE  // default, should be overridden
+                buttonPaint.style = Paint.Style.STROKE
+                buttonPaint.strokeWidth = 2f
+                textPaint.color = Color.WHITE
             }
 
         }
