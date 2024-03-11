@@ -22,7 +22,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
     data class Data(
         var type: ChipType = ChipType.EMPTY,
         /** level, or strength, of the chip */
-        var power: Int = 0,
+        var upgradeLevel: Int = 0,
         /** time that this chip needs before it can shoot again */
         var cooldown: Int = 0,
         /** current state of the timer */
@@ -97,7 +97,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
         with (chipData)
         {
             type = ChipType.EMPTY
-            power = 0
+            upgradeLevel = 0
             value = 0
             color = Color.WHITE
             glowColor = Color.WHITE
@@ -118,7 +118,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
         when (chipType)
         {
             ChipType.SUB -> {
-                chipData.power = 1
+                chipData.upgradeLevel = 1
                 bitmap = null
                 chipData.color = resources.getColor(R.color.chips_sub_foreground)
                 chipData.glowColor = resources.getColor(R.color.chips_sub_glow)
@@ -129,7 +129,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
                 data.range = 2f * modifier
             }
             ChipType.SHR -> {
-                chipData.power = 1
+                chipData.upgradeLevel = 1
                 bitmap = null
                 chipData.color = resources.getColor(R.color.chips_shr_foreground)
                 chipData.glowColor = resources.getColor(R.color.chips_shr_glow)
@@ -140,7 +140,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
                 data.range = 2f * modifier
             }
             ChipType.MEM -> {
-                chipData.power = 1
+                chipData.upgradeLevel = 1
                 bitmap = null
                 chipData.color = resources.getColor(R.color.chips_mem_foreground)
                 chipData.glowColor = resources.getColor(R.color.chips_mem_glow)
@@ -151,7 +151,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
                 data.range = 2f * modifier
             }
             ChipType.ACC -> {
-                chipData.power = 1
+                chipData.upgradeLevel = 1
                 bitmap = null
                 chipData.color = resources.getColor(R.color.chips_acc_foreground)
                 chipData.glowColor = resources.getColor(R.color.chips_acc_glow)
@@ -161,7 +161,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
                 data.range = 2f
             }
             ChipType.CLK -> {
-                chipData.power = 1
+                chipData.upgradeLevel = 1
                 bitmap = null
                 chipData.color = resources.getColor(R.color.chips_clk_foreground)
                 chipData.glowColor = resources.getColor(R.color.chips_clk_glow)
@@ -170,7 +170,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
                 data.range = 0f
             }
             ChipType.SHL -> {
-                chipData.power = 1
+                chipData.upgradeLevel = 1
                 bitmap = null
                 chipData.color = resources.getColor(R.color.chips_shl_foreground)
                 chipData.glowColor = resources.getColor(R.color.chips_shl_glow)
@@ -180,7 +180,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
                 data.range = 2f
             }
             ChipType.ADD -> {
-                chipData.power = 1
+                chipData.upgradeLevel = 1
                 bitmap = null
                 chipData.color = resources.getColor(R.color.chips_add_foreground)
                 chipData.glowColor = resources.getColor(R.color.chips_add_glow)
@@ -190,14 +190,14 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
                 data.range = 2f
             }
             ChipType.NOP -> {
-                chipData.power = 1
+                chipData.upgradeLevel = 1
                 bitmap = null
                 chipData.color = resources.getColor(R.color.chips_noop_foreground)
                 chipData.glowColor = resources.getColor(R.color.chips_noop_glow)
                 chipData.value = Game.basePrice[ChipUpgrades.REDUCE] ?: 99
             }
             ChipType.SPLT -> {
-                chipData.power = 1
+                chipData.upgradeLevel = 1
                 bitmap = null
                 chipData.color = resources.getColor(R.color.chips_split_foreground)
                 chipData.glowColor = resources.getColor(R.color.chips_split_glow)
@@ -206,7 +206,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
                 chipData.value = Game.basePrice[ChipUpgrades.REDUCE] ?: 99
             }
             ChipType.DUP -> {
-                chipData.power = 1
+                chipData.upgradeLevel = 1
                 bitmap = null
                 chipData.color = resources.getColor(R.color.chips_split_foreground)
                 chipData.glowColor = resources.getColor(R.color.chips_split_glow)
@@ -227,13 +227,18 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
 
     fun addPower(amount: Int)
     {
-        chipData.power += amount
+        chipData.upgradeLevel += amount
         bitmap = null
     }
 
     fun isObstacle(): Boolean
     {
         return chipData.type in obstacleTypes
+    }
+
+    fun obstacleDifficulty(): Double
+    {
+        return (obstacleStrength[chipData.type] ?: 0.0) * chipData.upgradeLevel
     }
 
     fun getCooldownTime(): Float
@@ -243,7 +248,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
     {
         if (this.chipData.type == ChipType.CLK)
         {
-            val modifier = (1f + chipData.power)
+            val modifier = (1f + chipData.upgradeLevel)
             return chipData.cooldown.toFloat() / modifier
         }
         else
@@ -429,7 +434,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
                 return
             }
             else -> {
-                if (attacker.onShot(chipData.type, chipData.power))
+                if (attacker.onShot(chipData.type, chipData.upgradeLevel))
                     attacker.remove()
             }
         }
@@ -495,7 +500,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
         {
             val number1: ULong = attacker.attackerData.number
             val number2: ULong = internalRegister?.attackerData?.number ?: 0u
-            val newValue = when (chipData.power)
+            val newValue = when (chipData.upgradeLevel)
             {
                 1 -> number1 + number2
                 2 -> number1 or number2
@@ -522,22 +527,22 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
     {
         return when (chipData.type)
         {
-            ChipType.SUB -> createBitmap("SUB %d".format(chipData.power))
-            ChipType.SHR -> createBitmap("SHR %d".format(chipData.power))
+            ChipType.SUB -> createBitmap("SUB %d".format(chipData.upgradeLevel))
+            ChipType.SHR -> createBitmap("SHR %d".format(chipData.upgradeLevel))
             ChipType.MEM -> createBitmap("MEM")
-            ChipType.ACC -> when (chipData.power)
+            ChipType.ACC -> when (chipData.upgradeLevel)
             {
                 1 -> createBitmap("ACC +")
                 2 -> createBitmap("ACC v")
                 else -> createBitmap("ACC &")
             }
-            ChipType.SHL -> createBitmap("SHL %d".format(chipData.power))
-            ChipType.ADD -> createBitmap("ADD %d".format(chipData.power))
-            ChipType.CLK -> createBitmap("CLK %d".format(chipData.power))
+            ChipType.SHL -> createBitmap("SHL %d".format(chipData.upgradeLevel))
+            ChipType.ADD -> createBitmap("ADD %d".format(chipData.upgradeLevel))
+            ChipType.CLK -> createBitmap("CLK %d".format(chipData.upgradeLevel))
             ChipType.SPLT -> createBitmap("SPLT")
             ChipType.DUP -> createBitmap("DUP")
-            ChipType.NOP -> if (chipData.power == 1)  createBitmap("NOP")
-                else createBitmap("NOP %d".format(chipData.power))
+            ChipType.NOP -> if (chipData.upgradeLevel == 1)  createBitmap("NOP")
+                else createBitmap("NOP %d".format(chipData.upgradeLevel))
             ChipType.ENTRY -> null
             ChipType.CPU -> null
             ChipType.EMPTY -> null
@@ -602,7 +607,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
                 alternatives.add(ChipUpgrades.SELL)
             }
             ChipType.ACC -> {
-                if (chipData.power < 3)
+                if (chipData.upgradeLevel < 3)
                     alternatives.add(ChipUpgrades.POWERUP)
                 alternatives.add(ChipUpgrades.SELL)
             }
@@ -642,7 +647,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
                     alternatives.remove(a)
         }
         // discard the possibility for upgrade if the chip is already very high powered
-        if (chipData.power >= 12)
+        if (chipData.upgradeLevel >= 12)
         {
             alternatives.remove(ChipUpgrades.POWERUP)
         }
@@ -705,8 +710,14 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
 
     companion object
     {
-        val obstacleTypes =
-            setOf(ChipType.ADD, ChipType.SHL, ChipType.NOP, ChipType.SPLT, ChipType.DUP)
+        val obstacleStrength =
+            hashMapOf(
+                ChipType.NOP to 0.5,
+                ChipType.ADD to 1.0,
+                ChipType.SHL to 1.2,
+                ChipType.SPLT to 1.6,
+                ChipType.DUP to 2.0)
+        val obstacleTypes = obstacleStrength.keys
         fun createFromData(network: Network, data: Data): Chip
                 /** reconstruct an object based on the saved data
                  * and set all inner proprieties

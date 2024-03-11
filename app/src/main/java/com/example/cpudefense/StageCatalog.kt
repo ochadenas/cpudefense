@@ -2,6 +2,7 @@ package com.example.cpudefense
 
 import com.example.cpudefense.gameElements.*
 import com.example.cpudefense.networkmap.Link
+import kotlin.math.sqrt
 import kotlin.random.Random
 
 class StageCatalog
@@ -38,7 +39,7 @@ class StageCatalog
                         29 -> 3
                         else -> 6
                     }
-                    createObstacles(stage, numberOfObstacles)
+                    createFixedNumberOfObstacles(stage, numberOfObstacles)
                     return
                 }
                 Game.SERIES_ENDLESS -> {
@@ -54,10 +55,12 @@ class StageCatalog
                         }
                     while (stage.difficulty > 900f) {
                         EndlessStageCreator(stage).createStage(level)
-                        stage.calculateDifficulty()
+                        stage.calculateDifficulty() // avoid levels that are impossible to play
                     }
-                    val numberOfObstacles = level.number - stage.difficulty.toInt()
-                    createObstacles(stage, numberOfObstacles)
+                    // val numberOfObstacles = level.number - stage.difficulty.toInt()
+                    // createFixedNumberOfObstacles(stage, numberOfObstacles)
+                    val targetDifficulty = 2.0 * sqrt(level.number.toDouble()) - stage.difficulty
+                    createObstaclesForDifficulty(stage, targetDifficulty)
                     stage.provideStructureData()
                     structure[level.number] = stage.data
                     Persistency(stage.theGame.gameActivity).saveLevelStructure(Game.SERIES_ENDLESS, structure)
@@ -65,7 +68,7 @@ class StageCatalog
             }
         }
 
-        private fun createObstacles(stage: Stage, numberOfObstacles: Int)
+        private fun createFixedNumberOfObstacles(stage: Stage, numberOfObstacles: Int)
         {
             val reduce = stage.theGame.heroes[Hero.Type.LIMIT_UNWANTED_CHIPS]?.getStrength() ?: 0 // consider Kilby's effect
             val reducedNumberOfObstacles = numberOfObstacles - reduce.toInt()
@@ -84,6 +87,33 @@ class StageCatalog
                         }
                     }
                 }
+        }
+
+        private fun createObstaclesForDifficulty(stage: Stage, difficulty: Double)
+                /** creates an undetermined number of obstacles for the given stage,
+                 * so that the cumulated "strength" of these obstacles "does not exceed the given difficulty.
+                 */
+        {
+            val reduce = stage.theGame.heroes[Hero.Type.LIMIT_UNWANTED_CHIPS]?.getStrength()?.toDouble() ?: 0.0 // consider Kilby's effect
+            val targetDifficulty = difficulty - reduce
+            var stageDifficulty = stage.difficultyOfObstacles()
+            while (stageDifficulty < targetDifficulty)
+            {
+                val possibleSlotsForObstacles = stage.chips.values.filter { it.chipData.type in possibleChiptypesWhereObstaclesCanBePut }
+                if (possibleSlotsForObstacles.isNotEmpty())
+                {
+                    val obstacleSlot = possibleSlotsForObstacles.random()
+                    when (obstacleSlot.chipData.type)
+                    {
+                        in listOf( Chip.ChipType.ADD, Chip.ChipType.SHL, Chip.ChipType.NOP) -> obstacleSlot.addPower(1)
+                        Chip.ChipType.EMPTY -> obstacleSlot.setType(Chip.obstacleTypes.random())
+                        else -> {}
+                    }
+                    stageDifficulty = stage.difficultyOfObstacles()
+                }
+                else
+                    return // no more obstacles can be placed
+            }
         }
         private fun createStageWithoutObstacles(stage: Stage, level: Stage.Identifier)
         {

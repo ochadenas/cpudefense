@@ -86,7 +86,7 @@ class ChipUpgrade(val chipToUpgrade: Chip, val type: Chip.ChipUpgrades,
             Chip.ChipUpgrades.REDUCE ->
             {
                 chipToUpgrade.addPower(-1)
-                if (chipToUpgrade.chipData.power == 0)
+                if (chipToUpgrade.chipData.upgradeLevel == 0)
                     chipToUpgrade.sellChip()
             }
             Chip.ChipUpgrades.SELL -> chipToUpgrade.sellChip()

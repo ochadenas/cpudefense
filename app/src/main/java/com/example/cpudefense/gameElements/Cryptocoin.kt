@@ -40,6 +40,8 @@ class Cryptocoin(network: com.example.cpudefense.networkmap.Network, number: ULo
         {
             Chip.ChipType.ACC -> return false
             Chip.ChipType.MEM -> return false
+            Chip.ChipType.DUP -> return false
+            Chip.ChipType.SPLT -> return false
             else -> {
                 if (super.onShot(type, power))
                 {
