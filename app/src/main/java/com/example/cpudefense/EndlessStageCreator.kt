@@ -8,6 +8,7 @@ import com.example.cpudefense.gameElements.Attacker
 import com.example.cpudefense.gameElements.Chip
 import com.example.cpudefense.networkmap.Link
 import com.example.cpudefense.networkmap.Network
+import com.example.cpudefense.networkmap.Node
 import com.example.cpudefense.networkmap.Viewport
 import com.example.cpudefense.utils.setTopLeft
 import java.util.concurrent.CopyOnWriteArrayList
@@ -130,13 +131,9 @@ class EndlessStageCreator(val stage: Stage)
         // remove isolated chips
         // stage.network.nodes.entries.removeIf { it.value.connectedLinks.size == 0 }  // preferred solution, but requires API24
 
-        // clumsy solution:
-        val iterator = stage.network.nodes.entries.iterator()
-        while (iterator.hasNext()) {
-            val node = iterator.next().value
-            if (node.connectedLinks.size == 0)
-                iterator.remove()
-        }
+        // solution by copying the whole hash map:
+        val nodesWithConnectors: Map<Int, Node> = stage.network.nodes.filter { it.value.connectedLinks.size > 0 }
+        stage.network.nodes = nodesWithConnectors as HashMap<Int, Node>
 
         // set mask for the graphical representations of the links
         for (link in stage.network.links.values)
