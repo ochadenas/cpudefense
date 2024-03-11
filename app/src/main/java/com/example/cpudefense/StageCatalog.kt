@@ -21,7 +21,7 @@ class StageCatalog
                 Game.SERIES_TURBO ->
                 {
                     createStageWithoutObstacles(stage, level)  // make basic layout
-                    val numberOfObstacles = when (level.number) {
+                    val difficulty = when (level.number) {
                         1 -> 0
                         2 -> 1
                         3 -> 2
@@ -39,7 +39,7 @@ class StageCatalog
                         29 -> 3
                         else -> 6
                     }
-                    createFixedNumberOfObstacles(stage, numberOfObstacles)
+                    createObstaclesForDifficulty(stage, difficulty.toDouble())
                     return
                 }
                 Game.SERIES_ENDLESS -> {

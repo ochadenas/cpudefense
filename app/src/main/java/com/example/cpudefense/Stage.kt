@@ -8,7 +8,6 @@ import com.example.cpudefense.networkmap.Network
 import com.example.cpudefense.networkmap.Track
 import com.example.cpudefense.networkmap.Viewport
 import com.example.cpudefense.utils.blur
-import java.sql.SQLIntegrityConstraintViolationException
 import java.util.concurrent.CopyOnWriteArrayList
 import kotlin.random.Random
 
@@ -51,13 +50,14 @@ class Stage(var theGame: Game) {
         var gridSizeX: Int = 1,
         var gridSizeY: Int = 1,
         var maxWaves: Int = 0,
-        var countOfWaves: Int = 0,
+        var wavesCount: Int = 0,
         var chips: HashMap<Int, Chip.Data> = hashMapOf(),
         var links: HashMap<Int, Link.Data> = hashMapOf(),
         var tracks: HashMap<Int, Track.Data> = hashMapOf(),
         var waves: CopyOnWriteArrayList<Wave.Data> = CopyOnWriteArrayList<Wave.Data>(),
         var attackers: CopyOnWriteArrayList<Attacker.Data> = CopyOnWriteArrayList<Attacker.Data>(),
         var chipsAllowed: Set<Chip.ChipUpgrades> = setOf(),
+        var obstaclesRemovedCount: Int = 0,
     )
     var data = Data()
 
@@ -228,7 +228,7 @@ class Stage(var theGame: Game) {
                     return null
                 }
                 else {
-                    data.countOfWaves++
+                    data.wavesCount++
                     return waves.removeFirst()
                 }
             }

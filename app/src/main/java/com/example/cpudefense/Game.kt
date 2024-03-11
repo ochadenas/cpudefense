@@ -59,7 +59,7 @@ class Game(val gameActivity: MainGameActivity) {
         const val SERIES_TURBO   = 2
         const val SERIES_ENDLESS = 3
 
-        val basePrice = mapOf(Chip.ChipUpgrades.REDUCE to 20,
+        val basePrice = mapOf(Chip.ChipUpgrades.REDUCE to 10,
             Chip.ChipUpgrades.SUB to 8, Chip.ChipUpgrades.ACC to 10,
             Chip.ChipUpgrades.SHR to 16, Chip.ChipUpgrades.MEM to 12,
             Chip.ChipUpgrades.CLK to 32)

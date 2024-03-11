@@ -28,7 +28,12 @@ class ChipUpgrade(val chipToUpgrade: Chip, val type: Chip.ChipUpgrades,
                 return upgradePrice.toInt()
             }
             Chip.ChipUpgrades.REDUCE -> {
-                return chipToUpgrade.chipData.value
+                var alreadyRemoved = 0
+                game.currentStage?.let {
+                    alreadyRemoved = it.data.obstaclesRemovedCount
+                    it.data.obstaclesRemovedCount++
+                }
+                return chipToUpgrade.chipData.value * (alreadyRemoved*(alreadyRemoved+1)/2 + 1)
             }
             Chip.ChipUpgrades.SELL -> {
                 val refund = - chipToUpgrade.chipData.value * (game.heroes[Hero.Type.INCREASE_REFUND]?.getStrength() ?: 50f) * 0.01f

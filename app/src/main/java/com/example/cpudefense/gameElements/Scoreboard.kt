@@ -193,10 +193,10 @@ class ScoreBoard(val game: Game): GameElement() {
 
         fun display(canvas: Canvas)
         {
-            if (game.currentStage?.data?.countOfWaves != lastValue)
+            if (game.currentStage?.data?.wavesCount != lastValue)
             {
                 /* only render the display if value has changed, otherwise re-use bitmap */
-                lastValue = game.currentStage?.data?.countOfWaves ?: -1
+                lastValue = game.currentStage?.data?.wavesCount ?: -1
                 recreateBitmap()
             }
             canvas.drawBitmap(bitmap, null, area, paint)
@@ -213,7 +213,7 @@ class ScoreBoard(val game: Game): GameElement() {
             paint.color = myColor
             paint.textAlign = Paint.Align.LEFT
             game.currentStage?.let {
-                val currentWave = "%d".format(it.data.countOfWaves)
+                val currentWave = "%d".format(it.data.wavesCount)
                 paint.textSize = Game.scoreTextSize * game.resources.displayMetrics.scaledDensity
                 paint.getTextBounds(currentWave, 0, currentWave.length, bounds)
                 val verticalMargin = (rect.height()-bounds.height())/2
