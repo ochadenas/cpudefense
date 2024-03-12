@@ -358,11 +358,11 @@ class Stage(var theGame: Game) {
             if (minLength>track.links.size)
                 minLength = track.links.size
         }
-        if (minLength<3 || tracks.size == 0) {
+        if (minLength<4 || tracks.size == 0) {
             difficulty = 999.0  // too difficult
             return
         }
-        difficulty = 11-(sumLength.toDouble()/tracks.size) + difficultyOfObstacles()
+        difficulty = 8-(sumLength.toDouble()/tracks.size) + difficultyOfObstacles()
     }
     fun takeSnapshot(size: Int): Bitmap?
             /** gets a miniature picture of the current level

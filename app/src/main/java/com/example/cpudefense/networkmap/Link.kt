@@ -5,7 +5,7 @@ import com.example.cpudefense.*
 import com.example.cpudefense.gameElements.GameElement
 import kotlin.math.abs
 
-class Link(val theNetwork: Network, var node1: Node, var node2: Node, var ident: Int, var mask: Int = 0x0F, var variant: Variant = Variant.CONVEX): GameElement() {
+class Link(val theNetwork: Network, var node1: Node, var node2: Node, var ident: Int, var mask: Int = 0x0F, var variant: Variant? = Variant.CONVEX): GameElement() {
 
     data class Data
         (
@@ -13,7 +13,7 @@ class Link(val theNetwork: Network, var node1: Node, var node2: Node, var ident:
         var startId: Int,
         var endId: Int,
         var mask: Int,
-        var variant: Variant
+        var variant: Variant?
     )
 
     var data = Data(
@@ -35,16 +35,29 @@ class Link(val theNetwork: Network, var node1: Node, var node2: Node, var ident:
     var connectorWidth = 6f
     var connectorRadius = 8f
     val paintConnector = Paint()
+    val paintEntry = Paint()
     val paintBackground = Paint()
     var paintLineBackground = Paint()
 
     init {
         calculateIntermediatePointPosition()
-        paintBackground.color = theNetwork.theGame.resources.getColor(R.color.network_background)
-        paintBackground.style = Paint.Style.FILL_AND_STROKE
-        paintConnector.color = theNetwork.theGame.resources.getColor(R.color.connectors)
-        paintConnector.style = Paint.Style.STROKE
-        paintConnector.strokeWidth = connectorWidth
+        with (paintBackground)
+        {
+            color = theNetwork.theGame.resources.getColor(R.color.network_background)
+            style = Paint.Style.FILL_AND_STROKE
+        }
+        with (paintConnector)
+        {
+            color = theNetwork.theGame.resources.getColor(R.color.connectors)
+            style = Paint.Style.STROKE
+            strokeWidth = connectorWidth
+        }
+        with (paintEntry)
+        {
+            color = theNetwork.theGame.resources.getColor(R.color.entrypoints)
+            style = Paint.Style.STROKE
+            strokeWidth = connectorWidth
+        }
         paintLineBackground = Paint(paintBackground)
     }
 
@@ -75,7 +88,7 @@ class Link(val theNetwork: Network, var node1: Node, var node2: Node, var ident:
         val distHori: Float = abs(point2.x - point1.x)
         val distVert: Float = abs(point2.y - point1.y)
 
-        when (data.variant) {
+        when (data.variant ?: Variant.CONVEX) {
             Variant.CONCAVE -> {
                 if (distVert < distHori)
                     interPointOnGrid = Coord(point1.x+distVert, point2.y)  // done
@@ -99,7 +112,7 @@ class Link(val theNetwork: Network, var node1: Node, var node2: Node, var ident:
         val distHori: Float = abs(point2.x - point1.x)
         val distVert: Float = abs(point2.y - point1.y)
 
-        when (data.variant)
+        when (data.variant ?: Variant.CONVEX)
         {
             Variant.CONCAVE -> {
                 if (distVert > distHori)
@@ -220,7 +233,7 @@ class Link(val theNetwork: Network, var node1: Node, var node2: Node, var ident:
         val point = viewport.gridToViewport(gridPoint)
         val radius = connectorRadius
         canvas.drawCircle(point.first.toFloat(), point.second.toFloat(), radius, paintBackground)
-        canvas.drawCircle(point.first.toFloat(), point.second.toFloat(), radius, paintConnector)
+        canvas.drawCircle(point.first.toFloat(), point.second.toFloat(), radius, paintEntry)
     }
 
     companion object {
@@ -231,7 +244,7 @@ class Link(val theNetwork: Network, var node1: Node, var node2: Node, var ident:
         {
             val node1 = network.nodes[data.startId] ?: return null
             val node2 = network.nodes[data.endId] ?: return null
-            val link = Link(network, node1, node2, data.ident, data.mask)
+            val link = Link(network, node1, node2, data.ident, data.mask, data.variant)
             link.data = data
             return link
         }

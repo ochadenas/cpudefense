@@ -28,11 +28,7 @@ class ChipUpgrade(val chipToUpgrade: Chip, val type: Chip.ChipUpgrades,
                 return upgradePrice.toInt()
             }
             Chip.ChipUpgrades.REDUCE -> {
-                var alreadyRemoved = 0
-                game.currentStage?.let {
-                    alreadyRemoved = it.data.obstaclesRemovedCount
-                    it.data.obstaclesRemovedCount++
-                }
+                var alreadyRemoved = game.currentStage?.data?.obstaclesRemovedCount ?: 0
                 return chipToUpgrade.chipData.value * (alreadyRemoved*(alreadyRemoved+1)/2 + 1)
             }
             Chip.ChipUpgrades.SELL -> {
@@ -93,6 +89,7 @@ class ChipUpgrade(val chipToUpgrade: Chip, val type: Chip.ChipUpgrades,
                 chipToUpgrade.addPower(-1)
                 if (chipToUpgrade.chipData.upgradeLevel == 0)
                     chipToUpgrade.sellChip()
+                game.currentStage?.let {it.data.obstaclesRemovedCount++ }
             }
             Chip.ChipUpgrades.SELL -> chipToUpgrade.sellChip()
             Chip.ChipUpgrades.SUB -> chipToUpgrade.setType(Chip.ChipType.SUB)
