@@ -35,6 +35,7 @@ open class Attacker(network: Network, representation: Representation = Represent
     private var oldNumber: ULong = 0U
     var oldNumberBitmap: Bitmap? = null
     var immuneTo: Chip? = null
+    var immuneToAll = false
     var animationCount = 0
     val animationCountMax = 8
     private var baseNumberFontSize = 24f

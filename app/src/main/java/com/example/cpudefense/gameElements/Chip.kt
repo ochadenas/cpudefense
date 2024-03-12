@@ -418,7 +418,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
     {
         if (chipData.type == ChipType.EMPTY)
             return
-        if (attacker.immuneTo == this)
+        if (attacker.immuneTo == this || attacker.immuneToAll)
             return
         if (chipData.type in listOf<ChipType>(ChipType.ACC, ChipType.MEM, ChipType.CLK)
             && attacker.attackerData.isCoin)
@@ -448,7 +448,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
             theNetwork.theGame.heroes[Hero.Type.GAIN_CASH_ON_KILL]?.getStrength()?.toInt()
                 ?: 0 // possible bonus
         theNetwork.theGame.scoreBoard.addCash(attacker.attackerData.bits + extraCashGained)
-        attacker.immuneTo = this
+        attacker.immuneToAll = true
         theNetwork.theGame.gameActivity.theGameView.theEffects?.fade(attacker)
     }
 

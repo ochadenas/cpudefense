@@ -94,7 +94,10 @@ class ChipUpgrade(val chipToUpgrade: Chip, val type: Chip.ChipUpgrades,
             Chip.ChipUpgrades.SELL -> chipToUpgrade.sellChip()
             Chip.ChipUpgrades.SUB -> chipToUpgrade.setType(Chip.ChipType.SUB)
             Chip.ChipUpgrades.SHR -> chipToUpgrade.setType(Chip.ChipType.SHR)
-            Chip.ChipUpgrades.ACC -> chipToUpgrade.setType(Chip.ChipType.ACC)
+            Chip.ChipUpgrades.ACC -> {
+                chipToUpgrade.setType(Chip.ChipType.ACC)
+                chipToUpgrade.chipData.value = price  // ACC prices do vary, so the default value cannot be used
+            }
             Chip.ChipUpgrades.MEM -> chipToUpgrade.setType(Chip.ChipType.MEM)
             Chip.ChipUpgrades.CLK -> chipToUpgrade.setType(Chip.ChipType.CLK)
         }
