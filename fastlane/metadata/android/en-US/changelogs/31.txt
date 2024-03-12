@@ -1,0 +1,11 @@
+New Features:
+    Two more types of "negative" chips: DUP and SPLT
+    (an introductory level with explanation will be added later).
+
+Bugfixes:
+    Number of negative chips in "endless" stages reduced.
+    Revised the calculation of stage difficulty in endless stages.
+    Isolated slots are avoided, paths have a minimum length.
+
+Miscellaneous:
+    Removal cost of negative chips depend on how many have already been removed.
