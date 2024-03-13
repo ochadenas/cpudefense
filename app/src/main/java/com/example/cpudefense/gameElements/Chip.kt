@@ -81,6 +81,11 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
     {
         with (chipData)
         {
+            // special case ACC: if an attacker is held inside, release it
+            if (chipData.type == ChipType.ACC)
+            {
+
+            }
             if (cooldownTimer > 0.0f) {
                 color = resources.getColor(R.color.chips_soldstate_foreground)
                 glowColor = resources.getColor(R.color.chips_soldstate_glow)
