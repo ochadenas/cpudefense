@@ -1,0 +1,6 @@
+New Features:
+    New hero added: Margaret Hamilton
+
+Bugfixes:
+    Level selection in "endless" series was limited.
+    Two MEM chips could swallow the same attacker simultaneously.
