@@ -7,7 +7,6 @@ import android.text.StaticLayout
 import android.text.TextPaint
 import com.example.cpudefense.effects.Fadable
 import com.example.cpudefense.effects.Fader
-import com.example.cpudefense.gameElements.Attacker
 import com.example.cpudefense.utils.center
 import com.example.cpudefense.utils.displayTextCenteredInRect
 import com.example.cpudefense.utils.setCenter
@@ -33,7 +32,7 @@ class Hero(var game: Game, type: Type): Fadable {
         REDUCE_HEAT,
         DECREASE_ATT_FREQ, DECREASE_ATT_SPEED, DECREASE_ATT_STRENGTH,
         ADDITIONAL_LIVES, INCREASE_MAX_HERO_LEVEL, LIMIT_UNWANTED_CHIPS,
-        INCREASE_STARTING_CASH, GAIN_CASH,
+        INCREASE_STARTING_CASH, GAIN_CASH, DECREASE_REMOVAL_COST,
         DECREASE_UPGRADE_COST, INCREASE_REFUND, GAIN_CASH_ON_KILL}
     data class Data (
         val type: Type,
@@ -87,6 +86,7 @@ class Hero(var game: Game, type: Type): Fadable {
         Type.GAIN_CASH_ON_KILL -> game.resources.getColor(R.color.upgrade_active_eco)
         Type.INCREASE_REFUND -> game.resources.getColor(R.color.upgrade_active_eco)
         Type.DECREASE_UPGRADE_COST -> game.resources.getColor(R.color.upgrade_active_eco)
+        Type.DECREASE_REMOVAL_COST -> game.resources.getColor(R.color.upgrade_active_eco)
     }
 
     var biography: Biography? = null
@@ -361,6 +361,11 @@ class Hero(var game: Game, type: Type): Fadable {
                 strengthDesc = "x %.2f".format(strength)
                 upgradeDesc = " → %.2f".format(next)
             }
+            Type.DECREASE_REMOVAL_COST -> {
+                shortDesc = game.resources.getString(R.string.shortdesc_reduce_removal)
+                strengthDesc = "-%d%%".format(strength.toInt())
+                upgradeDesc = " → -%d%%".format(next.toInt())
+            }
         }
         val cost = getPrice(data.level)
         costDesc = game.resources.getString(R.string.cost_desc).format(cost)
@@ -381,7 +386,8 @@ class Hero(var game: Game, type: Type): Fadable {
             Type.INCREASE_CHIP_MEM_SPEED -> return 1.0f + level / 20f
             Type.INCREASE_STARTING_CASH -> return 8.0f + level * level
             Type.REDUCE_HEAT -> return level * 10f
-            Type.DECREASE_UPGRADE_COST -> return level * 5f
+            Type.DECREASE_UPGRADE_COST -> return level * 6f
+            Type.DECREASE_REMOVAL_COST -> return level * 8f
             Type.ADDITIONAL_LIVES -> return level.toFloat()
             Type.DECREASE_ATT_FREQ -> return 1.0f - level * 0.05f
             Type.DECREASE_ATT_SPEED -> return 1.0f - level * 0.04f
@@ -440,6 +446,7 @@ class Hero(var game: Game, type: Type): Fadable {
             Type.INCREASE_REFUND ->         upgradeLevel(Type.DECREASE_UPGRADE_COST) >= 3
             Type.DECREASE_UPGRADE_COST ->   upgradeLevel(Type.GAIN_CASH) >= 3
             Type.GAIN_CASH ->               upgradeLevel(Type.INCREASE_STARTING_CASH) >= 3
+            Type.DECREASE_REMOVAL_COST ->   upgradeLevel(Type.GAIN_CASH) >= 3
             Type.REDUCE_HEAT ->             upgradeLevel(Type.INCREASE_CHIP_MEM_SPEED) >= 3
             Type.INCREASE_CHIP_MEM_SPEED -> stageIdentifier.number >= 14
             Type.INCREASE_CHIP_SUB_RANGE -> upgradeLevel(Type.INCREASE_CHIP_SUB_SPEED) >= 5
@@ -616,6 +623,14 @@ class Hero(var game: Game, type: Type): Fadable {
                     effect = game.resources.getString(R.string.HERO_EFFECT_GAININFO)
                     vitae = game.resources.getString(R.string.mandelbrot)
                     picture = BitmapFactory.decodeResource(game.resources, R.drawable.mandelbrot)
+                }
+                Type.DECREASE_REMOVAL_COST ->
+                {
+                    name = "Hamilton"
+                    fullName = "Margaret Hamilton"
+                    effect = game.resources.getString(R.string.HERO_EFFECT_DECREASEREMOVAL)
+                    vitae = game.resources.getString(R.string.hamilton)
+                    picture = BitmapFactory.decodeResource(game.resources, R.drawable.hamilton)
                 }
                 Type.DECREASE_ATT_SPEED ->
                 {
