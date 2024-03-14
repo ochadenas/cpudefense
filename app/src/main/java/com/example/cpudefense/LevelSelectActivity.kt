@@ -63,7 +63,7 @@ class LevelSelectActivity : AppCompatActivity() {
                 }
             })
         )
-        val currentSeries = intent.getIntExtra("NEXT_SERIES", 1)
+        val currentSeries = intent.getIntExtra("NEXT_SERIES", Game.SERIES_NORMAL)
         prepareStageSelector(currentSeries)
         // set the active tab depending on the current series
         val tab = tabLayout.getTabAt(currentSeries-1)
@@ -72,7 +72,16 @@ class LevelSelectActivity : AppCompatActivity() {
         // tabLayout.setupWithViewPager(findViewById(R.id.pager))
     }
 
-    private fun prepareStageSelector(series: Int = 1)
+    private fun nextLevelPossible(level: Int, series: Int): Boolean
+            /** returns whether this level can shown in the list.
+             * For the first two series, they are limited to maxLevelAvailable.
+             * In "endless" there is no limit.
+             */
+    {
+        return ((series == Game.SERIES_ENDLESS) || (level < Game.maxLevelAvailable))
+    }
+
+    private fun prepareStageSelector(series: Int)
             /**
              * Prepare stage selector for the given series. Either populate the level list
              * with the entries for each stage, or display a message.
@@ -86,12 +95,12 @@ class LevelSelectActivity : AppCompatActivity() {
         selectedSeries = series
         when (series)
         {
-            1 -> {
+            Game.SERIES_NORMAL -> {
                 levels = Persistency(this).loadLevelSummaries(Game.SERIES_NORMAL)
                 populateStageList(listView, levels, prefs, Game.SERIES_NORMAL,
                     resources.getColor(R.color.text_green), resources.getColor(R.color.text_lightgreen))
             }
-            2 -> {
+            Game.SERIES_TURBO-> {
                 if (isTurboAvailable) {
                     levels = Persistency(this).loadLevelSummaries(Game.SERIES_TURBO)
                     populateStageList(listView, levels, prefs, Game.SERIES_NORMAL,
@@ -110,7 +119,7 @@ class LevelSelectActivity : AppCompatActivity() {
                     listView.addView(textView)
                 }
             }
-            3 -> {
+            Game.SERIES_ENDLESS -> {
                 if (isEndlessAvailable) {
                     levels = Persistency(this).loadLevelSummaries(Game.SERIES_ENDLESS)
                     populateStageList(listView, levels, prefs, Game.SERIES_ENDLESS,
@@ -150,8 +159,7 @@ class LevelSelectActivity : AppCompatActivity() {
         // try to determine whether a new level has been added,
         // and it becomes available directly
         val highestLevelInList = ArrayList(stageSummary.keys).last()
-        if ((highestLevelInList<Game.maxLevelAvailable || series == 3)
-                    && (stageSummary[highestLevelInList]?.won == true))
+        if (nextLevelPossible(highestLevelInList, series) && (stageSummary[highestLevelInList]?.won == true))
             stageSummary[highestLevelInList+1] = Stage.Summary()
 
         for ((level, summary) in stageSummary.entries)
@@ -188,7 +196,7 @@ class LevelSelectActivity : AppCompatActivity() {
             levelEntryView.isClickable = true
             levelEntryView.setOnClickListener { onLevelSelect(levelEntryView, level) }
             listView.addView(levelEntryView)
-            if (level >= Game.maxLevelAvailable)
+            if (!nextLevelPossible(level, series))
                 break
         }
     }

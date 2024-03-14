@@ -52,14 +52,14 @@ class WelcomeActivity : AppCompatActivity() {
         if (maxLevel.number == 0)
             displayLit = false
         when (maxLevel.series) {
-            1 -> imageView.setImageBitmap(
+            Game.SERIES_NORMAL -> imageView.setImageBitmap(
                 display.getDisplayBitmap(
                     maxLevel.number,
                     SevenSegmentDisplay.LedColors.GREEN,
                     displayLit
                 )
             )
-            2 -> imageView.setImageBitmap(
+            Game.SERIES_TURBO -> imageView.setImageBitmap(
                 display.getDisplayBitmap(
                     maxLevel.number,
                     SevenSegmentDisplay.LedColors.YELLOW,
@@ -78,8 +78,13 @@ class WelcomeActivity : AppCompatActivity() {
 
     fun showMaxLevelInfo(v: View) {
         /** displays the max level reached so far as graphical display */
-        val seriesName =
-            if (maxLevel.series == 2) getString(R.string.name_series_2) else getString(R.string.name_series_1)
+        val seriesName = when (maxLevel.series)
+        {
+            Game.SERIES_NORMAL -> getString(R.string.name_series_1)
+            Game.SERIES_TURBO -> getString(R.string.name_series_2)
+            Game.SERIES_ENDLESS -> getString(R.string.name_series_3)
+            else -> "???"  // shouldn't happen
+        }
         val textToDisplay = getString(R.string.stage_reached).format(seriesName, maxLevel.number)
         Toast.makeText(this, textToDisplay, Toast.LENGTH_LONG).show()
 
