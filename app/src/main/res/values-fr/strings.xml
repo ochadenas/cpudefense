@@ -25,7 +25,7 @@
     <string name="button_marketplace">Recrutement</string>
     <string name="level_entry">Niveau %d</string>
     <string name="level_selector">Sélection de niveau</string>
-    <string name="button_refund">Remise à zéro</string>
+    <string name="button_refund_all">Remise à zéro</string>
     <string name="query_restart_game">Vraiment commencer une nouvelle partie ?  Cela remettra toute la progression à zéro.</string>
     <string name="no">Non</string>
     <string name="yes">Oui</string>
@@ -165,4 +165,10 @@
     <string name="about_version">Version %s.</string>
     <string name="message_of_the_day">Des modifications ont été apportées au jeu, notamment au niveau des puces MEM. Consultez les notes de version dans l\'écran INFO.</string>
     <string name="instr_22">N\'oubliez pas que les puces SHR sont puissantes mais qu\'elles ne peuvent pas éliminer les attaquants. Elles réduisent rapidement les grandes valeurs, mais face à des hordes d\'attaquants faibles, plusieurs puces SUB peuvent constituer une défense plus efficace.\n</string>
+    <string name="button_refund_one">Licencier</string>
+    <string name="shortdesc_reduce_removal">Coût enlèvement</string>
+    <string name="HERO_EFFECT_DECREASEREMOVAL">réduit le coût de l\'enlèvement des puces indésirables</string>
+    <string name="name_series_3">Sans fin</string>
+    <string name="overheat">Unité centrale endommagée par surchauffe</string>
+    <string name="message_cannot_fire">Utilisez \'%s\' pour licencier ce héros.</string>
 </resources>

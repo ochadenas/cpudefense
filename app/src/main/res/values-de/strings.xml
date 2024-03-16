@@ -25,7 +25,7 @@
     <string name="button_marketplace">Helden</string>
     <string name="level_entry">Level %d</string>
     <string name="level_selector">Level-Auswahl</string>
-    <string name="button_refund">Zurücksetzen</string>
+    <string name="button_refund_all">Zurücksetzen</string>
     <string name="close">Schließen</string>
     <string name="instr_1">
 "Dein Computer ist von einem üblen Virus befallen. Stücke von Schadcode - dargestellt als Einsen und Nullen - versuchen, zur CPU zu gelangen.
@@ -209,4 +209,10 @@ Turing wurde aufgrund seiner Homosexualität massiv diskriminiert. Er starb 1954
     <string name="about_version">Version %s.</string>
     <string name="message_of_the_day">Es wurden Änderungen am Spiel vorgenommen, vor allem an den MEM-Chips. Lesen Sie die Versionshinweise unter INFO.</string>
     <string name="instr_22">"Denke datran, dass SHR-Chips zwar stark sind, aber Angreifer nicht komplett ausschalten können. Sie schwächen diejenigen mit hohen Werten, aber gegen Horden schwacher Angreifer können mehrere SUB-Chips eine effektivere Verteidigung darstellen.\n "</string>
+    <string name="button_refund_one">Entlassen</string>
+    <string name="shortdesc_reduce_removal">Kostenreduktion</string>
+    <string name="HERO_EFFECT_DECREASEREMOVAL">reduziert die Kosten für die Entfernung unerwünschter Chips</string>
+    <string name="name_series_3">Endlos</string>
+    <string name="overheat">CPU-Schaden durch Überhitzung</string>
+    <string name="message_cannot_fire">Verwenden Sie \'%s\', um diesen Helden zu entlassen.</string>
 </resources>

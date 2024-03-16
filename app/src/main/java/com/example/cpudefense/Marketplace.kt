@@ -104,7 +104,7 @@ class Marketplace(val game: Game): GameElement()
             Fader(game, it, Fader.Type.APPEAR, Fader.Speed.SLOW)
             it.alignRight(myArea.right, myArea.bottom - bottomMargin - it.area.height())
         }
-        buttonRefund = Button(game.resources.getString(R.string.button_refund),
+        buttonRefund = Button(game.resources.getString(R.string.button_refund_all),
             textSize = Game.purchaseButtonTextSize * game.resources.displayMetrics.scaledDensity,
             style = Button.Style.HPKEY, preferredWidth = biographyArea.width())
         buttonRefund?.let {
@@ -130,6 +130,14 @@ class Marketplace(val game: Game): GameElement()
         }
         if (buttonRefund?.area?.contains(event.x.toInt(), event.y.toInt()) == true)
         {
+            // if a hero card is selected, then only sell this one; otherwise, go into the "reset all" dialog
+            selected?.let {
+                if (it.data.level > 0)
+                {
+                    refundOne(it)
+                    return true
+                }
+            }
             val dialog = Dialog(game.gameActivity)
             dialog.setContentView(R.layout.layout_dialog_heroes)
             dialog.window?.setLayout(
@@ -157,8 +165,7 @@ class Marketplace(val game: Game): GameElement()
                     Fader(game, coins.last(), Fader.Type.DISAPPEAR)
                     it.doUpgrade()
                     fillMarket(nextGameLevel)
-                    // update text on the button
-                    buttonPurchase?.text = purchaseButtonText(it)
+                    makeButtonText(it)
                 }
             }
             return true
@@ -175,14 +182,13 @@ class Marketplace(val game: Game): GameElement()
             if (card.areaOnScreen.contains(event.x.toInt(), event.y.toInt())) {
                 selected = card
                 biographyViewOffset = 0f
-                buttonPurchase?.text = purchaseButtonText(card)
+                makeButtonText(card)
                 return true
             }
         if (cardsArea.contains(event.x.toInt(), event.y.toInt())) {
             selected = null
-            return true
+            makeButtonText(null)
         }
-
         return false
     }
 
@@ -206,11 +212,44 @@ class Marketplace(val game: Game): GameElement()
         Persistency(game.gameActivity).saveHeroes(game)
         Persistency(game.gameActivity).saveState(game)
         fillMarket(nextGameLevel)
-        buttonPurchase?.text = purchaseButtonText(null)
+        makeButtonText(null)
     }
 
+    private fun refundOne(hero: Hero)
+    {
+        with (hero)
+        {
+            if (data.type == Hero.Type.INCREASE_MAX_HERO_LEVEL) // heroes that cannot be fired
+            {
+                val res = game.resources
+                val text = res.getString(R.string.message_cannot_fire).format(res.getString(R.string.button_refund_all))
+                Toast.makeText(game.gameActivity, text, Toast.LENGTH_SHORT).show()
+                return
+            }
+            when (data.level)
+            {
+                0 -> return  // should not happen
+                1 -> { // sell hero completely
+                    val refund = 1
+                    data.coinsSpent = 0
+                    game.global.coinsTotal += refund
+                    doDowngrade()
+                }
+                else -> {
+                    val refund = data.level-1
+                    data.coinsSpent -= refund
+                    game.global.coinsTotal += refund
+                    doDowngrade()
+                }
+            }
+
+        }
+        Persistency(game.gameActivity).saveState(game)
+        fillMarket(nextGameLevel)
+        makeButtonText(hero)
+    }
     fun onScroll(event1: MotionEvent?, event2: MotionEvent?, dX: Float, dY: Float): Boolean {
-        val scrollfactor = 0.8f  // higher values make scrolling faster
+        val scrollfactor = 1.1f  // higher values make scrolling faster
         if (dY == 0f)
             return false  // only vertical movements are considered here
         event1?.let {
@@ -291,7 +330,12 @@ class Marketplace(val game: Game): GameElement()
         }
     }
 
-    fun purchaseButtonText(card: Hero?): String
+    private fun makeButtonText(card: Hero?)
+    {
+        buttonPurchase?.text = purchaseButtonText(card)
+        buttonRefund?.text = refundButtonText(card)
+    }
+    private fun purchaseButtonText(card: Hero?): String
     {
         var text: String? = card?.let {
             if (it.data.level <= 1)
@@ -300,6 +344,17 @@ class Marketplace(val game: Game): GameElement()
                 game.resources.getString(R.string.button_purchase_plural).format(it.getPrice(card.data.level))
             }
         return text ?: game.resources.getString(R.string.button_purchase)
+    }
+
+    private fun refundButtonText(card: Hero?): String
+    {
+        card?.let {
+            if (card.data.level>0)
+                return game.resources.getString(R.string.button_refund_one)
+            else
+                return game.resources.getString(R.string.button_refund_all)
+        }
+        return game.resources.getString(R.string.button_refund_all)
     }
 
     class Coin(val game: Game, size: Int): GameElement(), Fadable, Flippable

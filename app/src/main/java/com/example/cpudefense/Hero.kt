@@ -472,8 +472,11 @@ class Hero(var game: Game, type: Type): Fadable {
         return "%s %s\n%s %s".format(shortDesc, strengthDesc, upgradeDesc, costDesc)
     }
     override fun fadeDone(type: Fader.Type) {
+        if (data.level == 0)
+            heroOpacity = 0.0f
+        else
+            heroOpacity = 1.0f
         graphicalState = GraphicalState.NORMAL
-        heroOpacity = 1.0f
     }
 
     override fun setOpacity(opacity: Float)
@@ -500,6 +503,22 @@ class Hero(var game: Game, type: Type): Fadable {
         }
     }
 
+    fun doDowngrade()
+    {
+        if (data.level <= 0)
+            return
+        data.level -= 1
+        Persistency(game.gameActivity).saveHeroes(game)
+        // start graphical transition */
+        if (data.level == 0) {
+            Fader(game, this, Fader.Type.DISAPPEAR, Fader.Speed.MEDIUM)
+            graphicalState = GraphicalState.TRANSIENT_LEVEL_0
+        }
+        else {
+            Fader(game, this, Fader.Type.APPEAR, Fader.Speed.MEDIUM)
+            graphicalState = GraphicalState.TRANSIENT
+        }
+    }
     fun resetUpgrade()
     {
         data.level = 0
