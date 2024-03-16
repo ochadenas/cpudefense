@@ -10,8 +10,8 @@ android {
         applicationId 'de.chadenas.cpudefense'
         minSdk 21
         targetSdk 33
-        versionCode 32
-        versionName "1.32"
+        versionCode 33
+        versionName "1.33-alpha"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
