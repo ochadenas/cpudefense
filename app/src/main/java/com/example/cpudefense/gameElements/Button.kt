@@ -1,17 +1,20 @@
 package com.example.cpudefense.gameElements
 
 import android.graphics.*
+import com.example.cpudefense.Game
 import com.example.cpudefense.effects.Fadable
 import com.example.cpudefense.effects.Fader
 import com.example.cpudefense.utils.*
+import java.util.*
 
-class Button(var text: String, val textSize: Float, val color: Int = Color.GREEN, val style: Style = Style.FILLED, val preferredWidth: Int = 0): Fadable
+class Button(var game: Game, var text: String, val textSize: Float, val color: Int = Color.GREEN, val style: Style = Style.FILLED, val preferredWidth: Int = 0): Fadable
 {
     var alpha = 0
     var area = Rect()
     var touchableArea = Rect() // bigger than visible area, making it easier to hit the button
     var buttonPaint = Paint()
     var textPaint = Paint()
+    var background: Bitmap? = null
 
     enum class Style { FRAME, FILLED, HPKEY}
 
@@ -23,32 +26,34 @@ class Button(var text: String, val textSize: Float, val color: Int = Color.GREEN
                 buttonPaint.color = Color.WHITE  // default, should be overridden
                 buttonPaint.style = Paint.Style.STROKE
                 buttonPaint.strokeWidth = 2f
+                textPaint.typeface = Typeface.MONOSPACE
                 textPaint.color = Color.WHITE
             }
             Style.FILLED -> {
                 buttonPaint.color = color
                 buttonPaint.style = Paint.Style.FILL
+                textPaint.typeface = Typeface.MONOSPACE
                 textPaint.color = Color.BLACK
             }
             Style.HPKEY ->
             {
-                buttonPaint.color = Color.WHITE  // default, should be overridden
-                buttonPaint.style = Paint.Style.STROKE
-                buttonPaint.strokeWidth = 2f
+                background = game.hpBackgroundBitmap
+                textPaint.typeface = Typeface.DEFAULT_BOLD
                 textPaint.color = Color.WHITE
             }
 
         }
         textPaint.style = Paint.Style.FILL
-        textPaint.typeface = Typeface.MONOSPACE
         /* calculate the size of the button */
         textPaint.textSize = textSize
         textPaint.getTextBounds("Tg", 0, "Tg".length, area) // sample text with descender
-        val height = area.height() * 2
+        var height = area.height() * 2
         textPaint.getTextBounds(text, 0, text.length, area)
         var width = area.width() + height
         if (width<preferredWidth)
             width = preferredWidth
+        if (style == Style.HPKEY)  // these buttons need more space
+            height = (height*1.5).toInt()
         area = Rect(0,0,width,height)
         touchableArea = Rect(area).inflate(textSize.toInt())
     }
@@ -73,9 +78,14 @@ class Button(var text: String, val textSize: Float, val color: Int = Color.GREEN
     }
 
     fun display(canvas: Canvas) {
-        val stringToDisplay = text
+        var stringToDisplay = text
         buttonPaint.alpha = alpha
-        canvas.drawRect(area, buttonPaint)
+        if (style == Style.HPKEY) {
+            stringToDisplay = stringToDisplay.uppercase(Locale.getDefault())
+            background?.let { canvas.drawBitmap(it, null, area, buttonPaint) }
+        }
+        else
+            canvas.drawRect(area, buttonPaint)
         area.displayTextCenteredInRect(canvas, stringToDisplay, textPaint)
     }
 

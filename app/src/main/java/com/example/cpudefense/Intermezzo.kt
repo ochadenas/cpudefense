@@ -119,7 +119,7 @@ class Intermezzo(var game: Game): GameElement(), Fadable {
     private fun showButton()
     {
         val bottomMargin = 40
-        buttonContinue = Button(textOnContinueButton,
+        buttonContinue = Button(game, textOnContinueButton,
             textSize = Game.computerTextSize * game.resources.displayMetrics.scaledDensity,
             color = game.resources.getColor(R.color.text_green), style = Button.Style.FILLED)
         val buttonTop = myArea.bottom - (buttonContinue?.area?.height() ?: 20) - bottomMargin
@@ -130,7 +130,7 @@ class Intermezzo(var game: Game): GameElement(), Fadable {
         // if (game.global.coinsTotal > 0)  // make button always accessible. Issue #20
         if (level.number > 6 || level.series > 1)  // level 6 in series 1 is the first one where coins may be present
         {
-            buttonPurchase = Button(game.resources.getString(R.string.button_marketplace),
+            buttonPurchase = Button(game, game.resources.getString(R.string.button_marketplace),
                 textSize = Game.computerTextSize * game.resources.displayMetrics.scaledDensity,
                 color = game.resources.getColor(R.color.text_blue), style = Button.Style.FILLED)
             buttonPurchase?.let {

@@ -144,6 +144,7 @@ class Game(val gameActivity: MainGameActivity) {
     val returnIcon: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.cancel_active)
     val moveLockIcon: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.move_lock)
     val moveUnlockIcon: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.move_unlock)
+    val hpBackgroundBitmap: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.hp_key)
 
     fun beginGame(resetProgress: Boolean = false)
     {
