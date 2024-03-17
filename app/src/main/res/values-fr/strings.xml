@@ -99,7 +99,7 @@
     <string name="HERO_EFFECT_ATTSPEED">réduit la vitesse des attaquants</string>
     <string name="HERO_EFFECT_ATTSTRENGTH">réduit la puissance des attaquants</string>
     <string name="HERO_EFFECT_MAXHEROUPGRADE">augmente le niveau maximal des autres héros</string>
-    <string name="HERO_EFFECT_REFUNDPRICE">"augmente le remboursement lors "</string>
+    <string name="HERO_EFFECT_REFUNDPRICE">"augmente le remboursement lors de la vente des puces"</string>
     <string name="HERO_EFFECT_RANGE">augmente la portée des puces %s</string>
     <string name="toast_loading">Chargement ...</string>
     <string name="name_series_1">Normal</string>

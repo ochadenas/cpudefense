@@ -1047,8 +1047,6 @@ class StageCatalog
                         createLink(15, 16, 20, 0x0e)
                         createLink(16, 999, 21, 0x0e)
 
-
-
                         createTrack(listOf(1, 2, 3, 4, 10, 18, 17, 16, 19, 20, 21), 0)
                         createTrack(listOf(1, 2, 8, 9, 18, 17, 16, 19, 20, 21), 1)
                         createTrack(listOf(5, 6, 7, 9, 18, 17, 16, 19, 20, 21), 2)
@@ -1510,6 +1508,122 @@ class StageCatalog
                         createWave(12, 24, .11f, 0.8f)
                         createWave(12, 28, .12f, 0.8f)
                         createWave(12, 32, .14f, 0.9f)
+
+                        data.chipsAllowed = setOf(
+                            Chip.ChipUpgrades.SUB,
+                            Chip.ChipUpgrades.POWERUP,
+                            Chip.ChipUpgrades.SELL,
+                            Chip.ChipUpgrades.SHR,
+                            Chip.ChipUpgrades.MEM,
+                            Chip.ChipUpgrades.ACC,
+                            Chip.ChipUpgrades.CLK,
+                            Chip.ChipUpgrades.REDUCE
+                        )
+                        rewardCoins = 3
+                    }
+                    30 -> {
+                        initializeNetwork(50, 50)
+
+                        createChip(10, 10, 1, type = Chip.ChipType.ENTRY)
+                        createChip(10, 20, 2)
+                        createChip(10, 30, 3)
+                        createChip(10, 40, 4)
+                        createChip(10, 50, 900, type = Chip.ChipType.CPU)
+                        createChip(25, 10, 5)
+                        createChip(25, 20, 6).setType(Chip.ChipType.DUP)
+                        createChip(25, 30, 7)
+                        createChip(25, 40, 8)
+                        createChip(25, 50, 901, type = Chip.ChipType.CPU)
+                        createChip(40, 10, 9)
+                        createChip(40, 20, 10).setType(Chip.ChipType.SPLT)
+                        createChip(40, 30, 11)
+                        createChip(40, 40, 12)
+                        createChip(40, 50, 902, type = Chip.ChipType.CPU)
+
+                        createLink(1, 2, 1, mask = 0x09)
+                        createLink(2, 3, 2)
+                        createLink(3, 4, 3)
+                        createLink(4, 900, 4)
+                        createLink(1, 5, 5, mask = 0x09)
+                        createLink(5, 6, 6)
+                        createLink(6, 7, 7)
+                        createLink(7, 8, 8)
+                        createLink(8, 901, 9)
+                        createLink(5, 9, 10)
+                        createLink(9, 10, 11)
+                        createLink(10, 11, 12)
+                        createLink(11, 12, 13)
+                        createLink(12, 902, 14)
+                        createLink(3, 7, 15, mask = 0x09)
+                        createLink(7, 11, 16, mask = 0x09)
+                        createLink(4, 8, 17, mask = 0x09)
+                        createLink(8, 12, 18, mask = 0x09)
+
+                        createTrack(listOf(1, 2, 3, 4), 0)
+                        createTrack(listOf(5, 6, 7, 8, 9), 1)
+                        createTrack(listOf(5, 10, 11, 12, 13, 14), 2)
+
+                        createWave(16, 4, .12f, 1.0f)
+                        createWave(16, 8, .11f, 1.0f)
+                        createWaveHex(16, 16, .12f, 1.0f)
+                        createWaveHex(16, 32, .10f, 1.0f)
+                        createWaveHex(16, 64, .12f, 1.1f)
+                        createWaveHex(16, 128, .14f, 1.1f)
+                        createWaveHex(16,256, .12f, 1.2f)
+                        createWaveHex(16,512, .14f, 1.2f)
+                        createWaveHex(16,1024, .12f, 1.2f, coins = 1)
+                        createWaveHex(16,4096, .14f, 1.2f)
+
+                        data.chipsAllowed = setOf(
+                            Chip.ChipUpgrades.SUB,
+                            Chip.ChipUpgrades.POWERUP,
+                            Chip.ChipUpgrades.SELL,
+                            Chip.ChipUpgrades.SHR,
+                            Chip.ChipUpgrades.MEM,
+                            Chip.ChipUpgrades.ACC,
+                            Chip.ChipUpgrades.CLK,
+                            Chip.ChipUpgrades.REDUCE
+                        )
+                    }
+                    31 -> {
+                        initializeNetwork(50, 50)
+
+                        createChip(10, 10, 1, type = Chip.ChipType.ENTRY)
+                        createChip(10, 20, 2)
+                        createChip(10, 30, 3)
+                        createChip(10, 40, 4).setType(Chip.ChipType.DUP)
+                        createChip(25, 40, 5).setType(Chip.ChipType.SPLT)
+                        createChip(40, 30, 6)
+                        createChip(30, 20, 7)
+                        createChip(25, 10, 900, type = Chip.ChipType.CPU)
+
+                        createLink(1, 2, 1)
+                        createLink(2, 3, 2)
+                        createLink(3, 4, 3)
+                        createLink(4, 5, 4)
+                        createLink(5, 6, 5)
+                        createLink(6, 7, 6)
+                        createLink(7, 900, 7)
+                        createLink(2, 7, 8, mask = 0x00)
+                        createLink(3, 7, 9, mask = 0x00)
+
+                        createTrack(listOf(1, 2, 3, 4, 5, 6, 7), 0)
+                        createTrack(listOf(1, 2, 3, 4, 5, 6, 7), 1)
+                        createTrack(listOf(1, 2, 3, 4, 5, 6, 7), 2)
+                        createTrack(listOf(1, 2, 3, 4, 5, 6, 7), 3)
+                        createTrack(listOf(1, 8, 7), 4)
+                        createTrack(listOf(1, 2, 9, 7), 5)
+
+                        createWave(16, 4, .12f, 1.2f)
+                        createWave(16, 8, .11f, 1.2f)
+                        createWave(16, 9, .12f, 1.3f)
+                        createWave(16, 12, .10f, 1.3f)
+                        createWave(16, 16, .12f, 1.3f)
+                        createWave(16, 32, .14f, 1.3f)
+                        createWave(16,64, .12f, 1.2f)
+                        createWave(16,100, .14f, 1.2f)
+                        createWave(16,128, .12f, 1.2f, coins = 1)
+                        createWave(16,200, .14f, 1.2f)
 
                         data.chipsAllowed = setOf(
                             Chip.ChipUpgrades.SUB,
