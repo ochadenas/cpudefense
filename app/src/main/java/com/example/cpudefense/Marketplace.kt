@@ -244,6 +244,7 @@ class Marketplace(val game: Game): GameElement()
             }
 
         }
+        Persistency(game.gameActivity).saveHeroes(game)
         Persistency(game.gameActivity).saveState(game)
         fillMarket(nextGameLevel)
         makeButtonText(hero)

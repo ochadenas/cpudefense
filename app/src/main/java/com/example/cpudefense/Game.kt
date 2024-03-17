@@ -615,7 +615,9 @@ class Game(val gameActivity: MainGameActivity) {
         var sumCoinsSpent = 0
         for (hero in heroes.values)
             sumCoinsSpent += hero.data.coinsSpent
-        val theoreticalAmountOfCoins = sumCoinsGot - sumCoinsSpent
+        var theoreticalAmountOfCoins = sumCoinsGot - sumCoinsSpent
+        if (theoreticalAmountOfCoins < 0)
+            theoreticalAmountOfCoins = 0  // more coins have been spent than earned, that is clearly a bug
         if (global.coinsTotal < theoreticalAmountOfCoins)
         /** we've got a problem here. Coins are missing.
          * Unfortunately, we're unable to determine the exact number, because
