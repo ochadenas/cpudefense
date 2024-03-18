@@ -215,4 +215,6 @@ Turing wurde aufgrund seiner Homosexualität massiv diskriminiert. Er starb 1954
     <string name="name_series_3">Endlos</string>
     <string name="overheat">CPU-Schaden durch Überhitzung</string>
     <string name="message_cannot_fire">Verwenden Sie \'%s\', um diesen Helden zu entlassen.</string>
+    <string name="instr_17">Zwei weitere Typen von unerwünschten Chips, dann haben wir sie alle gesehen.\n\nDUP dupliziert ein Codestück. Statt eines Angreifers gibt es dann zwei mit der gleichen Zahl.\n\nSPLT (split) macht fast dasselbe, aber anstatt die Zahl einfach zu duplizieren, wird sie in zwei Teile aufgeteilt. Zum Beispiel wird xA4 zu xA0 und x04. Dies ist gewissermaßen das Gegenteil von ACC: Wenn die beiden resultierenden Zahlen durch logisches ODER kombiniert werden, erhält man die ursprünglichen Werte. \n</string>
+    <string name="instr_18">Achtung! Angriff aus dem Hinterhalt!</string>
 </resources>

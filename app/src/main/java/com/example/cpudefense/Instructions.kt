@@ -42,6 +42,8 @@ class Instructions(val game: Game, var stage: Stage.Identifier, var callback: ((
                 21 -> game.resources.getString(R.string.instr_13)
                 27 -> game.resources.getString(R.string.instr_14)
                 28 -> game.resources.getString(R.string.instr_15).format(Game.temperatureLimit)
+                30 -> game.resources.getString(R.string.instr_17)
+                31 -> game.resources.getString(R.string.instr_18)
                 else -> ""
             }
         }
