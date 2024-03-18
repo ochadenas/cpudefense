@@ -284,9 +284,14 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
         }
         /* check if there are attackers that we can shoot at */
         try {
-            val vehiclesInRange = distanceToVehicle.toList().filter {distanceTo(it.first)?.let { it <= data.range } ?: false }
-            if (vehiclesInRange.isNotEmpty())
-                shootAt(selectTarget(vehiclesInRange))
+            // remove all attackers that are no longer in range
+            val vehiclesOutOfRange = distanceToVehicle.keys.filter {
+                distanceTo(it)?.let { it > data.range } ?: true
+            }
+            vehiclesOutOfRange.forEach() { distanceToVehicle.remove(it) }
+            @Suppress("UNCHECKED_CAST")
+            // if (distanceToVehicle.isNotEmpty())
+            selectTarget(distanceToVehicle.keys.toList() as List<Attacker>)?.let { shootAt(it)}
         }
         catch (exception: ConcurrentModificationException)
         {
@@ -294,14 +299,28 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
         }
     }
 
-    private fun selectTarget(possibleTargets: List<Pair<Vehicle, Float>>): Attacker
+    private fun selectTarget(possibleTargets: List<Attacker>): Attacker?
     /** intelligently determine the targeted attacker, based on chip type and attacker's properties */
     {
-        val sortedTargets = possibleTargets.sortedBy { (it.first as Attacker).attackerData.number }
+        val coins = possibleTargets.filter() { it.attackerData.isCoin }
+        val regularAttackers = possibleTargets.filter() { !it.attackerData.isCoin }
+        val sortedTargets = regularAttackers.sortedBy { it.attackerData.number }
+        // sortedTargets is a list of regular attackers, smallest value first.
+        // Depending on the chip type, prioritize either small values or large values or coins.
+        try {
         return when (this.chipData.type)
         {
-            ChipType.SUB -> sortedTargets.first().first as Attacker
-            else -> sortedTargets.last().first as Attacker
+            ChipType.SUB -> {(coins + sortedTargets).first()}
+            ChipType.SHR -> {(sortedTargets + coins).last()}
+            ChipType.ACC -> {sortedTargets.last()}
+            ChipType.MEM -> {sortedTargets.last()}
+            ChipType.SPLT -> {sortedTargets.last()}
+            ChipType.DUP -> {sortedTargets.last()}
+            else -> {(sortedTargets + coins).last()}
+        }}
+        catch (ex: NoSuchElementException)
+        {
+            return null
         }
     }
 
@@ -425,7 +444,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
             return
         if (attacker.immuneTo == this || attacker.immuneToAll)
             return
-        if (chipData.type in listOf<ChipType>(ChipType.ACC, ChipType.MEM, ChipType.CLK)
+        if (chipData.type in listOf<ChipType>(ChipType.ACC, ChipType.MEM, ChipType.CLK, ChipType.SPLT, ChipType.DUP)
             && attacker.attackerData.isCoin)
             return  // coins are unaffected by certain chip types
         when (chipData.type)
