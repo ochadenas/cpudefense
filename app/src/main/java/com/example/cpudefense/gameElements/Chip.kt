@@ -9,6 +9,7 @@ import com.example.cpudefense.networkmap.Node
 import com.example.cpudefense.networkmap.Viewport
 import com.example.cpudefense.utils.displayTextCenteredInRect
 import com.example.cpudefense.utils.inflate
+import com.example.cpudefense.utils.setBottomLeft
 import com.example.cpudefense.utils.setCenter
 import java.lang.Math.abs
 import java.util.concurrent.CopyOnWriteArrayList
@@ -46,13 +47,14 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
 
     val resources = network.theGame.resources
 
-    /** some chips have a 'register' where an attacker's value can be held. */
-    private var internalRegister: Attacker? = null
+    /** some chips have a 'register' where one or several attackers' value can be held. */
+    private var internalRegister = CopyOnWriteArrayList<Attacker>()
 
     var upgradePossibilities = CopyOnWriteArrayList<ChipUpgrade>()
 
     private var paintBitmap = Paint()
     private var paintOutline = Paint()
+    private var paintIndicator = Paint()
     private var paintUpgradesBackground = Paint()
     private var outlineWidth = 2f
     private val paintBackground = Paint()
@@ -68,6 +70,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
         paintLines.style = Paint.Style.STROKE
         paintLines.color = Color.WHITE
         paintLines.strokeWidth = 4.0f
+        paintIndicator.color = paintOutline.color
         paintUpgradesBackground.color = Color.BLACK
         paintUpgradesBackground.strokeWidth = 16.0f
         paintUpgradesBackground.style = Paint.Style.FILL
@@ -109,7 +112,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
             sold = false
             cooldownTimer = 0.0f
         }
-        internalRegister = null
+        internalRegister.clear()
         bitmap = null
     }
     fun setIdent(ident: Int)
@@ -120,11 +123,12 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
     fun setType(chipType: ChipType)
     {
         chipData.type = chipType
+        chipData.upgradeLevel = 1
+        bitmap = null
         when (chipType)
         {
             ChipType.SUB -> {
-                chipData.upgradeLevel = 1
-                bitmap = null
+
                 chipData.color = resources.getColor(R.color.chips_sub_foreground)
                 chipData.glowColor = resources.getColor(R.color.chips_sub_glow)
                 chipData.value = Game.basePrice[ChipUpgrades.SUB] ?: 99
@@ -134,8 +138,6 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
                 data.range = 2f * modifier
             }
             ChipType.SHR -> {
-                chipData.upgradeLevel = 1
-                bitmap = null
                 chipData.color = resources.getColor(R.color.chips_shr_foreground)
                 chipData.glowColor = resources.getColor(R.color.chips_shr_glow)
                 chipData.value = Game.basePrice[ChipUpgrades.SHR] ?: 99
@@ -145,8 +147,6 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
                 data.range = 2f * modifier
             }
             ChipType.MEM -> {
-                chipData.upgradeLevel = 1
-                bitmap = null
                 chipData.color = resources.getColor(R.color.chips_mem_foreground)
                 chipData.glowColor = resources.getColor(R.color.chips_mem_glow)
                 chipData.value = Game.basePrice[ChipUpgrades.MEM] ?: 99
@@ -156,8 +156,6 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
                 data.range = 2f * modifier
             }
             ChipType.ACC -> {
-                chipData.upgradeLevel = 1
-                bitmap = null
                 chipData.color = resources.getColor(R.color.chips_acc_foreground)
                 chipData.glowColor = resources.getColor(R.color.chips_acc_glow)
                 chipData.value = Game.basePrice[ChipUpgrades.ACC] ?: 99
@@ -166,8 +164,6 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
                 data.range = 2f
             }
             ChipType.CLK -> {
-                chipData.upgradeLevel = 1
-                bitmap = null
                 chipData.color = resources.getColor(R.color.chips_clk_foreground)
                 chipData.glowColor = resources.getColor(R.color.chips_clk_glow)
                 chipData.value = Game.basePrice[ChipUpgrades.CLK] ?: 99
@@ -175,8 +171,6 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
                 data.range = 0f
             }
             ChipType.SHL -> {
-                chipData.upgradeLevel = 1
-                bitmap = null
                 chipData.color = resources.getColor(R.color.chips_shl_foreground)
                 chipData.glowColor = resources.getColor(R.color.chips_shl_glow)
                 chipData.value = Game.basePrice[ChipUpgrades.REDUCE] ?: 99
@@ -185,8 +179,6 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
                 data.range = 2f
             }
             ChipType.ADD -> {
-                chipData.upgradeLevel = 1
-                bitmap = null
                 chipData.color = resources.getColor(R.color.chips_add_foreground)
                 chipData.glowColor = resources.getColor(R.color.chips_add_glow)
                 chipData.value = Game.basePrice[ChipUpgrades.REDUCE] ?: 99
@@ -195,15 +187,11 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
                 data.range = 2f
             }
             ChipType.NOP -> {
-                chipData.upgradeLevel = 1
-                bitmap = null
                 chipData.color = resources.getColor(R.color.chips_noop_foreground)
                 chipData.glowColor = resources.getColor(R.color.chips_noop_glow)
                 chipData.value = Game.basePrice[ChipUpgrades.REDUCE] ?: 99
             }
             ChipType.SPLT -> {
-                chipData.upgradeLevel = 1
-                bitmap = null
                 chipData.color = resources.getColor(R.color.chips_split_foreground)
                 chipData.glowColor = resources.getColor(R.color.chips_split_glow)
                 val modifier = 1.2f
@@ -211,17 +199,15 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
                 chipData.value = Game.basePrice[ChipUpgrades.REDUCE] ?: 99
             }
             ChipType.DUP -> {
-                chipData.upgradeLevel = 1
-                bitmap = null
                 chipData.color = resources.getColor(R.color.chips_split_foreground)
                 chipData.glowColor = resources.getColor(R.color.chips_split_glow)
                 val modifier = 1.2f
                 chipData.cooldown = (32f / modifier).toInt()
                 chipData.value = Game.basePrice[ChipUpgrades.REDUCE] ?: 99
             }
-            ChipType.ENTRY -> {}
-            ChipType.CPU -> {}
-            ChipType.EMPTY -> {}
+            ChipType.ENTRY -> { chipData.upgradeLevel = 0}
+            ChipType.CPU -> { chipData.upgradeLevel = 0}
+            ChipType.EMPTY -> { chipData.upgradeLevel = 0}
         }
         if (chipData.sold)
         {
@@ -234,11 +220,6 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
     {
         chipData.upgradeLevel += amount
         bitmap = null
-    }
-
-    fun isObstacle(): Boolean
-    {
-        return chipData.type in obstacleTypes
     }
 
     fun obstacleDifficulty(): Double
@@ -271,6 +252,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
             return  //  no need to calculate for empty slots
         if (chipData.cooldownTimer>0) {
             chipData.cooldownTimer -= network.theGame.globalSpeedFactor()
+            if (chipData.type != ChipType.MEM)  // MEM is the only type that may act during cooldown
             return
         }
         if (chipData.sold) {
@@ -283,6 +265,8 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
             return
         }
         /* check if there are attackers that we can shoot at */
+        if (distanceToVehicle.isEmpty())
+            return // no need to check
         try {
             // remove all attackers that are no longer in range
             val vehiclesOutOfRange = distanceToVehicle.keys.filter {
@@ -290,11 +274,9 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
             }
             vehiclesOutOfRange.forEach() { distanceToVehicle.remove(it) }
             @Suppress("UNCHECKED_CAST")
-            // if (distanceToVehicle.isNotEmpty())
             selectTarget(distanceToVehicle.keys.toList() as List<Attacker>)?.let { shootAt(it)}
         }
-        catch (exception: ConcurrentModificationException)
-        {
+        catch (exception: ConcurrentModificationException) {
             // just ignore this
         }
     }
@@ -320,7 +302,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
         }}
         catch (ex: NoSuchElementException)
         {
-            return null
+            return null // no matching attackers in range
         }
     }
 
@@ -390,15 +372,33 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
 
         /* draw outline */
         paintOutline.strokeWidth =
-            if (isActivated()) 3f * outlineWidth
+            if (chipData.type == ChipType.MEM && isActivated() && chipData.cooldownTimer <= 0.0f) 3f * outlineWidth
             else
                 outlineWidth
         canvas.drawRect(rect, paintOutline)
+
+        /* special treatment for chips that store values */
+        if (chipData.type in listOf(ChipType.MEM, ChipType.ACC))
+            drawInternalStorage(canvas, rect)
 
         /* draw foreground */
         if (bitmap == null)
             bitmap = createBitmapForType()
         bitmap?.let { canvas.drawBitmap(it, null, rect, paintBitmap) }
+    }
+
+    private fun drawInternalStorage(canvas: Canvas, rect: Rect)
+    {
+        val widthOfIndicator = rect.width() / Game.maxInternalChipStorage
+        val indicatorRect = Rect(0,rect.bottom-rect.height()/4,widthOfIndicator,rect.bottom)
+        val storageSlotsUsed = internalRegister.size
+        val storageSlots = chipData.upgradeLevel
+        for (i in 0 until storageSlots)
+        {
+            indicatorRect.setBottomLeft(rect.left+i*widthOfIndicator,rect.bottom)
+            paintIndicator.style = if (i<storageSlotsUsed) Paint.Style.FILL else Paint.Style.STROKE
+            canvas.drawRect(indicatorRect, paintIndicator)
+        }
     }
 
     fun displayUpgrades(canvas: Canvas)
@@ -453,7 +453,8 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
             ChipType.SPLT -> { splitAttacker(attacker) }
             ChipType.DUP -> { duplicateAttacker(attacker) }
             ChipType.MEM -> {
-                if (internalRegister == null)
+                if (chipData.cooldownTimer <= 0f && internalRegister.size < chipData.upgradeLevel
+                    || chipData.cooldownTimer > 0f && internalRegister.size+1 < chipData.upgradeLevel )
                     storeAttacker(attacker)
                 return
             }
@@ -467,7 +468,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
 
     fun storeAttacker(attacker: Attacker)
     {
-        internalRegister = attacker
+        internalRegister.add(attacker)
         val extraCashGained =
             theNetwork.theGame.heroes[Hero.Type.GAIN_CASH_ON_KILL]?.getStrength()?.toInt()
                 ?: 0 // possible bonus
@@ -518,12 +519,12 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
 
     fun processInAccumulator(attacker: Attacker)
     {
-        if (internalRegister == null)
+        if (internalRegister.size == 0)
             storeAttacker(attacker)
         else
         {
             val number1: ULong = attacker.attackerData.number
-            val number2: ULong = internalRegister?.attackerData?.number ?: 0u
+            val number2: ULong = internalRegister.first().attackerData.number
             val newValue = when (chipData.upgradeLevel)
             {
                 1 -> number1 + number2
@@ -534,7 +535,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
             var change_in_speed = attacker.data.speed * (Random.nextFloat() - 0.5f) * 0.3f
             attacker.data.speed += change_in_speed
             attacker.setCurrentSpeed()
-            internalRegister = null
+            internalRegister.clear()
             attacker.immuneTo = this
         }
     }
@@ -544,7 +545,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
              * depending on its type.
              */
     {
-        return (chipData.type in listOf(ChipType.ACC, ChipType.MEM) && internalRegister != null)
+        return (chipData.type in listOf(ChipType.ACC, ChipType.MEM) && internalRegister.isNotEmpty())
     }
 
     private fun createBitmapForType(): Bitmap?
@@ -553,7 +554,8 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
         {
             ChipType.SUB -> createBitmap("SUB %d".format(chipData.upgradeLevel))
             ChipType.SHR -> createBitmap("SHR %d".format(chipData.upgradeLevel))
-            ChipType.MEM -> createBitmap("MEM")
+            ChipType.MEM -> { if (chipData.upgradeLevel == 1) createBitmap("MEM")
+                else createBitmap("MEM %d".format(chipData.upgradeLevel)) }
             ChipType.ACC -> when (chipData.upgradeLevel)
             {
                 1 -> createBitmap("ACC +")
@@ -636,6 +638,8 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
                 alternatives.add(ChipUpgrades.SELL)
             }
             ChipType.MEM -> {
+                if (chipData.upgradeLevel < Game.maxInternalChipStorage)
+                    alternatives.add(ChipUpgrades.POWERUP)
                 alternatives.add(ChipUpgrades.SELL)
             }
             ChipType.CLK -> {
@@ -663,8 +667,8 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
 
         // discard the alternatives that are not allowed for this stage,
         // but only for series 1.
-        // In series 2, all upgrades are always possible
-        if (network.theGame.currentStage?.getSeries() == 1) {
+        // In series 2 and 3, all upgrades are always possible
+        if (network.theGame.currentStage?.getSeries() == Game.SERIES_NORMAL) {
             val allowed = network.theGame.currentStage?.data?.chipsAllowed ?: setOf()
             for (a in alternatives)
                 if (a !in allowed)
@@ -719,14 +723,13 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
         if (chipData.type == ChipType.MEM)
             // activated MEM chips are cleared through tapping
         {
-            if (isActivated())
+            if (isActivated() && chipData.cooldownTimer <= 0.0f)
             {
-                internalRegister = null
+                internalRegister.removeFirstOrNull()
                 startCooldown()
                 return true
             }
         }
-
         if (upgradePossibilities.isEmpty())
             showUpgrades()
         return true

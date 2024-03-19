@@ -23,7 +23,6 @@ class Hero(var game: Game, type: Type): Fadable {
     - Torvalds
     - Baudot
     - John Conway
-    - M. Hamilton
      */
 
     enum class Type { INCREASE_CHIP_SUB_SPEED, INCREASE_CHIP_SUB_RANGE,
@@ -394,7 +393,7 @@ class Hero(var game: Game, type: Type): Fadable {
             Type.DECREASE_ATT_STRENGTH -> return exp(- level / 3.0).toFloat()
             Type.INCREASE_MAX_HERO_LEVEL -> return level.toFloat()
             Type.LIMIT_UNWANTED_CHIPS -> return level.toFloat()
-            Type.GAIN_CASH -> return (8f - level) * 9
+            Type.GAIN_CASH -> return if (level>0) (8f - level) * 9 else 0f
             Type.GAIN_CASH_ON_KILL -> return truncate((level+1) * 0.5f)
             Type.INCREASE_REFUND -> return (50f + level * 10)
             Type.INCREASE_CHIP_SUB_RANGE -> return 1.0f + level / 10f

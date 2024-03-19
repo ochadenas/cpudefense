@@ -52,6 +52,7 @@ class Game(val gameActivity: MainGameActivity) {
 
         const val minimalAmountOfCash = 8
         const val maxLivesPerStage = 3
+        const val maxInternalChipStorage = 4
 
         const val levelSnapshotIconSize = 120
 

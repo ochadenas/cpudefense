@@ -91,7 +91,8 @@ class StageCatalog
 
         private fun createObstaclesForDifficulty(stage: Stage, difficulty: Double)
                 /** creates an undetermined number of obstacles for the given stage,
-                 * so that the cumulated "strength" of these obstacles "does not exceed the given difficulty.
+                 * so that the cumulated "strength" of these obstacles does not exceed the given difficulty.
+                 * Difficulty values may be < 0.
                  */
         {
             val reduce = stage.theGame.heroes[Hero.Type.LIMIT_UNWANTED_CHIPS]?.getStrength()?.toDouble() ?: 0.0 // consider Kilby's effect
@@ -105,7 +106,7 @@ class StageCatalog
                     val obstacleSlot = possibleSlotsForObstacles.random()
                     when (obstacleSlot.chipData.type)
                     {
-                        in listOf( Chip.ChipType.ADD, Chip.ChipType.SHL, Chip.ChipType.NOP) -> obstacleSlot.addPower(1)
+                        in listOf( Chip.ChipType.ADD, Chip.ChipType.SHL, Chip.ChipType.NOP ) -> obstacleSlot.addPower(1)
                         Chip.ChipType.EMPTY -> obstacleSlot.setType(Chip.obstacleTypes.random())
                         else -> {}
                     }
