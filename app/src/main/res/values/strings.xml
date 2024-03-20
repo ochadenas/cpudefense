@@ -87,13 +87,7 @@ But be careful. The moving cryptocoin is stronger than ordinary attackers, and i
     </string>
     <string name="instr_7a">Chips need to cool down between operations. Hire heroes to reduce the chance of grouped attackers overwhelming a chip.\n\nIf you are stuck, you can replay a lower level trying to catch a running cryptocoin.\n</string>
     <string name="instr_8">"\nYou can sell existing chips and re-use their slot. Most, but not all of the information will be refunded.\n\nNote that an activated chip will complete its current cooldown cycle before disappearing. "</string>
-    <string name="instr_9">
-"Let\'s introduce another chip. The MEM (for memory) chip takes a number and stores it safely away in memory.
-
-You can tell from the thick border that there is a number inside. In this state, the MEM chip cannot store any further number. It must first be \'read out\' (by tapping on it). Once you have tapped on the chip, it\'s cool down cycle starts, and only after that it'll be able to swallow the next attacker.
-
-MEM chips are powerful because they can take out any attacker, but they require your attention, and they are quite slow."
-    </string>
+    <string name="instr_9">"\nLet's introduce another chip. The MEM (for memory) chip takes a number and stores it safely away in memory. A little white indicator shows that there is a value inside.\n\nIn its basic version, the MEM chip can hold only one attacker, but additional slots can be created by upgrading the chip. The MEM chip must be 'read out' (by tapping on it). Once you have tapped on the chip, its cool down cycle starts, and only after that one of the filled slots becomes available again. A thick white frame indicates whether you should tap on the chip. \n\nMEM chips are powerful because they can take out any attacker, but they require your attention, and they are quite slow.\n\n    "</string>
     <string name="instr_10">
 "The accumulator chip (ACC) is a bit more complex than the others, but it can be very effective against large numbers of attackers. It takes two numbers and combines them into one result.
 
