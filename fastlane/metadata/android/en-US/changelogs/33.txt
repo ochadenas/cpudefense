@@ -1,0 +1,7 @@
+New Features:
+    Two more levels were added, introducing SPLT and DUP.
+    Heros now can be downgraded individually.
+    MEM chips can be upgraded (up to level 4) to hold more than one value. An explanatory text was added to stage 14.
+
+Miscellaneous:
+    Chips now target cryptocoins first
