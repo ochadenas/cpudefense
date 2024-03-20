@@ -252,6 +252,11 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
         chipData.cooldownTimer = getCooldownTime()
     }
 
+    fun storageSlotsAvailable(): Int
+    {
+        return if (chipData.type == ChipType.ACC) 1 else chipData.upgradeLevel
+    }
+
     override fun update() {
         super.update()
         if (chipData.type == ChipType.EMPTY)
@@ -385,7 +390,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
 
         /* special treatment for chips that store values */
         if (chipData.type in listOf(ChipType.MEM, ChipType.ACC))
-            drawInternalStorage(canvas, rect)
+            displayInternalStorage(canvas, rect)
 
         /* draw foreground */
         if (bitmap == null)
@@ -393,12 +398,12 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
         bitmap?.let { canvas.drawBitmap(it, null, rect, paintBitmap) }
     }
 
-    private fun drawInternalStorage(canvas: Canvas, rect: Rect)
+    private fun displayInternalStorage(canvas: Canvas, rect: Rect)
     {
         val widthOfIndicator = rect.width() / Game.maxInternalChipStorage
         val indicatorRect = Rect(0,rect.bottom-rect.height()/4,widthOfIndicator,rect.bottom)
         val storageSlotsUsed = internalRegister.size
-        val storageSlots = chipData.upgradeLevel
+        val storageSlots = storageSlotsAvailable()
         for (i in 0 until storageSlots)
         {
             indicatorRect.setBottomLeft(rect.left+i*widthOfIndicator,rect.bottom)
