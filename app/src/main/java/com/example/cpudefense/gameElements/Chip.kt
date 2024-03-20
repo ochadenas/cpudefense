@@ -89,7 +89,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
             {
 
             }
-            if (cooldownTimer > 0.0f) {
+            if (isInCooldown()) {
                 color = resources.getColor(R.color.chips_soldstate_foreground)
                 glowColor = resources.getColor(R.color.chips_soldstate_glow)
                 sold = true
@@ -241,6 +241,12 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
             return this.chipData.cooldown.toFloat()
     }
 
+    inline fun isInCooldown(): Boolean
+    /** @return true if the chip is in its cooldown phase */
+    {
+        return chipData.cooldownTimer > 0.0f
+    }
+
     fun startCooldown()
     {
         chipData.cooldownTimer = getCooldownTime()
@@ -363,7 +369,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
         paintBackground.color = defaultBackgroundColor
         paintBackground.alpha = 255
         canvas.drawRect(rect, paintBackground)
-        if (chipData.cooldownTimer>0)
+        if (isInCooldown())
         {
             paintBackground.color = chipData.glowColor
             paintBackground.alpha = (chipData.cooldownTimer*255f/getCooldownTime()).toInt()
@@ -372,7 +378,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
 
         /* draw outline */
         paintOutline.strokeWidth =
-            if (chipData.type == ChipType.MEM && isActivated() && chipData.cooldownTimer <= 0.0f) 3f * outlineWidth
+            if (chipData.type == ChipType.MEM && isActivated() && !isInCooldown()) 3f * outlineWidth
             else
                 outlineWidth
         canvas.drawRect(rect, paintOutline)
@@ -396,8 +402,32 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
         for (i in 0 until storageSlots)
         {
             indicatorRect.setBottomLeft(rect.left+i*widthOfIndicator,rect.bottom)
-            paintIndicator.style = if (i<storageSlotsUsed) Paint.Style.FILL else Paint.Style.STROKE
-            canvas.drawRect(indicatorRect, paintIndicator)
+            // determine appearance of the indicator: solid, empty, or fading/coloured
+            paintIndicator.alpha = 255
+            paintIndicator.color = paintLines.color
+            when (i)
+            {
+                in 0 until storageSlotsUsed -> {
+                    paintIndicator.style = Paint.Style.FILL
+                    canvas.drawRect(indicatorRect, paintIndicator)
+                }
+                storageSlotsUsed -> {
+                    if (isInCooldown())
+                    {
+                        paintIndicator.style = Paint.Style.FILL
+                        // paintIndicator.color = theNetwork.theGame.resources.getColor(R.color.chips_mem_foreground)
+                        paintIndicator.alpha = (chipData.cooldownTimer*255f/getCooldownTime()).toInt()
+                        canvas.drawRect(indicatorRect, paintIndicator)
+                    }
+                    paintIndicator.style = Paint.Style.STROKE
+                    paintIndicator.alpha = 255
+                    canvas.drawRect(indicatorRect, paintIndicator)
+                }
+                else -> {
+                    paintIndicator.style = Paint.Style.STROKE
+                    canvas.drawRect(indicatorRect, paintIndicator)
+                }
+            }
         }
     }
 
@@ -453,10 +483,9 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
             ChipType.SPLT -> { splitAttacker(attacker) }
             ChipType.DUP -> { duplicateAttacker(attacker) }
             ChipType.MEM -> {
-                if (chipData.cooldownTimer <= 0f && internalRegister.size < chipData.upgradeLevel
-                    || chipData.cooldownTimer > 0f && internalRegister.size+1 < chipData.upgradeLevel )
+                if (slotsLeftInMEM())
                     storeAttacker(attacker)
-                return
+                return // no cooldown phase here
             }
             else -> {
                 if (attacker.onShot(chipData.type, chipData.upgradeLevel))
@@ -464,6 +493,16 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
             }
         }
         startCooldown()
+    }
+
+    fun slotsLeftInMEM(): Boolean
+    /** @return true if the MEM chip can still hold another number */
+    {
+        return when (isInCooldown())
+        {
+            true -> internalRegister.size+1 < chipData.upgradeLevel
+            false -> internalRegister.size < chipData.upgradeLevel
+        }
     }
 
     fun storeAttacker(attacker: Attacker)
@@ -723,7 +762,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
         if (chipData.type == ChipType.MEM)
             // activated MEM chips are cleared through tapping
         {
-            if (isActivated() && chipData.cooldownTimer <= 0.0f)
+            if (isActivated() && !isInCooldown())
             {
                 internalRegister.removeFirstOrNull()
                 startCooldown()
