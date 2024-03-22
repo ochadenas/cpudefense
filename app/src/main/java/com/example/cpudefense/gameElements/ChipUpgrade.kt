@@ -22,7 +22,9 @@ class ChipUpgrade(val chipToUpgrade: Chip, val type: Chip.ChipUpgrades,
         var penalty = 0 // possible price modification
         when (type){
             Chip.ChipUpgrades.POWERUP -> {
-                var upgradePrice = chipToUpgrade.chipData.value * 1.5
+                var baseValue = chipToUpgrade.chipData.value
+                if (chipToUpgrade.chipData.type == Chip.ChipType.MEM) baseValue += 12  // MEM updates are really expensive
+                var upgradePrice = baseValue * 1.5
                 val discount = game.heroes[Hero.Type.DECREASE_UPGRADE_COST]?.getStrength() ?: 0f
                 upgradePrice = upgradePrice * (100f - discount) / 100
                 return upgradePrice.toInt()

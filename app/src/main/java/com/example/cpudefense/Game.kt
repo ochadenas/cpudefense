@@ -27,7 +27,7 @@ class Game(val gameActivity: MainGameActivity) {
         const val maxLevelAvailable = 31
 
         // feature toggles:
-        val enableEndlessMode = true
+        const val enableEndlessMode = true
 
         val chipSize = Coord(6,3)
         const val viewportMargin = 10
@@ -66,12 +66,12 @@ class Game(val gameActivity: MainGameActivity) {
             Chip.ChipUpgrades.CLK to 32)
 
         // temperature control:
-        val heatAdjustmentFactor = 1.6f // how many heat is generated per shortened tick
-        val baseTemperature = 17
-        val heatPerDegree = 200
-        val temperatureCooldownFactor = 0.99995
-        val temperatureWarnThreshold = 60
-        val temperatureLimit = 85
+        const val heatAdjustmentFactor = 1.6f // how many heat is generated per shortened tick
+        const val baseTemperature = 17
+        const val heatPerDegree = 200
+        const val temperatureCooldownFactor = 0.99995
+        const val temperatureWarnThreshold = 60
+        const val temperatureLimit = 85
     }
 
     var defaultSpeedFactor = 0.512f
@@ -153,9 +153,9 @@ class Game(val gameActivity: MainGameActivity) {
         if (!resetProgress) {
             val persistency = Persistency(gameActivity)
             global = persistency.loadGlobalData()
-            summaryPerNormalLevel  = persistency.loadLevelSummaries(Game.SERIES_NORMAL)
-            summaryPerTurboLevel   = persistency.loadLevelSummaries(Game.SERIES_TURBO)
-            summaryPerEndlessLevel = persistency.loadLevelSummaries(Game.SERIES_ENDLESS)
+            summaryPerNormalLevel  = persistency.loadLevelSummaries(SERIES_NORMAL)
+            summaryPerTurboLevel   = persistency.loadLevelSummaries(SERIES_TURBO)
+            summaryPerEndlessLevel = persistency.loadLevelSummaries(SERIES_ENDLESS)
             heroes = persistency.loadHeroes(this) // load the upgrades gained so far
             correctNumberOfCoins()
             additionalCashDelay = heroes[Hero.Type.GAIN_CASH]?.getStrength()?.toInt() ?: 0
@@ -177,9 +177,9 @@ class Game(val gameActivity: MainGameActivity) {
     {
         // get historical data of levels completed so far
         val persistency = Persistency(gameActivity)
-        summaryPerNormalLevel  = persistency.loadLevelSummaries(Game.SERIES_NORMAL)
-        summaryPerTurboLevel   = persistency.loadLevelSummaries(Game.SERIES_TURBO)
-        summaryPerEndlessLevel = persistency.loadLevelSummaries(Game.SERIES_ENDLESS)
+        summaryPerNormalLevel  = persistency.loadLevelSummaries(SERIES_NORMAL)
+        summaryPerTurboLevel   = persistency.loadLevelSummaries(SERIES_TURBO)
+        summaryPerEndlessLevel = persistency.loadLevelSummaries(SERIES_ENDLESS)
         // persistency.loadState(this)
         stageData?.let {
             currentStage = Stage.createStageFromData(this, it)
@@ -334,7 +334,7 @@ class Game(val gameActivity: MainGameActivity) {
         return false
     }
 
-    fun processClickOnNodes(network: Network, p0: MotionEvent): Boolean
+    private fun processClickOnNodes(network: Network, p0: MotionEvent): Boolean
     {
         /* first, check if the click is inside one of the upgrade boxes
         * of _any_ node */
@@ -360,20 +360,20 @@ class Game(val gameActivity: MainGameActivity) {
     {
         when (stage.series)
         {
-            Game.SERIES_NORMAL  -> return summaryPerNormalLevel[stage.number]
-            Game.SERIES_TURBO   -> return summaryPerTurboLevel[stage.number]
-            Game.SERIES_ENDLESS -> return summaryPerEndlessLevel[stage.number]
+            SERIES_NORMAL  -> return summaryPerNormalLevel[stage.number]
+            SERIES_TURBO   -> return summaryPerTurboLevel[stage.number]
+            SERIES_ENDLESS -> return summaryPerEndlessLevel[stage.number]
             else -> return null
         }
     }
 
-    fun setSummaryOfStage(stage: Stage.Identifier, summary: Stage.Summary?)
+    private fun setSummaryOfStage(stage: Stage.Identifier, summary: Stage.Summary?)
     {
         summary?.let {
             when (stage.series) {
-                Game.SERIES_NORMAL  -> summaryPerNormalLevel[stage.number] = it
-                Game.SERIES_TURBO   -> summaryPerTurboLevel[stage.number] = it
-                Game.SERIES_ENDLESS -> summaryPerEndlessLevel[stage.number] = it
+                SERIES_NORMAL  -> summaryPerNormalLevel[stage.number] = it
+                SERIES_TURBO   -> summaryPerTurboLevel[stage.number] = it
+                SERIES_ENDLESS -> summaryPerEndlessLevel[stage.number] = it
                 else -> return
             }
         }
@@ -589,10 +589,16 @@ class Game(val gameActivity: MainGameActivity) {
         }
     }
 
+    fun actualMaxInternalChipStorage(): Int
+    {
+        val maxStorage = heroes[Hero.Type.ENABLE_MEM_UPGRADE]?.getStrength()?.toInt() ?: 1
+        return if (maxStorage > maxInternalChipStorage) maxInternalChipStorage else maxStorage
+    }
+
     private fun takeLevelSnapshot()
     {
         currentStage?.let {
-            if (it.getSeries() == Game.SERIES_ENDLESS)
+            if (it.getSeries() == SERIES_ENDLESS)
                 levelThumbnailEndless[it.getLevel()] = it.takeSnapshot(levelSnapshotIconSize)
             else
                 levelThumbnail[it.getLevel()] = it.takeSnapshot(levelSnapshotIconSize)
@@ -600,7 +606,7 @@ class Game(val gameActivity: MainGameActivity) {
         }
     }
 
-    fun correctNumberOfCoins()
+    private fun correctNumberOfCoins()
             /** the purpose of this method is to verify if the total number of coins spent
              * corresponds to the coins got, and to correct this number if coins have been "lost"
              * due to corrupt save files etc.
@@ -623,7 +629,7 @@ class Game(val gameActivity: MainGameActivity) {
         /** we've got a problem here. Coins are missing.
          * Unfortunately, we're unable to determine the exact number, because
          * the extra coins are not taken into account.
-         * Let's assume that for every 4 coins "regularly" got there is one extra coin gahered.
+         * Let's assume that for every 4 coins "regularly" got there is one extra coin gathered.
          */
            global.coinsTotal = theoreticalAmountOfCoins + sumCoinsGot / 4
     }

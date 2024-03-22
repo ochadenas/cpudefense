@@ -682,7 +682,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
                 alternatives.add(ChipUpgrades.SELL)
             }
             ChipType.MEM -> {
-                if (chipData.upgradeLevel < Game.maxInternalChipStorage)
+                if (chipData.upgradeLevel < theNetwork.theGame.actualMaxInternalChipStorage())
                     alternatives.add(ChipUpgrades.POWERUP)
                 alternatives.add(ChipUpgrades.SELL)
             }
