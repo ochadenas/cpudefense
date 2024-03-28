@@ -27,25 +27,6 @@ class PurseOfCoins(val game: Game, val levelMode: Game.LevelMode = Game.LevelMod
     var contents = Contents()
     val filename = game.resources.getString(R.string.pref_filename_savegames)
 
-    fun readContentsOfPurse()
-    {
-        val prefs = game.gameActivity.getSharedPreferences(filename, AppCompatActivity.MODE_PRIVATE)
-        val json = prefs.getString(levelMode.toString(), "none")
-        if (json == "none" || workInProgress)
-            calculateInitialContents()
-        else {
-            contents = Gson().fromJson(json, PurseOfCoins.Contents::class.java)
-            initialized = true
-        }
-    }
-
-    fun saveContentsOfPurse()
-    {
-        val editor = game.gameActivity.getSharedPreferences(filename, AppCompatActivity.MODE_PRIVATE).edit()
-        editor.putString(levelMode.toString(), Gson().toJson(contents))
-        editor.apply()
-    }
-
     fun calculateInitialContents()
     /** method for migrating the "old" style of coin-keeping */
     {
@@ -67,12 +48,12 @@ class PurseOfCoins(val game: Game, val levelMode: Game.LevelMode = Game.LevelMod
             Game.LevelMode.BASIC -> {
                 contents.rewardCoins = sumRewardCoinsInBasicMode
                 contents.runningCoins = totalRunningCoins * sumRewardCoinsInBasicMode / totalRewardCoins
-                contents.spentCoins = coinsSpentOnHeroes * sumRewardCoinsInBasicMode / totalRewardCoins
+                contents.spentCoins = 0  // initial value, will be set later accordingly
             }
             Game.LevelMode.ENDLESS -> {
                 contents.rewardCoins = sumRewardCoinsInEndlessMode
                 contents.runningCoins = totalRunningCoins * sumRewardCoinsInEndlessMode / totalRewardCoins
-                contents.spentCoins = coinsSpentOnHeroes * sumRewardCoinsInEndlessMode / totalRewardCoins
+                contents.spentCoins = 0
             }
         }
         contents.totalCoins = contents.rewardCoins + contents.runningCoins

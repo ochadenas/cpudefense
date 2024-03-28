@@ -50,6 +50,10 @@ class Persistency(activity: Activity) {
         val endless: MutableList<Hero.Data> = mutableListOf()
     )
 
+    data class SerializablePurseContents (
+        var basic: PurseOfCoins.Contents,
+        var endless: PurseOfCoins.Contents,
+    )
     fun saveState(game: Game?)
             /** saves all data that is needed to continue a game later.
              * This includes levels completed and coins got,
@@ -63,11 +67,11 @@ class Persistency(activity: Activity) {
             editor.putString("global", json)
 
             // save current game state:
-            val data = SerializableStateData(
+            val stateData = SerializableStateData(
                 general = it.state,
                 stage = it.currentStage?.provideData()
             )
-            json = Gson().toJson(data)
+            json = Gson().toJson(stateData)
             editor.putString("state", json)
 
             // save upgrades got so far:
@@ -78,7 +82,13 @@ class Persistency(activity: Activity) {
             editor.commit()
 
             // save coins in purse:
-            it.coins.values.forEach { purse -> purse.saveContentsOfPurse() }
+            val emptyContents = PurseOfCoins.Contents()
+            var purseData = SerializablePurseContents(basic = emptyContents, endless = emptyContents)
+            game.coins[Game.LevelMode.BASIC]?.contents?.let { purse -> purseData.basic = purse }
+            game.coins[Game.LevelMode.ENDLESS]?.contents?.let { purse -> purseData.endless = purse }
+            prefsSaves.edit().putString("coins", Gson().toJson(purseData)).commit()
+
+            // it.coins.values.forEach { purse -> purse.saveContentsOfPurse() }
         }
     }
 
@@ -99,13 +109,17 @@ class Persistency(activity: Activity) {
             it.heroesByMode[Game.LevelMode.ENDLESS] =  loadHeroes(it, Game.LevelMode.ENDLESS)
 
             // get state of running game
-            val json = prefs.getString("state", "none")
-            if (json == "none")
-                return
-            val data: SerializableStateData = Gson().fromJson(json, SerializableStateData::class.java)
-            it.state = data.general
-            it.stageData = data.stage
-            it.gameActivity.setGameSpeed(it.global.speed)  // restore game speed mode
+            var json = prefs.getString("state", "none")
+            if (json != "none") {
+                val data: SerializableStateData =
+                    Gson().fromJson(json, SerializableStateData::class.java)
+                it.state = data.general
+                it.stageData = data.stage
+                it.gameActivity.setGameSpeed(it.global.speed)  // restore game speed mode
+            }
+
+            // load contents of purses
+            loadCoins(game)
         }
     }
 
@@ -278,6 +292,18 @@ class Persistency(activity: Activity) {
         return heroMap
     }
 
+    fun loadCoins(game: Game)
+    {
+        // get number of coins
+        val json = prefsSaves.getString("coins", "none")
+        if (json != "none") {
+            val data: SerializablePurseContents =
+                Gson().fromJson(json, SerializablePurseContents::class.java)
+            game.coins[Game.LevelMode.BASIC]?.let { purse -> purse.contents = data.basic; purse.initialized = true }
+            game.coins[Game.LevelMode.ENDLESS]?.let { purse -> purse.contents = data.endless; purse.initialized = true }
+        }
+    }
+
     fun saveLevelStructure(series: Int, data: HashMap<Int, Stage.Data>)
             /** saves the structure data for all 'endless' levels to structure.xml.
              */
@@ -286,7 +312,7 @@ class Persistency(activity: Activity) {
         val levelData = SerializableLevelData(data)
         val json = Gson().toJson(levelData)
         editor.putString("series_%d".format(series), json)
-        editor.commit()
+        editor.apply()
     }
     fun loadLevelStructure(series: Int): HashMap<Int, Stage.Data>
     {

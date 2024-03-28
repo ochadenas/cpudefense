@@ -173,7 +173,7 @@ class Game(val gameActivity: MainGameActivity) {
             correctNumberOfCoins()
 
             // calculate coins
-            coins.values.forEach() { purse -> purse.readContentsOfPurse() }
+            persistency.loadCoins(this)
             if (coins[LevelMode.BASIC]?.initialized == false)
                 migrateHeroes()
 
@@ -657,8 +657,25 @@ class Game(val gameActivity: MainGameActivity) {
              * Called when migrating from 1.33 to 1.34
              */
     {
-        heroesByMode[LevelMode.BASIC] = HashMap(heroes)
-        heroesByMode[LevelMode.ENDLESS] = hashMapOf()
+        /* check whether the sum of coins actually spent on heroes exceeds the theoretically
+         available amount. In this case, reset the heroes and refund the coins.
+         */
+        val coinsActuallySpentOnHeroes = heroes.values.sumOf { it.data.coinsSpent }
+        for (mode in LevelMode.values()) // do this for basic and endless
+        {
+            coins[mode]?.let {
+                it.calculateInitialContents()
+                if (it.contents.totalCoins >= coinsActuallySpentOnHeroes) {
+                    heroesByMode[mode] = HashMap(heroes)
+                    it.contents.spentCoins= coinsActuallySpentOnHeroes
+                }
+                else
+                {
+                    heroesByMode[mode] = hashMapOf() // no heroes
+                    it.contents.spentCoins= 0
+                }
+            }
+        }
     }
 
 }
