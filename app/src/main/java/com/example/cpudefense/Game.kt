@@ -111,6 +111,17 @@ class Game(val gameActivity: MainGameActivity) {
     var levelThumbnail = HashMap<Int, Bitmap?>()  // level snapshots (common for series 1 and 2)
     var levelThumbnailEndless = HashMap<Int, Bitmap?>()  // level snapshots for series 3
     var heroes = HashMap<Hero.Type, Hero>()
+    var heroesByMode = hashMapOf<LevelMode, HashMap<Hero.Type, Hero>>(
+        LevelMode.BASIC to HashMap<Hero.Type, Hero>(),
+        LevelMode.ENDLESS to HashMap<Hero.Type, Hero>(),
+    )
+
+    /* coin management */
+    enum class LevelMode { BASIC, ENDLESS }
+    var coins = hashMapOf(
+        LevelMode.BASIC to PurseOfCoins(this, LevelMode.BASIC),
+        LevelMode.ENDLESS to PurseOfCoins(this, LevelMode.ENDLESS),
+    )
 
     /* game elements */
     val viewport = Viewport()
@@ -156,8 +167,16 @@ class Game(val gameActivity: MainGameActivity) {
             summaryPerNormalLevel  = persistency.loadLevelSummaries(SERIES_NORMAL)
             summaryPerTurboLevel   = persistency.loadLevelSummaries(SERIES_TURBO)
             summaryPerEndlessLevel = persistency.loadLevelSummaries(SERIES_ENDLESS)
-            heroes = persistency.loadHeroes(this) // load the upgrades gained so far
+            heroes = persistency.loadHeroes(this, null) // load the upgrades gained so far
+            heroesByMode[LevelMode.BASIC] = persistency.loadHeroes(this, LevelMode.BASIC)
+            heroesByMode[LevelMode.ENDLESS] = persistency.loadHeroes(this, LevelMode.ENDLESS)
             correctNumberOfCoins()
+
+            // calculate coins
+            coins.values.forEach() { purse -> purse.readContentsOfPurse() }
+            if (coins[LevelMode.BASIC]?.initialized == false)
+                migrateHeroes()
+
             additionalCashDelay = heroes[Hero.Type.GAIN_CASH]?.getStrength()?.toInt() ?: 0
             intermezzo.prepareLevel(state.startingLevel, true)
         }
@@ -629,9 +648,17 @@ class Game(val gameActivity: MainGameActivity) {
         /** we've got a problem here. Coins are missing.
          * Unfortunately, we're unable to determine the exact number, because
          * the extra coins are not taken into account.
-         * Let's assume that for every 4 coins "regularly" got there is one extra coin gathered.
+         * Let's assume that for every 4 coins got from stage rewards there is one extra coin gathered.
          */
            global.coinsTotal = theoreticalAmountOfCoins + sumCoinsGot / 4
+    }
+    private fun migrateHeroes()
+            /** method to separate heroes and coins between the modes of playing (basic/endless).
+             * Called when migrating from 1.33 to 1.34
+             */
+    {
+        heroesByMode[LevelMode.BASIC] = HashMap(heroes)
+        heroesByMode[LevelMode.ENDLESS] = hashMapOf()
     }
 
 }

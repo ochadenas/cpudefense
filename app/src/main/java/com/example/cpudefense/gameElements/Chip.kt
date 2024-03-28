@@ -264,7 +264,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
         if (chipData.cooldownTimer>0) {
             chipData.cooldownTimer -= network.theGame.globalSpeedFactor()
             if (chipData.type != ChipType.MEM)  // MEM is the only type that may act during cooldown
-            return
+                return
         }
         if (chipData.sold) {
             resetToEmptyChip()

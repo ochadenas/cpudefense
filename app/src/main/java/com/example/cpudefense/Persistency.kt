@@ -1,28 +1,31 @@
 package com.example.cpudefense
 
 import android.app.Activity
+import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.Base64
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.gson.Gson
 import java.io.ByteArrayOutputStream
 import kotlin.Exception
 
-class Persistency(val activity: Activity) {
+class Persistency(activity: Activity) {
 
     // define preferences files
-    val prefs = activity.getSharedPreferences(activity.getString(R.string.pref_filename),
+    private val prefs: SharedPreferences = activity.getSharedPreferences(activity.getString(R.string.pref_filename),
         AppCompatActivity.MODE_PRIVATE)
-    val prefsStructure = activity.getSharedPreferences("structure", AppCompatActivity.MODE_PRIVATE)
-    val prefsThumbnails = activity.getSharedPreferences("thumbnails", AppCompatActivity.MODE_PRIVATE)
+    private val prefsStructure: SharedPreferences = activity.getSharedPreferences("structure", AppCompatActivity.MODE_PRIVATE)
+    private val prefsThumbnails: SharedPreferences = activity.getSharedPreferences("thumbnails", AppCompatActivity.MODE_PRIVATE)
+    private val prefsSaves: SharedPreferences = activity.getSharedPreferences(activity.getString(R.string.pref_filename_savegames), AppCompatActivity.MODE_PRIVATE)
     data class SerializableStateData (
         val general: Game.StateData,
         val stage: Stage.Data?
             )
 
     // designators of the level data in the prefs
-    val seriesKey = hashMapOf<Int, String>(
+    private val seriesKey = hashMapOf(
         Game.SERIES_NORMAL to "levels",
         Game.SERIES_TURBO to "levels_series2",
         Game.SERIES_ENDLESS to "levels_endless")
@@ -40,7 +43,11 @@ class Persistency(val activity: Activity) {
     )
 
     data class SerializableHeroData (
-        val upgrades: MutableList<Hero.Data> = mutableListOf<Hero.Data>()
+        val upgrades: MutableList<Hero.Data> = mutableListOf()
+    )
+    data class SerializableHeroDataPerMode (
+        val basic: MutableList<Hero.Data> = mutableListOf(),
+        val endless: MutableList<Hero.Data> = mutableListOf()
     )
 
     fun saveState(game: Game?)
@@ -69,6 +76,9 @@ class Persistency(val activity: Activity) {
             // save level data:
             saveLevels(it)
             editor.commit()
+
+            // save coins in purse:
+            it.coins.values.forEach { purse -> purse.saveContentsOfPurse() }
         }
     }
 
@@ -76,28 +86,30 @@ class Persistency(val activity: Activity) {
     {
         game?.let {
             // get level data
-            it.summaryPerNormalLevel = loadLevelSummaries(Game.SERIES_NORMAL) ?: HashMap()
-            it.summaryPerTurboLevel = loadLevelSummaries(Game.SERIES_TURBO) ?: HashMap()
-            it.summaryPerEndlessLevel = loadLevelSummaries(Game.SERIES_ENDLESS) ?: HashMap()
+            it.summaryPerNormalLevel = loadLevelSummaries(Game.SERIES_NORMAL)
+            it.summaryPerTurboLevel = loadLevelSummaries(Game.SERIES_TURBO)
+            it.summaryPerEndlessLevel = loadLevelSummaries(Game.SERIES_ENDLESS)
 
             // get global data
             it.global = loadGlobalData()
 
             // get upgrades
-            it.heroes = loadHeroes(it)
+            it.heroes = loadHeroes(it, null)
+            it.heroesByMode[Game.LevelMode.BASIC] =  loadHeroes(it, Game.LevelMode.BASIC)
+            it.heroesByMode[Game.LevelMode.ENDLESS] =  loadHeroes(it, Game.LevelMode.ENDLESS)
 
             // get state of running game
-            var json = prefs.getString("state", "none")
+            val json = prefs.getString("state", "none")
             if (json == "none")
                 return
             val data: SerializableStateData = Gson().fromJson(json, SerializableStateData::class.java)
             it.state = data.general
             it.stageData = data.stage
-            it.gameActivity.setGameSpeed(it.global.speed)  // resture game speed mode
+            it.gameActivity.setGameSpeed(it.global.speed)  // restore game speed mode
         }
     }
 
-    fun saveLevels(game: Game?)
+    private fun saveLevels(game: Game?)
     {
         val editor = prefs.edit()
         game?.let {
@@ -122,8 +134,8 @@ class Persistency(val activity: Activity) {
         game?.let {
             val levelIdent = stage.data.ident
             if (levelIdent.number != 0) {
-                var outputStream = ByteArrayOutputStream()
-                var snapshot: Bitmap? = when (levelIdent.series)
+                val outputStream = ByteArrayOutputStream()
+                val snapshot: Bitmap? = when (levelIdent.series)
                 {
                     Game.SERIES_ENDLESS -> it.levelThumbnailEndless[levelIdent.number]
                     else -> it.levelThumbnail[levelIdent.number]
@@ -131,7 +143,7 @@ class Persistency(val activity: Activity) {
                 snapshot?.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
                 val encodedImage: String =
                     Base64.encodeToString(outputStream.toByteArray(), Base64.DEFAULT)
-                var key: String = when (levelIdent.series)
+                val key: String = when (levelIdent.series)
                 {
                     Game.SERIES_ENDLESS -> "thumbnail_%d_endless".format(levelIdent.number)
                     else -> "thumbnail_%d".format(levelIdent.number)
@@ -142,17 +154,21 @@ class Persistency(val activity: Activity) {
         }
     }
 
-    fun saveHeroes(game: Game?)
+    fun saveHeroes(game: Game)
     {
-        val editor = prefs.edit()
-        game?.let {
-            val heroData = SerializableHeroData()
-            for (hero in it.heroes.values)
-                heroData.upgrades.add(hero.data)
-            var json = Gson().toJson(heroData)
-            editor.putString("upgrades", json)
-            editor.commit()
-        }
+        var editor = prefs.edit()
+        val upgradesData = SerializableHeroData()
+        for (hero in game.heroes.values)
+            upgradesData.upgrades.add(hero.data)
+        editor.putString("upgrades", Gson().toJson(upgradesData))
+        editor.apply()
+
+        editor = prefsSaves.edit()
+        val heroData = SerializableHeroDataPerMode()
+        game.heroesByMode[Game.LevelMode.BASIC]?.values?.forEach { hero -> heroData.basic.add(hero.data) }
+        game.heroesByMode[Game.LevelMode.ENDLESS]?.values?.forEach { hero -> heroData.endless.add(hero.data) }
+        editor.putString("heroes", Gson().toJson(heroData))
+        editor.apply()
     }
 
     fun loadGlobalData(): Game.GlobalData
@@ -186,7 +202,7 @@ class Persistency(val activity: Activity) {
 
     fun loadThumbnailOfLevel(level: Int, series: Int): Bitmap?
     {
-        var key: String = when(series)
+        val key: String = when(series)
         {
             Game.SERIES_ENDLESS -> "thumbnail_%d_endless".format(level)
             else -> "thumbnail_%d".format(level)
@@ -206,7 +222,7 @@ class Persistency(val activity: Activity) {
             encodedString = prefsThumbnails.getString(key, "")
 
         // reconstruct bitmap from string saved in preferences
-        var snapshot: Bitmap? = null
+        var snapshot: Bitmap?
         try {
             val decodedBytes: ByteArray = Base64.decode(encodedString, Base64.DEFAULT)
             snapshot = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.size)
@@ -219,21 +235,44 @@ class Persistency(val activity: Activity) {
         return snapshot
     }
 
-
-
-    fun loadHeroes(game: Game?): HashMap<Hero.Type, Hero>
+    fun loadHeroes(game: Game, mode: Game.LevelMode?): HashMap<Hero.Type, Hero>
     {
         val heroMap = HashMap<Hero.Type, Hero>()
-        val json = prefs.getString("upgrades", "none")
-        if (json != "none") game?.let {
-            val data: SerializableHeroData = Gson().fromJson(json, SerializableHeroData::class.java)
-            for (heroData in data.upgrades) {
+        var file = prefs
+        var key = "upgrades"
+        when (mode)
+        {
+            Game.LevelMode.BASIC -> {
+                key = "heroes"
+                file = prefsSaves
+            }
+            Game.LevelMode.ENDLESS -> {
+                key = "heroes_endless"
+                file = prefsSaves
+            }
+            else -> {}
+        }
+        val json = file.getString(key, "none")
+        if (json == "none")
+            return heroMap
+        try {
+            val listOfHeroData: MutableList<Hero.Data> = when (mode) {
+                null -> Gson().fromJson(json, SerializableHeroData::class.java).upgrades
+                Game.LevelMode.BASIC -> Gson().fromJson(json, SerializableHeroDataPerMode::class.java).basic
+                Game.LevelMode.ENDLESS -> Gson().fromJson(json, SerializableHeroDataPerMode::class.java).endless
+            }
+            for (heroData in listOfHeroData) {
                 try {
-                    heroMap[heroData.type] = Hero.createFromData(it, heroData)
-                }
-                catch(ex: NullPointerException) {
+                    heroMap[heroData.type] = Hero.createFromData(game, heroData)
+                } catch (ex: NullPointerException) {
                     /* may happen if a previously existing hero type is definitely removed from the game */
                 }
+            }
+        }
+        catch (ex: Exception) {
+            // save file has not the expected structure
+            game.gameActivity.runOnUiThread {
+                Toast.makeText(game.gameActivity, "Save file corrupted.", Toast.LENGTH_LONG).show()
             }
         }
         return heroMap
@@ -252,7 +291,7 @@ class Persistency(val activity: Activity) {
     fun loadLevelStructure(series: Int): HashMap<Int, Stage.Data>
     {
         try {
-            var json = prefsStructure.getString("series_%d".format(series), "none")
+            val json = prefsStructure.getString("series_%d".format(series), "none")
             if (json == "none")
                 return hashMapOf()
             val data: SerializableLevelData =
