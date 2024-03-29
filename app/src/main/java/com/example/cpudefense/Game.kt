@@ -23,6 +23,8 @@ import kotlin.random.Random
 
 
 class Game(val gameActivity: MainGameActivity) {
+    val workInProgress = false  // REMOVE THIS
+
     companion object Params {
         const val maxLevelAvailable = 31
 
@@ -122,6 +124,10 @@ class Game(val gameActivity: MainGameActivity) {
         LevelMode.BASIC to PurseOfCoins(this, LevelMode.BASIC),
         LevelMode.ENDLESS to PurseOfCoins(this, LevelMode.ENDLESS),
     )
+    /** the stage that has been selected in the level selector */
+    var currentStage: Stage.Identifier = Stage.Identifier()
+    /** current stage when it is actually played and the game is running */
+    var currentlyActiveStage: Stage? = null
 
     /* game elements */
     val viewport = Viewport()
@@ -130,8 +136,7 @@ class Game(val gameActivity: MainGameActivity) {
     var marketplace = Marketplace(this)
     val scoreBoard = ScoreBoard(this)
     val speedControlPanel = SpeedControl(this)
-    var currentStage: Stage? = null
-    private var currentWave: Wave? = null
+    private var currentlyActiveWave: Wave? = null
     var movers = CopyOnWriteArrayList<Mover>() // list of all mover objects that are created for game elements
     var faders = CopyOnWriteArrayList<Fader>() // idem for faders
     var flippers = CopyOnWriteArrayList<Flipper>() // idem for flippers
@@ -160,6 +165,11 @@ class Game(val gameActivity: MainGameActivity) {
 
     fun beginGame(resetProgress: Boolean = false)
     {
+        /** Begin the current game on a chosen level. Also called when starting a completely
+         * new game.
+         * @param resetProgress If true, the whole game is started from the first level, and
+         * all coins and heroes are cleared. Otherwise, start on the level given in the saved state.
+         */
         gameActivity.loadSettings()
         if (!resetProgress) {
             val persistency = Persistency(gameActivity)
@@ -174,10 +184,11 @@ class Game(val gameActivity: MainGameActivity) {
 
             // calculate coins
             persistency.loadCoins(this)
-            if (coins[LevelMode.BASIC]?.initialized == false)
+            if (coins[LevelMode.BASIC]?.initialized == false || workInProgress)
                 migrateHeroes()
 
-            additionalCashDelay = heroes[Hero.Type.GAIN_CASH]?.getStrength()?.toInt() ?: 0
+            additionalCashDelay = heroModifier(Hero.Type.GAIN_CASH).toInt()
+            currentStage = state.startingLevel
             intermezzo.prepareLevel(state.startingLevel, true)
         }
         else {
@@ -186,6 +197,7 @@ class Game(val gameActivity: MainGameActivity) {
             summaryPerTurboLevel = HashMap()
             setLastPlayedStage(state.startingLevel)
             setMaxPlayedStage(state.startingLevel, resetProgress=true)
+            currentStage = state.startingLevel
             intermezzo.prepareLevel(state.startingLevel, true)
         }
         if (background == null)
@@ -194,6 +206,7 @@ class Game(val gameActivity: MainGameActivity) {
 
     fun resumeGame()
     {
+        /** function to resume a running game at exactly the point where the app was left. */
         // get historical data of levels completed so far
         val persistency = Persistency(gameActivity)
         summaryPerNormalLevel  = persistency.loadLevelSummaries(SERIES_NORMAL)
@@ -201,9 +214,10 @@ class Game(val gameActivity: MainGameActivity) {
         summaryPerEndlessLevel = persistency.loadLevelSummaries(SERIES_ENDLESS)
         // persistency.loadState(this)
         stageData?.let {
-            currentStage = Stage.createStageFromData(this, it)
+            currentlyActiveStage = Stage.createStageFromData(this, it)
         }
-        currentStage?.let {
+        currentlyActiveStage?.let {
+            currentStage = it.data.ident
             it.network.validateViewport()
             viewport.setGridSize(it.sizeX, it.sizeY)
         }
@@ -220,8 +234,8 @@ class Game(val gameActivity: MainGameActivity) {
                 gameActivity.setGameActivityStatus(MainGameActivity.GameActivityStatus.BETWEEN_LEVELS)
             }
             else -> {
-                currentStage?.let {
-                    currentWave = if (it.waves.size > 0) it.waves[0]
+                currentlyActiveStage?.let {
+                    currentlyActiveWave = if (it.waves.size > 0) it.waves[0]
                     else it.nextWave()
                     speedControlPanel.resetButtons()
                 }
@@ -231,7 +245,7 @@ class Game(val gameActivity: MainGameActivity) {
         if (background == null)
             background = Background(this)
         if (!gameActivity.settings.configDisableBackground)
-            background?.choose(currentStage?.data?.ident)
+            background?.choose(currentStage)
         background?.state = Background.BackgroundState.UNINITIALIZED
     }
 
@@ -249,12 +263,24 @@ class Game(val gameActivity: MainGameActivity) {
             return defaultSpeedFactor
     }
 
+    fun currentHeroes(stage: Stage.Identifier? = currentStage): HashMap<Hero.Type, Hero>
+    /** @return the set of heroes for the current level, depending on the mode (BASIC or ENDLESS) */
+    {
+        val heroes =
+        stage?.let {
+            val mode = it.mode()
+            heroesByMode[mode]
+        }
+        return heroes ?: HashMap()
+    }
+
+
     fun update()
     {
         if (state.phase == GamePhase.RUNNING)
         {
             checkTemperature()
-            currentStage?.network?.let {
+            currentlyActiveStage?.network?.let {
                 if (background?.mustBeChanged() == true) {
                     it.backgroundImage = background?.actualImage
                     it.recreateNetworkImage(viewport)
@@ -262,7 +288,7 @@ class Game(val gameActivity: MainGameActivity) {
                 it.update()
             }
             scoreBoard.update()
-            currentWave?.update()
+            currentlyActiveWave?.update()
             gainAdditionalCash()
         }
     }
@@ -298,7 +324,7 @@ class Game(val gameActivity: MainGameActivity) {
     {
         if (state.phase == GamePhase.RUNNING || state.phase == GamePhase.PAUSED)
         {
-            currentStage?.network?.display(canvas, viewport)
+            currentlyActiveStage?.network?.display(canvas, viewport)
             scoreBoard.display(canvas, viewport)
             speedControlPanel.display(canvas)
         }
@@ -325,7 +351,7 @@ class Game(val gameActivity: MainGameActivity) {
             {
                 if (speedControlPanel.onDown(p0))
                     return true
-                currentStage?.network?.let {
+                currentlyActiveStage?.network?.let {
                     if (processClickOnNodes(it, p0))
                         return true
                     for (obj in it.vehicles)
@@ -342,7 +368,7 @@ class Game(val gameActivity: MainGameActivity) {
             {
                 if (speedControlPanel.onDown(p0))
                     return true
-                currentStage?.network?.let {
+                currentlyActiveStage?.network?.let {
                     if (processClickOnNodes(it, p0))
                         return true
                 }
@@ -400,22 +426,22 @@ class Game(val gameActivity: MainGameActivity) {
     
     private fun startNextWave()
     {
-        currentWave = currentStage?.nextWave()
+        currentlyActiveWave = currentlyActiveStage?.nextWave()
     }
 
     fun onEndOfWave()
     {
-        currentWave = null
+        currentlyActiveWave = null
         // GlobalScope.launch { startNextWave() }
         startNextWave()
     }
 
     fun onEndOfStage()
     {
-        if (currentStage == null)
+        if (currentlyActiveStage == null)
             return // in this case, the stage has already been left
         takeLevelSnapshot()
-        currentStage?.let {
+        currentlyActiveStage?.let {
             if (it.attackerCount()>0)
                 // still attackers left, wait until wave is really over
                 GlobalScope.launch { delay(2000L); onEndOfStage() }
@@ -440,7 +466,7 @@ class Game(val gameActivity: MainGameActivity) {
             coinsMaxAvailable = stage.summary.coinsMaxAvailable,
             coinsAvailable = stage.summary.coinsMaxAvailable - state.coinsInLevel
         )
-        val currentStage = stage.data.ident
+        currentStage = stage.data.ident
         val nextStage = currentStage.next()
         setSummaryOfStage(currentStage, summaryOfCompletedStage)
         setMaxPlayedStage(currentStage)
@@ -485,8 +511,8 @@ class Game(val gameActivity: MainGameActivity) {
 
         viewport.setGridSize(nextStage.network.data.gridSizeX, nextStage.network.data.gridSizeY)
         state.phase = GamePhase.RUNNING
-        currentWave = nextStage.nextWave()
-        currentStage = nextStage
+        currentlyActiveWave = nextStage.nextWave()
+        currentlyActiveStage = nextStage
         if (!gameActivity.settings.configDisableBackground)
             background?.choose(level)
         takeLevelSnapshot()
@@ -499,10 +525,9 @@ class Game(val gameActivity: MainGameActivity) {
         state.lives--
         if (state.lives == 0)
         {
-            val lastLevel = currentStage?.data?.ident ?: Stage.Identifier(1,0)
             takeLevelSnapshot()
-            currentStage = null
-            intermezzo.endOfGame(lastLevel, hasWon = false)
+            currentlyActiveStage = null
+            intermezzo.endOfGame(currentStage, hasWon = false)
         }
     }
 
@@ -511,22 +536,22 @@ class Game(val gameActivity: MainGameActivity) {
         gameActivity.finish()
     }
 
-    fun setLastPlayedStage(currentStage: Stage.Identifier)
+    fun setLastPlayedStage(identifier: Stage.Identifier)
     /** when completing a level, record the current number in the SharedPrefs.
-     * @param currentStage number of the level successfully completed */
+     * @param identifier number of the level successfully completed */
     {
         val prefs = gameActivity.getSharedPreferences(gameActivity.getString(R.string.pref_filename), Context.MODE_PRIVATE)
         with (prefs.edit())
         {
-            putInt("LASTSTAGE", currentStage.number)
-            putInt("LASTSERIES", currentStage.series)
+            putInt("LASTSTAGE", identifier.number)
+            putInt("LASTSERIES", identifier.series)
             commit()
         }
     }
 
-    private fun setMaxPlayedStage(currentStage: Stage.Identifier, resetProgress: Boolean = false)
+    private fun setMaxPlayedStage(identifier: Stage.Identifier, resetProgress: Boolean = false)
             /** when completing a level, record the level as highest completed, but only if the old max level is not higher.
-             * @param currentStage number of the level successfully completed
+             * @param identifier number of the level successfully completed
              * @param resetProgress If true, forces resetting the max stage to the given currentStage
              * */
     {
@@ -542,21 +567,21 @@ class Game(val gameActivity: MainGameActivity) {
                 putBoolean("ENDLESS_AVAILABLE", false)
                 commit()
             }
-            if (currentStage.isGreaterThan(maxStage))
+            if (identifier.isGreaterThan(maxStage))
             {
-                putInt("MAXSTAGE", currentStage.number)
-                putInt("MAXSERIES", currentStage.series)
+                putInt("MAXSTAGE", identifier.number)
+                putInt("MAXSERIES", identifier.series)
                 commit()
             }
             // make advanced series available
-            when (currentStage.series)
+            when (identifier.series)
             {
                 1 ->
-                    if (currentStage.number==maxLevelAvailable)
+                    if (identifier.number==maxLevelAvailable)
                         putBoolean("TURBO_AVAILABLE", true)
                 2 -> {
                     putBoolean("TURBO_AVAILABLE", true)
-                    if (currentStage.number == maxLevelAvailable)
+                    if (identifier.number == maxLevelAvailable)
                         putBoolean("ENDLESS_AVAILABLE", true)
                 }
                 3 -> {
@@ -569,14 +594,13 @@ class Game(val gameActivity: MainGameActivity) {
     }
     private fun calculateLives()
     {
-        val extraLives = heroes[Hero.Type.ADDITIONAL_LIVES]?.getStrength()
+        var extraLives = heroModifier(Hero.Type.ADDITIONAL_LIVES)
         state.currentMaxLives = state.maxLives + (extraLives ?: 0f).toInt()
         state.lives = state.currentMaxLives
     }
     private fun calculateStartingCash()
     {
-        val cash = heroes[Hero.Type.INCREASE_STARTING_CASH]?.getStrength()?.toInt()
-        state.cash = cash ?: minimalAmountOfCash
+        state.cash = heroModifier(Hero.Type.INCREASE_STARTING_CASH).toInt()
     }
 
     private fun gainAdditionalCash()
@@ -610,13 +634,18 @@ class Game(val gameActivity: MainGameActivity) {
 
     fun actualMaxInternalChipStorage(): Int
     {
-        val maxStorage = heroes[Hero.Type.ENABLE_MEM_UPGRADE]?.getStrength()?.toInt() ?: 1
+        val maxStorage = heroModifier(Hero.Type.ENABLE_MEM_UPGRADE).toInt()
         return if (maxStorage > maxInternalChipStorage) maxInternalChipStorage else maxStorage
+    }
+
+    fun heroModifier(type: Hero.Type): Float {
+        val hero: Hero? = currentHeroes().get(type)
+        return hero?.getStrength() ?: Hero.getStrengthOfType(type, 0)
     }
 
     private fun takeLevelSnapshot()
     {
-        currentStage?.let {
+        currentlyActiveStage?.let {
             if (it.getSeries() == SERIES_ENDLESS)
                 levelThumbnailEndless[it.getLevel()] = it.takeSnapshot(levelSnapshotIconSize)
             else
@@ -639,7 +668,7 @@ class Game(val gameActivity: MainGameActivity) {
         for (summary in summaryPerEndlessLevel.values)
             sumCoinsGot += summary.coinsGot
         var sumCoinsSpent = 0
-        for (hero in heroes.values)
+        for (hero in heroes.values)  // these are the 'old' heroes
             sumCoinsSpent += hero.data.coinsSpent
         var theoreticalAmountOfCoins = sumCoinsGot - sumCoinsSpent
         if (theoreticalAmountOfCoins < 0)

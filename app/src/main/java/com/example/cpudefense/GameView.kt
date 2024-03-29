@@ -113,7 +113,7 @@ class GameView(context: Context, val theGame: Game):
             {
                 if (scrollAllowed) {
                     theGame.viewport.addOffset(-dx, -dy)
-                    theGame.currentStage?.network?.recreateNetworkImage(theGame.viewport)
+                    theGame.currentlyActiveStage?.network?.recreateNetworkImage(theGame.viewport)
                 }
             }
         }
@@ -125,7 +125,7 @@ class GameView(context: Context, val theGame: Game):
     override fun onLongPress(p0: MotionEvent) {
         p0.let {
             when (theGame.state.phase) {
-                Game.GamePhase.RUNNING -> theGame.currentStage?.network?.onLongPress(p0)
+                Game.GamePhase.RUNNING -> theGame.currentlyActiveStage?.network?.onLongPress(p0)
                 Game.GamePhase.MARKETPLACE -> theGame.marketplace.onLongPress(p0)
                 else -> {}
             }

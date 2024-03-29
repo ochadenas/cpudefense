@@ -23,17 +23,17 @@ class Wave(var game: Game, var data: Data)
         else if (data.ticksUntilNextAttacker > 0)
             data.ticksUntilNextAttacker -= game.globalSpeedFactor()/game.defaultSpeedFactor
         else {
-            val frequency = data.attackerFrequency * (game.heroes[Hero.Type.DECREASE_ATT_FREQ]?.getStrength() ?: 1f)
+            val frequency = data.attackerFrequency * game.heroModifier(Hero.Type.DECREASE_ATT_FREQ)
             data.ticksUntilNextAttacker = 6.0 / frequency
             if (data.coins>0 && Random.nextFloat() > 0.8)
             {
                 data.coins--
-                game.currentStage?.createNewAttacker(data.attackerStrength, data.attackerSpeed, isCoin = true)
+                game.currentlyActiveStage?.createNewAttacker(data.attackerStrength, data.attackerSpeed, isCoin = true)
             }
             else if (data.representation == Attacker.Representation.HEX)
-                game.currentStage?.createNewAttacker(data.attackerStrength, data.attackerSpeed, representation = Attacker.Representation.HEX)
+                game.currentlyActiveStage?.createNewAttacker(data.attackerStrength, data.attackerSpeed, representation = Attacker.Representation.HEX)
             else
-                game.currentStage?.createNewAttacker(data.attackerStrength, data.attackerSpeed, representation = Attacker.Representation.UNDEFINED)
+                game.currentlyActiveStage?.createNewAttacker(data.attackerStrength, data.attackerSpeed, representation = Attacker.Representation.UNDEFINED)
             data.currentCount--
         }
     }

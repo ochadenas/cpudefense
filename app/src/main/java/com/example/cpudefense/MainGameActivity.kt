@@ -139,7 +139,7 @@ class MainGameActivity : Activity() {
             runOnUiThread {
                 val toast: Toast = Toast.makeText(
                     this,
-                    "Stage %d".format(theGame.currentStage?.getLevel()),
+                    "Stage %d".format(theGame.currentStage.number),
                     Toast.LENGTH_SHORT
                 )
                 toast.show()
@@ -199,7 +199,7 @@ class MainGameActivity : Activity() {
     }
 
     private fun replayLevel() {
-        theGame.currentStage?.let { startGameAtLevel(it.data.ident) }
+        theGame.currentlyActiveStage?.let { startGameAtLevel(it.data.ident) }
     }
 
     private fun update()

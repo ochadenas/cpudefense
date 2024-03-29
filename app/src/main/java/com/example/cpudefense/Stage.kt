@@ -19,15 +19,25 @@ class Stage(var theGame: Game) {
         fun next(): Identifier
         /** returns an identifier of the next level */
         { return Identifier(series, number+1)}
+
         fun previous(): Identifier
         /** returns an identifier of the previous level */
         { return Identifier(series, if (number<=1) 1 else number-1)}
+
         fun isGreaterThan(compare: Identifier): Boolean {
             return when {
                 compare.series > this.series -> false
                 compare.series < this.series -> true
                 else -> compare.number < this.number
             }
+        }
+
+        fun mode(): Game.LevelMode
+        {
+            if (series == Game.SERIES_ENDLESS)
+                return Game.LevelMode.ENDLESS
+            else
+                return Game.LevelMode.BASIC
         }
     }
 
@@ -184,14 +194,11 @@ class Stage(var theGame: Game) {
     fun createNewAttacker(maxNumber: Int, speed: Float, isCoin: Boolean = false,
                           representation: Attacker.Representation = Attacker.Representation.BINARY)
     {
-        val actualSpeed = speed * (theGame.heroes[Hero.Type.DECREASE_ATT_SPEED]?.getStrength() ?: 1.0f)
+        val actualSpeed = speed * theGame.heroModifier(Hero.Type.DECREASE_ATT_SPEED)
         val attacker = if (isCoin)
             Cryptocoin(network, (maxNumber*1.5).toULong(), actualSpeed )
         else {
-            var strength = Random.nextFloat()*(maxNumber+1)
-            theGame.heroes[Hero.Type.DECREASE_ATT_STRENGTH]?.let {
-                strength *= it.getStrength()
-            }
+            var strength = Random.nextFloat()*(maxNumber+1) * theGame.heroModifier(Hero.Type.DECREASE_ATT_STRENGTH)
             Attacker(network, representation, strength.toULong(), actualSpeed)
         }
         network.addVehicle(attacker)

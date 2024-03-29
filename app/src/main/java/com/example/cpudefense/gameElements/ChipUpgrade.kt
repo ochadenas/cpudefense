@@ -25,22 +25,22 @@ class ChipUpgrade(val chipToUpgrade: Chip, val type: Chip.ChipUpgrades,
                 var baseValue = chipToUpgrade.chipData.value
                 if (chipToUpgrade.chipData.type == Chip.ChipType.MEM) baseValue += 12  // MEM updates are really expensive
                 var upgradePrice = baseValue * 1.5
-                val discount = game.heroes[Hero.Type.DECREASE_UPGRADE_COST]?.getStrength() ?: 0f
+                val discount = game.heroModifier(Hero.Type.DECREASE_UPGRADE_COST)
                 upgradePrice = upgradePrice * (100f - discount) / 100
                 return upgradePrice.toInt()
             }
             Chip.ChipUpgrades.REDUCE -> {
-                val alreadyRemoved = game.currentStage?.data?.obstaclesRemovedCount ?: 0
-                val discount =  game.heroes[Hero.Type.DECREASE_REMOVAL_COST]?.getStrength() ?: 0f
+                val alreadyRemoved = game.currentlyActiveStage?.data?.obstaclesRemovedCount ?: 0
+                val discount = game.heroModifier(Hero.Type.DECREASE_REMOVAL_COST)
                 return (chipToUpgrade.chipData.value * (alreadyRemoved*(alreadyRemoved+1)/2 + 1) * (100f-discount).toInt() / 100)
             }
             Chip.ChipUpgrades.SELL -> {
-                val refund = - chipToUpgrade.chipData.value * (game.heroes[Hero.Type.INCREASE_REFUND]?.getStrength() ?: 50f) * 0.01f
+                val refund = - chipToUpgrade.chipData.value * game.heroModifier(Hero.Type.INCREASE_REFUND) * 0.01f
                 return refund.toInt()
             }
             Chip.ChipUpgrades.ACC -> {
                 // ACC chips are more expensive if there are already chips of the same type
-                game.currentStage?.let {
+                game.currentlyActiveStage?.let {
                     val count = it.chipCount(Chip.ChipType.ACC)
                     penalty = count * count * count
                 }
@@ -92,7 +92,7 @@ class ChipUpgrade(val chipToUpgrade: Chip, val type: Chip.ChipUpgrades,
                 chipToUpgrade.addPower(-1)
                 if (chipToUpgrade.chipData.upgradeLevel == 0)
                     chipToUpgrade.sellChip()
-                game.currentStage?.let {it.data.obstaclesRemovedCount++ }
+                game.currentlyActiveStage?.let {it.data.obstaclesRemovedCount++ }
             }
             Chip.ChipUpgrades.SELL -> chipToUpgrade.sellChip()
             Chip.ChipUpgrades.SUB -> chipToUpgrade.setType(Chip.ChipType.SUB)

@@ -69,7 +69,7 @@ class Persistency(activity: Activity) {
             // save current game state:
             val stateData = SerializableStateData(
                 general = it.state,
-                stage = it.currentStage?.provideData()
+                stage = it.currentlyActiveStage?.provideData()
             )
             json = Gson().toJson(stateData)
             editor.putString("state", json)
@@ -252,20 +252,8 @@ class Persistency(activity: Activity) {
     fun loadHeroes(game: Game, mode: Game.LevelMode?): HashMap<Hero.Type, Hero>
     {
         val heroMap = HashMap<Hero.Type, Hero>()
-        var file = prefs
-        var key = "upgrades"
-        when (mode)
-        {
-            Game.LevelMode.BASIC -> {
-                key = "heroes"
-                file = prefsSaves
-            }
-            Game.LevelMode.ENDLESS -> {
-                key = "heroes_endless"
-                file = prefsSaves
-            }
-            else -> {}
-        }
+        val file = if (mode == null) prefs else prefsSaves
+        val key = if (mode == null) "upgrades" else "heroes"
         val json = file.getString(key, "none")
         if (json == "none")
             return heroMap

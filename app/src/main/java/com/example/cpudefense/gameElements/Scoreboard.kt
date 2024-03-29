@@ -76,14 +76,14 @@ class ScoreBoard(val game: Game): GameElement() {
         paint.style = Paint.Style.STROKE
         paint.strokeWidth = scoreboardBorderWidth
         canvas.drawRect(area, paint)
-        game.currentStage?.let { if (it.getSeries() > 1 || it.getLevel() > 2)
-            information.display(canvas) }
+        if (game.currentStage.series > 1 || game.currentStage.number > 2)
+            information.display(canvas)
         waves.display(canvas)
         lives.display(canvas)
         coins.display(canvas)
-        game.currentStage?.let { if (it.getSeries() > 1 || it.getLevel() > 27)
-            temperature.display(canvas) }
-        if (game.currentStage?.getSeries() ?: 1 > 1)
+        if (game.currentStage.series > 1 || game.currentStage.number > 27)
+            temperature.display(canvas)
+        if (game.currentStage.series > 1)
             temperature.display(canvas)
         debugStatusLine?.display(canvas)
     }
@@ -193,10 +193,10 @@ class ScoreBoard(val game: Game): GameElement() {
 
         fun display(canvas: Canvas)
         {
-            if (game.currentStage?.data?.wavesCount != lastValue)
+            if (game.currentlyActiveStage?.data?.wavesCount != lastValue)
             {
                 /* only render the display if value has changed, otherwise re-use bitmap */
-                lastValue = game.currentStage?.data?.wavesCount ?: -1
+                lastValue = game.currentlyActiveStage?.data?.wavesCount ?: -1
                 recreateBitmap()
             }
             canvas.drawBitmap(bitmap, null, area, paint)
@@ -212,7 +212,7 @@ class ScoreBoard(val game: Game): GameElement() {
             paint.style = Paint.Style.FILL
             paint.color = myColor
             paint.textAlign = Paint.Align.LEFT
-            game.currentStage?.let {
+            game.currentlyActiveStage?.let {
                 val currentWave = "%d".format(it.data.wavesCount)
                 paint.textSize = Game.scoreTextSize * game.resources.displayMetrics.scaledDensity
                 paint.getTextBounds(currentWave, 0, currentWave.length, bounds)
@@ -290,17 +290,17 @@ class ScoreBoard(val game: Game): GameElement() {
                 glowRect.setCenter(ledArea.right - i * deltaX, ledArea.centerY())
                 val ledRect = Rect(glowRect).inflate(-4)
                 if (i <= game.state.lives)
-                    when (game.currentStage?.getSeries())
+                    when (game.currentStage.series)
                     {
-                        1 -> {
+                        Game.SERIES_NORMAL -> {
                             paint.color = resources.getColor(R.color.led_green)
                             glowPaint.color = resources.getColor(R.color.led_green)
                         }
-                        2 -> {
+                        Game.SERIES_TURBO -> {
                             paint.color = resources.getColor(R.color.led_turbo)
                             glowPaint.color = resources.getColor(R.color.led_turbo_glow)
                         }
-                        3 -> {
+                        Game.SERIES_ENDLESS -> {
                             paint.color = resources.getColor(R.color.led_red)
                             glowPaint.color = resources.getColor(R.color.led_red_glow)
                         }
@@ -338,7 +338,7 @@ class ScoreBoard(val game: Game): GameElement() {
         }
 
         fun display(canvas: Canvas) {
-            if (game.currentStage?.summary?.coinsMaxAvailable == 0)
+            if (game.currentlyActiveStage?.summary?.coinsMaxAvailable == 0)
                 return  // levels where you can't get coins
             coins = game.state.coinsInLevel + game.state.coinsExtra
             if (coins<0)

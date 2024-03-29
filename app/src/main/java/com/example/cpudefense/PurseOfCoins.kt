@@ -8,8 +8,6 @@ class PurseOfCoins(val game: Game, val levelMode: Game.LevelMode = Game.LevelMod
  *
  */
 {
-    val workInProgress = true
-
     data class Contents (
         /** total coins gathered in the game mode */
         var totalCoins: Int = 0,

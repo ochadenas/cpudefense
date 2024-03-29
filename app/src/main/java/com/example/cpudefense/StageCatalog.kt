@@ -70,7 +70,7 @@ class StageCatalog
 
         private fun createFixedNumberOfObstacles(stage: Stage, numberOfObstacles: Int)
         {
-            val reduce = stage.theGame.heroes[Hero.Type.LIMIT_UNWANTED_CHIPS]?.getStrength() ?: 0 // consider Kilby's effect
+            val reduce = stage.theGame.heroModifier(Hero.Type.LIMIT_UNWANTED_CHIPS) // consider Kilby's effect
             val reducedNumberOfObstacles = numberOfObstacles - reduce.toInt()
             if (reducedNumberOfObstacles > 0)
                 for (i in 1..reducedNumberOfObstacles)  // set or upgrade the slots
@@ -95,7 +95,7 @@ class StageCatalog
                  * Difficulty values may be < 0.
                  */
         {
-            val reduce = stage.theGame.heroes[Hero.Type.LIMIT_UNWANTED_CHIPS]?.getStrength()?.toDouble() ?: 0.0 // consider Kilby's effect
+            val reduce = stage.theGame.heroModifier(Hero.Type.LIMIT_UNWANTED_CHIPS)
             val targetDifficulty = difficulty - reduce
             var stageDifficulty = stage.difficultyOfObstacles()
             while (stageDifficulty < targetDifficulty)

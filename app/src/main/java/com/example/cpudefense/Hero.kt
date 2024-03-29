@@ -382,34 +382,13 @@ class Hero(var game: Game, type: Type): Fadable {
         }
     }
 
+
     fun getStrength(level: Int = data.level): Float
             /** determines the numerical effect ("strength") of the upgrade,
              * depending on its level
              */
     {
-        when (data.type) {
-            Type.INCREASE_CHIP_SUB_SPEED -> return 1.0f + level / 20f
-            Type.INCREASE_CHIP_SHR_SPEED -> return 1.0f + level / 20f
-            Type.INCREASE_CHIP_MEM_SPEED -> return 1.0f + level / 20f
-            Type.INCREASE_STARTING_CASH -> return 8.0f + level * level
-            Type.REDUCE_HEAT -> return level * 10f
-            Type.DECREASE_UPGRADE_COST -> return level * 6f
-            Type.DECREASE_REMOVAL_COST -> return level * 8f
-            Type.ADDITIONAL_LIVES -> return level.toFloat()
-            Type.DECREASE_ATT_FREQ -> return 1.0f - level * 0.05f
-            Type.DECREASE_ATT_SPEED -> return 1.0f - level * 0.04f
-            Type.DECREASE_ATT_STRENGTH -> return exp(- level / 3.0).toFloat()
-            Type.INCREASE_MAX_HERO_LEVEL -> return level.toFloat()
-            Type.LIMIT_UNWANTED_CHIPS -> return level.toFloat()
-            Type.ENABLE_MEM_UPGRADE -> return (level+1).toFloat()
-            Type.GAIN_CASH -> return if (level>0) (8f - level) * 9 else 0f
-            Type.GAIN_CASH_ON_KILL -> return truncate((level+1) * 0.5f)
-            Type.INCREASE_REFUND -> return (50f + level * 10)
-            Type.INCREASE_CHIP_SUB_RANGE -> return 1.0f + level / 10f
-            Type.INCREASE_CHIP_SHR_RANGE -> return 1.0f + level / 10f
-            Type.INCREASE_CHIP_MEM_RANGE -> return 1.0f + level / 10f
-            else -> return level.toFloat()
-        }
+        return getStrengthOfType(data.type, level)
     }
 
     fun getMaxUpgradeLevel(): Int
@@ -418,7 +397,7 @@ class Hero(var game: Game, type: Type): Fadable {
              * the possible effect of Sid Meier
              */
     {
-        val additionalUpgradePossibility = game.heroes[Type.INCREASE_MAX_HERO_LEVEL]?.getStrength()?.toInt()
+        val additionalUpgradePossibility = game.heroModifier(Type.INCREASE_MAX_HERO_LEVEL).toInt()
         when (data.type)
         {
             Type.ADDITIONAL_LIVES -> return maxLevel
@@ -431,7 +410,7 @@ class Hero(var game: Game, type: Type): Fadable {
 
     private fun upgradeLevel(type: Type): Int
     {
-        val level = game.heroes[type]?.data?.level
+        val level = game.currentHeroes()[type]?.data?.level
         return level ?: 0
     }
 
@@ -499,8 +478,6 @@ class Hero(var game: Game, type: Type): Fadable {
             return
         data.level += 1
         setDesc()
-        game.heroes[this.data.type] = this
-        Persistency(game.gameActivity).saveHeroes(game)
         // start graphical transition */
         if (data.level == 1) {
             Fader(game, this, Fader.Type.APPEAR, Fader.Speed.VERY_SLOW)
@@ -552,6 +529,39 @@ class Hero(var game: Game, type: Type): Fadable {
         }
 
         const val heroPictureSize = 120
+
+
+        fun getStrengthOfType(type: Type, level: Int = 0): Float
+                /** determines the numerical effect ("strength") of
+                 * a hero of the given type, depending on its level.
+                 * "level = 0" corresponds to "hero not present".
+                 */
+        {
+            when (type) {
+                Type.INCREASE_CHIP_SUB_SPEED -> return 1.0f + level / 20f
+                Type.INCREASE_CHIP_SHR_SPEED -> return 1.0f + level / 20f
+                Type.INCREASE_CHIP_MEM_SPEED -> return 1.0f + level / 20f
+                Type.INCREASE_STARTING_CASH -> return Game.minimalAmountOfCash.toFloat() + level * level
+                Type.REDUCE_HEAT -> return level * 10f
+                Type.DECREASE_UPGRADE_COST -> return level * 6f
+                Type.DECREASE_REMOVAL_COST -> return level * 8f
+                Type.ADDITIONAL_LIVES -> return level.toFloat()
+                Type.DECREASE_ATT_FREQ -> return 1.0f - level * 0.05f
+                Type.DECREASE_ATT_SPEED -> return 1.0f - level * 0.04f
+                Type.DECREASE_ATT_STRENGTH -> return exp(- level / 3.0).toFloat()
+                Type.INCREASE_MAX_HERO_LEVEL -> return level.toFloat()
+                Type.LIMIT_UNWANTED_CHIPS -> return level.toFloat()
+                Type.ENABLE_MEM_UPGRADE -> return (level+1).toFloat()
+                Type.GAIN_CASH -> return if (level>0) (8f - level) * 9 else 0f
+                Type.GAIN_CASH_ON_KILL -> return truncate((level+1) * 0.5f)
+                Type.INCREASE_REFUND -> return (50f + level * 10)
+                Type.INCREASE_CHIP_SUB_RANGE -> return 1.0f + level / 10f
+                Type.INCREASE_CHIP_SHR_RANGE -> return 1.0f + level / 10f
+                Type.INCREASE_CHIP_MEM_RANGE -> return 1.0f + level / 10f
+                else -> return level.toFloat()
+            }
+        }
+
     }
 
     inner class Hero(var type: Type)

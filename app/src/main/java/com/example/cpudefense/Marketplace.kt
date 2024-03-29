@@ -53,13 +53,14 @@ class Marketplace(val game: Game): GameElement()
     {
         nextGameLevel = level
         val newUpgrades = mutableListOf<Hero>()
+        val heroes = game.currentHeroes(level)
         for (type in Hero.Type.values())
         {
             /* if upgrade already exists (because it has been bought earlier),
             get it from the game data. Otherwise, create an empty card.
             Only add upgrades that are allowed (available) at present.
              */
-            var card: Hero? = game.heroes[type]
+            var card: Hero? = heroes[type]
             if (card == null)
                card = Hero.createFromData(game, Hero.Data(type))
             if (card.isAvailable(level)) {
@@ -164,6 +165,8 @@ class Marketplace(val game: Game): GameElement()
                     it.data.coinsSpent += price
                     Fader(game, coins.last(), Fader.Type.DISAPPEAR)
                     it.doUpgrade()
+                    game.currentHeroes(nextGameLevel)[it.data.type] = it
+                    Persistency(game.gameActivity).saveHeroes(game)
                     fillMarket(nextGameLevel)
                     makeButtonText(it)
                 }
@@ -306,7 +309,7 @@ class Marketplace(val game: Game): GameElement()
         canvas.drawLine(0f, y, myArea.right.toFloat(), y, paint)
 
         // determine size and spacing of coins
-        var coinLeftMargin = coinSize / 2
+        val coinLeftMargin = coinSize / 2
         var deltaX = coinSize + 2
         if (game.global.coinsTotal * deltaX + 2*coinLeftMargin > coinsArea.width())  // coins do not fit, must overlap
             deltaX = (myArea.width() - 2*coinLeftMargin) / game.global.coinsTotal
@@ -338,7 +341,7 @@ class Marketplace(val game: Game): GameElement()
     }
     private fun purchaseButtonText(card: Hero?): String
     {
-        var text: String? = card?.let {
+        val text: String? = card?.let {
             if (it.data.level <= 1)
                 game.resources.getString(R.string.button_purchase)
             else
