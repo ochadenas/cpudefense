@@ -120,7 +120,7 @@ class Game(val gameActivity: MainGameActivity) {
 
     /* coin management */
     enum class LevelMode { BASIC, ENDLESS }
-    var coins = hashMapOf(
+    var purseOfCoins = hashMapOf(
         LevelMode.BASIC to PurseOfCoins(this, LevelMode.BASIC),
         LevelMode.ENDLESS to PurseOfCoins(this, LevelMode.ENDLESS),
     )
@@ -153,7 +153,8 @@ class Game(val gameActivity: MainGameActivity) {
     enum class GamePhase { START, RUNNING, INTERMEZZO, MARKETPLACE, PAUSED }
     enum class GameSpeed { NORMAL, MAX }
 
-    val coinIcon: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.cryptocoin)
+    val coinIconBlue: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.cryptocoin)
+    val coinIconRed: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.cryptocoin_red)
     val cpuImage: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.cpu)
     val playIcon: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.play_active)
     val pauseIcon: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.pause_active)
@@ -184,7 +185,7 @@ class Game(val gameActivity: MainGameActivity) {
 
             // calculate coins
             persistency.loadCoins(this)
-            if (coins[LevelMode.BASIC]?.initialized == false || workInProgress)
+            if (purseOfCoins[LevelMode.BASIC]?.initialized == false || workInProgress)
                 migrateHeroes()
 
             additionalCashDelay = heroModifier(Hero.Type.GAIN_CASH).toInt()
@@ -263,15 +264,25 @@ class Game(val gameActivity: MainGameActivity) {
             return defaultSpeedFactor
     }
 
-    fun currentHeroes(stage: Stage.Identifier? = currentStage): HashMap<Hero.Type, Hero>
+    fun currentHeroes(stage: Stage.Identifier = currentStage): HashMap<Hero.Type, Hero>
     /** @return the set of heroes for the current level, depending on the mode (BASIC or ENDLESS) */
     {
-        val heroes =
-        stage?.let {
-            val mode = it.mode()
-            heroesByMode[mode]
-        }
+        val heroes = heroesByMode[stage.mode()]
         return heroes ?: HashMap()
+    }
+
+    fun currentPurse(stage: Stage.Identifier = currentStage): PurseOfCoins
+    {
+        return purseOfCoins[stage.mode()] ?: PurseOfCoins(this)
+    }
+
+    fun currentCoinBitmap(stage: Stage.Identifier = currentStage): Bitmap
+    {
+        return when (stage.mode())
+        {
+            LevelMode.BASIC -> coinIconBlue
+            LevelMode.ENDLESS -> coinIconRed
+        }
     }
 
 
@@ -460,7 +471,7 @@ class Game(val gameActivity: MainGameActivity) {
             toast.show()
         }
         intermezzo.coinsGathered = state.coinsExtra + state.coinsInLevel
-        global.coinsTotal += intermezzo.coinsGathered
+        currentPurse().addReward(intermezzo.coinsGathered)
         val summaryOfCompletedStage = Stage.Summary(won = true,
             coinsGot = stage.summary.coinsGot + state.coinsInLevel,
             coinsMaxAvailable = stage.summary.coinsMaxAvailable,
@@ -679,7 +690,7 @@ class Game(val gameActivity: MainGameActivity) {
          * the extra coins are not taken into account.
          * Let's assume that for every 4 coins got from stage rewards there is one extra coin gathered.
          */
-           global.coinsTotal = theoreticalAmountOfCoins + sumCoinsGot / 4
+         global.coinsTotal = theoreticalAmountOfCoins + sumCoinsGot / 4
     }
     private fun migrateHeroes()
             /** method to separate heroes and coins between the modes of playing (basic/endless).
@@ -692,7 +703,7 @@ class Game(val gameActivity: MainGameActivity) {
         val coinsActuallySpentOnHeroes = heroes.values.sumOf { it.data.coinsSpent }
         for (mode in LevelMode.values()) // do this for basic and endless
         {
-            coins[mode]?.let {
+            purseOfCoins[mode]?.let {
                 it.calculateInitialContents()
                 if (it.contents.totalCoins >= coinsActuallySpentOnHeroes) {
                     heroesByMode[mode] = HashMap(heroes)

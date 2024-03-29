@@ -366,7 +366,7 @@ class ScoreBoard(val game: Game): GameElement() {
             displayHeader(canvas, Rect(0,0, area.width(), area.height()), game.resources.getString(R.string.scoreboard_coins))
             for (i in 0 until coins) {
                 rect.setCenter(x - i * deltaX, y)
-                canvas.drawBitmap(game.coinIcon, null, rect, paint)
+                canvas.drawBitmap(game.currentCoinBitmap(), null, rect, paint)
             }
         }
     }

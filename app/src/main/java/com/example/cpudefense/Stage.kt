@@ -170,7 +170,8 @@ class Stage(var theGame: Game) {
             // set summary and available coins
             stage.theGame.getSummaryOfStage(stage.data.ident)?.let {
                 stage.summary = it
-                stage.theGame.state.coinsInLevel = it.coinsAvailable ?: 0
+                stage.rewardCoins = it.coinsMaxAvailable
+                // stage.theGame.state.coinsInLevel = it.coinsAvailable ?: 0
             }
         }
         fun createStageFromData(game: Game, stageData: Data): Stage?

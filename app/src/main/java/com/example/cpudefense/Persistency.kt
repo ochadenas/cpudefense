@@ -84,8 +84,8 @@ class Persistency(activity: Activity) {
             // save coins in purse:
             val emptyContents = PurseOfCoins.Contents()
             var purseData = SerializablePurseContents(basic = emptyContents, endless = emptyContents)
-            game.coins[Game.LevelMode.BASIC]?.contents?.let { purse -> purseData.basic = purse }
-            game.coins[Game.LevelMode.ENDLESS]?.contents?.let { purse -> purseData.endless = purse }
+            game.purseOfCoins[Game.LevelMode.BASIC]?.contents?.let { purse -> purseData.basic = purse }
+            game.purseOfCoins[Game.LevelMode.ENDLESS]?.contents?.let { purse -> purseData.endless = purse }
             prefsSaves.edit().putString("coins", Gson().toJson(purseData)).commit()
 
             // it.coins.values.forEach { purse -> purse.saveContentsOfPurse() }
@@ -287,8 +287,8 @@ class Persistency(activity: Activity) {
         if (json != "none") {
             val data: SerializablePurseContents =
                 Gson().fromJson(json, SerializablePurseContents::class.java)
-            game.coins[Game.LevelMode.BASIC]?.let { purse -> purse.contents = data.basic; purse.initialized = true }
-            game.coins[Game.LevelMode.ENDLESS]?.let { purse -> purse.contents = data.endless; purse.initialized = true }
+            game.purseOfCoins[Game.LevelMode.BASIC]?.let { purse -> purse.contents = data.basic; purse.initialized = true }
+            game.purseOfCoins[Game.LevelMode.ENDLESS]?.let { purse -> purse.contents = data.endless; purse.initialized = true }
         }
     }
 

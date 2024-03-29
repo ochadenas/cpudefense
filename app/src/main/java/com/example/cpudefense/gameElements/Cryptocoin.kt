@@ -6,7 +6,6 @@ import android.graphics.Paint
 import android.graphics.Rect
 import com.example.cpudefense.Game
 import com.example.cpudefense.R
-import com.example.cpudefense.effects.Fader
 import com.example.cpudefense.effects.Flippable
 import com.example.cpudefense.effects.Flipper
 import com.example.cpudefense.networkmap.Viewport
@@ -16,7 +15,7 @@ class Cryptocoin(network: com.example.cpudefense.networkmap.Network, number: ULo
     Attacker(network, Representation.BINARY, number, speed), Flippable
 {
     var paint = Paint()
-    var myBitmap = theNetwork.theGame.coinIcon.copy(theNetwork.theGame.coinIcon.config, true)
+    var myBitmap = theNetwork.theGame.currentCoinBitmap().copy(theNetwork.theGame.currentCoinBitmap().config, true)
     var isCurrentlyFlipping = false
 
     init {
@@ -63,7 +62,8 @@ class Cryptocoin(network: com.example.cpudefense.networkmap.Network, number: ULo
     }
 
     override fun provideBitmap(): Bitmap {
-        return theNetwork.theGame.coinIcon.copy(theNetwork.theGame.coinIcon.config, true)
+        val bitmap = theNetwork.theGame.currentCoinBitmap()
+        return bitmap.copy(bitmap.config, true)
     }
 
     override fun flipStart() {

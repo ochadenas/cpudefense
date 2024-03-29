@@ -28,6 +28,7 @@ class Marketplace(val game: Game): GameElement()
     private var biographyViewOffset = 0f  // used for scrolling
 
     private var upgrades = mutableListOf<Hero>()
+    private var purse = game.currentPurse()
     private var selected: Hero? = null
     private var coins = mutableListOf<Coin>()
     private var coinSize = (32 * game.resources.displayMetrics.scaledDensity).toInt()
@@ -54,6 +55,7 @@ class Marketplace(val game: Game): GameElement()
         nextGameLevel = level
         val newUpgrades = mutableListOf<Hero>()
         val heroes = game.currentHeroes(level)
+        purse = game.currentPurse()
         for (type in Hero.Type.values())
         {
             /* if upgrade already exists (because it has been bought earlier),
@@ -73,7 +75,7 @@ class Marketplace(val game: Game): GameElement()
         }
         arrangeCards(newUpgrades, cardViewOffset)
         upgrades = newUpgrades
-        coins = MutableList(game.global.coinsTotal) { Coin(game, coinSize) }
+        coins = MutableList(purse.availableCoins()) { Coin(game, coinSize) }
     }
 
     private fun arrangeCards(cards: MutableList<Hero>, dY: Float = 0f)
@@ -160,8 +162,8 @@ class Marketplace(val game: Game): GameElement()
         {
             selected?.let {
                 val price = it.getPrice(it.data.level)
-                if (game.global.coinsTotal >= price && it.data.level < it.getMaxUpgradeLevel()) {
-                    game.global.coinsTotal -= price
+                if (purse.availableCoins() >= price && it.data.level < it.getMaxUpgradeLevel()) {
+                    purse.spend(price)
                     it.data.coinsSpent += price
                     Fader(game, coins.last(), Fader.Type.DISAPPEAR)
                     it.doUpgrade()
@@ -209,7 +211,7 @@ class Marketplace(val game: Game): GameElement()
         for (card in upgrades.filter { it.data.level > 0} ) {
             val refund =
                 if (card.data.coinsSpent > 0) card.data.coinsSpent else 0  // was: 4
-            game.global.coinsTotal += refund
+            purse.spend(-refund)
             card.resetUpgrade()
         }
         Persistency(game.gameActivity).saveHeroes(game)
@@ -235,13 +237,13 @@ class Marketplace(val game: Game): GameElement()
                 1 -> { // sell hero completely
                     val refund = 1
                     data.coinsSpent = 0
-                    game.global.coinsTotal += refund
+                    purse.spend(-refund)
                     doDowngrade()
                 }
                 else -> {
                     val refund = data.level-1
                     data.coinsSpent -= refund
-                    game.global.coinsTotal += refund
+                    purse.spend(-refund)
                     doDowngrade()
                 }
             }
@@ -253,7 +255,7 @@ class Marketplace(val game: Game): GameElement()
         makeButtonText(hero)
     }
     fun onScroll(event1: MotionEvent?, event2: MotionEvent?, dX: Float, dY: Float): Boolean {
-        val scrollfactor = 1.1f  // higher values make scrolling faster
+        val scrollFactor = 1.1f  // higher values make scrolling faster
         if (dY == 0f)
             return false  // only vertical movements are considered here
         event1?.let {
@@ -261,13 +263,13 @@ class Marketplace(val game: Game): GameElement()
             val posY = it.y.toInt()
             when {
                 cardsArea.contains(posX, posY) -> {
-                    cardViewOffset -= dY * scrollfactor
+                    cardViewOffset -= dY * scrollFactor
                     if (cardViewOffset>0f)
                         cardViewOffset=0f
                     arrangeCards(upgrades, cardViewOffset)
                 }
                 biographyArea.contains(posX, posY) -> {
-                    biographyViewOffset -= dY * scrollfactor
+                    biographyViewOffset -= dY * scrollFactor
                     if (biographyViewOffset>0f) // avoid scrolling when already at end of area
                         biographyViewOffset=0f
                 }
@@ -311,8 +313,8 @@ class Marketplace(val game: Game): GameElement()
         // determine size and spacing of coins
         val coinLeftMargin = coinSize / 2
         var deltaX = coinSize + 2
-        if (game.global.coinsTotal * deltaX + 2*coinLeftMargin > coinsArea.width())  // coins do not fit, must overlap
-            deltaX = (myArea.width() - 2*coinLeftMargin) / game.global.coinsTotal
+        if (coins.size * deltaX + 2*coinLeftMargin > coinsArea.width())  // coins do not fit, must overlap
+            deltaX = (myArea.width() - 2*coinLeftMargin) / coins.size
         val coinPosY = coinsArea.centerY()
         var coinPosX = coinLeftMargin
         for (c in coins)
@@ -361,7 +363,7 @@ class Marketplace(val game: Game): GameElement()
         return game.resources.getString(R.string.button_refund_all)
     }
 
-    class Coin(val game: Game, size: Int): GameElement(), Fadable, Flippable
+    inner class Coin(val game: Game, size: Int): GameElement(), Fadable, Flippable
     {
         val paint = Paint()
         val myArea = Rect(0,0,size,size)
@@ -371,7 +373,7 @@ class Marketplace(val game: Game): GameElement()
 
         init {
             paint.alpha = 255
-            myCanvas.drawBitmap(game.coinIcon, null, Rect(0,0,size,size), paint)
+            myCanvas.drawBitmap(game.currentCoinBitmap(nextGameLevel), null, Rect(0,0,size,size), paint)
         }
         override fun update() {
         }

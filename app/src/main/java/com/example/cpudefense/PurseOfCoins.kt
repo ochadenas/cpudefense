@@ -25,6 +25,22 @@ class PurseOfCoins(val game: Game, val levelMode: Game.LevelMode = Game.LevelMod
     var contents = Contents()
     val filename = game.resources.getString(R.string.pref_filename_savegames)
 
+    fun addReward(amount: Int)
+    {
+        contents.totalCoins += amount
+        contents.rewardCoins += amount
+    }
+
+    fun spend(amount: Int)
+    {
+        contents.spentCoins += amount
+    }
+
+    fun availableCoins(): Int
+    {
+        return contents.totalCoins - contents.spentCoins
+    }
+
     fun calculateInitialContents()
     /** method for migrating the "old" style of coin-keeping */
     {
@@ -57,10 +73,7 @@ class PurseOfCoins(val game: Game, val levelMode: Game.LevelMode = Game.LevelMod
         contents.totalCoins = contents.rewardCoins + contents.runningCoins
     }
 
-    fun availableCoins(): Int
-    {
-        return contents.totalCoins - contents.spentCoins
-    }
+
 
 
 
