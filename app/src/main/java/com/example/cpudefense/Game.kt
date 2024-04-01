@@ -606,7 +606,7 @@ class Game(val gameActivity: MainGameActivity) {
     private fun calculateLives()
     {
         var extraLives = heroModifier(Hero.Type.ADDITIONAL_LIVES)
-        state.currentMaxLives = state.maxLives + (extraLives ?: 0f).toInt()
+        state.currentMaxLives = state.maxLives + extraLives.toInt()
         state.lives = state.currentMaxLives
     }
     private fun calculateStartingCash()

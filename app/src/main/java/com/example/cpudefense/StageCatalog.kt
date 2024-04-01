@@ -17,7 +17,8 @@ class StageCatalog
         {
             when (level.series)
             {
-                Game.SERIES_NORMAL -> return createStageWithoutObstacles(stage, level)
+                Game.SERIES_NORMAL ->
+                    createStageWithoutObstacles(stage, level)
                 Game.SERIES_TURBO ->
                 {
                     createStageWithoutObstacles(stage, level)  // make basic layout
@@ -40,7 +41,6 @@ class StageCatalog
                         else -> 6
                     }
                     createObstaclesForDifficulty(stage, difficulty.toDouble())
-                    return
                 }
                 Game.SERIES_ENDLESS -> {
                     // if the stage is in the save file (from an earlier try on this level),
@@ -51,21 +51,23 @@ class StageCatalog
                         structure[level.number]?.let {
                             Stage.fillEmptyStageWithData(stage, it)
                             EndlessStageCreator(stage).createWaves()
+                            stage.calculateDifficulty()
                             return
                         }
-                    while (stage.difficulty > 900f) {
+                    while (stage.data.difficulty > 900f) {
                         EndlessStageCreator(stage).createStage(level)
                         stage.calculateDifficulty() // avoid levels that are impossible to play
                     }
                     // val numberOfObstacles = level.number - stage.difficulty.toInt()
                     // createFixedNumberOfObstacles(stage, numberOfObstacles)
-                    val targetDifficulty = 2.0 * sqrt(level.number.toDouble()) - stage.difficulty
-                    createObstaclesForDifficulty(stage, targetDifficulty)
+                    val targetDifficulty = 4 + 1.5 * sqrt(level.number.toDouble())
+                    createObstaclesForDifficulty(stage, targetDifficulty - stage.data.difficulty)
                     stage.provideStructureData()
                     structure[level.number] = stage.data
                     Persistency(stage.theGame.gameActivity).saveLevelStructure(Game.SERIES_ENDLESS, structure)
                 }
             }
+            stage.calculateDifficulty()
         }
 
         private fun createFixedNumberOfObstacles(stage: Stage, numberOfObstacles: Int)

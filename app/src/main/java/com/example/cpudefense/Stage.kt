@@ -49,7 +49,7 @@ class Stage(var theGame: Game) {
     var tracks = hashMapOf<Int, Track>()
     var waves = CopyOnWriteArrayList<Wave>()
 
-    var ticksUntilFirstAttacker: Long = 0
+    private var ticksUntilFirstAttacker: Long = 0
 
     enum class Type { REGULAR, FINAL }
 
@@ -68,18 +68,18 @@ class Stage(var theGame: Game) {
         var attackers: CopyOnWriteArrayList<Attacker.Data> = CopyOnWriteArrayList<Attacker.Data>(),
         var chipsAllowed: Set<Chip.ChipUpgrades> = setOf(),
         var obstaclesRemovedCount: Int = 0,
-    )
+        var difficulty: Double = 999.0,
+        )
     var data = Data()
 
     data class Summary(
         var coinsAvailable: Int = 0,
         var coinsGot: Int = 0,
         var coinsMaxAvailable: Int = 0,
-        var won: Boolean = false
+        var won: Boolean = false,
     )
     lateinit var summary: Summary
 
-    var difficulty: Double = 999.0
     var rewardCoins = 0  // number of coins that can be obtained by completing the level
 
     fun getLevel(): Int {return data.ident.number}
@@ -174,10 +174,10 @@ class Stage(var theGame: Game) {
                 // stage.theGame.state.coinsInLevel = it.coinsAvailable ?: 0
             }
         }
-        fun createStageFromData(game: Game, stageData: Data): Stage?
+        fun createStageFromData(game: Game, stageData: Data): Stage
         {
             val stage = Stage(game)
-            fillEmptyStageWithData(stage, stageData) ?: return null
+            fillEmptyStageWithData(stage, stageData)
             for (waveData in stage.data.waves)
             {
                 val wave = Wave.createFromData(game, waveData)
@@ -199,7 +199,7 @@ class Stage(var theGame: Game) {
         val attacker = if (isCoin)
             Cryptocoin(network, (maxNumber*1.5).toULong(), actualSpeed )
         else {
-            var strength = Random.nextFloat()*(maxNumber+1) * theGame.heroModifier(Hero.Type.DECREASE_ATT_STRENGTH)
+            val strength = Random.nextFloat()*(maxNumber+1) * theGame.heroModifier(Hero.Type.DECREASE_ATT_STRENGTH)
             Attacker(network, representation, strength.toULong(), actualSpeed)
         }
         network.addVehicle(attacker)
@@ -367,10 +367,15 @@ class Stage(var theGame: Game) {
                 minLength = track.links.size
         }
         if (minLength<4 || tracks.size == 0) {
-            difficulty = 999.0  // too difficult
+            data.difficulty = 999.0  // too difficult
             return
         }
-        difficulty = 8-(sumLength.toDouble()/tracks.size) + difficultyOfObstacles()
+        /* calculate weighted difficulty */
+        var difficulty = 16.0 // base value
+        difficulty -= sumLength.toDouble()/tracks.size * 0.4  // mean length of tracks
+        difficulty -= minLength * 0.7 // shortest track
+        difficulty +=  difficultyOfObstacles()
+        data.difficulty = difficulty
     }
     fun takeSnapshot(size: Int): Bitmap?
             /** gets a miniature picture of the current level

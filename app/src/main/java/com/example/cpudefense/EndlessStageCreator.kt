@@ -12,6 +12,7 @@ import com.example.cpudefense.networkmap.Node
 import com.example.cpudefense.networkmap.Viewport
 import com.example.cpudefense.utils.setTopLeft
 import java.util.concurrent.CopyOnWriteArrayList
+import kotlin.math.sqrt
 import kotlin.random.Random
 
 class EndlessStageCreator(val stage: Stage)
@@ -94,24 +95,29 @@ class EndlessStageCreator(val stage: Stage)
                 sectors.add(sector)
             }
         // determine entries and exits
+        val possibleEntrySectors = listOf(
+            SectorCoord(0,0),
+            SectorCoord(1,0),
+            SectorCoord(2,0),
+            SectorCoord(0,1),
+        ).shuffled()
+        var numberOfEntries = (1 + Random.nextFloat() * sqrt(level.number * 0.2)).toInt()
+        if (numberOfEntries>4) numberOfEntries=4
         val entrySectors = mutableListOf<Sector?>()
-        if (Random.nextFloat() < .7)
-            entrySectors.add(getByCoordinate(SectorCoord(0,0)))
-        if (Random.nextFloat() < .5)
-            entrySectors.add(getByCoordinate(SectorCoord(2,0)))
-        if (Random.nextFloat() < .2)
-            entrySectors.add(getByCoordinate(SectorCoord(1,0)))
-        if (Random.nextFloat() < .3 || entrySectors.isEmpty())
-            entrySectors.add(getByCoordinate(SectorCoord(0,1)))
+        possibleEntrySectors.subList(0,numberOfEntries).forEach {
+            entrySectors.add(getByCoordinate(it)) }
         entrySectors.forEach { it?.type = SectorType.ENTRY }
 
+        val possibleExitSectors = listOf(
+            SectorCoord(numberOfSectorsX-1,numberOfSectorsY-1),
+            SectorCoord(numberOfSectorsX-1,numberOfSectorsY-2),
+            SectorCoord(numberOfSectorsX-2,numberOfSectorsY-1),
+        ).shuffled()
+        var numberOfExits = (1 + Random.nextFloat() * sqrt(level.number * 0.1)).toInt()
+        if (numberOfExits>3) numberOfExits=3
         val exitSectors = mutableListOf<Sector?>()
-        if (Random.nextFloat() < .3)
-            exitSectors.add(getByCoordinate(SectorCoord(0,numberOfSectorsY-1)))
-        if (Random.nextFloat() < .1)
-            exitSectors.add(getByCoordinate(SectorCoord(numberOfSectorsX-1,numberOfSectorsY-2)))
-        if (Random.nextFloat() < 0.8 || exitSectors.isEmpty())
-            exitSectors.add(getByCoordinate(SectorCoord(numberOfSectorsX-1,numberOfSectorsY-1)))
+        possibleExitSectors.subList(0,numberOfExits).forEach {
+            exitSectors.add(getByCoordinate(it)) }
         exitSectors.forEach { it?.type = SectorType.EXIT }
 
         for (count in 1 .. numberOfPaths)
@@ -148,12 +154,12 @@ class EndlessStageCreator(val stage: Stage)
     fun createWaves()
     {
         val levelNumber = stage.data.ident.number
-        for (waveNumber in 1 .. (levelNumber + 3)) {
+        for (waveNumber in 1 .. (levelNumber + 0)) {
             val attackerCount = 16
-            val strength = waveNumber+levelNumber
+            val strength = (waveNumber+levelNumber)/2
             val attackerStrength = (Attacker.powerOfTwo[strength] ?: 1048576u).toInt()
-            val attackerSpeed = (12 + strength) * 0.07f
-            val attackerFrequency = (12 + strength) * 0.008f
+            val attackerSpeed = (16 + strength) * 0.06f
+            val attackerFrequency = (8 + strength) * 0.006f
             val coins = if (Random.nextFloat()>0.92) 1 else 0
             stage.createWave(attackerCount, attackerStrength, attackerFrequency, attackerSpeed, coins = coins)
         }
