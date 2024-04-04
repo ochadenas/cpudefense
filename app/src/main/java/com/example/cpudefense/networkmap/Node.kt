@@ -49,6 +49,12 @@ open class Node(val theNetwork: Network, x: Float, y: Float): GameElement()
         }
     }
 
+    open fun drawConnectorsOnLinks(): Boolean
+            /** whether the ends of connectors are shown.
+             * @return false if the node itself supersedes the link ends.
+             */
+    { return true }
+
     fun calculateActualRect(): Rect?
             /** determines the size of this node on the screen based on the grid points.
              * @return the actual size of a node, or null if size cannot be determined

@@ -335,7 +335,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
 
     override fun display(canvas: Canvas, viewport: Viewport) {
         if (chipData.type == ChipType.ENTRY)
-            return super.display(canvas, viewport)  // TODO. temporary, just as long as ENTRY does not have its own display method
+            return super.display(canvas, viewport)
 
         /* calculate size */
         /* this is put here because the viewport / zoom factor may change.
@@ -447,6 +447,9 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
         for (upgrade in upgradePossibilities)
             upgrade.display(canvas)
     }
+
+    override fun drawConnectorsOnLinks(): Boolean
+    { return (chipData.type == ChipType.ENTRY) }
 
     private fun attackerInRange(attacker: Attacker): Boolean
     {

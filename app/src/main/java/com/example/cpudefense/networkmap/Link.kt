@@ -208,8 +208,10 @@ class Link(val theNetwork: Network, var node1: Node, var node2: Node, var ident:
                     displayLine(canvas, viewport, point1, point0)
                     displayLine(canvas, viewport, point0, point2)
                 }
-            displayConnectorCircle(canvas, viewport, point1)
-            displayConnectorCircle(canvas, viewport, point2)
+            if (node1.drawConnectorsOnLinks())
+                displayConnectorCircle(canvas, viewport, point1)
+            if (node2.drawConnectorsOnLinks())
+                displayConnectorCircle(canvas, viewport, point2)
         }
     }
 
