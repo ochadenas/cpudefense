@@ -343,7 +343,7 @@ class Hero(var game: Game, type: Type): Fadable {
                 shortDesc = game.resources.getString(R.string.shortdesc_refund)
                 strengthDesc = "%d%%".format(strength.toInt())
                 upgradeDesc = " → %d%%".format(next.toInt())
-                maxLevel = 6  // even at level 6, refund is more than 100%
+                maxLevel = 5  // even at level 6, refund is more than 100%
             }
             Type.INCREASE_CHIP_SUB_RANGE ->
             {
