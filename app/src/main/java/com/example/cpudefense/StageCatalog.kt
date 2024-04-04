@@ -1587,6 +1587,7 @@ class StageCatalog
                             Chip.ChipUpgrades.CLK,
                             Chip.ChipUpgrades.REDUCE
                         )
+                        rewardCoins = 3
                     }
                     31 -> {
                         initializeNetwork(50, 50)
@@ -1638,7 +1639,6 @@ class StageCatalog
                             Chip.ChipUpgrades.CLK,
                             Chip.ChipUpgrades.REDUCE
                         )
-
                         data.type = Stage.Type.FINAL
                         rewardCoins = 3
                     }
