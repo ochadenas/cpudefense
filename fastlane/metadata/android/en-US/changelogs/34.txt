@@ -1,0 +1,13 @@
+IMPORTANT: The "Endless" level series now has its own CryptoCoins and a separate set of heroes. The existing coins have been distributed proportionally. Under certain circumstances, the heroes had to be reset; in this case, the coins have been credited to you and you will have to hire the heroes again.
+The difficulty of the Endless levels has been drastically reduced in compensation.
+
+New functions:
+- New hero: Gottfried Wilhelm Leibniz.
+
+Bug fixes:
+- There were no CryptoCoins for level 30.
+- ACC chips showed more than one slot, although they can only hold one value.
+
+Miscellaneous:
+- Tramiel is limited to level 5 now.
+- Upgrade of MEM chips is significantly more expensive and requires Leibniz.
