@@ -3,7 +3,6 @@ package com.example.cpudefense
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
-import android.graphics.Typeface
 import android.net.Uri
 import android.os.Bundle
 import android.text.method.LinkMovementMethod
@@ -48,7 +47,7 @@ class AboutActivity : AppCompatActivity()
             val contentView = findViewById<androidx.constraintlayout.widget.ConstraintLayout>(R.id.contents_section)
             contentView.removeAllViews()
             val textView = TextView(this)
-            textView.text = getString(R.string.release_notes)
+            textView.text = getString(R.string.ZZ_release_notes)
             textView.setPadding(8)
             textView.setTextColor(Color.WHITE)
             textView.textSize = 12f
