@@ -324,7 +324,7 @@ class Hero(var game: Game, type: Type): Fadable {
                 shortDesc = game.resources.getString(R.string.shortdesc_enable_mem_upgrade)
                 strengthDesc = "%d".format(strength.toInt())
                 upgradeDesc = " → %d".format(next.toInt())
-                maxLevel = Game.maxInternalChipStorage - 2
+                maxLevel = Game.maxInternalChipStorage - 1
             }
             Type.GAIN_CASH ->
             {
