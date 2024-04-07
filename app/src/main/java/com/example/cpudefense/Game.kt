@@ -29,7 +29,7 @@ class Game(val gameActivity: MainGameActivity) {
         const val maxLevelAvailable = 31
 
         // feature toggles:
-        const val enableEndlessMode = true
+        const val enableEndlessMode = false
 
         val chipSize = Coord(6,3)
         const val viewportMargin = 10
@@ -182,6 +182,11 @@ class Game(val gameActivity: MainGameActivity) {
             heroesByMode[LevelMode.BASIC] = persistency.loadHeroes(this, LevelMode.BASIC)
             heroesByMode[LevelMode.ENDLESS] = persistency.loadHeroes(this, LevelMode.ENDLESS)
             correctNumberOfCoins()
+
+            /* debug code to reset endless levels */
+            // summaryPerEndlessLevel.values.forEach() { it.coinsGot = 0; it.coinsAvailable = it.coinsMaxAvailable }
+            // persistency.saveState(this)
+
 
             // calculate coins
             persistency.loadCoins(this)
