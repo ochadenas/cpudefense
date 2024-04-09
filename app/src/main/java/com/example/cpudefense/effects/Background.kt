@@ -93,7 +93,8 @@ class Background(val game: Game)
              */
     {
         loadBitmaps()
-        if (stageIdent?.let {it.series < 3 && it.number == 8 } == true)
+        // allows use of special backgrounds, currently disabled
+        if (false && stageIdent?.let {it.series < 3 && it.number == 8 } == true)
             useSpecialBackground = true
         else
         {

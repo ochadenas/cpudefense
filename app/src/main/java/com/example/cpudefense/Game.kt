@@ -29,7 +29,7 @@ class Game(val gameActivity: MainGameActivity) {
         const val maxLevelAvailable = 31
 
         // feature toggles:
-        const val enableEndlessMode = false
+        const val enableEndlessMode = true
 
         val chipSize = Coord(6,3)
         const val viewportMargin = 10

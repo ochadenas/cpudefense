@@ -105,7 +105,7 @@ class WelcomeActivity : AppCompatActivity() {
             else -> buttonResume.isEnabled = false
         }
         // uncomment if there is a message to display
-        showVersionMessage()
+        // showVersionMessage()
     }
 
     override fun onActivityReenter(resultCode: Int, data: Intent?) {
