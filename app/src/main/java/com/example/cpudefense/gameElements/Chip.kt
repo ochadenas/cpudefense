@@ -255,12 +255,12 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
         super.update()
         if (chipData.type == ChipType.EMPTY)
             return  //  no need to calculate for empty slots
-        if (chipData.cooldownTimer>0) {
+        if (isInCooldown()) {
             chipData.cooldownTimer -= network.theGame.globalSpeedFactor()
             if (chipData.type != ChipType.MEM)  // MEM is the only type that may act during cooldown
                 return
         }
-        if (chipData.sold) {
+        if (chipData.sold && !isInCooldown()) {
             resetToEmptyChip()
             return
         }
