@@ -398,14 +398,11 @@ class Hero(var game: Game, type: Type): Fadable {
              */
     {
         val additionalUpgradePossibility = game.heroModifier(Type.INCREASE_MAX_HERO_LEVEL).toInt()
-        when (data.type)
-        {
-            Type.ADDITIONAL_LIVES -> return maxLevel
-            Type.INCREASE_MAX_HERO_LEVEL -> return maxLevel
-            Type.GAIN_CASH -> return maxLevel
-            Type.INCREASE_REFUND -> return maxLevel
-            else -> return maxLevel + (additionalUpgradePossibility ?: 0)
-        }
+        if (data.type in
+            listOf( Type.ADDITIONAL_LIVES, Type.INCREASE_MAX_HERO_LEVEL, Type.GAIN_CASH, Type.INCREASE_REFUND, Type.ENABLE_MEM_UPGRADE))
+            return maxLevel
+        else
+            return maxLevel + (additionalUpgradePossibility ?: 0)
     }
 
     private fun upgradeLevel(type: Type): Int
