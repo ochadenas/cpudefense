@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package com.example.cpudefense.gameElements
 
 import android.graphics.*
@@ -11,7 +13,6 @@ import com.example.cpudefense.utils.displayTextCenteredInRect
 import com.example.cpudefense.utils.inflate
 import com.example.cpudefense.utils.setBottomLeft
 import com.example.cpudefense.utils.setCenter
-import java.lang.Math.abs
 import java.util.concurrent.CopyOnWriteArrayList
 import kotlin.random.Random
 
@@ -270,20 +271,10 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
             return
         }
         /* check if there are attackers that we can shoot at */
-        if (distanceToVehicle.isEmpty())
+        val attackers = attackersInRange()
+        if (attackers.isEmpty())
             return // no need to check
-        try {
-            // remove all attackers that are no longer in range
-            val vehiclesOutOfRange = distanceToVehicle.keys.filter {
-                distanceTo(it)?.let { it > data.range } ?: true
-            }
-            vehiclesOutOfRange.forEach() { distanceToVehicle.remove(it) }
-            @Suppress("UNCHECKED_CAST")
-            selectTarget(distanceToVehicle.keys.toList() as List<Attacker>)?.let { shootAt(it)}
-        }
-        catch (exception: ConcurrentModificationException) {
-            // just ignore this
-        }
+        selectTarget(attackers)?.let { shootAt(it)}
     }
 
     private fun selectTarget(possibleTargets: List<Attacker>): Attacker?
@@ -435,7 +426,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
     {
         if (upgradePossibilities.size == 0)
             return
-        var upgradesArea = Rect(0,0,0,0)  // start with empty rect
+        val upgradesArea = Rect(0,0,0,0)  // start with empty rect
         /* create a rectangle that contains all update boxes including their labels */
         for (upgrade in upgradePossibilities) {
             upgradesArea.union(upgrade.actualRect)
@@ -451,23 +442,10 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
     override fun drawConnectorsOnLinks(): Boolean
     { return (chipData.type == ChipType.ENTRY) }
 
-    private fun attackerInRange(attacker: Attacker): Boolean
-    {
-        val dist: Float? = distanceTo(attacker)
-        if (dist != null) {
-            return dist <= abs(data.range)
-        } else return false
-    }
-
+    @Suppress("UNCHECKED_CAST")
     fun attackersInRange(): List<Attacker>
     {
-        try {
-            val vehicles = distanceToVehicle.keys.filter { attackerInRange(it as Attacker) }
-                .map { it as Attacker }
-            return vehicles
-        }
-        catch (ex: ConcurrentModificationException)
-        { return listOf() }  // may happen when there are really many chips and attackers
+        return vehiclesInRange(data.range) as List<Attacker>
     }
 
     fun shootAt(attacker: Attacker)
@@ -572,7 +550,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
                 else -> number1 and number2
             }
             attacker.changeNumberTo(newValue)
-            var change_in_speed = attacker.data.speed * (Random.nextFloat() - 0.5f) * 0.3f
+            val change_in_speed = attacker.data.speed * (Random.nextFloat() - 0.5f) * 0.3f
             attacker.data.speed += change_in_speed
             attacker.setCurrentSpeed()
             internalRegister.clear()

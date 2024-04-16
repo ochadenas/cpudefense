@@ -1,5 +1,6 @@
 package com.example.cpudefense.gameElements
 
+import android.content.ActivityNotFoundException
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
@@ -8,6 +9,9 @@ import com.example.cpudefense.networkmap.*
 import com.example.cpudefense.utils.setCenter
 
 open class Vehicle(val theNetwork: Network): GameElement() {
+
+    enum class State { ACTIVE, DISAPPEARING, GONE}
+
     data class Data
         (
         /** speed with respect to the virtual grid, without global speed modifier */
@@ -22,6 +26,8 @@ open class Vehicle(val theNetwork: Network): GameElement() {
         var endNodeId: Int,
         var trackId: Int,
         var sizeOnScreenInDp: Float,
+        /** the state of the vehicle determines whether it is to be considered active by the network */
+        var state: Vehicle.State,
         )
 
     var data = Data(
@@ -32,7 +38,8 @@ open class Vehicle(val theNetwork: Network): GameElement() {
         startNodeId = -1,
         endNodeId = -1,
         trackId = -1,
-        sizeOnScreenInDp = 0.0f
+        sizeOnScreenInDp = 0.0f,
+        state = Vehicle.State.ACTIVE,
     )
 
     var posOnGrid: Coord? = null
@@ -54,7 +61,7 @@ open class Vehicle(val theNetwork: Network): GameElement() {
             posOnGrid = it.getPositionOnGrid(data.distanceTravelledOnLink, startNode)
             if (posOnGrid == endNode.posOnGrid) // reached end of link
             {
-                startNode.distanceToVehicle.remove(this) // out of reach, so stop notification
+                startNode.notify(this, direction = Node.VehicleDirection.GONE) // out of reach, so stop notification
                 setOntoLink(onTrack?.nextLink(it), endNode) // get next link on track, if any
                 data.distanceTravelledOnLink = 0f // and start at the beginning of the link
             }
@@ -116,6 +123,7 @@ open class Vehicle(val theNetwork: Network): GameElement() {
             onTrack = track
             data.trackId = track.data.ident
             setOntoLink(track.links[0], null)
+            data.state = State.ACTIVE
         }
     }
 }

@@ -41,25 +41,12 @@ class Cpu(network: Network, gridX: Int, gridY: Int): Chip(network, gridX, gridY)
 
     override fun update() {
         super.update()
-        /*
         val attackers = attackersInRange()
         if (attackers.isNotEmpty())
         {
             scoreHit()
             animationCount = maxAnimationCount
             attackers[0].remove()
-        }
-
-         */
-        // this is less fancy but faster:
-        distanceToVehicle.forEach { (vehicle, distance) ->
-            val dist: Float? = distanceTo(vehicle)
-            if (dist != null && dist <= data.range) {
-                scoreHit()
-                animationCount = maxAnimationCount
-                (vehicle as Attacker).remove()
-                return
-            }
         }
     }
 

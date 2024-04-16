@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package com.example.cpudefense.gameElements
 
 import android.graphics.*
@@ -217,9 +219,10 @@ open class Attacker(network: Network, representation: Representation = Represent
     override fun remove()
     {
         onLink?.let {
-            it.node1.distanceToVehicle.remove(this)
-            it.node2.distanceToVehicle.remove(this)
-            theNetwork.vehicles.remove(this)
+            it.node1.notify(this, direction = Node.VehicleDirection.GONE)
+            it.node2.notify(this, direction = Node.VehicleDirection.GONE)
+            data.state = State.GONE
+            theNetwork.vehicles.remove(this) // TODO: this might not be thread safe
         }
     }
 
@@ -271,8 +274,8 @@ open class Attacker(network: Network, representation: Representation = Represent
 
     override fun update() {
         super.update()
-        endNode?.notify(this, distanceToNextNode)
-        startNode?.notify(this, -distanceFromLastNode)
+        endNode?.notify(this, distanceToNextNode, Node.VehicleDirection.APPROACHING)
+        startNode?.notify(this, distanceFromLastNode, Node.VehicleDirection.LEAVING)
 
         // animation, if any
         if (animationCount>0)

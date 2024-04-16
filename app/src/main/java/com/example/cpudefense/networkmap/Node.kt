@@ -10,6 +10,7 @@ import com.example.cpudefense.gameElements.GameElement
 import com.example.cpudefense.gameElements.Vehicle
 import com.example.cpudefense.utils.makeSquare
 import com.example.cpudefense.utils.setCenter
+import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.CopyOnWriteArrayList
 
 open class Node(val theNetwork: Network, x: Float, y: Float): GameElement()
@@ -27,8 +28,12 @@ open class Node(val theNetwork: Network, x: Float, y: Float): GameElement()
     var posOnGrid = Coord(Pair(x,y))
     var connectedLinks = CopyOnWriteArrayList<Link>() // used during level setup
 
-    var distanceToVehicle: HashMap<Vehicle, Float> = HashMap()
     open var actualRect: Rect? = null
+
+    /** keep track of the current distance to the vehicles in range */
+    enum class VehicleDirection { APPROACHING, LEAVING, GONE }
+    data class Distance ( var distance: Float, var direction: VehicleDirection )
+    private var distanceToVehicle: ConcurrentHashMap<Vehicle, Distance> = ConcurrentHashMap()
 
     override fun update() {
     }
@@ -73,18 +78,19 @@ open class Node(val theNetwork: Network, x: Float, y: Float): GameElement()
         }
     }
 
-    fun notify(vehicle: Vehicle, distance: Float)
+    fun notify(vehicle: Vehicle, distance: Float = 0f, direction: VehicleDirection)
             /** called to notify this node that a vehicle is near (i.e., on a link from this node).
              * @param vehicle The vehicle approaching
-             * @param distance Distance on the link, in grid units. Positive when approaching,
-             * negative when leaving
+             * @param distance Distance on the link, in grid units. Always positive
+             * @param direction Whether the vehicle approaches or leaves. Use "GONE" to de-subscribe.
              */
     {
-        distanceToVehicle[vehicle] = distance
+        distanceToVehicle[vehicle] = Distance(distance, direction)
     }
 
 
     fun distanceTo(vehicle: Vehicle): Float?
+    /** @returns the absolute distance to the vehicle (always positive) or null if out of range */
     {
         if (vehicle.startNode != this && vehicle.endNode != this)
         {
@@ -92,9 +98,21 @@ open class Node(val theNetwork: Network, x: Float, y: Float): GameElement()
             return null
         }
         val dist = distanceToVehicle[vehicle]
-        if (dist != null)
-            return if (dist>0) dist else -dist
-        else return null
+        if (dist?.direction == VehicleDirection.GONE)
+            return null
+        else
+            return dist?.distance
+    }
+
+    fun vehiclesInRange(range: Float): List<Vehicle>
+    {
+        // first, clean up our list and remove all vehicles that are no longer considered
+        val vehiclesDefinitelyGone = distanceToVehicle.keys.filter { distanceToVehicle[it]?.direction == VehicleDirection.GONE }
+        vehiclesDefinitelyGone.forEach { distanceToVehicle.remove(it) }
+        // check the distance and return a list of the vehicles in range
+        val vehiclesInRange = distanceToVehicle.keys.filter {
+            distanceTo(it)?.let { it <= range } ?: false }
+        return vehiclesInRange
     }
 
     open fun onDown(event: MotionEvent): Boolean {
