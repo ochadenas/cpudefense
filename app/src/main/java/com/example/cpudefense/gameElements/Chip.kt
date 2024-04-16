@@ -100,7 +100,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
         }
     }
 
-    fun resetToEmptyChip()
+    private fun resetToEmptyChip()
     /** called when a sold chip is definitely removed */
     {
         with (chipData)
@@ -222,7 +222,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
         return (obstacleStrength[chipData.type] ?: 0.0) * chipData.upgradeLevel
     }
 
-    fun getCooldownTime(): Float
+    private fun getCooldownTime(): Float
             /** @return the number of ticks that the chip will need to cooldown.
              * For CLK chips, this depends on the level.
              */
@@ -236,18 +236,18 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
             return this.chipData.cooldown.toFloat()
     }
 
-    inline fun isInCooldown(): Boolean
+    private inline fun isInCooldown(): Boolean
     /** @return true if the chip is in its cooldown phase */
     {
         return chipData.cooldownTimer > 0.0f
     }
 
-    fun startCooldown()
+    private fun startCooldown()
     {
         chipData.cooldownTimer = getCooldownTime()
     }
 
-    fun storageSlotsAvailable(): Int
+    private fun storageSlotsAvailable(): Int
     {
         return if (chipData.type == ChipType.ACC) 1 else chipData.upgradeLevel
     }
@@ -280,8 +280,8 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
     private fun selectTarget(possibleTargets: List<Attacker>): Attacker?
     /** intelligently determine the targeted attacker, based on chip type and attacker's properties */
     {
-        val coins = possibleTargets.filter() { it.attackerData.isCoin }
-        val regularAttackers = possibleTargets.filter() { !it.attackerData.isCoin }
+        val coins = possibleTargets.filter { it.attackerData.isCoin }
+        val regularAttackers = possibleTargets.filter { !it.attackerData.isCoin }
         val sortedTargets = regularAttackers.sortedBy { it.attackerData.number }
         // sortedTargets is a list of regular attackers, smallest value first.
         // Depending on the chip type, prioritize either small values or large values or coins.
@@ -302,10 +302,10 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
         }
     }
 
-    fun updateClk()
+    private fun updateClk()
     /** method that gets executed whenever the clock 'ticks' */
     {
-        val chipsAffected = listOf<ChipType>( ChipType.SUB,  ChipType.SHR, ChipType.MEM )
+        val chipsAffected = listOf( ChipType.SUB,  ChipType.SHR, ChipType.MEM )
         for (node in theNetwork.nodes.values)
         {
             val chip = node as Chip
@@ -443,18 +443,18 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
     { return (chipData.type == ChipType.ENTRY) }
 
     @Suppress("UNCHECKED_CAST")
-    inline fun attackersInRange(): List<Attacker>
+    fun attackersInRange(): List<Attacker>
     {
         return vehiclesInRange(data.range) as List<Attacker>
     }
 
-    fun shootAt(attacker: Attacker)
+    private fun shootAt(attacker: Attacker)
     {
         if (chipData.type == ChipType.EMPTY)
             return
         if (attacker.immuneTo == this || attacker.immuneToAll)
             return
-        if (chipData.type in listOf<ChipType>(ChipType.ACC, ChipType.MEM, ChipType.CLK, ChipType.SPLT, ChipType.DUP)
+        if (chipData.type in listOf(ChipType.ACC, ChipType.MEM, ChipType.CLK, ChipType.SPLT, ChipType.DUP)
             && attacker.attackerData.isCoin)
             return  // coins are unaffected by certain chip types
         when (chipData.type)
@@ -475,7 +475,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
         startCooldown()
     }
 
-    fun slotsLeftInMEM(): Boolean
+    private fun slotsLeftInMEM(): Boolean
     /** @return true if the MEM chip can still hold another number */
     {
         return when (isInCooldown())
@@ -485,7 +485,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
         }
     }
 
-    fun storeAttacker(attacker: Attacker)
+    private fun storeAttacker(attacker: Attacker)
     {
         internalRegister.add(attacker)
         val extraCashGained =
@@ -495,7 +495,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
         theNetwork.theGame.gameActivity.theGameView.theEffects?.fade(attacker)
     }
 
-    fun splitAttacker(attacker: Attacker): Attacker
+    private fun splitAttacker(attacker: Attacker): Attacker
     {
         val newAttacker = duplicateAttacker(attacker)
         val number = attacker.attackerData.number
@@ -521,13 +521,13 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
         return newAttacker
     }
 
-    fun duplicateAttacker(attacker: Attacker): Attacker
+    private fun duplicateAttacker(attacker: Attacker): Attacker
     {
-        var change_in_speed = attacker.data.speed * (Random.nextFloat() * 0.1f)
-        attacker.data.speed += change_in_speed
+        var changeInSpeed = attacker.data.speed * (Random.nextFloat() * 0.1f)
+        attacker.data.speed += changeInSpeed
         val newAttacker = attacker.copy()
-        change_in_speed = newAttacker.data.speed * (Random.nextFloat() * 0.2f + 0.1f)
-        newAttacker.data.speed -= change_in_speed
+        changeInSpeed = newAttacker.data.speed * (Random.nextFloat() * 0.2f + 0.1f)
+        newAttacker.data.speed -= changeInSpeed
         network.addVehicle(newAttacker)
         newAttacker.setOntoLink(attacker.onLink, newAttacker.startNode)
         attacker.immuneTo = this
@@ -535,7 +535,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
         return newAttacker
     }
 
-    fun processInAccumulator(attacker: Attacker)
+    private fun processInAccumulator(attacker: Attacker)
     {
         if (internalRegister.size == 0)
             storeAttacker(attacker)
@@ -550,15 +550,15 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
                 else -> number1 and number2
             }
             attacker.changeNumberTo(newValue)
-            val change_in_speed = attacker.data.speed * (Random.nextFloat() - 0.5f) * 0.3f
-            attacker.data.speed += change_in_speed
+            val changeInSpeed = attacker.data.speed * (Random.nextFloat() - 0.5f) * 0.3f
+            attacker.data.speed += changeInSpeed
             attacker.setCurrentSpeed()
             internalRegister.clear()
             attacker.immuneTo = this
         }
     }
 
-    fun isActivated(): Boolean
+    private fun isActivated(): Boolean
             /** for display purposes: determine whether the chip is "activated",
              * depending on its type.
              */
@@ -629,7 +629,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
         return bitmap
     }
 
-    fun showUpgrades() {
+    private fun showUpgrades() {
         if (chipData.sold)
             return
         val alternatives = CopyOnWriteArrayList<ChipUpgrades>()

@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package com.example.cpudefense.networkmap
 
 import android.graphics.Canvas
@@ -29,6 +31,8 @@ open class Node(val theNetwork: Network, x: Float, y: Float): GameElement()
     var connectedLinks = CopyOnWriteArrayList<Link>() // used during level setup
 
     open var actualRect: Rect? = null
+    /** hack: limit list cleanup to improve performance */
+    private var ticks = 100
 
     /** keep track of the current distance to the vehicles in range */
     enum class VehicleDirection { APPROACHING, LEAVING, GONE }
@@ -38,6 +42,12 @@ open class Node(val theNetwork: Network, x: Float, y: Float): GameElement()
     val vehiclesInRange = mutableListOf<Vehicle>()
 
     override fun update() {
+        ticks--
+        if (ticks<0)
+        {
+            cleanupVehiclesInRange()
+            ticks = 100
+        }
     }
 
     override fun display(canvas: Canvas, viewport: Viewport) {
@@ -119,6 +129,7 @@ open class Node(val theNetwork: Network, x: Float, y: Float): GameElement()
         return vehiclesInRange
 
          */
+        /*
         vehiclesDefinitelyGone.clear()
         vehiclesInRange.clear()
         distanceToVehicle.entries.forEach { (vehicle, dist: Distance) ->
@@ -129,6 +140,22 @@ open class Node(val theNetwork: Network, x: Float, y: Float): GameElement()
         }
         vehiclesDefinitelyGone.forEach { distanceToVehicle.remove(it) }
         return vehiclesInRange
+
+         */
+        return distanceToVehicle.keys.filter { vehicle ->
+            distanceToVehicle[vehicle]?.let {
+                it.direction != VehicleDirection.GONE &&
+                        it.distance <= range
+            } ?: false
+        }
+    }
+
+    private fun cleanupVehiclesInRange()
+    /** remove the vehicles from the list that are already GONE */
+    {
+        val hashMap: Map<Vehicle, Distance> = distanceToVehicle.filterValues { it.direction != VehicleDirection.GONE }
+        if (hashMap.isNotEmpty())
+            distanceToVehicle = ConcurrentHashMap(hashMap)
     }
 
     open fun onDown(event: MotionEvent): Boolean {
