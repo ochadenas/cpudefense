@@ -34,6 +34,8 @@ open class Node(val theNetwork: Network, x: Float, y: Float): GameElement()
     enum class VehicleDirection { APPROACHING, LEAVING, GONE }
     data class Distance ( var distance: Float, var direction: VehicleDirection )
     private var distanceToVehicle: ConcurrentHashMap<Vehicle, Distance> = ConcurrentHashMap()
+    val vehiclesDefinitelyGone = mutableListOf<Vehicle>()
+    val vehiclesInRange = mutableListOf<Vehicle>()
 
     override fun update() {
     }
@@ -85,6 +87,7 @@ open class Node(val theNetwork: Network, x: Float, y: Float): GameElement()
              * @param direction Whether the vehicle approaches or leaves. Use "GONE" to de-subscribe.
              */
     {
+        // distanceToVehicle[vehicle]?.let { it.distance = distance; it.direction = direction; return }
         distanceToVehicle[vehicle] = Distance(distance, direction)
     }
 
@@ -106,12 +109,25 @@ open class Node(val theNetwork: Network, x: Float, y: Float): GameElement()
 
     fun vehiclesInRange(range: Float): List<Vehicle>
     {
+        /*
         // first, clean up our list and remove all vehicles that are no longer considered
         val vehiclesDefinitelyGone = distanceToVehicle.keys.filter { distanceToVehicle[it]?.direction == VehicleDirection.GONE }
         vehiclesDefinitelyGone.forEach { distanceToVehicle.remove(it) }
         // check the distance and return a list of the vehicles in range
         val vehiclesInRange = distanceToVehicle.keys.filter {
             distanceTo(it)?.let { it <= range } ?: false }
+        return vehiclesInRange
+
+         */
+        vehiclesDefinitelyGone.clear()
+        vehiclesInRange.clear()
+        distanceToVehicle.entries.forEach { (vehicle, dist: Distance) ->
+            if (dist.direction == VehicleDirection.GONE)
+                vehiclesDefinitelyGone.add(vehicle)
+            else if (dist.distance <= range )
+                vehiclesInRange.add(vehicle)
+        }
+        vehiclesDefinitelyGone.forEach { distanceToVehicle.remove(it) }
         return vehiclesInRange
     }
 

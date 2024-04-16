@@ -443,7 +443,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
     { return (chipData.type == ChipType.ENTRY) }
 
     @Suppress("UNCHECKED_CAST")
-    fun attackersInRange(): List<Attacker>
+    inline fun attackersInRange(): List<Attacker>
     {
         return vehiclesInRange(data.range) as List<Attacker>
     }
