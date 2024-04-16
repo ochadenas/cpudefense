@@ -20,6 +20,7 @@
     <color name="attackers_glow_bin">#FFFD2222</color>
     <color name="attackers_glow_hex">#BD5B2D</color>
     <color name="attackers_glow_coin">#1D96FF</color>
+    <color name="attackers_glow_coin_endless">#EC2816</color>
     <color name="attackers_background">#40000000</color>
     <color name="chips_sub_foreground">#DA07DD00</color>
     <color name="chips_sub_glow">#AFFA34</color>
