@@ -2,12 +2,8 @@ package com.example.cpudefense.gameElements
 
 import android.graphics.*
 import android.view.MotionEvent
-import androidx.core.graphics.createBitmap
-import com.example.cpudefense.Game
-import com.example.cpudefense.R
 import com.example.cpudefense.networkmap.Network
 import com.example.cpudefense.networkmap.Viewport
-import com.example.cpudefense.utils.displayTextCenteredInRect
 import com.example.cpudefense.utils.makeSquare
 import com.example.cpudefense.utils.scale
 import com.example.cpudefense.utils.setCenter

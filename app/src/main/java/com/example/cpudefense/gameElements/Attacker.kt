@@ -126,7 +126,7 @@ open class Attacker(network: Network, representation: Representation = Represent
         makeNumber(this)
     }
 
-    fun invertNumber()
+    private fun invertNumber()
     {
         var n: ULong = attackerData.number
         n = n.inv()
