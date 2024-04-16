@@ -1,0 +1,4 @@
+Bug fixes:
+- Fixed an occasional game crash when there were lots of attackers.
+- Leibniz is no longer affected by Sid Meier.
+- MEM chips are no longer sold instantly.
