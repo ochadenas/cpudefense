@@ -26,7 +26,7 @@ class Game(val gameActivity: MainGameActivity) {
     val workInProgress = false  // REMOVE THIS
 
     companion object Params {
-        const val maxLevelAvailable = 31
+        const val maxLevelAvailable = 32
 
         // feature toggles:
         const val enableEndlessMode = true

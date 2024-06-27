@@ -1639,6 +1639,69 @@ class StageCatalog
                             Chip.ChipUpgrades.CLK,
                             Chip.ChipUpgrades.REDUCE
                         )
+                        rewardCoins = 3
+                    }
+                    32 -> {
+                        initializeNetwork(50, 50)
+
+                        createChip(10, 10, 1)
+                        createChip(25, 10, 2, type = Chip.ChipType.CPU)
+                        createChip(40, 10, 3)
+                        createChip(10, 20, 4)
+                        createChip(25, 20, 5)
+                        createChip(40, 20, 6)
+                        createChip(10, 30, 7)
+                        createChip(25, 30, 8, type = Chip.ChipType.ENTRY)
+                        createChip(40, 30, 9)
+                        createChip(10, 40, 10)
+                        createChip(25, 40, 11)
+                        createChip(40, 40, 12)
+
+                        createLink(1, 2, 1)
+                        createLink(2, 3, 2)
+                        createLink(1, 4, 3)
+                        createLink(3, 6, 4)
+                        createLink(4, 5, 5)
+                        createLink(5, 6, 6)
+                        createLink(4, 7, 7)
+                        createLink(8, 5, 8)
+                        createLink(6, 9, 9)
+                        createLink(8, 7, 10)
+                        createLink(8, 9, 11)
+                        createLink(7, 10, 12)
+                        createLink(8, 11, 13)
+                        createLink(9, 12, 14)
+                        createLink(10, 11, 15)
+                        createLink(11, 12, 16)
+
+                        createTrack(listOf(8, 5, 3, 1), 0)
+                        createTrack(listOf(8, 6, 4, 2), 1)
+                        createTrack(listOf(10, 7, 3, 1), 2)
+                        createTrack(listOf(11, 9, 4, 2), 3)
+                        createTrack(listOf(13, 15, 12, 7, 3, 1), 4)
+                        createTrack(listOf(13, 16, 14, 9, 4, 2), 5)
+
+                        createWave(16, 4, .12f, 1.2f)
+                        createWave(16, 8, .11f, 1.2f)
+                        createWave(16, 9, .12f, 1.3f)
+                        createWave(16, 12, .10f, 1.3f)
+                        createWave(16, 16, .12f, 1.3f)
+                        createWave(16, 32, .14f, 1.3f)
+                        createWave(16,64, .12f, 1.2f)
+                        createWave(16,100, .14f, 1.2f)
+                        createWave(16,128, .12f, 1.2f)
+                        createWave(16,200, .14f, 1.2f, coins = 1)
+
+                        data.chipsAllowed = setOf(
+                            Chip.ChipUpgrades.SUB,
+                            Chip.ChipUpgrades.POWERUP,
+                            Chip.ChipUpgrades.SELL,
+                            Chip.ChipUpgrades.SHR,
+                            Chip.ChipUpgrades.MEM,
+                            Chip.ChipUpgrades.ACC,
+                            Chip.ChipUpgrades.CLK,
+                            Chip.ChipUpgrades.REDUCE
+                        )
                         data.type = Stage.Type.FINAL
                         rewardCoins = 3
                     }
