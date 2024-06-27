@@ -47,7 +47,7 @@ class WelcomeActivity : AppCompatActivity() {
         // display as graphics:
         var displayLit = true
         val display =
-            SevenSegmentDisplay(2, (80 * resources.displayMetrics.scaledDensity).toInt(), this)
+            SevenSegmentDisplay(4, (80 * resources.displayMetrics.scaledDensity).toInt(), this)
         val imageView = findViewById<ImageView>(R.id.sevenSegmentDisplay)
         if (maxLevel.number == 0)
             displayLit = false
