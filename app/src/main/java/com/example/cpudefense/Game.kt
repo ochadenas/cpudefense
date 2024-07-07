@@ -75,6 +75,11 @@ class Game(val gameActivity: MainGameActivity) {
         const val temperatureCooldownFactor = 0.99995
         const val temperatureWarnThreshold = 60
         const val temperatureLimit = 85
+
+        // resistors:
+        const val resistorBaseStrength = 10f // ohms
+        const val resistorBaseDuration = 160f // ticks
+
     }
 
     var defaultSpeedFactor = 0.512f

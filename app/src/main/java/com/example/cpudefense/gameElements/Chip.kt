@@ -177,8 +177,8 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
                 chipData.color = resources.getColor(R.color.chips_resistor_foreground)
                 chipData.glowColor = resources.getColor(R.color.chips_resistor_glow)
                 chipData.value = Game.basePrice[ChipUpgrades.RES] ?: 99
-                chipData.cooldown = 16 // fixed value
-                data.range = 1.5f
+                chipData.cooldown = 4 // fixed value
+                data.range = 2f
             }
             ChipType.CLK -> {
                 chipData.color = resources.getColor(R.color.chips_clk_foreground)
@@ -248,7 +248,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
     {
         if (chipData.type != ChipType.RES)
             return 0
-        var resistance = chipData.upgradeLevel * 10f * theNetwork.theGame.heroModifier(Hero.Type.INCREASE_CHIP_RES_STRENGTH)
+        var resistance = chipData.upgradeLevel * Game.resistorBaseStrength * theNetwork.theGame.heroModifier(Hero.Type.INCREASE_CHIP_RES_STRENGTH)
         return resistance.toInt()
     }
 
@@ -499,7 +499,8 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
             }
             ChipType.RES -> {
                 attacker.data.speedModifier = effectOfResistanceOnSpeed(resistorValue().toFloat())
-                attacker.data.speedModificationTimer += 100f / attacker.data.speedModifier * theNetwork.theGame.heroModifier(Hero.Type.INCREASE_CHIP_RES_DURATION)
+                val additionalDuration = Game.resistorBaseDuration / attacker.data.speedModifier * theNetwork.theGame.heroModifier(Hero.Type.INCREASE_CHIP_RES_DURATION)
+                attacker.data.speedModificationTimer += additionalDuration
                 attacker.immuneTo = this
                 Attacker.makeNumber(attacker)
             }
