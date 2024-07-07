@@ -1,6 +1,5 @@
 package com.example.cpudefense.gameElements
 
-import android.content.ActivityNotFoundException
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
@@ -8,7 +7,7 @@ import android.graphics.Rect
 import com.example.cpudefense.networkmap.*
 import com.example.cpudefense.utils.setCenter
 
-open class Vehicle(val theNetwork: Network): GameElement() {
+open class Vehicle(val network: Network): GameElement() {
 
     enum class State { ACTIVE, DISAPPEARING, GONE}
 
@@ -16,6 +15,9 @@ open class Vehicle(val theNetwork: Network): GameElement() {
         (
         /** speed with respect to the virtual grid, without global speed modifier */
         var speed: Float,
+        /** temporary modifier of the speed */
+        var speedModifier: Float,
+        var speedModificationTimer: Float,
         /** position on the virtual grid */
         var gridPos: Pair<Float, Float>,
         /** distance travelled from last node */
@@ -32,6 +34,8 @@ open class Vehicle(val theNetwork: Network): GameElement() {
 
     var data = Data(
         speed = 1f,
+        speedModifier = 1.0f,
+        speedModificationTimer = 0.0f,
         gridPos = Pair(0f, 0f),
         distanceTravelledOnLink = 0.0f,
         linkId = -1,
@@ -47,17 +51,24 @@ open class Vehicle(val theNetwork: Network): GameElement() {
     var onTrack: Track? = null
     var startNode: Node? = null
     var endNode: Node? = null
-    var currentSpeed: Float = 0.0f
 
     var distanceFromLastNode = 0.0f
     var distanceToNextNode = 0.0f
 
     override fun update() {
+        /** determine the current speed of the vehicle, including modifiers and buffs */
+        var currentSpeed: Float = data.speed * 0.16f
+        if (currentSpeed < Network.minVehicleSpeed)
+            currentSpeed = Network.minVehicleSpeed // stopgap. Impose minimal speed lest vehicles get stuck somewhere.
+
+        if (data.speedModificationTimer > 0)
+            currentSpeed *= data.speedModifier
+
         onLink?.let {
             /* determine which is start and which is end node */
             val startNode = this.startNode ?: it.node1
             val endNode = this.endNode ?: it.node2
-            data.distanceTravelledOnLink += currentSpeed * theNetwork.theGame.globalSpeedFactor()
+            data.distanceTravelledOnLink += currentSpeed * network.theGame.globalSpeedFactor()
             posOnGrid = it.getPositionOnGrid(data.distanceTravelledOnLink, startNode)
             if (posOnGrid == endNode.posOnGrid) // reached end of link
             {
@@ -102,12 +113,6 @@ open class Vehicle(val theNetwork: Network): GameElement() {
         data.endNodeId = endNode?.data?.ident ?: -1
         onLink = link
         setCurrentDistanceOnLink(link)
-        setCurrentSpeed()
-    }
-
-    fun setCurrentSpeed()
-    {
-        currentSpeed = 0.16f * data.speed
     }
 
     fun setCurrentDistanceOnLink(link: Link)

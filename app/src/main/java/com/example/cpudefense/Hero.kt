@@ -28,6 +28,7 @@ class Hero(var game: Game, type: Type): Fadable {
     enum class Type { INCREASE_CHIP_SUB_SPEED, INCREASE_CHIP_SUB_RANGE,
         INCREASE_CHIP_SHR_SPEED,  INCREASE_CHIP_SHR_RANGE,
         INCREASE_CHIP_MEM_SPEED,  INCREASE_CHIP_MEM_RANGE, ENABLE_MEM_UPGRADE,
+        INCREASE_CHIP_RES_STRENGTH, INCREASE_CHIP_RES_DURATION,
         REDUCE_HEAT,
         DECREASE_ATT_FREQ, DECREASE_ATT_SPEED, DECREASE_ATT_STRENGTH,
         ADDITIONAL_LIVES, INCREASE_MAX_HERO_LEVEL, LIMIT_UNWANTED_CHIPS,
@@ -74,6 +75,8 @@ class Hero(var game: Game, type: Type): Fadable {
         Type.INCREASE_CHIP_MEM_SPEED -> game.resources.getColor(R.color.upgrade_active_chip_mem)
         Type.INCREASE_CHIP_MEM_RANGE -> game.resources.getColor(R.color.upgrade_active_chip_mem)
         Type.ENABLE_MEM_UPGRADE -> game.resources.getColor(R.color.upgrade_active_chip_mem)
+        Type.INCREASE_CHIP_RES_STRENGTH -> game.resources.getColor(R.color.upgrade_active_chip_res)
+        Type.INCREASE_CHIP_RES_DURATION -> game.resources.getColor(R.color.upgrade_active_chip_res)
         Type.REDUCE_HEAT -> game.resources.getColor(R.color.upgrade_active_chip_clk)
         Type.DECREASE_ATT_FREQ -> game.resources.getColor(R.color.upgrade_active_general)
         Type.DECREASE_ATT_SPEED -> game.resources.getColor(R.color.upgrade_active_general)
@@ -280,6 +283,16 @@ class Hero(var game: Game, type: Type): Fadable {
                 strengthDesc = "x %.2f".format(strength)
                 upgradeDesc = " → %.2f".format(next)
             }
+            Type.INCREASE_CHIP_RES_STRENGTH -> {
+                shortDesc = game.resources.getString(R.string.shortdesc_RES)
+                strengthDesc = "x %.2f".format(strength)
+                upgradeDesc = " → %.2f".format(next)
+            }
+            Type.INCREASE_CHIP_RES_DURATION -> {
+                shortDesc = game.resources.getString(R.string.shortdesc_duration)
+                strengthDesc = "x %.2f".format(strength)
+                upgradeDesc = " → %.2f".format(next)
+            }
             Type.REDUCE_HEAT -> {
                 shortDesc = game.resources.getString(R.string.shortdesc_heat)
                 strengthDesc = "-%d%%".format(strength.toInt())
@@ -436,7 +449,9 @@ class Hero(var game: Game, type: Type): Fadable {
             Type.INCREASE_CHIP_SUB_RANGE -> upgradeLevel(Type.INCREASE_CHIP_SUB_SPEED) >= 5
             Type.INCREASE_CHIP_SHR_RANGE -> upgradeLevel(Type.INCREASE_CHIP_SHR_SPEED) >= 5
             Type.INCREASE_CHIP_MEM_RANGE -> upgradeLevel(Type.INCREASE_CHIP_MEM_SPEED) >= 5
-            Type.ENABLE_MEM_UPGRADE ->    upgradeLevel(Type.INCREASE_CHIP_MEM_RANGE) >= 3
+            Type.ENABLE_MEM_UPGRADE ->      upgradeLevel(Type.INCREASE_CHIP_MEM_RANGE) >= 3
+            Type.INCREASE_CHIP_RES_STRENGTH -> stageIdentifier.number >= 32
+            Type.INCREASE_CHIP_RES_DURATION -> upgradeLevel(Type.INCREASE_CHIP_RES_STRENGTH) >= 3
             else -> true
         }
     }
@@ -555,6 +570,8 @@ class Hero(var game: Game, type: Type): Fadable {
                 Type.INCREASE_CHIP_SUB_RANGE -> return 1.0f + level / 10f
                 Type.INCREASE_CHIP_SHR_RANGE -> return 1.0f + level / 10f
                 Type.INCREASE_CHIP_MEM_RANGE -> return 1.0f + level / 10f
+                Type.INCREASE_CHIP_RES_STRENGTH -> return 1.0f + level * 0.2f
+                Type.INCREASE_CHIP_RES_DURATION -> return 1.0f + level * 0.2f
                 else -> return level.toFloat()
             }
         }
@@ -730,6 +747,22 @@ class Hero(var game: Game, type: Type): Fadable {
                     effect = game.resources.getString(R.string.HERO_EFFECT_MAXHEROUPGRADE)
                     vitae = game.resources.getString(R.string.meier)
                     picture = BitmapFactory.decodeResource(game.resources, R.drawable.meier)
+                }
+                Type.INCREASE_CHIP_RES_STRENGTH ->
+                {
+                    name = "Ohm"
+                    fullName = "Georg Ohm"
+                    effect = game.resources.getString(R.string.HERO_EFFECT_RES_STRENGTH)
+                    vitae = game.resources.getString(R.string.ohm)
+                    picture = BitmapFactory.decodeResource(game.resources, R.drawable.ohm)
+                }
+                Type.INCREASE_CHIP_RES_DURATION ->
+                {
+                    name = "Volta"
+                    fullName = "Alessandro Volta"
+                    effect = game.resources.getString(R.string.HERO_EFFECT_RES_DURATION)
+                    vitae = game.resources.getString(R.string.volta)
+                    picture = BitmapFactory.decodeResource(game.resources, R.drawable.volta)
                 }
             }
         }

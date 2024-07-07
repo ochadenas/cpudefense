@@ -50,14 +50,14 @@ open class Attacker(network: Network, representation: Representation = Represent
         this.data.speed = speed
         if (attackerData.bits == 0)
             calculateNumberOfDigits()
-        numberFontSize = baseNumberFontSize * theNetwork.theGame.resources.displayMetrics.scaledDensity *
-                if (theNetwork.theGame.gameActivity.settings.configUseLargeButtons) 1.5f else 1.0f
+        numberFontSize = baseNumberFontSize * this.network.theGame.resources.displayMetrics.scaledDensity *
+                if (this.network.theGame.gameActivity.settings.configUseLargeButtons) 1.5f else 1.0f
         makeNumber(this)
     }
 
     fun copy(): Attacker
     {
-        val newAttacker = Attacker(network = theNetwork, representation = attackerData.representation, number = attackerData.number, speed = data.speed )
+        val newAttacker = Attacker(network = network, representation = attackerData.representation, number = attackerData.number, speed = data.speed )
         newAttacker.data = data.copy()
         newAttacker.attackerData = attackerData.copy()
         newAttacker.onTrack = onTrack
@@ -67,7 +67,6 @@ open class Attacker(network: Network, representation: Representation = Represent
         newAttacker.onLink = onLink
         newAttacker.startNode = startNode
         newAttacker.endNode= endNode
-        newAttacker.currentSpeed = currentSpeed
         newAttacker.distanceFromLastNode = distanceFromLastNode
         newAttacker.distanceToNextNode = distanceToNextNode
         return newAttacker
@@ -140,7 +139,7 @@ open class Attacker(network: Network, representation: Representation = Represent
     private fun extraCashGained(): Int
     /** possible bonus on kill due to hero */
     {
-        val strength = theNetwork.theGame.heroModifier(Hero.Type.GAIN_CASH_ON_KILL)
+        val strength = network.theGame.heroModifier(Hero.Type.GAIN_CASH_ON_KILL)
         val extraCash = Random.nextFloat() * strength * 2.0f // this gives an expectation value of 'strength'
         return extraCash.toInt()
     }
@@ -159,8 +158,8 @@ open class Attacker(network: Network, representation: Representation = Represent
                 val newNumber =  attackerData.number.toLong() - power
                 if (newNumber < 0)
                 {
-                    theNetwork.theGame.gameActivity.theGameView.theEffects?.explode(this)
-                    theNetwork.theGame.scoreBoard.addCash(attackerData.bits + extraCashGained())
+                    network.theGame.gameActivity.theGameView.theEffects?.explode(this)
+                    network.theGame.scoreBoard.addCash(attackerData.bits + extraCashGained())
                     return true
                 }
                 else
@@ -201,7 +200,7 @@ open class Attacker(network: Network, representation: Representation = Represent
              * or (0, 0) if the viewport is undefined or invalid.
              */
     {
-        posOnGrid?.let { return theNetwork.theGame.viewport.gridToViewport(it) }
+        posOnGrid?.let { return network.theGame.viewport.gridToViewport(it) }
         /* else, if posOnGrid == null: */
         return Pair(0, 0)
     }
@@ -210,8 +209,8 @@ open class Attacker(network: Network, representation: Representation = Represent
         get() = when (attackerData.representation)
         {
             Representation.UNDEFINED -> null
-            Representation.BINARY -> theNetwork.theGame.resources.getColor(R.color.attackers_glow_bin)
-            Representation.HEX -> theNetwork.theGame.resources.getColor(R.color.attackers_glow_hex)
+            Representation.BINARY -> network.theGame.resources.getColor(R.color.attackers_glow_bin)
+            Representation.HEX -> network.theGame.resources.getColor(R.color.attackers_glow_hex)
             Representation.DECIMAL -> null
             Representation.FLOAT -> null
         }
@@ -222,7 +221,7 @@ open class Attacker(network: Network, representation: Representation = Represent
             it.node1.notify(this, direction = Node.VehicleDirection.GONE)
             it.node2.notify(this, direction = Node.VehicleDirection.GONE)
             data.state = State.GONE
-            theNetwork.vehicles.remove(this) // TODO: this might not be thread safe
+            network.vehicles.remove(this) // TODO: this might not be thread safe
         }
     }
 
@@ -232,13 +231,21 @@ open class Attacker(network: Network, representation: Representation = Represent
         val textPaint = Paint()
         val blurPaint = Paint()
         val blurMaskFilter = BlurMaskFilter(11f, BlurMaskFilter.Blur.OUTER)
-        if (attackerData.representation == Representation.BINARY) {
-            textPaint.color = theNetwork.theGame.resources.getColor(R.color.attackers_foreground_bin)
-            blurPaint.color = theNetwork.theGame.resources.getColor(R.color.attackers_glow_bin)
-        }
-        else {
-            textPaint.color = theNetwork.theGame.resources.getColor(R.color.attackers_foreground_hex)
-            blurPaint.color = theNetwork.theGame.resources.getColor(R.color.attackers_glow_hex)
+        when (attackerData.representation) {
+            Representation.BINARY -> {
+                if (data.speedModificationTimer > 0)
+                    textPaint.color = network.theGame.resources.getColor(R.color.attackers_slowed_bin)
+                else
+                    textPaint.color = network.theGame.resources.getColor(R.color.attackers_foreground_bin)
+                blurPaint.color = network.theGame.resources.getColor(R.color.attackers_glow_bin)
+            }
+            else -> {
+                if (data.speedModificationTimer > 0)
+                    textPaint.color = network.theGame.resources.getColor(R.color.attackers_slowed_hex)
+                else
+                    textPaint.color = network.theGame.resources.getColor(R.color.attackers_foreground_hex)
+                blurPaint.color = network.theGame.resources.getColor(R.color.attackers_glow_hex)
+            }
         }
 
         textPaint.textSize = numberFontSize
@@ -259,7 +266,7 @@ open class Attacker(network: Network, representation: Representation = Represent
 
         /* create a transparent black background to have more contrast */
         val paint = Paint()
-        paint.color = theNetwork.theGame.resources.getColor(R.color.attackers_background)
+        paint.color = network.theGame.resources.getColor(R.color.attackers_background)
         // canvas.drawRect(rect, paint)
 
         /* use blurred image to create glow */
@@ -268,7 +275,7 @@ open class Attacker(network: Network, representation: Representation = Represent
         val blurCanvas = Canvas(numberBitmap)
         blurCanvas.drawBitmap(alpha, 0f, 0f, blurPaint)
 
-        textPaint.color = theNetwork.theGame.resources.getColor(R.color.attackers_foreground_bin)
+        textPaint.color = network.theGame.resources.getColor(R.color.attackers_foreground_bin)
         textPaint.maskFilter = null
     }
 
@@ -276,6 +283,19 @@ open class Attacker(network: Network, representation: Representation = Represent
         super.update()
         endNode?.notify(this, distanceToNextNode, Node.VehicleDirection.APPROACHING)
         startNode?.notify(this, distanceFromLastNode, Node.VehicleDirection.LEAVING)
+
+        when
+        {
+            data.speedModificationTimer > 0 ->
+            { data.speedModificationTimer -= network.theGame.globalSpeedFactor() }
+            data.speedModificationTimer < 0 ->
+            {
+                data.speedModificationTimer = 0.0f
+                data.speedModifier = 0.0f
+                makeNumber(this)
+            }
+        }
+
 
         // animation, if any
         if (animationCount>0)

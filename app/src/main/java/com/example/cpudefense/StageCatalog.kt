@@ -1682,15 +1682,15 @@ class StageCatalog
                         createTrack(listOf(13, 16, 14, 9, 4, 2), 5)
 
                         createWave(16, 4, .12f, 1.2f)
-                        createWave(16, 8, .11f, 1.2f)
-                        createWave(16, 9, .12f, 1.3f)
-                        createWave(16, 12, .10f, 1.3f)
-                        createWave(16, 16, .12f, 1.3f)
-                        createWave(16, 32, .14f, 1.3f)
-                        createWave(16,64, .12f, 1.2f)
-                        createWave(16,100, .14f, 1.2f)
-                        createWave(16,128, .12f, 1.2f)
-                        createWave(16,200, .14f, 1.2f, coins = 1)
+                        createWave(16, 8, .11f, 1.3f)
+                        createWave(16, 9, .12f, 1.4f)
+                        createWave(16, 12, .10f, 1.4f)
+                        createWave(16, 16, .12f, 1.5f)
+                        createWave(16, 32, .14f, 1.5f)
+                        createWave(16,64, .12f, 1.5f)
+                        createWave(16,100, .14f, 1.5f)
+                        createWave(16,128, .12f, 1.6f)
+                        createWave(16,200, .14f, 1.8f, coins = 1)
 
                         data.chipsAllowed = setOf(
                             Chip.ChipUpgrades.SUB,
@@ -1700,6 +1700,7 @@ class StageCatalog
                             Chip.ChipUpgrades.MEM,
                             Chip.ChipUpgrades.ACC,
                             Chip.ChipUpgrades.CLK,
+                            Chip.ChipUpgrades.RES,
                             Chip.ChipUpgrades.REDUCE
                         )
                         data.type = Stage.Type.FINAL

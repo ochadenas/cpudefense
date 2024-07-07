@@ -69,7 +69,7 @@ class LevelSelectActivity : AppCompatActivity() {
         val tab = tabLayout.getTabAt(currentSeries-1)
         tab?.select()
 
-        // tabLayout.setupWithViewPager(findViewById(R.id.pager))
+        // tabLayout.setupWithViewPager(findViewById(RES.id.pager))
     }
 
     private fun nextLevelPossible(level: Int, series: Int): Boolean

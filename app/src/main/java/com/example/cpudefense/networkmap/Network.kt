@@ -48,6 +48,7 @@ class Network(val theGame: Game, x: Int, y: Int): GameElement() {
     }
 
     companion object {
+        const val minVehicleSpeed = Game.minAttackerSpeed
         fun createNetworkFromData(game: Game, data: Data): Network {
 
             return Network(game, data.gridSizeX, data.gridSizeY)

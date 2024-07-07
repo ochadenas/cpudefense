@@ -204,6 +204,8 @@ The programming language Pascal is named after him."</string>
     <string name="shortdesc_SHR">SHR chip speed</string>
     <string name="shortdesc_ACC">ACC chip speed</string>
     <string name="shortdesc_MEM">MEM chip speed</string>
+    <string name="shortdesc_RES">Resistance</string>
+    <string name="shortdesc_duration">Duration</string>
     <string name="shortdesc_heat">Generated heat</string>
     <string name="shortdesc_upgrade">Chip upgrade cost</string>
     <string name="shortdesc_lives">Additional lives</string>
@@ -236,6 +238,8 @@ The programming language Pascal is named after him."</string>
     <string name="HERO_EFFECT_LIMITUNWANTED">Reduces the number of unwanted chips</string>
     <string name="HERO_EFFECT_DECREASEREMOVAL">Reduces the cost of unwanted chip removal</string>
     <string name="HERO_EFFECT_ENABLEMEM">Enables upgrading of MEM chips</string>
+    <string name="HERO_EFFECT_RES_STRENGTH">Increases the strength of resistors</string>
+    <string name="HERO_EFFECT_RES_DURATION">Increases the duration of resistance effect</string>
     <string name="toast_loading">Loading …</string>
     <string name="name_series_1">Normal</string>
     <string name="name_series_2">Turbo</string>

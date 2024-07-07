@@ -2,6 +2,7 @@
 
 package com.example.cpudefense.gameElements
 
+import android.content.res.TypedArray
 import android.graphics.*
 import android.view.MotionEvent
 import com.example.cpudefense.*
@@ -14,12 +15,13 @@ import com.example.cpudefense.utils.inflate
 import com.example.cpudefense.utils.setBottomLeft
 import com.example.cpudefense.utils.setCenter
 import java.util.concurrent.CopyOnWriteArrayList
+import kotlin.math.exp
 import kotlin.random.Random
 
 open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gridX.toFloat(), gridY.toFloat())
 {
-    enum class ChipType { EMPTY, SUB, SHR, MEM, ACC, SHL, ADD, NOP, SPLT, DUP, CLK, ENTRY, CPU}
-    enum class ChipUpgrades { POWERUP, REDUCE, SELL, SUB, SHR, MEM, ACC, CLK }
+    enum class ChipType { EMPTY, SUB, SHR, MEM, ACC, RES, SHL, ADD, NOP, SPLT, DUP, CLK, ENTRY, CPU}
+    enum class ChipUpgrades { POWERUP, REDUCE, SELL, SUB, SHR, MEM, ACC, CLK, RES }
 
     data class Data(
         var type: ChipType = ChipType.EMPTY,
@@ -47,6 +49,19 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
     private var heightOnScreen = 0
 
     val resources = network.theGame.resources
+    val resistorColour = arrayOf(
+        resources.getColor(R.color.resistor_0),
+        resources.getColor(R.color.resistor_1),
+        resources.getColor(R.color.resistor_2),
+        resources.getColor(R.color.resistor_3),
+        resources.getColor(R.color.resistor_4),
+        resources.getColor(R.color.resistor_5),
+        resources.getColor(R.color.resistor_6),
+        resources.getColor(R.color.resistor_7),
+        resources.getColor(R.color.resistor_8),
+        resources.getColor(R.color.resistor_9),
+    )
+
 
     /** some chips have a 'register' where one or several attackers' value can be held. */
     private var internalRegister = CopyOnWriteArrayList<Attacker>()
@@ -148,7 +163,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
                 chipData.color = resources.getColor(R.color.chips_mem_foreground)
                 chipData.glowColor = resources.getColor(R.color.chips_mem_glow)
                 chipData.value = Game.basePrice[ChipUpgrades.MEM] ?: 99
-                chipData.cooldown = (72f / game.heroModifier(Hero.Type.INCREASE_CHIP_MEM_SPEED)).toInt() // was 128f
+                chipData.cooldown = (72f / game.heroModifier(Hero.Type.INCREASE_CHIP_MEM_SPEED)).toInt()
                 data.range = 2f * game.heroModifier(Hero.Type.INCREASE_CHIP_MEM_RANGE)
             }
             ChipType.ACC -> {
@@ -157,6 +172,13 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
                 chipData.value = Game.basePrice[ChipUpgrades.ACC] ?: 99
                 chipData.cooldown = 16 // fixed value
                 data.range = 2f
+            }
+            ChipType.RES -> {
+                chipData.color = resources.getColor(R.color.chips_resistor_foreground)
+                chipData.glowColor = resources.getColor(R.color.chips_resistor_glow)
+                chipData.value = Game.basePrice[ChipUpgrades.RES] ?: 99
+                chipData.cooldown = 16 // fixed value
+                data.range = 1.5f
             }
             ChipType.CLK -> {
                 chipData.color = resources.getColor(R.color.chips_clk_foreground)
@@ -220,6 +242,14 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
     fun obstacleDifficulty(): Double
     {
         return (obstacleStrength[chipData.type] ?: 0.0) * chipData.upgradeLevel
+    }
+
+    fun resistorValue(): Int
+    {
+        if (chipData.type != ChipType.RES)
+            return 0
+        var resistance = chipData.upgradeLevel * 10f * theNetwork.theGame.heroModifier(Hero.Type.INCREASE_CHIP_RES_STRENGTH)
+        return resistance.toInt()
     }
 
     private fun getCooldownTime(): Float
@@ -405,7 +435,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
                     if (isInCooldown())
                     {
                         paintIndicator.style = Paint.Style.FILL
-                        // paintIndicator.color = theNetwork.theGame.resources.getColor(R.color.chips_mem_foreground)
+                        // paintIndicator.color = theNetwork.theGame.resources.getColor(RES.color.chips_mem_foreground)
                         paintIndicator.alpha = (chipData.cooldownTimer*255f/getCooldownTime()).toInt()
                         canvas.drawRect(indicatorRect, paintIndicator)
                     }
@@ -466,6 +496,12 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
                 if (slotsLeftInMEM())
                     storeAttacker(attacker)
                 return // no cooldown phase here
+            }
+            ChipType.RES -> {
+                attacker.data.speedModifier = effectOfResistanceOnSpeed(resistorValue().toFloat())
+                attacker.data.speedModificationTimer += 100f / attacker.data.speedModifier * theNetwork.theGame.heroModifier(Hero.Type.INCREASE_CHIP_RES_DURATION)
+                attacker.immuneTo = this
+                Attacker.makeNumber(attacker)
             }
             else -> {
                 if (attacker.onShot(chipData.type, chipData.upgradeLevel))
@@ -552,10 +588,14 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
             attacker.changeNumberTo(newValue)
             val changeInSpeed = attacker.data.speed * (Random.nextFloat() - 0.5f) * 0.3f
             attacker.data.speed += changeInSpeed
-            attacker.setCurrentSpeed()
             internalRegister.clear()
             attacker.immuneTo = this
         }
+    }
+
+    private fun effectOfResistanceOnSpeed(ohm: Float): Float
+    {
+        return exp(- ohm / 74.0f)
     }
 
     private fun isActivated(): Boolean
@@ -583,6 +623,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
             ChipType.SHL -> createBitmap("SHL %d".format(chipData.upgradeLevel))
             ChipType.ADD -> createBitmap("ADD %d".format(chipData.upgradeLevel))
             ChipType.CLK -> createBitmap("CLK %d".format(chipData.upgradeLevel))
+            ChipType.RES -> createBitmapForResistor()
             ChipType.SPLT -> createBitmap("SPLT")
             ChipType.DUP -> createBitmap("DUP")
             ChipType.NOP -> if (chipData.upgradeLevel == 1)  createBitmap("NOP")
@@ -591,6 +632,64 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
             ChipType.CPU -> null
             ChipType.EMPTY -> null
         }
+    }
+
+    private fun createBitmapForResistor(): Bitmap?
+    /** special colour-coded symbols for chips of type resistor */
+    {
+        val bitmap: Bitmap? = actualRect?.let {
+            val bitmap = Bitmap.createBitmap(it.width(), it.height(), Bitmap.Config.ARGB_8888)
+            val rect = Rect(0, 0, bitmap.width, bitmap.height)
+            val canvas = Canvas(bitmap)
+            val paint = Paint()
+
+            val widthOfRings = rect.width() / 10
+            val gapBetweenRings = (widthOfRings * 0.8f).toInt()
+            val leftMarginOfRings = rect.width() / 5
+            val heightOfRings = rect.height()
+
+            var ohm = resistorValue()
+            var firstDigit = ohm
+            var lastDigit = ohm % 10
+            var multiplier = 0
+            for (digit in 1 .. 9)
+            {
+                if (ohm>=10)
+                {
+                    lastDigit = ohm % 10
+                    ohm /= 10
+                    multiplier = digit
+                }
+                else
+                    break
+            }
+            firstDigit = ohm
+
+
+            try {
+                // 1st ring
+                var left = leftMarginOfRings
+                var ringRect = Rect(left, 0, left + widthOfRings, heightOfRings)
+                paint.color = resistorColour[firstDigit]
+                canvas.drawRect(ringRect, paint)
+
+                // 2nd ring
+                left = leftMarginOfRings + widthOfRings + gapBetweenRings
+                ringRect = Rect(left, 0, left + widthOfRings, heightOfRings)
+                paint.color = resistorColour[lastDigit]
+                canvas.drawRect(ringRect, paint)
+
+                // 3rd ring
+                left = leftMarginOfRings + 2 * (widthOfRings + gapBetweenRings)
+                ringRect = Rect(left, 0, left + widthOfRings, heightOfRings)
+                paint.color = resistorColour[multiplier]
+                canvas.drawRect(ringRect, paint)
+            }
+            catch (exception: NoSuchElementException) {}
+
+            bitmap
+        }
+        return bitmap
     }
 
     private fun createBitmap(text: String): Bitmap?
@@ -639,6 +738,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
                 alternatives.add(ChipUpgrades.SHR)
                 alternatives.add(ChipUpgrades.ACC)
                 alternatives.add(ChipUpgrades.MEM)
+                alternatives.add(ChipUpgrades.RES)
                 if (theNetwork.theGame.currentlyActiveStage?.chipCount(ChipType.CLK) == 0)
                     alternatives.add(ChipUpgrades.CLK) // only one allowed
             }
@@ -661,6 +761,10 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
                 alternatives.add(ChipUpgrades.SELL)
             }
             ChipType.CLK -> {
+                alternatives.add(ChipUpgrades.POWERUP)
+                alternatives.add(ChipUpgrades.SELL)
+            }
+            ChipType.RES -> {
                 alternatives.add(ChipUpgrades.POWERUP)
                 alternatives.add(ChipUpgrades.SELL)
             }
@@ -755,6 +859,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
 
     companion object
     {
+        /** this is an estimate how annoying an unwanted chip will be */
         val obstacleStrength =
             hashMapOf(
                 ChipType.NOP to 0.5,
@@ -763,6 +868,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
                 ChipType.SPLT to 1.6,
                 ChipType.DUP to 2.0)
         val obstacleTypes = obstacleStrength.keys
+
         fun createFromData(network: Network, data: Data): Chip
                 /** reconstruct an object based on the saved data
                  * and set all inner proprieties

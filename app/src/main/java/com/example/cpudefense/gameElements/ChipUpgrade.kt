@@ -103,6 +103,7 @@ class ChipUpgrade(val chipToUpgrade: Chip, val type: Chip.ChipUpgrades,
             }
             Chip.ChipUpgrades.MEM -> chipToUpgrade.setType(Chip.ChipType.MEM)
             Chip.ChipUpgrades.CLK -> chipToUpgrade.setType(Chip.ChipType.CLK)
+            Chip.ChipUpgrades.RES -> chipToUpgrade.setType(Chip.ChipType.RES)
         }
         game.state.cash -= price
     }
@@ -123,6 +124,7 @@ class ChipUpgrade(val chipToUpgrade: Chip, val type: Chip.ChipUpgrades,
             Chip.ChipUpgrades.ACC -> "ACC"
             Chip.ChipUpgrades.MEM -> "MEM"
             Chip.ChipUpgrades.CLK -> "CLK"
+            Chip.ChipUpgrades.RES -> "R"
         }
         val bitmap = Bitmap.createBitmap(actualRect.width(), actualRect.height(), Bitmap.Config.ARGB_8888)
         val rect = Rect(0, 0, bitmap.width, bitmap.height)

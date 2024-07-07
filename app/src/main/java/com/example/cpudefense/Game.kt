@@ -55,6 +55,7 @@ class Game(val gameActivity: MainGameActivity) {
         const val minimalAmountOfCash = 8
         const val maxLivesPerStage = 3
         const val maxInternalChipStorage = 4
+        const val minAttackerSpeed = 0.01f
 
         const val levelSnapshotIconSize = 120
 
@@ -65,7 +66,7 @@ class Game(val gameActivity: MainGameActivity) {
         val basePrice = mapOf(Chip.ChipUpgrades.REDUCE to 10,
             Chip.ChipUpgrades.SUB to 8, Chip.ChipUpgrades.ACC to 10,
             Chip.ChipUpgrades.SHR to 16, Chip.ChipUpgrades.MEM to 12,
-            Chip.ChipUpgrades.CLK to 32)
+            Chip.ChipUpgrades.CLK to 32, Chip.ChipUpgrades.RES to 20)
 
         // temperature control:
         const val heatAdjustmentFactor = 1.6f // how many heat is generated per shortened tick

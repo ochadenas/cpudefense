@@ -180,4 +180,8 @@
     <string name="instr_23">Tous les composants électroniques ne sont pas des puces logiques. Il existe aussi d\'importants composants analogiques, comme les condensateurs [C] ou les résistances [R].\n\nDans ce jeu, les résistances ont pour effet de ralentir les attaquants pendant un certain temps. Leur force est indiquée par trois anneaux de couleur.\n</string>
     <string name="ohm">Georg Simon Ohm a été l\'un des premiers à tenter de décrire mathématiquement les processus électriques. Ses travaux ont d\'abord été peu remarqués et considérés comme un jeu académique. Ce n\'est que Charles Wheatstone qui a reconnu leur importance et a demandé à Ada Lovelace de traduire certaines œuvres d\'Ohm en anglais.\n\nAujourd\'hui, son nom est indissociable de la résistance électrique. La loi d\'Ohm et l\'unité de résistance portent son nom.\n</string>
     <string name="volta">Alessandro Giuseppe Antonio Anastasio Volta était un physicien expérimental qui a remis en question et réfuté certaines des théories et hypothèses qui prévalaient à son époque. Ainsi, il ne découvrit pas seulement le gaz méthane, mais fit surtout des découvertes révolutionnaires dans le nouveau domaine de l\'électricité. Il a décrit le rapport entre la tension, la charge et la capacité. Mais surtout, il a mis au point la première pile électrique.\n\nL\'unité de tension électrique, le volt, porte son nom.\n</string>
+    <string name="shortdesc_RES">Résistance</string>
+    <string name="shortdesc_duration">Durée</string>
+    <string name="HERO_EFFECT_RES_STRENGTH">Augmente toutes les résistances\n</string>
+    <string name="HERO_EFFECT_RES_DURATION">Augmente la durée de l\'effet des résistances</string>
 </resources>

@@ -19,6 +19,8 @@
     <color name="attackers_foreground_hex">#FFDC00</color>
     <color name="attackers_glow_bin">#FFFD2222</color>
     <color name="attackers_glow_hex">#BD5B2D</color>
+    <color name="attackers_slowed_bin">#DAE6C2C2</color>
+    <color name="attackers_slowed_hex">#FFAA00</color>
     <color name="attackers_glow_coin">#1D96FF</color>
     <color name="attackers_glow_coin_endless">#EC2816</color>
     <color name="attackers_background">#40000000</color>
@@ -30,6 +32,8 @@
     <color name="chips_mem_glow">#BCA7E1</color>
     <color name="chips_acc_foreground">#FFEB3B</color>
     <color name="chips_acc_glow">#FFF7AF</color>
+    <color name="chips_resistor_foreground">#FFFFFF</color>
+    <color name="chips_resistor_glow">#AEAEAE</color>
     <color name="chips_clk_foreground">#FF973B</color>
     <color name="chips_clk_glow">#CAA288</color>
     <color name="chips_shl_foreground">#BA0600</color>
@@ -75,6 +79,19 @@
     <color name="upgrade_active_chip_acc">#FFC107</color>
     <color name="upgrade_active_chip_mem">#774CC3</color>
     <color name="upgrade_active_chip_clk">#FF973B</color>
+    <color name="upgrade_active_chip_res">#F0F0F0</color>
+    <color name="resistor_0">#000000</color>
+    <color name="resistor_1">#964b00</color>
+    <color name="resistor_2">#ff0000</color>
+    <color name="resistor_3">#ffb000</color>
+    <color name="resistor_4">#efef00</color>
+    <color name="resistor_5">#00a600</color>
+    <color name="resistor_6">#3366ff</color>
+    <color name="resistor_7">#a000a0</color>
+    <color name="resistor_8">#8f8f8f</color>
+    <color name="resistor_9">#ffffff</color>
+    <color name="resistor_gold">#d3cb10</color>
+    <color name="resistor_silver">#cfcfcf</color>
 
 
 </resources>
