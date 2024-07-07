@@ -14,7 +14,6 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.cpudefense.gameElements.SevenSegmentDisplay
-import kotlin.math.max
 
 
 class WelcomeActivity : AppCompatActivity() {
@@ -185,7 +184,7 @@ class WelcomeActivity : AppCompatActivity() {
             ViewGroup.LayoutParams.WRAP_CONTENT
         )
         dialog.setCancelable(false)
-        dialog.findViewById<TextView>(R.id.question).text = resources.getText(R.string.message_of_the_day)
+        dialog.findViewById<TextView>(R.id.question).text = resources.getText(R.string.ZZ_message_of_the_day)
         val button1 = dialog.findViewById<Button>(R.id.button1)
         button1?.text = resources.getText(R.string.close)
         button1?.setOnClickListener { dialog.dismiss() }

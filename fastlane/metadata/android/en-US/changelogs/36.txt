@@ -1,0 +1,7 @@
+New functions:
+- New chip type: Resistors
+- Level 32 added
+- New heroes: Georg Ohm, Alessandro Volta
+
+Bug fixes:
+- The level indicator on the welcome screen was limited to 99.
