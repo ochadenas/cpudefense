@@ -6,7 +6,7 @@ The attackers in this game are represented as bits and bytes. To defend the cpu 
 
 The game features "heroes of the information age": persons that had great influence on the development of modern computers. They come with a short biography und provide global bonuses that make the game considerably easier.
 
-Currently, the game has 8 types of "towers". There are more than 50 levels that can be played, and 18 heroes and heroines.
+Currently, there are more than 20 heroes and heroines. The game comes with 32 predefined levels but has also an "endless" mode with randomly generated levels.
 
 
 [<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
