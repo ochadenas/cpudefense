@@ -208,9 +208,10 @@ class Network(val theGame: Game, x: Int, y: Int): GameElement() {
         return linkId
     }
 
-    fun createTrack(linkIdents: List<Int>, isCircle: Boolean): Track
+    fun createTrack(ident: Int, linkIdents: List<Int>, isCircle: Boolean): Track
     {
         var track = Track(this)
+        track.data.ident = ident
         track.data.linkIdents = linkIdents
         track.data.isCircle = isCircle
         linkIdents.forEach {ident ->

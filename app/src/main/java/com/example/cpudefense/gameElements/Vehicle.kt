@@ -7,9 +7,13 @@ import android.graphics.Rect
 import com.example.cpudefense.networkmap.*
 import com.example.cpudefense.utils.setCenter
 
-open class Vehicle(val network: Network): GameElement() {
+open class Vehicle(val network: Network): GameElement()
+/** generic class that represents any vehicle moving on a network.
+ * As a special case, the attackers moving on an electric circuit are derived from this class.
+ */
+{
 
-    enum class State { ACTIVE, DISAPPEARING, GONE}
+    enum class State { ACTIVE, GONE}
 
     data class Data
         (
@@ -43,7 +47,7 @@ open class Vehicle(val network: Network): GameElement() {
         endNodeId = -1,
         trackId = -1,
         sizeOnScreenInDp = 0.0f,
-        state = Vehicle.State.ACTIVE,
+        state = State.ACTIVE,
     )
 
     var posOnGrid: Coord? = null

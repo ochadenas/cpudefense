@@ -313,7 +313,7 @@ class Stage(var theGame: Game) {
              * @param linkIdents List of the link idents in the track
              * */
     {
-        val track = network.createTrack(linkIdents, false)
+        val track = network.createTrack(ident, linkIdents, false)
         tracks[ident] = track
     }
     

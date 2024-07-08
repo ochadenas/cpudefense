@@ -35,16 +35,16 @@ open class Attacker(network: Network, representation: Representation = Represent
     private var numberBitmap: Bitmap = Bitmap.createBitmap(100, 32, Bitmap.Config.ARGB_8888)
     var actualRect = Rect()
     private var oldNumber: ULong = 0U
-    var oldNumberBitmap: Bitmap? = null
+    private var oldNumberBitmap: Bitmap? = null
     var immuneTo: Chip? = null
     var immuneToAll = false
     var animationCount = 0
-    val animationCountMax = 8
+    private val animationCountMax = 8
     private var baseNumberFontSize = 24f
-    var numberFontSize = baseNumberFontSize  // must be scaled
+    private var numberFontSize = baseNumberFontSize  // must be scaled
     var displacement = Pair(Random.nextInt(5)-1, Random.nextInt(7)-2) // small shift in display to avoid over-crowding on the screen
     private val paintBitmap = Paint()
-    var scale: Float = 1.0f
+    private var scale: Float = 1.0f
 
     init {
         this.data.speed = speed
@@ -392,8 +392,11 @@ open class Attacker(network: Network, representation: Representation = Represent
             attacker.data = data.vehicle
             attacker.attackerData = data
             attacker.onTrack = stage.tracks[data.vehicle.trackId]
-            attacker.setOntoLink(stage.network.links[data.vehicle.linkId], stage.chips[data.vehicle.startNodeId])
-            // TODO : distancefromlastnode ist hier immer 0! das ist ein Fehelr!
+            val link = stage.network.links[data.vehicle.linkId]
+            link?.let {
+                attacker.setOntoLink(it, stage.chips[data.vehicle.startNodeId])
+                attacker.setCurrentDistanceOnLink(it)
+            }
             return attacker
         }
     }
