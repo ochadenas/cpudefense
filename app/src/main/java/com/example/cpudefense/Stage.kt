@@ -154,6 +154,7 @@ class Stage(var theGame: Game) {
             for ((id, chipData) in stage.data.chips)
             {
                 val chip = Chip.createFromData(stage.network, chipData)
+                chip.data.ident = id
                 stage.network.addNode(chip, id)
                 stage.chips[id] = chip
             }
