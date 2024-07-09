@@ -177,6 +177,7 @@ class Stage(var theGame: Game) {
         fun createStageFromData(game: Game, stageData: Data): Stage
         {
             val stage = Stage(game)
+            stage.data.ident = stageData.ident
             fillEmptyStageWithData(stage, stageData)
             for (waveData in stage.data.waves)
             {

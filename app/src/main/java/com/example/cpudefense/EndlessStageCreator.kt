@@ -160,7 +160,7 @@ class EndlessStageCreator(val stage: Stage)
             val attackerStrength = (Attacker.powerOfTwo[strength] ?: 1048576u).toInt()
             val attackerSpeed = (16 + strength) * 0.06f
             val attackerFrequency = (8 + strength) * 0.006f
-            val coins = if (Random.nextFloat()>0.92) 1 else 0
+            val coins = if (Random.nextFloat()>0.02) 1 else 0
             stage.createWave(attackerCount, attackerStrength, attackerFrequency, attackerSpeed, coins = coins)
         }
         stage.data.maxWaves = stage.waves.size
