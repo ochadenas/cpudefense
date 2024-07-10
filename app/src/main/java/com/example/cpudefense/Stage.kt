@@ -345,12 +345,6 @@ class Stage(var theGame: Game) {
         createWave(attackerCount, attackerStrength, attackerFrequency, attackerSpeed, coins, Attacker.Representation.HEX)
     }
 
-    private fun createAttacker(data: Attacker.Data)
-    {
-        val attacker = Attacker.createFromData(this, data)
-        network.addVehicle(attacker)
-    }
-
     fun difficultyOfObstacles(): Double
     {
         var sumOfObstacles = 0.0

@@ -393,6 +393,8 @@ open class Attacker(network: Network, representation: Representation = Represent
             attacker.attackerData = data
             attacker.onTrack = stage.tracks[data.vehicle.trackId]
             val link = stage.network.links[data.vehicle.linkId]
+            link?.node1?.data?.ident
+            link?.node2?.data?.ident
             link?.let {
                 attacker.setOntoLink(it, stage.chips[data.vehicle.startNodeId])
                 attacker.setCurrentDistanceOnLink(it)
