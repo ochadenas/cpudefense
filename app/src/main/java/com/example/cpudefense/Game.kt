@@ -226,10 +226,10 @@ class Game(val gameActivity: MainGameActivity) {
         summaryPerEndlessLevel = persistency.loadLevelSummaries(SERIES_ENDLESS)
         // persistency.loadState(this)
         stageData?.let {
+            currentStage = it.ident
             currentlyActiveStage = Stage.createStageFromData(this, it)
         }
         currentlyActiveStage?.let {
-            currentStage = it.data.ident
             it.network.validateViewport()
             viewport.setGridSize(it.sizeX, it.sizeY)
         }
