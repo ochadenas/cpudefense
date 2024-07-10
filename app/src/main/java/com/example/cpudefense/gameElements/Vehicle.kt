@@ -105,7 +105,7 @@ open class Vehicle(val network: Network): GameElement()
         if (link == null)
             return
         if (link.node2 == node) {
-            startNode = node
+            startNode = link.node2
             endNode = link.node1
         }
         else

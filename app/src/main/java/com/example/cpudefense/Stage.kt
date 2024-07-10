@@ -166,6 +166,7 @@ class Stage(var theGame: Game) {
             for ((id, trackData) in stage.data.tracks)
             {
                 val track = Track.createFromData(stage, trackData)
+                track.data.ident = id  // correction code for a bug in versions <= 1.36
                 stage.tracks[id] = track
             }
             // set summary and available coins
