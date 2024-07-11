@@ -33,7 +33,7 @@ open class Vehicle(val network: Network): GameElement()
         var trackId: Int,
         var sizeOnScreenInDp: Float,
         /** the state of the vehicle determines whether it is to be considered active by the network */
-        var state: Vehicle.State,
+        var state: State,
         )
 
     var data = Data(
@@ -87,9 +87,9 @@ open class Vehicle(val network: Network): GameElement()
     override fun display(canvas: Canvas, viewport: Viewport)
     {
         posOnGrid?.let {
-            var actualRect = Rect(0, 0, 20, 20)
+            val actualRect = Rect(0, 0, 20, 20)
             actualRect.setCenter(viewport.gridToViewport(it))
-            var paint = Paint()
+            val paint = Paint()
             paint.color = Color.RED
             paint.style = Paint.Style.FILL
             canvas.drawRect(actualRect, paint)

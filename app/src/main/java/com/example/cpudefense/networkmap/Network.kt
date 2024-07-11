@@ -34,25 +34,8 @@ class Network(val theGame: Game, x: Int, y: Int): GameElement() {
 
     enum class Dir { HORIZONTAL, VERTICAL, DIAGONAL, REVERSE_DIAGONAL, UNDEFINED }
 
-    fun provideData(): Data
-    /** serializes the network into a 'data' structure that can be stored as string. */
-    {
-        nodes.forEach { (key, value) -> data.nodes[key] = value.data }
-        links.forEach { (key, value) -> data.links[key] = value.data }
-        return data
-    }
-
-    fun loadStateFromData(data: Data)
-    {
-
-    }
-
     companion object {
         const val minVehicleSpeed = Game.minAttackerSpeed
-        fun createNetworkFromData(game: Game, data: Data): Network {
-
-            return Network(game, data.gridSizeX, data.gridSizeY)
-        }
     }
 
     fun distanceBetweenGridPoints(): Pair<Int, Int>?
@@ -104,7 +87,7 @@ class Network(val theGame: Game, x: Int, y: Int): GameElement() {
     override fun display(canvas: Canvas, viewport: Viewport)
     {
         // if viewport is not valid, try to validate it
-        if (viewport.isValid == false && validateViewport() == false)
+        if (!viewport.isValid && !validateViewport())
             return
         displayNetwork(canvas, viewport)
         for (obj in nodes.values)
@@ -134,20 +117,6 @@ class Network(val theGame: Game, x: Int, y: Int): GameElement() {
         if (!this::networkImage.isInitialized)
             recreateNetworkImage(viewport)
         canvas.drawBitmap(this.networkImage, null, viewport.screen, paint)
-    }
-
-    private fun displayFrame(canvas: Canvas, viewport: Viewport)
-            /** draws an outline around the network area, e.g. for testing purposes.
-             */
-    {
-        val cornerTopLeft = viewport.gridToViewport(Coord(0, 0))
-        val cornerBottomRight = viewport.gridToViewport(Coord(data.gridSizeX, data.gridSizeY))
-        val actualRect = Rect(cornerTopLeft.first, cornerTopLeft.second, cornerBottomRight.first, cornerBottomRight.second)
-        val paint = Paint()
-        paint.color = Color.WHITE
-        paint.style = Paint.Style.STROKE
-        paint.strokeWidth = 2f
-        canvas.drawRect(actualRect, paint)
     }
 
     fun recreateNetworkImage(viewport: Viewport)
@@ -187,16 +156,6 @@ class Network(val theGame: Game, x: Int, y: Int): GameElement() {
         return nodeId
     }
 
-    fun createNode(gridX: Int, gridY: Int, ident: Int = -1): Node?
-    /** creates a node at the given grid position */
-    {
-        if (gridX<=0 || gridX>=data.gridSizeX || gridY<=0 || gridY>data.gridSizeY)
-            return null
-        val node = Node(this, gridX.toFloat(), gridY.toFloat())
-        addNode(node, ident)
-        return node
-    }
-
     fun addLink(link: Link?, ident: Int = -1): Int
             /**
              * @param ident If no ident is given, a new one is created.
@@ -210,12 +169,12 @@ class Network(val theGame: Game, x: Int, y: Int): GameElement() {
 
     fun createTrack(ident: Int, linkIdents: List<Int>, isCircle: Boolean): Track
     {
-        var track = Track(this)
+        val track = Track(this)
         track.data.ident = ident
         track.data.linkIdents = linkIdents
         track.data.isCircle = isCircle
-        linkIdents.forEach {ident ->
-            links[ident]?.let {
+        linkIdents.forEach {id ->
+            links[id]?.let {
                 track.links.add(it)
                 it.usageCount += 1
             }

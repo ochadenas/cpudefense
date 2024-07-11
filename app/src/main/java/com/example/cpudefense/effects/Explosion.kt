@@ -3,17 +3,17 @@ package com.example.cpudefense.effects
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Rect
-import com.example.cpudefense.Game
 import com.example.cpudefense.utils.setCenter
 import java.util.concurrent.CopyOnWriteArrayList
 import kotlin.random.Random
 
-class Spark(var posX: Float, var posY: Float, var vX: Float, var vY: Float,
+class Spark(
+    private var posX: Float, private var posY: Float, private var vX: Float, private var vY: Float,
     val color: Int) {
 
     var size = Random.nextInt(4) + 4
-    var maxAge = 64 + Random.nextInt(128)
-    var age = 0
+    private var maxAge = 64 + Random.nextInt(128)
+    private var age = 0
     val paint = Paint()
     var rect = Rect(0, 0, size, size)
 
@@ -37,9 +37,9 @@ class Spark(var posX: Float, var posY: Float, var vX: Float, var vY: Float,
     }
 }
 
-class Explosion(game: Game, posOnScreen: Pair<Int, Int>,
-                var primaryColor: Int, var secondaryColor: Int) {
-    var sparks = CopyOnWriteArrayList<Spark>()
+class Explosion(posOnScreen: Pair<Int, Int>,
+                primaryColor: Int, secondaryColor: Int) {
+    private var sparks = CopyOnWriteArrayList<Spark>()
 
     init {
         sparks.clear()

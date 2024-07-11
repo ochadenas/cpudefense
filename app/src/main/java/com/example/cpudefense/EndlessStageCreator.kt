@@ -17,7 +17,7 @@ import kotlin.random.Random
 
 class EndlessStageCreator(val stage: Stage)
 /**
- * This class provides methods to generate an aritrary number of random stage objects.
+ * This class provides methods to generate an arbitrary number of random stage objects.
  * Like StageCatalog, it is not meant to be instantiated.
  */
 {
@@ -166,26 +166,7 @@ class EndlessStageCreator(val stage: Stage)
         stage.data.maxWaves = stage.waves.size
     }
 
-    /*
-    fun createTrack(startSector: Sector, ident: Int, entries: List<Chip>, exits: List<Chip>)
-    /** creates a random Track object in the Stage with the given ident
-     * starting on startSector
-     * @param entries List of nodes that can be used as entry points
-     * @param exits List of nodes that can be used as exit points
-     */
-    {
-        var sectorPath = createPath(startSector)
-        var path = mutableListOf<Chip>()
-        sectorPath?.forEach() {
-            path += it.makePath()
-        }
-        var track = makeTrackFromPath(stage, path, entries[0], exits[0])
-        stage.createTrack(track, ident)
-    }
-
-     */
-    
-    fun createPath(firstSector: Sector): Path?
+    private fun createPath(firstSector: Sector): Path?
     /** tries to find a path to an exit sector.
      * @param firstSector Start of path
      * @return list of sectors, or null if no path is found */
@@ -195,7 +176,7 @@ class EndlessStageCreator(val stage: Stage)
         return null
     }
 
-    fun pathToExit(firstSector: Sector): Path?
+    private fun pathToExit(firstSector: Sector): Path?
     /** create a random path of sectors, starting with firstSector.
      * @return a list of sectors ending with an "exit" sector, or null if
      * the path does not reach an exit sector */
@@ -216,13 +197,13 @@ class EndlessStageCreator(val stage: Stage)
         return null
     }
 
-    fun getMask(link: Link? = null): Int
+    private fun getMask(link: Link? = null): Int
     /** returns a random value for the link mask */
     {
         return 0x06
     }
 
-    fun setMask(link: Link?)
+    private fun setMask(link: Link?)
     {
         link?.let {
             when (link.usageCount) {
@@ -235,19 +216,19 @@ class EndlessStageCreator(val stage: Stage)
         }
     }
 
-    fun getByCoordinate(coord: SectorCoord): Sector?
+    private fun getByCoordinate(coord: SectorCoord): Sector?
     {
         return sectors.find { sec -> sec.ident.isEqual(coord) }
     }
 
-    fun getNeighbour(sector: Sector, direction: Direction): Sector?
+    private fun getNeighbour(sector: Sector, direction: Direction): Sector?
     /** returns the sector in the indicated direction, or null if
      * there is no such direction
      */
     {
         return getByCoordinate(sector.ident.plus(direction))
     }
-    fun getRandomNeighbour(thisSector: Sector, exclude: MutableList<Sector>, allowEntries: Boolean = false): Sector?
+    private fun getRandomNeighbour(thisSector: Sector, exclude: MutableList<Sector>, allowEntries: Boolean = false): Sector?
     /** returns a random neighbour of this sector that is not already
      * included in the list
      * @param allowEntries: whether to avoid entries as possible neighbour (false) or allow them (true) */
@@ -270,7 +251,7 @@ class EndlessStageCreator(val stage: Stage)
         return null
     }
 
-    fun linkIdent(node1: Chip, node2: Chip): Int
+    private fun linkIdent(node1: Chip, node2: Chip): Int
     /** @returns a unique ident for the connection between node1 and node2 */
     {
         return "%02d%02d".format(node1.data.ident, node2.data.ident).toInt()
@@ -293,7 +274,7 @@ class EndlessStageCreator(val stage: Stage)
         return linkList
     }
 
-    class SectorCoord(var horizontal: Int, var vertical: Int)
+    class SectorCoord(private var horizontal: Int, var vertical: Int)
     /** coordinate of a sector, consisting of horizontal and vertical component */
     {
         fun isEqual (other: SectorCoord?): Boolean
@@ -317,7 +298,6 @@ class EndlessStageCreator(val stage: Stage)
                 Direction.DOWN -> SectorCoord(0, 1)
                 Direction.LEFT -> SectorCoord(-1, 0)
                 Direction.RIGHT -> SectorCoord(1, 0)
-                // Direction.DOWNLEFT -> SectorCoord(-1, 1)
             }
         }
 
@@ -365,7 +345,7 @@ class EndlessStageCreator(val stage: Stage)
         var exitsUsed = mutableSetOf<Direction>()
         var entriesUsed = mutableSetOf<Direction>()
 
-        fun selectModel(): Model
+        private fun selectModel(): Model
                 /** returns a sector "model" based on which entries/exits are already used,
                  * and which are permitted by the model.
                  *
@@ -389,7 +369,7 @@ class EndlessStageCreator(val stage: Stage)
                 SectorType.ENTRY -> nodes.add(stage.createChip(area.centerX(), area.centerY(), type = Chip.ChipType.ENTRY, ident = nextIdent()))
                 SectorType.EXIT -> nodes.add(stage.createChip(area.centerX(), area.centerY(), type = Chip.ChipType.CPU, ident = nextIdent()))
                 SectorType.NORMAL -> {
-                    var model = selectModel()
+                    val model = selectModel()
                     model.createNodes.invoke(stage, area)
                 }
             }
@@ -397,8 +377,8 @@ class EndlessStageCreator(val stage: Stage)
 
         inner class Model(val number: Int) {
             var createNodes: (Stage, Rect) -> Unit
-            var possibleEntries = Direction.values()
-            var possibleExits = Direction.values()
+            private var possibleEntries = Direction.values()
+            private var possibleExits = Direction.values()
 
             init {
                 when (number) {

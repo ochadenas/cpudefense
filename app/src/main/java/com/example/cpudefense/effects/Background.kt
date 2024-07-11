@@ -88,7 +88,7 @@ class Background(val game: Game)
     fun choose(stageIdent: Stage.Identifier?, opacity: Float = 0.6f)
             /** chooses the background to use,
              * and selects a random part of it
-             * @param number selects one of the available backgrounds
+             * @param stageIdent Series and number of the current stage
              * @param opacity sets the opacity, from 0.0 to 1.0
              */
     {

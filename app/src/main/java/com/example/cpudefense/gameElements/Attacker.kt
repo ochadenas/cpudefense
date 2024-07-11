@@ -52,7 +52,7 @@ open class Attacker(network: Network, representation: Representation = Represent
             calculateNumberOfDigits()
         numberFontSize = baseNumberFontSize * this.network.theGame.resources.displayMetrics.scaledDensity *
                 if (this.network.theGame.gameActivity.settings.configUseLargeButtons) 1.5f else 1.0f
-        makeNumber(this)
+        // makeNumber(this)
     }
 
     fun copy(): Attacker
@@ -69,6 +69,7 @@ open class Attacker(network: Network, representation: Representation = Represent
         newAttacker.endNode= endNode
         newAttacker.distanceFromLastNode = distanceFromLastNode
         newAttacker.distanceToNextNode = distanceToNextNode
+        makeNumber(newAttacker)
         return newAttacker
     }
 
@@ -348,15 +349,16 @@ open class Attacker(network: Network, representation: Representation = Represent
 
 
     companion object {
-        fun makeNumber(attacker: Attacker): String
+        fun makeNumber(attacker: Attacker)
         {
+            if (attacker.attackerData.isCoin)
+                return
             val text: String
             if (attacker.attackerData.representation == Representation.BINARY)
                 text = attacker.attackerData.number.toString(radix=2).padStart(attacker.attackerData.binaryDigits, '0')
             else
                 text = "x" + attacker.attackerData.number.toString(radix=16).uppercase().padStart(attacker.attackerData.hexDigits, '0')
             attacker.createBitmap(text)
-            return text
         }
 
         fun log16(v: Float): Float
@@ -397,6 +399,7 @@ open class Attacker(network: Network, representation: Representation = Represent
                 attacker.setOntoLink(it, stage.chips[data.vehicle.startNodeId])
                 attacker.setCurrentDistanceOnLink(it)
             }
+            makeNumber(attacker)
             return attacker
         }
     }

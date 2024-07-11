@@ -3,7 +3,10 @@ package com.example.cpudefense.effects
 import com.example.cpudefense.Game
 import java.lang.Math.*
 
-class Mover(game: Game, thing: Movable, fromX: Int, fromY: Int, toX: Int, toY: Int, type: Type = Type.STRAIGHT, speed: Speed = Speed.FAST, wait: Int = 0)
+class Mover(
+    private val game: Game, private val thing: Movable,
+    fromX: Int, fromY: Int, toX: Int, toY: Int,
+    var type: Type = Type.STRAIGHT, speed: Speed = Speed.FAST, wait: Int = 0)
 /**
  * Auxiliary object that handles moving of game elements
  * by calculating their positions.
@@ -14,9 +17,6 @@ class Mover(game: Game, thing: Movable, fromX: Int, fromY: Int, toX: Int, toY: I
 {
     var x = 0f // current position
     var y = 0f
-
-    private val theGame = game
-    private val thing = thing
 
     private var startX = fromX // starting point
     private var startY = fromY
@@ -34,7 +34,6 @@ class Mover(game: Game, thing: Movable, fromX: Int, fromY: Int, toX: Int, toY: I
     private val twoPi = 2.0f * PI
 
     enum class Type { NONE, APPEAR, STRAIGHT, BOUNCE, REPEAT, CIRCLE }
-    var type = type
 
     enum class Speed { FAST, SLOW, MODERATE }
 
@@ -45,7 +44,6 @@ class Mover(game: Game, thing: Movable, fromX: Int, fromY: Int, toX: Int, toY: I
             Speed.FAST -> { distPerStep = 30 }
             Speed.MODERATE -> { distPerStep = 15 }
             Speed.SLOW -> { distPerStep = 5 }
-            else -> { distPerStep = 10 }
         }
         val deltaX = (endX - startX).toFloat()
         val deltaY = (endY - startY).toFloat()
@@ -60,7 +58,7 @@ class Mover(game: Game, thing: Movable, fromX: Int, fromY: Int, toX: Int, toY: I
             }
             Type.STRAIGHT -> {
                 // determine dX and dY (movement per step) and number of steps
-                var dist = sqrt((deltaX * deltaX + deltaY * deltaY).toDouble())
+                val dist = kotlin.math.sqrt((deltaX * deltaX + deltaY * deltaY).toDouble())
                 steps = (dist / distPerStep).toInt()
                 if (steps < 5) {
                     steps = 5
@@ -69,7 +67,7 @@ class Mover(game: Game, thing: Movable, fromX: Int, fromY: Int, toX: Int, toY: I
                 dY = deltaY / steps
             }
             Type.REPEAT -> {
-                var dist = sqrt((deltaX * deltaX + deltaY * deltaY).toDouble())
+                val dist = kotlin.math.sqrt((deltaX * deltaX + deltaY * deltaY).toDouble())
                 steps = (dist / distPerStep).toInt()
                 if (steps < 5) {
                     steps = 5
@@ -90,10 +88,10 @@ class Mover(game: Game, thing: Movable, fromX: Int, fromY: Int, toX: Int, toY: I
             Type.APPEAR -> {}
         }
         reset()
-        theGame.movers.add(this) // make sure we are in the list so that we can be called during update
+        this.game.movers.add(this) // make sure we are in the list so that we can be called during update
     }
 
-    fun endMove()
+    private fun endMove()
     {
         x = endX.toFloat()
         y = endY.toFloat()
@@ -102,7 +100,7 @@ class Mover(game: Game, thing: Movable, fromX: Int, fromY: Int, toX: Int, toY: I
         thing.moveDone()
     }
 
-    fun reset(): Unit
+    private fun reset()
             /**
              * resets the movement to the starting position
              */
@@ -112,7 +110,7 @@ class Mover(game: Game, thing: Movable, fromX: Int, fromY: Int, toX: Int, toY: I
         count = steps
     }
 
-    fun addDelta()
+    private fun addDelta()
     {
         x += dX
         y += dY
@@ -144,7 +142,7 @@ class Mover(game: Game, thing: Movable, fromX: Int, fromY: Int, toX: Int, toY: I
             Type.CIRCLE -> {
                 val dW = (twoPi / steps).toFloat()
                 angle += dW
-                thing.setCenter(startX+(sin(angle) * radiusX).toInt(), startY+(cos(angle) * radiusY).toInt())
+                thing.setCenter(startX+(kotlin.math.sin(angle) * radiusX).toInt(), startY+(kotlin.math.cos(angle) * radiusY).toInt())
             }
             Type.BOUNCE -> {
                 val gravity = 0.5f // measure for the acceleration to the right

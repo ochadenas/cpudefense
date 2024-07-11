@@ -18,7 +18,7 @@ class Flipper(val theGame: Game, private val thing: Flippable,
  */
 {
     private var bitmapRecto = thing.provideBitmap()
-    private lateinit var bitmapVerso: Bitmap
+    private var bitmapVerso: Bitmap
     private var width = bitmapRecto.width
     private var height = bitmapRecto.height
     private var actualBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
@@ -27,7 +27,7 @@ class Flipper(val theGame: Game, private val thing: Flippable,
     enum class Type { HORIZONTAL, VERTICAL, NONE }
     enum class Speed { FAST, MEDIUM, SLOW, VERY_SLOW }
 
-    var angle = 0.0  // turning angle, from 0 to 360
+    private var angle = 0.0  // turning angle, from 0 to 360
 
     init {
         when (type) {
@@ -56,21 +56,21 @@ class Flipper(val theGame: Game, private val thing: Flippable,
         }
         val dimX = (cos(Math.toRadians(angle)) * width).toInt()
         actualBitmap.clear()
-        var canvas = Canvas(actualBitmap)
+        val canvas = Canvas(actualBitmap)
         if (dimX < 0)
         {
-            var targetRect = Rect((width + dimX) / 2, 0, (width - dimX) / 2, height)
+            val targetRect = Rect((width + dimX) / 2, 0, (width - dimX) / 2, height)
             canvas.drawBitmap(bitmapVerso, null, targetRect, paint)
         }
         else {
-            var targetRect = Rect((width - dimX) / 2, 0, (width + dimX) / 2, height)
+            val targetRect = Rect((width - dimX) / 2, 0, (width + dimX) / 2, height)
             canvas.drawBitmap(bitmapRecto, null, targetRect, paint)
         }
         thing.setBitmap(actualBitmap.copy(actualBitmap.config, true))
         return
     }
 
-    fun flipDone()
+    private fun flipDone()
     {
         type = Type.NONE
         actualBitmap = bitmapRecto.copy(bitmapRecto.config, true)

@@ -107,7 +107,7 @@ class Intermezzo(var game: Game): GameElement(), Fadable {
         }
 
             game.gameActivity.theGameView.theEffects?.explosions?.add(
-                Explosion(game, Pair(Random.nextInt(myArea.width()), Random.nextInt(myArea.height()*8/10)),
+                Explosion(Pair(Random.nextInt(myArea.width()), Random.nextInt(myArea.height()*8/10)),
                     colour.first, colour.second))
     }
 

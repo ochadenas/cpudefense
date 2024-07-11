@@ -13,7 +13,7 @@ import kotlin.random.Random
 
 class Stage(var theGame: Game) {
 
-    class Identifier(var series: Int =1, var number: Int =0)
+    class Identifier(var series: Int = Game.SERIES_NORMAL, var number: Int =0)
     /** A stage is identified by the combination of series (1 to 3) and the level number. */
     {
         fun next(): Identifier
@@ -55,7 +55,7 @@ class Stage(var theGame: Game) {
 
 
     data class Data (
-        var ident: Identifier = Identifier(series=1, number=0),
+        var ident: Identifier = Identifier(series=Game.SERIES_NORMAL, number=0),
         var type: Type = Type.REGULAR,
         var gridSizeX: Int = 1,
         var gridSizeY: Int = 1,
@@ -205,6 +205,7 @@ class Stage(var theGame: Game) {
             val strength = Random.nextFloat()*(maxNumber+1) * theGame.heroModifier(Hero.Type.DECREASE_ATT_STRENGTH)
             Attacker(network, representation, strength.toULong(), actualSpeed)
         }
+        Attacker.makeNumber(attacker)
         network.addVehicle(attacker)
 
         if (tracks.size > 0)
@@ -328,7 +329,7 @@ class Stage(var theGame: Game) {
         var strength = attackerStrength
         var frequency = attackerFrequency
         var speed = attackerSpeed
-        if (series==2)  // modifications in strength for turbo mode
+        if (series==Game.SERIES_TURBO)  // modifications in strength for turbo mode
         {
             count = (attackerCount * 1.5f).toInt()
             strength = (attackerStrength * ( 1 + waves.size*waves.size*0.2f + waves.size ) + 4).toInt()

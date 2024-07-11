@@ -3,7 +3,6 @@ package com.example.cpudefense.effects
 import android.graphics.Canvas
 import com.example.cpudefense.Game
 import com.example.cpudefense.R
-import com.example.cpudefense.gameElements.Attacker
 import java.util.concurrent.CopyOnWriteArrayList
 
 class Effects(var theGame: Game) {
@@ -13,8 +12,7 @@ class Effects(var theGame: Game) {
     fun explode(thing: Explodable)
     {
         val explosionColour = thing.explosionColour ?: theGame.resources.getColor(R.color.attackers_glow_bin)
-        explosions.add(Explosion(theGame, thing.getPositionOnScreen(),
-        theGame.resources.getColor(R.color.attackers_foreground_bin), explosionColour ))
+        explosions.add(Explosion(thing.getPositionOnScreen(), theGame.resources.getColor(R.color.attackers_foreground_bin), explosionColour ))
         thing.remove()
     }
 
