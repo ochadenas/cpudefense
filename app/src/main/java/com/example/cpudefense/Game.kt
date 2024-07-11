@@ -189,11 +189,6 @@ class Game(val gameActivity: MainGameActivity) {
             heroesByMode[LevelMode.ENDLESS] = persistency.loadHeroes(this, LevelMode.ENDLESS)
             correctNumberOfCoins()
 
-            /* debug code to reset endless levels */
-            // summaryPerEndlessLevel.values.forEach() { it.coinsGot = 0; it.coinsAvailable = it.coinsMaxAvailable }
-            // persistency.saveState(this)
-
-
             // calculate coins
             persistency.loadCoins(this)
             if (purseOfCoins[LevelMode.BASIC]?.initialized == false || workInProgress)
@@ -529,14 +524,14 @@ class Game(val gameActivity: MainGameActivity) {
         speedControlPanel.resetButtons()
         scoreBoard.recreateBitmap()
         viewport.reset()
+        if (!gameActivity.settings.configDisableBackground)
+            background?.choose(level)
         Persistency(gameActivity).saveState(this)
 
         viewport.setGridSize(nextStage.network.data.gridSizeX, nextStage.network.data.gridSizeY)
         state.phase = GamePhase.RUNNING
         currentlyActiveWave = nextStage.nextWave()
         currentlyActiveStage = nextStage
-        if (!gameActivity.settings.configDisableBackground)
-            background?.choose(level)
         takeLevelSnapshot()
     }
 

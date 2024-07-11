@@ -396,13 +396,6 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
             canvas.drawRect(rect, paintBackground)
         }
 
-        /* draw outline */
-        paintOutline.strokeWidth =
-            if (chipData.type == ChipType.MEM && isActivated() && !isInCooldown()) 3f * outlineWidth
-            else
-                outlineWidth
-        canvas.drawRect(rect, paintOutline)
-
         /* special treatment for chips that store values */
         if (chipData.type in listOf(ChipType.MEM, ChipType.ACC))
             displayInternalStorage(canvas, rect)
@@ -411,6 +404,14 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
         if (bitmap == null)
             bitmap = createBitmapForType()
         bitmap?.let { canvas.drawBitmap(it, null, rect, paintBitmap) }
+
+        /* draw outline */
+        paintOutline.strokeWidth =
+            if (chipData.type == ChipType.MEM && isActivated() && !isInCooldown()) 3f * outlineWidth
+            else
+                outlineWidth
+        canvas.drawRect(rect, paintOutline)
+
     }
 
     private fun displayInternalStorage(canvas: Canvas, rect: Rect)
