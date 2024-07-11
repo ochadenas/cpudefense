@@ -75,6 +75,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
     private val paintBackground = Paint()
     private var paintLines = Paint()
     private val defaultBackgroundColor = resources.getColor(R.color.chips_background)
+    private val alternateBackgroundColor = resources.getColor(R.color.resistor_background)
 
     init {
         data.range = 2.0f
