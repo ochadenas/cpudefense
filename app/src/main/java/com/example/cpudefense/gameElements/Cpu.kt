@@ -15,7 +15,7 @@ class Cpu(network: Network, gridX: Int, gridY: Int): Chip(network, gridX, gridY)
         var hits: Int
         )
 
-    var cpuData = CpuData(hits = 0)
+    private var cpuData = CpuData(hits = 0)
     override var actualRect: Rect? = null
 
     override var bitmap: Bitmap? = null
@@ -81,7 +81,7 @@ class Cpu(network: Network, gridX: Int, gridY: Int): Chip(network, gridX, gridY)
      */
     {
         cpuData.hits++
-        theNetwork?.theGame?.removeOneLife()
+        theNetwork.theGame.removeOneLife()
     }
 
     override fun onDown(event: MotionEvent): Boolean

@@ -12,11 +12,11 @@ class Button(var game: Game, var text: String, val textSize: Float, val color: I
     var alpha = 0
     var area = Rect()
     var touchableArea = Rect() // bigger than visible area, making it easier to hit the button
-    var buttonPaint = Paint()
-    var textPaint = Paint()
+    private var buttonPaint = Paint()
+    private var textPaint = Paint()
     var background: Bitmap? = null
 
-    enum class Style { FRAME, FILLED, HPKEY}
+    enum class Style { FRAME, FILLED, HP_KEY}
 
     init {
         when (style)
@@ -35,7 +35,7 @@ class Button(var game: Game, var text: String, val textSize: Float, val color: I
                 textPaint.typeface = Typeface.MONOSPACE
                 textPaint.color = Color.BLACK
             }
-            Style.HPKEY ->
+            Style.HP_KEY ->
             {
                 background = game.hpBackgroundBitmap
                 textPaint.typeface = Typeface.DEFAULT_BOLD
@@ -52,7 +52,7 @@ class Button(var game: Game, var text: String, val textSize: Float, val color: I
         var width = area.width() + height
         if (width<preferredWidth)
             width = preferredWidth
-        if (style == Style.HPKEY)  // these buttons need more space
+        if (style == Style.HP_KEY)  // these buttons need more space
             height = (height*1.5).toInt()
         area = Rect(0,0,width,height)
         touchableArea = Rect(area).inflate(textSize.toInt())
@@ -80,7 +80,7 @@ class Button(var game: Game, var text: String, val textSize: Float, val color: I
     fun display(canvas: Canvas) {
         var stringToDisplay = text
         buttonPaint.alpha = alpha
-        if (style == Style.HPKEY) {
+        if (style == Style.HP_KEY) {
             stringToDisplay = stringToDisplay.uppercase(Locale.getDefault())
             background?.let { canvas.drawBitmap(it, null, area, buttonPaint) }
         }

@@ -2,7 +2,6 @@
 
 package com.example.cpudefense.gameElements
 
-import android.content.res.TypedArray
 import android.graphics.*
 import android.view.MotionEvent
 import com.example.cpudefense.*
@@ -49,7 +48,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
     private var heightOnScreen = 0
 
     val resources = network.theGame.resources
-    val resistorColour = arrayOf(
+    private val resistorColour = arrayOf(
         resources.getColor(R.color.resistor_0),
         resources.getColor(R.color.resistor_1),
         resources.getColor(R.color.resistor_2),
@@ -244,11 +243,11 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
         return (obstacleStrength[chipData.type] ?: 0.0) * chipData.upgradeLevel
     }
 
-    fun resistorValue(): Int
+    private fun resistorValue(): Int
     {
         if (chipData.type != ChipType.RES)
             return 0
-        var resistance = chipData.upgradeLevel * Game.resistorBaseStrength * theNetwork.theGame.heroModifier(Hero.Type.INCREASE_CHIP_RES_STRENGTH)
+        val resistance = chipData.upgradeLevel * Game.resistorBaseStrength * theNetwork.theGame.heroModifier(Hero.Type.INCREASE_CHIP_RES_STRENGTH)
         return resistance.toInt()
     }
 
@@ -650,7 +649,6 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
             val heightOfRings = rect.height()
 
             var ohm = resistorValue()
-            var firstDigit = ohm
             var lastDigit = ohm % 10
             var multiplier = 0
             for (digit in 1 .. 9)
@@ -664,9 +662,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
                 else
                     break
             }
-            firstDigit = ohm
-
-
+            val firstDigit: Int = ohm
             try {
                 // 1st ring
                 var left = leftMarginOfRings

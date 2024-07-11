@@ -15,8 +15,8 @@ class Cryptocoin(network: com.example.cpudefense.networkmap.Network, number: ULo
     Attacker(network, Representation.BINARY, number, speed), Flippable
 {
     var paint = Paint()
-    var myBitmap = this.network.theGame.currentCoinBitmap().copy(this.network.theGame.currentCoinBitmap().config, true)
-    var isCurrentlyFlipping = false
+    private var myBitmap: Bitmap = this.network.theGame.currentCoinBitmap().copy(this.network.theGame.currentCoinBitmap().config, true)
+    private var isCurrentlyFlipping = false
 
     init {
         this.attackerData.isCoin = true
@@ -30,7 +30,7 @@ class Cryptocoin(network: com.example.cpudefense.networkmap.Network, number: ULo
         canvas.drawBitmap(myBitmap, null, actualRect, paint)
     }
 
-    override val explosionColour: Int?
+    override val explosionColour: Int
         get() = if (network.theGame.currentStage.series == Game.SERIES_ENDLESS) network.theGame.resources.getColor(R.color.attackers_glow_coin_endless)
                 else network.theGame.resources.getColor(R.color.attackers_glow_coin)
 
