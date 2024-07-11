@@ -11,7 +11,7 @@ class StageCatalog
      * It is not meant to be instantiated.
      */
     companion object {
-        private val possibleChiptypesWhereObstaclesCanBePut =
+        private val possibleChipTypesWhereObstaclesCanBePut =
             setOf(Chip.ChipType.EMPTY, Chip.ChipType.ADD, Chip.ChipType.SHL, Chip.ChipType.NOP)
         fun createStage(stage: Stage, level: Stage.Identifier)
         {
@@ -77,7 +77,7 @@ class StageCatalog
             if (reducedNumberOfObstacles > 0)
                 for (i in 1..reducedNumberOfObstacles)  // set or upgrade the slots
                 {
-                    val possibleSlotsForObstacles = stage.chips.values.filter { it.chipData.type in possibleChiptypesWhereObstaclesCanBePut }
+                    val possibleSlotsForObstacles = stage.chips.values.filter { it.chipData.type in possibleChipTypesWhereObstaclesCanBePut }
                     if (possibleSlotsForObstacles.isNotEmpty())
                     {
                         val obstacleSlot = possibleSlotsForObstacles.random()
@@ -102,7 +102,7 @@ class StageCatalog
             var stageDifficulty = stage.difficultyOfObstacles()
             while (stageDifficulty < targetDifficulty)
             {
-                val possibleSlotsForObstacles = stage.chips.values.filter { it.chipData.type in possibleChiptypesWhereObstaclesCanBePut }
+                val possibleSlotsForObstacles = stage.chips.values.filter { it.chipData.type in possibleChipTypesWhereObstaclesCanBePut }
                 if (possibleSlotsForObstacles.isNotEmpty())
                 {
                     val obstacleSlot = possibleSlotsForObstacles.random()

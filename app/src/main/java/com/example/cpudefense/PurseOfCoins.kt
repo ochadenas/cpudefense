@@ -1,9 +1,6 @@
 package com.example.cpudefense
 
-import androidx.appcompat.app.AppCompatActivity
-import com.google.gson.Gson
-
-class PurseOfCoins(val game: Game, val levelMode: Game.LevelMode = Game.LevelMode.BASIC)
+class PurseOfCoins(val game: Game, private val levelMode: Game.LevelMode = Game.LevelMode.BASIC)
 /** Auxiliary object that holds the current amount of coins for a level mode
  *
  */
@@ -23,7 +20,6 @@ class PurseOfCoins(val game: Game, val levelMode: Game.LevelMode = Game.LevelMod
     var initialized: Boolean = false
 
     var contents = Contents()
-    val filename = game.resources.getString(R.string.pref_filename_savegames)
 
     fun addReward(amount: Int)
     {
@@ -50,9 +46,9 @@ class PurseOfCoins(val game: Game, val levelMode: Game.LevelMode = Game.LevelMod
         val sumRewardCoinsInEndlessMode = game.summaryPerEndlessLevel.values.sumOf { it.coinsGot }
 
         // distribute the coins in the game fairly to the modes
-        var coinsSpentOnHeroes = game.heroes.values.sumOf { it.data.coinsSpent }
-        var theoreticalAmountOfCoins = game.global.coinsTotal + coinsSpentOnHeroes
-        var totalRewardCoins = sumRewardCoinsInBasicMode + sumRewardCoinsInEndlessMode
+        val coinsSpentOnHeroes = game.heroes.values.sumOf { it.data.coinsSpent }
+        val theoreticalAmountOfCoins = game.global.coinsTotal + coinsSpentOnHeroes
+        val totalRewardCoins = sumRewardCoinsInBasicMode + sumRewardCoinsInEndlessMode
         // the difference between the (theoretical) sum of all coins and those accounted for is the number of walking coins
         var totalRunningCoins = theoreticalAmountOfCoins - totalRewardCoins
         if (totalRunningCoins<0) totalRunningCoins=0 // safety catch, should not be triggered

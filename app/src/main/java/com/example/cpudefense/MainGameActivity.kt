@@ -212,7 +212,7 @@ class MainGameActivity : Activity() {
             theGame.update()
 
             // determine whether to update the display
-            if (timeAtStartOfCycle-timeOfLastFrame > 30 && !(displayJob?.isActive == true))
+            if (timeAtStartOfCycle-timeOfLastFrame > 30 && displayJob?.isActive != true)
                 displayJob = GlobalScope.launch { display() }
             val elapsed = SystemClock.uptimeMillis() - timeAtStartOfCycle
             val wait: Long =
@@ -260,6 +260,6 @@ class MainGameActivity : Activity() {
             GameActivityStatus.PLAYING -> editor.putString("STATUS", "running")
             GameActivityStatus.BETWEEN_LEVELS -> editor.putString("STATUS", "complete")
         }
-        editor.commit()
+        editor.apply()
     }
 }

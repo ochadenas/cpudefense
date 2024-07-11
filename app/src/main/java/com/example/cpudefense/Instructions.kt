@@ -13,7 +13,7 @@ import kotlin.random.Random
 class Instructions(val game: Game, var stage: Stage.Identifier, var callback: (()->Unit)? ): Fadable {
     var alpha = 0
 
-    var funFact = if (Random.nextFloat() > 0.3)
+    private var funFact = if (Random.nextFloat() > 0.3)
         "%s\n\n%s".format(
         game.resources.getString(R.string.instr_did_you_know),
         game.resources.getStringArray(R.array.fun_fact).random())

@@ -9,6 +9,7 @@ import com.example.cpudefense.utils.setCenter
 import com.example.cpudefense.utils.shrink
 
 class ProgressNotification (theGame: Game)
+/** Class that displays a "loading 40% ..." message */
 {
     var isVisible = false
     var sizeX = 200

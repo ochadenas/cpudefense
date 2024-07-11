@@ -175,7 +175,7 @@ class WelcomeActivity : AppCompatActivity() {
         }
     }
 
-    fun showMessageOfTheDay()
+    private fun showMessageOfTheDay()
     {
         val dialog = Dialog(this)
         dialog.setContentView(R.layout.layout_dialog_message_of_the_day)

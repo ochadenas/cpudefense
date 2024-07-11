@@ -119,7 +119,7 @@ class Game(val gameActivity: MainGameActivity) {
     var levelThumbnail = HashMap<Int, Bitmap?>()  // level snapshots (common for series 1 and 2)
     var levelThumbnailEndless = HashMap<Int, Bitmap?>()  // level snapshots for series 3
     var heroes = HashMap<Hero.Type, Hero>()
-    var heroesByMode = hashMapOf<LevelMode, HashMap<Hero.Type, Hero>>(
+    var heroesByMode = hashMapOf(
         LevelMode.BASIC to HashMap<Hero.Type, Hero>(),
         LevelMode.ENDLESS to HashMap<Hero.Type, Hero>(),
     )
@@ -582,13 +582,13 @@ class Game(val gameActivity: MainGameActivity) {
                 putInt("MAXSERIES", 1)
                 putBoolean("TURBO_AVAILABLE", false)
                 putBoolean("ENDLESS_AVAILABLE", false)
-                commit()
+                apply()
             }
             if (identifier.isGreaterThan(maxStage))
             {
                 putInt("MAXSTAGE", identifier.number)
                 putInt("MAXSERIES", identifier.series)
-                commit()
+                apply()
             }
             // make advanced series available
             when (identifier.series)
@@ -611,7 +611,7 @@ class Game(val gameActivity: MainGameActivity) {
     }
     private fun calculateLives()
     {
-        var extraLives = heroModifier(Hero.Type.ADDITIONAL_LIVES)
+        val extraLives = heroModifier(Hero.Type.ADDITIONAL_LIVES)
         state.currentMaxLives = state.maxLives + extraLives.toInt()
         state.lives = state.currentMaxLives
     }
@@ -656,7 +656,7 @@ class Game(val gameActivity: MainGameActivity) {
     }
 
     fun heroModifier(type: Hero.Type): Float {
-        val hero: Hero? = currentHeroes().get(type)
+        val hero: Hero? = currentHeroes()[type]
         return hero?.getStrength() ?: Hero.getStrengthOfType(type, 0)
     }
 

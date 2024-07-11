@@ -3,11 +3,9 @@ package com.example.cpudefense
 import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
-import android.text.method.ScrollingMovementMethod
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.Switch
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
@@ -48,7 +46,7 @@ class SettingsActivity : AppCompatActivity()
             putBoolean("SHOW_FRAMERATE", findViewById<SwitchCompat>(R.id.switch_show_framerate)?.isChecked ?: false)
             putBoolean("USE_FAST_FAST_FORWARD", findViewById<SwitchCompat>(R.id.switch_fast_fast_forward)?.isChecked ?: false)
             putBoolean("KEEP_LEVELS", findViewById<SwitchCompat>(R.id.switch_keep_levels)?.isChecked ?: true)
-            commit()
+            apply()
         }
     }
 

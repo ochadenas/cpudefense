@@ -22,7 +22,7 @@ class AboutActivity : AppCompatActivity()
         textView.movementMethod = ScrollingMovementMethod()
         textView.movementMethod = LinkMovementMethod.getInstance()
         val info = packageManager.getPackageInfo(this.packageName, PackageManager.GET_ACTIVITIES)
-        val versionView: TextView = findViewById<TextView>(R.id.about_version)
+        val versionView: TextView = findViewById(R.id.about_version)
         versionView.text = getString(R.string.about_version).format(info.versionName)
     }
 
@@ -40,7 +40,7 @@ class AboutActivity : AppCompatActivity()
         catch (exception: Exception) {}  // come here if no external app can handle the request
     }
 
-    fun releasenotes(@Suppress("UNUSED_PARAMETER") v: View)
+    fun releaseNotes(@Suppress("UNUSED_PARAMETER") v: View)
     {
         try {
 

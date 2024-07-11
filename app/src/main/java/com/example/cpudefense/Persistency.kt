@@ -34,10 +34,6 @@ class Persistency(activity: Activity) {
         val level: HashMap<Int, Stage.Summary> = HashMap()
             )
 
-    data class SerializableThumbnailData (
-        val thumbnail: HashMap<Int, String> = HashMap()
-    )
-
     data class SerializableLevelData (
         val level: HashMap<Int, Stage.Data> = HashMap()
     )
@@ -79,11 +75,11 @@ class Persistency(activity: Activity) {
 
             // save level data:
             saveLevels(it)
-            editor.commit()
+            editor.apply()
 
             // save coins in purse:
             val emptyContents = PurseOfCoins.Contents()
-            var purseData = SerializablePurseContents(basic = emptyContents, endless = emptyContents)
+            val purseData = SerializablePurseContents(basic = emptyContents, endless = emptyContents)
             game.purseOfCoins[Game.LevelMode.BASIC]?.contents?.let { purse -> purseData.basic = purse }
             game.purseOfCoins[Game.LevelMode.ENDLESS]?.contents?.let { purse -> purseData.endless = purse }
             prefsSaves.edit().putString("coins", Gson().toJson(purseData)).commit()
@@ -109,7 +105,7 @@ class Persistency(activity: Activity) {
             it.heroesByMode[Game.LevelMode.ENDLESS] =  loadHeroes(it, Game.LevelMode.ENDLESS)
 
             // get state of running game
-            var json = prefs.getString("state", "none")
+            val json = prefs.getString("state", "none")
             if (json != "none") {
                 val data: SerializableStateData =
                     Gson().fromJson(json, SerializableStateData::class.java)
@@ -163,7 +159,7 @@ class Persistency(activity: Activity) {
                     else -> "thumbnail_%d".format(levelIdent.number)
                 }
                 editor.putString(key, encodedImage)
-                editor.commit()
+                editor.apply()
             }
         }
     }
