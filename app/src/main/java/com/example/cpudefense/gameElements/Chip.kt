@@ -75,7 +75,6 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
     private val paintBackground = Paint()
     private var paintLines = Paint()
     private val defaultBackgroundColor = resources.getColor(R.color.chips_background)
-    private val alternateBackgroundColor = resources.getColor(R.color.resistor_background)
 
     init {
         data.range = 2.0f
@@ -503,7 +502,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
                 val additionalDuration = Game.resistorBaseDuration / attacker.data.speedModifier * theNetwork.theGame.heroModifier(Hero.Type.INCREASE_CHIP_RES_DURATION)
                 attacker.data.speedModificationTimer += additionalDuration
                 attacker.immuneTo = this
-                Attacker.makeNumber(attacker)
+                attacker.makeNumber()
             }
             else -> {
                 if (attacker.onShot(chipData.type, chipData.upgradeLevel))
@@ -554,8 +553,8 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
             }
         }
         newAttacker.attackerData.number -= attacker.attackerData.number
-        Attacker.makeNumber(attacker)
-        Attacker.makeNumber(newAttacker)
+        attacker.makeNumber()
+        attacker.makeNumber()
         return newAttacker
     }
 

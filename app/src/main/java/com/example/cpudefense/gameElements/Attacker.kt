@@ -52,7 +52,6 @@ open class Attacker(network: Network, representation: Representation = Represent
             calculateNumberOfDigits()
         numberFontSize = baseNumberFontSize * this.network.theGame.resources.displayMetrics.scaledDensity *
                 if (this.network.theGame.gameActivity.settings.configUseLargeButtons) 1.5f else 1.0f
-        // makeNumber(this)
     }
 
     fun copy(): Attacker
@@ -69,7 +68,7 @@ open class Attacker(network: Network, representation: Representation = Represent
         newAttacker.endNode= endNode
         newAttacker.distanceFromLastNode = distanceFromLastNode
         newAttacker.distanceToNextNode = distanceToNextNode
-        makeNumber(newAttacker)
+        makeNumber()
         return newAttacker
     }
 
@@ -123,7 +122,7 @@ open class Attacker(network: Network, representation: Representation = Represent
         attackerData.number = newNumber
         if (newNumber>oldNumber)
             calculateNumberOfDigits()
-        makeNumber(this)
+        makeNumber()
     }
 
     private fun invertNumber()
@@ -226,6 +225,18 @@ open class Attacker(network: Network, representation: Representation = Represent
         }
     }
 
+    fun makeNumber()
+    {
+        if (attackerData.isCoin)
+            return
+        val text: String
+        if (attackerData.representation == Representation.BINARY)
+            text = attackerData.number.toString(radix=2).padStart(attackerData.binaryDigits, '0')
+        else
+            text = "x" + attackerData.number.toString(radix=16).uppercase().padStart(attackerData.hexDigits, '0')
+        createBitmap(text)
+    }
+
     fun createBitmap(text: String)
     {
         // define colours
@@ -293,7 +304,7 @@ open class Attacker(network: Network, representation: Representation = Represent
             {
                 data.speedModificationTimer = 0.0f
                 data.speedModifier = 0.0f
-                makeNumber(this)
+                makeNumber()
             }
         }
 
@@ -348,18 +359,8 @@ open class Attacker(network: Network, representation: Representation = Represent
     }
 
 
-    companion object {
-        fun makeNumber(attacker: Attacker)
-        {
-            if (attacker.attackerData.isCoin)
-                return
-            val text: String
-            if (attacker.attackerData.representation == Representation.BINARY)
-                text = attacker.attackerData.number.toString(radix=2).padStart(attacker.attackerData.binaryDigits, '0')
-            else
-                text = "x" + attacker.attackerData.number.toString(radix=16).uppercase().padStart(attacker.attackerData.hexDigits, '0')
-            attacker.createBitmap(text)
-        }
+    companion object
+    {
 
         fun log16(v: Float): Float
         {
@@ -399,7 +400,7 @@ open class Attacker(network: Network, representation: Representation = Represent
                 attacker.setOntoLink(it, stage.chips[data.vehicle.startNodeId])
                 attacker.setCurrentDistanceOnLink(it)
             }
-            makeNumber(attacker)
+            attacker.makeNumber()
             return attacker
         }
     }
