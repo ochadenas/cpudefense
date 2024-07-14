@@ -1,0 +1,6 @@
+Bug fixes:
+- Fixed some bugs that occurred when re-entering the application.
+
+Miscellaneous:
+- Use of a custom font for chips and code fragments.
+
