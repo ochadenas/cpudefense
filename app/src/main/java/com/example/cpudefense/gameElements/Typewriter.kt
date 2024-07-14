@@ -53,7 +53,7 @@ class Typewriter(val game: Game, myArea: Rect, private var lines: CopyOnWriteArr
             val stringToDisplay = text.substring(0, stringLength)
             val paint = Paint()
             paint.color = game.resources.getColor(R.color.text_green)
-            paint.typeface = ResourcesCompat.getFont(game.gameActivity, R.font.roboto_mono_medium)
+            paint.typeface = ResourcesCompat.getFont(game.gameActivity, R.font.ubuntu_mono)
             paint.textSize = textSize
             paint.alpha = alpha
             canvas.drawText(stringToDisplay, x, y, paint)

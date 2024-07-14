@@ -40,8 +40,8 @@ class Game(val gameActivity: MainGameActivity) {
         // text sizes are given in dp (device independent)
         const val scoreTextSize = 36f
         const val scoreHeaderSize = 18f
-        const val chipTextSize = 22f
-        const val computerTextSize = 28f
+        const val chipTextSize = 24f
+        const val computerTextSize = 32f
         const val notificationTextSize = 22f
         const val instructionTextSize = 28f
         const val biographyTextSize = 24f

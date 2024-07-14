@@ -700,9 +700,9 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
             val paint = Paint()
 
             paint.textSize = (Game.chipTextSize * resources.displayMetrics.scaledDensity) *
-                    if (theNetwork.theGame.gameActivity.settings.configUseLargeButtons) 0.9f else 0.9f // multiple sizes possible, but not used here
+                    if (theNetwork.theGame.gameActivity.settings.configUseLargeButtons) 1.0f else 0.95f // multiple sizes possible
             paint.alpha = 255
-            paint.typeface = ResourcesCompat.getFont(network.theGame.gameActivity, R.font.roboto_mono_bold)
+            paint.typeface = ResourcesCompat.getFont(network.theGame.gameActivity, R.font.ubuntu_mono_bold)
             paint.textAlign = Paint.Align.CENTER
             val clippedRect = rect.displayTextCenteredInRect(canvas, text, paint)
 
