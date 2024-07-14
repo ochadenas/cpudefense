@@ -4,6 +4,7 @@ package com.example.cpudefense.gameElements
 
 import android.graphics.*
 import android.view.MotionEvent
+import androidx.core.content.res.ResourcesCompat
 import com.example.cpudefense.*
 import com.example.cpudefense.effects.Mover
 import com.example.cpudefense.networkmap.Network
@@ -612,24 +613,24 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
     {
         return when (chipData.type)
         {
-            ChipType.SUB -> createBitmap("SUB %d".format(chipData.upgradeLevel))
-            ChipType.SHR -> createBitmap("SHR %d".format(chipData.upgradeLevel))
+            ChipType.SUB -> createBitmap("SUB%2d".format(chipData.upgradeLevel))
+            ChipType.SHR -> createBitmap("SHR%2d".format(chipData.upgradeLevel))
             ChipType.MEM -> { if (chipData.upgradeLevel == 1) createBitmap("MEM")
-                else createBitmap("MEM %d".format(chipData.upgradeLevel)) }
+                else createBitmap("MEM%2d".format(chipData.upgradeLevel)) }
             ChipType.ACC -> when (chipData.upgradeLevel)
             {
                 1 -> createBitmap("ACC +")
                 2 -> createBitmap("ACC v")
                 else -> createBitmap("ACC &")
             }
-            ChipType.SHL -> createBitmap("SHL %d".format(chipData.upgradeLevel))
-            ChipType.ADD -> createBitmap("ADD %d".format(chipData.upgradeLevel))
-            ChipType.CLK -> createBitmap("CLK %d".format(chipData.upgradeLevel))
+            ChipType.SHL -> createBitmap("SHL%2d".format(chipData.upgradeLevel))
+            ChipType.ADD -> createBitmap("ADD%2d".format(chipData.upgradeLevel))
+            ChipType.CLK -> createBitmap("CLK%2d".format(chipData.upgradeLevel))
             ChipType.RES -> createBitmapForResistor()
             ChipType.SPLT -> createBitmap("SPLT")
             ChipType.DUP -> createBitmap("DUP")
             ChipType.NOP -> if (chipData.upgradeLevel == 1)  createBitmap("NOP")
-                else createBitmap("NOP %d".format(chipData.upgradeLevel))
+                else createBitmap("NOP%2d".format(chipData.upgradeLevel))
             ChipType.ENTRY -> null
             ChipType.CPU -> null
             ChipType.EMPTY -> null
@@ -700,9 +701,9 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
             val paint = Paint()
 
             paint.textSize = (Game.chipTextSize * resources.displayMetrics.scaledDensity) *
-                    if (theNetwork.theGame.gameActivity.settings.configUseLargeButtons) 1.2f else 1.0f
+                    if (theNetwork.theGame.gameActivity.settings.configUseLargeButtons) 0.9f else 0.9f // multiple sizes possible, but not used here
             paint.alpha = 255
-            paint.typeface = Typeface.create("sans-serif-condensed", Typeface.BOLD)
+            paint.typeface = ResourcesCompat.getFont(network.theGame.gameActivity, R.font.roboto_mono_bold)
             paint.textAlign = Paint.Align.CENTER
             val clippedRect = rect.displayTextCenteredInRect(canvas, text, paint)
 

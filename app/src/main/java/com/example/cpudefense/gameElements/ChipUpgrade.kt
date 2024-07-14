@@ -2,6 +2,7 @@ package com.example.cpudefense.gameElements
 
 import android.graphics.*
 import android.view.MotionEvent
+import androidx.core.content.res.ResourcesCompat
 import com.example.cpudefense.*
 import com.example.cpudefense.effects.Movable
 import com.example.cpudefense.utils.*
@@ -134,7 +135,7 @@ class ChipUpgrade(val chipToUpgrade: Chip, val type: Chip.ChipUpgrades,
         val newCanvas = Canvas(bitmap)
         paintText.textSize = Game.chipTextSize * game.resources.displayMetrics.scaledDensity
         paintText.alpha = 255
-        paintText.typeface = Typeface.create("sans-serif-condensed", Typeface.BOLD)
+        paintText.typeface = ResourcesCompat.getFont(game.gameActivity, R.font.roboto_mono)
         paintText.textAlign = Paint.Align.CENTER
         paintText.color = paintFrame.color
         rect.displayTextCenteredInRect(newCanvas, text, paintText)

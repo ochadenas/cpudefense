@@ -4,6 +4,7 @@ package com.example.cpudefense.gameElements
 
 import android.graphics.*
 import android.view.MotionEvent
+import androidx.core.content.res.ResourcesCompat
 import com.example.cpudefense.*
 import com.example.cpudefense.effects.Explodable
 import com.example.cpudefense.effects.Fadable
@@ -251,8 +252,7 @@ open class Attacker(network: Network, representation: Representation = Represent
 
         textPaint.textSize = numberFontSize
         textPaint.alpha = 255
-        // paint.typeface = MONOSPACE
-        textPaint.typeface = Typeface.create("sans-serif-condensed", Typeface.BOLD)
+        textPaint.typeface = ResourcesCompat.getFont(network.theGame.gameActivity, R.font.roboto_mono_bold)
         textPaint.textAlign = Paint.Align.CENTER
         val bounds = Rect()
         textPaint.getTextBounds(text, 0, text.length, bounds)

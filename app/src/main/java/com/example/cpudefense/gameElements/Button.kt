@@ -1,7 +1,9 @@
 package com.example.cpudefense.gameElements
 
 import android.graphics.*
+import androidx.core.content.res.ResourcesCompat
 import com.example.cpudefense.Game
+import com.example.cpudefense.R
 import com.example.cpudefense.effects.Fadable
 import com.example.cpudefense.effects.Fader
 import com.example.cpudefense.utils.*
@@ -26,13 +28,13 @@ class Button(var game: Game, var text: String, val textSize: Float, val color: I
                 buttonPaint.color = Color.WHITE  // default, should be overridden
                 buttonPaint.style = Paint.Style.STROKE
                 buttonPaint.strokeWidth = 2f
-                textPaint.typeface = Typeface.MONOSPACE
+                textPaint.typeface = ResourcesCompat.getFont(game.gameActivity, R.font.roboto_mono_bold)
                 textPaint.color = Color.WHITE
             }
             Style.FILLED -> {
                 buttonPaint.color = color
                 buttonPaint.style = Paint.Style.FILL
-                textPaint.typeface = Typeface.MONOSPACE
+                textPaint.typeface = ResourcesCompat.getFont(game.gameActivity, R.font.roboto_mono_bold)
                 textPaint.color = Color.BLACK
             }
             Style.HP_KEY ->
