@@ -15,8 +15,8 @@ class Cryptocoin(network: com.example.cpudefense.networkmap.Network, number: ULo
     Attacker(network, Representation.BINARY, number, speed), Flippable
 {
     var paint = Paint()
-    private var myBitmap: Bitmap = this.network.theGame.currentCoinBitmap().copy(this.network.theGame.currentCoinBitmap().config, true)
     private var isCurrentlyFlipping = false
+    private var myBitmap: Bitmap = Bitmap.createBitmap(32, 32, Bitmap.Config.ARGB_8888)
 
     init {
         this.attackerData.isCoin = true
@@ -56,6 +56,10 @@ class Cryptocoin(network: com.example.cpudefense.networkmap.Network, number: ULo
                 }
             }
         }
+    }
+
+    override fun makeNumber() {
+        myBitmap = this.network.theGame.currentCoinBitmap().copy(this.network.theGame.currentCoinBitmap().config, true)
     }
 
     override fun setBitmap(bitmap: Bitmap) {

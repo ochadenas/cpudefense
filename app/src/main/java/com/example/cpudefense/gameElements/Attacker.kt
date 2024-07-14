@@ -68,7 +68,7 @@ open class Attacker(network: Network, representation: Representation = Represent
         newAttacker.endNode= endNode
         newAttacker.distanceFromLastNode = distanceFromLastNode
         newAttacker.distanceToNextNode = distanceToNextNode
-        makeNumber()
+        newAttacker.makeNumber()
         return newAttacker
     }
 
@@ -225,10 +225,11 @@ open class Attacker(network: Network, representation: Representation = Represent
         }
     }
 
-    fun makeNumber()
+    open fun makeNumber()
+            /** creates a bitmap using the current number (strength) of the attacker.
+             * N.B.: Cryptocoins have their own implementation of this method.
+             */
     {
-        if (attackerData.isCoin)
-            return
         val text: String
         if (attackerData.representation == Representation.BINARY)
             text = attackerData.number.toString(radix=2).padStart(attackerData.binaryDigits, '0')

@@ -52,8 +52,14 @@ class PurseOfCoins(val game: Game, private val levelMode: Game.LevelMode = Game.
         // the difference between the (theoretical) sum of all coins and those accounted for is the number of walking coins
         var totalRunningCoins = theoreticalAmountOfCoins - totalRewardCoins
         if (totalRunningCoins<0) totalRunningCoins=0 // safety catch, should not be triggered
-        // distribute them into the series according to the general percentage
-        when (levelMode)
+        if (totalRewardCoins == 0)
+        // special case: the player has not won any coins yet
+        {
+            contents.rewardCoins = 0
+            contents.runningCoins = 0
+            contents.spentCoins = 0
+        }
+        else when (levelMode)   // distribute the coins into the series according to the general percentage
         {
             Game.LevelMode.BASIC -> {
                 contents.rewardCoins = sumRewardCoinsInBasicMode
