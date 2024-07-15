@@ -62,9 +62,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
         resources.getColor(R.color.resistor_9),
     )
 
-
-    /** some chips have a 'register' where one or several attackers' value can be held. */
-    private var internalRegister = CopyOnWriteArrayList<Attacker>()
+    private var internalRegister = Register()
 
     var upgradePossibilities = CopyOnWriteArrayList<ChipUpgrade>()
 
@@ -100,11 +98,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
     {
         with (chipData)
         {
-            // special case ACC: if an attacker is held inside, release it
-            if (chipData.type == ChipType.ACC)
-            {
-
-            }
+            internalRegister.releaseAll() // if an attacker is held inside, release it. This is for MEM and ACC
             if (isInCooldown()) {
                 color = resources.getColor(R.color.chips_soldstate_foreground)
                 glowColor = resources.getColor(R.color.chips_soldstate_glow)
@@ -128,7 +122,6 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
             sold = false
             cooldownTimer = 0.0f
         }
-        internalRegister.clear()
         bitmap = null
     }
     fun setIdent(ident: Int)
@@ -277,11 +270,6 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
         chipData.cooldownTimer = getCooldownTime()
     }
 
-    private fun storageSlotsAvailable(): Int
-    {
-        return if (chipData.type == ChipType.ACC) 1 else chipData.upgradeLevel
-    }
-
     override fun update() {
         super.update()
         if (chipData.type == ChipType.EMPTY)
@@ -335,7 +323,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
     private fun updateClk()
     /** method that gets executed whenever the clock 'ticks' */
     {
-        val chipsAffected = listOf( ChipType.SUB,  ChipType.SHR, ChipType.MEM )
+        val chipsAffected = listOf( ChipType.SUB, ChipType.SHR, ChipType.MEM )
         for (node in theNetwork.nodes.values)
         {
             val chip = node as Chip
@@ -398,7 +386,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
 
         /* special treatment for chips that store values */
         if (chipData.type in listOf(ChipType.MEM, ChipType.ACC))
-            displayInternalStorage(canvas, rect)
+            internalRegister.display(canvas, rect)
 
         /* draw foreground */
         if (bitmap == null)
@@ -412,44 +400,6 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
                 outlineWidth
         canvas.drawRect(rect, paintOutline)
 
-    }
-
-    private fun displayInternalStorage(canvas: Canvas, rect: Rect)
-    {
-        val widthOfIndicator = rect.width() / Game.maxInternalChipStorage
-        val indicatorRect = Rect(0,rect.bottom-rect.height()/4,widthOfIndicator,rect.bottom)
-        val storageSlotsUsed = internalRegister.size
-        val storageSlots = storageSlotsAvailable()
-        for (i in 0 until storageSlots)
-        {
-            indicatorRect.setBottomLeft(rect.left+i*widthOfIndicator,rect.bottom)
-            // determine appearance of the indicator: solid, empty, or fading/coloured
-            paintIndicator.alpha = 255
-            paintIndicator.color = paintLines.color
-            when (i)
-            {
-                in 0 until storageSlotsUsed -> {
-                    paintIndicator.style = Paint.Style.FILL
-                    canvas.drawRect(indicatorRect, paintIndicator)
-                }
-                storageSlotsUsed -> {
-                    if (isInCooldown())
-                    {
-                        paintIndicator.style = Paint.Style.FILL
-                        // paintIndicator.color = theNetwork.theGame.resources.getColor(RES.color.chips_mem_foreground)
-                        paintIndicator.alpha = (chipData.cooldownTimer*255f/getCooldownTime()).toInt()
-                        canvas.drawRect(indicatorRect, paintIndicator)
-                    }
-                    paintIndicator.style = Paint.Style.STROKE
-                    paintIndicator.alpha = 255
-                    canvas.drawRect(indicatorRect, paintIndicator)
-                }
-                else -> {
-                    paintIndicator.style = Paint.Style.STROKE
-                    canvas.drawRect(indicatorRect, paintIndicator)
-                }
-            }
-        }
     }
 
     fun displayUpgrades(canvas: Canvas)
@@ -495,7 +445,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
             ChipType.DUP -> { duplicateAttacker(attacker) }
             ChipType.MEM -> {
                 if (slotsLeftInMEM())
-                    storeAttacker(attacker)
+                    internalRegister.store(attacker)
                 return // no cooldown phase here
             }
             ChipType.RES -> {
@@ -518,19 +468,9 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
     {
         return when (isInCooldown())
         {
-            true -> internalRegister.size+1 < chipData.upgradeLevel
-            false -> internalRegister.size < chipData.upgradeLevel
+            true -> internalRegister.slotsUsed()+1 < chipData.upgradeLevel
+            false -> internalRegister.slotsUsed() < chipData.upgradeLevel
         }
-    }
-
-    private fun storeAttacker(attacker: Attacker)
-    {
-        internalRegister.add(attacker)
-        val extraCashGained =
-            theNetwork.theGame.heroModifier(Hero.Type.GAIN_CASH_ON_KILL).toInt() // possible bonus
-        theNetwork.theGame.scoreBoard.addCash(attacker.attackerData.bits + extraCashGained)
-        attacker.immuneToAll = true
-        theNetwork.theGame.gameActivity.theGameView.theEffects?.fade(attacker)
     }
 
     private fun splitAttacker(attacker: Attacker): Attacker
@@ -555,7 +495,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
         }
         newAttacker.attackerData.number -= attacker.attackerData.number
         attacker.makeNumber()
-        attacker.makeNumber()
+        newAttacker.makeNumber()
         return newAttacker
     }
 
@@ -575,12 +515,13 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
 
     private fun processInAccumulator(attacker: Attacker)
     {
-        if (internalRegister.size == 0)
-            storeAttacker(attacker)
+        val previousAttacker = internalRegister.retrieve()
+        if (previousAttacker == null)
+            internalRegister.store(attacker)
         else
         {
             val number1: ULong = attacker.attackerData.number
-            val number2: ULong = internalRegister.first().attackerData.number
+            val number2: ULong = previousAttacker.attackerData.number
             val newValue = when (chipData.upgradeLevel)
             {
                 1 -> number1 + number2
@@ -605,7 +546,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
              * depending on its type.
              */
     {
-        return (chipData.type in listOf(ChipType.ACC, ChipType.MEM) && internalRegister.isNotEmpty())
+        return (internalRegister.slotsUsed()>0)
     }
 
     private fun createBitmapForType(): Bitmap?
@@ -836,7 +777,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
 
     override fun onDown(event: MotionEvent): Boolean {
         if (actualRect?.contains(event.x.toInt(), event.y.toInt()) == false)
-        // gesture is inside this chip
+        // gesture is not inside this chip
         {
             upgradePossibilities.clear()
             return false
@@ -846,7 +787,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
         {
             if (isActivated() && !isInCooldown())
             {
-                internalRegister.removeFirstOrNull()
+                internalRegister.retrieve()
                 startCooldown()
                 return true
             }
@@ -884,6 +825,97 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
             }
             chip.chipData = data
             return chip
+        }
+    }
+
+    inner class Register
+    /** some chips have a 'register' where one or several attackers' value can be held. */
+    {
+        private var register = CopyOnWriteArrayList<Attacker>()
+
+        fun clear()
+        {
+            register.clear()
+        }
+
+        fun store(attacker: Attacker)
+        {
+            register.add(attacker)
+            val extraCashGained = theNetwork.theGame.heroModifier(Hero.Type.GAIN_CASH_ON_KILL).toInt() // possible bonus
+            theNetwork.theGame.scoreBoard.addCash(attacker.attackerData.bits + extraCashGained)
+            attacker.immuneToAll = true
+            theNetwork.theGame.gameActivity.theGameView.theEffects?.fade(attacker)
+        }
+
+        fun retrieve(): Attacker?
+        {
+            return register.firstOrNull()
+        }
+
+        fun releaseAll()
+        /** releases the numbers stored in the register and make them move again */
+        {
+            register.forEach()
+            {
+                it.data.state = Vehicle.State.ACTIVE
+            }
+            register.clear()
+        }
+
+        fun slotsUsed(): Int
+        {
+            return register.size
+        }
+
+        fun slotsFree(): Int
+        {
+            return slotsTotal() - slotsUsed()
+        }
+
+        fun slotsTotal(): Int
+        {
+            return when (chipData.type)
+            {
+                ChipType.ACC -> 1
+                ChipType.MEM -> chipData.upgradeLevel
+                else -> 0
+            }
+        }
+
+        fun display(canvas: Canvas, rectOfChip: Rect)
+        {
+            val widthOfIndicator = rectOfChip.width() / Game.maxInternalChipStorage
+            val indicatorRect = Rect(0,rectOfChip.bottom-rectOfChip.height()/4,widthOfIndicator,rectOfChip.bottom)
+            for (i in 0 until slotsTotal())
+            {
+                indicatorRect.setBottomLeft(rectOfChip.left+i*widthOfIndicator,rectOfChip.bottom)
+                // determine appearance of the indicator: solid, empty, or fading/coloured
+                paintIndicator.alpha = 255
+                paintIndicator.color = paintLines.color
+                when (i)
+                {
+                    in 0 until slotsUsed() -> {
+                        paintIndicator.style = Paint.Style.FILL
+                        canvas.drawRect(indicatorRect, paintIndicator)
+                    }
+                    slotsUsed() -> {
+                        if (isInCooldown())
+                        {
+                            paintIndicator.style = Paint.Style.FILL
+                            // paintIndicator.color = theNetwork.theGame.resources.getColor(RES.color.chips_mem_foreground)
+                            paintIndicator.alpha = (chipData.cooldownTimer*255f/getCooldownTime()).toInt()
+                            canvas.drawRect(indicatorRect, paintIndicator)
+                        }
+                        paintIndicator.style = Paint.Style.STROKE
+                        paintIndicator.alpha = 255
+                        canvas.drawRect(indicatorRect, paintIndicator)
+                    }
+                    else -> {
+                        paintIndicator.style = Paint.Style.STROKE
+                        canvas.drawRect(indicatorRect, paintIndicator)
+                    }
+                }
+            }
         }
     }
 }
