@@ -849,7 +849,13 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
 
         fun retrieve(): Attacker?
         {
-            return register.firstOrNull()
+            try {
+                return register.removeAt(0)
+            }
+            catch (ex: ArrayIndexOutOfBoundsException) // register is empty
+            {
+                return null
+            }
         }
 
         fun releaseAll()
@@ -892,13 +898,14 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
                 // determine appearance of the indicator: solid, empty, or fading/coloured
                 paintIndicator.alpha = 255
                 paintIndicator.color = paintLines.color
+                var indicatorsLit = slotsUsed()  // number of rects to be filled
                 when (i)
                 {
-                    in 0 until slotsUsed() -> {
+                    in 0 until indicatorsLit -> {
                         paintIndicator.style = Paint.Style.FILL
                         canvas.drawRect(indicatorRect, paintIndicator)
                     }
-                    slotsUsed() -> {
+                    indicatorsLit -> {
                         if (isInCooldown())
                         {
                             paintIndicator.style = Paint.Style.FILL
