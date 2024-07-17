@@ -30,6 +30,8 @@ open class Attacker(network: Network, representation: Representation = Represent
         var vehicle: Vehicle.Data,
         /** flag that is set if destruction of this attacker must not yield cash */
         var hasNoValue: Boolean = false,
+        /** remember if the attacker is held in a chip */
+        var storageNodeId: Int = -1,
     )
 
     var attackerData = Data( representation = representation, number = number, binaryDigits = 0, hexDigits = 0,
@@ -418,6 +420,11 @@ open class Attacker(network: Network, representation: Representation = Represent
                 attacker.setCurrentDistanceOnLink(it)
             }
             attacker.makeNumber()
+            if (attacker.data.state == State.HELD)
+            {
+                val storage: Chip? = stage.chips[attacker.attackerData.storageNodeId]
+                storage?.internalRegister?.store(attacker)
+            }
             return attacker
         }
     }

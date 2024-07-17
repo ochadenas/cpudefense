@@ -64,7 +64,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
 
     private var chipsThatDoesntAffectCoins = listOf(ChipType.ACC, ChipType.MEM, ChipType.CLK, ChipType.SPLT, ChipType.DUP)
 
-    private var internalRegister = Register()
+    var internalRegister = Register()
 
     var upgradePossibilities = CopyOnWriteArrayList<ChipUpgrade>()
 
@@ -850,6 +850,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
             attacker.gainCash()
             attacker.immuneTo = this@Chip
             attacker.data.state = Vehicle.State.HELD
+            attacker.attackerData.storageNodeId = this@Chip.data.ident
             theNetwork.theGame.gameActivity.theGameView.theEffects?.fade(attacker)
         }
 
@@ -870,6 +871,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
             register.forEach()
             {
                 it.data.state = Vehicle.State.ACTIVE
+                it.attackerData.storageNodeId = -1
                 it.attackerData.hasNoValue = true
                 it.jitterSpeed()
                 it.makeNumber()
