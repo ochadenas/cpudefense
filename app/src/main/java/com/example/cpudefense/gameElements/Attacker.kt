@@ -349,12 +349,11 @@ open class Attacker(network: Network, representation: Representation = Represent
     }
 
     override fun fadeDone(type: Fader.Type) {
+        scale = 0.0f
     }
 
     override fun setOpacity(opacity: Float) {
-        // scale = opacity
-        // paintBitmap.alpha = (255 * opacity).toInt()
-        // TODO: remove this
+        scale = opacity
     }
 
     fun jitterSpeed()

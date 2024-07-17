@@ -224,7 +224,7 @@ class Stage(var theGame: Game) {
 
     fun attackerCount(): Int
     {
-        return network.vehicles.size
+        return network.vehicles.filter { it.data.state == Vehicle.State.ACTIVE }.size
     }
 
     fun nextWave(): Wave?
