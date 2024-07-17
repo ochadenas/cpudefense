@@ -62,7 +62,8 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
         resources.getColor(R.color.resistor_9),
     )
 
-    private var chipsThatDoesntAffectCoins = listOf(ChipType.ACC, ChipType.MEM, ChipType.CLK, ChipType.SPLT, ChipType.DUP)
+    private var chipsThatDoNotAffectCoins = listOf(ChipType.ACC, ChipType.MEM, ChipType.CLK, ChipType.SPLT, ChipType.DUP)
+    private var chipsAffectedByCLK = listOf( ChipType.SUB, ChipType.SHR, ChipType.MEM )
 
     var internalRegister = Register()
 
@@ -328,11 +329,10 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
     private fun updateClk()
     /** method that gets executed whenever the clock 'ticks' */
     {
-        val chipsAffected = listOf( ChipType.SUB, ChipType.SHR, ChipType.MEM )
         for (node in theNetwork.nodes.values)
         {
             val chip = node as Chip
-            if (chip.chipData.type in chipsAffected) {
+            if (chip.chipData.type in chipsAffectedByCLK) {
                 // avoid resetting when clock tick comes _too_ soon after the regular reset
                 val minDelay = kotlin.math.min(chip.getCooldownTime() * 0.2f, this.getCooldownTime())
                 if (chip.chipData.cooldownTimer <= chip.getCooldownTime()-minDelay) {
@@ -440,7 +440,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
             return
         if (attacker.immuneTo == this || attacker.immuneToAll)
             return
-        if (chipData.type in chipsThatDoesntAffectCoins
+        if (chipData.type in chipsThatDoNotAffectCoins
             && attacker.attackerData.isCoin)
             return  // coins are unaffected by certain chip types
         when (chipData.type)
@@ -909,7 +909,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
                 // determine appearance of the indicator: solid, empty, or fading/coloured
                 paintIndicator.alpha = 255
                 paintIndicator.color = paintLines.color
-                val indicatorsLit = slotsUsed()  // number of rects to be filled
+                val indicatorsLit = slotsUsed()  // number of rectangles to be filled
                 when (i)
                 {
                     in 0 until indicatorsLit -> {
