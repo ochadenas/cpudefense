@@ -62,6 +62,8 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
         resources.getColor(R.color.resistor_9),
     )
 
+    private var chipsThatDoesntAffectCoins = listOf(ChipType.ACC, ChipType.MEM, ChipType.CLK, ChipType.SPLT, ChipType.DUP)
+
     private var internalRegister = Register()
 
     var upgradePossibilities = CopyOnWriteArrayList<ChipUpgrade>()
@@ -279,9 +281,11 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
             if (chipData.type != ChipType.MEM)  // MEM is the only type that may act during cooldown
                 return
         }
-        if (chipData.sold && !isInCooldown()) {
-            resetToEmptyChip()
-            return
+        if (chipData.sold)
+        {
+            if (!isInCooldown())
+                resetToEmptyChip()
+            return   // chips already sold do not act. They only wait to be removed after cooldown
         }
         if (chipData.type == ChipType.CLK)
         /* come here when the clock 'ticks', i.e. CLK cooldown has passed */ {
@@ -295,9 +299,10 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
         selectTarget(attackers)?.let { shootAt(it)}
     }
 
-    private fun selectTarget(possibleTargets: List<Attacker>): Attacker?
+    private fun selectTarget(attackerList: List<Attacker>): Attacker?
     /** intelligently determine the targeted attacker, based on chip type and attacker's properties */
     {
+        val possibleTargets = attackerList.filter { it.data.state == Vehicle.State.ACTIVE }
         val coins = possibleTargets.filter { it.attackerData.isCoin }
         val regularAttackers = possibleTargets.filter { !it.attackerData.isCoin }
         val sortedTargets = regularAttackers.sortedBy { it.attackerData.number }
@@ -435,7 +440,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
             return
         if (attacker.immuneTo == this || attacker.immuneToAll)
             return
-        if (chipData.type in listOf(ChipType.ACC, ChipType.MEM, ChipType.CLK, ChipType.SPLT, ChipType.DUP)
+        if (chipData.type in chipsThatDoesntAffectCoins
             && attacker.attackerData.isCoin)
             return  // coins are unaffected by certain chip types
         when (chipData.type)
@@ -466,11 +471,12 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
     private fun slotsLeftInMEM(): Boolean
     /** @return true if the MEM chip can still hold another number */
     {
-        return when (isInCooldown())
+        val slotsLeft = when (isInCooldown())
         {
             true -> internalRegister.slotsUsed()+1 < chipData.upgradeLevel
             false -> internalRegister.slotsUsed() < chipData.upgradeLevel
         }
+        return slotsLeft
     }
 
     private fun splitAttacker(attacker: Attacker): Attacker
@@ -529,8 +535,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
                 else -> number1 and number2
             }
             attacker.changeNumberTo(newValue)
-            val changeInSpeed = attacker.data.speed * (Random.nextFloat() - 0.5f) * 0.3f
-            attacker.data.speed += changeInSpeed
+            attacker.jitterSpeed()
             internalRegister.clear()
             attacker.immuneTo = this
         }
@@ -839,11 +844,12 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
         }
 
         fun store(attacker: Attacker)
+        /** stores a value or a coin in the internal register, putting the attacker to HELD status */
         {
             register.add(attacker)
-            val extraCashGained = theNetwork.theGame.heroModifier(Hero.Type.GAIN_CASH_ON_KILL).toInt() // possible bonus
-            theNetwork.theGame.scoreBoard.addCash(attacker.attackerData.bits + extraCashGained)
-            attacker.immuneToAll = true
+            attacker.gainCash()
+            attacker.immuneTo = this@Chip
+            attacker.data.state = Vehicle.State.HELD
             theNetwork.theGame.gameActivity.theGameView.theEffects?.fade(attacker)
         }
 
@@ -864,6 +870,9 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
             register.forEach()
             {
                 it.data.state = Vehicle.State.ACTIVE
+                it.attackerData.hasNoValue = true
+                it.jitterSpeed()
+                it.makeNumber()
             }
             register.clear()
         }
@@ -898,7 +907,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
                 // determine appearance of the indicator: solid, empty, or fading/coloured
                 paintIndicator.alpha = 255
                 paintIndicator.color = paintLines.color
-                var indicatorsLit = slotsUsed()  // number of rects to be filled
+                val indicatorsLit = slotsUsed()  // number of rects to be filled
                 when (i)
                 {
                     in 0 until indicatorsLit -> {

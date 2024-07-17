@@ -13,7 +13,7 @@ open class Vehicle(val network: Network): GameElement()
  */
 {
 
-    enum class State { ACTIVE, GONE}
+    enum class State { ACTIVE, HELD, GONE}
 
     data class Data
         (
@@ -60,6 +60,9 @@ open class Vehicle(val network: Network): GameElement()
     var distanceToNextNode = 0.0f
 
     override fun update() {
+        if (data.state == State.HELD)
+            return  // no movement for vehicles that are held
+
         /** determine the current speed of the vehicle, including modifiers and buffs */
         var currentSpeed: Float = data.speed * 0.16f
         if (currentSpeed < Network.minVehicleSpeed)
@@ -132,7 +135,6 @@ open class Vehicle(val network: Network): GameElement()
             onTrack = track
             data.trackId = track.data.ident
             setOntoLink(track.links[0], null)
-            data.state = State.ACTIVE
         }
     }
 }

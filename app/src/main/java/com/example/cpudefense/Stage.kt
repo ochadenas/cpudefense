@@ -205,10 +205,12 @@ class Stage(var theGame: Game) {
             val strength = Random.nextFloat()*(maxNumber+1) * theGame.heroModifier(Hero.Type.DECREASE_ATT_STRENGTH)
             Attacker(network, representation, strength.toULong(), actualSpeed)
         }
-        network.addVehicle(attacker)
-        if (tracks.size > 0)
+        if (tracks.size > 0) {
+            network.addVehicle(attacker)
             attacker.setOntoTrack(tracks[Random.nextInt(tracks.size)])
-        attacker.makeNumber()
+            attacker.makeNumber()
+            attacker.data.state = Vehicle.State.ACTIVE
+        }
     }
 
     fun chipCount(type: Chip.ChipType): Int

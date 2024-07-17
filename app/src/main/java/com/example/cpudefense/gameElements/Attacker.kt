@@ -27,7 +27,9 @@ open class Attacker(network: Network, representation: Representation = Represent
         var hexDigits: Int,
         var bits: Int,
         var isCoin: Boolean = false,
-        var vehicle: Vehicle.Data
+        var vehicle: Vehicle.Data,
+        /** flag that is set if destruction of this attacker must not yield cash */
+        var hasNoValue: Boolean = false,
     )
 
     var attackerData = Data( representation = representation, number = number, binaryDigits = 0, hexDigits = 0,
@@ -137,12 +139,19 @@ open class Attacker(network: Network, representation: Representation = Represent
         changeNumberTo(n)
     }
 
-    private fun extraCashGained(): Int
+    private fun extraCash(): Int
     /** possible bonus on kill due to hero */
     {
         val strength = network.theGame.heroModifier(Hero.Type.GAIN_CASH_ON_KILL)
         val extraCash = Random.nextFloat() * strength * 2.0f // this gives an expectation value of 'strength'
         return extraCash.toInt()
+    }
+
+    fun gainCash()
+    /** credit the info gained for eliminating this attacker */
+    {
+        if (attackerData.hasNoValue == false)
+            network.theGame.scoreBoard.addCash(attackerData.bits + extraCash())
     }
 
     open fun onShot(type: Chip.ChipType, power: Int): Boolean
@@ -160,7 +169,7 @@ open class Attacker(network: Network, representation: Representation = Represent
                 if (newNumber < 0)
                 {
                     network.theGame.gameActivity.theGameView.theEffects?.explode(this)
-                    network.theGame.scoreBoard.addCash(attackerData.bits + extraCashGained())
+                    gainCash()
                     return true
                 }
                 else
@@ -237,6 +246,7 @@ open class Attacker(network: Network, representation: Representation = Represent
         else
             text = "x" + attackerData.number.toString(radix=16).uppercase().padStart(attackerData.hexDigits, '0')
         createBitmap(text)
+        scale = 1.0f  // reset any shrinking effects
     }
 
     fun createBitmap(text: String)
@@ -339,12 +349,19 @@ open class Attacker(network: Network, representation: Representation = Represent
     }
 
     override fun fadeDone(type: Fader.Type) {
-        remove()
     }
 
     override fun setOpacity(opacity: Float) {
-        scale = opacity
-        paintBitmap.alpha = (255 * opacity).toInt()
+        // scale = opacity
+        // paintBitmap.alpha = (255 * opacity).toInt()
+        // TODO: remove this
+    }
+
+    fun jitterSpeed()
+    /** applies a small change to the attacker's speed */
+    {
+        val changeInSpeed = data.speed * (Random.nextFloat() - 0.5f) * 0.3f
+        data.speed += changeInSpeed
     }
 
     fun onDown(event: MotionEvent): Boolean {
