@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package com.example.cpudefense.gameElements
 
 import android.graphics.*
@@ -10,15 +12,15 @@ class ScoreBoard(val game: Game): GameElement() {
     var margin = 4   // between LED area and edge
     var preferredSizeOfLED = 10 // horizontal size of LEDs, can be smaller if there is too little space
 
-    var area = Rect()
-    var information = Information()
-    var waves = Waves()
-    var lives = Lives()
-    var coins = Coins()
-    var temperature = Temperature()
-    var debugStatusLine: DebugStatusLine? = null
-    var myColor = Color.WHITE
-    var divider = 0  // between the display title and the actual display
+    private var area = Rect()
+    private var information = Information()
+    private var waves = Waves()
+    private var lives = Lives()
+    private var coins = Coins()
+    private var temperature = Temperature()
+    private var debugStatusLine: DebugStatusLine? = null
+    private var myColor = Color.WHITE
+    private var divider = 0  // between the display title and the actual display
 
     val fractionOfScoreBoardUsedForInf = 0.3f
     private val scoreboardBorderWidth = 4.0f
@@ -51,17 +53,17 @@ class ScoreBoard(val game: Game): GameElement() {
     fun informationToString(number: Int): String {
         if (number < 512 && number > -512)
             return "%d bit".format(number)
-        var bytes: Int = number/8
+        val bytes: Int = number/8
         if (bytes < 800 && bytes > -800)
             return "%d B".format(bytes)
         val kiB: Float = bytes.toFloat()/1024.0f
         if (kiB < 800 && kiB > -800)
             return "%.1f KiB".format(kiB)
-        val MiB: Float = kiB/1024.0f
-        if (MiB < 800 && MiB > -800)
-            return "%.1f MiB".format(MiB)
-        val  GiB: Float = MiB/1024.0f
-        return "%.1f GiB".format(GiB)
+        val mibiBytes: Float = kiB/1024.0f
+        if (mibiBytes < 800 && mibiBytes > -800)
+            return "%.1f MiB".format(mibiBytes)
+        val  gibiBytes: Float = mibiBytes/1024.0f
+        return "%.1f GiB".format(gibiBytes)
     }
 
     override fun update() {
@@ -99,7 +101,7 @@ class ScoreBoard(val game: Game): GameElement() {
     {
         // TODO: Problem is that text with letters below the line (such as 'Temp') is slightly off-center vertically
         // due to calculation in rect.displayTextCenteredInRect
-        var rect = Rect(area)
+        val rect = Rect(area)
         rect.bottom = divider
         val paint = Paint()
         paint.color = game.resources.getColor(R.color.scoreboard_text)
@@ -125,20 +127,20 @@ class ScoreBoard(val game: Game): GameElement() {
         }
     }
 
-    inner class Information()
+    inner class Information
     /** display of current amount of information ('cash') */
     {
-        var area = Rect()
-        var divider = 0
+        private var area = Rect()
+        private var divider = 0
 
-        var lastValue = -1   // used to detect value changes
+        private var lastValue = -1   // used to detect value changes
         lateinit var bitmap: Bitmap
         val paint = Paint()
 
         fun setSize(area: Rect, divider: Int): Rect
                 /** sets the area that is taken up by the information count.
                  * @param area The whole area of the score board
-                 * @divider hieght of the line between header and contents
+                 * @divider height of the line between header and contents
                  * @return The rectangle that remains (original area minus occupied area)
                   */
         {
@@ -174,12 +176,11 @@ class ScoreBoard(val game: Game): GameElement() {
         }
     }
 
-    inner class Waves()
-    {
-        var area = Rect()
-        var divider = 0
+    inner class Waves {
+        private var area = Rect()
+        private var divider = 0
 
-        var lastValue = -1   // used to detect value changes
+        private var lastValue = -1   // used to detect value changes
         lateinit var bitmap: Bitmap
         val paint = Paint()
 
@@ -227,15 +228,15 @@ class ScoreBoard(val game: Game): GameElement() {
     }
 
     inner class Lives {
-        var area = Rect()
-        var divider = 0
+        private var area = Rect()
+        private var divider = 0
 
-        var lastValue = -1   // used to detect value changes
+        private var lastValue = -1   // used to detect value changes
         lateinit var bitmap: Bitmap
-        val paint = Paint()
-        var ledAreaHeight: Int = 0
-        var ledAreaWidth: Int = 0
-        val preferredSizeLedX = (preferredSizeOfLED * game.resources.displayMetrics.density).toInt()
+        private val paint = Paint()
+        private var ledAreaHeight: Int = 0
+        private var ledAreaWidth: Int = 0
+        private val preferredSizeLedX = (preferredSizeOfLED * game.resources.displayMetrics.density).toInt()
         private var sizeLedX = preferredSizeLedX
         private var sizeLedY = 0 // will be calculated in setSize
         private var deltaX = 0
@@ -318,14 +319,14 @@ class ScoreBoard(val game: Game): GameElement() {
     }
 
     inner class Coins {
-        var area = Rect()
-        var divider = 0
-        var coins: Int = 0
-        var actualSize = Game.coinSizeOnScoreboard
+        private var area = Rect()
+        private var divider = 0
+        private var coins: Int = 0
+        private var actualSize = Game.coinSizeOnScoreboard
 
-        var lastValue = -1   // used to detect value changes
+        private var lastValue = -1   // used to detect value changes
         lateinit var bitmap: Bitmap
-        val paint = Paint()
+        private val paint = Paint()
 
         fun setSize(area: Rect, divider: Int): Rect
         {
@@ -372,12 +373,12 @@ class ScoreBoard(val game: Game): GameElement() {
     }
 
     inner class Temperature {
-        var area = Rect()
-        var divider = 0
-        var temperature: Int = Game.baseTemperature
-        var lastValue = -1   // used to detect value changes
-        var actualSize = Game.coinSizeOnScoreboard
-        var sevenSegmentDisplay: SevenSegmentDisplay? = null
+        private var area = Rect()
+        private var divider = 0
+        private var temperature: Int = Game.baseTemperature
+        private var lastValue = -1   // used to detect value changes
+        private var actualSize = Game.coinSizeOnScoreboard
+        private var sevenSegmentDisplay: SevenSegmentDisplay? = null
 
         lateinit var bitmap: Bitmap
         val paint = Paint()
@@ -421,16 +422,16 @@ class ScoreBoard(val game: Game): GameElement() {
         }
     }
 
-    inner class DebugStatusLine()
+    inner class DebugStatusLine
     /** this is an additional text displayed at every tick.
      * It is meant to hold additional debug info, e. g. the current frame rate
      */
     {
-        var area = Rect()
-        var divider: Int = 0
-        val paint = Paint()
-        var bitmap: Bitmap? = null
-        var lastValue = 0.0
+        private var area = Rect()
+        private var divider: Int = 0
+        private val paint = Paint()
+        private var bitmap: Bitmap? = null
+        private var lastValue = 0.0
 
         fun setSize(area: Rect, divider: Int) {
             this.divider = divider
@@ -445,11 +446,11 @@ class ScoreBoard(val game: Game): GameElement() {
             bitmap?.let { canvas.drawBitmap(it, null, area, paint) }
         }
 
-        fun recreateBitmap() {
+        private fun recreateBitmap() {
             if (area.width() >0 && area.height() > 0)
                 bitmap = Bitmap.createBitmap(area.width(), area.height(), Bitmap.Config.ARGB_8888)
             // var textToDisplay = "Level %d, difficulty %.2f".format(game.currentStage.number, game.currentlyActiveStage?.data?.difficulty)
-            var textToDisplay = "time per frame: %.2f ms.".format(game.timeBetweenFrames)
+            val textToDisplay = "time per frame: %.2f ms.".format(game.timeBetweenFrames)
             // var textToDisplay = "time per frame: %.2f ms. Ticks %d, frames %d.".format(game.timeBetweenFrames, game.ticksCount, game.frameCount)
             bitmap?.let {
                 val canvas = Canvas(it)
