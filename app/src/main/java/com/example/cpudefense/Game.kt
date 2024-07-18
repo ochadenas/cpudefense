@@ -500,14 +500,15 @@ class Game(val gameActivity: MainGameActivity) {
 
     fun startNextStage(level: Stage.Identifier)
     {
+        currentStage = level
         val nextStage = Stage(this)
-        gameActivity.setGameActivityStatus(MainGameActivity.GameActivityStatus.PLAYING)
-        calculateLives()
-        calculateStartingCash()
         StageCatalog.createStage(nextStage, level)
         nextStage.calculateDifficulty()
         if (!nextStage.isInitialized())
             return  // something went wrong, possibly trying to create a level that doesn't exist
+        gameActivity.setGameActivityStatus(MainGameActivity.GameActivityStatus.PLAYING)
+        calculateLives()
+        calculateStartingCash()
         gameActivity.runOnUiThread {
             val toast: Toast = Toast.makeText(
                 gameActivity,
