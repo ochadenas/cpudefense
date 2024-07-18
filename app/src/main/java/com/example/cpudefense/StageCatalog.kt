@@ -306,7 +306,6 @@ class StageCatalog
                             setOf(
                                 Chip.ChipUpgrades.SUB,
                                 Chip.ChipUpgrades.POWERUP,
-                                Chip.ChipUpgrades.SELL,
                                 Chip.ChipUpgrades.SHR
                             )
                         rewardCoins = 3
