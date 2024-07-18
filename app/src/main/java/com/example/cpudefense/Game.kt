@@ -55,7 +55,7 @@ class Game(val gameActivity: MainGameActivity) {
         const val minimalAmountOfCash = 8
         const val maxLivesPerStage = 3
         const val maxInternalChipStorage = 4
-        const val minAttackerSpeed = 0.01f
+        const val minAttackerSpeed = 0.02f
 
         const val levelSnapshotIconSize = 120
 
@@ -79,6 +79,7 @@ class Game(val gameActivity: MainGameActivity) {
         // resistors:
         const val resistorBaseStrength = 10f // ohms
         const val resistorBaseDuration = 160f // ticks
+        const val resistorMaxDuration = 1600f // ticks
 
     }
 

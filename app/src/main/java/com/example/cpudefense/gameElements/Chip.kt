@@ -455,8 +455,10 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
                 return // no cooldown phase here
             }
             ChipType.RES -> {
-                attacker.data.speedModifier = effectOfResistanceOnSpeed(resistorValue().toFloat())
-                val additionalDuration = Game.resistorBaseDuration / attacker.data.speedModifier * theNetwork.theGame.heroModifier(Hero.Type.INCREASE_CHIP_RES_DURATION)
+                attacker.data.speedModifier = effectOfResistanceOnSpeed(resistorValue().toFloat(), attacker)
+                var additionalDuration = Game.resistorBaseDuration / attacker.data.speedModifier * theNetwork.theGame.heroModifier(Hero.Type.INCREASE_CHIP_RES_DURATION)
+                if (additionalDuration > Game.resistorMaxDuration)
+                    additionalDuration = Game.resistorMaxDuration
                 attacker.data.speedModificationTimer += additionalDuration
                 attacker.immuneTo = this
                 attacker.makeNumber()
@@ -542,9 +544,10 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
         }
     }
 
-    private fun effectOfResistanceOnSpeed(ohm: Float): Float
+    private fun effectOfResistanceOnSpeed(ohm: Float, attacker: Attacker): Float
     {
-        return exp(- ohm / 74.0f)
+        // return exp(- ohm / 74.0f)
+        return exp(- (ohm*attacker.attackerData.bits) / 320.0f)
     }
 
     private fun isActivated(): Boolean

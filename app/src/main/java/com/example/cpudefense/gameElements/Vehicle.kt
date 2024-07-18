@@ -65,11 +65,10 @@ open class Vehicle(val network: Network): GameElement()
 
         /** determine the current speed of the vehicle, including modifiers and buffs */
         var currentSpeed: Float = data.speed * 0.16f
-        if (currentSpeed < Network.minVehicleSpeed)
-            currentSpeed = Network.minVehicleSpeed // stopgap. Impose minimal speed lest vehicles get stuck somewhere.
-
         if (data.speedModificationTimer > 0)
             currentSpeed *= data.speedModifier
+        if (currentSpeed < Network.minVehicleSpeed)
+            currentSpeed = Network.minVehicleSpeed // stopgap. Impose minimal speed lest vehicles get stuck somewhere.
 
         onLink?.let {
             /* determine which is start and which is end node */
