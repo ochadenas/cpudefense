@@ -24,6 +24,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
     enum class ChipUpgrades { POWERUP, REDUCE, SELL, SUB, SHR, MEM, ACC, CLK, RES }
 
     data class Data(
+        /** the principal type of the chip */
         var type: ChipType = ChipType.EMPTY,
         /** level, or strength, of the chip */
         var upgradeLevel: Int = 0,

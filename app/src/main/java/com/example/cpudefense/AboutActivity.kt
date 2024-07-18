@@ -10,6 +10,7 @@ import android.text.method.ScrollingMovementMethod
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.setPadding
 
 
@@ -49,6 +50,7 @@ class AboutActivity : AppCompatActivity()
             val textView = TextView(this)
             textView.text = getString(R.string.ZZ_release_notes)
             textView.setPadding(8)
+            // textView.typeface = ResourcesCompat.getFont(this, R.font.ubuntu_mono_bold)
             textView.setTextColor(Color.WHITE)
             textView.textSize = 12f
             textView.movementMethod = ScrollingMovementMethod()

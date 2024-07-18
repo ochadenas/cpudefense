@@ -1,0 +1,11 @@
+New features:
+- The attackers held in the internal register of MEM and ACC are now released when selling the chip.
+
+Bug fixes:
+- Game elements as well as hired heroes became active only when the stage was played a second time.
+- MEM and ACC chips are no longer "emptied" when resuming the app.
+
+Miscellaneous:
+- Removed the SELL option in stage 6
+
+
