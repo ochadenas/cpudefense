@@ -160,7 +160,7 @@ class Intermezzo(var game: Game): GameElement(), Fadable {
         typewriter?.display(canvas)
         buttonContinue?.display(canvas)
         buttonPurchase?.display(canvas)
-        heroSelection?.display(canvas)
+        heroSelection?.display(canvas, viewport)
     }
 
     fun onDown(event: MotionEvent): Boolean {
@@ -260,11 +260,11 @@ class Intermezzo(var game: Game): GameElement(), Fadable {
 
         }
 
-        fun display(canvas: Canvas)
+        fun display(canvas: Canvas, viewport: Viewport)
         {
             heroesAskingToTakeLeave.forEachIndexed()
             { index, hero ->
-                hero.display(canvas)
+                hero.card.display(canvas, viewport)
             }
 
         }

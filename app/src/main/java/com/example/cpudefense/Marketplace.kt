@@ -62,34 +62,34 @@ class Marketplace(val game: Game): GameElement()
             get it from the game data. Otherwise, create an empty card.
             Only add upgrades that are allowed (available) at present.
              */
-            var card: Hero? = heroes[type]
-            if (card == null)
-               card = Hero.createFromData(game, Hero.Data(type))
-            if (card.isAvailable(level)) {
-                card.createBiography(biographyArea)
-                newUpgrades.add(card)
+            var hero: Hero? = heroes[type]
+            if (hero == null)
+               hero = Hero.createFromData(game, Hero.Data(type))
+            if (hero.isAvailable(level)) {
+                hero.createBiography(biographyArea)
+                newUpgrades.add(hero)
             }
-            card.setDesc()
-            card.setSize()
-            card.createBitmap()
+            hero.setDesc()
+            hero.card.setSize()
+            hero.card.createBitmap()
         }
         arrangeCards(newUpgrades, cardViewOffset)
         upgrades = newUpgrades
         coins = MutableList(purse.availableCoins()) { Coin(game, coinSize) }
     }
 
-    private fun arrangeCards(cards: MutableList<Hero>, dY: Float = 0f)
+    private fun arrangeCards(heroes: MutableList<Hero>, dY: Float = 0f)
     /** calculate positions of the cards' rectangles.
      * @param dY Vertical offset used for scrolling */
     {
         val space = 20
         val offset = (Game.cardHeight*game.resources.displayMetrics.scaledDensity).toInt() + space
         var pos = cardsArea.top + space + dY.toInt()
-        for (card in cards)
+        for (hero in heroes)
         {
-            card.setSize()
-            card.areaOnScreen.setTopLeft(space, pos)
-            card.portraitArea.setCenter(card.areaOnScreen.center())
+            hero.card.setSize()
+            hero.card.areaOnScreen.setTopLeft(space, pos)
+            hero.card.portraitArea.setCenter(hero.card.areaOnScreen.center())
             pos += offset
         }
     }
@@ -183,11 +183,11 @@ class Marketplace(val game: Game): GameElement()
                 return true
             }
         }
-        for (card in upgrades)
-            if (card.areaOnScreen.contains(event.x.toInt(), event.y.toInt())) {
-                selected = card
+        for (hero in upgrades)
+            if (hero.card.areaOnScreen.contains(event.x.toInt(), event.y.toInt())) {
+                selected = hero
                 biographyViewOffset = 0f
-                makeButtonText(card)
+                makeButtonText(hero)
                 return true
             }
         if (cardsArea.contains(event.x.toInt(), event.y.toInt())) {
@@ -198,9 +198,9 @@ class Marketplace(val game: Game): GameElement()
     }
 
     fun onLongPress(event: MotionEvent): Boolean {
-        for (card in upgrades)
-            if (card.areaOnScreen.contains(event.x.toInt(), event.y.toInt())) {
-                Toast.makeText(game.gameActivity, card.upgradeInfo(), Toast.LENGTH_LONG).show()
+        for (hero in upgrades)
+            if (hero.card.areaOnScreen.contains(event.x.toInt(), event.y.toInt())) {
+                Toast.makeText(game.gameActivity, hero.upgradeInfo(), Toast.LENGTH_LONG).show()
                 return true
             }
         return false
@@ -294,11 +294,10 @@ class Marketplace(val game: Game): GameElement()
         }
 
         canvas.drawColor(Color.BLACK)
-
         // draw cards
-        selected?.displayHighlightFrame(canvas)
-        for (card in upgrades)
-            card.display(canvas)
+        selected?.card?.displayHighlightFrame(canvas)
+        for (hero in upgrades)
+            hero.card.display(canvas, viewport)
 
         // draw 'total coins' line
         val coinsArea = Rect(0, 0, myArea.right, cardsArea.top)
