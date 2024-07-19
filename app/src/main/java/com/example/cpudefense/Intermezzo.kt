@@ -11,6 +11,7 @@ import com.example.cpudefense.gameElements.Button
 import com.example.cpudefense.gameElements.GameElement
 import com.example.cpudefense.gameElements.Typewriter
 import com.example.cpudefense.networkmap.Viewport
+import com.example.cpudefense.utils.shrink
 import java.util.concurrent.CopyOnWriteArrayList
 import kotlin.random.Random
 
@@ -22,6 +23,7 @@ class Intermezzo(var game: Game): GameElement(), Fadable {
     private var buttonContinue: Button? = null
     private var buttonPurchase: Button? = null
     private var instructions: Instructions? = null
+    private var heroSelection: HeroSelection? = null
     var coinsGathered = 0
 
     private var textOnContinueButton = ""
@@ -42,6 +44,7 @@ class Intermezzo(var game: Game): GameElement(), Fadable {
     override fun fadeDone(type: Fader.Type) {
         alpha = 255
         instructions = Instructions(game, level) { displayText() }
+        heroSelection = HeroSelection()
     }
 
     private fun displayText()
@@ -157,6 +160,7 @@ class Intermezzo(var game: Game): GameElement(), Fadable {
         typewriter?.display(canvas)
         buttonContinue?.display(canvas)
         buttonPurchase?.display(canvas)
+        heroSelection?.display(canvas)
     }
 
     fun onDown(event: MotionEvent): Boolean {
@@ -227,4 +231,60 @@ class Intermezzo(var game: Game): GameElement(), Fadable {
         buttonContinue = null
         buttonPurchase = null
     }
+
+    inner class HeroSelection
+    {
+        val sizeOfHeroPanel = 3
+        var heroesAskingToTakeLeave = listOf<Hero>()
+        var myArea = Rect()
+        var width: Int = 0
+
+        init {
+            heroesAskingToTakeLeave = choosePossibleHeroes(5)
+            if (heroesAskingToTakeLeave.size > sizeOfHeroPanel)
+                heroesAskingToTakeLeave = heroesAskingToTakeLeave.takeLast(sizeOfHeroPanel)
+            setSize(Intermezzo@myArea)
+        }
+
+        fun setSize(containingRect: Rect)
+        {
+            var margin = 10
+            var myArea = Rect(containingRect)
+            myArea.shrink(margin)
+            var width = if (4*margin+3*Game.cardWidth>containingRect.width())
+                (containingRect.width()-4*margin) / 3
+            else
+                Game.cardWidth
+
+
+
+        }
+
+        fun display(canvas: Canvas)
+        {
+            heroesAskingToTakeLeave.forEachIndexed()
+            { index, hero ->
+                hero.display(canvas)
+            }
+
+        }
+
+        private fun choosePossibleHeroes(count: Int): List<Hero>
+                /** returns a list of heroes that may be asking for a leave.
+                 * @param count max. number of heroes returned
+                 * @return list containing the <count> strongest heroes, among those fulfilling certain criteria
+                 */
+        {
+            val heroesExcluded = listOf<Hero.Type>( Hero.Type.ENABLE_MEM_UPGRADE, Hero.Type.INCREASE_MAX_HERO_LEVEL )
+            var possibleHeroes = game.currentHeroes(level).values.filter {
+                it.data.type !in heroesExcluded
+            }.sortedBy { it.data.level }  // list of all heroes that are available, the strongest at the end
+            if (possibleHeroes.size > count)
+                possibleHeroes = possibleHeroes.takeLast(count)
+            return possibleHeroes.shuffled()
+        }
+
+
+    }
+
 }

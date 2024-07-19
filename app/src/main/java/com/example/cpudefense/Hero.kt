@@ -36,6 +36,7 @@ class Hero(var game: Game, type: Type): Fadable {
         ADDITIONAL_LIVES, INCREASE_MAX_HERO_LEVEL, LIMIT_UNWANTED_CHIPS,
         INCREASE_STARTING_CASH, GAIN_CASH, DECREASE_REMOVAL_COST,
         DECREASE_UPGRADE_COST, INCREASE_REFUND, GAIN_CASH_ON_KILL}
+
     data class Data (
         val type: Type,
         var level: Int = 0,
@@ -47,8 +48,12 @@ class Hero(var game: Game, type: Type): Fadable {
     private var graphicalState = GraphicalState.NORMAL
     private var transition = 0.0f
 
-    var areaOnScreen = Rect(0, 0, (Game.cardWidth*game.resources.displayMetrics.scaledDensity).toInt(), (Game.cardHeight*game.resources.displayMetrics.scaledDensity).toInt())
-    var heroArea = Rect(0, 0, (heroPictureSize*game.resources.displayMetrics.scaledDensity).toInt(), (heroPictureSize*game.resources.displayMetrics.scaledDensity).toInt())
+    /** rectangle with the size of the card, positioned at (0|0) */
+    val cardArea = Rect(0, 0, (Game.cardWidth*game.resources.displayMetrics.scaledDensity).toInt(), (Game.cardHeight*game.resources.displayMetrics.scaledDensity).toInt())
+    /** rectangle at the actual position on the screen */
+    var areaOnScreen = Rect(cardArea)
+    /** the area where the hero photo goes */
+    var portraitArea = Rect(0, 0, (heroPictureSize*game.resources.displayMetrics.scaledDensity).toInt(), (heroPictureSize*game.resources.displayMetrics.scaledDensity).toInt())
     private var myBitmap: Bitmap? = null
     private var effectBitmap = BitmapFactory.decodeResource(game.resources, R.drawable.glow)
     private var paintRect = Paint()
@@ -62,10 +67,10 @@ class Hero(var game: Game, type: Type): Fadable {
     private var strengthDesc: String = "format string"
     private var upgradeDesc: String = " → next level"
     private var costDesc: String = "[cost: ]"
-    private var hero: Hero = Hero(type)
+    private var person = Person(type)
     var heroOpacity = 0f
     private var levelIndicator = mutableListOf<Rect>()
-    private var indicatorSize = heroArea.width() / 10
+    private var indicatorSize = portraitArea.width() / 10
 
     var inactiveColor = game.resources.getColor(R.color.upgrade_inactive)
     var activeColor: Int = when(type)
@@ -131,7 +136,7 @@ class Hero(var game: Game, type: Type): Fadable {
         // display hero picture
         // (this is put here because of fading)
         paintHero.alpha = (255f * heroOpacity).toInt()
-        hero.picture?.let { canvas.drawBitmap(it, null, heroArea, paintHero) }
+        person.picture?.let { canvas.drawBitmap(it, null, portraitArea, paintHero) }
 
         displayFrame(canvas)
     }
@@ -198,12 +203,13 @@ class Hero(var game: Game, type: Type): Fadable {
         var centre = areaOnScreen.center() // remember the former screen position, if given
         areaOnScreen = Rect(0, 0, (Game.cardWidth*game.resources.displayMetrics.scaledDensity).toInt(), (Game.cardHeight*game.resources.displayMetrics.scaledDensity).toInt())
         areaOnScreen.setCenter(centre)
-        centre = heroArea.center()
-        heroArea = Rect(0, 0, (heroPictureSize*game.resources.displayMetrics.scaledDensity).toInt(), (heroPictureSize*game.resources.displayMetrics.scaledDensity).toInt())
-        heroArea.setCenter(centre)
+        centre = portraitArea.center()
+        portraitArea = Rect(0, 0, (heroPictureSize*game.resources.displayMetrics.scaledDensity).toInt(), (heroPictureSize*game.resources.displayMetrics.scaledDensity).toInt())
+        portraitArea.setCenter(centre)
         paintText.textSize = (Game.biographyTextSize - 2) * game.resources.displayMetrics.scaledDensity
-        indicatorSize = heroArea.width() / 10
+        indicatorSize = portraitArea.width() / 10
     }
+
     fun createBitmap()
     /** re-creates the bitmap without border, using a canvas positioned at (0, 0) */
     {
@@ -227,7 +233,7 @@ class Hero(var game: Game, type: Type): Fadable {
         val heroPaintText = Paint(paintText)
         heroPaintText.color = if (data.level == 0) inactiveColor else activeColor
         val heroTextRect = Rect(0, margin, areaOnScreen.width(), margin+40)
-        heroTextRect.displayTextCenteredInRect(canvas, hero.fullName, heroPaintText)
+        heroTextRect.displayTextCenteredInRect(canvas, person.fullName, heroPaintText)
 
         addLevelDecoration(canvas)
         myBitmap = bitmap
@@ -246,7 +252,7 @@ class Hero(var game: Game, type: Type): Fadable {
         paintIndicator.color = if (data.level == 0) inactiveColor else activeColor
         var verticalIndicatorSize = indicatorSize  // squeeze when max level is greater than 8
         if (getMaxUpgradeLevel()>8)
-            verticalIndicatorSize = heroArea.height() / (5+getMaxUpgradeLevel())
+            verticalIndicatorSize = portraitArea.height() / (5+getMaxUpgradeLevel())
         for (i in 1 .. getMaxUpgradeLevel())
         {
             val rect = Rect(0,0, indicatorSize, verticalIndicatorSize)
@@ -536,7 +542,7 @@ class Hero(var game: Game, type: Type): Fadable {
             val newInstance = Hero(game, data.type)
             newInstance.data.level = data.level
             newInstance.data.coinsSpent = data.coinsSpent
-            newInstance.hero.setType()
+            newInstance.person.setType()
             newInstance.heroOpacity = when (data.level) { 0 -> 0f else -> 1f}
             newInstance.setDesc()
             return newInstance
@@ -580,7 +586,7 @@ class Hero(var game: Game, type: Type): Fadable {
 
     }
 
-    inner class Hero(var type: Type)
+    inner class Person(var type: Type)
     {
         var name = ""
         var fullName = ""
@@ -786,7 +792,7 @@ class Hero(var game: Game, type: Type): Fadable {
             }
             else
             {
-                text = "%s\n\n%s".format(hero.fullName, effect)
+                text = "%s\n\n%s".format(person.fullName, effect)
                 paintBiography.color = selected?.inactiveColor ?: Color.WHITE
             }
 

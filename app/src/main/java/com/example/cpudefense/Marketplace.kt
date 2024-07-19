@@ -89,7 +89,7 @@ class Marketplace(val game: Game): GameElement()
         {
             card.setSize()
             card.areaOnScreen.setTopLeft(space, pos)
-            card.heroArea.setCenter(card.areaOnScreen.center())
+            card.portraitArea.setCenter(card.areaOnScreen.center())
             pos += offset
         }
     }
