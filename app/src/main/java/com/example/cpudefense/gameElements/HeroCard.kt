@@ -1,7 +1,6 @@
 package com.example.cpudefense.gameElements
 
 import android.graphics.*
-import android.text.TextPaint
 import com.example.cpudefense.Game
 import com.example.cpudefense.Hero
 import com.example.cpudefense.R
@@ -21,14 +20,15 @@ class HeroCard(val game: Game, val hero: Hero): GameElement(), Fadable
     private val heroPictureSize = 120
 
     /** rectangle with the size of the card, positioned at (0|0) */
-    val cardArea = Rect(0, 0, (Game.cardWidth*game.resources.displayMetrics.scaledDensity).toInt(), (Game.cardHeight*game.resources.displayMetrics.scaledDensity).toInt())
+    private var cardArea = Rect()
     /** rectangle at the actual position on the screen */
-    var areaOnScreen = Rect(cardArea)
+    var cardAreaOnScreen = Rect(cardArea)
     /** the area where the hero photo goes */
-    var portraitArea = Rect(0, 0, (heroPictureSize *game.resources.displayMetrics.scaledDensity).toInt(), (heroPictureSize *game.resources.displayMetrics.scaledDensity).toInt())
+    var portraitArea = Rect()
+    var portraitAreaOnScreen = Rect(portraitArea)
     private var myBitmap: Bitmap? = null
     private var effectBitmap = BitmapFactory.decodeResource(game.resources, R.drawable.glow)
-    private var shortDescRect = Rect(areaOnScreen)
+    private var shortDescRect = Rect(cardAreaOnScreen)
 
     /** state used for various graphical effects */
     enum class GraphicalState { NORMAL, TRANSIENT_LEVEL_0, TRANSIENT }
@@ -101,12 +101,12 @@ class HeroCard(val game: Game, val hero: Hero): GameElement(), Fadable
             paintRect.strokeWidth = 2f + hero.data.level / 2
         }
         paintRect.strokeWidth *= game.resources.displayMetrics.scaledDensity
-        myBitmap?.let { canvas.drawBitmap(it, null, areaOnScreen, paintRect) }
+        myBitmap?.let { canvas.drawBitmap(it, null, cardAreaOnScreen, paintRect) }
 
         // display hero picture
         // (this is put here because of fading)
         paintHero.alpha = (255f * heroOpacity).toInt()
-        hero.person.picture?.let { canvas.drawBitmap(it, null, portraitArea, paintHero) }
+        hero.person.picture?.let { canvas.drawBitmap(it, null, portraitAreaOnScreen, paintHero) }
 
         displayFrame(canvas)
     }
@@ -120,19 +120,19 @@ class HeroCard(val game: Game, val hero: Hero): GameElement(), Fadable
                 if (transition > 0.5)
                     thickness = 1.0f - transition
                 paintRect.strokeWidth = (2f + 10 * thickness)*game.resources.displayMetrics.scaledDensity
-                canvas.drawRect(areaOnScreen, paintRect)
+                canvas.drawRect(cardAreaOnScreen, paintRect)
             }
             GraphicalState.TRANSIENT_LEVEL_0 -> {
                 // draw animation for initial activation of the upgrade
-                canvas.drawRect(areaOnScreen, paintInactive)
-                displayLine(canvas, areaOnScreen.left, areaOnScreen.top, areaOnScreen.left, areaOnScreen.bottom)
-                displayLine(canvas, areaOnScreen.right, areaOnScreen.bottom, areaOnScreen.right, areaOnScreen.top)
-                displayLine(canvas, areaOnScreen.right, areaOnScreen.top, areaOnScreen.left, areaOnScreen.top)
-                displayLine(canvas, areaOnScreen.left, areaOnScreen.bottom, areaOnScreen.right, areaOnScreen.bottom)
+                canvas.drawRect(cardAreaOnScreen, paintInactive)
+                displayLine(canvas, cardAreaOnScreen.left, cardAreaOnScreen.top, cardAreaOnScreen.left, cardAreaOnScreen.bottom)
+                displayLine(canvas, cardAreaOnScreen.right, cardAreaOnScreen.bottom, cardAreaOnScreen.right, cardAreaOnScreen.top)
+                displayLine(canvas, cardAreaOnScreen.right, cardAreaOnScreen.top, cardAreaOnScreen.left, cardAreaOnScreen.top)
+                displayLine(canvas, cardAreaOnScreen.left, cardAreaOnScreen.bottom, cardAreaOnScreen.right, cardAreaOnScreen.bottom)
                 // let hero picture appear
                 heroOpacity = transition
             }
-            else -> canvas.drawRect(areaOnScreen, paintRect)
+            else -> canvas.drawRect(cardAreaOnScreen, paintRect)
         }
     }
 
@@ -145,10 +145,10 @@ class HeroCard(val game: Game, val hero: Hero): GameElement(), Fadable
             val originalAlpha = alpha
             alpha = 60
             strokeWidth = originalThickness + 12 * game.resources.displayMetrics.scaledDensity
-            canvas.drawRect(areaOnScreen, this)
+            canvas.drawRect(cardAreaOnScreen, this)
             alpha = 60
             strokeWidth = originalThickness + 6 * game.resources.displayMetrics.scaledDensity
-            canvas.drawRect(areaOnScreen, this)
+            canvas.drawRect(cardAreaOnScreen, this)
             // restore original values
             strokeWidth = originalThickness
             alpha = originalAlpha
@@ -157,7 +157,7 @@ class HeroCard(val game: Game, val hero: Hero): GameElement(), Fadable
     }
 
     private fun displayLine(canvas: Canvas, x0: Int, y0: Int, x1: Int, y1: Int)
-    // draws a fraction of the line between x0,y0 and x1,y1
+    /** draws a fraction of the line between x0,y0 and x1,y1 */
     {
         val x: Float = x0 * (1-transition) + x1 * transition
         val y = y0 * (1-transition) + y1 * transition
@@ -168,14 +168,14 @@ class HeroCard(val game: Game, val hero: Hero): GameElement(), Fadable
         canvas.drawBitmap(effectBitmap, null, effectRect, paintText)
     }
 
-    fun setSize()
+    fun putAt(left: Int, top: Int)
+    /** sets the top left corner of the card area to the given position */
     {
-        var centre = areaOnScreen.center() // remember the former screen position, if given
-        areaOnScreen = Rect(0, 0, (Game.cardWidth*game.resources.displayMetrics.scaledDensity).toInt(), (Game.cardHeight*game.resources.displayMetrics.scaledDensity).toInt())
-        areaOnScreen.setCenter(centre)
-        centre = portraitArea.center()
-        portraitArea = Rect(0, 0, (heroPictureSize *game.resources.displayMetrics.scaledDensity).toInt(), (heroPictureSize *game.resources.displayMetrics.scaledDensity).toInt())
-        portraitArea.setCenter(centre)
+        cardAreaOnScreen = Rect(cardArea)
+        cardAreaOnScreen.setTopLeft(left, top)
+        val center = cardAreaOnScreen.center()
+        portraitAreaOnScreen = Rect(portraitArea)
+        portraitAreaOnScreen.setCenter(center)
         paintText.textSize = (Game.biographyTextSize - 2) * game.resources.displayMetrics.scaledDensity
         indicatorSize = portraitArea.width() / 10
     }
@@ -197,14 +197,19 @@ class HeroCard(val game: Game, val hero: Hero): GameElement(), Fadable
         return
     }
 
+    fun create()
+    {
+        cardArea = Rect(0, 0, (Game.cardWidth*game.resources.displayMetrics.scaledDensity).toInt(), (Game.cardHeight*game.resources.displayMetrics.scaledDensity).toInt())
+        portraitArea = Rect(0, 0, (heroPictureSize *game.resources.displayMetrics.scaledDensity).toInt(), (heroPictureSize *game.resources.displayMetrics.scaledDensity).toInt())
+        paintText.textSize = (Game.biographyTextSize - 2) * game.resources.displayMetrics.scaledDensity
+        indicatorSize = portraitArea.width() / 10
+        createBitmap()
+    }
+
     fun createBitmap()
             /** re-creates the bitmap without border, using a canvas positioned at (0, 0) */
     {
-        val bitmap = Bitmap.createBitmap(
-            areaOnScreen.width(),
-            areaOnScreen.height(),
-            Bitmap.Config.ARGB_8888
-        )
+        val bitmap = Bitmap.createBitmap(cardArea.width(), cardArea.height(), Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)
 
         // render text used to indicate the effect of the upgrade, and calculate its position
@@ -219,11 +224,10 @@ class HeroCard(val game: Game, val hero: Hero): GameElement(), Fadable
         paintUpdate.color = game.resources.getColor(R.color.upgrade_inactive)
         canvas.drawText(hero.upgradeDesc, bounds.right + marginHorizontal, baseline, paintUpdate)
 
-        // draw hero
         val margin = (10*game.resources.displayMetrics.scaledDensity).toInt()
         val heroPaintText = Paint(paintText)
         heroPaintText.color = if (hero.data.level == 0) inactiveColor else activeColor
-        val heroTextRect = Rect(0, margin, areaOnScreen.width(), margin+40)
+        val heroTextRect = Rect(0, margin, cardArea.width(), margin+40)
         heroTextRect.displayTextCenteredInRect(canvas, hero.person.fullName, heroPaintText)
 
         addLevelDecoration(canvas)

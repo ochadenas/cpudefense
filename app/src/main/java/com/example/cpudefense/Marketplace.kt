@@ -9,9 +9,7 @@ import com.example.cpudefense.effects.*
 import com.example.cpudefense.gameElements.Button
 import com.example.cpudefense.gameElements.GameElement
 import com.example.cpudefense.networkmap.Viewport
-import com.example.cpudefense.utils.center
 import com.example.cpudefense.utils.setCenter
-import com.example.cpudefense.utils.setTopLeft
 
 class Marketplace(val game: Game): GameElement()
 {
@@ -70,8 +68,7 @@ class Marketplace(val game: Game): GameElement()
                 newUpgrades.add(hero)
             }
             hero.setDesc()
-            hero.card.setSize()
-            hero.card.createBitmap()
+            hero.card.create()
         }
         arrangeCards(newUpgrades, cardViewOffset)
         upgrades = newUpgrades
@@ -79,7 +76,7 @@ class Marketplace(val game: Game): GameElement()
     }
 
     private fun arrangeCards(heroes: MutableList<Hero>, dY: Float = 0f)
-    /** calculate positions of the cards' rectangles.
+    /** calculate the positions of the cards' rectangles.
      * @param dY Vertical offset used for scrolling */
     {
         val space = 20
@@ -87,9 +84,7 @@ class Marketplace(val game: Game): GameElement()
         var pos = cardsArea.top + space + dY.toInt()
         for (hero in heroes)
         {
-            hero.card.setSize()
-            hero.card.areaOnScreen.setTopLeft(space, pos)
-            hero.card.portraitArea.setCenter(hero.card.areaOnScreen.center())
+            hero.card.putAt(space, pos)
             pos += offset
         }
     }
@@ -184,7 +179,7 @@ class Marketplace(val game: Game): GameElement()
             }
         }
         for (hero in upgrades)
-            if (hero.card.areaOnScreen.contains(event.x.toInt(), event.y.toInt())) {
+            if (hero.card.cardAreaOnScreen.contains(event.x.toInt(), event.y.toInt())) {
                 selected = hero
                 biographyViewOffset = 0f
                 makeButtonText(hero)
@@ -199,7 +194,7 @@ class Marketplace(val game: Game): GameElement()
 
     fun onLongPress(event: MotionEvent): Boolean {
         for (hero in upgrades)
-            if (hero.card.areaOnScreen.contains(event.x.toInt(), event.y.toInt())) {
+            if (hero.card.cardAreaOnScreen.contains(event.x.toInt(), event.y.toInt())) {
                 Toast.makeText(game.gameActivity, hero.upgradeInfo(), Toast.LENGTH_LONG).show()
                 return true
             }
@@ -322,12 +317,14 @@ class Marketplace(val game: Game): GameElement()
             c.display(canvas, viewport)
             coinPosX += deltaX
         }
+
         // draw buttons
         buttonFinish?.display(canvas)
         buttonRefund?.display(canvas)
         selected?.let {
             buttonPurchase?.display(canvas)
         }
+
         // draw biography
         selected?.biography?.let {
             val sourceRect = Rect(0, -biographyViewOffset.toInt(), it.bitmap.width, it.myArea.height()-biographyViewOffset.toInt())
