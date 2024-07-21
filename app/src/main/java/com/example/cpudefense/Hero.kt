@@ -35,11 +35,22 @@ class Hero(var game: Game, type: Type)
         DECREASE_UPGRADE_COST, INCREASE_REFUND, GAIN_CASH_ON_KILL}
 
     data class Data (
+        /** type of the hero, actually its name */
         val type: Type,
+        /** upgrade level */
         var level: Int = 0,
-        var coinsSpent: Int = 0
+        /** coins spent for all upgrades so far */
+        var coinsSpent: Int = 0,
+        /** list of levels where the hero is not available, with the starting level as key */
+        var holidays: HashMap<Int, LevelRange>,
     )
-    var data = Data(type = type)
+    var data = Data(type = type, holidays = hashMapOf())
+
+    data class LevelRange (
+        val from: Int,
+        val to: Int,
+            )
+
 
     var shortDesc: String = "effect description"
     var strengthDesc: String = "format string"
@@ -352,7 +363,6 @@ class Hero(var game: Game, type: Type)
                 else -> return level.toFloat()
             }
         }
-
     }
 
     inner class Person(var type: Type)
@@ -583,5 +593,25 @@ class Hero(var game: Game, type: Type)
             }
             textLayout.draw(canvas)
         }
+    }
+
+    // handling of holidays
+
+    fun isOnLeave(level: Stage.Identifier): Boolean
+    {
+        if (level.series != Game.SERIES_ENDLESS)
+            return false
+        data.holidays.values.forEach()
+        {
+            if (it.from <= level.number && it.from >= level.number)
+                return true
+        }
+        return false
+    }
+
+    fun addLeave(level: Stage.Identifier, duration: Int)
+    {
+        val levelTo = Stage.Identifier(level.series, level.number+duration-1)
+        data.holidays[level.number]=LevelRange(level.number, levelTo.number)
     }
 }

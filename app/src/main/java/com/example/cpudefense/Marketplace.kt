@@ -68,7 +68,7 @@ class Marketplace(val game: Game): GameElement()
                 newUpgrades.add(hero)
             }
             hero.setDesc()
-            hero.card.create()
+            hero.card.create(showNextUpdate = true)
         }
         arrangeCards(newUpgrades, cardViewOffset)
         upgrades = newUpgrades

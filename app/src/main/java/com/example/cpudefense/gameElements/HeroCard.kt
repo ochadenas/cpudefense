@@ -6,6 +6,7 @@ import com.example.cpudefense.Hero
 import com.example.cpudefense.R
 import com.example.cpudefense.effects.Fadable
 import com.example.cpudefense.effects.Fader
+import com.example.cpudefense.effects.Flippable
 import com.example.cpudefense.networkmap.Viewport
 import com.example.cpudefense.utils.center
 import com.example.cpudefense.utils.displayTextCenteredInRect
@@ -20,7 +21,7 @@ class HeroCard(val game: Game, val hero: Hero): GameElement(), Fadable
     private val heroPictureSize = 120
 
     /** rectangle with the size of the card, positioned at (0|0) */
-    private var cardArea = Rect()
+    var cardArea = Rect()
     /** rectangle at the actual position on the screen */
     var cardAreaOnScreen = Rect(cardArea)
     /** the area where the hero photo goes */
@@ -39,6 +40,10 @@ class HeroCard(val game: Game, val hero: Hero): GameElement(), Fadable
     /** the little boxes that show the current level */
     private var levelIndicator = mutableListOf<Rect>()
     private var indicatorSize = portraitArea.width() / 10
+
+    /** additional flags */
+    var showNextUpdate = true
+    var isOnLeave = false
 
     /* different paint objects */
     private var paintRect = Paint()
@@ -105,9 +110,15 @@ class HeroCard(val game: Game, val hero: Hero): GameElement(), Fadable
 
         // display hero picture
         // (this is put here because of fading)
-        paintHero.alpha = (255f * heroOpacity).toInt()
-        hero.person.picture?.let { canvas.drawBitmap(it, null, portraitAreaOnScreen, paintHero) }
-
+        if (isOnLeave)
+        {
+            portraitAreaOnScreen.displayTextCenteredInRect(canvas, "On leave", paintText)
+        }
+        else // not on leave, this is the normal case
+        {
+            paintHero.alpha = (255f * heroOpacity).toInt()
+            hero.person.picture?.let { canvas.drawBitmap(it, null, portraitAreaOnScreen, paintHero) }
+        }
         displayFrame(canvas)
     }
 
@@ -138,7 +149,6 @@ class HeroCard(val game: Game, val hero: Hero): GameElement(), Fadable
 
     fun displayHighlightFrame(canvas: Canvas)
     {
-        // if (graphicalState != GraphicalState.TRANSIENT_LEVEL_0) {
         with (paintInactive)
         {
             val originalThickness = strokeWidth
@@ -197,12 +207,13 @@ class HeroCard(val game: Game, val hero: Hero): GameElement(), Fadable
         return
     }
 
-    fun create()
+    fun create(showNextUpdate: Boolean = true)
     {
         cardArea = Rect(0, 0, (Game.cardWidth*game.resources.displayMetrics.scaledDensity).toInt(), (Game.cardHeight*game.resources.displayMetrics.scaledDensity).toInt())
         portraitArea = Rect(0, 0, (heroPictureSize *game.resources.displayMetrics.scaledDensity).toInt(), (heroPictureSize *game.resources.displayMetrics.scaledDensity).toInt())
         paintText.textSize = (Game.biographyTextSize - 2) * game.resources.displayMetrics.scaledDensity
         indicatorSize = portraitArea.width() / 10
+        this.showNextUpdate = showNextUpdate
         createBitmap()
     }
 
@@ -221,9 +232,10 @@ class HeroCard(val game: Game, val hero: Hero): GameElement(), Fadable
         val bounds = Rect()
         paintText.getTextBounds(hero.strengthDesc, 0, hero.strengthDesc.length, bounds)
         canvas.drawText(hero.shortDesc, marginHorizontal, baseline - bounds.height() - marginVertical, paintText)
-        paintUpdate.color = game.resources.getColor(R.color.upgrade_inactive)
-        canvas.drawText(hero.upgradeDesc, bounds.right + marginHorizontal, baseline, paintUpdate)
-
+        if (showNextUpdate) {
+            paintUpdate.color = game.resources.getColor(R.color.upgrade_inactive)
+            canvas.drawText(hero.upgradeDesc, bounds.right + marginHorizontal, baseline, paintUpdate)
+        }
         val margin = (10*game.resources.displayMetrics.scaledDensity).toInt()
         val heroPaintText = Paint(paintText)
         heroPaintText.color = if (hero.data.level == 0) inactiveColor else activeColor
@@ -272,5 +284,4 @@ class HeroCard(val game: Game, val hero: Hero): GameElement(), Fadable
     {
         transition = opacity
     }
-
 }

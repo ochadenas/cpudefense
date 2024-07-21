@@ -278,6 +278,9 @@ class Game(val gameActivity: MainGameActivity) {
         return heroes ?: HashMap()
     }
 
+    fun currentHeroesOnLeave(stage: Stage.Identifier):
+
+
     fun currentPurse(stage: Stage.Identifier = currentStage): PurseOfCoins
     {
         return purseOfCoins[stage.mode()] ?: PurseOfCoins(this)

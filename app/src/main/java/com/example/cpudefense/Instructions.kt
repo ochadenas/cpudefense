@@ -10,7 +10,9 @@ import com.example.cpudefense.effects.Fadable
 import com.example.cpudefense.effects.Fader
 import kotlin.random.Random
 
-class Instructions(val game: Game, var stage: Stage.Identifier, var callback: (()->Unit)? ): Fadable {
+class Instructions(val game: Game, var stage: Stage.Identifier, var showLeaveDialogue: Boolean,
+                   var callback: (()->Unit)? ): Fadable
+{
     var alpha = 0
 
     private var funFact = if (Random.nextFloat() > 0.3)
@@ -23,7 +25,9 @@ class Instructions(val game: Game, var stage: Stage.Identifier, var callback: ((
     {
         if (game.intermezzo.type in setOf(Intermezzo.Type.GAME_LOST, Intermezzo.Type.GAME_WON))
             return ""
-        if (stage.series == Game.SERIES_NORMAL) {
+        else if (showLeaveDialogue)
+            return game.resources.getString(R.string.instr_leave)
+        else if (stage.series == Game.SERIES_NORMAL) {
             return when (level) {
                 1 -> game.resources.getString(R.string.instr_1)
                 2 -> game.resources.getString(R.string.instr_2)
@@ -44,6 +48,7 @@ class Instructions(val game: Game, var stage: Stage.Identifier, var callback: ((
                 28 -> game.resources.getString(R.string.instr_15).format(Game.temperatureLimit)
                 30 -> game.resources.getString(R.string.instr_17)
                 31 -> game.resources.getString(R.string.instr_18)
+                32 -> game.resources.getString(R.string.instr_23)
                 else -> ""
             }
         }
@@ -59,7 +64,6 @@ class Instructions(val game: Game, var stage: Stage.Identifier, var callback: ((
                 1 -> game.resources.getString(R.string.instr_endless)
                 else -> funFact
             }
-
         }
         else
             return ""
@@ -85,7 +89,9 @@ class Instructions(val game: Game, var stage: Stage.Identifier, var callback: ((
         val text = instructionText(stage.number)
         val textPaint = TextPaint()
         textPaint.textSize = Game.instructionTextSize * game.resources.displayMetrics.scaledDensity
-        textPaint.color = Color.WHITE
+        textPaint.color =
+            if (showLeaveDialogue) game.resources.getColor(R.color.text_amber)
+            else Color.WHITE
         textPaint.alpha = alpha
         val textLayout = StaticLayout(
             text,

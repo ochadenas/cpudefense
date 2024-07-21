@@ -4,6 +4,7 @@ package com.example.cpudefense
 
 import android.graphics.*
 import android.view.MotionEvent
+import android.widget.Toast
 import com.example.cpudefense.effects.Explosion
 import com.example.cpudefense.effects.Fadable
 import com.example.cpudefense.effects.Fader
@@ -12,6 +13,7 @@ import com.example.cpudefense.gameElements.GameElement
 import com.example.cpudefense.gameElements.Typewriter
 import com.example.cpudefense.networkmap.Viewport
 import com.example.cpudefense.utils.shrink
+import java.time.Duration
 import java.util.concurrent.CopyOnWriteArrayList
 import kotlin.random.Random
 
@@ -34,6 +36,7 @@ class Intermezzo(var game: Game): GameElement(), Fadable {
     fun setSize(area: Rect)
     {
         myArea = Rect(area)
+        heroSelection?.setSize(myArea)
     }
 
     override fun update() {
@@ -43,8 +46,10 @@ class Intermezzo(var game: Game): GameElement(), Fadable {
 
     override fun fadeDone(type: Fader.Type) {
         alpha = 255
-        instructions = Instructions(game, level) { displayText() }
-        heroSelection = HeroSelection()
+        val showLeaveDialogue = isLevelWhereHeroGoesOnLeave(level)
+        if (showLeaveDialogue)
+            heroSelection = HeroSelection()
+        instructions = Instructions(game, level, showLeaveDialogue) { displayText() }
     }
 
     private fun displayText()
@@ -170,11 +175,13 @@ class Intermezzo(var game: Game): GameElement(), Fadable {
         else if (buttonContinue?.touchableArea?.contains(event.x.toInt(), event.y.toInt()) == true) {
             when (type) {
                 Type.GAME_WON -> { game.quitGame() }
-                Type.GAME_LOST -> { game.startNextStage(level) }
-                else -> { game.startNextStage(level) }
+                Type.GAME_LOST -> { startLevel() }
+                else -> { startLevel() }
             }
             return true
         }
+        else if (heroSelection?.onDown(event) == true)
+            return true
         return false
     }
 
@@ -200,6 +207,19 @@ class Intermezzo(var game: Game): GameElement(), Fadable {
         clear()
         game.marketplace.fillMarket(level)
         game.state.phase = Game.GamePhase.MARKETPLACE
+    }
+
+    private fun startLevel()
+    {
+        if (isLevelWhereHeroGoesOnLeave(level))
+        {
+            if (heroSelection?.selectedHero == null) {
+                Toast.makeText(game.gameActivity, "You must select one hero and give them leave!", Toast.LENGTH_SHORT)
+                    .show()
+                return
+            }
+        }
+        game.startNextStage(level)
     }
 
     fun endOfGame(lastLevel: Stage.Identifier, hasWon: Boolean)
@@ -232,39 +252,68 @@ class Intermezzo(var game: Game): GameElement(), Fadable {
         buttonPurchase = null
     }
 
+    private fun isLevelWhereHeroGoesOnLeave(ident: Stage.Identifier): Boolean
+    {
+        if (ident.series == 3 && ident.number == 2)
+            return true
+        else
+            return false
+    }
+
+    private fun heroMustBeSelectedForLeave()
+
+
     inner class HeroSelection
     {
         val sizeOfHeroPanel = 3
         var heroesAskingToTakeLeave = listOf<Hero>()
-        var myArea = Rect()
+        var selectedHero: Hero? = null
         var width: Int = 0
 
         init {
             heroesAskingToTakeLeave = choosePossibleHeroes(5)
             if (heroesAskingToTakeLeave.size > sizeOfHeroPanel)
                 heroesAskingToTakeLeave = heroesAskingToTakeLeave.takeLast(sizeOfHeroPanel)
-            setSize(Intermezzo@myArea)
         }
 
         fun setSize(containingRect: Rect)
         {
-            var margin = 10
-            var myArea = Rect(containingRect)
+            if (heroesAskingToTakeLeave.isEmpty()) return
+            heroesAskingToTakeLeave.forEach() {
+                it.card.create(showNextUpdate = false)
+            }
+            var cardWidth  = heroesAskingToTakeLeave.first().card.cardArea.width()
+            var cardHeight = heroesAskingToTakeLeave.first().card.cardArea.height()
+            var margin = (20 * game.resources.displayMetrics.scaledDensity).toInt()
+            val textLineHeight = Game.instructionTextSize * game.resources.displayMetrics.scaledDensity // approx.
+            val top = containingRect.top + (6*textLineHeight).toInt()
+            var myArea = Rect(margin, top, containingRect.right-margin, top + 2*cardHeight + 3*margin)
             myArea.shrink(margin)
-            var width = if (4*margin+3*Game.cardWidth>containingRect.width())
-                (containingRect.width()-4*margin) / 3
-            else
-                Game.cardWidth
 
-
-
+            // if (4*margin+3*cardWidth > containingRect.width())
+            //    cardWidth = (containingRect.width()-4*margin) / 3
+            val x_left = myArea.left
+            val x_right = myArea.right - cardWidth
+            val y_bottom = myArea.bottom - cardHeight
+            val y_top = myArea.top
+            heroesAskingToTakeLeave.forEachIndexed()
+            {
+                index, hero ->
+                when (index)
+                {
+                    0 -> hero.card.putAt(x_left, y_top)
+                    1 -> hero.card.putAt(x_right, y_top)
+                    2 -> hero.card.putAt(x_left, y_bottom)
+                    3 -> hero.card.putAt(x_right, y_bottom)
+                }
+            }
         }
 
         fun display(canvas: Canvas, viewport: Viewport)
         {
-            heroesAskingToTakeLeave.forEachIndexed()
-            { index, hero ->
-                hero.card.display(canvas, viewport)
+            heroesAskingToTakeLeave.forEach()
+            {
+                it.card.display(canvas, viewport)
             }
 
         }
@@ -284,7 +333,27 @@ class Intermezzo(var game: Game): GameElement(), Fadable {
             return possibleHeroes.shuffled()
         }
 
+        fun onDown(event: MotionEvent): Boolean {
+            heroesAskingToTakeLeave.forEach()
+            {
+                if (it.card.cardAreaOnScreen.contains(event.x.toInt(), event.y.toInt())) {
+                    selectForLeave(it)
+                    return true
+                }
+            }
+            return false
+        }
 
+        fun selectForLeave(hero: Hero)
+        {
+            heroesAskingToTakeLeave.filter { it != hero }
+                .forEach() { it.card.isOnLeave = false }  // reset the other cards
+            hero.card.isOnLeave = !hero.card.isOnLeave // toggle this one
+            if (hero.card.isOnLeave)
+                selectedHero = hero
+            else
+                selectedHero = null
+        }
     }
 
 }
