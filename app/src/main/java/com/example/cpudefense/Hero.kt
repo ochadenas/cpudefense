@@ -7,12 +7,16 @@ import android.graphics.Bitmap.createBitmap
 import android.text.Layout
 import android.text.StaticLayout
 import android.text.TextPaint
-import com.example.cpudefense.effects.Fadable
 import com.example.cpudefense.gameElements.HeroCard
 import kotlin.math.exp
 import kotlin.math.truncate
 
 class Hero(var game: Game, type: Type)
+/** class representing the various personalities in the game, and the effect
+ * they have on game play.
+ * @param game Reference to the main game object
+ * @param type Type of the hero (main key for all hero attributes)
+ */
 {
     /*
     potential Heroes for versions to come:
@@ -41,16 +45,11 @@ class Hero(var game: Game, type: Type)
         var level: Int = 0,
         /** coins spent for all upgrades so far */
         var coinsSpent: Int = 0,
-        /** list of levels where the hero is not available, with the starting level as key */
-        var holidays: HashMap<Int, LevelRange>,
     )
-    var data = Data(type = type, holidays = hashMapOf())
+    var data = Data(type = type)
 
-    data class LevelRange (
-        val from: Int,
-        val to: Int,
-            )
-
+    /** only for the current level: whether hero is on leave */
+    var isOnLeave = false
 
     var shortDesc: String = "effect description"
     var strengthDesc: String = "format string"
@@ -234,7 +233,7 @@ class Hero(var game: Game, type: Type)
             listOf( Type.ADDITIONAL_LIVES, Type.INCREASE_MAX_HERO_LEVEL, Type.GAIN_CASH, Type.INCREASE_REFUND, Type.ENABLE_MEM_UPGRADE))
             return maxLevel
         else
-            return maxLevel + (additionalUpgradePossibility ?: 0)
+            return maxLevel + additionalUpgradePossibility
     }
 
     private fun upgradeLevel(type: Type): Int
@@ -317,7 +316,7 @@ class Hero(var game: Game, type: Type)
     }
 
     companion object {
-        fun createFromData(game: Game, data: Data): com.example.cpudefense.Hero
+        fun createFromData(game: Game, data: Data): Hero
                 /** reconstruct a Hero object based on the saved data
                  * and set all inner proprieties
                  */
@@ -328,6 +327,7 @@ class Hero(var game: Game, type: Type)
             newInstance.person.setType()
             newInstance.card.heroOpacity = when (data.level) { 0 -> 0f else -> 1f}
             newInstance.setDesc()
+            newInstance.isOnLeave = newInstance.isOnLeave(game.currentStage)
             return newInstance
         }
 
@@ -562,7 +562,7 @@ class Hero(var game: Game, type: Type)
         private var canvas = Canvas(bitmap)
         private var paintBiography = TextPaint()
 
-        fun createBiography(selected: com.example.cpudefense.Hero?)
+        fun createBiography(selected: Hero?)
         {
             val text: String
             if (data.level>0)
@@ -595,23 +595,40 @@ class Hero(var game: Game, type: Type)
         }
     }
 
-    // handling of holidays
+    // Holiday handling
+    data class Holiday (
+        val hero: Hero.Type,
+        val from: Int,
+        val to: Int,
+    )
 
-    fun isOnLeave(level: Stage.Identifier): Boolean
+    fun isOnLeave(level: Stage.Identifier, leaveStartsOnLevel: Boolean = false): Boolean
+            /**
+             * @param leaveStartsOnLevel if true, consider that are actually leaving on the level.
+             * Otherwise, also include those that are _still_ on leave.
+             * @return whether the hero is on leave for the given stage. */
     {
         if (level.series != Game.SERIES_ENDLESS)
             return false
-        data.holidays.values.forEach()
+        if (leaveStartsOnLevel)
         {
-            if (it.from <= level.number && it.from >= level.number)
-                return true
+            return game.holidays[level.number]?.hero == this.data.type
         }
+        else
+            game.holidays.values.forEach()
+            {
+                if (it.hero == this.data.type && it.from <= level.number && it.to >= level.number)
+                    return true
+            }
         return false
     }
 
     fun addLeave(level: Stage.Identifier, duration: Int)
     {
         val levelTo = Stage.Identifier(level.series, level.number+duration-1)
-        data.holidays[level.number]=LevelRange(level.number, levelTo.number)
+        game.holidays[level.number]=Holiday(data.type, level.number, levelTo.number)
+        Persistency(game.gameActivity).saveHolidays(game)
     }
+
 }
+

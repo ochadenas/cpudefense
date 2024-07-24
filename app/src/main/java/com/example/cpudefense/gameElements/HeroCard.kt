@@ -43,7 +43,7 @@ class HeroCard(val game: Game, val hero: Hero): GameElement(), Fadable
 
     /** additional flags */
     var showNextUpdate = true
-    var isOnLeave = false
+    var monochrome = false
 
     /* different paint objects */
     private var paintRect = Paint()
@@ -53,7 +53,9 @@ class HeroCard(val game: Game, val hero: Hero): GameElement(), Fadable
     private val paintHero = Paint()
 
     var inactiveColor = game.resources.getColor(R.color.upgrade_inactive)
-    var activeColor: Int = when(type)
+    var monochromeColor = inactiveColor
+    var activeColor: Int = if (monochrome) monochromeColor
+    else when(type)
     {
         Hero.Type.INCREASE_CHIP_SUB_SPEED -> game.resources.getColor(R.color.upgrade_active_chip_sub)
         Hero.Type.INCREASE_CHIP_SUB_RANGE -> game.resources.getColor(R.color.upgrade_active_chip_sub)
@@ -95,22 +97,22 @@ class HeroCard(val game: Game, val hero: Hero): GameElement(), Fadable
 
     override fun display(canvas: Canvas, viewport: Viewport)
     {
-        if (hero.data.level == 0)
-        {
-            paintRect.color = inactiveColor
-            paintRect.strokeWidth = 2f
-        }
-        else
-        {
-            paintRect.color = activeColor
-            paintRect.strokeWidth = 2f + hero.data.level / 2
+        when (hero.data.level) {
+            0 -> {
+                paintRect.color = inactiveColor
+                paintRect.strokeWidth = 2f
+            }
+            else -> {
+                paintRect.color = activeColor
+                paintRect.strokeWidth = 2f + hero.data.level / 2
+            }
         }
         paintRect.strokeWidth *= game.resources.displayMetrics.scaledDensity
         myBitmap?.let { canvas.drawBitmap(it, null, cardAreaOnScreen, paintRect) }
 
         // display hero picture
         // (this is put here because of fading)
-        if (isOnLeave)
+        if (hero.isOnLeave)
         {
             portraitAreaOnScreen.displayTextCenteredInRect(canvas, "On leave", paintText)
         }
@@ -207,13 +209,14 @@ class HeroCard(val game: Game, val hero: Hero): GameElement(), Fadable
         return
     }
 
-    fun create(showNextUpdate: Boolean = true)
+    fun create(showNextUpdate: Boolean = true, monochrome: Boolean = false)
     {
         cardArea = Rect(0, 0, (Game.cardWidth*game.resources.displayMetrics.scaledDensity).toInt(), (Game.cardHeight*game.resources.displayMetrics.scaledDensity).toInt())
         portraitArea = Rect(0, 0, (heroPictureSize *game.resources.displayMetrics.scaledDensity).toInt(), (heroPictureSize *game.resources.displayMetrics.scaledDensity).toInt())
         paintText.textSize = (Game.biographyTextSize - 2) * game.resources.displayMetrics.scaledDensity
         indicatorSize = portraitArea.width() / 10
         this.showNextUpdate = showNextUpdate
+        this.monochrome = monochrome
         createBitmap()
     }
 

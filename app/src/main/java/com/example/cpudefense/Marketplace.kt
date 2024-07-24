@@ -69,6 +69,7 @@ class Marketplace(val game: Game): GameElement()
             }
             hero.setDesc()
             hero.card.create(showNextUpdate = true)
+            hero.isOnLeave = hero.isOnLeave(level)
         }
         arrangeCards(newUpgrades, cardViewOffset)
         upgrades = newUpgrades
@@ -249,6 +250,7 @@ class Marketplace(val game: Game): GameElement()
         fillMarket(nextGameLevel)
         makeButtonText(hero)
     }
+    @Suppress("UNUSED_PARAMETER")
     fun onScroll(event1: MotionEvent?, event2: MotionEvent?, dX: Float, dY: Float): Boolean {
         val scrollFactor = 1.1f  // higher values make scrolling faster
         if (dY == 0f)

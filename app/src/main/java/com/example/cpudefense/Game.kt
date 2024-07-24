@@ -124,6 +124,7 @@ class Game(val gameActivity: MainGameActivity) {
         LevelMode.BASIC to HashMap<Hero.Type, Hero>(),
         LevelMode.ENDLESS to HashMap<Hero.Type, Hero>(),
     )
+    var holidays = HashMap<Int, Hero.Holiday>()
 
     /* coin management */
     enum class LevelMode { BASIC, ENDLESS }
@@ -278,8 +279,13 @@ class Game(val gameActivity: MainGameActivity) {
         return heroes ?: HashMap()
     }
 
-    fun currentHeroesOnLeave(stage: Stage.Identifier):
-
+    fun currentHeroesOnLeave(stage: Stage.Identifier, leaveStartsOnLevel: Boolean = false): HashMap<Hero.Type, Hero>
+    /**
+     * @param leaveStartsOnLevel whether only include the heroes that are starting their leave, or also those that have started before
+     * @returns all heroes that are on leave during the given stage */
+    {
+        return currentHeroes().filterValues { it.isOnLeave(stage, leaveStartsOnLevel) } as HashMap<Hero.Type, Hero>
+    }
 
     fun currentPurse(stage: Stage.Identifier = currentStage): PurseOfCoins
     {

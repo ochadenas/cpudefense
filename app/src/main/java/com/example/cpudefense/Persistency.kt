@@ -45,11 +45,14 @@ class Persistency(activity: Activity) {
         val basic: MutableList<Hero.Data> = mutableListOf(),
         val endless: MutableList<Hero.Data> = mutableListOf()
     )
-
     data class SerializablePurseContents (
         var basic: PurseOfCoins.Contents,
         var endless: PurseOfCoins.Contents,
     )
+    data class SerializableHolidays (
+        val period: HashMap<Int, Hero.Holiday> = HashMap(),
+    )
+
     fun saveState(game: Game?)
             /** saves all data that is needed to continue a game later.
              * This includes levels completed and coins got,
@@ -181,6 +184,15 @@ class Persistency(activity: Activity) {
         editor.apply()
     }
 
+    fun saveHolidays(game: Game)
+    {
+        val editor = prefsSaves.edit()
+        var data = SerializableHolidays(game.holidays)
+        var json = Gson().toJson(data)
+        editor.putString("holidays", json)
+        editor.apply()
+    }
+
     fun loadGlobalData(): Game.GlobalData
     /** retrieve some global game data, such as total number of coins.
         Saving is done in saveState().
@@ -266,6 +278,7 @@ class Persistency(activity: Activity) {
                     /* may happen if a previously existing hero type is definitely removed from the game */
                 }
             }
+            loadHolidays(game)
         }
         catch (ex: Exception) {
             // save file has not the expected structure
@@ -285,6 +298,18 @@ class Persistency(activity: Activity) {
                 Gson().fromJson(json, SerializablePurseContents::class.java)
             game.purseOfCoins[Game.LevelMode.BASIC]?.let { purse -> purse.contents = data.basic; purse.initialized = true }
             game.purseOfCoins[Game.LevelMode.ENDLESS]?.let { purse -> purse.contents = data.endless; purse.initialized = true }
+        }
+    }
+
+
+    fun loadHolidays(game: Game)
+    {
+        val editor = prefsSaves.edit()
+        val json = prefsSaves.getString("holidays", "none")
+        if (json != "none") {
+            val data: SerializableHolidays =
+                Gson().fromJson(json, SerializableHolidays::class.java)
+            game.holidays = data.period
         }
     }
 

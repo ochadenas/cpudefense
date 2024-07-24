@@ -90,7 +90,7 @@ class Instructions(val game: Game, var stage: Stage.Identifier, var showLeaveDia
         val textPaint = TextPaint()
         textPaint.textSize = Game.instructionTextSize * game.resources.displayMetrics.scaledDensity
         textPaint.color =
-            if (showLeaveDialogue) game.resources.getColor(R.color.text_amber)
+            if (showLeaveDialogue) game.resources.getColor(R.color.text_green)
             else Color.WHITE
         textPaint.alpha = alpha
         val textLayout = StaticLayout(

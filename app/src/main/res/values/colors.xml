@@ -13,6 +13,7 @@
     <color name="circuit_edge">#eb6909</color>
 
     <color name="network_background">#F0292215</color>
+    <color name="alternate_background">#000000</color>
     <color name="connectors">#F0e79c00</color>
     <color name="entrypoints">#F0CFB473</color>
     <color name="attackers_foreground_bin">#DAFFF2F2</color>
@@ -71,6 +72,7 @@
     <color name="text_lightred">#F86B6B</color>
 
     <color name="upgrade_inactive">#7C878C</color>
+    <color name="upgrade_monochrome">#B9921C</color>
     <color name="upgrade_active_general">#79D5FF</color>
     <color name="upgrade_active_eco">#FF8400</color>
     <color name="upgrade_active_meta">#FF3138</color>
