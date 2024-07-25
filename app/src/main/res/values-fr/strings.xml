@@ -184,5 +184,9 @@
     <string name="shortdesc_duration">Durée d\'effet R\n</string>
     <string name="HERO_EFFECT_RES_STRENGTH">Augmente toutes les résistances\n</string>
     <string name="HERO_EFFECT_RES_DURATION">Augmente la durée de l\'effet des résistances</string>
-    <string name="instr_leave">Certains héros demandent des vacances. Vous devez accorder un congé à l\'un(e) d\'entre eux qui reviendra au bout de 3 niveaux.</string>
+    <string name="message_is_on_leave">%s est actuellement en congé.\n</string>
+    <string name="instr_leave">Certains héros demandent des vacances. Vous devez accorder un congé à l\'un(e) d\'entre eux qui reviendra au bout de %d niveaux.</string>
+    <string name="heroes_on_leave_0">Aucun héros ne se trouve en congé.\n</string>
+    <string name="heroes_on_leave_1">Héro en congés :</string>
+    <string name="heroes_on_leave_2">Héros en congés :</string>
 </resources>

@@ -52,10 +52,13 @@ class Game(val gameActivity: MainGameActivity) {
         const val cardHeight = 256
         const val cardWidth = 220
 
+        // some adjustable game playing parameters
         const val minimalAmountOfCash = 8
         const val maxLivesPerStage = 3
         const val maxInternalChipStorage = 4
         const val minAttackerSpeed = 0.02f
+        const val numberOfHeroesConsideredForLeave = 5
+        const val numberOfHeroesToChooseFrom = 3
 
         const val levelSnapshotIconSize = 120
 

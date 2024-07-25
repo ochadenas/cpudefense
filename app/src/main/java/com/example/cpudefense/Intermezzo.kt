@@ -25,6 +25,7 @@ class Intermezzo(var game: Game): GameElement(), Fadable {
     private var instructions: Instructions? = null
     private var heroSelection: HeroSelection? = null
     var coinsGathered = 0
+    var durationOfLeave = 3
 
     private var textOnContinueButton = ""
 
@@ -79,8 +80,8 @@ class Intermezzo(var game: Game): GameElement(), Fadable {
             }
             Type.STARTING_LEVEL -> {
                 lines.add(game.resources.getString(R.string.game_start))
-                // if (!game.currentHeroesOnLeave(level).isEmpty())
-                lines += heroesOnLeaveText()
+                if (game.currentHeroesOnLeave(level).isNotEmpty())
+                    lines += heroesOnLeaveText()
                 textOnContinueButton = game.resources.getString(R.string.enter_game)
                 game.setLastPlayedStage(level)
             }
@@ -90,7 +91,8 @@ class Intermezzo(var game: Game): GameElement(), Fadable {
                 if (coinsGathered>0)
                     lines.add(game.resources.getString(R.string.coins_gathered).format(coinsGathered))
                 lines.add(game.resources.getString(R.string.next_stage).format(level.number))
-                lines += heroesOnLeaveText()
+                if (game.currentHeroesOnLeave(level).isNotEmpty())
+                    lines += heroesOnLeaveText()
                 textOnContinueButton = game.resources.getString(R.string.enter_game)
                 game.setLastPlayedStage(level)
             }
@@ -102,9 +104,11 @@ class Intermezzo(var game: Game): GameElement(), Fadable {
     {
         val heroes: List<Hero> = game.currentHeroesOnLeave(level).values.toList()
         when (heroes.size) {
-            0 -> return listOf("No heroes are currently on leave.")
-            1 -> return listOf("Hero on leave:", heroes.first().person.fullName)
-            else -> return listOf("Heroes on leave:") + heroes.map { it.person.fullName }
+            0 -> return listOf(game.resources.getString(R.string.heroes_on_leave_0))
+            1 -> return listOf(game.resources.getString(R.string.heroes_on_leave_1),
+                               heroes.first().person.fullName)
+            else -> return listOf(game.resources.getString(R.string.heroes_on_leave_1)) +
+                    heroes.map { it.person.fullName }
         }
     }
 
@@ -211,7 +215,6 @@ class Intermezzo(var game: Game): GameElement(), Fadable {
         }
         game.state.phase = Game.GamePhase.INTERMEZZO
         game.gameActivity.setGameActivityStatus(MainGameActivity.GameActivityStatus.BETWEEN_LEVELS)
-        heroSelection = null
     }
 
     private fun startMarketplace()
@@ -275,12 +278,15 @@ class Intermezzo(var game: Game): GameElement(), Fadable {
         instructions = null
         buttonContinue = null
         buttonPurchase = null
+        heroSelection = null
     }
 
     private fun isLevelWhereHeroGoesOnLeave(ident: Stage.Identifier): Boolean
+    /** This function also sets the duration of leave (in levels; default is 2) */
     {
-        if (ident.series < 3)
+        if (ident.series < Game.SERIES_ENDLESS)
             return false
+        durationOfLeave = 2 + ident.number / 100
         return when (ident.number % 4)
         {
             0 -> { ident.number >= 16 }
@@ -296,10 +302,9 @@ class Intermezzo(var game: Game): GameElement(), Fadable {
         return (isLevelWhereHeroGoesOnLeave(ident) && (ident.number !in game.holidays))
     }
 
-
     inner class HeroSelection
     {
-        private val sizeOfHeroPanel = 3
+        private val sizeOfHeroPanel = Game.numberOfHeroesToChooseFrom
         private var heroesAskingToTakeLeave = listOf<Hero>()
         var selectedHero: Hero? = null
         var width: Int = 0
@@ -309,7 +314,7 @@ class Intermezzo(var game: Game): GameElement(), Fadable {
         private val backgroundPaint: Paint = Paint()
 
         init {
-            heroesAskingToTakeLeave = choosePossibleHeroes(5)
+            heroesAskingToTakeLeave = choosePossibleHeroes()
             if (heroesAskingToTakeLeave.size > sizeOfHeroPanel)
                 heroesAskingToTakeLeave = heroesAskingToTakeLeave.takeLast(sizeOfHeroPanel)
         }
@@ -365,12 +370,12 @@ class Intermezzo(var game: Game): GameElement(), Fadable {
 
         }
 
-        private fun choosePossibleHeroes(count: Int): List<Hero>
+        private fun choosePossibleHeroes(): List<Hero>
                 /** returns a list of heroes that may be asking for a leave.
-                 * @param count max. number of heroes returned
                  * @return list containing the <count> strongest heroes, among those fulfilling certain criteria
                  */
         {
+            val count = Game.numberOfHeroesConsideredForLeave
             val heroesExcluded = listOf(Hero.Type.ENABLE_MEM_UPGRADE, Hero.Type.INCREASE_MAX_HERO_LEVEL )
             var possibleHeroes = game.currentHeroes(level).values.filter {
                 it.data.type !in heroesExcluded && !it.isOnLeave(level)

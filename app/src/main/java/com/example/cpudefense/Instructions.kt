@@ -26,7 +26,7 @@ class Instructions(val game: Game, var stage: Stage.Identifier, var showLeaveDia
         if (game.intermezzo.type in setOf(Intermezzo.Type.GAME_LOST, Intermezzo.Type.GAME_WON))
             return ""
         else if (showLeaveDialogue)
-            return game.resources.getString(R.string.instr_leave)
+            return game.resources.getString(R.string.instr_leave).format(game.intermezzo.durationOfLeave)
         else if (stage.series == Game.SERIES_NORMAL) {
             return when (level) {
                 1 -> game.resources.getString(R.string.instr_1)
