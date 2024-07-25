@@ -317,7 +317,8 @@ open class Attacker(network: Network, representation: Representation = Represent
             {
                 data.speedModificationTimer = 0.0f
                 data.speedModifier = 0.0f
-                makeNumber()
+                if (data.state != State.HELD)
+                    makeNumber()
             }
         }
 
