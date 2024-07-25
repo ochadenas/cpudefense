@@ -157,6 +157,7 @@ class Marketplace(val game: Game): GameElement()
         if (buttonPurchase?.area?.contains(event.x.toInt(), event.y.toInt()) == true)
         {
             selected?.let {
+                if (heroIsOnLeave(it)) return true
                 val price = it.getPrice(it.data.level)
                 if (purse.availableCoins() >= price && it.data.level < it.getMaxUpgradeLevel()) {
                     purse.spend(price)
@@ -231,13 +232,7 @@ class Marketplace(val game: Game): GameElement()
                 Toast.makeText(game.gameActivity, text, Toast.LENGTH_SHORT).show()
                 return
             }
-            if (hero.isOnLeave)
-            {
-                val res = game.resources
-                val text = res.getString(R.string.message_is_on_leave).format(hero.person.name)
-                Toast.makeText(game.gameActivity, text, Toast.LENGTH_SHORT).show()
-                return
-            }
+            if (heroIsOnLeave(hero)) return
             when (data.level)
             {
                 0 -> return  // should not happen
@@ -284,6 +279,16 @@ class Marketplace(val game: Game): GameElement()
             }
         }
         return true
+    }
+
+    private fun heroIsOnLeave(hero: Hero): Boolean {
+        if (hero.isOnLeave) {
+            val res = game.resources
+            val text = res.getString(R.string.message_is_on_leave).format(hero.person.name)
+            Toast.makeText(game.gameActivity, text, Toast.LENGTH_SHORT).show()
+            return true
+        } else
+            return false
     }
 
     override fun display(canvas: Canvas, viewport: Viewport) {

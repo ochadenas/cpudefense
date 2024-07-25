@@ -211,6 +211,7 @@ class Intermezzo(var game: Game): GameElement(), Fadable {
         }
         game.state.phase = Game.GamePhase.INTERMEZZO
         game.gameActivity.setGameActivityStatus(MainGameActivity.GameActivityStatus.BETWEEN_LEVELS)
+        heroSelection = null
     }
 
     private fun startMarketplace()
@@ -278,10 +279,16 @@ class Intermezzo(var game: Game): GameElement(), Fadable {
 
     private fun isLevelWhereHeroGoesOnLeave(ident: Stage.Identifier): Boolean
     {
-        if (ident.series == 3)
-            return true
-        else
+        if (ident.series < 3)
             return false
+        return when (ident.number % 4)
+        {
+            0 -> { ident.number >= 16 }
+            1 -> { ident.number >= 256 }
+            2 -> { ident.number >= 64 }
+            3 -> { ident.number >= 128 }
+            else -> false
+        }
     }
 
     private fun oneHeroMustGoOnLeave(ident: Stage.Identifier): Boolean

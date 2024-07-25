@@ -26,6 +26,9 @@ class Hero(var game: Game, type: Type)
     - Torvalds
     - Baudot
     - John Conway
+    - Claude Shannon
+    - George Boole
+    - Auguste Kerckhoff?
      */
 
     enum class Type { INCREASE_CHIP_SUB_SPEED, INCREASE_CHIP_SUB_RANGE,
