@@ -304,7 +304,6 @@ class Persistency(activity: Activity) {
 
     fun loadHolidays(game: Game)
     {
-        val editor = prefsSaves.edit()
         val json = prefsSaves.getString("holidays", "none")
         if (json != "none") {
             val data: SerializableHolidays =

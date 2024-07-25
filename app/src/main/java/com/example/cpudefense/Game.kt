@@ -23,7 +23,7 @@ import kotlin.random.Random
 
 
 class Game(val gameActivity: MainGameActivity) {
-    val workInProgress = false  // REMOVE THIS
+    private val workInProgress = false  // REMOVE THIS
 
     companion object Params {
         const val maxLevelAvailable = 32
@@ -161,8 +161,8 @@ class Game(val gameActivity: MainGameActivity) {
     enum class GamePhase { START, RUNNING, INTERMEZZO, MARKETPLACE, PAUSED }
     enum class GameSpeed { NORMAL, MAX }
 
-    val coinIconBlue: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.cryptocoin)
-    val coinIconRed: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.cryptocoin_red)
+    private val coinIconBlue: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.cryptocoin)
+    private val coinIconRed: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.cryptocoin_red)
     val cpuImage: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.cpu)
     val playIcon: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.play_active)
     val pauseIcon: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.pause_active)
@@ -668,7 +668,11 @@ class Game(val gameActivity: MainGameActivity) {
 
     fun heroModifier(type: Hero.Type): Float {
         val hero: Hero? = currentHeroes()[type]
-        return hero?.getStrength() ?: Hero.getStrengthOfType(type, 0)
+        hero?.let {
+            if (!it.isOnLeave)
+                return it.getStrength()
+        }
+        return Hero.getStrengthOfType(type, 0) // hero has no effect, return the "level 0" strength
     }
 
     private fun takeLevelSnapshot()

@@ -203,8 +203,12 @@ class Marketplace(val game: Game): GameElement()
     }
 
     private fun refundAll()
+            /** resets all heroes to level 0 that meet certain criteria,
+             * e.g. that are not on leave.
+             * Refunds the coins spent on the hero.
+             */
     {
-        for (card in upgrades.filter { it.data.level > 0} ) {
+        for (card in upgrades.filter { it.data.level > 0 && !it.isOnLeave} ) {
             val refund =
                 if (card.data.coinsSpent > 0) card.data.coinsSpent else 0  // was: 4
             purse.spend(-refund)
@@ -224,6 +228,13 @@ class Marketplace(val game: Game): GameElement()
             {
                 val res = game.resources
                 val text = res.getString(R.string.message_cannot_fire).format(res.getString(R.string.button_refund_all))
+                Toast.makeText(game.gameActivity, text, Toast.LENGTH_SHORT).show()
+                return
+            }
+            if (hero.isOnLeave)
+            {
+                val res = game.resources
+                val text = res.getString(R.string.message_is_on_leave).format(hero.person.name)
                 Toast.makeText(game.gameActivity, text, Toast.LENGTH_SHORT).show()
                 return
             }
