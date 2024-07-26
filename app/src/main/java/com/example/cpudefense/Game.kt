@@ -129,8 +129,8 @@ class Game(val gameActivity: MainGameActivity) {
     )
     var holidays = HashMap<Int, Hero.Holiday>()
 
-    /* coin management */
     enum class LevelMode { BASIC, ENDLESS }
+    /** coin management */
     var purseOfCoins = hashMapOf(
         LevelMode.BASIC to PurseOfCoins(this, LevelMode.BASIC),
         LevelMode.ENDLESS to PurseOfCoins(this, LevelMode.ENDLESS),
@@ -266,7 +266,9 @@ class Game(val gameActivity: MainGameActivity) {
              * also other delays must be adjusted:
              * - cooldown of the chips
              * - cash gain over time
-             * - frequency of attacker generation
+             * - frequency of attacker generation.
+             * Actually, this factor is no longer actively used to handle different speeds,
+             * and the function always returns the same value.
              */
     {
         if (global.speed == GameSpeed.MAX)

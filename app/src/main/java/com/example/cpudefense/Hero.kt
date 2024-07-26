@@ -1,4 +1,4 @@
-@file:Suppress("DEPRECATION")
+@file:Suppress("DEPRECATION", "SpellCheckingInspection")
 
 package com.example.cpudefense
 
@@ -54,22 +54,28 @@ class Hero(var game: Game, type: Type)
     /** only for the current level: whether hero is on leave */
     var isOnLeave = false
 
+    /* string variables, will be overwritten later */
     var shortDesc: String = "effect description"
     var strengthDesc: String = "format string"
     var upgradeDesc: String = " → next level"
-    var costDesc: String = "[cost: ]"
+    private var costDesc: String = "[cost: ]"
+
+    /** reference to the person data of this hero */
     var person = Person(type)
+    /** reference to the graphical representation of this hero */
     var card = HeroCard(game, this)
 
     var biography: Biography? = null
     var effect: String = ""
     var vitae: String = ""
-    /** cannot upgrade beyond this level. This value can be modified for certain heroes,
+
+    /** hero cannot upgraded beyond this level. This value can be modified for certain heroes,
      * or by the effect of Sid Meier
       */
     private var maxLevel = 7
 
     fun createBiography(area: Rect)
+    /** create the biography object if it does not exist */
     {
         if (biography == null)
             biography = Biography(Rect(0,0,area.width(), area.height()))
@@ -78,6 +84,9 @@ class Hero(var game: Game, type: Type)
     }
 
     fun setDesc()
+    /** sets the description string of this hero, depending
+     * on the type and its upgrade level.
+     */
     {
         val strength = getStrength(data.level)
         val next = getStrength(data.level+1)
@@ -218,18 +227,18 @@ class Hero(var game: Game, type: Type)
 
 
     fun getStrength(level: Int = data.level): Float
-            /** determines the numerical effect ("strength") of the upgrade,
-             * depending on its level
-             */
+    /** determines the numerical effect ("strength") of the upgrade,
+     * depending on its level
+     */
     {
         return getStrengthOfType(data.type, level)
     }
 
     fun getMaxUpgradeLevel(): Int
-            /** @return The maximal allowed upgrade level for this hero,
-             * taking into account the type of the card and
-             * the possible effect of Sid Meier
-             */
+    /** @return The maximal allowed upgrade level for this hero,
+     * taking into account the type of the card and
+     * the possible effect of Sid Meier
+     */
     {
         val additionalUpgradePossibility = game.heroModifier(Type.INCREASE_MAX_HERO_LEVEL).toInt()
         if (data.type in
@@ -240,16 +249,18 @@ class Hero(var game: Game, type: Type)
     }
 
     private fun upgradeLevel(type: Type): Int
+    /** gets the upgrade level of a hero (different from this one)
+     * @param type The hero's type */
     {
         val level = game.currentHeroes()[type]?.data?.level
         return level ?: 0
     }
 
     fun isAvailable(stageIdentifier: Stage.Identifier): Boolean
-            /** function that evaluates certain restrictions on upgrades.
-             * Some upgrades require others to reach a certain level, etc.
-             * @param stageIdentifier cards may depend on the stage and/or series
-             */
+    /** function that evaluates certain restrictions on upgrades.
+     * Some upgrades require others to reach a certain level, etc.
+     * @param stageIdentifier cards may depend on the stage and/or series
+     */
     {
         if (stageIdentifier.series > 1)  // restrictions only apply for series 1
             return true
@@ -294,6 +305,7 @@ class Hero(var game: Game, type: Type)
     }
 
     fun doUpgrade()
+    /** actually do a rise in level, including starting the animation */
     {
         if (data.level >= getMaxUpgradeLevel())
             return
@@ -303,6 +315,7 @@ class Hero(var game: Game, type: Type)
     }
 
     fun doDowngrade()
+    /** actually do lowering of a level, including starting the animation */
     {
         if (data.level <= 0)
             return
@@ -310,7 +323,9 @@ class Hero(var game: Game, type: Type)
         Persistency(game.gameActivity).saveHeroes(game)
         card.downgradeAnimation()
     }
+
     fun resetUpgrade()
+    /** sets the level to 0 */
     {
         data.level = 0
         data.coinsSpent = 0
@@ -369,6 +384,7 @@ class Hero(var game: Game, type: Type)
     }
 
     inner class Person(var type: Type)
+    /** data related to the historical person behind the hero, such as description, photo, cv */
     {
         var name = ""
         var fullName = ""
@@ -560,6 +576,8 @@ class Hero(var game: Game, type: Type)
     }
 
     inner class Biography(var myArea: Rect)
+    /** The curriculum vitae of the hero, including graphical representation on the screen,
+     * @param myArea The rectangle on the screen provided for the biography. */
     {
         var bitmap: Bitmap = createBitmap(myArea.width(), myArea.height(), Bitmap.Config.ARGB_8888)
         private var canvas = Canvas(bitmap)
@@ -598,18 +616,18 @@ class Hero(var game: Game, type: Type)
         }
     }
 
-    // Holiday handling
+    /** Class that represents one single holiday for a certain hero */
     data class Holiday (
-        val hero: Hero.Type,
+        val hero: Type,
         val from: Int,
         val to: Int,
     )
 
     fun isOnLeave(level: Stage.Identifier, leaveStartsOnLevel: Boolean = false): Boolean
-            /**
-             * @param leaveStartsOnLevel if true, consider that are actually leaving on the level.
-             * Otherwise, also include those that are _still_ on leave.
-             * @return whether the hero is on leave for the given stage. */
+    /**
+     * @param leaveStartsOnLevel if true, consider that are actually leaving on the level.
+     * Otherwise, also include those that are _still_ on leave.
+     * @return whether the hero is on leave for the given stage. */
     {
         if (level.series != Game.SERIES_ENDLESS)
             return false
@@ -627,6 +645,9 @@ class Hero(var game: Game, type: Type)
     }
 
     fun addLeave(level: Stage.Identifier, duration: Int)
+    /** make this hero (the containing object) go on holiday.
+     * @param level The stage where the leave starts
+     * @param duration how many stages the leave will last (including start and end) */
     {
         val levelTo = Stage.Identifier(level.series, level.number+duration-1)
         game.holidays[level.number]=Holiday(data.type, level.number, levelTo.number)

@@ -378,6 +378,7 @@ class Marketplace(val game: Game): GameElement()
     }
 
     inner class Coin(val game: Game, size: Int): GameElement(), Fadable, Flippable
+    /** graphical representation of a crypto coin */
     {
         val paint = Paint()
         val myArea = Rect(0,0,size,size)
