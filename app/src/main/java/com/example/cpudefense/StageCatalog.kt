@@ -389,10 +389,10 @@ class StageCatalog
 
                         createWave(16, 2, .125f, 1.1f)
                         createWave(20, 3, .120f, 1.3f)
-                        createWave(20, 5, .110f, 1.6f)
-                        createWave(20, 7, .110f, 1.8f)
-                        createWave(20, 15, .090f, 2.0f, coins = 1)
-                        createWave(20, 24, .080f, 2.2f, coins = 0)
+                        createWave(20, 5, .105f, 1.6f)
+                        createWave(20, 7, .100f, 1.8f)
+                        createWave(20, 11, .090f, 2.0f, coins = 1)
+                        createWave(20, 27, .080f, 2.2f, coins = 0)
 
                         data.chipsAllowed =
                             setOf(
