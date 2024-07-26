@@ -417,8 +417,10 @@ open class Attacker(network: Network, representation: Representation = Represent
             attacker.onTrack = stage.tracks[data.vehicle.trackId]
             val link = stage.network.links[data.vehicle.linkId]
             link?.let {
-                attacker.setOntoLink(it, stage.chips[data.vehicle.startNodeId])
+                val startNode = stage.chips[data.vehicle.startNodeId]
+                attacker.setOntoLink(it, startNode)
                 attacker.setCurrentDistanceOnLink(it)
+                attacker.setPositionOnGrid(it, startNode)
             }
             attacker.makeNumber()
             if (attacker.data.state == State.HELD)

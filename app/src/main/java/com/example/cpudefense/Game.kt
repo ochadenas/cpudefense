@@ -23,11 +23,10 @@ import kotlin.random.Random
 
 
 class Game(val gameActivity: MainGameActivity) {
-    private val workInProgress = false  // REMOVE THIS
-
     companion object Params {
         const val maxLevelAvailable = 32
 
+        val makeAllLevelsAvailable = false  // for debbuging purposes only. TODO: SET TO FALSE
         // feature toggles:
         const val enableEndlessMode = true
 
@@ -196,7 +195,7 @@ class Game(val gameActivity: MainGameActivity) {
 
             // calculate coins
             persistency.loadCoins(this)
-            if (purseOfCoins[LevelMode.BASIC]?.initialized == false || workInProgress)
+            if (purseOfCoins[LevelMode.BASIC]?.initialized == false)
                 migrateHeroes()
 
             additionalCashDelay = heroModifier(Hero.Type.GAIN_CASH).toInt()

@@ -75,7 +75,7 @@ open class Vehicle(val network: Network): GameElement()
             val startNode = this.startNode ?: it.node1
             val endNode = this.endNode ?: it.node2
             data.distanceTravelledOnLink += currentSpeed * network.theGame.globalSpeedFactor()
-            posOnGrid = it.getPositionOnGrid(data.distanceTravelledOnLink, startNode)
+            setPositionOnGrid(it, startNode)
             if (posOnGrid == endNode.posOnGrid) // reached end of link
             {
                 startNode.notify(this, direction = Node.VehicleDirection.GONE) // out of reach, so stop notification
@@ -85,6 +85,12 @@ open class Vehicle(val network: Network): GameElement()
             setCurrentDistanceOnLink(it)
         }
      }
+
+    fun setPositionOnGrid(link: Link, startNode: Node?)
+    /** calculates the current position on the screen, based on the current link and the distance travelled */
+    {
+        startNode?.let { posOnGrid = link.getPositionOnGrid(data.distanceTravelledOnLink, it) }
+    }
 
     override fun display(canvas: Canvas, viewport: Viewport)
     {

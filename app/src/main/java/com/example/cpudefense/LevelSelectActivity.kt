@@ -41,6 +41,11 @@ class LevelSelectActivity : AppCompatActivity() {
     private fun setupSelector()
     {
         val tabLayout = findViewById<TabLayout>(R.id.tab_layout)
+        if (Game.makeAllLevelsAvailable)
+        {
+            isTurboAvailable = true
+            isEndlessAvailable = true
+        }
         if (Game.enableEndlessMode)
         {
             val tab = tabLayout.newTab().setText("Endless")

@@ -372,8 +372,9 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
     private fun displayLineToAttacker(canvas: Canvas, attackersInRange: List<Attacker>, chipRect: Rect)
     {
         paintLines.color = chipData.color
-        attackersInRange.forEach { att ->
-                canvas.drawLine(chipRect.exactCenterX(), chipRect.exactCenterY(), att.actualRect.exactCenterX(), att.actualRect.exactCenterY(), paintLines)
+        attackersInRange.filter { it.data.state == Vehicle.State.ACTIVE }.forEach {
+            att -> canvas.drawLine(chipRect.exactCenterX(), chipRect.exactCenterY(),
+                                   att.actualRect.exactCenterX(), att.actualRect.exactCenterY(), paintLines)
         }
     }
 
