@@ -190,10 +190,9 @@ The programming language Pascal is named after him."</string>
     <string name="settings_title">Settings</string>
     <string name="about_title">About</string>
     <string name="about_version">Version %s.</string>
-    <string name="about_license">This game is open source. Visit <a href="https://github.com/ochadenas/cpudefense#MIT-1-ov-file">github.com/ochadenas/cpudefense</a> for more information.\n\nThe portraits of the Information Age Heroes are mostly derived from works of the public domain.\n\nOriginal photos:\n  Alex Handy (CC BY-SA 2.0)\n  Jacob Appelbaum (CC BY-SA 2.5)\n  Konrad Jacobs (CC BY-SA 2.0 de)\n  Rama (CC BY-SA 2.0 fr)\n  Shervinafshar (CC BY-SA 3.0)\n  Tony Bove (CC BY 3.0)\n  Wolfgang Hunscher (CC BY-SA 3.0)\n  Silvano de Gennaro (courtesy of the author)\n  Clermont Auvergne Métropole (CC BY-SA 4.0)\n  Jean-Frédéric (CC BY 2.0)\n\nComputer boards:\n  Autopilot (CC BY-SA 4.0)\n  Bill Bertram (CC-BY 2.0)\n  Oliver Chadenas (CC BY-SA 3.0)\n  Smial (FAL)\n\nAll other artwork:\n  Oliver Chadenas (CC BY-SA 3.0)</string>
+    <string name="about_license">"This game is open source. Visit <a href="https://github.com/ochadenas/cpudefense#MIT-1-ov-file">github.com/ochadenas/cpudefense</a> for more information.\n\nThe portraits of the Information Age Heroes are mostly derived from works of the public domain.\n\nOriginal photos:\n  Alex Handy (CC BY-SA 2.0)\n  Jacob Appelbaum (CC BY-SA 2.5)\n  Konrad Jacobs (CC BY-SA 2.0 de)\n  Rama (CC BY-SA 2.0 fr)\n  Shervinafshar (CC BY-SA 3.0)\n  Tony Bove (CC BY 3.0)\n  Wolfgang Hunscher (CC BY-SA 3.0)\n  Silvano de Gennaro (courtesy of the author)\n  Clermont Auvergne Métropole (CC BY-SA 4.0)\n  Jean-Frédéric (CC BY 2.0)\n  Tekniska Museet (CC BY 2.0)\n\nComputer boards:\n  Autopilot (CC BY-SA 4.0)\n  Bill Bertram (CC-BY 2.0)\n  Oliver Chadenas (CC BY-SA 3.0)\n  Smial (FAL)\n\nAll other artwork:\n  Oliver Chadenas (CC BY-SA 3.0)\n  "</string>
     <string name="about_info_title">Info</string>
     <string name="about_info_text">For additional info and hints on game play visit the game\'s wiki on the web.</string>
-
     <string name="play_level_x">Play level %d</string>
     <string name="link_wiki">Game Wiki</string>
     <string name="button_exit">Exit</string>
@@ -212,6 +211,7 @@ The programming language Pascal is named after him."</string>
     <string name="shortdesc_frequency">Attacker frequency</string>
     <string name="shortdesc_att_speed">Attacker speed</string>
     <string name="shortdesc_att_strength">Attacker strength</string>
+    <string name="shortdesc_coin_strength">Coin strength</string>
     <string name="shortdesc_info_gain">Information gain</string>
     <string name="shortdesc_range">%s chip range</string>
     <string name="shortdesc_refund">Refund when selling chips</string>
@@ -230,6 +230,7 @@ The programming language Pascal is named after him."</string>
     <string name="HERO_EFFECT_FREQUENCY">Decreases attacker frequency</string>
     <string name="HERO_EFFECT_INFOOVERTIME">Gains additional bits over time</string>
     <string name="HERO_EFFECT_ATTSPEED">Reduces attacker speed</string>
+    <string name="HERO_EFFECT_COINSTRENGTH">Reduces cryptocoin strength</string>
     <string name="HERO_EFFECT_ATTSTRENGTH">Reduces attacker strength</string>
     <string name="HERO_EFFECT_MAXHEROUPGRADE">Increases maximal upgrade level of other heroes</string>
     <string name="HERO_EFFECT_REFUNDPRICE">Increases refund when selling chips</string>
@@ -302,6 +303,7 @@ Furthermore, some slots are already taken by unwanted chips you'll have to deal 
     <string name="heroes_on_leave_0">No heroes are on leave.</string>
     <string name="heroes_on_leave_1">Hero on leave:</string>
     <string name="heroes_on_leave_2">Heroes on leave:</string>
+    <string name="shannon">Claude Elwood Shannon is considered the founder of information theory and one of the fathers of the information age. One of his major achievements was to transfer the mathematical theory of Boolean algebra to real circuits, thereby making modern digital computers possible. \n\nShannon developed the concept of information and entropy in messages, made important contributions to cryptography, and worked on artificial intelligence. Among other things, he described a programme for playing chess and constructed a mechanical mouse that could find its own way through a maze.  \n</string>
 
 
 </resources>

@@ -70,6 +70,7 @@ class HeroCard(val game: Game, val hero: Hero): GameElement(), Fadable
         Hero.Type.DECREASE_ATT_FREQ -> game.resources.getColor(R.color.upgrade_active_general)
         Hero.Type.DECREASE_ATT_SPEED -> game.resources.getColor(R.color.upgrade_active_general)
         Hero.Type.DECREASE_ATT_STRENGTH -> game.resources.getColor(R.color.upgrade_active_general)
+        Hero.Type.DECREASE_COIN_STRENGTH -> game.resources.getColor(R.color.upgrade_active_general)
         Hero.Type.ADDITIONAL_LIVES -> game.resources.getColor(R.color.upgrade_active_meta)
         Hero.Type.INCREASE_MAX_HERO_LEVEL -> game.resources.getColor(R.color.upgrade_active_meta)
         Hero.Type.LIMIT_UNWANTED_CHIPS -> game.resources.getColor(R.color.upgrade_active_meta)

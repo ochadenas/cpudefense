@@ -36,7 +36,7 @@ class Hero(var game: Game, type: Type)
         INCREASE_CHIP_MEM_SPEED,  INCREASE_CHIP_MEM_RANGE, ENABLE_MEM_UPGRADE,
         INCREASE_CHIP_RES_STRENGTH, INCREASE_CHIP_RES_DURATION,
         REDUCE_HEAT,
-        DECREASE_ATT_FREQ, DECREASE_ATT_SPEED, DECREASE_ATT_STRENGTH,
+        DECREASE_ATT_FREQ, DECREASE_ATT_SPEED, DECREASE_ATT_STRENGTH, DECREASE_COIN_STRENGTH,
         ADDITIONAL_LIVES, INCREASE_MAX_HERO_LEVEL, LIMIT_UNWANTED_CHIPS,
         INCREASE_STARTING_CASH, GAIN_CASH, DECREASE_REMOVAL_COST,
         DECREASE_UPGRADE_COST, INCREASE_REFUND, GAIN_CASH_ON_KILL}
@@ -146,6 +146,11 @@ class Hero(var game: Game, type: Type)
             }
             Type.DECREASE_ATT_SPEED -> {
                 shortDesc = game.resources.getString(R.string.shortdesc_att_speed)
+                strengthDesc = "x %.2f".format(strength)
+                upgradeDesc = " → %.2f".format(next)
+            }
+            Type.DECREASE_COIN_STRENGTH -> {
+                shortDesc = game.resources.getString(R.string.shortdesc_coin_strength)
                 strengthDesc = "x %.2f".format(strength)
                 upgradeDesc = " → %.2f".format(next)
             }
@@ -267,6 +272,7 @@ class Hero(var game: Game, type: Type)
         return when (data.type) {
             Type.LIMIT_UNWANTED_CHIPS ->    upgradeLevel(Type.INCREASE_MAX_HERO_LEVEL) >= 3
             Type.INCREASE_MAX_HERO_LEVEL -> upgradeLevel(Type.ADDITIONAL_LIVES) >= 3
+            Type.DECREASE_COIN_STRENGTH ->  upgradeLevel(Type.DECREASE_ATT_STRENGTH) >= 3
             Type.DECREASE_ATT_STRENGTH ->   upgradeLevel(Type.DECREASE_ATT_SPEED) >= 3
             Type.DECREASE_ATT_SPEED ->      upgradeLevel(Type.DECREASE_ATT_FREQ) >= 3
             Type.ADDITIONAL_LIVES ->        upgradeLevel(Type.DECREASE_ATT_SPEED) >= 5
@@ -367,6 +373,7 @@ class Hero(var game: Game, type: Type)
                 Type.DECREASE_ATT_FREQ -> return 1.0f - level * 0.05f
                 Type.DECREASE_ATT_SPEED -> return 1.0f - level * 0.04f
                 Type.DECREASE_ATT_STRENGTH -> return exp(- level / 3.0).toFloat()
+                Type.DECREASE_COIN_STRENGTH -> return 1.0f - level * 0.05f
                 Type.INCREASE_MAX_HERO_LEVEL -> return level.toFloat()
                 Type.LIMIT_UNWANTED_CHIPS -> return level.toFloat()
                 Type.ENABLE_MEM_UPGRADE -> return (level+1).toFloat()
@@ -473,6 +480,14 @@ class Hero(var game: Game, type: Type)
                     effect = game.resources.getString(R.string.HERO_EFFECT_FREQUENCY)
                     vitae = game.resources.getString(R.string.cernettes)
                     picture = BitmapFactory.decodeResource(game.resources, R.drawable.cernettes)
+                }
+                Type.DECREASE_COIN_STRENGTH ->
+                {
+                    name = "Shannon"
+                    fullName = "Claude Shannon"
+                    effect = game.resources.getString(R.string.HERO_EFFECT_COINSTRENGTH)
+                    vitae = game.resources.getString(R.string.shannon)
+                    picture = BitmapFactory.decodeResource(game.resources, R.drawable.shannon)
                 }
                 Type.GAIN_CASH ->
                 {

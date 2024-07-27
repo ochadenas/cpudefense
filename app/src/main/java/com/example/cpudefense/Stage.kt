@@ -200,7 +200,7 @@ class Stage(var theGame: Game) {
     {
         val actualSpeed = speed * theGame.heroModifier(Hero.Type.DECREASE_ATT_SPEED)
         val attacker = if (isCoin)
-            Cryptocoin(network, (maxNumber*1.5).toULong(), actualSpeed )
+            Cryptocoin(network, (maxNumber*1.5*theGame.heroModifier(Hero.Type.DECREASE_COIN_STRENGTH)).toULong(), actualSpeed )
         else {
             val strength = Random.nextFloat()*(maxNumber+1) * theGame.heroModifier(Hero.Type.DECREASE_ATT_STRENGTH)
             Attacker(network, representation, strength.toULong(), actualSpeed)
