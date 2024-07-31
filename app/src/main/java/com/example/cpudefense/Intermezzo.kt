@@ -55,9 +55,14 @@ class Intermezzo(var game: Game): GameElement(), Fadable {
 
     override fun fadeDone(type: Fader.Type) {
         alpha = 255
-        val showLeaveDialogue = oneHeroMustGoOnLeave(level)
-        if (showLeaveDialogue)
+        var showLeaveDialogue = false
+        if (oneHeroMustGoOnLeave(level)) {
             heroSelection = HeroSelection()
+            heroSelection?.let {
+                if (it.heroesAskingToTakeLeave.isNotEmpty())
+                    showLeaveDialogue = true
+            }
+        }
         instructions = Instructions(game, level, showLeaveDialogue) { displayText() }
     }
 
@@ -315,7 +320,7 @@ class Intermezzo(var game: Game): GameElement(), Fadable {
     inner class HeroSelection
     {
         private val sizeOfHeroPanel = Game.numberOfHeroesToChooseFrom
-        private var heroesAskingToTakeLeave = listOf<Hero>()
+        var heroesAskingToTakeLeave = listOf<Hero>()
         var selectedHero: Hero? = null
         var width: Int = 0
         private var myOuterArea = Rect()
