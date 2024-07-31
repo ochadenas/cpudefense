@@ -257,7 +257,7 @@ class Intermezzo(var game: Game): GameElement(), Fadable {
                     .show()
                 return false
             }
-            heroSelection?.selectedHero?.addLeave(level, 3)
+            heroSelection?.selectedHero?.addLeave(level, durationOfLeave)
             Persistency(game.gameActivity).saveHolidays(game)
             return true
         }
