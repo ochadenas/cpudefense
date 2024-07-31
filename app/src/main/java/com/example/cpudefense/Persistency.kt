@@ -305,7 +305,7 @@ class Persistency(activity: Activity) {
     fun loadHolidays(game: Game)
     {
         val json = prefsSaves.getString("holidays", "none")
-        if (json != "none") {
+        if (json != "none" && false) {
             val data: SerializableHolidays =
                 Gson().fromJson(json, SerializableHolidays::class.java)
             game.holidays = data.period

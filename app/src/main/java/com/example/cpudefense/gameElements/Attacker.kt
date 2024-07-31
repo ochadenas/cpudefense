@@ -11,6 +11,7 @@ import com.example.cpudefense.effects.Fadable
 import com.example.cpudefense.effects.Fader
 import com.example.cpudefense.networkmap.*
 import com.example.cpudefense.utils.*
+import kotlin.math.exp
 import kotlin.math.log2
 import kotlin.random.Random
 
@@ -77,6 +78,19 @@ open class Attacker(network: Network, representation: Representation = Represent
         return newAttacker
     }
 
+
+    fun provideData(): Data
+    /** copies some transient variables into the persistent attacker data.
+     * Used in the stage's provideData function.
+     * @return the data object */
+    {
+        attackerData.vehicle.gridPos = posOnGrid?.asPair() ?: Pair(0f, 0f)
+        /* get the ident of the current link */
+        // val keys = theNetwork.links.filterValues { it == onLink }.keys
+        attackerData.vehicle.linkId = onLink?.data?.ident ?: -1
+        return attackerData
+    }
+
     private fun calculateNumberOfDigits()
             /** determine how many binary or hex digits the value must have,
              * given its number
@@ -111,16 +125,10 @@ open class Attacker(network: Network, representation: Representation = Represent
         attackerData.bits = attackerData.binaryDigits + 4 * attackerData.hexDigits
     }
 
-    fun provideData(): Data
-    {
-        attackerData.vehicle.gridPos = posOnGrid?.asPair() ?: Pair(0f, 0f)
-        /* get the ident of the current link */
-        // val keys = theNetwork.links.filterValues { it == onLink }.keys
-        attackerData.vehicle.linkId = onLink?.data?.ident ?: -1
-        return attackerData
-    }
-
     fun changeNumberTo(newNumber: ULong) {
+        /** change the attacker's number to a new number,
+         * displaying an animation.
+          */
         oldNumber = attackerData.number
         oldNumberBitmap = numberBitmap
         animationCount = animationCountMax
@@ -131,6 +139,7 @@ open class Attacker(network: Network, representation: Representation = Represent
     }
 
     private fun invertNumber()
+    /** turns the number into its binary complement */
     {
         var n: ULong = attackerData.number
         n = n.inv()
@@ -155,6 +164,26 @@ open class Attacker(network: Network, representation: Representation = Represent
         if (attackerData.hasNoValue == false)
             network.theGame.scoreBoard.addCash(attackerData.bits + extraCash())
     }
+
+    fun slowDown(modifier: Float)
+    /** temporarily decrease the attacker's speed, e.g. due to a resistor effect */
+    {
+        data.speedModifier = modifier
+        var additionalDuration = Game.resistorBaseDuration / data.speedModifier * network.theGame.heroModifier(Hero.Type.INCREASE_CHIP_RES_DURATION)
+        if (additionalDuration > Game.resistorMaxDuration)
+            additionalDuration = Game.resistorMaxDuration
+        data.speedModificationTimer += additionalDuration
+        makeNumber()
+    }
+
+    fun effectOfResistanceOnSpeed(ohm: Float): Float
+            /** speed modification caused by a resistor
+             * @param ohm Resistance value
+             */
+    {
+        return exp(- (ohm*attackerData.bits) / 320.0f)
+    }
+
 
     open fun onShot(type: Chip.ChipType, power: Int): Boolean
             /** function that gets called when a the attacker gets "hit".

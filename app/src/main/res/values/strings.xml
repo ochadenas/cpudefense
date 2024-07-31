@@ -213,6 +213,8 @@ The programming language Pascal is named after him."</string>
     <string name="shortdesc_att_strength">Attacker strength</string>
     <string name="shortdesc_coin_strength">Coin strength</string>
     <string name="shortdesc_info_gain">Information gain</string>
+    <string name="shortdesc_info_generation">Inf gain per Ω</string>
+    <string name="shortdesc_double_chance">Double hit chance</string>
     <string name="shortdesc_range">%s chip range</string>
     <string name="shortdesc_refund">Refund when selling chips</string>
     <string name="shortdesc_max_hero_upgrade">Max hero level</string>
@@ -304,6 +306,6 @@ Furthermore, some slots are already taken by unwanted chips you'll have to deal 
     <string name="heroes_on_leave_1">Hero on leave:</string>
     <string name="heroes_on_leave_2">Heroes on leave:</string>
     <string name="shannon">Claude Elwood Shannon is considered the founder of information theory and one of the fathers of the information age. One of his major achievements was to transfer the mathematical theory of Boolean algebra to real circuits, thereby making modern digital computers possible. \n\nShannon developed the concept of information and entropy in messages, made important contributions to cryptography, and worked on artificial intelligence. Among other things, he described a programme for playing chess and constructed a mechanical mouse that could find its own way through a maze.  \n</string>
-
-
-</resources>
+    <string name="boole">The achievement of George Boole Jr. lies in the fact that he formalised the concepts of logic and thus made them part of mathematics. Boolean algebra is the basis for the internal functioning of all modern computers.\n\nBoole was the son of a shoemaker and never attended any school other than primary school. He taught himself maths, Latin and Greek, French and German.</string>
+    <string name="diffie">Together with Martin Hellmann, Bailey Whitfield Diffie developed the DH key exchange between two parties named after the two of them. They thus created an essential prerequisite for secure connections over the Internet.\n\nDiffie is also concerned about social issues of cryptography. He is a staunch advocate of the right to privacy.</string>
+    </resources>

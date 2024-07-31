@@ -337,10 +337,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
                 // avoid resetting when clock tick comes _too_ soon after the regular reset
                 val minDelay = kotlin.math.min(chip.getCooldownTime() * 0.2f, this.getCooldownTime())
                 if (chip.chipData.cooldownTimer <= chip.getCooldownTime()-minDelay) {
-                    var generatedHeat = chip.chipData.cooldownTimer
-                    val factor = 100f - network.theGame.heroModifier(Hero.Type.REDUCE_HEAT)
-                    generatedHeat *= (factor * Game.heatAdjustmentFactor / 100f)
-                    theNetwork.theGame.state.heat += generatedHeat
+                    network.theGame.generateHeat(chip.chipData.cooldownTimer)
                     chip.chipData.cooldownTimer = 0f
                 }
             }
@@ -456,13 +453,11 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
                 return // no cooldown phase here
             }
             ChipType.RES -> {
-                attacker.data.speedModifier = effectOfResistanceOnSpeed(resistorValue().toFloat(), attacker)
-                var additionalDuration = Game.resistorBaseDuration / attacker.data.speedModifier * theNetwork.theGame.heroModifier(Hero.Type.INCREASE_CHIP_RES_DURATION)
-                if (additionalDuration > Game.resistorMaxDuration)
-                    additionalDuration = Game.resistorMaxDuration
-                attacker.data.speedModificationTimer += additionalDuration
+                val ohm = resistorValue().toFloat()
+                attacker.slowDown(attacker.effectOfResistanceOnSpeed(ohm))
+                network.theGame.generateHeat(ohm)
                 attacker.immuneTo = this
-                attacker.makeNumber()
+
             }
             else -> {
                 if (attacker.onShot(chipData.type, chipData.upgradeLevel))
@@ -543,12 +538,6 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
             internalRegister.clear()
             attacker.immuneTo = this
         }
-    }
-
-    private fun effectOfResistanceOnSpeed(ohm: Float, attacker: Attacker): Float
-    {
-        // return exp(- ohm / 74.0f)
-        return exp(- (ohm*attacker.attackerData.bits) / 320.0f)
     }
 
     private fun isActivated(): Boolean

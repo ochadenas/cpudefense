@@ -679,6 +679,17 @@ class Game(val gameActivity: MainGameActivity) {
         return Hero.getStrengthOfType(type, 0) // hero has no effect, return the "level 0" strength
     }
 
+    fun generateHeat(amount: Float)
+    /** adds an amount of "heat" to the global game temperature, respecting possible modifiers
+     */
+    {
+        var generatedHeat = amount
+        val factor = 100f - heroModifier(Hero.Type.REDUCE_HEAT)
+        generatedHeat *= (factor * Game.heatAdjustmentFactor / 100f)
+        state.heat += generatedHeat
+    }
+
+
     private fun takeLevelSnapshot()
     {
         currentlyActiveStage?.let {

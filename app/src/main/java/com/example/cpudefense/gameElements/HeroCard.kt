@@ -80,6 +80,8 @@ class HeroCard(val game: Game, val hero: Hero): GameElement(), Fadable
         Hero.Type.INCREASE_REFUND -> game.resources.getColor(R.color.upgrade_active_eco)
         Hero.Type.DECREASE_UPGRADE_COST -> game.resources.getColor(R.color.upgrade_active_eco)
         Hero.Type.DECREASE_REMOVAL_COST -> game.resources.getColor(R.color.upgrade_active_eco)
+        Hero.Type.GENERATE_INFO -> TODO()
+        Hero.Type.CRIT_HIT_CHANCE -> TODO()
     }
 
 

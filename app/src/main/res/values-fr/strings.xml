@@ -184,10 +184,14 @@
     <string name="shortdesc_duration">Durée d\'effet R\n</string>
     <string name="HERO_EFFECT_RES_STRENGTH">Augmente toutes les résistances\n</string>
     <string name="HERO_EFFECT_RES_DURATION">Augmente la durée de l\'effet des résistances</string>
-    <string name="message_is_on_leave">%s est actuellement en congé.\n</string>
+    <string name="message_is_on_leave">%s est actuellement en congé.</string>
     <string name="instr_leave">Certains héros demandent des vacances. Vous devez accorder un congé à l\'un(e) d\'entre eux qui reviendra au bout de %d niveaux.</string>
     <string name="heroes_on_leave_0">Aucun héros ne se trouve en congé.\n</string>
     <string name="heroes_on_leave_1">Héro en congés :</string>
     <string name="heroes_on_leave_2">Héros en congés :</string>
     <string name="shannon">"Claude Elwood Shannon est considéré comme le fondateur de la théorie de l'information et l'un des pères de l'ère de l'information. L'une de ses principales réalisations est d'avoir appliqué la théorie mathématique de l'algèbre booléenne aux circuits réels, rendant ainsi possible les ordinateurs numériques modernes. \n\nShannon a développé le concept d'information et d'entropie dans les messages, a apporté d'importantes contributions à la cryptographie et s'est intéressé à l'intelligence artificielle. Il a notamment décrit un programme pour jouer aux échecs et a construit une souris mécanique capable d'apprendre par elle-même à trouver son chemin dans un labyrinthe.  "</string>
+    <string name="shortdesc_coin_strength">puissance écus</string>
+    <string name="HERO_EFFECT_COINSTRENGTH">réduit la puissance des crypto-écus</string>
+    <string name="boole">L\'exploit de George Boole Jr. est d\'avoir formalisé les concepts de la logique et d\'en avoir ainsi fait une partie des mathématiques. L\'algèbre booléenne est à la base du fonctionnement interne de tous les ordinateurs modernes.\n\nBoole était le fils d\'un cordonnier et n\'a jamais fréquenté d\'école autre que l\'école primaire. Il a appris seul les mathématiques, le latin et le grec, le français et l\'allemand.</string>
+    <string name="diffie">Avec Martin Hellmann, Whitfield Diffie a développé l\'échange de clés entre deux parties, qui porte leur nom, et a ainsi créé une condition essentielle pour des connexions sécurisées sur Internet.\n\nDiffie s\'intéresse également aux questions sociétales liées à la cryptographie et est un fervent défenseur du droit à la vie privée.</string>
 </resources>

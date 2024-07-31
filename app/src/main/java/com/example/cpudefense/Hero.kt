@@ -35,8 +35,9 @@ class Hero(var game: Game, type: Type)
         INCREASE_CHIP_SHR_SPEED,  INCREASE_CHIP_SHR_RANGE,
         INCREASE_CHIP_MEM_SPEED,  INCREASE_CHIP_MEM_RANGE, ENABLE_MEM_UPGRADE,
         INCREASE_CHIP_RES_STRENGTH, INCREASE_CHIP_RES_DURATION,
-        REDUCE_HEAT,
+        REDUCE_HEAT, GENERATE_INFO,
         DECREASE_ATT_FREQ, DECREASE_ATT_SPEED, DECREASE_ATT_STRENGTH, DECREASE_COIN_STRENGTH,
+        CRIT_HIT_CHANCE,
         ADDITIONAL_LIVES, INCREASE_MAX_HERO_LEVEL, LIMIT_UNWANTED_CHIPS,
         INCREASE_STARTING_CASH, GAIN_CASH, DECREASE_REMOVAL_COST,
         DECREASE_UPGRADE_COST, INCREASE_REFUND, GAIN_CASH_ON_KILL}
@@ -198,7 +199,7 @@ class Hero(var game: Game, type: Type)
                 shortDesc = game.resources.getString(R.string.shortdesc_range).format("SUB")
                 strengthDesc = "x %.2f".format(strength)
                 upgradeDesc = " → %.2f".format(next)
-            }  
+            }
             Type.INCREASE_CHIP_SHR_RANGE ->
             {
                 shortDesc = game.resources.getString(R.string.shortdesc_range).format("SHR")
@@ -220,6 +221,16 @@ class Hero(var game: Game, type: Type)
                 shortDesc = game.resources.getString(R.string.shortdesc_reduce_removal)
                 strengthDesc = "-%d%%".format(strength.toInt())
                 upgradeDesc = " → -%d%%".format(next.toInt())
+            }
+            Type.GENERATE_INFO -> {
+                shortDesc = game.resources.getString(R.string.shortdesc_info_generation)
+                strengthDesc = "%.2f".format(strength.toInt())
+                upgradeDesc = " → -%.2f".format(next.toInt())
+            }
+            Type.CRIT_HIT_CHANCE -> {
+                shortDesc = game.resources.getString(R.string.shortdesc_double_chance)
+                strengthDesc = "%d%%".format(strength.toInt())
+                upgradeDesc = " → %d%%".format(next.toInt())
             }
         }
         val cost = getPrice(data.level)
@@ -483,10 +494,10 @@ class Hero(var game: Game, type: Type)
                 }
                 Type.DECREASE_COIN_STRENGTH ->
                 {
-                    name = "Shannon"
-                    fullName = "Claude Shannon"
+                    name = "Diffie"
+                    fullName = "Whit Diffie"
                     effect = game.resources.getString(R.string.HERO_EFFECT_COINSTRENGTH)
-                    vitae = game.resources.getString(R.string.shannon)
+                    vitae = game.resources.getString(R.string.diffie)
                     picture = BitmapFactory.decodeResource(game.resources, R.drawable.shannon)
                 }
                 Type.GAIN_CASH ->
@@ -585,6 +596,8 @@ class Hero(var game: Game, type: Type)
                     vitae = game.resources.getString(R.string.volta)
                     picture = BitmapFactory.decodeResource(game.resources, R.drawable.volta)
                 }
+                Type.GENERATE_INFO -> TODO()
+                Type.CRIT_HIT_CHANCE -> TODO()
             }
         }
 
