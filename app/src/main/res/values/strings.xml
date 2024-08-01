@@ -302,6 +302,7 @@ Furthermore, some slots are already taken by unwanted chips you'll have to deal 
     <string name="message_cannot_fire">Use \'%s\' to release this hero.</string>
     <string name="message_is_on_leave">%s is currently on leave.</string>
     <string name="instr_leave">Some heroes are asking for time off. You must grant leave to one of them, who will return after %d levels.</string>
+    <string name="instr_leave_1">Some heroes are asking for time off. You must grant leave to one of them, who will return in the next level.</string>
     <string name="heroes_on_leave_0">No heroes are on leave.</string>
     <string name="heroes_on_leave_1">Hero on leave:</string>
     <string name="heroes_on_leave_2">Heroes on leave:</string>

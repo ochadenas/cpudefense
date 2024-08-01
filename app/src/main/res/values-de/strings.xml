@@ -231,6 +231,7 @@ Turing wurde aufgrund seiner Homosexualität massiv diskriminiert. Er starb 1954
     <string name="HERO_EFFECT_RES_DURATION">Erhöht die Wirkungsdauer der Widerstände</string>
     <string name="message_is_on_leave">%s ist derzeit im Urlaub.</string>
     <string name="instr_leave">"Einem dieser Helden musst du einen Urlaub von %d Leveln Dauer gewähren. In dieser Zeit steht er oder sie nicht zur Verfügung.\n "</string>
+    <string name="instr_leave_1">"Einem dieser Helden musst du Urlaub gewähren. Für den aktuellen Level steht er oder sie dann nicht zur Verfügung.  "</string>
     <string name="heroes_on_leave_0">Kein Held ist beurlaubt.</string>
     <string name="heroes_on_leave_1">Beurlaubt:</string>
     <string name="heroes_on_leave_2">Beurlaubte Helden:</string>

@@ -186,6 +186,7 @@
     <string name="HERO_EFFECT_RES_DURATION">Augmente la durée de l\'effet des résistances</string>
     <string name="message_is_on_leave">%s est actuellement en congé.</string>
     <string name="instr_leave">Certains héros demandent des vacances. Vous devez accorder un congé à l\'un(e) d\'entre eux qui reviendra au bout de %d niveaux.</string>
+    <string name="instr_leave_1">Certains héros demandent des vacances. Vous devez accorder un congé à l\'un(e) d\'entre eux qui reviendra pour le prochain niveau.</string>
     <string name="heroes_on_leave_0">Aucun héros ne se trouve en congé.\n</string>
     <string name="heroes_on_leave_1">Héro en congés :</string>
     <string name="heroes_on_leave_2">Héros en congés :</string>

@@ -35,7 +35,7 @@ class Intermezzo(var game: Game): GameElement(), Fadable {
     private var instructions: Instructions? = null
     private var heroSelection: HeroSelection? = null
     var coinsGathered = 0
-    var durationOfLeave = 3
+    var durationOfLeave = 2
 
     private var textOnContinueButton = ""
 
@@ -301,7 +301,7 @@ class Intermezzo(var game: Game): GameElement(), Fadable {
     {
         if (ident.series < Game.SERIES_ENDLESS)
             return false
-        durationOfLeave = 2 + ident.number / 100
+        durationOfLeave = 1 + ident.number / 100
         return when (ident.number % 4)
         {
             0 -> { ident.number >= 16 }
