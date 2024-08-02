@@ -679,14 +679,16 @@ class Game(val gameActivity: MainGameActivity) {
         return Hero.getStrengthOfType(type, 0) // hero has no effect, return the "level 0" strength
     }
 
-    fun generateHeat(amount: Float)
+    fun generateHeat(amount: Float, percent: Int = 0): Int
     /** adds an amount of "heat" to the global game temperature, respecting possible modifiers
+     * @param percent the part of the heat (in %) that is effectively not applied
+     * @return the part of the generated heat that has not been applied
      */
     {
-        var generatedHeat = amount
         val factor = 100f - heroModifier(Hero.Type.REDUCE_HEAT)
-        generatedHeat *= (factor * Game.heatAdjustmentFactor / 100f)
-        state.heat += generatedHeat
+        val generatedHeat = amount * (factor * heatAdjustmentFactor / 100f)
+        state.heat += (generatedHeat * (100-percent)) / 100
+        return percent * generatedHeat.toInt() / 100
     }
 
 

@@ -455,7 +455,8 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
             ChipType.RES -> {
                 val ohm = resistorValue().toFloat()
                 attacker.slowDown(attacker.effectOfResistanceOnSpeed(ohm))
-                network.theGame.generateHeat(ohm)
+                val amount = network.theGame.generateHeat(ohm, theNetwork.theGame.heroModifier(Hero.Type.CONVERT_HEAT).toInt())
+                theNetwork.theGame.scoreBoard.addCash(amount)
                 attacker.immuneTo = this
 
             }

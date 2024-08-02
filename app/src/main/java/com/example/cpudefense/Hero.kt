@@ -34,9 +34,8 @@ class Hero(var game: Game, type: Type)
     enum class Type { INCREASE_CHIP_SUB_SPEED, INCREASE_CHIP_SUB_RANGE, DOUBLE_HIT_SUB,
         INCREASE_CHIP_SHR_SPEED,  INCREASE_CHIP_SHR_RANGE,
         INCREASE_CHIP_MEM_SPEED,  INCREASE_CHIP_MEM_RANGE, ENABLE_MEM_UPGRADE,
-        INCREASE_CHIP_RES_STRENGTH, INCREASE_CHIP_RES_DURATION,
-        REDUCE_HEAT, CONVERT_HEAT,
-        DECREASE_ATT_FREQ, DECREASE_ATT_SPEED, DECREASE_ATT_STRENGTH, DECREASE_COIN_STRENGTH,
+        INCREASE_CHIP_RES_STRENGTH, INCREASE_CHIP_RES_DURATION, CONVERT_HEAT,
+        DECREASE_ATT_FREQ, DECREASE_ATT_SPEED, DECREASE_ATT_STRENGTH, DECREASE_COIN_STRENGTH, REDUCE_HEAT,
         ADDITIONAL_LIVES, INCREASE_MAX_HERO_LEVEL, LIMIT_UNWANTED_CHIPS,
         INCREASE_STARTING_CASH, GAIN_CASH, DECREASE_REMOVAL_COST,
         DECREASE_UPGRADE_COST, INCREASE_REFUND, GAIN_CASH_ON_KILL}
@@ -397,6 +396,7 @@ class Hero(var game: Game, type: Type)
                 Type.INCREASE_CHIP_MEM_RANGE -> return 1.0f + level / 10f
                 Type.INCREASE_CHIP_RES_STRENGTH -> return 1.0f + level * 0.2f
                 Type.INCREASE_CHIP_RES_DURATION -> return 1.0f + level * 0.2f
+                Type.CONVERT_HEAT -> return level * 3f
                 Type.DOUBLE_HIT_SUB -> return if (level < 10) level * 0.1f else 1.0f
                 else -> return level.toFloat()
             }
@@ -608,7 +608,7 @@ class Hero(var game: Game, type: Type)
                 Type.DOUBLE_HIT_SUB -> {
                     name = "Boole"
                     fullName = "George Boole"
-                    effect = game.resources.getString(R.string.HERO_EFFECT_CHANCE_DOUBLE)
+                    effect = game.resources.getString(R.string.HERO_EFFECT_CHANCE_DOUBLE).format("SUB")
                     vitae = game.resources.getString(R.string.boole)
                     picture = BitmapFactory.decodeResource(game.resources, R.drawable.boole)
                 }

@@ -118,7 +118,7 @@ In hex, you have digits from 0 to 9 and then from A to F. The hex number 0x0F eq
     <string name="instr_17">Two more undesired chip types, then we have seen them all.\n\nDUP duplicates an attacking piece of code. Instead of one attacker, you\'ll have two, with the same number.\n\nSPLT (split) does nearly the same, but instead of simply duplicating the number, it splits it into two pieces. For example, xA4 becomes xA0 and x04. This is somewhat the opposite of ACC: If the two resulting numbers are combined by logical OR, you\'ll get the original values. \n</string>
     <string name="instr_18">Beware! Sneak attack!</string>
     <string name="instr_22">Remember that SHR chips are powerful but cannot eliminate attackers. They quickly reduce large values, but against hordes of weak attackers, multiple SUB chips may be a more cost-effective defence.</string>
-    <string name="instr_23">Not all electronic components are logic chips. There are also important classic, analogue components such as capacitors [C] or resistors [R]. \n\nIn this game, resistors have the effect of slowing down the attackers for a certain period of time. Their strength is indicated by three coloured rings.\n\nThe effect is the bigger the stronger the attackers are. One-bit-numbers are hardly affected at all, whereas 8-bit numbers become quite slow by large resistances.\n</string>
+    <string name="instr_23">Not all electronic components are logic chips. There are also important classic, analogue components such as capacitors [C] or resistors [R]. \n\nIn this game, resistors have the effect of slowing down the attackers for a certain period of time. Their strength is indicated by three coloured rings. The slowing effect is the bigger the stronger the attackers are. One-bit-numbers are hardly affected at all, whereas 8-bit numbers become quite slow by large resistances.\n\nResistors generate heat. There is a hero (Claude Shannon) who can convert some of this heat into information.\n</string>
     <string name="instr_endless">You have successfully cleared all stages and won the game!\n\nIf you want, you can continue in \"endless\" mode, with randomly generated circuits that get more and more difficult. You will start the \"endless\" series without heroes, and you cannot use the coins gathered until now. \n\nHow far will you get?</string>
 
 
@@ -213,7 +213,7 @@ The programming language Pascal is named after him."</string>
     <string name="shortdesc_att_strength">Attacker strength</string>
     <string name="shortdesc_coin_strength">Coin strength</string>
     <string name="shortdesc_info_gain">Information gain</string>
-    <string name="shortdesc_heat_conversion">Heat converted</string>
+    <string name="shortdesc_heat_conversion">heat converted</string>
     <string name="shortdesc_double_chance">%s double hit chance</string>
     <string name="shortdesc_range">%s chip range</string>
     <string name="shortdesc_refund">Refund when selling chips</string>
