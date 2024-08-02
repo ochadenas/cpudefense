@@ -190,7 +190,7 @@ The programming language Pascal is named after him."</string>
     <string name="settings_title">Settings</string>
     <string name="about_title">About</string>
     <string name="about_version">Version %s.</string>
-    <string name="about_license">"This game is open source. Visit <a href="https://github.com/ochadenas/cpudefense#MIT-1-ov-file">github.com/ochadenas/cpudefense</a> for more information.\n\nThe portraits of the Information Age Heroes are mostly derived from works of the public domain.\n\nOriginal photos:\n  Alex Handy (CC BY-SA 2.0)\n  Jacob Appelbaum (CC BY-SA 2.5)\n  Konrad Jacobs (CC BY-SA 2.0 de)\n  Rama (CC BY-SA 2.0 fr)\n  Shervinafshar (CC BY-SA 3.0)\n  Tony Bove (CC BY 3.0)\n  Wolfgang Hunscher (CC BY-SA 3.0)\n  Silvano de Gennaro (courtesy of the author)\n  Clermont Auvergne Métropole (CC BY-SA 4.0)\n  Jean-Frédéric (CC BY 2.0)\n  Tekniska Museet (CC BY 2.0)\n\nComputer boards:\n  Autopilot (CC BY-SA 4.0)\n  Bill Bertram (CC-BY 2.0)\n  Oliver Chadenas (CC BY-SA 3.0)\n  Smial (FAL)\n\nAll other artwork:\n  Oliver Chadenas (CC BY-SA 3.0)\n  "</string>
+    <string name="about_license">"This game is open source. Visit <a href="https://github.com/ochadenas/cpudefense#MIT-1-ov-file">github.com/ochadenas/cpudefense</a> for more information.\n\nThe portraits of the Information Age Heroes are mostly derived from works of the public domain.\n\nOriginal photos:\n  Alex Handy (CC BY-SA 2.0)\n  Jacob Appelbaum (CC BY-SA 2.5)\n  Konrad Jacobs (CC BY-SA 2.0 de)\n  Rama (CC BY-SA 2.0 fr)\n  Shervinafshar (CC BY-SA 3.0)\n  Tony Bove (CC BY 3.0)\n  Wolfgang Hunscher (CC BY-SA 3.0)\n  Silvano de Gennaro (courtesy of the author)\n  Clermont Auvergne Métropole (CC BY-SA 4.0)\n  Jean-Frédéric (CC BY 2.0)\n  Tekniska Museet (CC BY 2.0)\n  The Royal Society (CC BY-SA 4.0)\n\nComputer boards:\n  Autopilot (CC BY-SA 4.0)\n  Bill Bertram (CC-BY 2.0)\n  Oliver Chadenas (CC BY-SA 3.0)\n  Smial (FAL)\n\nAll other artwork:\n  Oliver Chadenas (CC BY-SA 3.0)\n  "</string>
     <string name="about_info_title">Info</string>
     <string name="about_info_text">For additional info and hints on game play visit the game\'s wiki on the web.</string>
     <string name="play_level_x">Play level %d</string>
@@ -213,8 +213,8 @@ The programming language Pascal is named after him."</string>
     <string name="shortdesc_att_strength">Attacker strength</string>
     <string name="shortdesc_coin_strength">Coin strength</string>
     <string name="shortdesc_info_gain">Information gain</string>
-    <string name="shortdesc_info_generation">Inf gain per Ω</string>
-    <string name="shortdesc_double_chance">Double hit chance</string>
+    <string name="shortdesc_heat_conversion">Heat converted</string>
+    <string name="shortdesc_double_chance">%s double hit chance</string>
     <string name="shortdesc_range">%s chip range</string>
     <string name="shortdesc_refund">Refund when selling chips</string>
     <string name="shortdesc_max_hero_upgrade">Max hero level</string>
@@ -243,6 +243,8 @@ The programming language Pascal is named after him."</string>
     <string name="HERO_EFFECT_ENABLEMEM">Enables upgrading of MEM chips</string>
     <string name="HERO_EFFECT_RES_STRENGTH">Increases the strength of resistors</string>
     <string name="HERO_EFFECT_RES_DURATION">Increases the duration of resistance effect</string>
+    <string name="HERO_EFFECT_CONVERT_HEAT">Converts some of the resistors\' heat into info</string>
+    <string name="HERO_EFFECT_CHANCE_DOUBLE">Gives %s chips a chance of double effect</string>
     <string name="toast_loading">Loading …</string>
     <string name="name_series_1">Normal</string>
     <string name="name_series_2">Turbo</string>

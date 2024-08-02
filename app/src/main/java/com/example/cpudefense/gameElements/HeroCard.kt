@@ -6,7 +6,6 @@ import com.example.cpudefense.Hero
 import com.example.cpudefense.R
 import com.example.cpudefense.effects.Fadable
 import com.example.cpudefense.effects.Fader
-import com.example.cpudefense.effects.Flippable
 import com.example.cpudefense.networkmap.Viewport
 import com.example.cpudefense.utils.center
 import com.example.cpudefense.utils.displayTextCenteredInRect
@@ -59,6 +58,7 @@ class HeroCard(val game: Game, val hero: Hero): GameElement(), Fadable
     {
         Hero.Type.INCREASE_CHIP_SUB_SPEED -> game.resources.getColor(R.color.upgrade_active_chip_sub)
         Hero.Type.INCREASE_CHIP_SUB_RANGE -> game.resources.getColor(R.color.upgrade_active_chip_sub)
+        Hero.Type.DOUBLE_HIT_SUB -> game.resources.getColor(R.color.upgrade_active_chip_sub)
         Hero.Type.INCREASE_CHIP_SHR_SPEED -> game.resources.getColor(R.color.upgrade_active_chip_shr)
         Hero.Type.INCREASE_CHIP_SHR_RANGE -> game.resources.getColor(R.color.upgrade_active_chip_shr)
         Hero.Type.INCREASE_CHIP_MEM_SPEED -> game.resources.getColor(R.color.upgrade_active_chip_mem)
@@ -66,6 +66,7 @@ class HeroCard(val game: Game, val hero: Hero): GameElement(), Fadable
         Hero.Type.ENABLE_MEM_UPGRADE -> game.resources.getColor(R.color.upgrade_active_chip_mem)
         Hero.Type.INCREASE_CHIP_RES_STRENGTH -> game.resources.getColor(R.color.upgrade_active_chip_res)
         Hero.Type.INCREASE_CHIP_RES_DURATION -> game.resources.getColor(R.color.upgrade_active_chip_res)
+        Hero.Type.CONVERT_HEAT -> game.resources.getColor(R.color.upgrade_active_chip_res)
         Hero.Type.REDUCE_HEAT -> game.resources.getColor(R.color.upgrade_active_chip_clk)
         Hero.Type.DECREASE_ATT_FREQ -> game.resources.getColor(R.color.upgrade_active_general)
         Hero.Type.DECREASE_ATT_SPEED -> game.resources.getColor(R.color.upgrade_active_general)
@@ -80,8 +81,6 @@ class HeroCard(val game: Game, val hero: Hero): GameElement(), Fadable
         Hero.Type.INCREASE_REFUND -> game.resources.getColor(R.color.upgrade_active_eco)
         Hero.Type.DECREASE_UPGRADE_COST -> game.resources.getColor(R.color.upgrade_active_eco)
         Hero.Type.DECREASE_REMOVAL_COST -> game.resources.getColor(R.color.upgrade_active_eco)
-        Hero.Type.GENERATE_INFO -> TODO()
-        Hero.Type.CRIT_HIT_CHANCE -> TODO()
     }
 
 
