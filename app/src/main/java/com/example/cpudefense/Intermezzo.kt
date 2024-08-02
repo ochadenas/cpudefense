@@ -19,10 +19,7 @@ import kotlin.random.Random
 - Horst Feistel's contributions
 - IBM drum calculating machine
 - Susan Landau
-- Shannon's Ultimate Machine
 - esoteric programming languages
-- Moon Landing on HP 25
-- HP calculators
  */
 
 class Intermezzo(var game: Game): GameElement(), Fadable {
