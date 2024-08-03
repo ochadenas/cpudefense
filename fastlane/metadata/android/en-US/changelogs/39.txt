@@ -8,3 +8,4 @@ Miscellaneous:
 - The slowing effect of resistors now depend on the attacker's value. The stronger the attacker, the more it gets slowed.
 
 
+

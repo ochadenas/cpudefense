@@ -1,0 +1,9 @@
+New features:
+- New heroes: Claude Shannon, George Boole, Whit Diffie
+- Resistors now produce heat, which can be converted into information if Shannon is available.
+- Some more "Did you know" messages.
+
+Bug fixes:
+- Avoid a situation where the player must choose a hero, but none is displayed.
+- Heroes always went off for three levels, regardless of what the text said.
+- The game uses a default system font if the desired font is not available. This had led to crashes on some devices.
