@@ -1,5 +1,6 @@
 package com.example.cpudefense.gameElements
 
+import android.content.res.Resources.NotFoundException
 import android.graphics.*
 import androidx.core.content.res.ResourcesCompat
 import com.example.cpudefense.Game
@@ -39,8 +40,13 @@ class Typewriter(val game: Game, myArea: Rect, private var lines: CopyOnWriteArr
         var stringLength = 0 // number of characters to display
         var x = topLeft.first.toFloat()
         var y = topLeft.second.toFloat()
+        val paint = Paint()
 
-        init { Fader(game, this, Fader.Type.APPEAR, Fader.Speed.SLOW) }
+        init {
+            Fader(game, this, Fader.Type.APPEAR, Fader.Speed.SLOW)
+            // try to set font
+
+        }
 
         override fun fadeDone(type: Fader.Type) {
             callback?.let { it() }  // call callback function, if defined.
@@ -54,7 +60,7 @@ class Typewriter(val game: Game, myArea: Rect, private var lines: CopyOnWriteArr
             val stringToDisplay = text.substring(0, stringLength)
             val paint = Paint()
             paint.color = game.resources.getColor(R.color.text_green)
-            paint.typeface = ResourcesCompat.getFont(game.gameActivity, R.font.ubuntu_mono)
+            paint.typeface = game.gameActivity.monoTypeface
             paint.textSize = textSize
             paint.alpha = alpha
             canvas.drawText(stringToDisplay, x, y, paint)

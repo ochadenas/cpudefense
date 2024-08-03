@@ -135,7 +135,7 @@ class ChipUpgrade(val chipToUpgrade: Chip, val type: Chip.ChipUpgrades,
         val newCanvas = Canvas(bitmap)
         paintText.textSize = Game.chipTextSize * game.resources.displayMetrics.scaledDensity
         paintText.alpha = 255
-        paintText.typeface = ResourcesCompat.getFont(game.gameActivity, R.font.ubuntu_mono_bold)
+        paintText.typeface = game.gameActivity.boldTypeface
         paintText.textAlign = Paint.Align.CENTER
         paintText.color = paintFrame.color
         rect.displayTextCenteredInRect(newCanvas, text, paintText)
