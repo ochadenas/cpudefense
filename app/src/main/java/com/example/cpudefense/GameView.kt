@@ -21,6 +21,7 @@ class GameView(context: Context, val theGame: Game):
     var scrollAllowed = true // whether the viewport can be moved by scrolling
     private var gestureDetector = GestureDetectorCompat(context, this)
 
+
     fun setup()
             /** called when the game view is created.
              * This is NOT the case when the user returns to the main menu
@@ -117,8 +118,6 @@ class GameView(context: Context, val theGame: Game):
                 }
             }
         }
-
-
         return false
     }
 

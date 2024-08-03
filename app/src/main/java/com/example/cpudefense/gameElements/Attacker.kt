@@ -305,7 +305,7 @@ open class Attacker(network: Network, representation: Representation = Represent
 
         textPaint.textSize = numberFontSize
         textPaint.alpha = 255
-        textPaint.typeface = ResourcesCompat.getFont(network.theGame.gameActivity, R.font.ubuntu_mono_bold)
+        textPaint.typeface = network.theGame.gameActivity.boldTypeface
         textPaint.textAlign = Paint.Align.CENTER
         val bounds = Rect()
         textPaint.getTextBounds(text, 0, text.length, bounds)

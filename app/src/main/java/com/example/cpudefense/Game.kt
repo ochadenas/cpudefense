@@ -3,9 +3,11 @@ package com.example.cpudefense
 import android.app.Activity
 import android.content.Context
 import android.content.res.Resources
+import android.content.res.Resources.NotFoundException
 import android.graphics.*
 import android.view.MotionEvent
 import android.widget.Toast
+import androidx.core.content.res.ResourcesCompat
 import com.example.cpudefense.effects.Background
 import com.example.cpudefense.effects.Fader
 import com.example.cpudefense.effects.Flipper

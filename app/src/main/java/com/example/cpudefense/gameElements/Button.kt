@@ -28,13 +28,13 @@ class Button(var game: Game, var text: String, val textSize: Float, val color: I
                 buttonPaint.color = Color.WHITE  // default, should be overridden
                 buttonPaint.style = Paint.Style.STROKE
                 buttonPaint.strokeWidth = 2f
-                textPaint.typeface = ResourcesCompat.getFont(game.gameActivity, R.font.ubuntu_mono_bold)
+                textPaint.typeface = game.gameActivity.boldTypeface
                 textPaint.color = Color.WHITE
             }
             Style.FILLED -> {
                 buttonPaint.color = color
                 buttonPaint.style = Paint.Style.FILL
-                textPaint.typeface = ResourcesCompat.getFont(game.gameActivity, R.font.ubuntu_mono_bold)
+                textPaint.typeface = game.gameActivity.boldTypeface
                 textPaint.color = Color.BLACK
             }
             Style.HP_KEY ->

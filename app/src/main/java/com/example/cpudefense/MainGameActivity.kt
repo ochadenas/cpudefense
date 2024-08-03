@@ -2,6 +2,8 @@ package com.example.cpudefense
 
 import android.app.Activity
 import android.app.Dialog
+import android.content.res.Resources.NotFoundException
+import android.graphics.Typeface
 import android.os.Bundle
 import android.os.SystemClock
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
@@ -11,6 +13,7 @@ import android.view.WindowManager
 import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.Toast
+import androidx.core.content.res.ResourcesCompat
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -44,6 +47,10 @@ class MainGameActivity : Activity() {
     /** cumulated time */
     private var frameTimeSum = 0L
 
+    /** font for displaying "computer messages" */
+    lateinit var monoTypeface: Typeface
+    lateinit var boldTypeface: Typeface
+
     enum class GameActivityStatus { PLAYING, BETWEEN_LEVELS }
 
     data class Settings(
@@ -63,6 +70,7 @@ class MainGameActivity : Activity() {
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         setContentView(R.layout.activity_main_game)
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        setComputerTypeface()
         theGame = Game(this)
         theGameView = GameView(this, theGame)
 
@@ -80,6 +88,21 @@ class MainGameActivity : Activity() {
             resumeGame = false
         theGameView.setup()
     }
+
+    fun setComputerTypeface()
+    {
+        try
+        {
+            monoTypeface = ResourcesCompat.getFont(this, R.font.ubuntu_mono) ?: Typeface.MONOSPACE
+            boldTypeface = ResourcesCompat.getFont(this, R.font.ubuntu_mono_bold) ?: Typeface.MONOSPACE
+        }
+        catch (ex: NotFoundException)
+        {
+            monoTypeface = Typeface.MONOSPACE
+            boldTypeface = Typeface.MONOSPACE
+        }
+    }
+
 
     override fun onPause() {
         // this method get executed when the user presses the system's "back" button,
