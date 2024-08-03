@@ -78,6 +78,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
     private val paintBackground = Paint()
     private var paintLines = Paint()
     private val defaultBackgroundColor = resources.getColor(R.color.chips_background)
+    private var lastHitWasCritical = false
 
     init {
         data.range = 2.0f
@@ -383,7 +384,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
         canvas.drawRect(rect, paintBackground)
         if (isInCooldown())
         {
-            paintBackground.color = chipData.glowColor
+            paintBackground.color = if (lastHitWasCritical) Color.WHITE else chipData.glowColor
             paintBackground.alpha = (chipData.cooldownTimer*255f/getCooldownTime()).toInt()
             canvas.drawRect(rect, paintBackground)
         }
@@ -461,11 +462,28 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
 
             }
             else -> {
-                if (attacker.onShot(chipData.type, chipData.upgradeLevel))
-                    attacker.remove()
+                val shots = numberOfShots()
+                lastHitWasCritical = (shots>1)
+                for (shot in 1 .. shots) {
+                    if (attacker.onShot(chipData.type, chipData.upgradeLevel)) {
+                        attacker.remove()
+                        break
+                    }
+                }
             }
         }
         startCooldown()
+    }
+
+    private fun numberOfShots(): Int
+    /** determines the number of shots that this chip has, depending on critical hit chance */
+    {
+        val hitChancePercent = when (chipData.type)
+        {
+            ChipType.SUB -> theNetwork.theGame.heroModifier(Hero.Type.DOUBLE_HIT_SUB).toInt()
+            else -> 0
+        }
+        return if (hitChancePercent > 0 && Random.nextInt(0,100) < hitChancePercent) 2 else 1
     }
 
     private fun slotsLeftInMEM(): Boolean

@@ -397,7 +397,7 @@ class Hero(var game: Game, type: Type)
                 Type.INCREASE_CHIP_RES_STRENGTH -> return 1.0f + level * 0.2f
                 Type.INCREASE_CHIP_RES_DURATION -> return 1.0f + level * 0.2f
                 Type.CONVERT_HEAT -> return level * 3f
-                Type.DOUBLE_HIT_SUB -> return if (level < 10) level * 0.1f else 1.0f
+                Type.DOUBLE_HIT_SUB -> return if (level < 10) level * 10f else 100f
                 else -> return level.toFloat()
             }
         }
