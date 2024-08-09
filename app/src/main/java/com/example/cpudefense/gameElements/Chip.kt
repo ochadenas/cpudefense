@@ -308,6 +308,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
         val possibleTargets = attackerList.filter { it.data.state == Vehicle.State.ACTIVE }
         val coins = possibleTargets.filter { it.attackerData.isCoin }
         val regularAttackers = possibleTargets.filter { !it.attackerData.isCoin }
+        val regularAttackersExcludingZero = regularAttackers.filter { it.attackerData.number > 0U }
         val sortedTargets = regularAttackers.sortedBy { it.attackerData.number }
         // sortedTargets is a list of regular attackers, smallest value first.
         // Depending on the chip type, prioritize either small values or large values or coins.
@@ -315,7 +316,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
         return when (this.chipData.type)
         {
             ChipType.SUB -> {(coins + sortedTargets).first()}
-            ChipType.SHR -> {(sortedTargets + coins).last()}
+            ChipType.SHR -> {(regularAttackersExcludingZero + coins).last()}
             ChipType.ACC -> {sortedTargets.last()}
             ChipType.MEM -> {sortedTargets.last()}
             ChipType.SPLT -> {sortedTargets.last()}
