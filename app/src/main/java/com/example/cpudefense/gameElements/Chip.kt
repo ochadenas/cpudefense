@@ -4,7 +4,6 @@ package com.example.cpudefense.gameElements
 
 import android.graphics.*
 import android.view.MotionEvent
-import androidx.core.content.res.ResourcesCompat
 import com.example.cpudefense.*
 import com.example.cpudefense.effects.Mover
 import com.example.cpudefense.networkmap.Network
@@ -15,7 +14,6 @@ import com.example.cpudefense.utils.inflate
 import com.example.cpudefense.utils.setBottomLeft
 import com.example.cpudefense.utils.setCenter
 import java.util.concurrent.CopyOnWriteArrayList
-import kotlin.math.exp
 import kotlin.random.Random
 
 open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gridX.toFloat(), gridY.toFloat())
@@ -308,15 +306,15 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
         val possibleTargets = attackerList.filter { it.data.state == Vehicle.State.ACTIVE }
         val coins = possibleTargets.filter { it.attackerData.isCoin }
         val regularAttackers = possibleTargets.filter { !it.attackerData.isCoin }
-        val regularAttackersExcludingZero = regularAttackers.filter { it.attackerData.number > 0U }
         val sortedTargets = regularAttackers.sortedBy { it.attackerData.number }
+        val sortedTargetsExcludingZero = sortedTargets.filter { it.attackerData.number > 0U }
         // sortedTargets is a list of regular attackers, smallest value first.
         // Depending on the chip type, prioritize either small values or large values or coins.
         try {
         return when (this.chipData.type)
         {
             ChipType.SUB -> {(coins + sortedTargets).first()}
-            ChipType.SHR -> {(regularAttackersExcludingZero + coins).last()}
+            ChipType.SHR -> {(sortedTargetsExcludingZero + coins).last()}
             ChipType.ACC -> {sortedTargets.last()}
             ChipType.MEM -> {sortedTargets.last()}
             ChipType.SPLT -> {sortedTargets.last()}
@@ -460,7 +458,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int): Node(network, gri
                 val amount = network.theGame.generateHeat(ohm, theNetwork.theGame.heroModifier(Hero.Type.CONVERT_HEAT).toInt())
                 theNetwork.theGame.scoreBoard.addCash(amount)
                 attacker.immuneTo = this
-
+                return // no cooldown phase here
             }
             else -> {
                 val shots = numberOfShots()
