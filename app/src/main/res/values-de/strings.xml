@@ -16,7 +16,7 @@
     <string name="coins_gathered">Gesammelte Coins: %d.</string>
     <string name="game_start">Start des Spiels.</string>
     <string name="enter_game">Los</string>
-    <string name="scoreboard_inf">Inf</string>
+    <string name="scoreboard_inf">Info</string>
     <string name="scoreboard_waves">Welle</string>
     <string name="scoreboard_status">Status</string>
     <string name="scoreboard_coins">Coins</string>
@@ -28,55 +28,55 @@
     <string name="button_refund_all">Zurücksetzen</string>
     <string name="close">Schließen</string>
     <string name="instr_1">
-"Dein Computer ist von einem üblen Virus befallen. Stücke von Schadcode - dargestellt als Einsen und Nullen - versuchen, zur CPU zu gelangen.
+"Dein Computer ist von einem üblen Virus befallen. Stücke von Schadcode — dargestellt als Einsen und Nullen — versuchen, zur CPU zu gelangen.
 
-Tippe den leeren Slot an, um einen Chip zur Verteidigung gegen den Angriff einzusetzen, und tippe noch einmal zur Bestätigung.
+Tippe den leeren Steckplatz an, um einen Chip zur Verteidigung gegen den Angriff einzusetzen, und tippe noch einmal zur Bestätigung.
 
-Der einfachste Chip ist 'SUB 1'. Er subtrahiert 1 vom Wert des Angreifers: 1 wird zu 0, und 0 verschwindet und stellt keine Bedrohung mehr dar."
+Der einfachste Chip ist „SUB 1“. Er subtrahiert 1 vom Wert des Angreifers: 1 wird zu 0, und 0 verschwindet und stellt keine Bedrohung mehr dar."
     </string>
     <string name="instr_2">
 "Durch Tippen auf einen Angreifer wird dessen Wert invertiert. 1 wird zu 0, und 0 wird zu 1.
 
-Das Invertieren einer 0 macht einen Angreifer tatsächlich gefährlicher. Pass also auf, dass du nicht auf alles tippst, was vorbeikommt."
+Das Invertieren einer 0 macht einen Angreifer tatsächlich gefährlicher. Pass also auf, dass du nicht alles antippst, was vorbeikommt."
     </string>
     <string name="instr_3">
-"Die Währung in diesem Spiel ist Information. Sie wird unten links angezeigt.
+"Die Währung in diesem Spiel ist Information. Sie wird unten links als „Info“ angezeigt.
 
 Durch Zerstören eines Angreifers erhält man etwas Information über das Virus. Damit lassen sich zusätzliche Chips kaufen oder bestehende aufwerten."
     </string>
     <string name="instr_4">
 "Einige Tipps:
 
-Im Dualsystem steht
+Im Zweiersystem steht
   10 für 2,
   11 für 3,
 100 für 4 und so weiter.
 
-Versuche, Zahlen mit '1' am Anfang anzutippen. Dadurch wird die Zahl kleiner und der Level viel einfacher.
+Versuche, Zahlen mit „1“ am Anfang anzutippen. Dadurch wird die Zahl kleiner und der Level viel einfacher.
 
-Jeder Angreifer, der zur CPU durchkommt, kostet dich ein Leben, egal welche Zahl er hat. Du brauchst mindestens einen SUB Chip, um sie loszuwerden."</string>
+Jeder Angreifer, der zur CPU durchkommt, kostet dich ein Leben, egal welche Zahl er hat. Du brauchst mindestens einen SUB-Chip, um sie loszuwerden."</string>
     <string name="instr_5">
-"Im nächsten Level steht ein neuer Chip zur Verfügung. Die Bezeichnung 'SHR 1' heißt 'shift right by 1'.
+"Im nächsten Level steht ein neuer Chip zur Verfügung. Die Bezeichnung „SHR 1“ heißt „shift right by 1“.
 
-Alle Binärziffern werden eine Stelle nach rechts geschoben. Die Stelle ganz links wird mit 0 aufgefüllt; zum Beispiel wird 0110 zu 0011.
+Alle Binärziffern werden eine Stelle nach rechts geschoben. Die Stelle ganz links wird mit 0 aufgefüllt, die Stelle ganz rechts verschwindet; zum Beispiel wird 0110 zu 0011.
 
 Das Verschieben ist gleichbedeutend mit einer Division durch 2."
     </string>
-    <string name="instr_6">"\nBei erfolgreichem Abschließen von Leveln gewinnt man wertvolle Cryptocoins. Damit kannst du Heldinnen und Helden des Informationszeitalters anheuern, die dir erhebliche Vorteile im Spiel bringen. \n\nPro Level gibt es eine maximale Anzahl von Cryptocoins, die unten angezeigt werden. Jedes verlorene Leben reduziert die Anzahl der Cryptocoins.\n\nFalls beim ersten Durchgang nicht alle Coins gewonnen werden, kann der Level beliebig wiederholt werden. Wenn allerdings das Maximum erreicht wurde, erhält man keine weiteren Coins für diesen Level.\n\n    "</string>
+    <string name="instr_6">"\nBei erfolgreichem Abschließen von Leveln gewinnt man wertvolle Cryptocoins. Damit kannst du Heldinnen und Helden des Informationszeitalters anheuern, die dir erhebliche Vorteile im Spiel bringen. \n\nPro Level gibt es eine maximale Anzahl von Cryptocoins, die unten angezeigt werden. Jede verlorene Lebenspunkt reduziert die Anzahl der Cryptocoins.\n\nFalls beim ersten Durchgang nicht alle Coins gewonnen werden, kann der Level beliebig wiederholt werden. Wenn allerdings das Maximum erreicht wurde, erhältst du keine weiteren Coins für diesen Level.\n\n"</string>
     <string name="instr_7">
 "Manchmal sieht man einen Cryptocoin, der sich mit den Angreifern bewegt. Er kann eingesammelt werden, indem er zerstört wird. Dies geht sogar mehrmals, wenn der Level wiederholt wird.
 
-Vorsicht: Der laufende Cryptocoin ist stärker als die gewöhnlichen Angreifer. Wenn er die CPU erreicht, kostet dies ebenfalls ein Leben."
+Vorsicht: Der laufende Cryptocoin ist stärker als die gewöhnlichen Angreifer. Wenn er die CPU erreicht, kostet dies ebenfalls einen Lebenspunkt."
     </string>
-    <string name="instr_9">Wir führen einen neuen Chip ein, nämlich MEM (für memory). Dieser nimmt eine Zahl und speichert sie weg. Ein kleiner weißer Indikator zeigt an, dass sich ein Wert im Inneren befindet.\n\nDer MEM-Chip muss \"ausgelesen\" werden, indem man auf ihn tippt). Damit beginnt sein Abkühlungszyklus, und erst danach wird der Speicherplatz wieder frei. Ein dicker weißer Rahmen zeigt an, ob du auf den Chip tippen solltest.\n\nIm Moment kann der MEM-Chip nur einen Angreifer aufnehmen. Später im Spiel wirst du Upgrades kaufen können, die zusätzliche Speicherplätze schaffen.\n\nMEM-Chips sind mächtig, weil sie jeden Angreifer ausschalten können, aber sie erfordern deine Aufmerksamkeit und sind ziemlich langsam.\n\nÜbersetzt mit DeepL.com (kostenlose Version)\n</string>
-    <string name="instr_10">"Der Akkumulator-Chip (ACC) ist etwas komplexer als die anderen, aber er kann gegen eine große Zahl von Angreifern sehr wirkungsvoll sein. Er kombiniert zwei Zahlen zu einem Ergebnis. \n\nIn der Basisvariante addiert er die beiden Zahlen. In der ersten Ausbaustufe führt er ein logisches ODER durch, in der zweiten Stufe ein logisches UND.\n \n Beispiel: Wenn die Zahlen 0110 (also 6) und 0011 (also 3) im ACC verarbeitet werden, ist das Ergebnis \n1001 (also 9) bei Addition [ACC +]\n0111 (also 7) bei ODER [ACC v]\n0010 (also 2) bei UND [ACC &amp;].\n\nDer Vorteil des ACC ist, dass er richtig schnell ist.\n\n    "</string>
+    <string name="instr_9">Wir führen einen neuen Chip ein, nämlich MEM (für „memory“, also „Speicher“). Dieser nimmt eine Zahl und speichert sie weg. Ein kleiner weißer Indikator zeigt an, dass sich ein Wert im Inneren befindet.\n\nDer MEM-Chip muss „ausgelesen“ werden, indem man auf ihn tippt. Damit beginnt sein Abkühlungszyklus, und erst danach wird der Speicherplatz wieder frei. Ein dicker weißer Rahmen zeigt an, ob du auf den Chip tippen solltest.\n\nIm Moment kann der MEM-Chip nur einen Angreifer aufnehmen. Später im Spiel wirst du Helden zur Verfügung haben, die zusätzliche Speicherplätze schaffen.\n\nMEM-Chips sind mächtig, weil sie jeden Angreifer ausschalten können, aber sie erfordern deine Aufmerksamkeit und sind ziemlich langsam.\n\n</string>
+    <string name="instr_10">"Der Akkumulator-Chip (ACC) ist etwas komplexer als die anderen, aber er kann gegen eine große Zahl von Angreifern sehr wirkungsvoll sein. Er kombiniert zwei Zahlen zu einem Ergebnis.\n\nIn der Basisvariante addiert er die beiden Zahlen. In der ersten Ausbaustufe führt er ein logisches ODER durch, in der zweiten Stufe ein logisches UND.\n\n Beispiel: Wenn die Zahlen 0110 (also 6) und 0011 (also 3) im ACC verarbeitet werden, ist das Ergebnis \n1001 (also 9) bei Addition [ACC +]\n0111 (also 7) bei ODER [ACC v]\n0010 (also 2) bei UND [ACC &amp;].\n\nDer Vorteil des ACC ist, dass er richtig schnell ist.\n\n"</string>
     <string name="instr_11">
-"Größere Zahlen werden hexadezimal dargestellt. Sie haben ein vorangestelltes 'x'.
+"Größere Zahlen werden im Hexadezimal- oder Sechzehnersystem dargestellt. Sie haben ein vorangestelltes „x“.
 
-In Hex gibt es die Ziffern von 0 bis 9 und dann von A bis F. Die Hex-Zahl 0x0F entspricht 15 dezimal bzw. 1111 im Binärsystem."
+Zur Darstellung der 16 Ziffern im Hexadezimalsystem werden die Ziffern von 0 bis 9 um die Buchstaben von A bis F ergänzt. Die Hex-Zahl 0x0F entspricht 15 dezimal bzw. 1111 im Zweiersystem."
     </string>
     <string name="instr_14">Ein weiterer Chip ist verfügbar! \n\nDer CLK-Chip (\'clock\', hier: Taktgeber) hat selber keinen Einfluss auf die Angreifer. Stattdessen beschleunigt er die anderen Chips auf dem Board. Jedes Mal, wenn CLK tickt, wird der Cooldown-Timer aller anderen Chips zurückgesetzt, und sie sind wieder betriebsbereit.\n\nEine Aufrüstung erhöht die CLK-Frequenz.</string>
-    <string name="instr_15">Das Übertakten der CPU kann gefährlich sein. Je schneller die Chips arbeiten, desto heißer werden sie.\n\nJedes Mal, wenn der Taktgeber CLK einen Chip zurücksetzt, wird ein bisschen Wärme erzeugt. Temperaturen über %d Grad können die CPU beschädigen - das heißt, du riskierst eins deiner Leben.\n</string>
+    <string name="instr_15">Das Übertakten der CPU kann gefährlich sein. Je schneller die Chips arbeiten, desto heißer werden sie.\n\nJedes Mal, wenn der Taktgeber CLK einen Chip zurücksetzt, wird ein bisschen Wärme erzeugt. Temperaturen über %d Grad können die CPU beschädigen - das heißt, du riskierst einen Lebenspunkt.\n</string>
     <string name="turing">
 "Alan Turing war eine der wichtigsten Persönlichkeiten in der Computerwissenschaft. Er legte viele der Grundlagen der theoretischen Informatik, unter anderem durch die Turing-Maschine und den Turing-Test. Außerdem entschlüsselte er den Enigma-Code im zweiten Weltkrieg. Sein Einfluss auf den Verlauf des Krieges kann kaum überschätzt werden.
 
@@ -92,17 +92,17 @@ Turing wurde aufgrund seiner Homosexualität massiv diskriminiert. Er starb 1954
 "Ada Gräfin Lovelace gilt als die Erfinderin der Programmierung. Zusammen mit Charles Babbage arbeitete sie mit seiner Rechenmaschine. Sie stellte ein Instruktionsset für die Berechnung der Bernoullizahlen auf, das vermutlich das erste formale Programm überhaupt war.\n\nLovelace erkannte, dass die Möglichkeiten einer programmierbaren Maschine weit über arithmetische Berechnungen hinaus gingen. Sie war zudem die erste, die zwischen symbolischen Konzepten (Software) und physischen Teilen (Hardware) unterschied."
     </string>
     <string name="hollerith">"Datenspeicherung und -verarbeitung begann mit der Einführung von Lochkarten durch Herman Hollerith. Er entwickelte und vermarktete eine Tabelliermaschine für Lochkarten, mit der man Information sammeln, sortieren und auswerten konnte. Sie wurde unter anderem bei Volkszählungen in vielen Ländern eingesetzt.\n\nIm Jahr 1896 gründete Hollerith die  Tabulating Machine Company, die später zu IBM wurde.\n "</string>
-    <string name="osborne">Im Jahr 1981 baute Adam Osborne den ersten tragbaren Computer. Der \'Osborne 1\' war nicht wirklich das, was wir heute einen Laptop nennen. Er war eher ein großer Koffer, der über 11 kg wog. Trotzdem hatte er in einem kompakten Gehäuse alles, was ein Computer braucht: Stromversorgung, Tastatur, zwei Diskettenlaufwerke, einen Monitor und eine Menge Software.\n\nOsborne war darüber hinaus ein Sachbuchautor und Buchverleger.\n\n</string>
+    <string name="osborne">Im Jahr 1981 baute Adam Osborne den ersten tragbaren Computer. Der \'Osborne 1\' war nicht wirklich das, was wir heute einen Laptop nennen. Er war eher ein großer Koffer, der über 11 kg wog. Trotzdem hatte er in einem kompakten Gehäuse alles, was ein Rechner braucht: Stromversorgung, Tastatur, zwei Diskettenlaufwerke, einen Monitor und eine Menge Software.\n\nOsborne war darüber hinaus ein Sachbuchautor und Buchverleger.\n\n</string>
     <string name="cernettes">"Les Horribles Cernettes (alias LHC) sind die High Energy Rock Band des europäischen Forschungszentrums CERN. Sie waren die erste Band im Web.\n\nNachdem Berners-Lee das World Wide Web erfunden hatte, suchte er nach passendem Inhalt. Silvano de Gennaro gab ihm ein Foto der Cernettes, das im Juli 1992 aufgenommen war und dadurch zum ersten Foto einer Band wurde, das in Browserfenstern auf der ganzen Welt angeschaut wurde.\n "</string>
-    <string name="knuth">"Donald Ervin Knuth ist ein Informatiker und Mathematiker, dem die Theoretische Informatik zahlreiche Beiträge verdankt.\n\nEr ist hauptsächlich für sein Monumentalwerk  'The Art of Computer Programming' bekannt - ein Projekt, das 1962 begonnen hat und noch immer nicht abgeschlossen ist. Quasi en passant entwickelte Knuth dafür das Textsatzsystem TeX, das weltweit zum Standard für wissenschaftliche Veröffentlichungen geworden ist.\n "</string>
-    <string name="zuse">Der erste moderne Computer wurde 1941 von Konrad Zuse gebaut. Der Z1 war eine programmierbare elektromechanische Maschine, die auf einer binären Basis arbeitete, Boolesche Logik verwendete und sogar Fließkommazahlen kannte.\n\nZuse erfand auch die erste Hochsprache \'Plankalkül\' für die Programmierung eines Computers.\n</string>
-    <string name="franke" formatted="false">"Der Physiker Herbert W. Franke war als Autor von Science-Fiction-Romanen und Sachbüchern bekannt.\n\nEr war ein Pionier in Computerkunst und -grafik und entwickelte das Konzept der \"kybernetischen Ästhetik\": Kunst, die von elektronischen Geräten und numerischen Algorithmen erschaffen wird.\n "</string>
-    <string name="vaughan">Dorothy Vaughan war einer der \"menschlichen Computer\" bei der NASA. Sie konnte komplexe mathematische Gleichungen schneller und verlässlicher lösen als die damaligen elektronischen oder mechanischen Geräte. Gemeinsam mit anderen Frauen brachte sie das amerikanische Weltraumprogramm wesentlich voran.\n\nSpäter bereitete sie als Managerin bei der NASA die Einführung elektronischer Computer vor, indem sie sich selbst und ihrem Team die Sprache FORTRAN beibrachte.</string>
-    <string name="tramiel">Als Kind überlebte Idek Tramielski Auschwitz. Er emigrierte 1947 in die USA und gründete dort 1954 Commodore International, die Schreibmaschinen baute. Im Jahr 1982 stellte Commodore den C64 vor, den ersten echten Heimcomputer der Welt.\n\nDer C64 brach alle Verkaufsrekorde. Er hatte nicht nur unglaubliche 64 kiB RAM, sondern auch hochauflösende Grafik, digitalen Sound, einen eingebauten BASIC-Interpreter und zwei Joystick-Ports. Für unzählige Menschen bedeutete der \'Brotkasten\' den Einstieg ins Computerzeitalter.\n</string>
-    <string name="pascal">\nBlaise Pascal war ein Universalgelehrter auf vielen Gebieten der Mathematik, Philosophie und Physik. Für das spätere Informationszeitalter waren seine Rechenmaschinen, die \'Pascalinen\', ein früher Vorläufer.\n\nDie Programmiersprache Pascal ist nach ihm benannt.</string>
-    <string name="meier">Sidney K. Meier hat einige der einflussreichsten Strategiespiele geschaffen und dieses Genre revolutioniert. Mit vergleichsweise einfachen Regeln simulieren seine Spiele die komplexen Zusammenhänge der Realität erstaunlich gut. Und sie erzählen immer eine Geschichte: Vom Zeitalter der Eisenbahn, von der amerikanischen Revolution, oder aber - wie in seinem bekanntesten Werk \'Civilization\' - von 6000 Jahren menschlicher Geschichte.</string>
-    <string name="chappe">"Zusammen mit seinen vier Brüdern Ignace, Pierre François, René und Abraham entwickelte Claude Chappe den optischen Telegrafen. Sein \"Tachygraph\" war das erste System, mit dem Informationen schnell über große Distanz übertragen werden konnten, und damit der Vorläufer aller moderner Kommunikation. Um 1830 war Paris über Chappe-Semaphoren mit vielen wichtigen Städten in Frankreich und Europa verbunden.\n "</string>
-    <string name="hamilton">Als junge Programmiererin arbeitete Margaret Elaine Hamilton in militärischen Projekten. Mitte der 1960er Jahre wechselte sie zum Apollo-Mondlandungsprojekt der NASA und wurde schnell zu Leiterin der Software-Entwicklung. Sie und ihr Team waren für Programmierung und Test des Navigationscomputers an Bord des Raumschiffs und der Landefähre verantwortlich, wobei von der absoluten Verlässlichkeit der Programme das Leben der Astronauten abhing.\n\nHamilton prägte den Begriff des \"Software Engineerings\". Außerdem gibt es sie als Lego-Figur.\n\n\n</string>
+    <string name="knuth">"Donald Ervin Knuth ist ein Informatiker und Mathematiker, dem die Theoretische Informatik zahlreiche Beiträge verdankt.\n\nEr ist hauptsächlich für sein Monumentalwerk  „The Art of Computer Programming>” bekannt - ein Projekt, das 1962 begonnen hat und noch immer nicht abgeschlossen ist. Quasi en passant entwickelte Knuth dafür das Textsatzsystem TeX, das weltweit zum Standard für wissenschaftliche Veröffentlichungen geworden ist.\n "</string>
+    <string name="zuse">Der erste moderne Computer wurde 1941 von Konrad Zuse gebaut. Der Z1 war eine programmierbare elektromechanische Maschine, die im Zweiersystem arbeitete, Boolesche Logik verwendete und sogar Fließkommazahlen kannte.\n\nZuse erfand auch die erste Hochsprache \'Plankalkül\' für die Programmierung eines Computers.\n</string>
+    <string name="franke" formatted="false">"Der Physiker Herbert W. Franke war als Autor von Science-Fiction-Romanen und Sachbüchern bekannt.\n\nEr war ein Pionier in Computerkunst und -grafik und entwickelte das Konzept der „kybernetischen Ästhetik”: Kunst, die von elektronischen Geräten und numerischen Algorithmen erschaffen wird.\n "</string>
+    <string name="vaughan">Dorothy Vaughan war einer der „menschlichen Computer” bei der NASA. Sie konnte komplexe mathematische Gleichungen schneller und verlässlicher lösen als die damaligen elektronischen oder mechanischen Geräte. Gemeinsam mit anderen Frauen brachte sie das amerikanische Weltraumprogramm wesentlich voran.\n\nSpäter bereitete sie als Managerin bei der NASA die Einführung elektronischer Computer vor, indem sie sich selbst und ihrem Team die Sprache FORTRAN beibrachte.</string>
+    <string name="tramiel">Als Kind überlebte Idek Tramielski Auschwitz. Er wanderte 1947 in die USA aus und gründete dort 1954 Commodore International, die Schreibmaschinen baute. Im Jahr 1982 stellte Commodore den C64 vor, den ersten echten Heimcomputer der Welt.\n\nDer C64 brach alle Verkaufsrekorde. Er hatte nicht nur unglaubliche 64 kiB RAM, sondern auch hochauflösende Grafik, digitalen Sound, einen eingebauten BASIC-Interpreter und zwei Joystick-Ports. Für unzählige Menschen bedeutete der „Brotkasten” den Einstieg ins Computerzeitalter.\n</string>
+    <string name="pascal">\nBlaise Pascal war ein Universalgelehrter auf vielen Gebieten der Mathematik, Philosophie und Physik. Für das spätere Informationszeitalter waren seine Rechenmaschinen, die „Pascalinen”, ein früher Vorläufer.\n\nDie Programmiersprache Pascal ist nach ihm benannt.</string>
+    <string name="meier">Sidney K. Meier hat einige der einflussreichsten Strategiespiele geschaffen und dieses Genre revolutioniert. Mit vergleichsweise einfachen Regeln simulieren seine Spiele die komplexen Zusammenhänge der Realität erstaunlich gut. Und sie erzählen immer eine Geschichte: Vom Zeitalter der Eisenbahn, von der amerikanischen Revolution, oder aber — wie in seinem bekanntesten Werk „Civilization” — von 6000 Jahren menschlicher Geschichte.</string>
+    <string name="chappe">"Zusammen mit seinen vier Brüdern Ignace, Pierre François, René und Abraham entwickelte Claude Chappe den optischen Telegrafen. Sein „Tachygraph” war das erste System, mit dem Informationen schnell über große Distanz übertragen werden konnten, und damit der Vorläufer aller moderner Kommunikation. Um 1830 war Paris über Chappe-Semaphoren mit vielen wichtigen Städten in Frankreich und Europa verbunden.\n "</string>
+    <string name="hamilton">Als junge Programmiererin arbeitete Margaret Elaine Hamilton in militärischen Projekten. Mitte der 1960er Jahre wechselte sie zum Apollo-Mondlandungsprojekt der NASA und wurde schnell zu Leiterin der Software-Entwicklung. Sie und ihr Team waren für Programmierung und Test des Flugkontrollrechners an Bord des Raumschiffs und der Landefähre verantwortlich, wobei von der absoluten Verlässlichkeit der Programme das Leben der Astronauten abhing.\n\nHamilton prägte den Begriff des „Software Engineering”. Außerdem gibt es sie als Lego-Figur.\n\n\n</string>
     <string name="settings_title">Einstellungen</string>
     <string name="about_title">Über dieses Spiel</string>
     <string name="yes">Ja</string>
@@ -119,7 +119,7 @@ Turing wurde aufgrund seiner Homosexualität massiv diskriminiert. Er starb 1954
     <string name="shortdesc_ACC">Geschw. ACC-Chips</string>
     <string name="shortdesc_MEM">Geschw. MEM-Chips</string>
     <string name="shortdesc_heat">Wärmeerzeugung</string>
-    <string name="shortdesc_upgrade">Kosten für Upgrade</string>
+    <string name="shortdesc_upgrade">Kosten für Verbesserung</string>
     <string name="shortdesc_lives">Extra-Leben</string>
     <string name="shortdesc_frequency">Frequenz der Angreifer</string>
     <string name="shortdesc_att_speed">Geschw. der Angreifer</string>
@@ -133,13 +133,13 @@ Turing wurde aufgrund seiner Homosexualität massiv diskriminiert. Er starb 1954
     <string name="upgrade_format">%s  [Kosten: %d]</string>
     <string name="toast_next_stage">Level %d</string>
     <string name="toast_stage_cleared">Level geschafft</string>
-    <string name="instr_12">Zwei weitere Chiparten: ADD und SHL.\n\nDiese tun das Gegenteil von SUB und SHR: Sie addieren 1 zu der Zahl bzw. schieben die Bits nach links.\n\nDas ist natürlich unerwünscht, denn es macht die Zahlen größer. Für diese Chips bedeutet ein \'Upgrade\', dass sie schwächer werden oder ganz verschwinden.</string>
+    <string name="instr_12">Zwei weitere Chiparten: ADD und SHL (für „shift left”).\n\nDiese tun das Gegenteil von SUB und SHR: Sie addieren 1 zu der Zahl bzw. schieben die Bits nach links.\n\nDas ist natürlich unerwünscht, denn es macht die Zahlen größer. Für diese Chips bedeutet „Verbesserung”, dass sie schwächer werden oder ganz verschwinden.</string>
     <string name="instr_13">"Beachte, dass CryptoCoins weder von ACC- noch von MEM-Chips beeinflusst werden.\n "</string>
     <string name="HERO_EFFECT_CHIPSPEED">verringert die Abklingzeit aller %s Chips</string>
     <string name="HERO_EFFECT_HEAT">verringert die Wärmeerzeugung</string>
     <string name="HERO_EFFECT_STARTINFO">startet alle Level mit mehr Information</string>
-    <string name="HERO_EFFECT_UPGRADECOST">verringert die Kosten für Upgrades</string>
-    <string name="HERO_EFFECT_LIVES">gewährt zusätzliche Leben</string>
+    <string name="HERO_EFFECT_UPGRADECOST">verringert die Kosten für Verbesserungen</string>
+    <string name="HERO_EFFECT_LIVES">gewährt zusätzliche Lebenspunkte</string>
     <string name="HERO_EFFECT_FREQUENCY">verringert die Frequenz der Angreifer</string>
     <string name="HERO_EFFECT_INFOOVERTIME">zusätzlicher Informationsgewinn pro Zeit</string>
     <string name="HERO_EFFECT_ATTSPEED">verringert die Geschwindigkeit der Angreifer</string>
@@ -158,8 +158,8 @@ Turing wurde aufgrund seiner Homosexualität massiv diskriminiert. Er starb 1954
     <string name="series_completed_message_2">Du kannst alle Levels</string>
     <string name="series_completed_message_3">nun noch einmal im</string>
     <string name="series_completed_message_4">\'Turbo\'-Modus spielen.</string>
-    <string name="instr_2_1">Im Turbo-Modus sind die Angreifer schneller, stärker und zahlreicher.\n\nZusätzlich sind einige Slots schon mit unerwünschten Chips belegt, mit denen du fertig werden musst.\n</string>
-    <string name="wiener">" Norbert Wiener ist als Begründer der Kybernetik bekannt, also der Steuerung und Regelung von Maschinen, und ist damit einer der Wegbereiter von Künstlicher Intelligenz. Der von ihm geprägte Begriff 'cyber' ist heute allgegenwärtig.  Er entwickelte mathematische Theorien, vor allem im Bereich der Mustererkennung und Bildbearbeitung, und bewies eine Reihe von mathematischen Sätzen.  Aufgrund der Erfahrungen im 2. Weltkrieg nahm er eine zunehmend pazifistische Haltung ein und weigerte sich, Werke zu veröffentlichen, die in den Händen von Militaristen Schaden anrichten könnten.     "</string>
+    <string name="instr_2_1">Im Turbo-Modus sind die Angreifer schneller, stärker und zahlreicher.\n\nZusätzlich sind einige Steckplätze schon mit unerwünschten Chips belegt, mit denen du fertig werden musst.\n</string>
+    <string name="wiener">" Norbert Wiener ist als Begründer der Kybernetik bekannt, also der Steuerung und Regelung von Maschinen, und ist damit einer der Wegbereiter von Künstlicher Intelligenz. Der von ihm geprägte Begriff „cyber” ist heute allgegenwärtig.  Er entwickelte mathematische Theorien, vor allem im Bereich der Mustererkennung und Bildbearbeitung, und bewies eine Reihe von mathematischen Sätzen.  Aufgrund der Erfahrungen im 2. Weltkrieg nahm er eine zunehmend pazifistische Haltung ein und weigerte sich, Werke zu veröffentlichen, die in den Händen von Militaristen Schaden anrichten könnten."</string>
     <string name="settings_disable_background">Hintergrund ausschalten</string>
     <string name="settings_show_atts_in_range">Angreifer in Reichweite zeigen</string>
     <string name="mandelbrot">Der Mathematiker Benoît Mandelbrot war der wichtigste Begründer der Fraktalen Geometrie, mit der sich nicht nur viele Strukturen in der Natur sehr gut beschreiben, sondern auch phantastische Grafiken am Rechner erzeugen lassen. \n\nDie grafischen Darstellungen der Mandelbrot-Menge, die sogenannten Apfelmännchen, gingen viral und begründeten ein neues Zeitalter der Computerkunst.\n</string>
@@ -177,9 +177,9 @@ Turing wurde aufgrund seiner Homosexualität massiv diskriminiert. Er starb 1954
     <string name="button_purchase_plural">Anheuern [%d Coins]</string>
     <string name="button_back">Schließen</string>
     <string name="button_info">Info</string>
-    <string name="button_releasenotes">Release Notes</string>
+    <string name="button_releasenotes">Versionshinweise</string>
     <string name="text_about">Über …</string>
-    <string name="instr_16">Der NOP Chip (für \"no operation\") tut gar nichts, belegt allerdings einen wertvollen Slot.\n\nEin NOP 2 Chip tut ebenfalls nicht, und das gleich zwei Mal.\n</string>
+    <string name="instr_16">Der NOP Chip (für \"no operation\") tut gar nichts, belegt allerdings einen wertvollen Steckplatz.\n\nEin NOP 2 Chip tut ebenfalls nicht, und das gleich zwei Mal.\n</string>
     <string name="instr_endless">Du hast alle Level geschafft und das Spiel gewonnen!\n\nWenn du willst, kannst du nun im \"Endlos\"-Modus weitermachen, mit zufällig generierten Leveln, die immer schwieriger werden. Du beginnst diese neue Serie ohne Helden, und du kannst die bisher gesammelten Münzen nicht verwenden. \n\nWie weit kommst du?\n</string>
     <string name="message_endless_unavailable">Verfügbar nach Abschluss aller vorherigen Level.</string>
     <string-array name="fun_fact">
@@ -230,7 +230,7 @@ Turing wurde aufgrund seiner Homosexualität massiv diskriminiert. Er starb 1954
     <string name="instr_18">Achtung! Angriff aus dem Hinterhalt!</string>
     <string name="leibniz">Auch Gottfried Wilhelm Leibniz war, ähnlich wie Pascal, ein großer Universalgelehrter seiner Zeit, dem wir wichtige Fortschritte, die man hier gar nicht alle aufzählen kann, in zahlreichen ganz unterschiedlichen Gebieten der Wissenschaft verdanken.\n\nSeine Leistung für das Informationszeitalter besteht in der Konstruktion komplexer mechanischer Rechenmaschinen, die als Vorläufer moderner Computer angesehen werden können. Vor allem aber erkannte er die Bedeutung des Zweiersystems und des binären Zahlencodes, mit dem heute alle digitalen Geräte arbeiten.\n</string>
     <string name="shortdesc_enable_mem_upgrade">max. Level für MEM</string>
-    <string name="HERO_EFFECT_ENABLEMEM">Ermöglicht Upgrades vom MEM-Chips</string>
+    <string name="HERO_EFFECT_ENABLEMEM">Ermöglicht Verbesserung vom MEM-Chips</string>
     <string name="instr_23">Nicht alle elektronischen Bauteile sind logische Chips. Es gibt auch wichtige analoge Komponenten wie Kondensatoren [C] oder Widerstände [R].\n\nIn diesem Spiel haben Widerstände den Effekt, dass sie die Angreifer für eine gewisse Zeit verlangsamen. Ihre Stärke wird durch drei farbige Ringe angegeben. Der Effekt ist umso größer, je stärker die Angreifer sind. Ein-Bit-Zahlen sind kaum betroffen, während 8-Bit-Zahlen durch große Widerstände ziemlich langsam werden.\n\nWiderstände erzeugen Wärme. Es gibt einen Helden (Claude Shannon), der einen Teil dieser Wärme in Information umwandeln kann.</string>
     <string name="ohm">Georg Simon Ohm war einer der ersten, die den Versuch unternahmen, elektrische Vorgänge mathematisch zu beschreiben. Seine Arbeiten wurden zunächst wenig beachtet und als akademische Spielerei abgetan. Erst Charles Wheatstone erkannte ihre Bedeutung und bat Ada Lovelace, einige Werke Ohms ins Englische zu übersetzen.\n\nHeute ist sein Name untrennbar mit dem elektrischen Widerstand verbunden. Das Ohmsche Gesetz und die Einheit des Widerstands sind nach ihm benannt.\n</string>
     <string name="volta">Alessandro Giuseppe Antonio Anastasio Volta war Experimentalphysiker, der einige der zu seiner Zeit herrschenden Theorien und Annahmen in Frage stellte und widerlegte. So entdeckte er nicht nur das Gas Methan, sondern machte vor allem bahnbrechende Entdeckungen auf dem neuen Gebiet der Elektrizitätslehre. Er beschrieb den Zusammenhang zwischen Spannung, Ladung und Kapazität. Vor allem aber entwickelte er die erste funktionierende Batterie. \n\nDie Einheit der elektrischen Spannung, Volt, ist nach ihm benannt.\n</string>
