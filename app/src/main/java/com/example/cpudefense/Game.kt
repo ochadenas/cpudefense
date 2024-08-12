@@ -73,11 +73,16 @@ class Game(val gameActivity: MainGameActivity) {
             Chip.ChipUpgrades.CLK to 32, Chip.ChipUpgrades.RES to 20)
 
         // temperature control:
-        const val heatAdjustmentFactor = 1.6f // how many heat is generated per shortened tick
+        /** amount of heat that is generated per shortened tick */
+        const val heatAdjustmentFactor = 1.6f
+        /** temperature in degrees at the start of each level */
         const val baseTemperature = 17
         const val heatPerDegree = 200
+        /** heat cool down rate (multiplied at each tick) */
         const val temperatureCooldownFactor = 0.99995
+        /** value in degrees at which the display turns yellow */
         const val temperatureWarnThreshold = 60
+        /** temperature degrees above this limit may result in loss of CPU life */
         const val temperatureLimit = 85
 
         // resistors:
@@ -90,14 +95,23 @@ class Game(val gameActivity: MainGameActivity) {
     var defaultSpeedFactor = 0.512f
 
     data class StateData(
-        var phase: GamePhase,       // whether the game is running, paused or between levels
-        var startingLevel: Stage.Identifier,     // level to begin the next game with
-        var maxLives: Int,          // maximum number of lives
-        var currentMaxLives: Int,   // maximum number of lives, taking into account modifiers
-        var lives: Int,             // current number of lives
-        var cash: Int,              // current amount of 'information' currency in bits
-        var coinsInLevel: Int = 0,  // cryptocoins that can be obtained by completing the current level
-        var coinsExtra: Int = 0,     // cryptocoins that have been acquired by collecting moving coins
+        /** whether the game is running, paused or between levels */
+        var phase: GamePhase,
+        /** level to begin the next game with */
+        var startingLevel: Stage.Identifier,
+        /** maximum number of lives */
+        var maxLives: Int,
+        /** maximum number of lives, taking into account modifiers */
+        var currentMaxLives: Int,
+        /** current number of lives */
+        var lives: Int,
+        /** current amount of 'information' currency in bits */
+        var cash: Int,
+        /** cryptocoins that can be obtained by completing the current level */
+        var coinsInLevel: Int = 0,
+        /** cryptocoins that have been acquired by collecting moving coins */
+        var coinsExtra: Int = 0,
+        /** heat value in internal units */
         var heat: Double = 0.0
         )
     var state = StateData(
@@ -149,16 +163,20 @@ class Game(val gameActivity: MainGameActivity) {
     val scoreBoard = ScoreBoard(this)
     val speedControlPanel = SpeedControl(this)
     private var currentlyActiveWave: Wave? = null
-    var movers = CopyOnWriteArrayList<Mover>() // list of all mover objects that are created for game elements
-    var faders = CopyOnWriteArrayList<Fader>() // idem for faders
-    var flippers = CopyOnWriteArrayList<Flipper>() // idem for flippers
+    /** list of all mover objects that are created for game elements */
+    var movers = CopyOnWriteArrayList<Mover>()
+    /** list of all fader objects that are created for game elements */
+    var faders = CopyOnWriteArrayList<Fader>()
+    /** list of all flipper objects that are created for game elements */
+    var flippers = CopyOnWriteArrayList<Flipper>()
     val notification = ProgressNotification(this)
 
-    /* other temporary variables */
+    // other temporary variables
     private var additionalCashDelay = 0
     private var additionalCashTicks: Float = 0.0f
 
-    var timeBetweenFrames: Double = 20.0 /* in ms. Used by wait cycles in the game */
+    /** time between frames in ms. Used by wait cycles in the game */
+    var timeBetweenFrames: Double = 20.0
     var ticksCount = 0
     var frameCount = 0
 
@@ -178,7 +196,7 @@ class Game(val gameActivity: MainGameActivity) {
 
     fun beginGame(resetProgress: Boolean = false)
     {
-        /** Begin the current game on a chosen level. Also called when starting a completely
+        /** Begins the current game on a chosen level. Also called when starting a completely
          * new game.
          * @param resetProgress If true, the whole game is started from the first level, and
          * all coins and heroes are cleared. Otherwise, start on the level given in the saved state.
@@ -288,7 +306,7 @@ class Game(val gameActivity: MainGameActivity) {
     fun currentHeroesOnLeave(stage: Stage.Identifier, leaveStartsOnLevel: Boolean = false): HashMap<Hero.Type, Hero>
     /**
      * @param leaveStartsOnLevel whether only include the heroes that are starting their leave, or also those that have started before
-     * @returns all heroes that are on leave during the given stage */
+     * @return all heroes that are on leave during the given stage */
     {
         return currentHeroes().filterValues { it.isOnLeave(stage, leaveStartsOnLevel) } as HashMap<Hero.Type, Hero>
     }

@@ -143,7 +143,7 @@ fun Rect.displayTextCenteredInRect(canvas: Canvas, text: String, paint: Paint): 
          * draws text centered to the center of this rectangle, using the actual text size.
          * @param text text to be drawn in the rectangle
          * @param paint paint that is used for the text
-         * @returns the rectangle that bounds the text actually drawn
+         * @return the rectangle that bounds the text actually drawn
          */
 {
     val bounds = Rect()
@@ -159,7 +159,7 @@ fun Rect.displayTextLeftAlignedInRect(canvas: Canvas, text: String, paint: Paint
          * draws text left-aligned and centered to the vertical center of this rectangle, using the actual text size.
          * @param text text to be drawn in the rectangle
          * @param paint paint that is used for the text
-         * @returns the rectangle that bounds the text actually drawn
+         * @return the rectangle that bounds the text actually drawn
          */
 {
     val bounds = Rect()

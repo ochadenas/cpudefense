@@ -252,7 +252,7 @@ class EndlessStageCreator(val stage: Stage)
     }
 
     private fun linkIdent(node1: Chip, node2: Chip): Int
-    /** @returns a unique ident for the connection between node1 and node2 */
+    /** @return a unique ident for the connection between node1 and node2 */
     {
         return "%02d%02d".format(node1.data.ident, node2.data.ident).toInt()
     }

@@ -103,7 +103,7 @@ open class Node(val theNetwork: Network, x: Float, y: Float): GameElement()
 
 
     fun distanceTo(vehicle: Vehicle): Float?
-    /** @returns the absolute distance to the vehicle (always positive) or null if out of range */
+    /** @return the absolute distance to the vehicle (always positive) or null if out of range */
     {
         if (vehicle.startNode != this && vehicle.endNode != this)
         {

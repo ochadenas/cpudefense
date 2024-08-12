@@ -61,6 +61,7 @@ open class Attacker(network: Network, representation: Representation = Represent
     }
 
     fun copy(): Attacker
+    /** creates a deep copy of the attacker object */
     {
         val newAttacker = Attacker(network = network, representation = attackerData.representation, number = attackerData.number, speed = data.speed )
         newAttacker.data = data.copy()
@@ -92,9 +93,9 @@ open class Attacker(network: Network, representation: Representation = Represent
     }
 
     private fun calculateNumberOfDigits()
-            /** determine how many binary or hex digits the value must have,
-             * given its number
-             */
+    /** determine how many binary or hex digits the value must have,
+     * given its number
+     */
     {
         if (attackerData.representation == Representation.UNDEFINED)
             attackerData.representation = if (attackerData.number >= 32u) Representation.HEX else Representation.BINARY
@@ -125,10 +126,11 @@ open class Attacker(network: Network, representation: Representation = Represent
         attackerData.bits = attackerData.binaryDigits + 4 * attackerData.hexDigits
     }
 
-    fun changeNumberTo(newNumber: ULong) {
-        /** change the attacker's number to a new number,
-         * displaying an animation.
-          */
+    fun changeNumberTo(newNumber: ULong)
+    /** change the attacker's number to a new number,
+     * displaying an animation.
+     */
+    {
         oldNumber = attackerData.number
         oldNumberBitmap = numberBitmap
         animationCount = animationCountMax
@@ -151,7 +153,7 @@ open class Attacker(network: Network, representation: Representation = Represent
     }
 
     private fun extraCash(): Int
-    /** possible bonus on kill due to hero */
+    /** @return possible bonus on kill due to hero */
     {
         val strength = network.theGame.heroModifier(Hero.Type.GAIN_CASH_ON_KILL)
         val extraCash = Random.nextFloat() * strength * 2.0f // this gives an expectation value of 'strength'
@@ -177,20 +179,20 @@ open class Attacker(network: Network, representation: Representation = Represent
     }
 
     fun effectOfResistanceOnSpeed(ohm: Float): Float
-            /** speed modification caused by a resistor
-             * @param ohm Resistance value
-             */
+    /** speed modification caused by a resistor
+     * @param ohm Resistance value
+     */
     {
         return exp(- (ohm*attackerData.bits) / 320.0f)
     }
 
 
     open fun onShot(type: Chip.ChipType, power: Int): Boolean
-            /** function that gets called when a the attacker gets "hit".
-             * @param type the chip's type that effectuates the attack
-             * @param power strength (amount) of the shot
-             * @return true if the attacker gets destroyed, false otherwise
-             */
+    /** function that gets called when a the attacker gets "hit".
+     * @param type the chip's type that effectuates the attack
+     * @param power strength (amount) of the shot
+     * @return true if the attacker gets destroyed, false otherwise
+     */
     {
         when (type)
         {
@@ -236,10 +238,10 @@ open class Attacker(network: Network, representation: Representation = Represent
     }
 
     override fun getPositionOnScreen(): Pair<Int, Int>
-            /** given grid coordinates, calculate the actual pixel coordinates.
-             * @return The position as pair of pixels (x, y),
-             * or (0, 0) if the viewport is undefined or invalid.
-             */
+    /** given grid coordinates, calculate the actual pixel coordinates.
+     * @return The position as pair of pixels (x, y),
+     * or (0, 0) if the viewport is undefined or invalid.
+     */
     {
         posOnGrid?.let { return network.theGame.viewport.gridToViewport(it) }
         /* else, if posOnGrid == null: */
@@ -257,6 +259,7 @@ open class Attacker(network: Network, representation: Representation = Represent
         }
 
     override fun remove()
+    /** removes this attacker from the network */
     {
         onLink?.let {
             it.node1.notify(this, direction = Node.VehicleDirection.GONE)
@@ -267,9 +270,9 @@ open class Attacker(network: Network, representation: Representation = Represent
     }
 
     open fun makeNumber()
-            /** creates a bitmap using the current number (strength) of the attacker.
-             * N.B.: Cryptocoins have their own implementation of this method.
-             */
+    /** creates a bitmap using the current number (strength) of the attacker.
+     * N.B.: Cryptocoins have their own implementation of this method.
+     */
     {
         val text: String
         if (attackerData.representation == Representation.BINARY)

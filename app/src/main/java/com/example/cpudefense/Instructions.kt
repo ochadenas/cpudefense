@@ -16,9 +16,8 @@ class Instructions(val game: Game, var stage: Stage.Identifier, var showLeaveDia
     var alpha = 0
 
     private var funFact = if (Random.nextFloat() > 0.3)
-        "%s\n\n%s".format(
-        game.resources.getString(R.string.instr_did_you_know),
-        game.resources.getStringArray(R.array.fun_fact).random())
+        game.resources.getString(R.string.instr_did_you_know) + "\n\n" +
+        game.resources.getStringArray(R.array.fun_fact).random()
     else ""
 
     private fun instructionText(level: Int): String
