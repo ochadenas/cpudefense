@@ -70,23 +70,40 @@ class MainGameActivity : Activity() {
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         setContentView(R.layout.activity_main_game)
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        theGameView = GameView(this, theGame)
+        waitForGamingSurface()
+    }
+
+    fun waitForGamingSurface()
+    {
+        if (theGameView.width == 0 || theGameView.height == 0)  // surface has not been created yet
+        {
+            GlobalScope.launch { delay(1L); waitForGamingSurface() }
+            return
+        }
+        else
+            setupGameView()
+    }
+
+    fun setupGameView()
+    {
         setComputerTypeface()
         theGame = Game(this)
-        theGameView = GameView(this, theGame)
 
         val parentView: FrameLayout? = findViewById(R.id.gameFrameLayout)
         parentView?.addView(theGameView)
 
         if (intent.getBooleanExtra("RESET_PROGRESS", false) == false) {
             startOnLevel = Stage.Identifier(
-                series = intent.getIntExtra("START_ON_SERIES", 1),
-                number = intent.getIntExtra("START_ON_STAGE", 1)
+                    series = intent.getIntExtra("START_ON_SERIES", 1),
+                    number = intent.getIntExtra("START_ON_STAGE", 1)
             )
         } else
             startOnLevel = null
         if (!intent.getBooleanExtra("RESUME_GAME", false))
             resumeGame = false
         theGameView.setup()
+
     }
 
     fun setComputerTypeface()
