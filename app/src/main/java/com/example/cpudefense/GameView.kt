@@ -34,6 +34,10 @@ class GameView(context: Context, val theGame: Game):
         theEffects = Effects(theGame)
     }
 
+    override fun onFinishInflate() {
+        super.onFinishInflate()
+    }
+
     override fun surfaceCreated(p0: SurfaceHolder) {
         if (this.width > 0 && this.height > 0)
             setSize(width, height)

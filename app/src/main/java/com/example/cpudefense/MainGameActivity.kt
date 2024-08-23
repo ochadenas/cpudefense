@@ -70,26 +70,14 @@ class MainGameActivity : Activity() {
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         setContentView(R.layout.activity_main_game)
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        theGameView = GameView(this, theGame)
-        waitForGamingSurface()
-    }
-
-    fun waitForGamingSurface()
-    {
-        if (theGameView.width == 0 || theGameView.height == 0)  // surface has not been created yet
-        {
-            GlobalScope.launch { delay(1L); waitForGamingSurface() }
-            return
-        }
-        else
-            setupGameView()
+        theGame = Game(this)
+        setupGameView()
     }
 
     fun setupGameView()
     {
         setComputerTypeface()
-        theGame = Game(this)
-
+        theGameView = GameView(this, theGame)
         val parentView: FrameLayout? = findViewById(R.id.gameFrameLayout)
         parentView?.addView(theGameView)
 
@@ -103,7 +91,6 @@ class MainGameActivity : Activity() {
         if (!intent.getBooleanExtra("RESUME_GAME", false))
             resumeGame = false
         theGameView.setup()
-
     }
 
     fun setComputerTypeface()
