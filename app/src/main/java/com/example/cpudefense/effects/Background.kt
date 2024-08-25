@@ -2,14 +2,11 @@ package com.example.cpudefense.effects
 
 import android.content.res.Resources
 import android.graphics.*
-import android.widget.Toast
 import com.example.cpudefense.*
-import com.example.cpudefense.utils.setCenter
-import kotlin.math.cos
-import kotlin.math.sin
+import com.example.cpudefense.utils.setTopLeft
 import kotlin.random.Random
 
-class Background(val activity: MainGameActivity, val gameView: GameView)
+class Background(val gameView: GameView)
 /** The background shown during the game, showing a picture of real circuits.
  * This object is created whenever a game is started or resumed.
  * The actual image is only a part of the larger image, cut out at random positions.
@@ -21,15 +18,11 @@ class Background(val activity: MainGameActivity, val gameView: GameView)
     private var backgroundNumber: Int = 0 // the selected background
     private var useSpecialBackground = false  // special background on selected levels
     private var wholeImageOfCurrentStage: Bitmap? = null
-    private var angle = 0.0
-    var x = 0.0
-    var y = 0.0
-    private var projX = 0.0
-    private var projY = 0.0
     var opacity = 0.5f
     var paint = Paint()
     var actualImage: Bitmap? = null // this is an image of the proportions of the screen
     var frozen = false
+    var enabled = true
 
     enum class BackgroundState { DISABLED, UNINITIALIZED, BLANK, INITIALIZED }
     var state = BackgroundState.BLANK
@@ -42,7 +35,8 @@ class Background(val activity: MainGameActivity, val gameView: GameView)
 
     fun initializeAtStartOfGame()
     {
-
+        enabled = gameView.gameMechanics.gameActivity.settings.configDisableBackground
+        state = Background.BackgroundState.UNINITIALIZED
     }
 
     fun prepareAtStartOfStage()
@@ -56,67 +50,30 @@ class Background(val activity: MainGameActivity, val gameView: GameView)
 
     fun display(canvas: Canvas)
     {
-        if (!gameActivity.settings.configDisableBackground)
-            background?.choose(currentStage)
-            background?.state = Background.BackgroundState.UNINITIALIZED
 
-            if (background == null)
-                background = Background(gameMechanics.gameActivity, this)
-            if (background?.mustBeChanged() == true) {
-                gameMechanics.currentlyActiveStage?.network?.let {
-                    it.backgroundImage = background?.actualImage
-                    it.recreateNetworkImage(viewport)
-                }
-            }
-        }
     }
 
-    // TODO: this should be moved to the application
 
-    private fun loadBitmaps()
+    private fun loadBitmap(number: Int, useSpecial: Boolean = false)
     /** loads the large background images as static objects into memory */
     {
         val resources: Resources = gameView.resources
-        if (!bitmapsLoaded)
-        {
-            activity.runOnUiThread {
-                val toast: Toast = Toast.makeText(activity, resources.getString(R.string.toast_loading), Toast.LENGTH_LONG)
-                toast.show()
-            }
-            actualImage = null
-            try {
-                gameView.notification.showProgress(0.0f)
-                availableBitmaps[1] = BitmapFactory.decodeResource(resources, R.drawable.background_1)
-                gameView.notification.showProgress(0.10f)
-                availableBitmaps[2] = BitmapFactory.decodeResource(resources, R.drawable.background_2)
-                gameView.notification.showProgress(0.20f)
-                availableBitmaps[3] = BitmapFactory.decodeResource(resources, R.drawable.background_3)
-                gameView.notification.showProgress(0.30f)
-                availableBitmaps[4] = BitmapFactory.decodeResource(resources, R.drawable.background_4)
-                gameView.notification.showProgress(0.40f)
-                availableBitmaps[5] = BitmapFactory.decodeResource(resources, R.drawable.background_5)
-                gameView.notification.showProgress(0.50f)
-                availableBitmaps[6] = BitmapFactory.decodeResource(resources, R.drawable.background_6)
-                gameView.notification.showProgress(0.60f)
-                availableBitmaps[7] = BitmapFactory.decodeResource(resources, R.drawable.background_7)
-                gameView.notification.showProgress(0.70f)
-                availableBitmaps[8] = BitmapFactory.decodeResource(resources, R.drawable.background_8)
-                gameView.notification.showProgress(0.80f)
-                availableBitmaps[9] = BitmapFactory.decodeResource(resources, R.drawable.background_9)
-                gameView.notification.showProgress(0.90f)
-                specialBitmap = BitmapFactory.decodeResource(resources, R.drawable.background_flowers)
-                bitmapsLoaded = true
-            }
-            catch (e: java.lang.Exception)
+        if (useSpecial)   // allows use of special backgrounds, currently disabled
+            wholeImageOfCurrentStage = BitmapFactory.decodeResource(resources, R.drawable.background_flowers)
+        else
+            wholeImageOfCurrentStage = when (number)
             {
-                bitmapsLoaded = true
-            // keep the bitmaps loaded so far,
-            // avoid further attempts to load more bitmaps
+                1 -> BitmapFactory.decodeResource(resources, R.drawable.background_1)
+                2 -> BitmapFactory.decodeResource(resources, R.drawable.background_2)
+                3 -> BitmapFactory.decodeResource(resources, R.drawable.background_3)
+                4 -> BitmapFactory.decodeResource(resources, R.drawable.background_4)
+                5 -> BitmapFactory.decodeResource(resources, R.drawable.background_5)
+                6 -> BitmapFactory.decodeResource(resources, R.drawable.background_6)
+                7 -> BitmapFactory.decodeResource(resources, R.drawable.background_7)
+                8 -> BitmapFactory.decodeResource(resources, R.drawable.background_8)
+                9 -> BitmapFactory.decodeResource(resources, R.drawable.background_9)
+                else -> BitmapFactory.decodeResource(resources, R.drawable.background_9)
             }
-            finally {
-                gameView.notification.hide()
-            }
-        }
     }
 
     fun choose(stageIdent: Stage.Identifier?, opacity: Float = 0.6f)
@@ -126,48 +83,26 @@ class Background(val activity: MainGameActivity, val gameView: GameView)
              * @param opacity sets the opacity, from 0.0 to 1.0
              */
     {
-        loadBitmaps()
-        // allows use of special backgrounds, currently disabled
         if (false && stageIdent?.let {it.series < 3 && it.number == 8 } == true)
             useSpecialBackground = true
-        else
-        {
-            useSpecialBackground = false
-            val n = stageIdent?.number ?: 0
-            backgroundNumber = n % availableBitmaps.size + 1
-        }
+        val n = stageIdent?.number ?: 0
+        loadBitmap(n % availableBitmaps.size + 1,  useSpecialBackground)
         this.opacity = opacity
-        angle = Random.nextDouble() * 2 * Math.PI
-        projX = cos(angle)
-        projY = sin(angle)
-        state = BackgroundState.UNINITIALIZED
     }
 
-    fun mustBeChanged(): Boolean
-            /** called in regular time intervals.
-             * @return true if the background image must be changed, false otherwise
-             */
-    {
-        return (this.state == BackgroundState.BLANK)
-    }
-
-    private fun blankImage(): Bitmap?
-    {
-        if (gameView.viewport.screen.width() == 0 || gameView.viewport.screen.height() == 0)
-            return null  // can't determine screen dimensions
-        else
-            return Bitmap.createBitmap(gameView.viewport.screen.width(), gameView.viewport.screen.height(), Bitmap.Config.ARGB_8888)
-    }
     fun getImage(): Bitmap?
             /** provides the background image. If necessary, recreate the bitmap.
              * If the screen dimensions are unknown, return null.
              * @return the bitmap, or NULL if none can be provided.
              */
     {
-        if (actualImage == null || state == BackgroundState.UNINITIALIZED) {
-            actualImage = blankImage()
-            state = BackgroundState.BLANK
+        if (actualImage == null || state == BackgroundState.UNINITIALIZED)
+        {
+            if (enabled)
+                createBackgroundImage()
         }
+
+
         if (activity.settings.configDisableBackground) {
             actualImage = blankImage()
             actualImage?.let { Canvas(it).drawColor(activity.gameView.backgroundColour) }
@@ -183,7 +118,7 @@ class Background(val activity: MainGameActivity, val gameView: GameView)
                     wholeImageOfCurrentStage = if (useSpecialBackground) specialBitmap else availableBitmaps[backgroundNumber]
                     if (bitmapsLoaded)
                         state = BackgroundState.INITIALIZED
-                    paintOnBackgroundImage(it)
+                    createBackgroundImage(it)
                 }
                 BackgroundState.INITIALIZED -> it
             }
@@ -192,21 +127,34 @@ class Background(val activity: MainGameActivity, val gameView: GameView)
         return actualImage
     }
 
-    private fun paintOnBackgroundImage(bitmap: Bitmap): Bitmap
+    private fun createBlankBackground(): Bitmap
+    {
+        val bitmap = actualImage ?: Bitmap.createBitmap(gameView.viewport.screen.width(),
+                                              gameView.viewport.screen.height(),
+                                              Bitmap.Config.ARGB_8888)
+        actualImage = bitmap
+        val canvas = Canvas(bitmap)
+        canvas.drawColor(gameView.resources.getColor(R.color.network_background))
+        state = BackgroundState.BLANK
+        return bitmap
+    }
+
+    private fun createBackgroundImage(): Bitmap
             /** paints a selection out of the whole background image onto the existing bitmap
              * @param bitmap The bitmap where to paint on. Should be a blank canvas.
              * @return the bitmap containing the image */
     {
+        createBlankBackground()
         this.wholeImageOfCurrentStage?.let {
             paint.alpha = (255 * opacity).toInt()
             val dest = Rect(0, 0, bitmap.width, bitmap.height)
             val source = Rect(dest)
-            val x = it.width / 2 + projX * 0.5f * (it.width - dest.width())
-            val y = it.height / 2 + projY * 0.5f * (it.height - dest.height())
-            source.setCenter(x.toInt(), y.toInt())
+            val displacementX = Random.nextInt(bitmap.width)
+            val displacementY = Random.nextInt(bitmap.height)
+            source.setTopLeft(displacementX, displacementY)
             val canvas = Canvas(bitmap)
-            canvas.drawColor(Color.BLACK)
             canvas.drawBitmap(it, source, dest, paint)
+            state = BackgroundState.INITIALIZED
         }
         return bitmap
     }
