@@ -1,5 +1,6 @@
 package com.example.cpudefense.effects
 
+import android.content.res.Resources
 import android.graphics.*
 import android.widget.Toast
 import com.example.cpudefense.*
@@ -8,7 +9,7 @@ import kotlin.math.cos
 import kotlin.math.sin
 import kotlin.random.Random
 
-class Background(val game: Game)
+class Background(val activity: MainGameActivity, val gameView: GameView)
 /** The background shown during the game, showing a picture of real circuits.
  * This object is created whenever a game is started or resumed.
  * The actual image is only a part of the larger image, cut out at random positions.
@@ -38,39 +39,72 @@ class Background(val game: Game)
         var availableBitmaps = hashMapOf<Int, Bitmap>()
         var specialBitmap: Bitmap? = null
     }
+
+    fun initializeAtStartOfGame()
+    {
+
+    }
+
+    fun prepareAtStartOfStage()
+    {
+
+    }
+
+    fun paintNetworkOnBackground(bitmapForeground: Bitmap)
+    {
+    }
+
+    fun display(canvas: Canvas)
+    {
+        if (!gameActivity.settings.configDisableBackground)
+            background?.choose(currentStage)
+            background?.state = Background.BackgroundState.UNINITIALIZED
+
+            if (background == null)
+                background = Background(gameMechanics.gameActivity, this)
+            if (background?.mustBeChanged() == true) {
+                gameMechanics.currentlyActiveStage?.network?.let {
+                    it.backgroundImage = background?.actualImage
+                    it.recreateNetworkImage(viewport)
+                }
+            }
+        }
+    }
+
     // TODO: this should be moved to the application
 
     private fun loadBitmaps()
     /** loads the large background images as static objects into memory */
     {
+        val resources: Resources = gameView.resources
         if (!bitmapsLoaded)
         {
-            game.gameActivity.runOnUiThread {
-                val toast: Toast = Toast.makeText(game.gameActivity, game.resources.getString(R.string.toast_loading), Toast.LENGTH_LONG)
+            activity.runOnUiThread {
+                val toast: Toast = Toast.makeText(activity, resources.getString(R.string.toast_loading), Toast.LENGTH_LONG)
                 toast.show()
             }
             actualImage = null
             try {
-                game.notification.showProgress(0.0f)
-                availableBitmaps[1] = BitmapFactory.decodeResource(game.resources, R.drawable.background_1)
-                game.notification.showProgress(0.10f)
-                availableBitmaps[2] = BitmapFactory.decodeResource(game.resources, R.drawable.background_2)
-                game.notification.showProgress(0.20f)
-                availableBitmaps[3] = BitmapFactory.decodeResource(game.resources, R.drawable.background_3)
-                game.notification.showProgress(0.30f)
-                availableBitmaps[4] = BitmapFactory.decodeResource(game.resources, R.drawable.background_4)
-                game.notification.showProgress(0.40f)
-                availableBitmaps[5] = BitmapFactory.decodeResource(game.resources, R.drawable.background_5)
-                game.notification.showProgress(0.50f)
-                availableBitmaps[6] = BitmapFactory.decodeResource(game.resources, R.drawable.background_6)
-                game.notification.showProgress(0.60f)
-                availableBitmaps[7] = BitmapFactory.decodeResource(game.resources, R.drawable.background_7)
-                game.notification.showProgress(0.70f)
-                availableBitmaps[8] = BitmapFactory.decodeResource(game.resources, R.drawable.background_8)
-                game.notification.showProgress(0.80f)
-                availableBitmaps[9] = BitmapFactory.decodeResource(game.resources, R.drawable.background_9)
-                game.notification.showProgress(0.90f)
-                specialBitmap = BitmapFactory.decodeResource(game.resources, R.drawable.background_flowers)
+                gameView.notification.showProgress(0.0f)
+                availableBitmaps[1] = BitmapFactory.decodeResource(resources, R.drawable.background_1)
+                gameView.notification.showProgress(0.10f)
+                availableBitmaps[2] = BitmapFactory.decodeResource(resources, R.drawable.background_2)
+                gameView.notification.showProgress(0.20f)
+                availableBitmaps[3] = BitmapFactory.decodeResource(resources, R.drawable.background_3)
+                gameView.notification.showProgress(0.30f)
+                availableBitmaps[4] = BitmapFactory.decodeResource(resources, R.drawable.background_4)
+                gameView.notification.showProgress(0.40f)
+                availableBitmaps[5] = BitmapFactory.decodeResource(resources, R.drawable.background_5)
+                gameView.notification.showProgress(0.50f)
+                availableBitmaps[6] = BitmapFactory.decodeResource(resources, R.drawable.background_6)
+                gameView.notification.showProgress(0.60f)
+                availableBitmaps[7] = BitmapFactory.decodeResource(resources, R.drawable.background_7)
+                gameView.notification.showProgress(0.70f)
+                availableBitmaps[8] = BitmapFactory.decodeResource(resources, R.drawable.background_8)
+                gameView.notification.showProgress(0.80f)
+                availableBitmaps[9] = BitmapFactory.decodeResource(resources, R.drawable.background_9)
+                gameView.notification.showProgress(0.90f)
+                specialBitmap = BitmapFactory.decodeResource(resources, R.drawable.background_flowers)
                 bitmapsLoaded = true
             }
             catch (e: java.lang.Exception)
@@ -80,7 +114,7 @@ class Background(val game: Game)
             // avoid further attempts to load more bitmaps
             }
             finally {
-                game.notification.hide()
+                gameView.notification.hide()
             }
         }
     }
@@ -119,10 +153,10 @@ class Background(val game: Game)
 
     private fun blankImage(): Bitmap?
     {
-        if (game.viewport.screen.width() == 0 || game.viewport.screen.height() == 0)
+        if (gameView.viewport.screen.width() == 0 || gameView.viewport.screen.height() == 0)
             return null  // can't determine screen dimensions
         else
-            return Bitmap.createBitmap(game.viewport.screen.width(), game.viewport.screen.height(), Bitmap.Config.ARGB_8888)
+            return Bitmap.createBitmap(gameView.viewport.screen.width(), gameView.viewport.screen.height(), Bitmap.Config.ARGB_8888)
     }
     fun getImage(): Bitmap?
             /** provides the background image. If necessary, recreate the bitmap.
@@ -134,9 +168,9 @@ class Background(val game: Game)
             actualImage = blankImage()
             state = BackgroundState.BLANK
         }
-        if (game.gameActivity.settings.configDisableBackground) {
+        if (activity.settings.configDisableBackground) {
             actualImage = blankImage()
-            actualImage?.let { Canvas(it).drawColor(game.gameActivity.theGameView.backgroundColour) }
+            actualImage?.let { Canvas(it).drawColor(activity.gameView.backgroundColour) }
             state = BackgroundState.DISABLED
         }
         // draw background on canvas

@@ -1,5 +1,6 @@
 package com.example.cpudefense
 
+import android.content.res.Resources
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Rect
@@ -10,61 +11,62 @@ import com.example.cpudefense.effects.Fadable
 import com.example.cpudefense.effects.Fader
 import kotlin.random.Random
 
-class Instructions(val game: Game, var stage: Stage.Identifier, var showLeaveDialogue: Boolean,
+class Instructions(val gameView: GameView, var stage: Stage.Identifier, var showLeaveDialogue: Boolean,
                    var callback: (()->Unit)? ): Fadable
 {
     var alpha = 0
+    val resources: Resources = gameView.resources
 
     private var funFact = if (Random.nextFloat() > 0.3)
-        game.resources.getString(R.string.instr_did_you_know) + "\n\n" +
-        game.resources.getStringArray(R.array.fun_fact).random()
+        resources.getString(R.string.instr_did_you_know) + "\n\n" +
+        resources.getStringArray(R.array.fun_fact).random()
     else ""
 
     private fun instructionText(level: Int): String
     {
-        if (game.intermezzo.type in setOf(Intermezzo.Type.GAME_LOST, Intermezzo.Type.GAME_WON))
+        if (gameView.intermezzo.type in setOf(Intermezzo.Type.GAME_LOST, Intermezzo.Type.GAME_WON))
             return ""
         else if (showLeaveDialogue)
-            when (game.intermezzo.durationOfLeave)
+            when (gameView.intermezzo.durationOfLeave)
             {
-                1 -> return game.resources.getString(R.string.instr_leave_1)
-                else -> return game.resources.getString(R.string.instr_leave).format(game.intermezzo.durationOfLeave)
+                1 -> return resources.getString(R.string.instr_leave_1)
+                else -> return resources.getString(R.string.instr_leave).format(gameView.intermezzo.durationOfLeave)
             }
-        else if (stage.series == Game.SERIES_NORMAL) {
+        else if (stage.series == GameMechanics.SERIES_NORMAL) {
             return when (level) {
-                1 -> game.resources.getString(R.string.instr_1)
-                2 -> game.resources.getString(R.string.instr_2)
-                3 -> game.resources.getString(R.string.instr_3)
-                4 -> game.resources.getString(R.string.instr_4)
-                5 -> game.resources.getString(R.string.instr_5)
-                6 -> game.resources.getString(R.string.instr_6)
-                7 -> game.resources.getString(R.string.instr_7)
-                8 -> game.resources.getString(R.string.instr_7a)
-                9 -> game.resources.getString(R.string.instr_8)
-                14 -> game.resources.getString(R.string.instr_9)
-                20 -> game.resources.getString(R.string.instr_10)
-                23 -> game.resources.getString(R.string.instr_12)
-                24 -> game.resources.getString(R.string.instr_16)
-                10 -> game.resources.getString(R.string.instr_11)
-                21 -> game.resources.getString(R.string.instr_13)
-                27 -> game.resources.getString(R.string.instr_14)
-                28 -> game.resources.getString(R.string.instr_15).format(Game.temperatureLimit)
-                30 -> game.resources.getString(R.string.instr_17)
-                31 -> game.resources.getString(R.string.instr_18)
-                32 -> game.resources.getString(R.string.instr_23)
+                1 -> resources.getString(R.string.instr_1)
+                2 -> resources.getString(R.string.instr_2)
+                3 -> resources.getString(R.string.instr_3)
+                4 -> resources.getString(R.string.instr_4)
+                5 -> resources.getString(R.string.instr_5)
+                6 -> resources.getString(R.string.instr_6)
+                7 -> resources.getString(R.string.instr_7)
+                8 -> resources.getString(R.string.instr_7a)
+                9 -> resources.getString(R.string.instr_8)
+                14 -> resources.getString(R.string.instr_9)
+                20 -> resources.getString(R.string.instr_10)
+                23 -> resources.getString(R.string.instr_12)
+                24 -> resources.getString(R.string.instr_16)
+                10 -> resources.getString(R.string.instr_11)
+                21 -> resources.getString(R.string.instr_13)
+                27 -> resources.getString(R.string.instr_14)
+                28 -> resources.getString(R.string.instr_15).format(GameMechanics.temperatureLimit)
+                30 -> resources.getString(R.string.instr_17)
+                31 -> resources.getString(R.string.instr_18)
+                32 -> resources.getString(R.string.instr_23)
                 else -> ""
             }
         }
-        else if (stage.series == Game.SERIES_TURBO) {
+        else if (stage.series == GameMechanics.SERIES_TURBO) {
             return when (level) {
-                1 -> game.resources.getString(R.string.instr_2_1)
+                1 -> resources.getString(R.string.instr_2_1)
                 else -> ""
             }
         }
-        else if (stage.series == Game.SERIES_ENDLESS)
+        else if (stage.series == GameMechanics.SERIES_ENDLESS)
         {
             return when (level) {
-                1 -> game.resources.getString(R.string.instr_endless)
+                1 -> resources.getString(R.string.instr_endless)
                 else -> funFact
             }
         }
@@ -72,7 +74,7 @@ class Instructions(val game: Game, var stage: Stage.Identifier, var showLeaveDia
             return ""
     }
 
-    init { Fader(game, this, Fader.Type.APPEAR, Fader.Speed.SLOW) }
+    init { Fader(gameView, this, Fader.Type.APPEAR, Fader.Speed.SLOW) }
 
     override fun fadeDone(type: Fader.Type) {
         callback?.let { it() }  // call callback function, if defined.
@@ -82,7 +84,6 @@ class Instructions(val game: Game, var stage: Stage.Identifier, var showLeaveDia
         alpha = (opacity*255).toInt()
     }
 
-
     fun display(canvas: Canvas) {
         val margin = 20
         val textArea = Rect(0, 0, canvas.width - 2 * margin, canvas.height - 200)
@@ -91,9 +92,9 @@ class Instructions(val game: Game, var stage: Stage.Identifier, var showLeaveDia
         canvas.translate(2*margin.toFloat(), margin.toFloat())
         val text = instructionText(stage.number)
         val textPaint = TextPaint()
-        textPaint.textSize = Game.instructionTextSize * game.resources.displayMetrics.scaledDensity
+        textPaint.textSize = GameMechanics.instructionTextSize * resources.displayMetrics.scaledDensity
         textPaint.color =
-            if (showLeaveDialogue) game.resources.getColor(R.color.text_green)
+            if (showLeaveDialogue) resources.getColor(R.color.text_green)
             else Color.WHITE
         textPaint.alpha = alpha
         val textLayout = StaticLayout(

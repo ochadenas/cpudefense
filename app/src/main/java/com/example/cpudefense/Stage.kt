@@ -11,9 +11,9 @@ import com.example.cpudefense.utils.blur
 import java.util.concurrent.CopyOnWriteArrayList
 import kotlin.random.Random
 
-class Stage(var theGame: Game) {
-
-    class Identifier(var series: Int = Game.SERIES_NORMAL, var number: Int =0)
+class Stage(var gameMechanics: GameMechanics, var gameView: GameView)
+{
+    class Identifier(var series: Int = GameMechanics.SERIES_NORMAL, var number: Int =0)
     /** A stage is identified by the combination of series (1 to 3) and the level number. */
     {
         fun next(): Identifier
@@ -32,12 +32,12 @@ class Stage(var theGame: Game) {
             }
         }
 
-        fun mode(): Game.LevelMode
+        fun mode(): GameMechanics.LevelMode
         {
-            if (series == Game.SERIES_ENDLESS)
-                return Game.LevelMode.ENDLESS
+            if (series == GameMechanics.SERIES_ENDLESS)
+                return GameMechanics.LevelMode.ENDLESS
             else
-                return Game.LevelMode.BASIC
+                return GameMechanics.LevelMode.BASIC
         }
     }
 
@@ -55,7 +55,7 @@ class Stage(var theGame: Game) {
 
 
     data class Data (
-        var ident: Identifier = Identifier(series=Game.SERIES_NORMAL, number=0),
+        var ident: Identifier = Identifier(series=GameMechanics.SERIES_NORMAL, number=0),
         var type: Type = Type.REGULAR,
         var gridSizeX: Int = 1,
         var gridSizeY: Int = 1,
@@ -150,7 +150,7 @@ class Stage(var theGame: Game) {
             stage.data = stageData
             stage.sizeX = stage.data.gridSizeX
             stage.sizeY = stage.data.gridSizeY
-            stage.network = Network(stage.theGame, stage.sizeX, stage.sizeY)
+            stage.network = Network(stage.gameMechanics, stage.gameView, stage.sizeX, stage.sizeY)
             for ((id, chipData) in stage.data.chips)
             {
                 val chip = Chip.createFromData(stage.network, chipData)
@@ -170,20 +170,20 @@ class Stage(var theGame: Game) {
                 stage.tracks[id] = track
             }
             // set summary and available coins
-            stage.theGame.getSummaryOfStage(stage.data.ident)?.let {
+            stage.gameMechanics.getSummaryOfStage(stage.data.ident)?.let {
                 stage.summary = it
                 stage.rewardCoins = it.coinsMaxAvailable
                 // stage.theGame.state.coinsInLevel = it.coinsAvailable ?: 0
             }
         }
-        fun createStageFromData(game: Game, stageData: Data): Stage
+        fun createStageFromData(gameMechanics: GameMechanics, gameView: GameView, stageData: Data): Stage
         {
-            val stage = Stage(game)
+            val stage = Stage(gameMechanics, gameView)
             stage.data.ident = stageData.ident
             fillEmptyStageWithData(stage, stageData)
             for (waveData in stage.data.waves)
             {
-                val wave = Wave.createFromData(game, waveData)
+                val wave = Wave.createFromData(gameMechanics, waveData)
                 stage.waves.add(wave)
             }
             for (attackerData in stage.data.attackers)
@@ -198,11 +198,11 @@ class Stage(var theGame: Game) {
     fun createNewAttacker(maxNumber: Int, speed: Float, isCoin: Boolean = false,
                           representation: Attacker.Representation = Attacker.Representation.BINARY)
     {
-        val actualSpeed = speed * theGame.heroModifier(Hero.Type.DECREASE_ATT_SPEED)
+        val actualSpeed = speed * gameMechanics.heroModifier(Hero.Type.DECREASE_ATT_SPEED)
         val attacker = if (isCoin)
-            Cryptocoin(network, (maxNumber*1.5*theGame.heroModifier(Hero.Type.DECREASE_COIN_STRENGTH)).toULong(), actualSpeed )
+            Cryptocoin(network, (maxNumber*1.5*gameMechanics.heroModifier(Hero.Type.DECREASE_COIN_STRENGTH)).toULong(), actualSpeed )
         else {
-            val strength = Random.nextFloat()*(maxNumber+1) * theGame.heroModifier(Hero.Type.DECREASE_ATT_STRENGTH)
+            val strength = Random.nextFloat()*(maxNumber+1) * gameMechanics.heroModifier(Hero.Type.DECREASE_ATT_STRENGTH)
             Attacker(network, representation, strength.toULong(), actualSpeed)
         }
         if (tracks.size > 0) {
@@ -229,15 +229,15 @@ class Stage(var theGame: Game) {
 
     fun nextWave(): Wave?
     {
-        when (theGame.state.phase)
+        when (gameMechanics.state.phase)
         {
-            Game.GamePhase.START -> return null
-            Game.GamePhase.INTERMEZZO -> return null
-            Game.GamePhase.MARKETPLACE -> return null
+            GameMechanics.GamePhase.START -> return null
+            GameMechanics.GamePhase.INTERMEZZO -> return null
+            GameMechanics.GamePhase.MARKETPLACE -> return null
             else -> {
                 if (waves.size == 0)
                 {
-                    theGame.onEndOfStage()
+                    gameMechanics.onEndOfStage()
                     return null
                 }
                 else {
@@ -255,8 +255,8 @@ class Stage(var theGame: Game) {
     {
         sizeX = dimX
         sizeY = dimY
-        network = Network(theGame, sizeX, sizeY)
-        theGame.viewport.setGridSize(sizeX, sizeY)
+        network = Network(gameMechanics, gameView, sizeX, sizeY)
+        gameView.viewport.setGridSize(sizeX, sizeY)
     }
 
     fun createChip(gridX: Int, gridY: Int, ident: Int = -1, type: Chip.ChipType = Chip.ChipType.EMPTY): Chip
@@ -330,7 +330,7 @@ class Stage(var theGame: Game) {
         var strength = attackerStrength
         var frequency = attackerFrequency
         var speed = attackerSpeed
-        if (series==Game.SERIES_TURBO)  // modifications in strength for turbo mode
+        if (series==GameMechanics.SERIES_TURBO)  // modifications in strength for turbo mode
         {
             count = (attackerCount * 1.5f).toInt()
             strength = (attackerStrength * ( 1 + waves.size*waves.size*0.2f + waves.size ) + 4).toInt()
@@ -340,7 +340,7 @@ class Stage(var theGame: Game) {
         val waveData = Wave.Data(count, strength, frequency, speed,
             coins, currentCount = count, representation = representation, ticksUntilNextAttacker = ticksUntilFirstAttacker.toDouble())
         ticksUntilFirstAttacker = (4 * 20).toLong()  // after first wave, set a delay here. 20 ticks equal one second
-        waves.add(Wave(theGame, waveData))
+        waves.add(Wave(gameMechanics, waveData))
     }
 
     fun createWaveHex(attackerCount: Int, attackerStrength: Int, attackerFrequency: Float, attackerSpeed: Float, coins: Int = 0)
@@ -382,13 +382,13 @@ class Stage(var theGame: Game) {
              * @return the bitmap that holds the snapshot
              */
     {
-        val p: Viewport = theGame.viewport
+        val p: Viewport = gameView.viewport
         if (p.viewportWidth > 0 && p.viewportHeight > 0)
         {
             var bigSnapshot = createBitmap(p.viewportWidth, p.viewportHeight)
             network.makeSnapshot(Canvas(bigSnapshot), p)
             /* blur the image */
-            bigSnapshot = bigSnapshot.blur(theGame.gameActivity, 3f) ?: bigSnapshot
+            bigSnapshot = bigSnapshot.blur(gameMechanics.gameActivity, 3f) ?: bigSnapshot
             return Bitmap.createScaledBitmap(bigSnapshot, size, size, true)
         }
         else

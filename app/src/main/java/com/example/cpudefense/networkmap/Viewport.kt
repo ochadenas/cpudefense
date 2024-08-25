@@ -1,7 +1,7 @@
 package com.example.cpudefense.networkmap
 
 import android.graphics.Rect
-import com.example.cpudefense.Game
+import com.example.cpudefense.GameMechanics
 
 class Viewport
 /** class that is responsible for mapping internal grid coordinates to screen coordinates */
@@ -33,8 +33,8 @@ class Viewport
         else
         {
             screen = Rect(0, 0, width, height)
-            this.viewportWidth = width - 2 * Game.viewportMargin
-            this.viewportHeight = height - 2 * Game.viewportMargin
+            this.viewportWidth = width - 2 * GameMechanics.viewportMargin
+            this.viewportHeight = height - 2 * GameMechanics.viewportMargin
             calculateScale()
         }
     }
@@ -88,8 +88,8 @@ class Viewport
 
     fun gridToViewport(gridPos: Coord): Pair<Int, Int>
     {
-        val posX = gridPos.x * scaleX + Game.viewportMargin + offsetX
-        val posY = gridPos.y * scaleY + Game.viewportMargin + offsetY
+        val posX = gridPos.x * scaleX + GameMechanics.viewportMargin + offsetX
+        val posY = gridPos.y * scaleY + GameMechanics.viewportMargin + offsetY
         return Pair(posX.toInt(), posY.toInt())
     }
 

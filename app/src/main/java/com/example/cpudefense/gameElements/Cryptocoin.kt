@@ -4,7 +4,7 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Rect
-import com.example.cpudefense.Game
+import com.example.cpudefense.GameMechanics
 import com.example.cpudefense.R
 import com.example.cpudefense.effects.Flippable
 import com.example.cpudefense.effects.Flipper
@@ -23,7 +23,7 @@ class Cryptocoin(network: com.example.cpudefense.networkmap.Network, number: ULo
         this.animationCount = 2 * animationCount
     }
     override fun display(canvas: Canvas, viewport: Viewport) {
-        val size =  (Game.coinSizeOnScreen * network.theGame.resources.displayMetrics.scaledDensity).toInt()
+        val size =  (GameMechanics.coinSizeOnScreen * network.gameMechanics.resources.displayMetrics.scaledDensity).toInt()
         actualRect = Rect(0, 0, size, size)
         actualRect.setCenter(getPositionOnScreen())
         actualRect.offset(displacement.first, displacement.second)
@@ -31,8 +31,8 @@ class Cryptocoin(network: com.example.cpudefense.networkmap.Network, number: ULo
     }
 
     override val explosionColour: Int
-        get() = if (network.theGame.currentStage.series == Game.SERIES_ENDLESS) network.theGame.resources.getColor(R.color.attackers_glow_coin_endless)
-                else network.theGame.resources.getColor(R.color.attackers_glow_coin)
+        get() = if (network.gameMechanics.currentStage.series == GameMechanics.SERIES_ENDLESS) network.gameMechanics.resources.getColor(R.color.attackers_glow_coin_endless)
+                else network.gameMechanics.resources.getColor(R.color.attackers_glow_coin)
 
     override fun onShot(type: Chip.ChipType, power: Int): Boolean
     {
@@ -45,13 +45,13 @@ class Cryptocoin(network: com.example.cpudefense.networkmap.Network, number: ULo
             else -> {
                 if (super.onShot(type, power))
                 {
-                    network.theGame.state.coinsExtra++
+                    network.gameMechanics.state.coinsExtra++
                     return true
                 }
                 else {
                     // coin was hit but not destroyed
                     if (!isCurrentlyFlipping)
-                        Flipper(network.theGame, this, Flipper.Type.HORIZONTAL, Flipper.Speed.FAST)
+                        Flipper(network.gameMechanics, this, Flipper.Type.HORIZONTAL, Flipper.Speed.FAST)
                     return false
                 }
             }
@@ -59,7 +59,7 @@ class Cryptocoin(network: com.example.cpudefense.networkmap.Network, number: ULo
     }
 
     override fun makeNumber() {
-        myBitmap = this.network.theGame.currentCoinBitmap().copy(this.network.theGame.currentCoinBitmap().config, true)
+        myBitmap = this.network.gameMechanics.currentCoinBitmap().copy(this.network.gameMechanics.currentCoinBitmap().config, true)
     }
 
     override fun setBitmap(bitmap: Bitmap) {
@@ -67,7 +67,7 @@ class Cryptocoin(network: com.example.cpudefense.networkmap.Network, number: ULo
     }
 
     override fun provideBitmap(): Bitmap {
-        val bitmap = network.theGame.currentCoinBitmap()
+        val bitmap = network.gameMechanics.currentCoinBitmap()
         return bitmap.copy(bitmap.config, true)
     }
 

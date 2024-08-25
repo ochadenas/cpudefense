@@ -3,11 +3,9 @@ package com.example.cpudefense
 import android.app.Activity
 import android.content.Context
 import android.content.res.Resources
-import android.content.res.Resources.NotFoundException
 import android.graphics.*
 import android.view.MotionEvent
 import android.widget.Toast
-import androidx.core.content.res.ResourcesCompat
 import com.example.cpudefense.effects.Background
 import com.example.cpudefense.effects.Fader
 import com.example.cpudefense.effects.Flipper
@@ -15,16 +13,14 @@ import com.example.cpudefense.effects.Mover
 import com.example.cpudefense.gameElements.*
 import com.example.cpudefense.networkmap.Coord
 import com.example.cpudefense.networkmap.Network
-import com.example.cpudefense.networkmap.Viewport
 import com.example.cpudefense.utils.displayTextCenteredInRect
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import java.util.concurrent.CopyOnWriteArrayList
 import kotlin.random.Random
 
 
-class Game(val gameActivity: MainGameActivity) {
+class GameMechanics(val gameActivity: MainGameActivity) {
     companion object Params {
         const val maxLevelAvailable = 32
 
@@ -142,6 +138,7 @@ class Game(val gameActivity: MainGameActivity) {
         LevelMode.BASIC to HashMap<Hero.Type, Hero>(),
         LevelMode.ENDLESS to HashMap<Hero.Type, Hero>(),
     )
+    private var currentlyActiveWave: Wave? = null
     var holidays = HashMap<Int, Hero.Holiday>()
 
     enum class LevelMode { BASIC, ENDLESS }
@@ -155,22 +152,6 @@ class Game(val gameActivity: MainGameActivity) {
     /** current stage when it is actually played and the game is running */
     var currentlyActiveStage: Stage? = null
 
-    /* game elements */
-    val viewport = Viewport()
-    var background: Background? = null
-    var intermezzo = Intermezzo(this)
-    var marketplace = Marketplace(this)
-    val scoreBoard = ScoreBoard(this)
-    val speedControlPanel = SpeedControl(this)
-    private var currentlyActiveWave: Wave? = null
-    /** list of all mover objects that are created for game elements */
-    var movers = CopyOnWriteArrayList<Mover>()
-    /** list of all fader objects that are created for game elements */
-    var faders = CopyOnWriteArrayList<Fader>()
-    /** list of all flipper objects that are created for game elements */
-    var flippers = CopyOnWriteArrayList<Flipper>()
-    val notification = ProgressNotification(this)
-
     // other temporary variables
     private var additionalCashDelay = 0
     private var additionalCashTicks: Float = 0.0f
@@ -183,6 +164,7 @@ class Game(val gameActivity: MainGameActivity) {
     enum class GamePhase { START, RUNNING, INTERMEZZO, MARKETPLACE, PAUSED }
     enum class GameSpeed { NORMAL, MAX }
 
+    // TODO: move to GameView
     private val coinIconBlue: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.cryptocoin)
     private val coinIconRed: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.cryptocoin_red)
     val cpuImage: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.cpu)
@@ -220,7 +202,7 @@ class Game(val gameActivity: MainGameActivity) {
 
             additionalCashDelay = heroModifier(Hero.Type.GAIN_CASH).toInt()
             currentStage = state.startingLevel
-            intermezzo.prepareLevel(state.startingLevel, true)
+            gameActivity.prepareLevelAtStartOfGame(state.startingLevel)
         }
         else {
             state.startingLevel = Stage.Identifier(1,1)
@@ -229,10 +211,8 @@ class Game(val gameActivity: MainGameActivity) {
             setLastPlayedStage(state.startingLevel)
             setMaxPlayedStage(state.startingLevel, resetProgress=true)
             currentStage = state.startingLevel
-            intermezzo.prepareLevel(state.startingLevel, true)
+            gameActivity.prepareLevelAtStartOfGame(state.startingLevel)
         }
-        if (background == null)
-            background = Background(this)
     }
 
     fun resumeGame()
@@ -246,16 +226,16 @@ class Game(val gameActivity: MainGameActivity) {
         // persistency.loadState(this)
         stageData?.let {
             currentStage = it.ident
-            currentlyActiveStage = Stage.createStageFromData(this, it)
+            currentlyActiveStage = Stage.createStageFromData(this, gameActivity.gameView, it)
         }
         currentlyActiveStage?.let {
             it.network.validateViewport()
-            viewport.setGridSize(it.sizeX, it.sizeY)
+            gameActivity.gameView.viewport.setGridSize(it.sizeX, it.sizeY)
         }
         when (state.phase)
         {
             GamePhase.MARKETPLACE -> {
-                marketplace.nextGameLevel = state.startingLevel
+                gameActivity.gameView.marketplace.nextGameLevel = state.startingLevel
                 gameActivity.setGameActivityStatus(MainGameActivity.GameActivityStatus.BETWEEN_LEVELS)
             }
             GamePhase.INTERMEZZO -> {
@@ -268,16 +248,11 @@ class Game(val gameActivity: MainGameActivity) {
                 currentlyActiveStage?.let {
                     currentlyActiveWave = if (it.waves.size > 0) it.waves[0]
                     else it.nextWave()
-                    speedControlPanel.resetButtons()
+                    gameActivity.gameView.speedControlPanel.resetButtons()
                 }
                 state.phase = GamePhase.RUNNING
             }
         }
-        if (background == null)
-            background = Background(this)
-        if (!gameActivity.settings.configDisableBackground)
-            background?.choose(currentStage)
-        background?.state = Background.BackgroundState.UNINITIALIZED
     }
 
     inline fun globalSpeedFactor(): Float
@@ -325,131 +300,16 @@ class Game(val gameActivity: MainGameActivity) {
         }
     }
 
-
     fun update()
     {
         if (state.phase == GamePhase.RUNNING)
         {
             checkTemperature()
-            currentlyActiveStage?.network?.let {
-                if (background?.mustBeChanged() == true) {
-                    it.backgroundImage = background?.actualImage
-                    it.recreateNetworkImage(viewport)
-                }
-                it.update()
-            }
-            scoreBoard.update()
+            currentlyActiveStage?.network?.update()
+            gameActivity.gameView.scoreBoard.update()
             currentlyActiveWave?.update()
             gainAdditionalCash()
         }
-    }
-
-    fun updateEffects()
-            /**  execute all movers and faders */
-    {
-        intermezzo.update()
-        for (m in movers)
-        {
-            if (m?.type == Mover.Type.NONE)
-                movers.remove(m)
-            else
-                m?.update()
-        }
-        for (m in faders)
-        {
-            if (m?.type == Fader.Type.NONE)
-                faders.remove(m)
-            else
-                m?.update()
-        }
-        for (m in flippers)
-        {
-            if (m?.type == Flipper.Type.NONE)
-                flippers.remove(m)
-            else
-                m?.update()
-        }
-    }
-
-    fun display(canvas: Canvas)
-    {
-        if (state.phase == GamePhase.RUNNING || state.phase == GamePhase.PAUSED)
-        {
-            currentlyActiveStage?.network?.display(canvas, viewport)
-            scoreBoard.display(canvas, viewport)
-            speedControlPanel.display(canvas)
-        }
-        if (state.phase == GamePhase.PAUSED)
-        {
-            val paint = Paint()
-            paint.color = Color.WHITE
-            paint.textSize = 72f
-            paint.typeface = Typeface.DEFAULT_BOLD
-            viewport.let {
-                val rect = Rect(0, 0, it.viewportWidth, it.viewportHeight)
-                rect.displayTextCenteredInRect(canvas, gameActivity.getString(R.string.game_paused), paint)
-            }
-        }
-        intermezzo.display(canvas, viewport)
-        marketplace.display(canvas, viewport)
-        notification.display(canvas)
-    }
-
-    fun onDown(p0: MotionEvent): Boolean {
-        when (state.phase)
-        {
-            GamePhase.RUNNING ->
-            {
-                if (speedControlPanel.onDown(p0))
-                    return true
-                currentlyActiveStage?.network?.let {
-                    if (processClickOnNodes(it, p0))
-                        return true
-                    for (obj in it.vehicles)
-                        if ((obj as Attacker).onDown(p0))
-                            return true
-                }
-                return false
-            }
-            GamePhase.INTERMEZZO ->
-                return intermezzo.onDown(p0)
-            GamePhase.MARKETPLACE ->
-                return marketplace.onDown(p0)
-            GamePhase.PAUSED ->
-            {
-                if (speedControlPanel.onDown(p0))
-                    return true
-                currentlyActiveStage?.network?.let {
-                    if (processClickOnNodes(it, p0))
-                        return true
-                }
-            }
-            else ->
-                return false
-        }
-        return false
-    }
-
-    private fun processClickOnNodes(network: Network, p0: MotionEvent): Boolean
-    {
-        /* first, check if the click is inside one of the upgrade boxes
-        * of _any_ node */
-        for (obj in network.nodes.values) {
-            val chip = obj as Chip
-            for (upgrade in chip.upgradePossibilities)
-                if (upgrade.onDown(p0)) {
-                    chip.upgradePossibilities.clear()
-                    return true
-                }
-            /* if we come here, then the click was not on an update. */
-            if (chip.actualRect?.contains(p0.x.toInt(), p0.y.toInt()) == false)
-                chip.upgradePossibilities.clear()  // clear update boxes of other chips
-        }
-        /* check the nodes themselves */
-        for (obj in network.nodes.values)
-            if (obj.onDown(p0))
-                return true
-        return false
     }
 
     fun getSummaryOfStage(stage: Stage.Identifier): Stage.Summary?

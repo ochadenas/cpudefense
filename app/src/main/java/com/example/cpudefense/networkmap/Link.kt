@@ -5,7 +5,9 @@ import com.example.cpudefense.*
 import com.example.cpudefense.gameElements.GameElement
 import kotlin.math.abs
 
-class Link(val theNetwork: Network, var node1: Node, var node2: Node, var ident: Int, var mask: Int = 0x0F, var variant: Variant? = Variant.CONVEX): GameElement() {
+class Link(val theNetwork: Network, var node1: Node, var node2: Node, var ident: Int, var mask: Int = 0x0F, var variant: Variant? = Variant.CONVEX): GameElement()
+{
+    val resources = theNetwork.gameView.resources
 
     data class Data
         (
@@ -43,18 +45,18 @@ class Link(val theNetwork: Network, var node1: Node, var node2: Node, var ident:
         calculateIntermediatePointPosition()
         with (paintBackground)
         {
-            color = theNetwork.theGame.resources.getColor(R.color.network_background)
+            color = resources.getColor(R.color.network_background)
             style = Paint.Style.FILL_AND_STROKE
         }
         with (paintConnector)
         {
-            color = theNetwork.theGame.resources.getColor(R.color.connectors)
+            color = resources.getColor(R.color.connectors)
             style = Paint.Style.STROKE
             strokeWidth = connectorWidth
         }
         with (paintEntry)
         {
-            color = theNetwork.theGame.resources.getColor(R.color.entrypoints)
+            color = resources.getColor(R.color.entrypoints)
             style = Paint.Style.STROKE
             strokeWidth = connectorWidth
         }

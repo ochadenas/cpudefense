@@ -3,15 +3,30 @@ package com.example.cpudefense
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
+import android.graphics.Paint
 import android.graphics.Rect
+import android.graphics.Typeface
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.SurfaceHolder
 import android.view.SurfaceView
 import androidx.core.view.GestureDetectorCompat
+import com.example.cpudefense.GameMechanics.GamePhase
+import com.example.cpudefense.effects.Background
 import com.example.cpudefense.effects.Effects
+import com.example.cpudefense.effects.Fader
+import com.example.cpudefense.effects.Flipper
+import com.example.cpudefense.effects.Mover
+import com.example.cpudefense.gameElements.Attacker
+import com.example.cpudefense.gameElements.Chip
+import com.example.cpudefense.gameElements.ScoreBoard
+import com.example.cpudefense.gameElements.SpeedControl
+import com.example.cpudefense.networkmap.Network
+import com.example.cpudefense.networkmap.Viewport
+import com.example.cpudefense.utils.displayTextCenteredInRect
+import java.util.concurrent.CopyOnWriteArrayList
 
-class GameView(context: Context, val theGame: Game):
+class GameView(context: Context, val gameMechanics: GameMechanics):
     SurfaceView(context), SurfaceHolder.Callback,
     GestureDetector.OnGestureListener
 {
@@ -21,6 +36,24 @@ class GameView(context: Context, val theGame: Game):
     var scrollAllowed = true // whether the viewport can be moved by scrolling
     private var gestureDetector = GestureDetectorCompat(context, this)
 
+    /** font for displaying "computer messages" */
+    lateinit var monoTypeface: Typeface
+    lateinit var boldTypeface: Typeface
+
+    /* game elements */
+    val viewport = Viewport()
+    var background: Background? = null
+    var intermezzo = Intermezzo(this)
+    var marketplace = Marketplace(this)
+    val scoreBoard = ScoreBoard(this)
+    val speedControlPanel = SpeedControl(this)
+    /** list of all mover objects that are created for game elements */
+    var movers = CopyOnWriteArrayList<Mover>()
+    /** list of all fader objects that are created for game elements */
+    var faders = CopyOnWriteArrayList<Fader>()
+    /** list of all flipper objects that are created for game elements */
+    var flippers = CopyOnWriteArrayList<Flipper>()
+    val notification = ProgressNotification(this)
 
     fun setup()
             /** called when the game view is created.
@@ -30,12 +63,8 @@ class GameView(context: Context, val theGame: Game):
     {
         this.visibility = VISIBLE
         this.holder.addCallback(this)
-        backgroundColour = theGame.resources.getColor(R.color.network_background)
-        theEffects = Effects(theGame)
-    }
-
-    override fun onFinishInflate() {
-        super.onFinishInflate()
+        backgroundColour = context.resources.getColor(R.color.network_background)
+        theEffects = Effects(gameMechanics)
     }
 
     override fun surfaceCreated(p0: SurfaceHolder) {
@@ -55,16 +84,31 @@ class GameView(context: Context, val theGame: Game):
         setSize(w, h)
     }
 
+    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int)
+            /** function that is called to calculate height and width of this view.
+             * At this point, we also calculate the dimensions of all internal elements.
+             */
+    {
+        val widthMode = MeasureSpec.getMode(widthMeasureSpec)
+        val widthSize = MeasureSpec.getSize(widthMeasureSpec)
+        val heightMode = MeasureSpec.getMode(heightMeasureSpec)
+        val heightSize = MeasureSpec.getSize(heightMeasureSpec)
+
+        val width: Int = widthSize
+        val height: Int = heightSize
+        setMeasuredDimension(width, height)
+    }
+
     inline fun scoreBoardHeight(h: Int): Int
     /** calculate score board size for a given screen size
     @param h total height of screen
      */
     {
         val scoreBoardHeight = (h*0.1).toInt()
-        if (scoreBoardHeight < Game.minScoreBoardHeight)
-            return Game.minScoreBoardHeight
-        else if (scoreBoardHeight > Game.maxScoreBoardHeight)
-            return Game.maxScoreBoardHeight
+        if (scoreBoardHeight < GameMechanics.minScoreBoardHeight)
+            return GameMechanics.minScoreBoardHeight
+        else if (scoreBoardHeight > GameMechanics.maxScoreBoardHeight)
+            return GameMechanics.maxScoreBoardHeight
         else
             return scoreBoardHeight
     }
@@ -81,15 +125,15 @@ class GameView(context: Context, val theGame: Game):
     {
         /* determine dimensions of the different game areas */
         val viewportHeight = viewportHeight(h)
-        theGame.viewport.setScreenSize(w, viewportHeight)
-        theGame.scoreBoard.setSize(Rect(0, viewportHeight, w, viewportHeight+scoreBoardHeight(h)))
-        theGame.speedControlPanel.setSize(Rect(0, 0, w, viewportHeight))
-        theGame.intermezzo.setSize(Rect(0,0,w,h))
-        theGame.marketplace.setSize(Rect(0,0,w,h))
-        theGame.notification.setPositionOnScreen(w/2, h/2)
+        viewport.setScreenSize(w, viewportHeight)
+        scoreBoard.setSize(Rect(0, viewportHeight, w, viewportHeight+scoreBoardHeight(h)))
+        speedControlPanel.setSize(Rect(0, 0, w, viewportHeight))
+        intermezzo.setSize(Rect(0, 0, w, h))
+        marketplace.setSize(Rect(0, 0, w, h))
+        notification.setPositionOnScreen(w/2, h/2)
         /* increase attacker size on larger screens */
         // theGame.globalResolutionFactorX = (w / )
-        theGame.resources.displayMetrics.scaledDensity = (h / 1024f)
+        gameMechanics.resources.displayMetrics.scaledDensity = (h / 1024f)
         resources.displayMetrics
     }
 
@@ -98,9 +142,61 @@ class GameView(context: Context, val theGame: Game):
         return true
     }
 
-    override fun onDown(p0: MotionEvent): Boolean {
-        p0.let { theGame.onDown(it) }
-        return true
+    override fun onDown(motionEvent: MotionEvent): Boolean {
+        when (gameMechanics.state.phase)
+        {
+            GamePhase.RUNNING ->
+            {
+                if (speedControlPanel.onDown(motionEvent))
+                    return true
+                gameMechanics.currentlyActiveStage?.network?.let {
+                    if (processClickOnNodes(it, motionEvent))
+                        return true
+                    for (obj in it.vehicles)
+                        if ((obj as Attacker).onDown(motionEvent))
+                            return true
+                }
+                return false
+            }
+            GamePhase.INTERMEZZO ->
+                return intermezzo.onDown(motionEvent)
+            GamePhase.MARKETPLACE ->
+                return marketplace.onDown(motionEvent)
+            GamePhase.PAUSED ->
+            {
+                if (speedControlPanel.onDown(motionEvent))
+                    return true
+                gameMechanics.currentlyActiveStage?.network?.let {
+                    if (processClickOnNodes(it, motionEvent))
+                        return true
+                }
+            }
+            else ->
+                return false
+        }
+        return false
+    }
+
+    private fun processClickOnNodes(network: Network, p0: MotionEvent): Boolean
+    {
+        /* first, check if the click is inside one of the upgrade boxes
+        * of _any_ node */
+        for (obj in network.nodes.values) {
+            val chip = obj as Chip
+            for (upgrade in chip.upgradePossibilities)
+                if (upgrade.onDown(p0)) {
+                    chip.upgradePossibilities.clear()
+                    return true
+                }
+            /* if we come here, then the click was not on an update. */
+            if (chip.actualRect?.contains(p0.x.toInt(), p0.y.toInt()) == false)
+                chip.upgradePossibilities.clear()  // clear update boxes of other chips
+        }
+        /* check the nodes themselves */
+        for (obj in network.nodes.values)
+            if (obj.onDown(p0))
+                return true
+        return false
     }
 
     override fun onShowPress(p0: MotionEvent) {
@@ -111,14 +207,14 @@ class GameView(context: Context, val theGame: Game):
     }
 
     override fun onScroll(p0: MotionEvent, p1: MotionEvent, dx: Float, dy: Float): Boolean {
-        when (theGame.state.phase)
+        when (gameMechanics.state.phase)
         {
-            Game.GamePhase.MARKETPLACE -> theGame.marketplace.onScroll(p0, p1, dx, dy)
+            GameMechanics.GamePhase.MARKETPLACE -> marketplace.onScroll(p0, p1, dx, dy)
             else ->
             {
                 if (scrollAllowed) {
-                    theGame.viewport.addOffset(-dx, -dy)
-                    theGame.currentlyActiveStage?.network?.recreateNetworkImage(theGame.viewport)
+                    viewport.addOffset(-dx, -dy)
+                    gameMechanics.currentlyActiveStage?.network?.recreateNetworkImage(viewport)
                 }
             }
         }
@@ -127,9 +223,9 @@ class GameView(context: Context, val theGame: Game):
 
     override fun onLongPress(p0: MotionEvent) {
         p0.let {
-            when (theGame.state.phase) {
-                Game.GamePhase.RUNNING -> theGame.currentlyActiveStage?.network?.onLongPress(p0)
-                Game.GamePhase.MARKETPLACE -> theGame.marketplace.onLongPress(p0)
+            when (gameMechanics.state.phase) {
+                GameMechanics.GamePhase.RUNNING -> gameMechanics.currentlyActiveStage?.network?.onLongPress(p0)
+                GameMechanics.GamePhase.MARKETPLACE -> marketplace.onLongPress(p0)
                 else -> {}
             }
         }
@@ -139,11 +235,56 @@ class GameView(context: Context, val theGame: Game):
         return false
     }
 
+    fun updateEffects()
+            /**  execute all movers and faders */
+    {
+        intermezzo.update()
+        for (m in movers)
+        {
+            if (m?.type == Mover.Type.NONE)
+                movers.remove(m)
+            else
+                m?.update()
+        }
+        for (m in faders)
+        {
+            if (m?.type == Fader.Type.NONE)
+                faders.remove(m)
+            else
+                m?.update()
+        }
+        for (m in flippers)
+        {
+            if (m?.type == Flipper.Type.NONE)
+                flippers.remove(m)
+            else
+                m?.update()
+        }
+    }
+
     @Synchronized fun display()
     {
+        val state = gameMechanics.state
         holder.lockCanvas()?.let()
         {
-            theGame.display(it)
+            background?.display(it)
+            if (state.phase == GamePhase.RUNNING || state.phase == GamePhase.PAUSED)
+            {
+                gameMechanics.currentlyActiveStage?.network?.display(it, viewport)
+                scoreBoard.display(it, viewport)
+                speedControlPanel.display(it)
+            }
+            if (state.phase == GamePhase.PAUSED)
+            {
+                val paint = Paint()
+                paint.color = Color.WHITE
+                paint.textSize = 72f
+                paint.typeface = Typeface.DEFAULT_BOLD
+                val rect = Rect(0, 0, viewport.viewportWidth, viewport.viewportHeight)
+                rect.displayTextCenteredInRect(it, resources.getString(R.string.game_paused), paint)
+            }
+            marketplace.display(it, viewport)
+            notification.display(it)
             theEffects?.display(it)
             holder.unlockCanvasAndPost(it)
         }

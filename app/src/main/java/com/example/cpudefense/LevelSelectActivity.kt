@@ -41,12 +41,12 @@ class LevelSelectActivity : AppCompatActivity() {
     private fun setupSelector()
     {
         val tabLayout = findViewById<TabLayout>(R.id.tab_layout)
-        if (Game.makeAllLevelsAvailable)
+        if (GameMechanics.makeAllLevelsAvailable)
         {
             isTurboAvailable = true
             isEndlessAvailable = true
         }
-        if (Game.enableEndlessMode)
+        if (GameMechanics.enableEndlessMode)
         {
             val tab = tabLayout.newTab().setText("Endless")
             tabLayout.addTab(tab)
@@ -68,7 +68,7 @@ class LevelSelectActivity : AppCompatActivity() {
                 }
             })
         )
-        val currentSeries = intent.getIntExtra("NEXT_SERIES", Game.SERIES_NORMAL)
+        val currentSeries = intent.getIntExtra("NEXT_SERIES", GameMechanics.SERIES_NORMAL)
         prepareStageSelector(currentSeries)
         // set the active tab depending on the current series
         val tab = tabLayout.getTabAt(currentSeries-1)
@@ -83,7 +83,7 @@ class LevelSelectActivity : AppCompatActivity() {
              * In "endless" there is no limit.
              */
     {
-        return ((series == Game.SERIES_ENDLESS) || (level < Game.maxLevelAvailable))
+        return ((series == GameMechanics.SERIES_ENDLESS) || (level < GameMechanics.maxLevelAvailable))
     }
 
     private fun prepareStageSelector(series: Int)
@@ -100,16 +100,16 @@ class LevelSelectActivity : AppCompatActivity() {
         selectedSeries = series
         when (series)
         {
-            Game.SERIES_NORMAL -> {
-                levels = Persistency(this).loadLevelSummaries(Game.SERIES_NORMAL)
-                populateStageList(listView, levels, prefs, Game.SERIES_NORMAL,
-                    resources.getColor(R.color.text_green), resources.getColor(R.color.text_lightgreen))
+            GameMechanics.SERIES_NORMAL -> {
+                levels = Persistency(this).loadLevelSummaries(GameMechanics.SERIES_NORMAL)
+                populateStageList(listView, levels, prefs, GameMechanics.SERIES_NORMAL,
+                                  resources.getColor(R.color.text_green), resources.getColor(R.color.text_lightgreen))
             }
-            Game.SERIES_TURBO-> {
+            GameMechanics.SERIES_TURBO-> {
                 if (isTurboAvailable) {
-                    levels = Persistency(this).loadLevelSummaries(Game.SERIES_TURBO)
-                    populateStageList(listView, levels, prefs, Game.SERIES_NORMAL,
-                        resources.getColor(R.color.text_amber), resources.getColor(R.color.text_lightamber))
+                    levels = Persistency(this).loadLevelSummaries(GameMechanics.SERIES_TURBO)
+                    populateStageList(listView, levels, prefs, GameMechanics.SERIES_NORMAL,
+                                      resources.getColor(R.color.text_amber), resources.getColor(R.color.text_lightamber))
                 }
                 else
                 {
@@ -124,11 +124,11 @@ class LevelSelectActivity : AppCompatActivity() {
                     listView.addView(textView)
                 }
             }
-            Game.SERIES_ENDLESS -> {
+            GameMechanics.SERIES_ENDLESS -> {
                 if (isEndlessAvailable) {
-                    levels = Persistency(this).loadLevelSummaries(Game.SERIES_ENDLESS)
-                    populateStageList(listView, levels, prefs, Game.SERIES_ENDLESS,
-                        resources.getColor(R.color.text_red), resources.getColor(R.color.text_lightred))
+                    levels = Persistency(this).loadLevelSummaries(GameMechanics.SERIES_ENDLESS)
+                    populateStageList(listView, levels, prefs, GameMechanics.SERIES_ENDLESS,
+                                      resources.getColor(R.color.text_red), resources.getColor(R.color.text_lightred))
                 }
                 else
                 {
@@ -213,7 +213,7 @@ class LevelSelectActivity : AppCompatActivity() {
     {
         // add bitmap to text view
         val iconPadding = 10
-        val iconSize = Game.levelSnapshotIconSize + iconPadding
+        val iconSize = GameMechanics.levelSnapshotIconSize + iconPadding
         val bitmap = Bitmap.createBitmap(iconSize, iconSize, Bitmap.Config.ARGB_8888)
         icon?.let {
             val canvas = Canvas(bitmap)

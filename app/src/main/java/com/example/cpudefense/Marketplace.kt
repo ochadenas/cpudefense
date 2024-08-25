@@ -1,6 +1,7 @@
 package com.example.cpudefense
 
 import android.app.Dialog
+import android.content.res.Resources
 import android.graphics.*
 import android.view.MotionEvent
 import android.view.ViewGroup
@@ -11,8 +12,10 @@ import com.example.cpudefense.gameElements.GameElement
 import com.example.cpudefense.networkmap.Viewport
 import com.example.cpudefense.utils.setCenter
 
-class Marketplace(val game: Game): GameElement()
+class Marketplace(val gameView: GameView): GameElement()
 {
+    private val resources: Resources = gameView.resources
+    private val gameMechanics = gameView.gameMechanics
     private var buttonFinish: Button? = null
     private var buttonRefund: Button? = null
     private var buttonPurchase: Button? = null
@@ -26,10 +29,10 @@ class Marketplace(val game: Game): GameElement()
     private var biographyViewOffset = 0f  // used for scrolling
 
     private var upgrades = mutableListOf<Hero>()
-    private var purse = game.currentPurse()
+    private var purse = gameMechanics.currentPurse()
     private var selected: Hero? = null
     private var coins = mutableListOf<Coin>()
-    private var coinSize = (32 * game.resources.displayMetrics.scaledDensity).toInt()
+    private var coinSize = (32 * resources.displayMetrics.scaledDensity).toInt()
 
     var nextGameLevel = Stage.Identifier()
 
@@ -41,8 +44,8 @@ class Marketplace(val game: Game): GameElement()
     fun setSize(area: Rect)
     {
         myArea = Rect(area)
-        val topMargin = (80 * game.resources.displayMetrics.scaledDensity).toInt()
-        cardsArea = Rect(64, topMargin, ((Game.cardWidth + 20)*game.resources.displayMetrics.scaledDensity).toInt(), myArea.bottom)
+        val topMargin = (80 * resources.displayMetrics.scaledDensity).toInt()
+        cardsArea = Rect(64, topMargin, ((GameMechanics.cardWidth + 20)*resources.displayMetrics.scaledDensity).toInt(), myArea.bottom)
         coinSize = 80 * topMargin / 100
         biographyArea= Rect(cardsArea.right+biographyAreaMargin, topMargin, myArea.right-biographyAreaMargin, myArea.bottom-biographyAreaMargin)
         createButton()
@@ -52,8 +55,8 @@ class Marketplace(val game: Game): GameElement()
     {
         nextGameLevel = level
         val newUpgrades = mutableListOf<Hero>()
-        val heroes = game.currentHeroes(level)
-        purse = game.currentPurse()
+        val heroes = gameMechanics.currentHeroes(level)
+        purse = gameMechanics.currentPurse()
         for (type in Hero.Type.values())
         {
             /* if upgrade already exists (because it has been bought earlier),
@@ -62,7 +65,7 @@ class Marketplace(val game: Game): GameElement()
              */
             var hero: Hero? = heroes[type]
             if (hero == null)
-               hero = Hero.createFromData(game, Hero.Data(type))
+               hero = Hero.createFromData(gameMechanics, Hero.Data(type))
             if (hero.isAvailable(level)) {
                 hero.createBiography(biographyArea)
                 newUpgrades.add(hero)
@@ -73,7 +76,7 @@ class Marketplace(val game: Game): GameElement()
         }
         arrangeCards(newUpgrades, cardViewOffset)
         upgrades = newUpgrades
-        coins = MutableList(purse.availableCoins()) { Coin(game, coinSize) }
+        coins = MutableList(purse.availableCoins()) { Coin(gameMechanics, coinSize) }
     }
 
     private fun arrangeCards(heroes: MutableList<Hero>, dY: Float = 0f)
@@ -81,7 +84,7 @@ class Marketplace(val game: Game): GameElement()
      * @param dY Vertical offset used for scrolling */
     {
         val space = 20
-        val offset = (Game.cardHeight*game.resources.displayMetrics.scaledDensity).toInt() + space
+        val offset = (GameMechanics.cardHeight*resources.displayMetrics.scaledDensity).toInt() + space
         var pos = cardsArea.top + space + dY.toInt()
         for (hero in heroes)
         {
@@ -96,25 +99,25 @@ class Marketplace(val game: Game): GameElement()
     private fun createButton()
     {
         val bottomMargin = 40
-        buttonFinish = Button(game, game.resources.getString(R.string.button_playlevel),
-            textSize = Game.purchaseButtonTextSize * game.resources.displayMetrics.scaledDensity,
-            style = Button.Style.HP_KEY, preferredWidth = biographyArea.width())
+        buttonFinish = Button(gameView, resources.getString(R.string.button_playlevel),
+                              textSize = GameMechanics.purchaseButtonTextSize * resources.displayMetrics.scaledDensity,
+                              style = Button.Style.HP_KEY, preferredWidth = biographyArea.width())
         buttonFinish?.let {
-            Fader(game, it, Fader.Type.APPEAR, Fader.Speed.SLOW)
+            Fader(gameView, it, Fader.Type.APPEAR, Fader.Speed.SLOW)
             it.alignRight(myArea.right, myArea.bottom - bottomMargin - it.area.height())
         }
-        buttonRefund = Button(game, game.resources.getString(R.string.button_refund_all),
-            textSize = Game.purchaseButtonTextSize * game.resources.displayMetrics.scaledDensity,
-            style = Button.Style.HP_KEY, preferredWidth = biographyArea.width())
+        buttonRefund = Button(gameView, resources.getString(R.string.button_refund_all),
+                              textSize = GameMechanics.purchaseButtonTextSize * resources.displayMetrics.scaledDensity,
+                              style = Button.Style.HP_KEY, preferredWidth = biographyArea.width())
         buttonRefund?.let {
-            Fader(game, it, Fader.Type.APPEAR, Fader.Speed.SLOW)
+            Fader(gameView, it, Fader.Type.APPEAR, Fader.Speed.SLOW)
             it.alignRight(myArea.right, myArea.bottom - bottomMargin - 2*it.area.height())
         }
-        buttonPurchase = Button(game, purchaseButtonText(null),
-            textSize = Game.purchaseButtonTextSize * game.resources.displayMetrics.scaledDensity,
-            style = Button.Style.HP_KEY, preferredWidth = biographyArea.width())
+        buttonPurchase = Button(gameView, purchaseButtonText(null),
+                                textSize = GameMechanics.purchaseButtonTextSize * resources.displayMetrics.scaledDensity,
+                                style = Button.Style.HP_KEY, preferredWidth = biographyArea.width())
         buttonPurchase?.let {
-            Fader(game, it, Fader.Type.APPEAR, Fader.Speed.SLOW)
+            Fader(gameView, it, Fader.Type.APPEAR, Fader.Speed.SLOW)
             it.alignRight(myArea.right, myArea.bottom - bottomMargin - 3*it.area.height())
         }
         biographyArea.bottom = ((buttonPurchase?.area?.top ?: buttonFinish?.area?.top) ?: myArea.bottom ) - biographyAreaMargin
@@ -124,7 +127,7 @@ class Marketplace(val game: Game): GameElement()
         /** test if a button has been pressed: */
         if (buttonFinish?.area?.contains(event.x.toInt(), event.y.toInt()) == true)
         {
-            game.startNextStage(nextGameLevel)
+            gameMechanics.startNextStage(nextGameLevel)
             return true
         }
         if (buttonRefund?.area?.contains(event.x.toInt(), event.y.toInt()) == true)
@@ -137,18 +140,18 @@ class Marketplace(val game: Game): GameElement()
                     return true
                 }
             }
-            val dialog = Dialog(game.gameActivity)
+            val dialog = Dialog(gameMechanics.gameActivity)
             dialog.setContentView(R.layout.layout_dialog_heroes)
             dialog.window?.setLayout(
                 ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT
             )
             dialog.setCancelable(true)
-            dialog.findViewById<android.widget.TextView>(R.id.question).text = game.resources.getText(R.string.query_reset)
+            dialog.findViewById<android.widget.TextView>(R.id.question).text = resources.getText(R.string.query_reset)
             val button1 = dialog.findViewById<android.widget.Button>(R.id.button1)
             val button2 = dialog.findViewById<android.widget.Button>(R.id.button2)
-            button2?.text = game.resources.getText(R.string.yes)
-            button1?.text = game.resources.getText(R.string.no)
+            button2?.text = resources.getText(R.string.yes)
+            button1?.text = resources.getText(R.string.no)
             button2?.setOnClickListener { dialog.dismiss(); refundAll() }
             button1?.setOnClickListener { dialog.dismiss() }
             dialog.show()
@@ -162,10 +165,10 @@ class Marketplace(val game: Game): GameElement()
                 if (purse.availableCoins() >= price && it.data.level < it.getMaxUpgradeLevel()) {
                     purse.spend(price)
                     it.data.coinsSpent += price
-                    Fader(game, coins.last(), Fader.Type.DISAPPEAR)
+                    Fader(gameView, coins.last(), Fader.Type.DISAPPEAR)
                     it.doUpgrade()
-                    game.currentHeroes(nextGameLevel)[it.data.type] = it
-                    Persistency(game.gameActivity).saveHeroes(game)
+                    gameMechanics.currentHeroes(nextGameLevel)[it.data.type] = it
+                    Persistency(gameMechanics.gameActivity).saveHeroes(gameMechanics)
                     fillMarket(nextGameLevel)
                     makeButtonText(it)
                 }
@@ -176,7 +179,7 @@ class Marketplace(val game: Game): GameElement()
         {
             if (coin.myArea.contains(event.x.toInt(), event.y.toInt())) {
                 if (!coin.isCurrentlyFlipping)
-                    Flipper(game, coin, Flipper.Type.HORIZONTAL)
+                    Flipper(gameMechanics, coin, Flipper.Type.HORIZONTAL)
                 return true
             }
         }
@@ -197,7 +200,7 @@ class Marketplace(val game: Game): GameElement()
     fun onLongPress(event: MotionEvent): Boolean {
         for (hero in upgrades)
             if (hero.card.cardAreaOnScreen.contains(event.x.toInt(), event.y.toInt())) {
-                Toast.makeText(game.gameActivity, hero.upgradeInfo(), Toast.LENGTH_LONG).show()
+                Toast.makeText(gameMechanics.gameActivity, hero.upgradeInfo(), Toast.LENGTH_LONG).show()
                 return true
             }
         return false
@@ -215,8 +218,8 @@ class Marketplace(val game: Game): GameElement()
             purse.spend(-refund)
             card.resetUpgrade()
         }
-        Persistency(game.gameActivity).saveHeroes(game)
-        Persistency(game.gameActivity).saveState(game)
+        Persistency(gameMechanics.gameActivity).saveHeroes(gameMechanics)
+        Persistency(gameMechanics.gameActivity).saveState(gameMechanics)
         fillMarket(nextGameLevel)
         makeButtonText(null)
     }
@@ -227,9 +230,9 @@ class Marketplace(val game: Game): GameElement()
         {
             if (data.type == Hero.Type.INCREASE_MAX_HERO_LEVEL) // heroes that cannot be fired
             {
-                val res = game.resources
+                val res = resources
                 val text = res.getString(R.string.message_cannot_fire).format(res.getString(R.string.button_refund_all))
-                Toast.makeText(game.gameActivity, text, Toast.LENGTH_SHORT).show()
+                Toast.makeText(gameMechanics.gameActivity, text, Toast.LENGTH_SHORT).show()
                 return
             }
             if (heroIsOnLeave(hero)) return
@@ -251,8 +254,8 @@ class Marketplace(val game: Game): GameElement()
             }
 
         }
-        Persistency(game.gameActivity).saveHeroes(game)
-        Persistency(game.gameActivity).saveState(game)
+        Persistency(gameMechanics.gameActivity).saveHeroes(gameMechanics)
+        Persistency(gameMechanics.gameActivity).saveState(gameMechanics)
         fillMarket(nextGameLevel)
         makeButtonText(hero)
     }
@@ -283,21 +286,21 @@ class Marketplace(val game: Game): GameElement()
 
     private fun heroIsOnLeave(hero: Hero): Boolean {
         if (hero.isOnLeave) {
-            val res = game.resources
+            val res = resources
             val text = res.getString(R.string.message_is_on_leave).format(hero.person.name)
-            Toast.makeText(game.gameActivity, text, Toast.LENGTH_SHORT).show()
+            Toast.makeText(gameMechanics.gameActivity, text, Toast.LENGTH_SHORT).show()
             return true
         } else
             return false
     }
 
     override fun display(canvas: Canvas, viewport: Viewport) {
-        if (game.state.phase != Game.GamePhase.MARKETPLACE)
+        if (gameMechanics.state.phase != GameMechanics.GamePhase.MARKETPLACE)
             return
         if (myArea.width() == 0 || myArea.height() == 0)
         {
-            val width = game.gameActivity.theGameView.width
-            val height = game.gameActivity.theGameView.height
+            val width = gameMechanics.gameActivity.gameView.width
+            val height = gameMechanics.gameActivity.gameView.height
             if (width > 0 && height > 0) {
                 setSize(Rect(0, 0, width, height))
                 fillMarket(nextGameLevel)
@@ -317,7 +320,7 @@ class Marketplace(val game: Game): GameElement()
         canvas.drawRect(coinsArea, clearPaint)
         paint.color = Color.WHITE
         paint.style = Paint.Style.STROKE
-        paint.strokeWidth = 2f * game.resources.displayMetrics.scaledDensity
+        paint.strokeWidth = 2f * resources.displayMetrics.scaledDensity
         paint.alpha = 255
         val y = coinsArea.bottom.toFloat() - paint.strokeWidth
         canvas.drawLine(0f, y, myArea.right.toFloat(), y, paint)
@@ -359,25 +362,25 @@ class Marketplace(val game: Game): GameElement()
     {
         val text: String? = card?.let {
             if (it.data.level <= 1)
-                game.resources.getString(R.string.button_purchase)
+                resources.getString(R.string.button_purchase)
             else
-                game.resources.getString(R.string.button_purchase_plural).format(it.getPrice(card.data.level))
+                resources.getString(R.string.button_purchase_plural).format(it.getPrice(card.data.level))
             }
-        return text ?: game.resources.getString(R.string.button_purchase)
+        return text ?: resources.getString(R.string.button_purchase)
     }
 
     private fun refundButtonText(card: Hero?): String
     {
         card?.let {
             if (card.data.level>0)
-                return game.resources.getString(R.string.button_refund_one)
+                return resources.getString(R.string.button_refund_one)
             else
-                return game.resources.getString(R.string.button_refund_all)
+                return resources.getString(R.string.button_refund_all)
         }
-        return game.resources.getString(R.string.button_refund_all)
+        return resources.getString(R.string.button_refund_all)
     }
 
-    inner class Coin(val game: Game, size: Int): GameElement(), Fadable, Flippable
+    inner class Coin(val gameMechanics: GameMechanics, size: Int): GameElement(), Fadable, Flippable
     /** graphical representation of a crypto coin */
     {
         val paint = Paint()
@@ -388,7 +391,7 @@ class Marketplace(val game: Game): GameElement()
 
         init {
             paint.alpha = 255
-            myCanvas.drawBitmap(game.currentCoinBitmap(nextGameLevel), null, Rect(0,0,size,size), paint)
+            myCanvas.drawBitmap(gameMechanics.currentCoinBitmap(nextGameLevel), null, Rect(0, 0, size, size), paint)
         }
         override fun update() {
         }

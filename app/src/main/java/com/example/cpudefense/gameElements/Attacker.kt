@@ -4,7 +4,6 @@ package com.example.cpudefense.gameElements
 
 import android.graphics.*
 import android.view.MotionEvent
-import androidx.core.content.res.ResourcesCompat
 import com.example.cpudefense.*
 import com.example.cpudefense.effects.Explodable
 import com.example.cpudefense.effects.Fadable
@@ -38,6 +37,8 @@ open class Attacker(network: Network, representation: Representation = Represent
     var attackerData = Data( representation = representation, number = number, binaryDigits = 0, hexDigits = 0,
         bits = 0, vehicle = super.data
     )
+    private val resources = network.gameView.resources
+    private val activity = network.gameView.gameMechanics.gameActivity
     private var numberBitmap: Bitmap = Bitmap.createBitmap(100, 32, Bitmap.Config.ARGB_8888)
     var actualRect = Rect()
     private var oldNumber: ULong = 0U
@@ -56,8 +57,8 @@ open class Attacker(network: Network, representation: Representation = Represent
         this.data.speed = speed
         if (attackerData.bits == 0)
             calculateNumberOfDigits()
-        numberFontSize = baseNumberFontSize * this.network.theGame.resources.displayMetrics.scaledDensity *
-                if (this.network.theGame.gameActivity.settings.configUseLargeButtons) 1.5f else 1.0f
+        numberFontSize = baseNumberFontSize * resources.displayMetrics.scaledDensity *
+                if (activity.settings.configUseLargeButtons) 1.5f else 1.0f
     }
 
     fun copy(): Attacker
@@ -155,7 +156,7 @@ open class Attacker(network: Network, representation: Representation = Represent
     private fun extraCash(): Int
     /** @return possible bonus on kill due to hero */
     {
-        val strength = network.theGame.heroModifier(Hero.Type.GAIN_CASH_ON_KILL)
+        val strength = network.gameMechanics.heroModifier(Hero.Type.GAIN_CASH_ON_KILL)
         val extraCash = Random.nextFloat() * strength * 2.0f // this gives an expectation value of 'strength'
         return extraCash.toInt()
     }
@@ -164,16 +165,16 @@ open class Attacker(network: Network, representation: Representation = Represent
     /** credit the info gained for eliminating this attacker */
     {
         if (attackerData.hasNoValue == false)
-            network.theGame.scoreBoard.addCash(attackerData.bits + extraCash())
+            network.gameView.scoreBoard.addCash(attackerData.bits + extraCash())
     }
 
     fun slowDown(modifier: Float)
     /** temporarily decrease the attacker's speed, e.g. due to a resistor effect */
     {
         data.speedModifier = modifier
-        var additionalDuration = Game.resistorBaseDuration / data.speedModifier * network.theGame.heroModifier(Hero.Type.INCREASE_CHIP_RES_DURATION)
-        if (additionalDuration > Game.resistorMaxDuration)
-            additionalDuration = Game.resistorMaxDuration
+        var additionalDuration = GameMechanics.resistorBaseDuration / data.speedModifier * network.gameMechanics.heroModifier(Hero.Type.INCREASE_CHIP_RES_DURATION)
+        if (additionalDuration > GameMechanics.resistorMaxDuration)
+            additionalDuration = GameMechanics.resistorMaxDuration
         data.speedModificationTimer += additionalDuration
         makeNumber()
     }
@@ -201,7 +202,7 @@ open class Attacker(network: Network, representation: Representation = Represent
                 val newNumber =  attackerData.number.toLong() - power
                 if (newNumber < 0)
                 {
-                    network.theGame.gameActivity.theGameView.theEffects?.explode(this)
+                    network.gameMechanics.gameActivity.gameView.theEffects?.explode(this)
                     gainCash()
                     return true
                 }
@@ -243,7 +244,7 @@ open class Attacker(network: Network, representation: Representation = Represent
      * or (0, 0) if the viewport is undefined or invalid.
      */
     {
-        posOnGrid?.let { return network.theGame.viewport.gridToViewport(it) }
+        posOnGrid?.let { return network.gameView.viewport.gridToViewport(it) }
         /* else, if posOnGrid == null: */
         return Pair(0, 0)
     }
@@ -252,8 +253,8 @@ open class Attacker(network: Network, representation: Representation = Represent
         get() = when (attackerData.representation)
         {
             Representation.UNDEFINED -> null
-            Representation.BINARY -> network.theGame.resources.getColor(R.color.attackers_glow_bin)
-            Representation.HEX -> network.theGame.resources.getColor(R.color.attackers_glow_hex)
+            Representation.BINARY -> resources.getColor(R.color.attackers_glow_bin)
+            Representation.HEX -> resources.getColor(R.color.attackers_glow_hex)
             Representation.DECIMAL -> null
             Representation.FLOAT -> null
         }
@@ -292,23 +293,23 @@ open class Attacker(network: Network, representation: Representation = Represent
         when (attackerData.representation) {
             Representation.BINARY -> {
                 if (data.speedModificationTimer > 0)
-                    textPaint.color = network.theGame.resources.getColor(R.color.attackers_slowed_bin)
+                    textPaint.color = network.gameMechanics.resources.getColor(R.color.attackers_slowed_bin)
                 else
-                    textPaint.color = network.theGame.resources.getColor(R.color.attackers_foreground_bin)
-                blurPaint.color = network.theGame.resources.getColor(R.color.attackers_glow_bin)
+                    textPaint.color = network.gameMechanics.resources.getColor(R.color.attackers_foreground_bin)
+                blurPaint.color = network.gameMechanics.resources.getColor(R.color.attackers_glow_bin)
             }
             else -> {
                 if (data.speedModificationTimer > 0)
-                    textPaint.color = network.theGame.resources.getColor(R.color.attackers_slowed_hex)
+                    textPaint.color = network.gameMechanics.resources.getColor(R.color.attackers_slowed_hex)
                 else
-                    textPaint.color = network.theGame.resources.getColor(R.color.attackers_foreground_hex)
-                blurPaint.color = network.theGame.resources.getColor(R.color.attackers_glow_hex)
+                    textPaint.color = network.gameMechanics.resources.getColor(R.color.attackers_foreground_hex)
+                blurPaint.color = network.gameMechanics.resources.getColor(R.color.attackers_glow_hex)
             }
         }
 
         textPaint.textSize = numberFontSize
         textPaint.alpha = 255
-        textPaint.typeface = network.theGame.gameActivity.boldTypeface
+        textPaint.typeface = network.gameView.boldTypeface
         textPaint.textAlign = Paint.Align.CENTER
         val bounds = Rect()
         textPaint.getTextBounds(text, 0, text.length, bounds)
@@ -323,7 +324,7 @@ open class Attacker(network: Network, representation: Representation = Represent
 
         /* create a transparent black background to have more contrast */
         val paint = Paint()
-        paint.color = network.theGame.resources.getColor(R.color.attackers_background)
+        paint.color = network.gameMechanics.resources.getColor(R.color.attackers_background)
         // canvas.drawRect(rect, paint)
 
         /* use blurred image to create glow */
@@ -332,7 +333,7 @@ open class Attacker(network: Network, representation: Representation = Represent
         val blurCanvas = Canvas(numberBitmap)
         blurCanvas.drawBitmap(alpha, 0f, 0f, blurPaint)
 
-        textPaint.color = network.theGame.resources.getColor(R.color.attackers_foreground_bin)
+        textPaint.color = network.gameMechanics.resources.getColor(R.color.attackers_foreground_bin)
         textPaint.maskFilter = null
     }
 
@@ -344,7 +345,7 @@ open class Attacker(network: Network, representation: Representation = Represent
         when
         {
             data.speedModificationTimer > 0 ->
-            { data.speedModificationTimer -= network.theGame.globalSpeedFactor() }
+            { data.speedModificationTimer -= network.gameMechanics.globalSpeedFactor() }
             data.speedModificationTimer < 0 ->
             {
                 data.speedModificationTimer = 0.0f

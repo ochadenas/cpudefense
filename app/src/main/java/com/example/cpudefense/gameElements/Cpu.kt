@@ -50,7 +50,7 @@ class Cpu(network: Network, gridX: Int, gridY: Int): Chip(network, gridX, gridY)
     {
         var bitmap: Bitmap? = null
         actualRect = calculateActualRect()?.makeSquare()?.scale(2.5f)
-        actualRect?.let {bitmap = Bitmap.createScaledBitmap(network.theGame.cpuImage, it.width(), it.height(), true) }
+        actualRect?.let {bitmap = Bitmap.createScaledBitmap(network.gameMechanics.cpuImage, it.width(), it.height(), true) }
         return bitmap
     }
 
@@ -81,7 +81,7 @@ class Cpu(network: Network, gridX: Int, gridY: Int): Chip(network, gridX, gridY)
      */
     {
         cpuData.hits++
-        theNetwork.theGame.removeOneLife()
+        theNetwork.gameMechanics.removeOneLife()
     }
 
     override fun onDown(event: MotionEvent): Boolean

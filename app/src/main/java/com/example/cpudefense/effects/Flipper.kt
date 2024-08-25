@@ -4,13 +4,13 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Rect
-import com.example.cpudefense.Game
+import com.example.cpudefense.GameMechanics
 import com.example.cpudefense.utils.clear
 import com.example.cpudefense.utils.flipHorizontally
 import com.example.cpudefense.utils.flipVertically
 import kotlin.math.cos
 
-class Flipper(val theGame: Game, private val thing: Flippable,
+class Flipper(val theGameMechanics: GameMechanics, private val thing: Flippable,
               var type: Type = Type.HORIZONTAL, private val speed: Speed = Speed.MEDIUM)
 /**
  * Auxiliary object that handles turning (or 'flipping') of game elements,
@@ -35,7 +35,7 @@ class Flipper(val theGame: Game, private val thing: Flippable,
             Type.VERTICAL -> { bitmapVerso = bitmapRecto.flipVertically() }
             else -> { bitmapVerso = bitmapRecto.copy(bitmapRecto.config, true) }
         }
-        theGame.flippers.add(this) // make sure we are in the list so that we can be called during update
+        theGameMechanics.flippers.add(this) // make sure we are in the list so that we can be called during update
         thing.flipStart()
     }
 

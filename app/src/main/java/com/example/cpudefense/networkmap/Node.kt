@@ -2,6 +2,7 @@
 
 package com.example.cpudefense.networkmap
 
+import android.content.res.Resources
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
@@ -17,6 +18,7 @@ import java.util.concurrent.CopyOnWriteArrayList
 
 open class Node(val theNetwork: Network, x: Float, y: Float): GameElement()
 {
+    val resources: Resources = theNetwork.gameView.resources
 
     data class Data
         (
@@ -55,8 +57,7 @@ open class Node(val theNetwork: Network, x: Float, y: Float): GameElement()
         actualRect?.setCenter(viewport.gridToViewport(posOnGrid))
         actualRect?.let { rect ->
             val paint = Paint()
-            paint.color =
-                theNetwork.theGame.resources.getColor(R.color.network_background)
+            paint.color = resources.getColor(R.color.network_background)
             paint.style = Paint.Style.FILL
             canvas.drawRect(rect, paint)
             paint.color = Color.WHITE

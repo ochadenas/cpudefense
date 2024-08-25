@@ -20,8 +20,8 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class MainGameActivity : Activity() {
-    lateinit var theGame: Game
-    lateinit var theGameView: GameView
+    lateinit var theGameMechanics: GameMechanics
+    lateinit var gameView: GameView
     private var startOnLevel: Stage.Identifier? = null
     private var resumeGame = true
     private var gameIsRunning =
@@ -47,10 +47,6 @@ class MainGameActivity : Activity() {
     /** cumulated time */
     private var frameTimeSum = 0L
 
-    /** font for displaying "computer messages" */
-    lateinit var monoTypeface: Typeface
-    lateinit var boldTypeface: Typeface
-
     enum class GameActivityStatus { PLAYING, BETWEEN_LEVELS }
 
     data class Settings(
@@ -70,16 +66,16 @@ class MainGameActivity : Activity() {
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         setContentView(R.layout.activity_main_game)
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        theGame = Game(this)
+        theGameMechanics = GameMechanics(this)
         setupGameView()
     }
 
     fun setupGameView()
     {
         setComputerTypeface()
-        theGameView = GameView(this, theGame)
+        gameView = GameView(this, theGameMechanics)
         val parentView: FrameLayout? = findViewById(R.id.gameFrameLayout)
-        parentView?.addView(theGameView)
+        parentView?.addView(gameView)
 
         if (intent.getBooleanExtra("RESET_PROGRESS", false) == false) {
             startOnLevel = Stage.Identifier(
@@ -90,20 +86,20 @@ class MainGameActivity : Activity() {
             startOnLevel = null
         if (!intent.getBooleanExtra("RESUME_GAME", false))
             resumeGame = false
-        theGameView.setup()
+        gameView.setup()
     }
 
     fun setComputerTypeface()
     {
         try
         {
-            monoTypeface = ResourcesCompat.getFont(this, R.font.ubuntu_mono) ?: Typeface.MONOSPACE
-            boldTypeface = ResourcesCompat.getFont(this, R.font.ubuntu_mono_bold) ?: Typeface.MONOSPACE
+            gameView.monoTypeface = ResourcesCompat.getFont(this, R.font.ubuntu_mono) ?: Typeface.MONOSPACE
+            gameView.boldTypeface = ResourcesCompat.getFont(this, R.font.ubuntu_mono_bold) ?: Typeface.MONOSPACE
         }
         catch (ex: NotFoundException)
         {
-            monoTypeface = Typeface.MONOSPACE
-            boldTypeface = Typeface.MONOSPACE
+            gameView.monoTypeface = Typeface.MONOSPACE
+            gameView.boldTypeface = Typeface.MONOSPACE
         }
     }
 
@@ -111,7 +107,7 @@ class MainGameActivity : Activity() {
     override fun onPause() {
         // this method get executed when the user presses the system's "back" button,
         // but also when she navigates to another app
-        Persistency(this).saveState(theGame)
+        Persistency(this).saveState(theGameMechanics)
         gameIsRunning = false
         super.onPause()
     }
@@ -145,29 +141,29 @@ class MainGameActivity : Activity() {
     private fun startNewGame()
             /** starts a new game from level 1, discarding all progress */
     {
-        theGame.setLastPlayedStage(Stage.Identifier())
-        theGame.beginGame(resetProgress = true)
+        theGameMechanics.setLastPlayedStage(Stage.Identifier())
+        theGameMechanics.beginGame(resetProgress = true)
     }
 
     private fun startGameAtLevel(level: Stage.Identifier)
             /** continues a current match at a given level, keeping the progress and upgrades */
     {
-        theGame.state.startingLevel = level
-        theGame.beginGame(resetProgress = false)
+        theGameMechanics.state.startingLevel = level
+        theGameMechanics.beginGame(resetProgress = false)
     }
 
     private fun resumeCurrentGame()
             /** continues at exactly the same point within a level, restoring the complete game state.
              */
     {
-        Persistency(this).loadState(theGame)
-        theGame.resumeGame()
-        if (theGame.state.phase == Game.GamePhase.RUNNING) {
+        Persistency(this).loadState(theGameMechanics)
+        theGameMechanics.resumeGame()
+        if (theGameMechanics.state.phase == GameMechanics.GamePhase.RUNNING) {
             runOnUiThread {
                 val toast: Toast = Toast.makeText(
-                    this,
-                    "Stage %d".format(theGame.currentStage.number),
-                    Toast.LENGTH_SHORT
+                        this,
+                        "Stage %d".format(theGameMechanics.currentStage.number),
+                        Toast.LENGTH_SHORT
                 )
                 toast.show()
             }
@@ -193,16 +189,16 @@ class MainGameActivity : Activity() {
         settings.fastFastForward = prefs.getBoolean("USE_FAST_FAST_FORWARD", false)
     }
 
-    fun setGameSpeed(speed: Game.GameSpeed) {
-        theGame.global.speed = speed
-        if (speed == Game.GameSpeed.MAX) {
+    fun setGameSpeed(speed: GameMechanics.GameSpeed) {
+        theGameMechanics.global.speed = speed
+        if (speed == GameMechanics.GameSpeed.MAX) {
             updateDelay = fastForwardDelay
             if (settings.fastFastForward)
                 updateDelay = fastFastForwardDelay
-            theGame.background?.frozen = true
+            theGameMechanics.background?.frozen = true
         } else {
             updateDelay = defaultDelay
-            theGame.background?.frozen = false
+            theGameMechanics.background?.frozen = false
         }
     }
 
@@ -221,12 +217,17 @@ class MainGameActivity : Activity() {
     }
 
     private fun returnToMainMenu() {
-        Persistency(this).saveState(theGame)
+        Persistency(this).saveState(theGameMechanics)
         finish()
     }
 
     private fun replayLevel() {
-        theGame.currentlyActiveStage?.let { startGameAtLevel(it.data.ident) }
+        theGameMechanics.currentlyActiveStage?.let { startGameAtLevel(it.data.ident) }
+    }
+
+    fun prepareLevelAtStartOfGame(ident: Stage.Identifier)
+    {
+        gameView.intermezzo.prepareLevel(ident, true)
     }
 
     private fun update()
@@ -235,8 +236,8 @@ class MainGameActivity : Activity() {
     {
         if (gameIsRunning) {
             val timeAtStartOfCycle = SystemClock.uptimeMillis()
-            theGame.ticksCount++
-            theGame.update()
+            theGameMechanics.ticksCount++
+            theGameMechanics.update()
 
             // determine whether to update the display
             if (timeAtStartOfCycle-timeOfLastFrame > 30 && displayJob?.isActive != true)
@@ -253,16 +254,16 @@ class MainGameActivity : Activity() {
      * The delay between two executions may vary. */
     {
         if (gameIsRunning) {
-            theGame.frameCount++
+            theGameMechanics.frameCount++
             val timeAtStartOfFrame = SystemClock.uptimeMillis()
             val timeSinceLastFrame = timeAtStartOfFrame - timeOfLastFrame
             timeOfLastFrame = timeAtStartOfFrame
-            theGameView.display()
+            gameView.display()
             /* calculate mean time per frame */
             frameTimeSum += timeSinceLastFrame
             frameCount += 1
             if (frameCount >= meanCount) {
-                theGame.timeBetweenFrames = (frameTimeSum / frameCount).toDouble()
+                theGameMechanics.timeBetweenFrames = (frameTimeSum / frameCount).toDouble()
                 frameCount = 0
                 frameTimeSum = 0
             }
@@ -274,8 +275,8 @@ class MainGameActivity : Activity() {
     /** do all faders, explosions etc. This thread is independent of the update() cycle. */
     {
         if (gameIsRunning) {
-            theGame.updateEffects()
-            theGameView.theEffects?.updateGraphicalEffects()
+            theGameMechanics.updateEffects()
+            gameView.theEffects?.updateGraphicalEffects()
             GlobalScope.launch { delay(effectsDelay); updateGraphicalEffects() }
         }
     }

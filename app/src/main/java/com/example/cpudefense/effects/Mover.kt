@@ -1,10 +1,11 @@
 package com.example.cpudefense.effects
 
-import com.example.cpudefense.Game
+import com.example.cpudefense.GameMechanics
+import com.example.cpudefense.GameView
 import java.lang.Math.*
 
 class Mover(
-    private val game: Game, private val thing: Movable,
+    private val gameView: GameView, private val thing: Movable,
     fromX: Int, fromY: Int, toX: Int, toY: Int,
     var type: Type = Type.STRAIGHT, speed: Speed = Speed.FAST, wait: Int = 0)
 /**
@@ -88,7 +89,7 @@ class Mover(
             Type.APPEAR -> {}
         }
         reset()
-        this.game.movers.add(this) // make sure we are in the list so that we can be called during update
+        gameView.movers.add(this) // make sure we are in the list so that we can be called during update
     }
 
     private fun endMove()

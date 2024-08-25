@@ -17,9 +17,9 @@ class StageCatalog
         {
             when (level.series)
             {
-                Game.SERIES_NORMAL ->
+                GameMechanics.SERIES_NORMAL ->
                     createStageWithoutObstacles(stage, level)
-                Game.SERIES_TURBO ->
+                GameMechanics.SERIES_TURBO ->
                 {
                     createStageWithoutObstacles(stage, level)  // make basic layout
                     val difficulty = when (level.number) {
@@ -42,12 +42,12 @@ class StageCatalog
                     }
                     createObstaclesForDifficulty(stage, difficulty.toDouble())
                 }
-                Game.SERIES_ENDLESS -> {
+                GameMechanics.SERIES_ENDLESS -> {
                     // if the stage is in the save file (from an earlier try on this level),
                     // restore the structure. Otherwise, create an empty level.
                     // Depending on the settings, always create a new random level.
-                    val structure: HashMap<Int, Stage.Data> = Persistency(stage.theGame.gameActivity).loadLevelStructure(Game.SERIES_ENDLESS)
-                    if (stage.theGame.gameActivity.settings.keepLevels)
+                    val structure: HashMap<Int, Stage.Data> = Persistency(stage.gameMechanics.gameActivity).loadLevelStructure(GameMechanics.SERIES_ENDLESS)
+                    if (stage.gameMechanics.gameActivity.settings.keepLevels)
                         structure[level.number]?.let {
                             Stage.fillEmptyStageWithData(stage, it)
                             EndlessStageCreator(stage).createWaves()
@@ -64,7 +64,7 @@ class StageCatalog
                     createObstaclesForDifficulty(stage, targetDifficulty - stage.data.difficulty)
                     stage.provideStructureData()
                     structure[level.number] = stage.data
-                    Persistency(stage.theGame.gameActivity).saveLevelStructure(Game.SERIES_ENDLESS, structure)
+                    Persistency(stage.gameMechanics.gameActivity).saveLevelStructure(GameMechanics.SERIES_ENDLESS, structure)
                 }
             }
             stage.calculateDifficulty()
@@ -72,7 +72,7 @@ class StageCatalog
 
         private fun createFixedNumberOfObstacles(stage: Stage, numberOfObstacles: Int)
         {
-            val reduce = stage.theGame.heroModifier(Hero.Type.LIMIT_UNWANTED_CHIPS) // consider Kilby's effect
+            val reduce = stage.gameMechanics.heroModifier(Hero.Type.LIMIT_UNWANTED_CHIPS) // consider Kilby's effect
             val reducedNumberOfObstacles = numberOfObstacles - reduce.toInt()
             if (reducedNumberOfObstacles > 0)
                 for (i in 1..reducedNumberOfObstacles)  // set or upgrade the slots
@@ -97,7 +97,7 @@ class StageCatalog
                  * Difficulty values may be < 0.
                  */
         {
-            val reduce = stage.theGame.heroModifier(Hero.Type.LIMIT_UNWANTED_CHIPS)
+            val reduce = stage.gameMechanics.heroModifier(Hero.Type.LIMIT_UNWANTED_CHIPS)
             val targetDifficulty = difficulty - reduce
             var stageDifficulty = stage.difficultyOfObstacles()
             while (stageDifficulty < targetDifficulty)

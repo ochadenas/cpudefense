@@ -1,15 +1,13 @@
 package com.example.cpudefense.gameElements
 
 import android.graphics.*
-import androidx.core.content.res.ResourcesCompat
-import com.example.cpudefense.Game
-import com.example.cpudefense.R
+import com.example.cpudefense.GameView
 import com.example.cpudefense.effects.Fadable
 import com.example.cpudefense.effects.Fader
 import com.example.cpudefense.utils.*
 import java.util.*
 
-class Button(var game: Game, var text: String, val textSize: Float, val color: Int = Color.GREEN, val style: Style = Style.FILLED, val preferredWidth: Int = 0): Fadable
+class Button(var gameView: GameView, var text: String, val textSize: Float, val color: Int = Color.GREEN, val style: Style = Style.FILLED, val preferredWidth: Int = 0): Fadable
 {
     var alpha = 0
     var area = Rect()
@@ -28,18 +26,18 @@ class Button(var game: Game, var text: String, val textSize: Float, val color: I
                 buttonPaint.color = Color.WHITE  // default, should be overridden
                 buttonPaint.style = Paint.Style.STROKE
                 buttonPaint.strokeWidth = 2f
-                textPaint.typeface = game.gameActivity.boldTypeface
+                textPaint.typeface = gameView.boldTypeface
                 textPaint.color = Color.WHITE
             }
             Style.FILLED -> {
                 buttonPaint.color = color
                 buttonPaint.style = Paint.Style.FILL
-                textPaint.typeface = game.gameActivity.boldTypeface
+                textPaint.typeface = gameView.boldTypeface
                 textPaint.color = Color.BLACK
             }
             Style.HP_KEY ->
             {
-                background = game.hpBackgroundBitmap
+                background = gameView.gameMechanics.hpBackgroundBitmap // TODO: Bitmap verschieben
                 textPaint.typeface = Typeface.DEFAULT_BOLD
                 textPaint.color = Color.WHITE
             }

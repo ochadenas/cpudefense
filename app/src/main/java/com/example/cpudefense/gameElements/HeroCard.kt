@@ -1,7 +1,8 @@
 package com.example.cpudefense.gameElements
 
 import android.graphics.*
-import com.example.cpudefense.Game
+import com.example.cpudefense.GameMechanics
+import com.example.cpudefense.GameView
 import com.example.cpudefense.Hero
 import com.example.cpudefense.R
 import com.example.cpudefense.effects.Fadable
@@ -12,10 +13,11 @@ import com.example.cpudefense.utils.displayTextCenteredInRect
 import com.example.cpudefense.utils.setCenter
 import com.example.cpudefense.utils.setTopLeft
 
-class HeroCard(val game: Game, val hero: Hero): GameElement(), Fadable
+class HeroCard(val gameView: GameView, val hero: Hero): GameElement(), Fadable
 /** graphical representation of a hero or a heroine */
 {
     val type = hero.data.type
+    val resources = gameView.resources
 
     private val heroPictureSize = 120
 
@@ -27,7 +29,7 @@ class HeroCard(val game: Game, val hero: Hero): GameElement(), Fadable
     var portraitArea = Rect()
     var portraitAreaOnScreen = Rect(portraitArea)
     private var myBitmap: Bitmap? = null
-    private var effectBitmap = BitmapFactory.decodeResource(game.resources, R.drawable.glow)
+    private var effectBitmap = BitmapFactory.decodeResource(resources, R.drawable.glow)
     private var shortDescRect = Rect(cardAreaOnScreen)
 
     /** state used for various graphical effects */
@@ -51,36 +53,36 @@ class HeroCard(val game: Game, val hero: Hero): GameElement(), Fadable
     private var paintText = Paint()
     private val paintHero = Paint()
 
-    var inactiveColor = game.resources.getColor(R.color.upgrade_inactive)
+    var inactiveColor = resources.getColor(R.color.upgrade_inactive)
     var monochromeColor = inactiveColor
     var activeColor: Int = if (monochrome) monochromeColor
     else when(type)
     {
-        Hero.Type.INCREASE_CHIP_SUB_SPEED -> game.resources.getColor(R.color.upgrade_active_chip_sub)
-        Hero.Type.INCREASE_CHIP_SUB_RANGE -> game.resources.getColor(R.color.upgrade_active_chip_sub)
-        Hero.Type.DOUBLE_HIT_SUB -> game.resources.getColor(R.color.upgrade_active_chip_sub)
-        Hero.Type.INCREASE_CHIP_SHR_SPEED -> game.resources.getColor(R.color.upgrade_active_chip_shr)
-        Hero.Type.INCREASE_CHIP_SHR_RANGE -> game.resources.getColor(R.color.upgrade_active_chip_shr)
-        Hero.Type.INCREASE_CHIP_MEM_SPEED -> game.resources.getColor(R.color.upgrade_active_chip_mem)
-        Hero.Type.INCREASE_CHIP_MEM_RANGE -> game.resources.getColor(R.color.upgrade_active_chip_mem)
-        Hero.Type.ENABLE_MEM_UPGRADE -> game.resources.getColor(R.color.upgrade_active_chip_mem)
-        Hero.Type.REDUCE_HEAT -> game.resources.getColor(R.color.upgrade_active_chip_clk)
-        Hero.Type.INCREASE_CHIP_RES_STRENGTH -> game.resources.getColor(R.color.upgrade_active_chip_res)
-        Hero.Type.INCREASE_CHIP_RES_DURATION -> game.resources.getColor(R.color.upgrade_active_chip_res)
-        Hero.Type.CONVERT_HEAT -> game.resources.getColor(R.color.upgrade_active_chip_res)
-        Hero.Type.DECREASE_ATT_FREQ -> game.resources.getColor(R.color.upgrade_active_general)
-        Hero.Type.DECREASE_ATT_SPEED -> game.resources.getColor(R.color.upgrade_active_general)
-        Hero.Type.DECREASE_ATT_STRENGTH -> game.resources.getColor(R.color.upgrade_active_general)
-        Hero.Type.DECREASE_COIN_STRENGTH -> game.resources.getColor(R.color.upgrade_active_general)
-        Hero.Type.ADDITIONAL_LIVES -> game.resources.getColor(R.color.upgrade_active_meta)
-        Hero.Type.INCREASE_MAX_HERO_LEVEL -> game.resources.getColor(R.color.upgrade_active_meta)
-        Hero.Type.LIMIT_UNWANTED_CHIPS -> game.resources.getColor(R.color.upgrade_active_meta)
-        Hero.Type.INCREASE_STARTING_CASH -> game.resources.getColor(R.color.upgrade_active_eco)
-        Hero.Type.GAIN_CASH -> game.resources.getColor(R.color.upgrade_active_eco)
-        Hero.Type.GAIN_CASH_ON_KILL -> game.resources.getColor(R.color.upgrade_active_eco)
-        Hero.Type.INCREASE_REFUND -> game.resources.getColor(R.color.upgrade_active_eco)
-        Hero.Type.DECREASE_UPGRADE_COST -> game.resources.getColor(R.color.upgrade_active_eco)
-        Hero.Type.DECREASE_REMOVAL_COST -> game.resources.getColor(R.color.upgrade_active_eco)
+        Hero.Type.INCREASE_CHIP_SUB_SPEED -> resources.getColor(R.color.upgrade_active_chip_sub)
+        Hero.Type.INCREASE_CHIP_SUB_RANGE -> resources.getColor(R.color.upgrade_active_chip_sub)
+        Hero.Type.DOUBLE_HIT_SUB -> resources.getColor(R.color.upgrade_active_chip_sub)
+        Hero.Type.INCREASE_CHIP_SHR_SPEED -> resources.getColor(R.color.upgrade_active_chip_shr)
+        Hero.Type.INCREASE_CHIP_SHR_RANGE -> resources.getColor(R.color.upgrade_active_chip_shr)
+        Hero.Type.INCREASE_CHIP_MEM_SPEED -> resources.getColor(R.color.upgrade_active_chip_mem)
+        Hero.Type.INCREASE_CHIP_MEM_RANGE -> resources.getColor(R.color.upgrade_active_chip_mem)
+        Hero.Type.ENABLE_MEM_UPGRADE -> resources.getColor(R.color.upgrade_active_chip_mem)
+        Hero.Type.REDUCE_HEAT -> resources.getColor(R.color.upgrade_active_chip_clk)
+        Hero.Type.INCREASE_CHIP_RES_STRENGTH -> resources.getColor(R.color.upgrade_active_chip_res)
+        Hero.Type.INCREASE_CHIP_RES_DURATION -> resources.getColor(R.color.upgrade_active_chip_res)
+        Hero.Type.CONVERT_HEAT -> resources.getColor(R.color.upgrade_active_chip_res)
+        Hero.Type.DECREASE_ATT_FREQ -> resources.getColor(R.color.upgrade_active_general)
+        Hero.Type.DECREASE_ATT_SPEED -> resources.getColor(R.color.upgrade_active_general)
+        Hero.Type.DECREASE_ATT_STRENGTH -> resources.getColor(R.color.upgrade_active_general)
+        Hero.Type.DECREASE_COIN_STRENGTH -> resources.getColor(R.color.upgrade_active_general)
+        Hero.Type.ADDITIONAL_LIVES -> resources.getColor(R.color.upgrade_active_meta)
+        Hero.Type.INCREASE_MAX_HERO_LEVEL -> resources.getColor(R.color.upgrade_active_meta)
+        Hero.Type.LIMIT_UNWANTED_CHIPS -> resources.getColor(R.color.upgrade_active_meta)
+        Hero.Type.INCREASE_STARTING_CASH -> resources.getColor(R.color.upgrade_active_eco)
+        Hero.Type.GAIN_CASH -> resources.getColor(R.color.upgrade_active_eco)
+        Hero.Type.GAIN_CASH_ON_KILL -> resources.getColor(R.color.upgrade_active_eco)
+        Hero.Type.INCREASE_REFUND -> resources.getColor(R.color.upgrade_active_eco)
+        Hero.Type.DECREASE_UPGRADE_COST -> resources.getColor(R.color.upgrade_active_eco)
+        Hero.Type.DECREASE_REMOVAL_COST -> resources.getColor(R.color.upgrade_active_eco)
     }
 
 
@@ -90,7 +92,7 @@ class HeroCard(val game: Game, val hero: Hero): GameElement(), Fadable
         paintInactive.color = inactiveColor
         paintText.color = Color.WHITE
         paintText.style = Paint.Style.FILL
-        shortDescRect.top = shortDescRect.bottom - (50 * game.resources.displayMetrics.scaledDensity).toInt()
+        shortDescRect.top = shortDescRect.bottom - (50 * resources.displayMetrics.scaledDensity).toInt()
         heroOpacity = when (hero.data.level) { 0 -> 0f else -> 1f}
     }
 
@@ -109,7 +111,7 @@ class HeroCard(val game: Game, val hero: Hero): GameElement(), Fadable
                 paintRect.strokeWidth = 2f + hero.data.level / 2
             }
         }
-        paintRect.strokeWidth *= game.resources.displayMetrics.scaledDensity
+        paintRect.strokeWidth *= resources.displayMetrics.scaledDensity
         myBitmap?.let { canvas.drawBitmap(it, null, cardAreaOnScreen, paintRect) }
 
         // display hero picture
@@ -134,7 +136,7 @@ class HeroCard(val game: Game, val hero: Hero): GameElement(), Fadable
                 var thickness = transition
                 if (transition > 0.5)
                     thickness = 1.0f - transition
-                paintRect.strokeWidth = (2f + 10 * thickness)*game.resources.displayMetrics.scaledDensity
+                paintRect.strokeWidth = (2f + 10 * thickness)*resources.displayMetrics.scaledDensity
                 canvas.drawRect(cardAreaOnScreen, paintRect)
             }
             GraphicalState.TRANSIENT_LEVEL_0 -> {
@@ -158,10 +160,10 @@ class HeroCard(val game: Game, val hero: Hero): GameElement(), Fadable
             val originalThickness = strokeWidth
             val originalAlpha = alpha
             alpha = 60
-            strokeWidth = originalThickness + 12 * game.resources.displayMetrics.scaledDensity
+            strokeWidth = originalThickness + 12 * resources.displayMetrics.scaledDensity
             canvas.drawRect(cardAreaOnScreen, this)
             alpha = 60
-            strokeWidth = originalThickness + 6 * game.resources.displayMetrics.scaledDensity
+            strokeWidth = originalThickness + 6 * resources.displayMetrics.scaledDensity
             canvas.drawRect(cardAreaOnScreen, this)
             // restore original values
             strokeWidth = originalThickness
@@ -190,7 +192,7 @@ class HeroCard(val game: Game, val hero: Hero): GameElement(), Fadable
         val center = cardAreaOnScreen.center()
         portraitAreaOnScreen = Rect(portraitArea)
         portraitAreaOnScreen.setCenter(center)
-        paintText.textSize = (Game.biographyTextSize - 2) * game.resources.displayMetrics.scaledDensity
+        paintText.textSize = (GameMechanics.biographyTextSize - 2) * resources.displayMetrics.scaledDensity
         indicatorSize = portraitArea.width() / 10
     }
 
@@ -213,9 +215,9 @@ class HeroCard(val game: Game, val hero: Hero): GameElement(), Fadable
 
     fun create(showNextUpdate: Boolean = true, monochrome: Boolean = false)
     {
-        cardArea = Rect(0, 0, (Game.cardWidth*game.resources.displayMetrics.scaledDensity).toInt(), (Game.cardHeight*game.resources.displayMetrics.scaledDensity).toInt())
-        portraitArea = Rect(0, 0, (heroPictureSize *game.resources.displayMetrics.scaledDensity).toInt(), (heroPictureSize *game.resources.displayMetrics.scaledDensity).toInt())
-        paintText.textSize = (Game.biographyTextSize - 2) * game.resources.displayMetrics.scaledDensity
+        cardArea = Rect(0, 0, (GameMechanics.cardWidth*resources.displayMetrics.scaledDensity).toInt(), (GameMechanics.cardHeight*resources.displayMetrics.scaledDensity).toInt())
+        portraitArea = Rect(0, 0, (heroPictureSize *resources.displayMetrics.scaledDensity).toInt(), (heroPictureSize *resources.displayMetrics.scaledDensity).toInt())
+        paintText.textSize = (GameMechanics.biographyTextSize - 2) * resources.displayMetrics.scaledDensity
         indicatorSize = portraitArea.width() / 10
         this.showNextUpdate = showNextUpdate
         this.monochrome = monochrome
@@ -229,8 +231,8 @@ class HeroCard(val game: Game, val hero: Hero): GameElement(), Fadable
         val canvas = Canvas(bitmap)
 
         // render text used to indicate the effect of the upgrade, and calculate its position
-        val marginHorizontal = 10f*game.resources.displayMetrics.scaledDensity
-        val marginVertical = 10f*game.resources.displayMetrics.scaledDensity
+        val marginHorizontal = 10f*resources.displayMetrics.scaledDensity
+        val marginVertical = 10f*resources.displayMetrics.scaledDensity
         val baseline = bitmap.height-marginVertical
         val paintUpdate = Paint(paintText)
         canvas.drawText(hero.strengthDesc, marginHorizontal, baseline, paintText)
@@ -238,10 +240,10 @@ class HeroCard(val game: Game, val hero: Hero): GameElement(), Fadable
         paintText.getTextBounds(hero.strengthDesc, 0, hero.strengthDesc.length, bounds)
         canvas.drawText(hero.shortDesc, marginHorizontal, baseline - bounds.height() - marginVertical, paintText)
         if (showNextUpdate) {
-            paintUpdate.color = game.resources.getColor(R.color.upgrade_inactive)
+            paintUpdate.color = resources.getColor(R.color.upgrade_inactive)
             canvas.drawText(hero.upgradeDesc, bounds.right + marginHorizontal, baseline, paintUpdate)
         }
-        val margin = (10*game.resources.displayMetrics.scaledDensity).toInt()
+        val margin = (10*resources.displayMetrics.scaledDensity).toInt()
         val heroPaintText = Paint(paintText)
         heroPaintText.color = if (hero.data.level == 0) inactiveColor else activeColor
         val heroTextRect = Rect(0, margin, cardArea.width(), margin+40)
@@ -255,11 +257,11 @@ class HeroCard(val game: Game, val hero: Hero): GameElement(), Fadable
     /** graphical transition that is called when upgrading the hero in the marketplace */
     {
         if (hero.data.level == 1) {
-            Fader(game, this, Fader.Type.APPEAR, Fader.Speed.VERY_SLOW)
+            Fader(gameView, this, Fader.Type.APPEAR, Fader.Speed.VERY_SLOW)
             graphicalState = GraphicalState.TRANSIENT_LEVEL_0
         }
         else {
-            Fader(game, this, Fader.Type.APPEAR, Fader.Speed.MEDIUM)
+            Fader(gameView, this, Fader.Type.APPEAR, Fader.Speed.MEDIUM)
             graphicalState = GraphicalState.TRANSIENT
         }
     }
@@ -268,11 +270,11 @@ class HeroCard(val game: Game, val hero: Hero): GameElement(), Fadable
             /** graphical transition that is called when downgrading the hero in the marketplace */
     {
         if (hero.data.level == 0) {
-            Fader(game, this, Fader.Type.DISAPPEAR, Fader.Speed.MEDIUM)
+            Fader(gameView, this, Fader.Type.DISAPPEAR, Fader.Speed.MEDIUM)
             graphicalState = GraphicalState.TRANSIENT_LEVEL_0
         }
         else {
-            Fader(game, this, Fader.Type.APPEAR, Fader.Speed.MEDIUM)
+            Fader(gameView, this, Fader.Type.APPEAR, Fader.Speed.MEDIUM)
             graphicalState = GraphicalState.TRANSIENT
         }
     }

@@ -74,7 +74,7 @@ open class Vehicle(val network: Network): GameElement()
             /* determine which is start and which is end node */
             val startNode = this.startNode ?: it.node1
             val endNode = this.endNode ?: it.node2
-            data.distanceTravelledOnLink += currentSpeed * network.theGame.globalSpeedFactor()
+            data.distanceTravelledOnLink += currentSpeed * network.gameMechanics.globalSpeedFactor()
             setPositionOnGrid(it, startNode)
             if (posOnGrid == endNode.posOnGrid) // reached end of link
             {

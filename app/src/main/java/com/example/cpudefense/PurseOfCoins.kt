@@ -1,6 +1,6 @@
 package com.example.cpudefense
 
-class PurseOfCoins(val game: Game, private val levelMode: Game.LevelMode = Game.LevelMode.BASIC)
+class PurseOfCoins(val gameMechanics: GameMechanics, private val levelMode: GameMechanics.LevelMode = GameMechanics.LevelMode.BASIC)
 /** Auxiliary object that holds the current amount of coins for a level mode
  *
  */
@@ -41,13 +41,13 @@ class PurseOfCoins(val game: Game, private val levelMode: Game.LevelMode = Game.
     /** method for migrating the "old" style of coin-keeping */
     {
         // get number of reward coins
-        val sumRewardCoinsInBasicMode = game.summaryPerNormalLevel.values.sumOf { it.coinsGot } +
-                game.summaryPerTurboLevel.values.sumOf { it.coinsGot }
-        val sumRewardCoinsInEndlessMode = game.summaryPerEndlessLevel.values.sumOf { it.coinsGot }
+        val sumRewardCoinsInBasicMode = gameMechanics.summaryPerNormalLevel.values.sumOf { it.coinsGot } +
+                gameMechanics.summaryPerTurboLevel.values.sumOf { it.coinsGot }
+        val sumRewardCoinsInEndlessMode = gameMechanics.summaryPerEndlessLevel.values.sumOf { it.coinsGot }
 
         // distribute the coins in the game fairly to the modes
-        val coinsSpentOnHeroes = game.heroes.values.sumOf { it.data.coinsSpent }
-        val theoreticalAmountOfCoins = game.global.coinsTotal + coinsSpentOnHeroes
+        val coinsSpentOnHeroes = gameMechanics.heroes.values.sumOf { it.data.coinsSpent }
+        val theoreticalAmountOfCoins = gameMechanics.global.coinsTotal + coinsSpentOnHeroes
         val totalRewardCoins = sumRewardCoinsInBasicMode + sumRewardCoinsInEndlessMode
         // the difference between the (theoretical) sum of all coins and those accounted for is the number of walking coins
         var totalRunningCoins = theoreticalAmountOfCoins - totalRewardCoins
@@ -61,12 +61,12 @@ class PurseOfCoins(val game: Game, private val levelMode: Game.LevelMode = Game.
         }
         else when (levelMode)   // distribute the coins into the series according to the general percentage
         {
-            Game.LevelMode.BASIC -> {
+            GameMechanics.LevelMode.BASIC -> {
                 contents.rewardCoins = sumRewardCoinsInBasicMode
                 contents.runningCoins = totalRunningCoins * sumRewardCoinsInBasicMode / totalRewardCoins
                 contents.spentCoins = 0  // initial value, will be set later accordingly
             }
-            Game.LevelMode.ENDLESS -> {
+            GameMechanics.LevelMode.ENDLESS -> {
                 contents.rewardCoins = sumRewardCoinsInEndlessMode
                 contents.runningCoins = totalRunningCoins * sumRewardCoinsInEndlessMode / totalRewardCoins
                 contents.spentCoins = 0

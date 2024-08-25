@@ -8,7 +8,7 @@ import com.example.cpudefense.utils.displayTextCenteredInRect
 import com.example.cpudefense.utils.setCenter
 import com.example.cpudefense.utils.shrink
 
-class ProgressNotification (theGame: Game)
+class ProgressNotification (gameView: GameView)
 /** Class that displays a "loading 40% ..." message */
 {
     var isVisible = false
@@ -27,7 +27,7 @@ class ProgressNotification (theGame: Game)
         paintRect.strokeWidth = 4.0f
         paintText.color = paintRect.color
         paintText.style = Paint.Style.FILL
-        paintText.textSize = Game.notificationTextSize * theGame.resources.displayMetrics.scaledDensity
+        paintText.textSize = GameMechanics.notificationTextSize * gameView.resources.displayMetrics.scaledDensity
     }
 
     fun setPositionOnScreen(x: Int, y: Int)

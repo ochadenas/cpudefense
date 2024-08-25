@@ -1,9 +1,9 @@
 package com.example.cpudefense.effects
 
-import com.example.cpudefense.Game
+import com.example.cpudefense.GameView
 
 class Fader(
-    game: Game,
+    gameView: GameView,
     private val thing: Fadable,
     var type: Type = Type.DISAPPEAR, speed: Speed = Speed.FAST, wait: Int = 0)
 /**
@@ -11,8 +11,6 @@ class Fader(
  */
 {
     private var opacity = 0f
-
-    private val theGame = game
 
     private var waitCycles = wait
     private var dAlpha = 0f
@@ -38,7 +36,7 @@ class Fader(
             Speed.SLOW      -> { dAlpha = 0.02f }
             Speed.VERY_SLOW -> { dAlpha = 0.005f }
         }
-        theGame.faders.add(this) // make sure we are in the list so that we can be called during update
+        gameView.faders.add(this) // make sure we are in the list so that we can be called during update
     }
 
     private fun endFade() {

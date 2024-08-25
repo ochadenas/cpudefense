@@ -2,11 +2,11 @@ package com.example.cpudefense.gameElements
 
 import android.graphics.*
 import android.view.MotionEvent
-import com.example.cpudefense.Game
+import com.example.cpudefense.GameMechanics
 import com.example.cpudefense.effects.Fadable
 import com.example.cpudefense.effects.Fader
 
-class SpeedControlButton(val game: Game, var type: Type = Type.PAUSE, private val panel: SpeedControl): Fadable
+class SpeedControlButton(val gameMechanics: GameMechanics, var type: Type = Type.PAUSE, private val panel: SpeedControl): Fadable
 {
     enum class Type { PAUSE, FAST, NORMAL, RETURN, LOCK, UNLOCK }
 
@@ -18,12 +18,12 @@ class SpeedControlButton(val game: Game, var type: Type = Type.PAUSE, private va
     fun setSize(size: Int)
     {
         area = Rect(0, 0, size, size)
-        bitmapOfType[Type.PAUSE] = Bitmap.createScaledBitmap(game.pauseIcon, size, size, true)
-        bitmapOfType[Type.NORMAL] = Bitmap.createScaledBitmap(game.playIcon, size, size, true)
-        bitmapOfType[Type.FAST] = Bitmap.createScaledBitmap(game.fastIcon, size, size, true)
-        bitmapOfType[Type.RETURN] = Bitmap.createScaledBitmap(game.returnIcon, size, size, true)
-        bitmapOfType[Type.LOCK] = Bitmap.createScaledBitmap(game.moveLockIcon, size, size, true)
-        bitmapOfType[Type.UNLOCK] = Bitmap.createScaledBitmap(game.moveUnlockIcon, size, size, true)
+        bitmapOfType[Type.PAUSE] = Bitmap.createScaledBitmap(gameMechanics.pauseIcon, size, size, true)
+        bitmapOfType[Type.NORMAL] = Bitmap.createScaledBitmap(gameMechanics.playIcon, size, size, true)
+        bitmapOfType[Type.FAST] = Bitmap.createScaledBitmap(gameMechanics.fastIcon, size, size, true)
+        bitmapOfType[Type.RETURN] = Bitmap.createScaledBitmap(gameMechanics.returnIcon, size, size, true)
+        bitmapOfType[Type.LOCK] = Bitmap.createScaledBitmap(gameMechanics.moveLockIcon, size, size, true)
+        bitmapOfType[Type.UNLOCK] = Bitmap.createScaledBitmap(gameMechanics.moveUnlockIcon, size, size, true)
     }
 
     override fun fadeDone(type: Fader.Type) {
@@ -39,31 +39,31 @@ class SpeedControlButton(val game: Game, var type: Type = Type.PAUSE, private va
             when (type)
             {
                 Type.PAUSE -> {
-                    game.gameActivity.setGameSpeed(Game.GameSpeed.NORMAL)
-                    game.state.phase = Game.GamePhase.PAUSED
+                    gameMechanics.gameActivity.setGameSpeed(GameMechanics.GameSpeed.NORMAL)
+                    gameMechanics.state.phase = GameMechanics.GamePhase.PAUSED
                     panel.resetButtons()
                     type = Type.NORMAL
                 }
                 Type.NORMAL -> {
-                    game.gameActivity.setGameSpeed(Game.GameSpeed.NORMAL)
-                    game.state.phase = Game.GamePhase.RUNNING
+                    gameMechanics.gameActivity.setGameSpeed(GameMechanics.GameSpeed.NORMAL)
+                    gameMechanics.state.phase = GameMechanics.GamePhase.RUNNING
                     panel.resetButtons()
                 }
                 Type.FAST -> {
-                    game.gameActivity.setGameSpeed(Game.GameSpeed.MAX)
-                    game.state.phase = Game.GamePhase.RUNNING
+                    gameMechanics.gameActivity.setGameSpeed(GameMechanics.GameSpeed.MAX)
+                    gameMechanics.state.phase = GameMechanics.GamePhase.RUNNING
                     panel.resetButtons()
                     type = Type.NORMAL
                 }
                 Type.RETURN -> {
-                    game.gameActivity.showReturnDialog()
+                    gameMechanics.gameActivity.showReturnDialog()
                 }
                 Type.LOCK -> {
-                    game.gameActivity.theGameView.scrollAllowed = true
+                    gameMechanics.gameActivity.gameView.scrollAllowed = true
                     type = Type.UNLOCK
                 }
                 Type.UNLOCK -> {
-                    game.gameActivity.theGameView.scrollAllowed = false
+                    gameMechanics.gameActivity.gameView.scrollAllowed = false
                     type = Type.LOCK
                 }
             }

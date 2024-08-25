@@ -1,10 +1,10 @@
 package com.example.cpudefense.gameElements
 
-import com.example.cpudefense.Game
+import com.example.cpudefense.GameMechanics
 import com.example.cpudefense.Hero
 import kotlin.random.Random
 
-class Wave(var game: Game, var data: Data)
+class Wave(var gameMechanics: GameMechanics, var data: Data)
 {
     data class Data (
         var attackerCount: Int,
@@ -19,29 +19,29 @@ class Wave(var game: Game, var data: Data)
 
     fun update() {
         if (data.currentCount == 0)
-            game.onEndOfWave()
+            gameMechanics.onEndOfWave()
         else if (data.ticksUntilNextAttacker > 0)
-            data.ticksUntilNextAttacker -= game.globalSpeedFactor()/game.defaultSpeedFactor
+            data.ticksUntilNextAttacker -= gameMechanics.globalSpeedFactor()/gameMechanics.defaultSpeedFactor
         else {
-            val frequency = data.attackerFrequency * game.heroModifier(Hero.Type.DECREASE_ATT_FREQ)
+            val frequency = data.attackerFrequency * gameMechanics.heroModifier(Hero.Type.DECREASE_ATT_FREQ)
             data.ticksUntilNextAttacker = 6.0 / frequency
             if (data.coins>0 && Random.nextFloat() > 0.8)
             {
                 data.coins--
-                game.currentlyActiveStage?.createNewAttacker(data.attackerStrength, data.attackerSpeed, isCoin = true)
+                gameMechanics.currentlyActiveStage?.createNewAttacker(data.attackerStrength, data.attackerSpeed, isCoin = true)
             }
             else if (data.representation == Attacker.Representation.HEX)
-                game.currentlyActiveStage?.createNewAttacker(data.attackerStrength, data.attackerSpeed, representation = Attacker.Representation.HEX)
+                gameMechanics.currentlyActiveStage?.createNewAttacker(data.attackerStrength, data.attackerSpeed, representation = Attacker.Representation.HEX)
             else
-                game.currentlyActiveStage?.createNewAttacker(data.attackerStrength, data.attackerSpeed, representation = Attacker.Representation.UNDEFINED)
+                gameMechanics.currentlyActiveStage?.createNewAttacker(data.attackerStrength, data.attackerSpeed, representation = Attacker.Representation.UNDEFINED)
             data.currentCount--
         }
     }
 
     companion object {
-        fun createFromData(game: Game, data: Data): Wave
+        fun createFromData(gameMechanics: GameMechanics, data: Data): Wave
         {
-            val wave = Wave(game, data)
+            val wave = Wave(gameMechanics, data)
             return wave
         }
     }

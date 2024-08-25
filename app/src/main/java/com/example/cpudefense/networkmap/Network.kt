@@ -3,13 +3,14 @@ package com.example.cpudefense.networkmap
 import android.graphics.*
 import android.view.MotionEvent
 import com.example.cpudefense.EndlessStageCreator
-import com.example.cpudefense.Game
+import com.example.cpudefense.GameMechanics
+import com.example.cpudefense.GameView
 import com.example.cpudefense.gameElements.Chip
 import com.example.cpudefense.gameElements.GameElement
 import com.example.cpudefense.gameElements.Vehicle
 import java.util.concurrent.CopyOnWriteArrayList
 
-class Network(val theGame: Game, x: Int, y: Int): GameElement() {
+class Network(val gameMechanics: GameMechanics, val gameView: GameView, x: Int, y: Int): GameElement() {
     data class Data(
         var gridSizeX: Int = 1,
         var gridSizeY: Int = 1,
@@ -35,7 +36,7 @@ class Network(val theGame: Game, x: Int, y: Int): GameElement() {
     enum class Dir { HORIZONTAL, VERTICAL, DIAGONAL, REVERSE_DIAGONAL, UNDEFINED }
 
     companion object {
-        const val minVehicleSpeed = Game.minAttackerSpeed
+        const val minVehicleSpeed = GameMechanics.minAttackerSpeed
     }
 
     fun distanceBetweenGridPoints(): Pair<Int, Int>?
@@ -49,8 +50,8 @@ class Network(val theGame: Game, x: Int, y: Int): GameElement() {
         if (gridPointDistance != null)
             return gridPointDistance // no need to recalculate
         if (validateViewport()) {
-            val point0 = theGame.viewport.gridToViewport(Coord(0, 0))
-            val point1 = theGame.viewport.gridToViewport(Coord(1, 1))
+            val point0 = gameView.viewport.gridToViewport(Coord(0, 0))
+            val point1 = gameView.viewport.gridToViewport(Coord(1, 1))
             gridPointDistance = Pair(point1.first - point0.first, point1.second - point0.second)
         }
         else
@@ -75,9 +76,9 @@ class Network(val theGame: Game, x: Int, y: Int): GameElement() {
      * @return false if the viewport is not valid, i.e. screen dimensions are not known
      */
     {
-        val view = theGame.gameActivity.theGameView
-        if (view.width > 0 || view.height > 0) {
-            theGame.viewport.setScreenSize(view.width, view.viewportHeight(view.height))
+        if (gameView.width > 0 || gameView.height > 0) // TODO: ersetzen durch Test auf Initialisierung
+        {
+            gameView.viewport.setScreenSize(gameView.width, gameView.viewportHeight(gameView.height))
             return true
         }
         else
@@ -125,7 +126,7 @@ class Network(val theGame: Game, x: Int, y: Int): GameElement() {
      * and places the network elements on it */
     {
         validateViewport()
-        backgroundImage = theGame.background?.getImage()
+        backgroundImage = gameView.background?.getImage()
         backgroundImage?.let {
             if (it.width == viewport.screen.width() && it.height == viewport.screen.height())
             // just use the given bitmap, it has the correct dimensions
