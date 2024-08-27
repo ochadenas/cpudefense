@@ -126,7 +126,7 @@ class Network(val gameMechanics: GameMechanics, val gameView: GameView, x: Int, 
      * and places the network elements on it */
     {
         validateViewport()
-        backgroundImage = gameView.background?.getImage()
+        backgroundImage = gameView.background?.createImagePart()
         backgroundImage?.let {
             if (it.width == viewport.screen.width() && it.height == viewport.screen.height())
             // just use the given bitmap, it has the correct dimensions
