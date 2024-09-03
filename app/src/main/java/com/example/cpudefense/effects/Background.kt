@@ -2,8 +2,10 @@ package com.example.cpudefense.effects
 
 import android.content.res.Resources
 import android.graphics.*
+import android.widget.Toast
 import com.example.cpudefense.*
 import com.example.cpudefense.utils.setTopLeft
+import kotlinx.serialization.descriptors.PrimitiveKind
 import kotlin.random.Random
 
 class Background(val gameView: GameView)
@@ -80,6 +82,7 @@ class Background(val gameView: GameView)
      * @param number the number of the background chosen. Must be between 1 and maxBackgroundNumber */
     {
         val resources: Resources = gameView.resources
+        Toast.makeText(gameView.gameMechanics.gameActivity, resources.getString(R.string.toast_loading), Toast.LENGTH_SHORT).show()
         return if (useSpecial)   // allows use of special backgrounds, currently disabled
             BitmapFactory.decodeResource(resources, R.drawable.background_flowers)
         else when (number)
