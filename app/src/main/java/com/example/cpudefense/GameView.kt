@@ -42,7 +42,7 @@ class GameView(context: Context, val gameMechanics: GameMechanics):
 
     /* game elements */
     val viewport = Viewport()
-    var background: Background? = null
+    var background = Background(this)
     var intermezzo = Intermezzo(this)
     var marketplace = Marketplace(this)
     val scoreBoard = ScoreBoard(this)
@@ -267,7 +267,7 @@ class GameView(context: Context, val gameMechanics: GameMechanics):
         val state = gameMechanics.state
         holder.lockCanvas()?.let()
         {
-            background?.display(it)
+            background.display(it)
             if (state.phase == GamePhase.RUNNING || state.phase == GamePhase.PAUSED)
             {
                 gameMechanics.currentlyActiveStage?.network?.display(it, viewport)

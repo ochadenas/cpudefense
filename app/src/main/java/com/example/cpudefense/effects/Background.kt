@@ -15,6 +15,8 @@ class Background(val gameView: GameView)
  * @property basicBackground A bitmap with the size of the viewport, cut out of the larger bitmap
   */
 {
+    /** area (in pixels) where to draw the background on */
+    var myArea = Rect()
     /** number of different background pictures available */
     private val maxBackgroundNumber = 9
     /** number of selected background */
@@ -29,6 +31,8 @@ class Background(val gameView: GameView)
     var currentBackground: Bitmap? = null
     /** whether a background picture shall be used (by configuration) */
     var enabled = true
+    /** standard opacity of the background */
+    val backgroundOpacity = 0.6f
 
     enum class BackgroundState { DISABLED, UNINITIALIZED, BLANK, INITIALIZED }
     var state = BackgroundState.BLANK
@@ -36,12 +40,13 @@ class Background(val gameView: GameView)
     fun initializeAtStartOfGame()
     {
         enabled = gameView.gameMechanics.gameActivity.settings.configDisableBackground
-        state = Background.BackgroundState.UNINITIALIZED
+        state = BackgroundState.UNINITIALIZED
     }
 
-    fun prepareAtStartOfStage()
+    fun prepareAtStartOfStage(stage: Stage.Identifier, area: Rect)
     {
-
+        myArea = Rect(area)
+        createImage(stage, backgroundOpacity)
     }
 
     fun paintNetworkOnBackground(bitmapForeground: Bitmap)
@@ -51,21 +56,23 @@ class Background(val gameView: GameView)
     {
         if (state == BackgroundState.INITIALIZED)
         {
-            val rect = Rect(0, 0, basicBackground?.width ?: 0, basicBackground?.height ?: 0)
-            if (rect.width() == 0 || rect.height() == 0)
+            if (myArea.width() == 0 || myArea.height() == 0)
                 return
             paint.alpha = 255
             currentBackground?.let {
                 val canvas = Canvas(it)
-                canvas.drawBitmap(bitmapForeground, null, rect, paint)
+                canvas.drawBitmap(bitmapForeground, null, myArea, paint)
             }
         }
-
     }
 
     fun display(canvas: Canvas)
     {
-
+        if (state == BackgroundState.INITIALIZED)
+            currentBackground?.let {
+                paint.alpha = 255
+                canvas.drawBitmap(it, null, myArea, paint)
+            }
     }
 
     private fun loadWholeBitmap(number: Int, useSpecial: Boolean = false): Bitmap
@@ -104,7 +111,7 @@ class Background(val gameView: GameView)
         return loadWholeBitmap(n % maxBackgroundNumber + 1, useSpecialBackground)
     }
 
-    fun createImagePart(stageIdent: Stage.Identifier?, opacity: Float = 0.6f)
+    fun createImage(stageIdent: Stage.Identifier?, opacity: Float = 0.6f)
             /** recreates the background image as a part of the larger image loaded from disk.
              * @param stageIdent The stage for which the background shall be created
              * @param opacity Alpha of the background, from 0.0 to 1.0. Lower values mean a dimmer picture.
@@ -141,11 +148,12 @@ class Background(val gameView: GameView)
         return bitmap
     }
 
-    private fun getBasicBackground(): Bitmap
-    /** @return the background picture without network. Creates the bitmap if necesary. */
+    private fun getBasicBackground(stageIdent: Stage.Identifier? = null): Bitmap
+    /** @return the background picture without network. Creates the bitmap if necessary. */
     {
         if (basicBackground == null || basicBackground?.width == 0)
-            createImagePart(null) // this is a fallback, situation should not occur
+            createImage(stageIdent) // this is a fallback in case that the background doesn't exist
         return basicBackground ?: createBlankBackground()
     }
+
 }

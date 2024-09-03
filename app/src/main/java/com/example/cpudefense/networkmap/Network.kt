@@ -126,22 +126,12 @@ class Network(val gameMechanics: GameMechanics, val gameView: GameView, x: Int, 
      * and places the network elements on it */
     {
         validateViewport()
-        backgroundImage = gameView.background?.createImagePart()
-        backgroundImage?.let {
-            if (it.width == viewport.screen.width() && it.height == viewport.screen.height())
-            // just use the given bitmap, it has the correct dimensions
-                this.networkImage = it.copy(it.config, true)
-            else
-                this.networkImage = Bitmap.createScaledBitmap(
-                    it,
-                    viewport.screen.width(),
-                    viewport.screen.height(),
-                    false
-                )
+        gameView.background.createImage(gameMechanics.currentStage)
+        gameView.background.basicBackground?.let {
+            val canvas = Canvas(it)
+            for (obj in links.values)
+                obj.display(canvas, viewport)
         }
-        val canvas = Canvas(this.networkImage)
-        for (obj in links.values)
-            obj.display(canvas, viewport)
     }
 
     fun addNode(node: Node?, ident: Int = -1): Int
