@@ -51,7 +51,7 @@ class Cryptocoin(network: com.example.cpudefense.networkmap.Network, number: ULo
                 else {
                     // coin was hit but not destroyed
                     if (!isCurrentlyFlipping)
-                        Flipper(network.gameMechanics, this, Flipper.Type.HORIZONTAL, Flipper.Speed.FAST)
+                        Flipper(network.gameView, this, Flipper.Type.HORIZONTAL, Flipper.Speed.FAST)
                     return false
                 }
             }

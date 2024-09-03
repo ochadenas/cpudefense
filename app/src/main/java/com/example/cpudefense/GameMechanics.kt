@@ -3,17 +3,12 @@ package com.example.cpudefense
 import android.app.Activity
 import android.content.Context
 import android.content.res.Resources
-import android.graphics.*
-import android.view.MotionEvent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.widget.Toast
-import com.example.cpudefense.effects.Background
-import com.example.cpudefense.effects.Fader
-import com.example.cpudefense.effects.Flipper
-import com.example.cpudefense.effects.Mover
-import com.example.cpudefense.gameElements.*
+import com.example.cpudefense.gameElements.Chip
+import com.example.cpudefense.gameElements.Wave
 import com.example.cpudefense.networkmap.Coord
-import com.example.cpudefense.networkmap.Network
-import com.example.cpudefense.utils.displayTextCenteredInRect
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -24,7 +19,7 @@ class GameMechanics(val gameActivity: MainGameActivity) {
     companion object Params {
         const val maxLevelAvailable = 32
 
-        val makeAllLevelsAvailable = false  // for debbuging purposes only. TODO: SET TO FALSE
+        val makeAllLevelsAvailable = false  // for debugging purposes only. TODO: SET TO FALSE
         // feature toggles:
         const val enableEndlessMode = true
 
@@ -366,6 +361,7 @@ class GameMechanics(val gameActivity: MainGameActivity) {
 
     private fun onStageCleared(stage: Stage)
     {
+        val intermezzo = gameActivity.gameView.intermezzo
         gameActivity.runOnUiThread {
             val toast: Toast = Toast.makeText(gameActivity, resources.getString(R.string.toast_stage_cleared), Toast.LENGTH_SHORT)
             toast.show()
@@ -395,7 +391,7 @@ class GameMechanics(val gameActivity: MainGameActivity) {
     fun startNextStage(level: Stage.Identifier)
     {
         currentStage = level
-        val nextStage = Stage(this)
+        val nextStage = Stage(this, gameActivity.gameView)
         StageCatalog.createStage(nextStage, level)
         nextStage.calculateDifficulty()
         if (!nextStage.isInitialized())
@@ -416,14 +412,8 @@ class GameMechanics(val gameActivity: MainGameActivity) {
         setSummaryOfStage(level, nextStage.summary)
         state.heat = 0.0
         gameActivity.setGameSpeed(GameSpeed.NORMAL)  // reset speed to normal when starting next stage
-        speedControlPanel.resetButtons()
-        scoreBoard.recreateBitmap()
-        viewport.reset()
-        if (!gameActivity.settings.configDisableBackground)
-            background?.choose(level)
         Persistency(gameActivity).saveState(this)
-
-        viewport.setGridSize(nextStage.network.data.gridSizeX, nextStage.network.data.gridSizeY)
+        gameActivity.gameView.resetAtStartOfStage(nextStage)
         state.phase = GamePhase.RUNNING
         currentlyActiveWave = nextStage.nextWave()
         currentlyActiveStage = nextStage
@@ -439,7 +429,7 @@ class GameMechanics(val gameActivity: MainGameActivity) {
         {
             takeLevelSnapshot()
             currentlyActiveStage = null
-            intermezzo.endOfGame(currentStage, hasWon = false)
+            gameActivity.gameView.intermezzo.endOfGame(currentStage, hasWon = false)
         }
     }
 
@@ -522,7 +512,7 @@ class GameMechanics(val gameActivity: MainGameActivity) {
             return
         additionalCashTicks -= globalSpeedFactor()
         if (additionalCashTicks<0) {
-            scoreBoard.addCash(1)
+            gameActivity.gameView.scoreBoard.addCash(1)
             additionalCashTicks = additionalCashDelay.toFloat()
         }
     }

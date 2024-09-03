@@ -10,6 +10,7 @@ import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.SurfaceHolder
 import android.view.SurfaceView
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.GestureDetectorCompat
 import com.example.cpudefense.GameMechanics.GamePhase
 import com.example.cpudefense.effects.Background
@@ -64,7 +65,32 @@ class GameView(context: Context, val gameMechanics: GameMechanics):
         this.visibility = VISIBLE
         this.holder.addCallback(this)
         backgroundColour = context.resources.getColor(R.color.network_background)
-        theEffects = Effects(gameMechanics)
+        setComputerTypeface()
+        theEffects = Effects(this)
+    }
+
+
+    fun setComputerTypeface()
+    {
+        try
+        {
+            monoTypeface = ResourcesCompat.getFont(context, R.font.ubuntu_mono) ?: Typeface.MONOSPACE
+            boldTypeface = ResourcesCompat.getFont(context, R.font.ubuntu_mono_bold) ?: Typeface.MONOSPACE
+        }
+        catch (ex: Exception)
+        {
+            monoTypeface = Typeface.MONOSPACE
+            boldTypeface = Typeface.MONOSPACE
+        }
+    }
+
+    fun resetAtStartOfStage(stage: Stage)
+    {
+        speedControlPanel.resetButtons()
+        scoreBoard.recreateBitmap()
+        viewport.reset()
+        background.prepareAtStartOfStage(stage.data.ident, viewport.getRect())
+        viewport.setGridSize(stage.network.data.gridSizeX, stage.network.data.gridSizeY)
     }
 
     override fun surfaceCreated(p0: SurfaceHolder) {
@@ -133,8 +159,7 @@ class GameView(context: Context, val gameMechanics: GameMechanics):
         notification.setPositionOnScreen(w/2, h/2)
         /* increase attacker size on larger screens */
         // theGame.globalResolutionFactorX = (w / )
-        gameMechanics.resources.displayMetrics.scaledDensity = (h / 1024f)
-        resources.displayMetrics
+        // gameMechanics.resources.displayMetrics.scaledDensity = (h / 1024f) * resources.displayMetrics
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
@@ -267,9 +292,9 @@ class GameView(context: Context, val gameMechanics: GameMechanics):
         val state = gameMechanics.state
         holder.lockCanvas()?.let()
         {
-            background.display(it)
             if (state.phase == GamePhase.RUNNING || state.phase == GamePhase.PAUSED)
             {
+                background.display(it)
                 gameMechanics.currentlyActiveStage?.network?.display(it, viewport)
                 scoreBoard.display(it, viewport)
                 speedControlPanel.display(it)
@@ -283,6 +308,7 @@ class GameView(context: Context, val gameMechanics: GameMechanics):
                 val rect = Rect(0, 0, viewport.viewportWidth, viewport.viewportHeight)
                 rect.displayTextCenteredInRect(it, resources.getString(R.string.game_paused), paint)
             }
+            intermezzo.display(it, viewport)
             marketplace.display(it, viewport)
             notification.display(it)
             theEffects?.display(it)

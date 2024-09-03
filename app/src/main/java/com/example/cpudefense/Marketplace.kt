@@ -179,7 +179,7 @@ class Marketplace(val gameView: GameView): GameElement()
         {
             if (coin.myArea.contains(event.x.toInt(), event.y.toInt())) {
                 if (!coin.isCurrentlyFlipping)
-                    Flipper(gameMechanics, coin, Flipper.Type.HORIZONTAL)
+                    Flipper(gameView, coin, Flipper.Type.HORIZONTAL)
                 return true
             }
         }

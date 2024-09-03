@@ -72,7 +72,6 @@ class MainGameActivity : Activity() {
 
     fun setupGameView()
     {
-        setComputerTypeface()
         gameView = GameView(this, theGameMechanics)
         val parentView: FrameLayout? = findViewById(R.id.gameFrameLayout)
         parentView?.addView(gameView)
@@ -88,21 +87,6 @@ class MainGameActivity : Activity() {
             resumeGame = false
         gameView.setup()
     }
-
-    fun setComputerTypeface()
-    {
-        try
-        {
-            gameView.monoTypeface = ResourcesCompat.getFont(this, R.font.ubuntu_mono) ?: Typeface.MONOSPACE
-            gameView.boldTypeface = ResourcesCompat.getFont(this, R.font.ubuntu_mono_bold) ?: Typeface.MONOSPACE
-        }
-        catch (ex: NotFoundException)
-        {
-            gameView.monoTypeface = Typeface.MONOSPACE
-            gameView.boldTypeface = Typeface.MONOSPACE
-        }
-    }
-
 
     override fun onPause() {
         // this method get executed when the user presses the system's "back" button,
@@ -195,10 +179,8 @@ class MainGameActivity : Activity() {
             updateDelay = fastForwardDelay
             if (settings.fastFastForward)
                 updateDelay = fastFastForwardDelay
-            theGameMechanics.background?.frozen = true
         } else {
             updateDelay = defaultDelay
-            theGameMechanics.background?.frozen = false
         }
     }
 
@@ -270,12 +252,11 @@ class MainGameActivity : Activity() {
         }
     }
 
-
     private fun updateGraphicalEffects()
     /** do all faders, explosions etc. This thread is independent of the update() cycle. */
     {
         if (gameIsRunning) {
-            theGameMechanics.updateEffects()
+            gameView.updateEffects()
             gameView.theEffects?.updateGraphicalEffects()
             GlobalScope.launch { delay(effectsDelay); updateGraphicalEffects() }
         }

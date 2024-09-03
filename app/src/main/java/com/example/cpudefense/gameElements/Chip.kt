@@ -48,8 +48,6 @@ open class Chip(val network: Network, gridX: Int, gridY: Int):
     open var bitmap: Bitmap? = null
     private var widthOnScreen: Int = 0
     private var heightOnScreen = 0
-
-    val resources: Resources = network.gameView.resources
     private val resistorColour = arrayOf(
         resources.getColor(R.color.resistor_0),
         resources.getColor(R.color.resistor_1),
