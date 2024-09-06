@@ -1,5 +1,6 @@
 package com.example.cpudefense
 
+import android.app.Activity.MODE_PRIVATE
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -14,6 +15,7 @@ import android.view.SurfaceHolder
 import android.view.SurfaceView
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.GestureDetectorCompat
+import com.example.cpudefense.GameActivity.GameActivityStatus
 import com.example.cpudefense.GameMechanics.GamePhase
 import com.example.cpudefense.GameMechanics.LevelMode
 import com.example.cpudefense.effects.Background
@@ -34,7 +36,8 @@ class GameView(context: Context):
     SurfaceView(context), SurfaceHolder.Callback,
     GestureDetector.OnGestureListener
 {
-    val gameMechanics = (context as GameActivity).gameMechanics
+    val gameActivity = context as GameActivity
+    val gameMechanics = gameActivity.gameMechanics
     var canvas: Canvas? = null
     var effects: Effects? = null
     var scrollAllowed = true // whether the viewport can be moved by scrolling
@@ -91,6 +94,7 @@ class GameView(context: Context):
         this.visibility = VISIBLE
         this.holder.addCallback(this)
         backgroundColour = context.resources.getColor(R.color.network_background)
+        loadGraphicalState()
         setComputerTypeface()
         effects = Effects(this)
     }
@@ -179,6 +183,7 @@ class GameView(context: Context):
         // adjust text sizes and scaling factor
         textScaleFactor = 0.70f * resources.displayMetrics.scaledDensity
         scaleFactor = 0.50f * resources.displayMetrics.scaledDensity
+        saveGraphicalState()
         // determine dimensions of the different game areas
         val viewportHeight = viewportHeight(h)
         viewport.setScreenSize(w, viewportHeight)
@@ -367,5 +372,20 @@ class GameView(context: Context):
             LevelMode.BASIC -> coinIconBlue
             LevelMode.ENDLESS -> coinIconRed
         }
+    }
+
+    fun saveGraphicalState()
+    {
+        val editor = gameActivity.getSharedPreferences(resources.getString(R.string.pref_filename_state), MODE_PRIVATE).edit()
+        editor.putFloat("SCALE_FACTOR", scaleFactor)
+        editor.putFloat("TEXT_SCALE_FACTOR", textScaleFactor)
+        editor.apply()
+    }
+
+    fun loadGraphicalState()
+    {
+        val prefs = gameActivity.getSharedPreferences(resources.getString(R.string.pref_filename_state), MODE_PRIVATE)
+        scaleFactor = prefs.getFloat("SCALE_FACTOR", 1.0f)
+        textScaleFactor = prefs.getFloat("TEXT_SCALE_FACTOR", 1.0f)
     }
 }

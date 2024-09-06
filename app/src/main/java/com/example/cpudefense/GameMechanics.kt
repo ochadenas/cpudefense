@@ -32,15 +32,15 @@ class GameMechanics(val gameActivity: GameActivity) {
         // text sizes are given in dp (device independent)
         const val scoreTextSize = 36f
         const val scoreHeaderSize = 18f
-        const val chipTextSize = 24f
+        const val chipTextSize = 20f
         const val computerTextSize = 32f
         const val notificationTextSize = 22f
-        const val instructionTextSize = 28f
+        const val instructionTextSize = 24f
         const val biographyTextSize = 24f
         const val purchaseButtonTextSize = 24f
 
         const val coinSizeOnScoreboard = 48
-        const val coinSizeOnScreen = 18
+        const val coinSizeOnScreen = 16
         const val cardWidth = 240
         const val cardHeight = cardWidth * 1.41
         const val preferredSizeOfLED = 20  // horizontal size of LEDs, can be smaller if there is too little space
