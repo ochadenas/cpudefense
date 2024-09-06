@@ -165,17 +165,17 @@ class Intermezzo(var gameView: GameView): GameElement(), Fadable {
         val buttonTop = myArea.bottom - (buttonContinue?.area?.height() ?: 20) - bottomMargin
         buttonContinue?.let {
             Fader(gameView, it, Fader.Type.APPEAR, Fader.Speed.SLOW)
-            it.alignLeft(50, buttonTop)
+            it.alignLeft(bottomMargin, buttonTop)
         }
         // if (game.global.coinsTotal > 0)  // make button always accessible. Issue #20
-        if (level.number > 6 || level.series > 1)  // level 6 in series 1 is the first one where coins may be present
+        if (level.number > 6 || level.series != GameMechanics.SERIES_NORMAL)  // level 6 in series 1 is the first one where coins may be present
         {
             buttonPurchase = Button(gameView, resources.getString(R.string.button_marketplace),
                                     textSize = GameMechanics.computerTextSize * gameView.textScaleFactor,
                                     color = resources.getColor(R.color.text_blue), style = Button.Style.FILLED)
             buttonPurchase?.let {
                 Fader(gameView, it, Fader.Type.APPEAR, Fader.Speed.SLOW)
-                it.alignRight(myArea.right, buttonTop)
+                it.alignRight(myArea.right-bottomMargin, buttonTop)
             }
         }
     }

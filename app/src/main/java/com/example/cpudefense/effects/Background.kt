@@ -43,7 +43,7 @@ class Background(val gameView: GameView)
     var enabled = true
 
     fun prepareAtStartOfStage(stage: Stage.Identifier)
-            /** called before starting a new stage. Gets a new backgriund image
+            /** called before starting a new stage. Gets a new background image
              * and crops or scales it to the required size.
              */
     {

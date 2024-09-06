@@ -88,7 +88,6 @@ class GameActivity : Activity() {
         setupGameView()
 
         // determine what to do: resume, restart, or play next level
-        var resumeGame = false
         if (intent.getBooleanExtra("RESET_PROGRESS", false) == false) {
             startOnLevel = Stage.Identifier(
                     series = intent.getIntExtra("START_ON_SERIES", 1),
@@ -96,9 +95,7 @@ class GameActivity : Activity() {
             )
         } else
             startOnLevel = null
-        if (!intent.getBooleanExtra("RESUME_GAME", false))
-            resumeGame = false
-
+        var resumeGame = intent.getBooleanExtra("RESUME_GAME", false)
         when {
             resumeGame -> resumeCurrentGame()
             startOnLevel == null -> startNewGame()
@@ -143,7 +140,7 @@ class GameActivity : Activity() {
              */
     {
         Persistency(this).loadState(gameMechanics)
-        gameMechanics.resumeGame()
+        gameMechanics.beginGame(resumeGame = true)
         if (gameMechanics.state.phase == GameMechanics.GamePhase.RUNNING) {
             runOnUiThread {
                 val toast: Toast = Toast.makeText(
@@ -217,7 +214,7 @@ class GameActivity : Activity() {
 
     private fun update()
     /** Thread for all physical processes on the screen, i.e. movement of attackers, cool-down times, etc.
-     * THis thread must run on a fixed pace. When accelerating the game, the delay of this thread is shortened. */
+     * This thread must run on a fixed pace. When accelerating the game, the delay of this thread is shortened. */
     {
         /* if (gameView.width == 0)  // surface has not been set up yet
         {

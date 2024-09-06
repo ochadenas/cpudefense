@@ -37,8 +37,8 @@ class GameView(context: Context):
     val gameMechanics = (context as GameActivity).gameMechanics
     var canvas: Canvas? = null
     var effects: Effects? = null
-    var backgroundColour = Color.BLACK
     var scrollAllowed = true // whether the viewport can be moved by scrolling
+    private var backgroundColour = Color.BLACK
     private var gestureDetector = GestureDetectorCompat(context, this)
 
     /** font for displaying "computer messages" */
@@ -266,7 +266,7 @@ class GameView(context: Context):
     override fun onScroll(p0: MotionEvent, p1: MotionEvent, dx: Float, dy: Float): Boolean {
         when (gameMechanics.state.phase)
         {
-            GameMechanics.GamePhase.MARKETPLACE -> marketplace.onScroll(p0, p1, dx, dy)
+            GamePhase.MARKETPLACE -> marketplace.onScroll(p0, p1, dx, dy)
             else ->
             {
                 if (scrollAllowed) {
@@ -281,8 +281,8 @@ class GameView(context: Context):
     override fun onLongPress(p0: MotionEvent) {
         p0.let {
             when (gameMechanics.state.phase) {
-                GameMechanics.GamePhase.RUNNING -> gameMechanics.currentlyActiveStage?.network?.onLongPress(p0)
-                GameMechanics.GamePhase.MARKETPLACE -> marketplace.onLongPress(p0)
+                GamePhase.RUNNING -> gameMechanics.currentlyActiveStage?.network?.onLongPress(p0)
+                GamePhase.MARKETPLACE -> marketplace.onLongPress(p0)
                 else -> {}
             }
         }

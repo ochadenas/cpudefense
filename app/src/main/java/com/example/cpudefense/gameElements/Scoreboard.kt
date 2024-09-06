@@ -13,8 +13,7 @@ class ScoreBoard(val gameView: GameView): GameElement()
     
     // default or min sizes
     var margin = 4   // between LED area and edge
-    var preferredSizeOfLED = 10 // horizontal size of LEDs, can be smaller if there is too little space
-    
+
     private var area = Rect()
     private var information = Information()
     private var waves = Waves()
@@ -243,7 +242,7 @@ class ScoreBoard(val gameView: GameView): GameElement()
         private val paint = Paint()
         private var ledAreaHeight: Int = 0
         private var ledAreaWidth: Int = 0
-        private val preferredSizeLedX = (preferredSizeOfLED * resources.displayMetrics.density).toInt()
+        private var preferredSizeLedX = 0
         private var sizeLedX = preferredSizeLedX
         private var sizeLedY = 0 // will be calculated in setSize
         private var deltaX = 0
@@ -258,6 +257,7 @@ class ScoreBoard(val gameView: GameView): GameElement()
             // calculate size and spacing of LEDs
             sizeLedY = (area.height()-divider-2*margin)*74/100
             val maxPossibleDeltaX = area.width()/(state.currentMaxLives + 0.0f)
+            preferredSizeLedX = (GameMechanics.preferredSizeOfLED * gameView.scaleFactor).toInt()
             deltaX = kotlin.math.min(preferredSizeLedX * 1.2f, maxPossibleDeltaX).toInt()
             ledAreaWidth = (state.currentMaxLives + 1) * deltaX
             sizeLedX = kotlin.math.min(preferredSizeLedX.toFloat(), deltaX / 1.2f).toInt()
@@ -340,7 +340,7 @@ class ScoreBoard(val gameView: GameView): GameElement()
 
         fun setSize(area: Rect, divider: Int): Rect
         {
-            actualSize = (GameMechanics.coinSizeOnScoreboard * resources.displayMetrics.scaledDensity).toInt()
+            actualSize = (GameMechanics.coinSizeOnScoreboard * gameView.scaleFactor).toInt()
             this.area = Rect(area.left, area.top, (area.left+area.width()*0.36).toInt(), area.bottom)
             bitmap =
                 Bitmap.createBitmap(this.area.width(), this.area.height(), Bitmap.Config.ARGB_8888)

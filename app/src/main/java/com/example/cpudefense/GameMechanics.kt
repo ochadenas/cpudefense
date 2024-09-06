@@ -39,10 +39,12 @@ class GameMechanics(val gameActivity: GameActivity) {
         const val biographyTextSize = 24f
         const val purchaseButtonTextSize = 24f
 
-        const val coinSizeOnScoreboard = 40
-        const val coinSizeOnScreen = 25
-        const val cardWidth = 320
+        const val coinSizeOnScoreboard = 48
+        const val coinSizeOnScreen = 18
+        const val cardWidth = 240
         const val cardHeight = cardWidth * 1.41
+        const val preferredSizeOfLED = 20  // horizontal size of LEDs, can be smaller if there is too little space
+
 
         // some adjustable game playing parameters
         const val minimalAmountOfCash = 8
@@ -156,7 +158,7 @@ class GameMechanics(val gameActivity: GameActivity) {
     enum class GamePhase { START, RUNNING, INTERMEZZO, MARKETPLACE, PAUSED }
     enum class GameSpeed { NORMAL, MAX }
 
-    fun beginGame(resetProgress: Boolean = false)
+    fun beginGame(resetProgress: Boolean = false, resumeGame: Boolean = false)
     {
         /** Begins the current game on a chosen level. Also called when starting a completely
          * new game.
@@ -164,7 +166,19 @@ class GameMechanics(val gameActivity: GameActivity) {
          * all coins and heroes are cleared. Otherwise, start on the level given in the saved state.
          */
         gameActivity.loadSettings()
-        if (!resetProgress) {
+
+        if (resetProgress)
+        {
+            state.startingLevel = Stage.Identifier(1,1)
+            summaryPerNormalLevel = HashMap()
+            summaryPerTurboLevel = HashMap()
+            setLastPlayedStage(state.startingLevel)
+            setMaxPlayedStage(state.startingLevel, resetProgress=true)
+            currentStage = state.startingLevel
+            gameActivity.prepareLevelAtStartOfGame(state.startingLevel)
+        }
+        else
+        {
             val persistency = Persistency(gameActivity)
             global = persistency.loadGlobalData()
             summaryPerNormalLevel  = persistency.loadLevelSummaries(SERIES_NORMAL)
@@ -179,30 +193,21 @@ class GameMechanics(val gameActivity: GameActivity) {
             persistency.loadCoins(this)
             if (purseOfCoins[LevelMode.BASIC]?.initialized == false)
                 migrateHeroes()
-
             additionalCashDelay = heroModifier(Hero.Type.GAIN_CASH).toInt()
-            currentStage = state.startingLevel
-            gameActivity.prepareLevelAtStartOfGame(state.startingLevel)
-        }
-        else {
-            state.startingLevel = Stage.Identifier(1,1)
-            summaryPerNormalLevel = HashMap()
-            summaryPerTurboLevel = HashMap()
-            setLastPlayedStage(state.startingLevel)
-            setMaxPlayedStage(state.startingLevel, resetProgress=true)
-            currentStage = state.startingLevel
-            gameActivity.prepareLevelAtStartOfGame(state.startingLevel)
+
+            if (resumeGame)
+                resumeGame()
+            else
+            {
+                currentStage = state.startingLevel
+                gameActivity.prepareLevelAtStartOfGame(state.startingLevel)
+            }
         }
     }
 
     fun resumeGame()
     {
         /** function to resume a running game at exactly the point where the app was left. */
-        // get historical data of levels completed so far
-        val persistency = Persistency(gameActivity)
-        summaryPerNormalLevel  = persistency.loadLevelSummaries(SERIES_NORMAL)
-        summaryPerTurboLevel   = persistency.loadLevelSummaries(SERIES_TURBO)
-        summaryPerEndlessLevel = persistency.loadLevelSummaries(SERIES_ENDLESS)
         // persistency.loadState(this)
         stageData?.let {
             currentStage = it.ident
@@ -211,6 +216,7 @@ class GameMechanics(val gameActivity: GameActivity) {
         currentlyActiveStage?.let {
             it.network.validateViewport()
             gameActivity.gameView.viewport.setGridSize(it.sizeX, it.sizeY)
+            gameActivity.gameView.background.prepareAtStartOfStage(it.data.ident)
         }
         when (state.phase)
         {

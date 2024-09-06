@@ -57,8 +57,6 @@ open class Attacker(network: Network, representation: Representation = Represent
         this.data.speed = speed
         if (attackerData.bits == 0)
             calculateNumberOfDigits()
-        numberFontSize = baseNumberFontSize * network.gameView.textScaleFactor *
-                if (activity.settings.configUseLargeButtons) 1.5f else 0.8f
     }
 
     fun copy(): Attacker
@@ -286,6 +284,9 @@ open class Attacker(network: Network, representation: Representation = Represent
 
     fun createBitmap(text: String)
     {
+        // determine size
+        numberFontSize = baseNumberFontSize * network.gameView.textScaleFactor *
+                if (activity.settings.configUseLargeButtons) 1.5f else 0.8f
         // define colours
         val textPaint = Paint()
         val blurPaint = Paint()

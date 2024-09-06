@@ -85,7 +85,7 @@ class Instructions(val gameView: GameView, var stage: Stage.Identifier, var show
     }
 
     fun display(canvas: Canvas) {
-        val margin = 20
+        val margin = 32
         val textArea = Rect(0, 0, canvas.width - 2 * margin, canvas.height - 200)
         canvas.save()
 
