@@ -13,7 +13,7 @@ class Typewriter(val gameView: GameView, myArea: Rect, private var lines: CopyOn
     private var resources = gameView.resources
     private var textBoxes = CopyOnWriteArrayList<TextBox>()
     private val pos = Pair(myArea.left + 50, myArea.bottom - 80)
-    private val lineSpacingY = GameMechanics.computerTextSize * resources.displayMetrics.scaledDensity * 1.8f
+    private val lineSpacingY = GameMechanics.computerTextSize * gameView.textScaleFactor * 1.8f
 
     init { showNextLine() }
 
@@ -37,7 +37,7 @@ class Typewriter(val gameView: GameView, myArea: Rect, private var lines: CopyOn
         Fadable
     {
         var alpha = 255
-        val textSize = GameMechanics.computerTextSize * resources.displayMetrics.scaledDensity
+        val textSize = GameMechanics.computerTextSize * gameView.textScaleFactor
         var stringLength = 0 // number of characters to display
         var x = topLeft.first.toFloat()
         var y = topLeft.second.toFloat()
@@ -45,8 +45,6 @@ class Typewriter(val gameView: GameView, myArea: Rect, private var lines: CopyOn
 
         init {
             Fader(gameView, this, Fader.Type.APPEAR, Fader.Speed.SLOW)
-            // try to set font
-
         }
 
         override fun fadeDone(type: Fader.Type) {

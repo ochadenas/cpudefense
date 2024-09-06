@@ -17,7 +17,7 @@
         android:fontFamily="monospace"
         android:text="@string/query_quit"
         android:textColor="@color/text_lightamber"
-        android:textSize="24sp"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -36,7 +36,7 @@
         android:text="@string/return_to_main_menu"
         android:textAllCaps="true"
         android:textColor="@color/text_green"
-        android:textSize="24sp"
+        android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/textView"
         app:layout_constraintBottom_toTopOf="@id/button_replay" />
@@ -50,7 +50,7 @@
         android:text="@string/replay"
         android:textAllCaps="true"
         android:textColor="@color/text_lightgreen"
-        android:textSize="24sp"
+        android:textSize="20sp"
         android:layout_marginBottom="16dp"
         app:layout_constraintStart_toStartOf="@+id/button_return"
         app:layout_constraintBottom_toBottomOf="parent" />

@@ -19,7 +19,7 @@ class HeroCard(val gameView: GameView, val hero: Hero): GameElement(), Fadable
     val type = hero.data.type
     val resources = gameView.resources
 
-    private val heroPictureSize = 120
+    private val heroPictureSize = 160
 
     /** rectangle with the size of the card, positioned at (0|0) */
     var cardArea = Rect()
@@ -192,7 +192,7 @@ class HeroCard(val gameView: GameView, val hero: Hero): GameElement(), Fadable
         val center = cardAreaOnScreen.center()
         portraitAreaOnScreen = Rect(portraitArea)
         portraitAreaOnScreen.setCenter(center)
-        paintText.textSize = (GameMechanics.biographyTextSize - 2) * resources.displayMetrics.scaledDensity
+        paintText.textSize = (GameMechanics.biographyTextSize - 2) * gameView.textScaleFactor
         indicatorSize = portraitArea.width() / 10
     }
 
@@ -215,9 +215,9 @@ class HeroCard(val gameView: GameView, val hero: Hero): GameElement(), Fadable
 
     fun create(showNextUpdate: Boolean = true, monochrome: Boolean = false)
     {
-        cardArea = Rect(0, 0, (GameMechanics.cardWidth*resources.displayMetrics.scaledDensity).toInt(), (GameMechanics.cardHeight*resources.displayMetrics.scaledDensity).toInt())
-        portraitArea = Rect(0, 0, (heroPictureSize *resources.displayMetrics.scaledDensity).toInt(), (heroPictureSize *resources.displayMetrics.scaledDensity).toInt())
-        paintText.textSize = (GameMechanics.biographyTextSize - 2) * resources.displayMetrics.scaledDensity
+        cardArea = Rect(0, 0, (GameMechanics.cardWidth*gameView.scaleFactor).toInt(), (GameMechanics.cardHeight*gameView.scaleFactor).toInt())
+        portraitArea = Rect(0, 0, (heroPictureSize*gameView.scaleFactor).toInt(), (heroPictureSize*gameView.scaleFactor).toInt())
+        paintText.textSize = (GameMechanics.biographyTextSize - 2) * gameView.textScaleFactor
         indicatorSize = portraitArea.width() / 10
         this.showNextUpdate = showNextUpdate
         this.monochrome = monochrome

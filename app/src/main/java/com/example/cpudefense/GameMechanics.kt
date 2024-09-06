@@ -15,7 +15,7 @@ import kotlinx.coroutines.launch
 import kotlin.random.Random
 
 
-class GameMechanics(val gameActivity: MainGameActivity) {
+class GameMechanics(val gameActivity: GameActivity) {
     companion object Params {
         const val maxLevelAvailable = 32
 
@@ -41,8 +41,8 @@ class GameMechanics(val gameActivity: MainGameActivity) {
 
         const val coinSizeOnScoreboard = 40
         const val coinSizeOnScreen = 25
-        const val cardHeight = 256
-        const val cardWidth = 220
+        const val cardWidth = 320
+        const val cardHeight = cardWidth * 1.41
 
         // some adjustable game playing parameters
         const val minimalAmountOfCash = 8
@@ -231,13 +231,13 @@ class GameMechanics(val gameActivity: MainGameActivity) {
         {
             GamePhase.MARKETPLACE -> {
                 gameActivity.gameView.marketplace.nextGameLevel = state.startingLevel
-                gameActivity.setGameActivityStatus(MainGameActivity.GameActivityStatus.BETWEEN_LEVELS)
+                gameActivity.setGameActivityStatus(GameActivity.GameActivityStatus.BETWEEN_LEVELS)
             }
             GamePhase.INTERMEZZO -> {
-                gameActivity.setGameActivityStatus(MainGameActivity.GameActivityStatus.BETWEEN_LEVELS)
+                gameActivity.setGameActivityStatus(GameActivity.GameActivityStatus.BETWEEN_LEVELS)
             }
             GamePhase.START -> {
-                gameActivity.setGameActivityStatus(MainGameActivity.GameActivityStatus.BETWEEN_LEVELS)
+                gameActivity.setGameActivityStatus(GameActivity.GameActivityStatus.BETWEEN_LEVELS)
             }
             else -> {
                 currentlyActiveStage?.let {
@@ -354,7 +354,7 @@ class GameMechanics(val gameActivity: MainGameActivity) {
             else {
                 onStageCleared(it)
                 Persistency(gameActivity).saveState(this)
-                gameActivity.setGameActivityStatus(MainGameActivity.GameActivityStatus.BETWEEN_LEVELS)
+                gameActivity.setGameActivityStatus(GameActivity.GameActivityStatus.BETWEEN_LEVELS)
             }
         }
     }
@@ -396,7 +396,7 @@ class GameMechanics(val gameActivity: MainGameActivity) {
         nextStage.calculateDifficulty()
         if (!nextStage.isInitialized())
             return  // something went wrong, possibly trying to create a level that doesn't exist
-        gameActivity.setGameActivityStatus(MainGameActivity.GameActivityStatus.PLAYING)
+        gameActivity.setGameActivityStatus(GameActivity.GameActivityStatus.PLAYING)
         calculateLives()
         calculateStartingCash()
         gameActivity.runOnUiThread {
@@ -413,7 +413,6 @@ class GameMechanics(val gameActivity: MainGameActivity) {
         state.heat = 0.0
         gameActivity.setGameSpeed(GameSpeed.NORMAL)  // reset speed to normal when starting next stage
         Persistency(gameActivity).saveState(this)
-        gameActivity.gameView.resetAtStartOfStage(nextStage)
         state.phase = GamePhase.RUNNING
         currentlyActiveWave = nextStage.nextWave()
         currentlyActiveStage = nextStage

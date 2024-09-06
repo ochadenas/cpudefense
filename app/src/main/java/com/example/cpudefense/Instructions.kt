@@ -92,7 +92,7 @@ class Instructions(val gameView: GameView, var stage: Stage.Identifier, var show
         canvas.translate(2*margin.toFloat(), margin.toFloat())
         val text = instructionText(stage.number)
         val textPaint = TextPaint()
-        textPaint.textSize = GameMechanics.instructionTextSize * resources.displayMetrics.scaledDensity
+        textPaint.textSize = GameMechanics.instructionTextSize * gameView.textScaleFactor
         textPaint.color =
             if (showLeaveDialogue) resources.getColor(R.color.text_green)
             else Color.WHITE

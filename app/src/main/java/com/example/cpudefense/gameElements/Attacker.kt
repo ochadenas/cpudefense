@@ -47,7 +47,7 @@ open class Attacker(network: Network, representation: Representation = Represent
     var immuneToAll = false
     var animationCount = 0
     private val animationCountMax = 8
-    private var baseNumberFontSize = 24f
+    private var baseNumberFontSize = 32f
     private var numberFontSize = baseNumberFontSize  // must be scaled
     var displacement = Pair(Random.nextInt(5)-1, Random.nextInt(7)-2) // small shift in display to avoid over-crowding on the screen
     private val paintBitmap = Paint()
@@ -57,8 +57,8 @@ open class Attacker(network: Network, representation: Representation = Represent
         this.data.speed = speed
         if (attackerData.bits == 0)
             calculateNumberOfDigits()
-        numberFontSize = baseNumberFontSize * resources.displayMetrics.scaledDensity *
-                if (activity.settings.configUseLargeButtons) 1.5f else 1.0f
+        numberFontSize = baseNumberFontSize * network.gameView.textScaleFactor *
+                if (activity.settings.configUseLargeButtons) 1.5f else 0.8f
     }
 
     fun copy(): Attacker

@@ -2,8 +2,6 @@ package com.example.cpudefense
 
 import android.app.Activity
 import android.app.Dialog
-import android.content.res.Resources.NotFoundException
-import android.graphics.Typeface
 import android.os.Bundle
 import android.os.SystemClock
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
@@ -13,19 +11,23 @@ import android.view.WindowManager
 import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.Toast
-import androidx.core.content.res.ResourcesCompat
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class MainGameActivity : Activity() {
+class GameActivity : Activity() {
     lateinit var theGameMechanics: GameMechanics
     lateinit var gameView: GameView
     private var startOnLevel: Stage.Identifier? = null
     private var resumeGame = true
     private var gameIsRunning =
         true  // flag used to keep the threads running. Set to false when leaving activity
+
+    companion object {
+    }
+
+    enum class GameActivityStatus { PLAYING, BETWEEN_LEVELS }
 
     /* properties used for assuring a constant frame rate */
     /** delta T in normal operation */
@@ -47,8 +49,6 @@ class MainGameActivity : Activity() {
     /** cumulated time */
     private var frameTimeSum = 0L
 
-    enum class GameActivityStatus { PLAYING, BETWEEN_LEVELS }
-
     data class Settings(
         var configDisableBackground: Boolean = true,
         var configShowAttsInRange: Boolean = false,
@@ -67,25 +67,6 @@ class MainGameActivity : Activity() {
         setContentView(R.layout.activity_main_game)
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         theGameMechanics = GameMechanics(this)
-        setupGameView()
-    }
-
-    fun setupGameView()
-    {
-        gameView = GameView(this, theGameMechanics)
-        val parentView: FrameLayout? = findViewById(R.id.gameFrameLayout)
-        parentView?.addView(gameView)
-
-        if (intent.getBooleanExtra("RESET_PROGRESS", false) == false) {
-            startOnLevel = Stage.Identifier(
-                    series = intent.getIntExtra("START_ON_SERIES", 1),
-                    number = intent.getIntExtra("START_ON_STAGE", 1)
-            )
-        } else
-            startOnLevel = null
-        if (!intent.getBooleanExtra("RESUME_GAME", false))
-            resumeGame = false
-        gameView.setup()
     }
 
     override fun onPause() {
@@ -111,6 +92,19 @@ class MainGameActivity : Activity() {
         }
         resumeGame = true
         gameIsRunning = true
+
+        // TODO: check whether this code should be moved
+        if (intent.getBooleanExtra("RESET_PROGRESS", false) == false) {
+            startOnLevel = Stage.Identifier(
+                    series = intent.getIntExtra("START_ON_SERIES", 1),
+                    number = intent.getIntExtra("START_ON_STAGE", 1)
+            )
+        } else
+            startOnLevel = null
+        if (!intent.getBooleanExtra("RESUME_GAME", false))
+            resumeGame = false
+
+        setupGameView()
         startGameThreads()
     }
 
@@ -120,6 +114,16 @@ class MainGameActivity : Activity() {
 
     override fun onDestroy() {
         super.onDestroy()
+    }
+
+    fun setupGameView()
+    /** creates the game view including all game components */
+    {
+        gameView = GameView(this, theGameMechanics)
+        val parentView: FrameLayout? = findViewById(R.id.gameFrameLayout)
+        parentView?.addView(gameView)
+        gameView.setup()
+        val width = gameView.width
     }
 
     private fun startNewGame()
@@ -209,6 +213,7 @@ class MainGameActivity : Activity() {
 
     fun prepareLevelAtStartOfGame(ident: Stage.Identifier)
     {
+        gameView.resetAtStartOfStage(ident)
         gameView.intermezzo.prepareLevel(ident, true)
     }
 
@@ -216,6 +221,12 @@ class MainGameActivity : Activity() {
     /** Thread for all physical processes on the screen, i.e. movement of attackers, cool-down times, etc.
      * THis thread must run on a fixed pace. When accelerating the game, the delay of this thread is shortened. */
     {
+        /* if (gameView.width == 0)  // surface has not been set up yet
+        {
+            GlobalScope.launch { delay(updateDelay); update() } // wait for game view to appear
+        }
+        else
+        */
         if (gameIsRunning) {
             val timeAtStartOfCycle = SystemClock.uptimeMillis()
             theGameMechanics.ticksCount++

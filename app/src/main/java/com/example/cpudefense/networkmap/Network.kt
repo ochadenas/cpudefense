@@ -117,7 +117,8 @@ class Network(val gameMechanics: GameMechanics, val gameView: GameView, x: Int, 
         // displayFrame(canvas, viewport) // optional
         if (!this::networkImage.isInitialized)
             recreateNetworkImage(viewport)
-        canvas.drawBitmap(this.networkImage, null, viewport.screen, paint)
+        if (this::networkImage.isInitialized)
+            canvas.drawBitmap(this.networkImage, null, viewport.screen, paint)
     }
 
     fun recreateNetworkImage(viewport: Viewport)
@@ -128,7 +129,8 @@ class Network(val gameMechanics: GameMechanics, val gameView: GameView, x: Int, 
         validateViewport()
         gameView.background.createImage(gameMechanics.currentStage)
         gameView.background.basicBackground?.let {
-            val canvas = Canvas(it)
+            networkImage = it
+            val canvas = Canvas(networkImage)
             for (obj in links.values)
                 obj.display(canvas, viewport)
         }

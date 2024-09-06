@@ -61,8 +61,6 @@ class Hero(var gameMechanics: GameMechanics, type: Type)
 
     /** reference to the person data of this hero */
     var person = Person(type)
-    /** reference to the graphical representation of this hero */
-    var card = HeroCard(gameMechanics.gameActivity.gameView, this)
 
     var biography: Biography? = null
     var effect: String = ""
@@ -72,6 +70,9 @@ class Hero(var gameMechanics: GameMechanics, type: Type)
      * or by the effect of Sid Meier
       */
     private var maxLevel = 7
+
+    /** reference to the graphical representation of this hero */
+    var card = HeroCard(gameMechanics.gameActivity.gameView, this)
 
     fun createBiography(area: Rect)
     /** create the biography object if it does not exist */
@@ -639,7 +640,7 @@ class Hero(var gameMechanics: GameMechanics, type: Type)
                 paintBiography.color = selected?.card?.inactiveColor ?: Color.WHITE
             }
             canvas.drawColor(Color.BLACK)
-            paintBiography.textSize = GameMechanics.biographyTextSize*gameMechanics.resources.displayMetrics.scaledDensity
+            paintBiography.textSize = GameMechanics.biographyTextSize*gameMechanics.gameActivity.gameView.textScaleFactor
             paintBiography.alpha = 255
             val textLayout = StaticLayout(
                 text, paintBiography, myArea.width(),

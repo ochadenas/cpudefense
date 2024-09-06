@@ -658,7 +658,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int):
             val canvas = Canvas(bitmap)
             val paint = Paint()
 
-            paint.textSize = (GameMechanics.chipTextSize * resources.displayMetrics.scaledDensity) *
+            paint.textSize = (GameMechanics.chipTextSize * network.gameView.textScaleFactor) *
                     if (theNetwork.gameMechanics.gameActivity.settings.configUseLargeButtons) 1.0f else 0.95f // multiple sizes possible
             paint.alpha = 255
             paint.typeface = theNetwork.gameView.boldTypeface

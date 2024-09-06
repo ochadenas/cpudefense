@@ -11,7 +11,7 @@
         android:theme="@style/Theme.CpuDefense">
         <profileable android:shell="true" />
         <activity
-            android:name=".MainGameActivity"
+            android:name=".GameActivity"
             android:screenOrientation="portrait"
             android:exported="false" />
         <activity

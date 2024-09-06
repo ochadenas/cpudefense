@@ -111,7 +111,7 @@ class ScoreBoard(val gameView: GameView): GameElement()
         val paint = Paint()
         paint.color = resources.getColor(R.color.scoreboard_text)
         paint.typeface = Typeface.create("sans-serif", Typeface.NORMAL)
-        paint.textSize = GameMechanics.scoreHeaderSize * resources.displayMetrics.scaledDensity
+        paint.textSize = GameMechanics.scoreHeaderSize * gameView.textScaleFactor
         if (centered)
             rect.displayTextCenteredInRect(canvas, text, paint)
         else
@@ -176,7 +176,7 @@ class ScoreBoard(val gameView: GameView): GameElement()
             val paint = Paint()
             paint.color = myColor
             paint.typeface = Typeface.create("sans-serif", Typeface.NORMAL)
-            paint.textSize = GameMechanics.scoreTextSize * resources.displayMetrics.scaledDensity
+            paint.textSize = GameMechanics.scoreTextSize * gameView.textScaleFactor
             rect.displayTextCenteredInRect(canvas, text, paint)
             displayHeader(canvas, Rect(0,0, area.width(), area.height()), resources.getString(R.string.scoreboard_inf))
         }
@@ -222,7 +222,7 @@ class ScoreBoard(val gameView: GameView): GameElement()
             paint.textAlign = Paint.Align.LEFT
             gameView.gameMechanics.currentlyActiveStage?.let {
                 val currentWave = "%d".format(it.data.wavesCount)
-                paint.textSize = GameMechanics.scoreTextSize * resources.displayMetrics.scaledDensity
+                paint.textSize = GameMechanics.scoreTextSize * gameView.textScaleFactor
                 paint.getTextBounds(currentWave, 0, currentWave.length, bounds)
                 val verticalMargin = (rect.height()-bounds.height())/2
                 val rectLeft = Rect(0, rect.top+verticalMargin, bounds.width(), rect.bottom-verticalMargin)

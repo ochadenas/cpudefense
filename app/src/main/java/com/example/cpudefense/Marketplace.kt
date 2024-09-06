@@ -32,7 +32,7 @@ class Marketplace(val gameView: GameView): GameElement()
     private var purse = gameMechanics.currentPurse()
     private var selected: Hero? = null
     private var coins = mutableListOf<Coin>()
-    private var coinSize = (32 * resources.displayMetrics.scaledDensity).toInt()
+    private var coinSize = (32 * gameView.scaleFactor).toInt()
 
     var nextGameLevel = Stage.Identifier()
 
@@ -44,10 +44,10 @@ class Marketplace(val gameView: GameView): GameElement()
     fun setSize(area: Rect)
     {
         myArea = Rect(area)
-        val topMargin = (80 * resources.displayMetrics.scaledDensity).toInt()
-        cardsArea = Rect(64, topMargin, ((GameMechanics.cardWidth + 20)*resources.displayMetrics.scaledDensity).toInt(), myArea.bottom)
-        coinSize = 80 * topMargin / 100
-        biographyArea= Rect(cardsArea.right+biographyAreaMargin, topMargin, myArea.right-biographyAreaMargin, myArea.bottom-biographyAreaMargin)
+        val margin = (120 * gameView.scaleFactor).toInt()
+        cardsArea = Rect(margin, margin, ((GameMechanics.cardWidth + 20)*gameView.scaleFactor).toInt(), myArea.bottom)
+        coinSize = 80 * margin / 100
+        biographyArea= Rect(cardsArea.right+biographyAreaMargin, margin, myArea.right-biographyAreaMargin, myArea.bottom-biographyAreaMargin)
         createButton()
     }
 
@@ -84,12 +84,12 @@ class Marketplace(val gameView: GameView): GameElement()
      * @param dY Vertical offset used for scrolling */
     {
         val space = 20
-        val offset = (GameMechanics.cardHeight*resources.displayMetrics.scaledDensity).toInt() + space
+        // val offset = (GameMechanics.cardHeight*gameView.scaleFactor).toInt() + space
         var pos = cardsArea.top + space + dY.toInt()
         for (hero in heroes)
         {
             hero.card.putAt(space, pos)
-            pos += offset
+            pos += hero.card.cardArea.height() + space
         }
     }
 
@@ -100,21 +100,21 @@ class Marketplace(val gameView: GameView): GameElement()
     {
         val bottomMargin = 40
         buttonFinish = Button(gameView, resources.getString(R.string.button_playlevel),
-                              textSize = GameMechanics.purchaseButtonTextSize * resources.displayMetrics.scaledDensity,
+                              textSize = GameMechanics.purchaseButtonTextSize * gameView.textScaleFactor,
                               style = Button.Style.HP_KEY, preferredWidth = biographyArea.width())
         buttonFinish?.let {
             Fader(gameView, it, Fader.Type.APPEAR, Fader.Speed.SLOW)
             it.alignRight(myArea.right, myArea.bottom - bottomMargin - it.area.height())
         }
         buttonRefund = Button(gameView, resources.getString(R.string.button_refund_all),
-                              textSize = GameMechanics.purchaseButtonTextSize * resources.displayMetrics.scaledDensity,
+                              textSize = GameMechanics.purchaseButtonTextSize * gameView.textScaleFactor,
                               style = Button.Style.HP_KEY, preferredWidth = biographyArea.width())
         buttonRefund?.let {
             Fader(gameView, it, Fader.Type.APPEAR, Fader.Speed.SLOW)
             it.alignRight(myArea.right, myArea.bottom - bottomMargin - 2*it.area.height())
         }
         buttonPurchase = Button(gameView, purchaseButtonText(null),
-                                textSize = GameMechanics.purchaseButtonTextSize * resources.displayMetrics.scaledDensity,
+                                textSize = GameMechanics.purchaseButtonTextSize * gameView.textScaleFactor,
                                 style = Button.Style.HP_KEY, preferredWidth = biographyArea.width())
         buttonPurchase?.let {
             Fader(gameView, it, Fader.Type.APPEAR, Fader.Speed.SLOW)
@@ -320,7 +320,7 @@ class Marketplace(val gameView: GameView): GameElement()
         canvas.drawRect(coinsArea, clearPaint)
         paint.color = Color.WHITE
         paint.style = Paint.Style.STROKE
-        paint.strokeWidth = 2f * resources.displayMetrics.scaledDensity
+        paint.strokeWidth = 2f * gameView.scaleFactor
         paint.alpha = 255
         val y = coinsArea.bottom.toFloat() - paint.strokeWidth
         canvas.drawLine(0f, y, myArea.right.toFloat(), y, paint)

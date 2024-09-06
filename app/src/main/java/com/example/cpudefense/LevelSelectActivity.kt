@@ -241,7 +241,7 @@ class LevelSelectActivity : AppCompatActivity() {
     {
         if (selectedLevel == 0)
             return
-        val intent = Intent(this, MainGameActivity::class.java)
+        val intent = Intent(this, GameActivity::class.java)
         intent.putExtra("START_ON_STAGE", selectedLevel)
         intent.putExtra("START_ON_SERIES", selectedSeries)
         intent.putExtra("CONTINUE_GAME", false)

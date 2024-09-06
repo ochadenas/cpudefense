@@ -117,7 +117,7 @@ class WelcomeActivity : AppCompatActivity() {
     }
 
     fun resumeGame(@Suppress("UNUSED_PARAMETER") v: View) {
-        val intent = Intent(this, MainGameActivity::class.java)
+        val intent = Intent(this, GameActivity::class.java)
         when {
             maxLevel.number == 0 -> {
                 // start new game

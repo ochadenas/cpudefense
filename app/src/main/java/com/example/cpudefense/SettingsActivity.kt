@@ -77,7 +77,7 @@ class SettingsActivity : AppCompatActivity()
         button1?.text = resources.getText(R.string.no)
         button2?.setOnClickListener {
             dialog.dismiss()
-            val intent = Intent(this, MainGameActivity::class.java)
+            val intent = Intent(this, GameActivity::class.java)
             intent.putExtra("RESET_PROGRESS", true)
             intent.putExtra("START_ON_STAGE", 1)
             intent.putExtra("CONTINUE_GAME", false)

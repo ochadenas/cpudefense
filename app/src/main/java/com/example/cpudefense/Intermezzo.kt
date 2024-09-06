@@ -160,7 +160,7 @@ class Intermezzo(var gameView: GameView): GameElement(), Fadable {
     {
         val bottomMargin = 40
         buttonContinue = Button(gameView, textOnContinueButton,
-                                textSize = GameMechanics.computerTextSize * resources.displayMetrics.scaledDensity,
+                                textSize = GameMechanics.computerTextSize * gameView.textScaleFactor,
                                 color = resources.getColor(R.color.text_green), style = Button.Style.FILLED)
         val buttonTop = myArea.bottom - (buttonContinue?.area?.height() ?: 20) - bottomMargin
         buttonContinue?.let {
@@ -171,7 +171,7 @@ class Intermezzo(var gameView: GameView): GameElement(), Fadable {
         if (level.number > 6 || level.series > 1)  // level 6 in series 1 is the first one where coins may be present
         {
             buttonPurchase = Button(gameView, resources.getString(R.string.button_marketplace),
-                                    textSize = GameMechanics.computerTextSize * resources.displayMetrics.scaledDensity,
+                                    textSize = GameMechanics.computerTextSize * gameView.textScaleFactor,
                                     color = resources.getColor(R.color.text_blue), style = Button.Style.FILLED)
             buttonPurchase?.let {
                 Fader(gameView, it, Fader.Type.APPEAR, Fader.Speed.SLOW)
@@ -228,8 +228,9 @@ class Intermezzo(var gameView: GameView): GameElement(), Fadable {
             type = Type.NORMAL_LEVEL
             Fader(gameView, this, Fader.Type.APPEAR, Fader.Speed.SLOW)
         }
+        gameView.background.prepareAtStartOfStage(level)
         gameView.gameMechanics.state.phase = GameMechanics.GamePhase.INTERMEZZO
-        activity.setGameActivityStatus(MainGameActivity.GameActivityStatus.BETWEEN_LEVELS)
+        activity.setGameActivityStatus(GameActivity.GameActivityStatus.BETWEEN_LEVELS)
     }
 
     private fun startMarketplace()
@@ -283,7 +284,7 @@ class Intermezzo(var gameView: GameView): GameElement(), Fadable {
             alpha = 255
             displayText()
         }
-        activity.setGameActivityStatus(MainGameActivity.GameActivityStatus.BETWEEN_LEVELS)
+        activity.setGameActivityStatus(GameActivity.GameActivityStatus.BETWEEN_LEVELS)
         gameView.gameMechanics.state.phase = GameMechanics.GamePhase.INTERMEZZO
     }
 
@@ -342,8 +343,8 @@ class Intermezzo(var gameView: GameView): GameElement(), Fadable {
             }
             val cardWidth  = heroesAskingToTakeLeave.first().card.cardArea.width()
             val cardHeight = heroesAskingToTakeLeave.first().card.cardArea.height()
-            val margin = (20 * resources.displayMetrics.scaledDensity).toInt()
-            val textLineHeight = GameMechanics.instructionTextSize * resources.displayMetrics.scaledDensity // approx.
+            val margin = (20 * gameView.scaleFactor).toInt()
+            val textLineHeight = GameMechanics.instructionTextSize * gameView.textScaleFactor // approx.
             val top = containingRect.top + (6*textLineHeight).toInt()
             val bottom = top + 2*cardHeight + 3*margin
             myOuterArea = Rect(0, 0, containingRect.right, bottom)

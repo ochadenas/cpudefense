@@ -45,10 +45,16 @@ class Background(val gameView: GameView)
         state = BackgroundState.UNINITIALIZED
     }
 
-    fun prepareAtStartOfStage(stage: Stage.Identifier, area: Rect)
+    fun prepareAtStartOfStage(stage: Stage.Identifier)
     {
-        myArea = Rect(area)
+        // TODO: hier nur das Bild laden, aber noch nicht skalieren oder auschneiden
         createImage(stage, backgroundOpacity)
+    }
+
+    fun setSize(area: Rect)
+    {
+        // TODO: hier das Bild ausschneiden und skalieren, aber nicht mehr laden
+        myArea = Rect(area)
     }
 
     fun paintNetworkOnBackground(bitmapForeground: Bitmap)
@@ -82,7 +88,8 @@ class Background(val gameView: GameView)
      * @param number the number of the background chosen. Must be between 1 and maxBackgroundNumber */
     {
         val resources: Resources = gameView.resources
-        Toast.makeText(gameView.gameMechanics.gameActivity, resources.getString(R.string.toast_loading), Toast.LENGTH_SHORT).show()
+        gameView.gameMechanics.gameActivity.runOnUiThread() {
+            Toast.makeText(gameView.gameMechanics.gameActivity, resources.getString(R.string.toast_loading), Toast.LENGTH_SHORT).show() }
         return if (useSpecial)   // allows use of special backgrounds, currently disabled
             BitmapFactory.decodeResource(resources, R.drawable.background_flowers)
         else when (number)
@@ -125,8 +132,10 @@ class Background(val gameView: GameView)
         {
             val largeBitmap = loadWholeBitmapOfStage(stageIdent)
             basicBackground?.let {
-                val displacementX = Random.nextInt(largeBitmap.width-it.width)
-                val displacementY = Random.nextInt(largeBitmap.height-it.height)
+                val displacementX = if (largeBitmap.width>it.width)
+                    Random.nextInt(largeBitmap.width-it.width) else 0
+                val displacementY = if (largeBitmap.height > it.height)
+                    Random.nextInt(largeBitmap.height-it.height) else 0
                 val destRect = Rect(0,0,it.width,it.height)
                 val sourceRect = Rect(destRect)
                 sourceRect.setTopLeft(displacementX, displacementY)

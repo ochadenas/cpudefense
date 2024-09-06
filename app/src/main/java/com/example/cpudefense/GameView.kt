@@ -56,6 +56,11 @@ class GameView(context: Context, val gameMechanics: GameMechanics):
     var flippers = CopyOnWriteArrayList<Flipper>()
     val notification = ProgressNotification(this)
 
+    /** text scale factor, based on ScaledDensity */
+    var textScaleFactor = 1.0f
+    /** general scale factor, based on ScaledDensity */
+    var scaleFactor = 1.0f
+
     fun setup()
             /** called when the game view is created.
              * This is NOT the case when the user returns to the main menu
@@ -84,13 +89,13 @@ class GameView(context: Context, val gameMechanics: GameMechanics):
         }
     }
 
-    fun resetAtStartOfStage(stage: Stage)
+    fun resetAtStartOfStage(stageIdent: Stage.Identifier)
     {
         speedControlPanel.resetButtons()
         scoreBoard.recreateBitmap()
         viewport.reset()
-        background.prepareAtStartOfStage(stage.data.ident, viewport.getRect())
-        viewport.setGridSize(stage.network.data.gridSizeX, stage.network.data.gridSizeY)
+        // viewport.setGridSize(stageIdent.network.data.gridSizeX, stageIdent.network.data.gridSizeY)
+        viewport.setScreenSize(this.width, this.height)
     }
 
     override fun surfaceCreated(p0: SurfaceHolder) {
@@ -149,7 +154,10 @@ class GameView(context: Context, val gameMechanics: GameMechanics):
 
     private fun setSize(w: Int, h: Int)
     {
-        /* determine dimensions of the different game areas */
+        // adjust text sizes and scaling factor
+        textScaleFactor = 0.70f * resources.displayMetrics.scaledDensity
+        scaleFactor = 0.50f * resources.displayMetrics.scaledDensity
+        // determine dimensions of the different game areas
         val viewportHeight = viewportHeight(h)
         viewport.setScreenSize(w, viewportHeight)
         scoreBoard.setSize(Rect(0, viewportHeight, w, viewportHeight+scoreBoardHeight(h)))
@@ -157,9 +165,11 @@ class GameView(context: Context, val gameMechanics: GameMechanics):
         intermezzo.setSize(Rect(0, 0, w, h))
         marketplace.setSize(Rect(0, 0, w, h))
         notification.setPositionOnScreen(w/2, h/2)
+
         /* increase attacker size on larger screens */
         // theGame.globalResolutionFactorX = (w / )
         // gameMechanics.resources.displayMetrics.scaledDensity = (h / 1024f) * resources.displayMetrics
+
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
