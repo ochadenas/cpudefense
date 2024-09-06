@@ -19,38 +19,37 @@ class Background(val gameView: GameView)
 {
     /** area (in pixels) where to draw the background on */
     var myArea = Rect()
+
     /** number of different background pictures available */
     private val maxBackgroundNumber = 9
-    /** number of selected background */
-    private var backgroundNumber: Int = 0
+
     /** special background on selected levels */
     private var useSpecialBackground = false
-    var opacity = 0.5f
-    var paint = Paint()
-    /** a bitmap that has arbitrary dimensions. Usually bigger than the screen size.
-     * Must be scaled to viewport dimensions whenever they change. */
-    var wholeBackground: Bitmap = Bitmap.createBitmap(100, 100, Bitmap.Config.ARGB_8888) // TODO: change the fixed size
-    /** bitmap with a background design of the screens's proportions */
-    var basicBackground: Bitmap? = null
-    /** bitmap with the network picture painted on the background */
-    var currentBackground: Bitmap? = null
-    /** whether a background picture shall be used (by configuration) */
-    var enabled = true
+
     /** standard opacity of the background */
     val backgroundOpacity = 0.6f
 
-    fun initializeAtStartOfGame()
-    {
-        enabled = gameView.gameMechanics.gameActivity.settings.configDisableBackground
-        Canvas(wholeBackground).drawColor(Color.BLACK)
-    }
+    var opacity = backgroundOpacity
+    var paint = Paint()
+
+    /** a bitmap that has arbitrary dimensions. Usually bigger than the screen size.
+     * Must be scaled to viewport dimensions whenever they change. */
+    var wholeBackground: Bitmap = Bitmap.createBitmap(100, 100, Bitmap.Config.ARGB_8888) // TODO: change the fixed size
+
+    /** bitmap with a background design of the screens's proportions */
+    var basicBackground: Bitmap? = null
+
+    /** whether a background picture shall be used (by configuration) */
+    var enabled = true
 
     fun prepareAtStartOfStage(stage: Stage.Identifier)
             /** called before starting a new stage. Gets a new backgriund image
              * and crops or scales it to the required size.
              */
     {
-        loadWholeBitmapOfStage(stage)
+        enabled = !gameView.gameMechanics.gameActivity.settings.configDisableBackground
+        if (enabled)
+            loadWholeBitmapOfStage(stage)
     }
 
     fun setSize(width: Int, height: Int)
@@ -60,7 +59,10 @@ class Background(val gameView: GameView)
         if (width>0 && height>0)
         {
             myArea = Rect(0, 0, width, height)
-            basicBackground = bitmapCroppedToSize(myArea)
+            if (enabled)
+                basicBackground = bitmapCroppedToSize(myArea)
+            else
+                basicBackground = createBlankBackground(myArea)
         }
     }
 
@@ -102,22 +104,18 @@ class Background(val gameView: GameView)
             /** chooses the background to use,
              * and selects a random part of it
              * @param stageIdent Series and number of the current stage
-             * @param opacity sets the opacity, from 0.0 to 1.0
              */
     {
         if (false && stageIdent?.let {it.series < 3 && it.number == 8 } == true)
             useSpecialBackground = true
         val n = stageIdent?.number ?: 0
-        this.opacity = opacity
         wholeBackground = loadWholeBitmap(n % maxBackgroundNumber + 1, useSpecialBackground)
     }
 
-    private fun createBlankBackground(): Bitmap
-    /** @return an empty bitmap with the dimensions of the screen */
+    private fun createBlankBackground(destRect: Rect): Bitmap
+    /** @return an empty bitmap with the dimensions of the given rectangle */
     {
-        val bitmap = basicBackground ?: Bitmap.createBitmap(gameView.viewport.screen.width(),
-                                                            gameView.viewport.screen.height(),
-                                                            Bitmap.Config.ARGB_8888)
+        val bitmap = basicBackground ?: Bitmap.createBitmap(destRect.width(), destRect.height(), Bitmap.Config.ARGB_8888)
         basicBackground = bitmap
         val canvas = Canvas(bitmap)
         canvas.drawColor(gameView.resources.getColor(R.color.network_background))
@@ -150,11 +148,12 @@ class Background(val gameView: GameView)
         // here, largeBitmap is at least as big as the destination rectangle (in both dimensions)
         deltaX = largeBitmap.width - destRect.width()
         deltaY = largeBitmap.height - destRect.height()
-        val bitmap = Bitmap.createBitmap(destRect.width(), destRect.height(), Bitmap.Config.ARGB_8888)
+        val bitmap = createBlankBackground(destRect)
         val canvas = Canvas(bitmap)
         val displacementX = if (deltaX>0) Random.nextInt(deltaX) else 0
         val displacementY = if (deltaY>0) Random.nextInt(deltaY) else 0
         val sourceRect = Rect(destRect)
+        paint.alpha = (opacity * 255).toInt()
         sourceRect.setTopLeft(displacementX, displacementY)
         canvas.drawBitmap(largeBitmap, sourceRect, destRect, paint)
         return bitmap
