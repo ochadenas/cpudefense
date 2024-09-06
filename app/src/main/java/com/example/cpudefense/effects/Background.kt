@@ -27,6 +27,9 @@ class Background(val gameView: GameView)
     private var useSpecialBackground = false
     var opacity = 0.5f
     var paint = Paint()
+    /** a bitmap that has arbitrary dimensions. Usually bigger than the screen size.
+     * Must be scaled to viewport dimensions whenever they change. */
+    var wholeBackground: Bitmap = Bitmap.createBitmap(100, 100, Bitmap.Config.ARGB_8888) // TODO: change the fixed size
     /** bitmap with a background design of the screens's proportions */
     var basicBackground: Bitmap? = null
     /** bitmap with the network picture painted on the background */
@@ -36,51 +39,37 @@ class Background(val gameView: GameView)
     /** standard opacity of the background */
     val backgroundOpacity = 0.6f
 
-    enum class BackgroundState { DISABLED, UNINITIALIZED, BLANK, INITIALIZED }
-    var state = BackgroundState.BLANK
-
     fun initializeAtStartOfGame()
     {
         enabled = gameView.gameMechanics.gameActivity.settings.configDisableBackground
-        state = BackgroundState.UNINITIALIZED
+        Canvas(wholeBackground).drawColor(Color.BLACK)
     }
 
     fun prepareAtStartOfStage(stage: Stage.Identifier)
+            /** called before starting a new stage. Gets a new backgriund image
+             * and crops or scales it to the required size.
+             */
     {
-        // TODO: hier nur das Bild laden, aber noch nicht skalieren oder auschneiden
-        createImage(stage, backgroundOpacity)
+        loadWholeBitmapOfStage(stage)
     }
 
-    fun setSize(area: Rect)
+    fun setSize(width: Int, height: Int)
     {
-        // TODO: hier das Bild ausschneiden und skalieren, aber nicht mehr laden
-        myArea = Rect(area)
-    }
-
-    fun paintNetworkOnBackground(bitmapForeground: Bitmap)
-    /**
-     * paints the given bitmap on the "basic" background picture
-     * */
-    {
-        if (state == BackgroundState.INITIALIZED)
+        if (myArea.width() == width && myArea.height() == height) // size has not changed
+            return // no need to recalculate
+        if (width>0 && height>0)
         {
-            if (myArea.width() == 0 || myArea.height() == 0)
-                return
-            paint.alpha = 255
-            currentBackground?.let {
-                val canvas = Canvas(it)
-                canvas.drawBitmap(bitmapForeground, null, myArea, paint)
-            }
+            myArea = Rect(0, 0, width, height)
+            basicBackground = bitmapCroppedToSize(myArea)
         }
     }
 
     fun display(canvas: Canvas)
     {
-        if (state == BackgroundState.INITIALIZED)
-            currentBackground?.let {
-                paint.alpha = 255
-                canvas.drawBitmap(it, null, myArea, paint)
-            }
+        paint.alpha = (255 * opacity).toInt()
+        basicBackground?.let {
+            canvas.drawBitmap(it, null, myArea, paint)
+        }
     }
 
     private fun loadWholeBitmap(number: Int, useSpecial: Boolean = false): Bitmap
@@ -90,24 +79,26 @@ class Background(val gameView: GameView)
         val resources: Resources = gameView.resources
         gameView.gameMechanics.gameActivity.runOnUiThread() {
             Toast.makeText(gameView.gameMechanics.gameActivity, resources.getString(R.string.toast_loading), Toast.LENGTH_SHORT).show() }
+        val options = BitmapFactory.Options()
+        options.inScaled = false
         return if (useSpecial)   // allows use of special backgrounds, currently disabled
             BitmapFactory.decodeResource(resources, R.drawable.background_flowers)
         else when (number)
         {
-            1 -> BitmapFactory.decodeResource(resources, R.drawable.background_1)
-            2 -> BitmapFactory.decodeResource(resources, R.drawable.background_2)
-            3 -> BitmapFactory.decodeResource(resources, R.drawable.background_3)
-            4 -> BitmapFactory.decodeResource(resources, R.drawable.background_4)
-            5 -> BitmapFactory.decodeResource(resources, R.drawable.background_5)
-            6 -> BitmapFactory.decodeResource(resources, R.drawable.background_6)
-            7 -> BitmapFactory.decodeResource(resources, R.drawable.background_7)
-            8 -> BitmapFactory.decodeResource(resources, R.drawable.background_8)
-            9 -> BitmapFactory.decodeResource(resources, R.drawable.background_9)
-            else -> BitmapFactory.decodeResource(resources, R.drawable.background_9)
+            1 -> BitmapFactory.decodeResource(resources, R.drawable.background_1, options)
+            2 -> BitmapFactory.decodeResource(resources, R.drawable.background_2, options)
+            3 -> BitmapFactory.decodeResource(resources, R.drawable.background_3, options)
+            4 -> BitmapFactory.decodeResource(resources, R.drawable.background_4, options)
+            5 -> BitmapFactory.decodeResource(resources, R.drawable.background_5, options)
+            6 -> BitmapFactory.decodeResource(resources, R.drawable.background_6, options)
+            7 -> BitmapFactory.decodeResource(resources, R.drawable.background_7, options)
+            8 -> BitmapFactory.decodeResource(resources, R.drawable.background_8, options)
+            9 -> BitmapFactory.decodeResource(resources, R.drawable.background_9, options)
+            else -> BitmapFactory.decodeResource(resources, R.drawable.background_9, options)
         }
     }
 
-    fun loadWholeBitmapOfStage(stageIdent: Stage.Identifier?): Bitmap
+    fun loadWholeBitmapOfStage(stageIdent: Stage.Identifier?)
             /** chooses the background to use,
              * and selects a random part of it
              * @param stageIdent Series and number of the current stage
@@ -118,33 +109,7 @@ class Background(val gameView: GameView)
             useSpecialBackground = true
         val n = stageIdent?.number ?: 0
         this.opacity = opacity
-        return loadWholeBitmap(n % maxBackgroundNumber + 1, useSpecialBackground)
-    }
-
-    fun createImage(stageIdent: Stage.Identifier?, opacity: Float = 0.6f)
-            /** recreates the background image as a part of the larger image loaded from disk.
-             * @param stageIdent The stage for which the background shall be created
-             * @param opacity Alpha of the background, from 0.0 to 1.0. Lower values mean a dimmer picture.
-             */
-    {
-        basicBackground = createBlankBackground()
-        if (enabled)
-        {
-            val largeBitmap = loadWholeBitmapOfStage(stageIdent)
-            basicBackground?.let {
-                val displacementX = if (largeBitmap.width>it.width)
-                    Random.nextInt(largeBitmap.width-it.width) else 0
-                val displacementY = if (largeBitmap.height > it.height)
-                    Random.nextInt(largeBitmap.height-it.height) else 0
-                val destRect = Rect(0,0,it.width,it.height)
-                val sourceRect = Rect(destRect)
-                sourceRect.setTopLeft(displacementX, displacementY)
-                val canvas = Canvas(it)
-                paint.alpha = (255 * opacity).toInt()
-                canvas.drawBitmap(it, sourceRect, destRect, paint)
-                state = BackgroundState.INITIALIZED
-            }
-        }
+        wholeBackground = loadWholeBitmap(n % maxBackgroundNumber + 1, useSpecialBackground)
     }
 
     private fun createBlankBackground(): Bitmap
@@ -156,16 +121,43 @@ class Background(val gameView: GameView)
         basicBackground = bitmap
         val canvas = Canvas(bitmap)
         canvas.drawColor(gameView.resources.getColor(R.color.network_background))
-        state = BackgroundState.BLANK
         return bitmap
     }
 
-    private fun getBasicBackground(stageIdent: Stage.Identifier? = null): Bitmap
-    /** @return the background picture without network. Creates the bitmap if necessary. */
+    private fun bitmapCroppedToSize(destRect: Rect): Bitmap
+            /** returns a portion of wholeBackground in the given size.
+             * May be either a cropped part if wholeBackground is bigger than the rectangle,
+             * or a scaled image if it is smaller.
+             */
+
     {
-        if (basicBackground == null || basicBackground?.width == 0)
-            createImage(stageIdent) // this is a fallback in case that the background doesn't exist
-        return basicBackground ?: createBlankBackground()
+        var deltaX = wholeBackground.width - destRect.width()
+        var deltaY = wholeBackground.height - destRect.height()
+
+        // if the whole bitmap is smaller than the destination, scale it up, but keep the aspect ratio
+        var newSize = Rect(0, 0, destRect.width(), destRect.height())
+        val largeBitmap = if (deltaX<0 || deltaY<0)
+        {
+            val ratio = wholeBackground.height / wholeBackground.width.toFloat()
+            if (deltaX<0) // stretch in x direction
+                newSize.bottom = (newSize.right * ratio).toInt()
+            if (deltaY<0) // stretch in y direction
+                newSize.right = (newSize.bottom / ratio).toInt()
+            Bitmap.createScaledBitmap(wholeBackground, newSize.width(), newSize.height(), false)
+        }
+        else wholeBackground
+
+        // here, largeBitmap is at least as big as the destination rectangle (in both dimensions)
+        deltaX = largeBitmap.width - destRect.width()
+        deltaY = largeBitmap.height - destRect.height()
+        val bitmap = Bitmap.createBitmap(destRect.width(), destRect.height(), Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bitmap)
+        val displacementX = if (deltaX>0) Random.nextInt(deltaX) else 0
+        val displacementY = if (deltaY>0) Random.nextInt(deltaY) else 0
+        val sourceRect = Rect(destRect)
+        sourceRect.setTopLeft(displacementX, displacementY)
+        canvas.drawBitmap(largeBitmap, sourceRect, destRect, paint)
+        return bitmap
     }
 
 }

@@ -2,7 +2,6 @@
 
 package com.example.cpudefense.gameElements
 
-import android.content.res.Resources
 import android.graphics.*
 import android.view.MotionEvent
 import com.example.cpudefense.*
@@ -360,7 +359,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int):
             heightOnScreen = it.second * GameMechanics.chipSize.y.toInt()
             actualRect = Rect(0, 0, widthOnScreen, heightOnScreen)
         }
-        outlineWidth = 2f * theNetwork.gameMechanics.resources.displayMetrics.scaledDensity
+        outlineWidth = 2f * resources.displayMetrics.scaledDensity
         actualRect?.setCenter(viewport.gridToViewport(posOnGrid))
         actualRect?.let { displayRect(canvas, it) }
         if (theNetwork.gameMechanics.gameActivity.settings.configShowAttsInRange && chipData.type != ChipType.EMPTY)
@@ -864,7 +863,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int):
             attacker.immuneTo = this@Chip
             attacker.data.state = Vehicle.State.HELD
             attacker.attackerData.storageNodeId = this@Chip.data.ident
-            theNetwork.gameMechanics.gameActivity.gameView.theEffects?.fade(attacker)
+            theNetwork.gameMechanics.gameActivity.gameView.effects?.fade(attacker)
         }
 
         fun retrieve(): Attacker?
@@ -933,7 +932,6 @@ open class Chip(val network: Network, gridX: Int, gridY: Int):
                         if (isInCooldown())
                         {
                             paintIndicator.style = Paint.Style.FILL
-                            // paintIndicator.color = theNetwork.theGame.resources.getColor(RES.color.chips_mem_foreground)
                             paintIndicator.alpha = (chipData.cooldownTimer*255f/getCooldownTime()).toInt()
                             canvas.drawRect(indicatorRect, paintIndicator)
                         }

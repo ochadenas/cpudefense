@@ -23,7 +23,7 @@ class Cryptocoin(network: com.example.cpudefense.networkmap.Network, number: ULo
         this.animationCount = 2 * animationCount
     }
     override fun display(canvas: Canvas, viewport: Viewport) {
-        val size =  (GameMechanics.coinSizeOnScreen * network.gameMechanics.resources.displayMetrics.scaledDensity).toInt()
+        val size =  (GameMechanics.coinSizeOnScreen * network.gameView.resources.displayMetrics.scaledDensity).toInt()
         actualRect = Rect(0, 0, size, size)
         actualRect.setCenter(getPositionOnScreen())
         actualRect.offset(displacement.first, displacement.second)
@@ -31,8 +31,8 @@ class Cryptocoin(network: com.example.cpudefense.networkmap.Network, number: ULo
     }
 
     override val explosionColour: Int
-        get() = if (network.gameMechanics.currentStage.series == GameMechanics.SERIES_ENDLESS) network.gameMechanics.resources.getColor(R.color.attackers_glow_coin_endless)
-                else network.gameMechanics.resources.getColor(R.color.attackers_glow_coin)
+        get() = if (network.gameMechanics.currentStage.series == GameMechanics.SERIES_ENDLESS) network.gameView.resources.getColor(R.color.attackers_glow_coin_endless)
+                else network.gameView.resources.getColor(R.color.attackers_glow_coin)
 
     override fun onShot(type: Chip.ChipType, power: Int): Boolean
     {
@@ -59,7 +59,7 @@ class Cryptocoin(network: com.example.cpudefense.networkmap.Network, number: ULo
     }
 
     override fun makeNumber() {
-        myBitmap = this.network.gameMechanics.currentCoinBitmap().copy(this.network.gameMechanics.currentCoinBitmap().config, true)
+        myBitmap = this.network.gameView.currentCoinBitmap().copy(this.network.gameView.currentCoinBitmap().config, true)
     }
 
     override fun setBitmap(bitmap: Bitmap) {
@@ -67,7 +67,7 @@ class Cryptocoin(network: com.example.cpudefense.networkmap.Network, number: ULo
     }
 
     override fun provideBitmap(): Bitmap {
-        val bitmap = network.gameMechanics.currentCoinBitmap()
+        val bitmap = network.gameView.currentCoinBitmap()
         return bitmap.copy(bitmap.config, true)
     }
 

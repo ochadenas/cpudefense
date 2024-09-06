@@ -119,9 +119,6 @@ class GameMechanics(val gameActivity: GameActivity) {
         var coinsTotal: Int = 0
     )
     var global = GlobalData()
-
-    val resources: Resources = (gameActivity as Activity).resources
-
     var stageData: Stage.Data? = null
     var summaryPerNormalLevel  = HashMap<Int, Stage.Summary>()
     var summaryPerTurboLevel  = HashMap<Int, Stage.Summary>()
@@ -158,18 +155,6 @@ class GameMechanics(val gameActivity: GameActivity) {
 
     enum class GamePhase { START, RUNNING, INTERMEZZO, MARKETPLACE, PAUSED }
     enum class GameSpeed { NORMAL, MAX }
-
-    // TODO: move to GameView
-    private val coinIconBlue: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.cryptocoin)
-    private val coinIconRed: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.cryptocoin_red)
-    val cpuImage: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.cpu)
-    val playIcon: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.play_active)
-    val pauseIcon: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.pause_active)
-    val fastIcon: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.fast_active)
-    val returnIcon: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.cancel_active)
-    val moveLockIcon: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.move_lock)
-    val moveUnlockIcon: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.move_unlock)
-    val hpBackgroundBitmap: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.hp_key)
 
     fun beginGame(resetProgress: Boolean = false)
     {
@@ -286,15 +271,6 @@ class GameMechanics(val gameActivity: GameActivity) {
         return purseOfCoins[stage.mode()] ?: PurseOfCoins(this)
     }
 
-    fun currentCoinBitmap(stage: Stage.Identifier = currentStage): Bitmap
-    {
-        return when (stage.mode())
-        {
-            LevelMode.BASIC -> coinIconBlue
-            LevelMode.ENDLESS -> coinIconRed
-        }
-    }
-
     fun update()
     {
         if (state.phase == GamePhase.RUNNING)
@@ -363,7 +339,7 @@ class GameMechanics(val gameActivity: GameActivity) {
     {
         val intermezzo = gameActivity.gameView.intermezzo
         gameActivity.runOnUiThread {
-            val toast: Toast = Toast.makeText(gameActivity, resources.getString(R.string.toast_stage_cleared), Toast.LENGTH_SHORT)
+            val toast: Toast = Toast.makeText(gameActivity, gameActivity.resources.getString(R.string.toast_stage_cleared), Toast.LENGTH_SHORT)
             toast.show()
         }
         intermezzo.coinsGathered = state.coinsExtra + state.coinsInLevel
@@ -402,7 +378,7 @@ class GameMechanics(val gameActivity: GameActivity) {
         gameActivity.runOnUiThread {
             val toast: Toast = Toast.makeText(
                 gameActivity,
-                resources.getString(R.string.toast_next_stage).format(nextStage.getLevel()),
+                gameActivity.resources.getString(R.string.toast_next_stage).format(nextStage.getLevel()),
                 Toast.LENGTH_SHORT
             )
             toast.show()
@@ -525,7 +501,7 @@ class GameMechanics(val gameActivity: GameActivity) {
         if ((overheat > 0) && (Random.nextDouble() < (overheat * 0.00001)))  // chance of damaging the CPU
         {
             gameActivity.runOnUiThread {
-                val toast: Toast = Toast.makeText(gameActivity, resources.getString(R.string.overheat), Toast.LENGTH_SHORT)
+                val toast: Toast = Toast.makeText(gameActivity, gameActivity.resources.getString(R.string.overheat), Toast.LENGTH_SHORT)
                 toast.show()
             }
             state.heat *= 0.6f

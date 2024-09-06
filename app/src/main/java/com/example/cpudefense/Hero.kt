@@ -49,6 +49,8 @@ class Hero(var gameMechanics: GameMechanics, type: Type)
         var coinsSpent: Int = 0,
     )
     var data = Data(type = type)
+    
+    val resources = gameMechanics.gameActivity.resources
 
     /** only for the current level: whether hero is on leave */
     var isOnLeave = false
@@ -93,147 +95,147 @@ class Hero(var gameMechanics: GameMechanics, type: Type)
         when (data.type)
         {
             Type.INCREASE_CHIP_SUB_SPEED -> {
-                shortDesc = gameMechanics.resources.getString(R.string.shortdesc_SUB)
+                shortDesc = resources.getString(R.string.shortdesc_SUB)
                 strengthDesc = "x %.2f".format(strength)
                 upgradeDesc = " → x %.2f".format(next)
             }
             Type.INCREASE_STARTING_CASH ->
             {
-                shortDesc = gameMechanics.resources.getString(R.string.shortdesc_startinfo)
+                shortDesc = resources.getString(R.string.shortdesc_startinfo)
                 strengthDesc = "%d bits".format(strength.toInt())
                 upgradeDesc = " → %d bits".format(next.toInt())
             }
             Type.INCREASE_CHIP_SHR_SPEED ->             {
-                shortDesc = gameMechanics.resources.getString(R.string.shortdesc_SHR)
+                shortDesc = resources.getString(R.string.shortdesc_SHR)
                 strengthDesc = "x %.2f".format(strength)
                 upgradeDesc = " → %.2f".format(next)
             }
             Type.INCREASE_CHIP_MEM_SPEED -> {
-                shortDesc = gameMechanics.resources.getString(R.string.shortdesc_MEM)
+                shortDesc = resources.getString(R.string.shortdesc_MEM)
                 strengthDesc = "x %.2f".format(strength)
                 upgradeDesc = " → %.2f".format(next)
             }
             Type.INCREASE_CHIP_RES_STRENGTH -> {
-                shortDesc = gameMechanics.resources.getString(R.string.shortdesc_RES)
+                shortDesc = resources.getString(R.string.shortdesc_RES)
                 strengthDesc = "x %.2f".format(strength)
                 upgradeDesc = " → %.2f".format(next)
             }
             Type.INCREASE_CHIP_RES_DURATION -> {
-                shortDesc = gameMechanics.resources.getString(R.string.shortdesc_duration)
+                shortDesc = resources.getString(R.string.shortdesc_duration)
                 strengthDesc = "x %.2f".format(strength)
                 upgradeDesc = " → %.2f".format(next)
             }
             Type.REDUCE_HEAT -> {
-                shortDesc = gameMechanics.resources.getString(R.string.shortdesc_heat)
+                shortDesc = resources.getString(R.string.shortdesc_heat)
                 strengthDesc = "-%d%%".format(strength.toInt())
                 upgradeDesc = " → -%d%%".format(next.toInt())
             }
             Type.DECREASE_UPGRADE_COST -> {
-                shortDesc = gameMechanics.resources.getString(R.string.shortdesc_upgrade)
+                shortDesc = resources.getString(R.string.shortdesc_upgrade)
                 strengthDesc = "-%d%%".format(strength.toInt())
                 upgradeDesc = " → -%d%%".format(next.toInt())
             }
             Type.ADDITIONAL_LIVES -> {
-                shortDesc = gameMechanics.resources.getString(R.string.shortdesc_lives)
+                shortDesc = resources.getString(R.string.shortdesc_lives)
                 strengthDesc = "%d".format(strength.toInt())
                 upgradeDesc = " → %d".format(next.toInt())
                 maxLevel = 3
             }
             Type.DECREASE_ATT_FREQ -> {
-                shortDesc = gameMechanics.resources.getString(R.string.shortdesc_frequency)
+                shortDesc = resources.getString(R.string.shortdesc_frequency)
                 strengthDesc = "x %.2f".format(strength)
                 upgradeDesc = " → %.2f".format(next)
             }
             Type.DECREASE_ATT_SPEED -> {
-                shortDesc = gameMechanics.resources.getString(R.string.shortdesc_att_speed)
+                shortDesc = resources.getString(R.string.shortdesc_att_speed)
                 strengthDesc = "x %.2f".format(strength)
                 upgradeDesc = " → %.2f".format(next)
             }
             Type.DECREASE_COIN_STRENGTH -> {
-                shortDesc = gameMechanics.resources.getString(R.string.shortdesc_coin_strength)
+                shortDesc = resources.getString(R.string.shortdesc_coin_strength)
                 strengthDesc = "x %.2f".format(strength)
                 upgradeDesc = " → %.2f".format(next)
             }
             Type.INCREASE_MAX_HERO_LEVEL ->
             {
-                shortDesc = gameMechanics.resources.getString(R.string.shortdesc_max_hero_upgrade)
+                shortDesc = resources.getString(R.string.shortdesc_max_hero_upgrade)
                 strengthDesc = "+%d".format(strength.toInt())
                 upgradeDesc = " → +%d".format(next.toInt())
                 maxLevel = 3
             }
             Type.LIMIT_UNWANTED_CHIPS ->
             {
-                shortDesc = gameMechanics.resources.getString(R.string.shortdesc_limit_unwanted)
+                shortDesc = resources.getString(R.string.shortdesc_limit_unwanted)
                 strengthDesc = "-%d".format(strength.toInt())
                 upgradeDesc = " → -%d".format(next.toInt())
             }
             Type.ENABLE_MEM_UPGRADE ->
             {
-                shortDesc = gameMechanics.resources.getString(R.string.shortdesc_enable_mem_upgrade)
+                shortDesc = resources.getString(R.string.shortdesc_enable_mem_upgrade)
                 strengthDesc = "%d".format(strength.toInt())
                 upgradeDesc = " → %d".format(next.toInt())
                 maxLevel = GameMechanics.maxInternalChipStorage - 1
             }
             Type.GAIN_CASH ->
             {
-                shortDesc = gameMechanics.resources.getString(R.string.shortdesc_info_gain)
+                shortDesc = resources.getString(R.string.shortdesc_info_gain)
                 strengthDesc = "1 bit/%d ticks".format(strength.toInt())
                 upgradeDesc = " → 1/%d ticks".format(next.toInt())
             }
             Type.GAIN_CASH_ON_KILL ->
             {
-                shortDesc = gameMechanics.resources.getString(R.string.shortdesc_info_on_kill)
+                shortDesc = resources.getString(R.string.shortdesc_info_on_kill)
                 strengthDesc = "%d bit/kill".format(strength.toInt())
                 upgradeDesc = " → %d bit/kill".format(next.toInt())
             }
             Type.INCREASE_REFUND ->
             {
-                shortDesc = gameMechanics.resources.getString(R.string.shortdesc_refund)
+                shortDesc = resources.getString(R.string.shortdesc_refund)
                 strengthDesc = "%d%%".format(strength.toInt())
                 upgradeDesc = " → %d%%".format(next.toInt())
                 maxLevel = 5  // even at level 6, refund is more than 100%
             }
             Type.INCREASE_CHIP_SUB_RANGE ->
             {
-                shortDesc = gameMechanics.resources.getString(R.string.shortdesc_range).format("SUB")
+                shortDesc = resources.getString(R.string.shortdesc_range).format("SUB")
                 strengthDesc = "x %.2f".format(strength)
                 upgradeDesc = " → %.2f".format(next)
             }
             Type.INCREASE_CHIP_SHR_RANGE ->
             {
-                shortDesc = gameMechanics.resources.getString(R.string.shortdesc_range).format("SHR")
+                shortDesc = resources.getString(R.string.shortdesc_range).format("SHR")
                 strengthDesc = "x %.2f".format(strength)
                 upgradeDesc = " → %.2f".format(next)
             }
             Type.INCREASE_CHIP_MEM_RANGE ->
             {
-                shortDesc = gameMechanics.resources.getString(R.string.shortdesc_range).format("MEM")
+                shortDesc = resources.getString(R.string.shortdesc_range).format("MEM")
                 strengthDesc = "x %.2f".format(strength)
                 upgradeDesc = " → %.2f".format(next)
             }
             Type.DECREASE_ATT_STRENGTH -> {
-                shortDesc = gameMechanics.resources.getString(R.string.shortdesc_att_strength)
+                shortDesc = resources.getString(R.string.shortdesc_att_strength)
                 strengthDesc = "x %.2f".format(strength)
                 upgradeDesc = " → %.2f".format(next)
             }
             Type.DECREASE_REMOVAL_COST -> {
-                shortDesc = gameMechanics.resources.getString(R.string.shortdesc_reduce_removal)
+                shortDesc = resources.getString(R.string.shortdesc_reduce_removal)
                 strengthDesc = "-%d%%".format(strength.toInt())
                 upgradeDesc = " → -%d%%".format(next.toInt())
             }
             Type.CONVERT_HEAT -> {
-                shortDesc = gameMechanics.resources.getString(R.string.shortdesc_heat_conversion)
+                shortDesc = resources.getString(R.string.shortdesc_heat_conversion)
                 strengthDesc = "%d%%".format(strength.toInt())
                 upgradeDesc = " → %d%%".format(next.toInt())
             }
             Type.DOUBLE_HIT_SUB -> {
-                shortDesc = gameMechanics.resources.getString(R.string.shortdesc_double_chance).format("SUB")
+                shortDesc = resources.getString(R.string.shortdesc_double_chance).format("SUB")
                 strengthDesc = "%d%%".format(strength.toInt())
                 upgradeDesc = " → %d%%".format(next.toInt())
             }
         }
         val cost = getPrice(data.level)
-        costDesc = gameMechanics.resources.getString(R.string.cost_desc).format(cost)
+        costDesc = resources.getString(R.string.cost_desc).format(cost)
         if (data.level >= getMaxUpgradeLevel()) {
             upgradeDesc = ""
             costDesc = ""
@@ -419,199 +421,199 @@ class Hero(var gameMechanics: GameMechanics, type: Type)
                 {
                     name = "Turing"
                     fullName = "Alan Turing"
-                    effect = gameMechanics.resources.getString(R.string.HERO_EFFECT_CHIPSPEED).format("SUB")
-                    vitae = gameMechanics.resources.getString(R.string.turing)
-                    picture = BitmapFactory.decodeResource(gameMechanics.resources, R.drawable.turing)
+                    effect = resources.getString(R.string.HERO_EFFECT_CHIPSPEED).format("SUB")
+                    vitae = resources.getString(R.string.turing)
+                    picture = BitmapFactory.decodeResource(resources, R.drawable.turing)
                 }
                 Type.INCREASE_CHIP_SHR_SPEED ->
                 {
                     name = "Lovelace"
                     fullName = "Ada Lovelace"
-                    effect = gameMechanics.resources.getString(R.string.HERO_EFFECT_CHIPSPEED).format("SHR")
-                    vitae = gameMechanics.resources.getString(R.string.lovelace)
-                    picture = BitmapFactory.decodeResource(gameMechanics.resources, R.drawable.lovelace)
+                    effect = resources.getString(R.string.HERO_EFFECT_CHIPSPEED).format("SHR")
+                    vitae = resources.getString(R.string.lovelace)
+                    picture = BitmapFactory.decodeResource(resources, R.drawable.lovelace)
                 }
                 Type.INCREASE_CHIP_MEM_SPEED ->
                 {
                     name = "Knuth"
                     fullName = "Donald E. Knuth"
-                    effect = gameMechanics.resources.getString(R.string.HERO_EFFECT_CHIPSPEED).format("MEM")
-                    vitae = gameMechanics.resources.getString(R.string.knuth)
-                    picture = BitmapFactory.decodeResource(gameMechanics.resources, R.drawable.knuth)
+                    effect = resources.getString(R.string.HERO_EFFECT_CHIPSPEED).format("MEM")
+                    vitae = resources.getString(R.string.knuth)
+                    picture = BitmapFactory.decodeResource(resources, R.drawable.knuth)
                 }
                 Type.REDUCE_HEAT ->
                 {
                     name = "Chappe"
                     fullName = "Claude Chappe"
-                    effect = gameMechanics.resources.getString(R.string.HERO_EFFECT_HEAT)
-                    vitae = gameMechanics.resources.getString(R.string.chappe)
-                    picture = BitmapFactory.decodeResource(gameMechanics.resources, R.drawable.chappe)
+                    effect = resources.getString(R.string.HERO_EFFECT_HEAT)
+                    vitae = resources.getString(R.string.chappe)
+                    picture = BitmapFactory.decodeResource(resources, R.drawable.chappe)
                 }
                 Type.INCREASE_STARTING_CASH ->
                 {
                     name = "Hollerith"
                     fullName = "Herman Hollerith"
-                    effect = gameMechanics.resources.getString(R.string.HERO_EFFECT_STARTINFO)
-                    vitae = gameMechanics.resources.getString(R.string.hollerith)
-                    picture = BitmapFactory.decodeResource(gameMechanics.resources, R.drawable.hollerith)
+                    effect = resources.getString(R.string.HERO_EFFECT_STARTINFO)
+                    vitae = resources.getString(R.string.hollerith)
+                    picture = BitmapFactory.decodeResource(resources, R.drawable.hollerith)
                 }
                 Type.DECREASE_UPGRADE_COST ->
                 {
                     name = "Osborne"
                     fullName = "Adam Osborne"
-                    effect = gameMechanics.resources.getString(R.string.HERO_EFFECT_UPGRADECOST)
-                    vitae = gameMechanics.resources.getString(R.string.osborne)
-                    picture = BitmapFactory.decodeResource(gameMechanics.resources, R.drawable.osborne)
+                    effect = resources.getString(R.string.HERO_EFFECT_UPGRADECOST)
+                    vitae = resources.getString(R.string.osborne)
+                    picture = BitmapFactory.decodeResource(resources, R.drawable.osborne)
                 }
                 Type.ADDITIONAL_LIVES ->
                 {
                     name = "Zuse"
                     fullName = "Konrad Zuse"
-                    effect = gameMechanics.resources.getString(R.string.HERO_EFFECT_LIVES)
-                    vitae = gameMechanics.resources.getString(R.string.zuse)
-                    picture = BitmapFactory.decodeResource(gameMechanics.resources, R.drawable.zuse)
+                    effect = resources.getString(R.string.HERO_EFFECT_LIVES)
+                    vitae = resources.getString(R.string.zuse)
+                    picture = BitmapFactory.decodeResource(resources, R.drawable.zuse)
                 }
                 Type.LIMIT_UNWANTED_CHIPS ->
                 {
                     name = "Kilby"
                     fullName = "Jack Kilby"
-                    effect = gameMechanics.resources.getString(R.string.HERO_EFFECT_LIMITUNWANTED)
-                    vitae = gameMechanics.resources.getString(R.string.kilby)
-                    picture = BitmapFactory.decodeResource(gameMechanics.resources, R.drawable.kilby)
+                    effect = resources.getString(R.string.HERO_EFFECT_LIMITUNWANTED)
+                    vitae = resources.getString(R.string.kilby)
+                    picture = BitmapFactory.decodeResource(resources, R.drawable.kilby)
                 }
                 Type.ENABLE_MEM_UPGRADE ->
                 {
                     name = "Leibniz"
                     fullName = "Gottfried Wilhelm Leibniz"
-                    effect = gameMechanics.resources.getString(R.string.HERO_EFFECT_ENABLEMEM)
-                    vitae = gameMechanics.resources.getString(R.string.leibniz)
-                    picture = BitmapFactory.decodeResource(gameMechanics.resources, R.drawable.leibniz)
+                    effect = resources.getString(R.string.HERO_EFFECT_ENABLEMEM)
+                    vitae = resources.getString(R.string.leibniz)
+                    picture = BitmapFactory.decodeResource(resources, R.drawable.leibniz)
                 }
                 Type.DECREASE_ATT_FREQ ->
                 {
                     name = "LHC"
                     fullName = "Les Horribles Cernettes"
-                    effect = gameMechanics.resources.getString(R.string.HERO_EFFECT_FREQUENCY)
-                    vitae = gameMechanics.resources.getString(R.string.cernettes)
-                    picture = BitmapFactory.decodeResource(gameMechanics.resources, R.drawable.cernettes)
+                    effect = resources.getString(R.string.HERO_EFFECT_FREQUENCY)
+                    vitae = resources.getString(R.string.cernettes)
+                    picture = BitmapFactory.decodeResource(resources, R.drawable.cernettes)
                 }
                 Type.DECREASE_COIN_STRENGTH ->
                 {
                     name = "Diffie"
                     fullName = "Whit Diffie"
-                    effect = gameMechanics.resources.getString(R.string.HERO_EFFECT_COINSTRENGTH)
-                    vitae = gameMechanics.resources.getString(R.string.diffie)
-                    picture = BitmapFactory.decodeResource(gameMechanics.resources, R.drawable.diffie)
+                    effect = resources.getString(R.string.HERO_EFFECT_COINSTRENGTH)
+                    vitae = resources.getString(R.string.diffie)
+                    picture = BitmapFactory.decodeResource(resources, R.drawable.diffie)
                 }
                 Type.GAIN_CASH ->
                 {
                     name = "Franke"
                     fullName = "Herbert W. Franke"
-                    effect = gameMechanics.resources.getString(R.string.HERO_EFFECT_INFOOVERTIME)
-                    vitae = gameMechanics.resources.getString(R.string.franke)
-                    picture = BitmapFactory.decodeResource(gameMechanics.resources, R.drawable.franke)
+                    effect = resources.getString(R.string.HERO_EFFECT_INFOOVERTIME)
+                    vitae = resources.getString(R.string.franke)
+                    picture = BitmapFactory.decodeResource(resources, R.drawable.franke)
                 }
                 Type.GAIN_CASH_ON_KILL ->
                 {
                     name = "Mandelbrot"
                     fullName = "Benoît B. Mandelbrot"
-                    effect = gameMechanics.resources.getString(R.string.HERO_EFFECT_GAININFO)
-                    vitae = gameMechanics.resources.getString(R.string.mandelbrot)
-                    picture = BitmapFactory.decodeResource(gameMechanics.resources, R.drawable.mandelbrot)
+                    effect = resources.getString(R.string.HERO_EFFECT_GAININFO)
+                    vitae = resources.getString(R.string.mandelbrot)
+                    picture = BitmapFactory.decodeResource(resources, R.drawable.mandelbrot)
                 }
                 Type.DECREASE_REMOVAL_COST ->
                 {
                     name = "Hamilton"
                     fullName = "Margaret Hamilton"
-                    effect = gameMechanics.resources.getString(R.string.HERO_EFFECT_DECREASEREMOVAL)
-                    vitae = gameMechanics.resources.getString(R.string.hamilton)
-                    picture = BitmapFactory.decodeResource(gameMechanics.resources, R.drawable.hamilton)
+                    effect = resources.getString(R.string.HERO_EFFECT_DECREASEREMOVAL)
+                    vitae = resources.getString(R.string.hamilton)
+                    picture = BitmapFactory.decodeResource(resources, R.drawable.hamilton)
                 }
                 Type.DECREASE_ATT_SPEED ->
                 {
                     name = "Vaughan"
                     fullName = "Dorothy Vaughan"
-                    effect = gameMechanics.resources.getString(R.string.HERO_EFFECT_ATTSPEED)
-                    vitae = gameMechanics.resources.getString(R.string.vaughan)
-                    picture = BitmapFactory.decodeResource(gameMechanics.resources, R.drawable.vaughan)
+                    effect = resources.getString(R.string.HERO_EFFECT_ATTSPEED)
+                    vitae = resources.getString(R.string.vaughan)
+                    picture = BitmapFactory.decodeResource(resources, R.drawable.vaughan)
                 }
                 Type.DECREASE_ATT_STRENGTH ->
                 {
                     name = "Schneier"
                     fullName = "Bruce Schneier"
-                    effect = gameMechanics.resources.getString(R.string.HERO_EFFECT_ATTSTRENGTH)
-                    vitae = gameMechanics.resources.getString(R.string.schneier)
-                    picture = BitmapFactory.decodeResource(gameMechanics.resources, R.drawable.schneier)
+                    effect = resources.getString(R.string.HERO_EFFECT_ATTSTRENGTH)
+                    vitae = resources.getString(R.string.schneier)
+                    picture = BitmapFactory.decodeResource(resources, R.drawable.schneier)
                 }
                 Type.INCREASE_REFUND ->
                 {
                     name = "Tramiel"
                     fullName = "Jack Tramiel"
-                    effect = gameMechanics.resources.getString(R.string.HERO_EFFECT_REFUNDPRICE)
-                    vitae = gameMechanics.resources.getString(R.string.tramiel)
-                    picture = BitmapFactory.decodeResource(gameMechanics.resources, R.drawable.tramiel)
+                    effect = resources.getString(R.string.HERO_EFFECT_REFUNDPRICE)
+                    vitae = resources.getString(R.string.tramiel)
+                    picture = BitmapFactory.decodeResource(resources, R.drawable.tramiel)
                 }
                 Type.INCREASE_CHIP_SUB_RANGE ->
                 {
                     name = "Wiener"
                     fullName = "Norbert Wiener"
-                    effect = gameMechanics.resources.getString(R.string.HERO_EFFECT_RANGE).format("SUB")
-                    vitae = gameMechanics.resources.getString(R.string.wiener)
-                    picture = BitmapFactory.decodeResource(gameMechanics.resources, R.drawable.wiener)
+                    effect = resources.getString(R.string.HERO_EFFECT_RANGE).format("SUB")
+                    vitae = resources.getString(R.string.wiener)
+                    picture = BitmapFactory.decodeResource(resources, R.drawable.wiener)
                 }
                 Type.INCREASE_CHIP_SHR_RANGE ->
                 {
                     name = "Pascal"
                     fullName = "Blaise Pascal"
-                    effect = gameMechanics.resources.getString(R.string.HERO_EFFECT_RANGE).format("SHR")
-                    vitae = gameMechanics.resources.getString(R.string.pascal)
-                    picture = BitmapFactory.decodeResource(gameMechanics.resources, R.drawable.pascal)
+                    effect = resources.getString(R.string.HERO_EFFECT_RANGE).format("SHR")
+                    vitae = resources.getString(R.string.pascal)
+                    picture = BitmapFactory.decodeResource(resources, R.drawable.pascal)
                 }
                 Type.INCREASE_CHIP_MEM_RANGE ->
                 {
                     name = "Hopper"
                     fullName = "Grace Hopper"
-                    effect = gameMechanics.resources.getString(R.string.HERO_EFFECT_RANGE).format("MEM")
-                    vitae = gameMechanics.resources.getString(R.string.hopper)
-                    picture = BitmapFactory.decodeResource(gameMechanics.resources, R.drawable.hopper)
+                    effect = resources.getString(R.string.HERO_EFFECT_RANGE).format("MEM")
+                    vitae = resources.getString(R.string.hopper)
+                    picture = BitmapFactory.decodeResource(resources, R.drawable.hopper)
                 }
                 Type.INCREASE_MAX_HERO_LEVEL ->
                 {
                     name = "Meier"
                     fullName = "Sid Meier"
-                    effect = gameMechanics.resources.getString(R.string.HERO_EFFECT_MAXHEROUPGRADE)
-                    vitae = gameMechanics.resources.getString(R.string.meier)
-                    picture = BitmapFactory.decodeResource(gameMechanics.resources, R.drawable.meier)
+                    effect = resources.getString(R.string.HERO_EFFECT_MAXHEROUPGRADE)
+                    vitae = resources.getString(R.string.meier)
+                    picture = BitmapFactory.decodeResource(resources, R.drawable.meier)
                 }
                 Type.INCREASE_CHIP_RES_STRENGTH ->
                 {
                     name = "Ohm"
                     fullName = "Georg Ohm"
-                    effect = gameMechanics.resources.getString(R.string.HERO_EFFECT_RES_STRENGTH)
-                    vitae = gameMechanics.resources.getString(R.string.ohm)
-                    picture = BitmapFactory.decodeResource(gameMechanics.resources, R.drawable.ohm)
+                    effect = resources.getString(R.string.HERO_EFFECT_RES_STRENGTH)
+                    vitae = resources.getString(R.string.ohm)
+                    picture = BitmapFactory.decodeResource(resources, R.drawable.ohm)
                 }
                 Type.INCREASE_CHIP_RES_DURATION ->
                 {
                     name = "Volta"
                     fullName = "Alessandro Volta"
-                    effect = gameMechanics.resources.getString(R.string.HERO_EFFECT_RES_DURATION)
-                    vitae = gameMechanics.resources.getString(R.string.volta)
-                    picture = BitmapFactory.decodeResource(gameMechanics.resources, R.drawable.volta)
+                    effect = resources.getString(R.string.HERO_EFFECT_RES_DURATION)
+                    vitae = resources.getString(R.string.volta)
+                    picture = BitmapFactory.decodeResource(resources, R.drawable.volta)
                 }
                 Type.CONVERT_HEAT -> {
                     name = "Shannon"
                     fullName = "Claude Shannon"
-                    effect = gameMechanics.resources.getString(R.string.HERO_EFFECT_CONVERT_HEAT)
-                    vitae = gameMechanics.resources.getString(R.string.shannon)
-                    picture = BitmapFactory.decodeResource(gameMechanics.resources, R.drawable.shannon)
+                    effect = resources.getString(R.string.HERO_EFFECT_CONVERT_HEAT)
+                    vitae = resources.getString(R.string.shannon)
+                    picture = BitmapFactory.decodeResource(resources, R.drawable.shannon)
                 }
                 Type.DOUBLE_HIT_SUB -> {
                     name = "Boole"
                     fullName = "George Boole"
-                    effect = gameMechanics.resources.getString(R.string.HERO_EFFECT_CHANCE_DOUBLE).format("SUB")
-                    vitae = gameMechanics.resources.getString(R.string.boole)
-                    picture = BitmapFactory.decodeResource(gameMechanics.resources, R.drawable.boole)
+                    effect = resources.getString(R.string.HERO_EFFECT_CHANCE_DOUBLE).format("SUB")
+                    vitae = resources.getString(R.string.boole)
+                    picture = BitmapFactory.decodeResource(resources, R.drawable.boole)
                 }
             }
         }

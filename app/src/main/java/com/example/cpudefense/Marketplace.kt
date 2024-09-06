@@ -391,7 +391,7 @@ class Marketplace(val gameView: GameView): GameElement()
 
         init {
             paint.alpha = 255
-            myCanvas.drawBitmap(gameMechanics.currentCoinBitmap(nextGameLevel), null, Rect(0, 0, size, size), paint)
+            myCanvas.drawBitmap(gameView.currentCoinBitmap(nextGameLevel), null, Rect(0, 0, size, size), paint)
         }
         override fun update() {
         }

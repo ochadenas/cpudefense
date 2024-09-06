@@ -17,12 +17,11 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class GameActivity : Activity() {
-    lateinit var theGameMechanics: GameMechanics
+    lateinit var gameMechanics: GameMechanics
     lateinit var gameView: GameView
     private var startOnLevel: Stage.Identifier? = null
-    private var resumeGame = true
-    private var gameIsRunning =
-        true  // flag used to keep the threads running. Set to false when leaving activity
+    /** flag used to keep the threads running. Set to false when leaving activity */
+    private var gameIsRunning = true
 
     companion object {
     }
@@ -66,13 +65,14 @@ class GameActivity : Activity() {
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         setContentView(R.layout.activity_main_game)
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        theGameMechanics = GameMechanics(this)
+        gameMechanics = GameMechanics(this)
+        gameView = GameView(this)
     }
 
     override fun onPause() {
         // this method get executed when the user presses the system's "back" button,
         // but also when she navigates to another app
-        Persistency(this).saveState(theGameMechanics)
+        Persistency(this).saveState(gameMechanics)
         gameIsRunning = false
         super.onPause()
     }
@@ -85,15 +85,10 @@ class GameActivity : Activity() {
     {
         super.onResume()
         loadSettings()
-        when {
-            resumeGame -> resumeCurrentGame()
-            startOnLevel == null -> startNewGame()
-            else -> startGameAtLevel(startOnLevel ?: Stage.Identifier())
-        }
-        resumeGame = true
-        gameIsRunning = true
+        setupGameView()
 
-        // TODO: check whether this code should be moved
+        // determine what to do: resume, restart, or play next level
+        var resumeGame = false
         if (intent.getBooleanExtra("RESET_PROGRESS", false) == false) {
             startOnLevel = Stage.Identifier(
                     series = intent.getIntExtra("START_ON_SERIES", 1),
@@ -104,7 +99,12 @@ class GameActivity : Activity() {
         if (!intent.getBooleanExtra("RESUME_GAME", false))
             resumeGame = false
 
-        setupGameView()
+        when {
+            resumeGame -> resumeCurrentGame()
+            startOnLevel == null -> startNewGame()
+            else -> startGameAtLevel(startOnLevel ?: Stage.Identifier())
+        }
+        gameIsRunning = true
         startGameThreads()
     }
 
@@ -119,38 +119,36 @@ class GameActivity : Activity() {
     fun setupGameView()
     /** creates the game view including all game components */
     {
-        gameView = GameView(this, theGameMechanics)
         val parentView: FrameLayout? = findViewById(R.id.gameFrameLayout)
         parentView?.addView(gameView)
-        gameView.setup()
-        val width = gameView.width
+        gameView.setupView()
     }
 
     private fun startNewGame()
             /** starts a new game from level 1, discarding all progress */
     {
-        theGameMechanics.setLastPlayedStage(Stage.Identifier())
-        theGameMechanics.beginGame(resetProgress = true)
+        gameMechanics.setLastPlayedStage(Stage.Identifier())
+        gameMechanics.beginGame(resetProgress = true)
     }
 
     private fun startGameAtLevel(level: Stage.Identifier)
             /** continues a current match at a given level, keeping the progress and upgrades */
     {
-        theGameMechanics.state.startingLevel = level
-        theGameMechanics.beginGame(resetProgress = false)
+        gameMechanics.state.startingLevel = level
+        gameMechanics.beginGame(resetProgress = false)
     }
 
     private fun resumeCurrentGame()
             /** continues at exactly the same point within a level, restoring the complete game state.
              */
     {
-        Persistency(this).loadState(theGameMechanics)
-        theGameMechanics.resumeGame()
-        if (theGameMechanics.state.phase == GameMechanics.GamePhase.RUNNING) {
+        Persistency(this).loadState(gameMechanics)
+        gameMechanics.resumeGame()
+        if (gameMechanics.state.phase == GameMechanics.GamePhase.RUNNING) {
             runOnUiThread {
                 val toast: Toast = Toast.makeText(
                         this,
-                        "Stage %d".format(theGameMechanics.currentStage.number),
+                        "Stage %d".format(gameMechanics.currentStage.number),
                         Toast.LENGTH_SHORT
                 )
                 toast.show()
@@ -178,7 +176,7 @@ class GameActivity : Activity() {
     }
 
     fun setGameSpeed(speed: GameMechanics.GameSpeed) {
-        theGameMechanics.global.speed = speed
+        gameMechanics.global.speed = speed
         if (speed == GameMechanics.GameSpeed.MAX) {
             updateDelay = fastForwardDelay
             if (settings.fastFastForward)
@@ -203,17 +201,17 @@ class GameActivity : Activity() {
     }
 
     private fun returnToMainMenu() {
-        Persistency(this).saveState(theGameMechanics)
+        Persistency(this).saveState(gameMechanics)
         finish()
     }
 
     private fun replayLevel() {
-        theGameMechanics.currentlyActiveStage?.let { startGameAtLevel(it.data.ident) }
+        gameMechanics.currentlyActiveStage?.let { startGameAtLevel(it.data.ident) }
     }
 
     fun prepareLevelAtStartOfGame(ident: Stage.Identifier)
     {
-        gameView.resetAtStartOfStage(ident)
+        gameView.resetAtStartOfStage()
         gameView.intermezzo.prepareLevel(ident, true)
     }
 
@@ -229,8 +227,8 @@ class GameActivity : Activity() {
         */
         if (gameIsRunning) {
             val timeAtStartOfCycle = SystemClock.uptimeMillis()
-            theGameMechanics.ticksCount++
-            theGameMechanics.update()
+            gameMechanics.ticksCount++
+            gameMechanics.update()
 
             // determine whether to update the display
             if (timeAtStartOfCycle-timeOfLastFrame > 30 && displayJob?.isActive != true)
@@ -247,7 +245,7 @@ class GameActivity : Activity() {
      * The delay between two executions may vary. */
     {
         if (gameIsRunning) {
-            theGameMechanics.frameCount++
+            gameMechanics.frameCount++
             val timeAtStartOfFrame = SystemClock.uptimeMillis()
             val timeSinceLastFrame = timeAtStartOfFrame - timeOfLastFrame
             timeOfLastFrame = timeAtStartOfFrame
@@ -256,7 +254,7 @@ class GameActivity : Activity() {
             frameTimeSum += timeSinceLastFrame
             frameCount += 1
             if (frameCount >= meanCount) {
-                theGameMechanics.timeBetweenFrames = (frameTimeSum / frameCount).toDouble()
+                gameMechanics.timeBetweenFrames = (frameTimeSum / frameCount).toDouble()
                 frameCount = 0
                 frameTimeSum = 0
             }
@@ -268,7 +266,7 @@ class GameActivity : Activity() {
     {
         if (gameIsRunning) {
             gameView.updateEffects()
-            gameView.theEffects?.updateGraphicalEffects()
+            gameView.effects?.updateGraphicalEffects()
             GlobalScope.launch { delay(effectsDelay); updateGraphicalEffects() }
         }
     }

@@ -76,9 +76,9 @@ class Network(val gameMechanics: GameMechanics, val gameView: GameView, x: Int, 
      * @return false if the viewport is not valid, i.e. screen dimensions are not known
      */
     {
-        if (gameView.width > 0 || gameView.height > 0) // TODO: ersetzen durch Test auf Initialisierung
+        if (gameView.isInitialized())
         {
-            gameView.viewport.setScreenSize(gameView.width, gameView.viewportHeight(gameView.height))
+            gameView.viewport.setScreenSize(gameView.width, gameView.height)
             return true
         }
         else
@@ -127,9 +127,9 @@ class Network(val gameMechanics: GameMechanics, val gameView: GameView, x: Int, 
      * and places the network elements on it */
     {
         validateViewport()
-        gameView.background.createImage(gameMechanics.currentStage)
-        gameView.background.basicBackground?.let {
-            networkImage = it
+        gameView.background.setSize(viewport.viewportWidth, viewport.viewportHeight)
+        gameView.background.basicBackground?.let{
+            networkImage = it.copy(it.config, true)
             val canvas = Canvas(networkImage)
             for (obj in links.values)
                 obj.display(canvas, viewport)

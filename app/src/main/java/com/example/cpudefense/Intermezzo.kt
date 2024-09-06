@@ -146,7 +146,7 @@ class Intermezzo(var gameView: GameView): GameElement(), Fadable {
             else -> colour = Pair(Color.RED, Color.GREEN)
         }
 
-        gameView.theEffects?.explosions?.add(
+        gameView.effects?.explosions?.add(
             Explosion(Pair(Random.nextInt(myArea.width()), Random.nextInt(myArea.height()*8/10)),
                 colour.first, colour.second))
     }
@@ -189,7 +189,7 @@ class Intermezzo(var gameView: GameView): GameElement(), Fadable {
             return
         val paint = Paint()
         paint.color = Color.BLACK
-        paint.alpha = alpha
+        paint.alpha = 255 // alpha
         canvas.drawRect(myArea, paint)
         instructions?.display(canvas)
         typewriter?.display(canvas)

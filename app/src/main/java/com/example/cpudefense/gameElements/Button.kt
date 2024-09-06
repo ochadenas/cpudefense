@@ -37,7 +37,7 @@ class Button(var gameView: GameView, var text: String, val textSize: Float, val 
             }
             Style.HP_KEY ->
             {
-                background = gameView.gameMechanics.hpBackgroundBitmap // TODO: Bitmap verschieben
+                background = gameView.hpBackgroundBitmap
                 textPaint.typeface = Typeface.DEFAULT_BOLD
                 textPaint.color = Color.WHITE
             }

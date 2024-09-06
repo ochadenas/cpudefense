@@ -1,6 +1,8 @@
 package com.example.cpudefense
 
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
@@ -13,6 +15,7 @@ import android.view.SurfaceView
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.GestureDetectorCompat
 import com.example.cpudefense.GameMechanics.GamePhase
+import com.example.cpudefense.GameMechanics.LevelMode
 import com.example.cpudefense.effects.Background
 import com.example.cpudefense.effects.Effects
 import com.example.cpudefense.effects.Fader
@@ -27,12 +30,13 @@ import com.example.cpudefense.networkmap.Viewport
 import com.example.cpudefense.utils.displayTextCenteredInRect
 import java.util.concurrent.CopyOnWriteArrayList
 
-class GameView(context: Context, val gameMechanics: GameMechanics):
+class GameView(context: Context):
     SurfaceView(context), SurfaceHolder.Callback,
     GestureDetector.OnGestureListener
 {
+    val gameMechanics = (context as GameActivity).gameMechanics
     var canvas: Canvas? = null
-    var theEffects: Effects? = null
+    var effects: Effects? = null
     var backgroundColour = Color.BLACK
     var scrollAllowed = true // whether the viewport can be moved by scrolling
     private var gestureDetector = GestureDetectorCompat(context, this)
@@ -40,6 +44,17 @@ class GameView(context: Context, val gameMechanics: GameMechanics):
     /** font for displaying "computer messages" */
     lateinit var monoTypeface: Typeface
     lateinit var boldTypeface: Typeface
+
+    private val coinIconBlue: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.cryptocoin)
+    private val coinIconRed: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.cryptocoin_red)
+    val cpuImage: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.cpu)
+    val playIcon: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.play_active)
+    val pauseIcon: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.pause_active)
+    val fastIcon: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.fast_active)
+    val returnIcon: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.cancel_active)
+    val moveLockIcon: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.move_lock)
+    val moveUnlockIcon: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.move_unlock)
+    val hpBackgroundBitmap: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.hp_key)
 
     /* game elements */
     val viewport = Viewport()
@@ -61,7 +76,13 @@ class GameView(context: Context, val gameMechanics: GameMechanics):
     /** general scale factor, based on ScaledDensity */
     var scaleFactor = 1.0f
 
-    fun setup()
+    fun isInitialized(): Boolean
+    /** whether the game view and all its components know their size and can be used */
+    {
+        return (width > 0) && (height > 0)
+    }
+
+    fun setupView()
             /** called when the game view is created.
              * This is NOT the case when the user returns to the main menu
              *  and then continues the game.
@@ -71,11 +92,11 @@ class GameView(context: Context, val gameMechanics: GameMechanics):
         this.holder.addCallback(this)
         backgroundColour = context.resources.getColor(R.color.network_background)
         setComputerTypeface()
-        theEffects = Effects(this)
+        effects = Effects(this)
     }
 
 
-    fun setComputerTypeface()
+    private fun setComputerTypeface()
     {
         try
         {
@@ -89,18 +110,7 @@ class GameView(context: Context, val gameMechanics: GameMechanics):
         }
     }
 
-    fun resetAtStartOfStage(stageIdent: Stage.Identifier)
-    {
-        speedControlPanel.resetButtons()
-        scoreBoard.recreateBitmap()
-        viewport.reset()
-        // viewport.setGridSize(stageIdent.network.data.gridSizeX, stageIdent.network.data.gridSizeY)
-        viewport.setScreenSize(this.width, this.height)
-    }
-
     override fun surfaceCreated(p0: SurfaceHolder) {
-        if (this.width > 0 && this.height > 0)
-            setSize(width, height)
     }
 
     override fun surfaceChanged(p0: SurfaceHolder, p1: Int, p2: Int, p3: Int) {
@@ -112,12 +122,12 @@ class GameView(context: Context, val gameMechanics: GameMechanics):
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
-        setSize(w, h)
+        setComponentSize(w, h)
+        background.setSize(w, h)
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int)
             /** function that is called to calculate height and width of this view.
-             * At this point, we also calculate the dimensions of all internal elements.
              */
     {
         val widthMode = MeasureSpec.getMode(widthMeasureSpec)
@@ -130,7 +140,16 @@ class GameView(context: Context, val gameMechanics: GameMechanics):
         setMeasuredDimension(width, height)
     }
 
-    inline fun scoreBoardHeight(h: Int): Int
+    fun resetAtStartOfStage()
+    {
+        speedControlPanel.resetButtons()
+        scoreBoard.recreateBitmap()
+        viewport.reset()
+        // viewport.setGridSize(stageIdent.network.data.gridSizeX, stageIdent.network.data.gridSizeY)
+        viewport.setScreenSize(this.width, this.height)
+    }
+
+    private inline fun scoreBoardHeight(h: Int): Int
     /** calculate score board size for a given screen size
     @param h total height of screen
      */
@@ -144,7 +163,7 @@ class GameView(context: Context, val gameMechanics: GameMechanics):
             return scoreBoardHeight
     }
 
-    inline fun viewportHeight(h: Int): Int
+    private inline fun viewportHeight(h: Int): Int
     /** calculate viewport size for a given screen size
     @param h total height of screen
      */
@@ -152,7 +171,10 @@ class GameView(context: Context, val gameMechanics: GameMechanics):
         return h - scoreBoardHeight(h)
     }
 
-    private fun setSize(w: Int, h: Int)
+    private fun setComponentSize(w: Int, h: Int)
+    /** calculates and sets the size of the inner components of this view.
+     * Also calculates the viewport dimensions.
+     * Can be called multiple times. */
     {
         // adjust text sizes and scaling factor
         textScaleFactor = 0.70f * resources.displayMetrics.scaledDensity
@@ -299,30 +321,51 @@ class GameView(context: Context, val gameMechanics: GameMechanics):
 
     @Synchronized fun display()
     {
+        if (!isInitialized())
+            return
         val state = gameMechanics.state
         holder.lockCanvas()?.let()
         {
             if (state.phase == GamePhase.RUNNING || state.phase == GamePhase.PAUSED)
-            {
-                background.display(it)
-                gameMechanics.currentlyActiveStage?.network?.display(it, viewport)
-                scoreBoard.display(it, viewport)
-                speedControlPanel.display(it)
-            }
+                displayNetwork(it)
             if (state.phase == GamePhase.PAUSED)
-            {
-                val paint = Paint()
-                paint.color = Color.WHITE
-                paint.textSize = 72f
-                paint.typeface = Typeface.DEFAULT_BOLD
-                val rect = Rect(0, 0, viewport.viewportWidth, viewport.viewportHeight)
-                rect.displayTextCenteredInRect(it, resources.getString(R.string.game_paused), paint)
-            }
+                displayPauseIndicator(it)
             intermezzo.display(it, viewport)
             marketplace.display(it, viewport)
             notification.display(it)
-            theEffects?.display(it)
+            effects?.display(it)
             holder.unlockCanvasAndPost(it)
+        }
+    }
+
+    private fun displayNetwork(canvas: Canvas)
+    {
+        canvas.let {
+            // background.display(it)
+            gameMechanics.currentlyActiveStage?.network?.display(it, viewport)
+            scoreBoard.display(it, viewport)
+            speedControlPanel.display(it)
+        }
+    }
+
+    private fun displayPauseIndicator(canvas: Canvas)
+    {
+        canvas.let {
+            val paint = Paint()
+            paint.color = Color.WHITE
+            paint.textSize = 72f
+            paint.typeface = Typeface.DEFAULT_BOLD
+            val rect = Rect(0, 0, viewport.viewportWidth, viewport.viewportHeight)
+            rect.displayTextCenteredInRect(it, resources.getString(R.string.game_paused), paint)
+        }
+    }
+
+    fun currentCoinBitmap(stage: Stage.Identifier = gameMechanics.currentStage): Bitmap
+    {
+        return when (stage.mode())
+        {
+            LevelMode.BASIC -> coinIconBlue
+            LevelMode.ENDLESS -> coinIconRed
         }
     }
 }

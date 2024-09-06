@@ -202,7 +202,7 @@ open class Attacker(network: Network, representation: Representation = Represent
                 val newNumber =  attackerData.number.toLong() - power
                 if (newNumber < 0)
                 {
-                    network.gameMechanics.gameActivity.gameView.theEffects?.explode(this)
+                    network.gameMechanics.gameActivity.gameView.effects?.explode(this)
                     gainCash()
                     return true
                 }
@@ -293,17 +293,17 @@ open class Attacker(network: Network, representation: Representation = Represent
         when (attackerData.representation) {
             Representation.BINARY -> {
                 if (data.speedModificationTimer > 0)
-                    textPaint.color = network.gameMechanics.resources.getColor(R.color.attackers_slowed_bin)
+                    textPaint.color = resources.getColor(R.color.attackers_slowed_bin)
                 else
-                    textPaint.color = network.gameMechanics.resources.getColor(R.color.attackers_foreground_bin)
-                blurPaint.color = network.gameMechanics.resources.getColor(R.color.attackers_glow_bin)
+                    textPaint.color = resources.getColor(R.color.attackers_foreground_bin)
+                blurPaint.color = resources.getColor(R.color.attackers_glow_bin)
             }
             else -> {
                 if (data.speedModificationTimer > 0)
-                    textPaint.color = network.gameMechanics.resources.getColor(R.color.attackers_slowed_hex)
+                    textPaint.color = resources.getColor(R.color.attackers_slowed_hex)
                 else
-                    textPaint.color = network.gameMechanics.resources.getColor(R.color.attackers_foreground_hex)
-                blurPaint.color = network.gameMechanics.resources.getColor(R.color.attackers_glow_hex)
+                    textPaint.color = resources.getColor(R.color.attackers_foreground_hex)
+                blurPaint.color = resources.getColor(R.color.attackers_glow_hex)
             }
         }
 
@@ -324,7 +324,7 @@ open class Attacker(network: Network, representation: Representation = Represent
 
         /* create a transparent black background to have more contrast */
         val paint = Paint()
-        paint.color = network.gameMechanics.resources.getColor(R.color.attackers_background)
+        paint.color = resources.getColor(R.color.attackers_background)
         // canvas.drawRect(rect, paint)
 
         /* use blurred image to create glow */
@@ -333,7 +333,7 @@ open class Attacker(network: Network, representation: Representation = Represent
         val blurCanvas = Canvas(numberBitmap)
         blurCanvas.drawBitmap(alpha, 0f, 0f, blurPaint)
 
-        textPaint.color = network.gameMechanics.resources.getColor(R.color.attackers_foreground_bin)
+        textPaint.color = resources.getColor(R.color.attackers_foreground_bin)
         textPaint.maskFilter = null
     }
 
