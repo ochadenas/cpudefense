@@ -26,8 +26,8 @@ import kotlin.random.Random
 class Intermezzo(var gameView: GameView): GameElement(), Fadable {
     var level = Stage.Identifier()
     val resources: Resources = gameView.resources
-    val activity = gameView.gameMechanics.gameActivity // TODO: geht das besser?
     var alpha = 0
+    private val activity = gameView.gameMechanics.gameActivity
     private var myArea = Rect()
     private var typewriter: Typewriter? = null
     private var buttonContinue: Button? = null
@@ -75,7 +75,7 @@ class Intermezzo(var gameView: GameView): GameElement(), Fadable {
                 lines.add(resources.getString(R.string.failed))
                 lines.add(resources.getString(R.string.last_stage).format(level.number))
                 textOnContinueButton = resources.getString(R.string.button_retry)
-                gameView.gameMechanics.setLastPlayedStage(level) // TODO: sollte woanders erfolgen
+                gameView.gameMechanics.setLastPlayedStage(level) // TODO: should be done somewhere else
             }
             Type.GAME_WON  -> {
                 lines.add(resources.getString(R.string.success))
