@@ -13,6 +13,7 @@ import com.example.cpudefense.GameView
 import com.example.cpudefense.R
 import com.example.cpudefense.Stage
 import com.example.cpudefense.utils.setTopLeft
+import kotlin.math.max
 import kotlin.random.Random
 
 class Background(val gameView: GameView)
@@ -134,25 +135,19 @@ class Background(val gameView: GameView)
              */
 
     {
-        var deltaX = sourceBitmap.width - destRect.width()
-        var deltaY = sourceBitmap.height - destRect.height()
-
         // if the whole bitmap is smaller than the destination, scale it up, but keep the aspect ratio
-        val newSize = Rect(0, 0, destRect.width(), destRect.height())
-        val largeBitmap = if (deltaX<0 || deltaY<0)
-        {
-            val ratio = sourceBitmap.height / sourceBitmap.width.toFloat()
-            if (deltaX<0) // stretch in x direction
-                newSize.bottom = (newSize.right * ratio).toInt()
-            if (deltaY<0) // stretch in y direction
-                newSize.right = (newSize.bottom / ratio).toInt()
-            Bitmap.createScaledBitmap(sourceBitmap, newSize.width(), newSize.height(), false)
-        }
+        val sourceX = sourceBitmap.width
+        val sourceY = sourceBitmap.height
+        val scaleX: Float = (destRect.width() / sourceX.toFloat())
+        val scaleY: Float = (destRect.height() / sourceY.toFloat())
+        val scale = max(scaleX, scaleY)
+        val largeBitmap = if (scale > 1.0f)
+            Bitmap.createScaledBitmap(sourceBitmap, (sourceX*scale).toInt(), (sourceY*scale).toInt(), false)
         else sourceBitmap
 
         // here, largeBitmap is at least as big as the destination rectangle (in both dimensions)
-        deltaX = largeBitmap.width - destRect.width()
-        deltaY = largeBitmap.height - destRect.height()
+        val deltaX = largeBitmap.width - destRect.width()
+        val deltaY = largeBitmap.height - destRect.height()
         val bitmap = createBlankBackground(destRect)
         val canvas = Canvas(bitmap)
         val displacementX = if (deltaX>0) Random.nextInt(deltaX) else 0
