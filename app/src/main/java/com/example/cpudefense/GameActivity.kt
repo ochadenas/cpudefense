@@ -59,12 +59,21 @@ class GameActivity : Activity() {
 
     var settings = Settings()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+    /** if onCreate is _not_ called, this stays "true".
+     * The other possibility to make it "true" is to use the button "Resume Game". */
+    var resumeGame = true
+
+    override fun onCreate(savedInstanceState: Bundle?)
+            /** this function gets called when the app was started, but not when the user returns
+             * here from another app.
+             */
+    {
         super.onCreate(savedInstanceState)
         /* here, the size of the surfaces might not be known */
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         setContentView(R.layout.activity_main_game)
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        resumeGame = false
         gameMechanics = GameMechanics(this)
         gameView = GameView(this)
     }
@@ -88,14 +97,15 @@ class GameActivity : Activity() {
         setupGameView()
 
         // determine what to do: resume, restart, or play next level
-        if (intent.getBooleanExtra("RESET_PROGRESS", false) == false) {
+        if (!intent.getBooleanExtra("RESET_PROGRESS", false)) {
             startOnLevel = Stage.Identifier(
                     series = intent.getIntExtra("START_ON_SERIES", 1),
                     number = intent.getIntExtra("START_ON_STAGE", 1)
             )
         } else
             startOnLevel = null
-        var resumeGame = intent.getBooleanExtra("RESUME_GAME", false)
+        if (!resumeGame)
+            resumeGame = intent.getBooleanExtra("RESUME_GAME", false)
         when {
             resumeGame -> resumeCurrentGame()
             startOnLevel == null -> startNewGame()
@@ -116,8 +126,11 @@ class GameActivity : Activity() {
     fun setupGameView()
     /** creates the game view including all game components */
     {
-        val parentView: FrameLayout? = findViewById(R.id.gameFrameLayout)
-        parentView?.addView(gameView)
+        if (gameView.parent == null)
+        {
+            val parentView: FrameLayout? = findViewById(R.id.gameFrameLayout)
+            parentView?.addView(gameView)
+        }
         gameView.setupView()
     }
 

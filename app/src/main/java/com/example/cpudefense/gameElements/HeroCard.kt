@@ -43,8 +43,8 @@ class HeroCard(val gameView: GameView, val hero: Hero): GameElement(), Fadable
     private var indicatorSize = portraitArea.width() / 10
 
     /** additional flags */
-    var showNextUpdate = true
-    var monochrome = false
+    private var showNextUpdate = true
+    private var monochrome = false
 
     /* different paint objects */
     private var paintRect = Paint()
@@ -192,7 +192,7 @@ class HeroCard(val gameView: GameView, val hero: Hero): GameElement(), Fadable
         val center = cardAreaOnScreen.center()
         portraitAreaOnScreen = Rect(portraitArea)
         portraitAreaOnScreen.setCenter(center)
-        paintText.textSize = (GameMechanics.biographyTextSize - 2) * gameView.textScaleFactor
+        paintText.textSize = GameMechanics.heroCardTextSize * gameView.textScaleFactor
         indicatorSize = portraitArea.width() / 10
     }
 
@@ -217,7 +217,7 @@ class HeroCard(val gameView: GameView, val hero: Hero): GameElement(), Fadable
     {
         cardArea = Rect(0, 0, (GameMechanics.cardWidth*gameView.scaleFactor).toInt(), (GameMechanics.cardHeight*gameView.scaleFactor).toInt())
         portraitArea = Rect(0, 0, (heroPictureSize*gameView.scaleFactor).toInt(), (heroPictureSize*gameView.scaleFactor).toInt())
-        paintText.textSize = (GameMechanics.biographyTextSize - 2) * gameView.textScaleFactor
+        paintText.textSize = GameMechanics.heroCardTextSize * gameView.textScaleFactor
         indicatorSize = portraitArea.width() / 10
         this.showNextUpdate = showNextUpdate
         this.monochrome = monochrome

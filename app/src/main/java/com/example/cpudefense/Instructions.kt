@@ -89,7 +89,7 @@ class Instructions(val gameView: GameView, var stage: Stage.Identifier, var show
         val textArea = Rect(0, 0, canvas.width - 2 * margin, canvas.height - 200)
         canvas.save()
 
-        canvas.translate(2*margin.toFloat(), margin.toFloat())
+        canvas.translate(margin.toFloat(), margin.toFloat())
         val text = instructionText(stage.number)
         val textPaint = TextPaint()
         textPaint.textSize = GameMechanics.instructionTextSize * gameView.textScaleFactor

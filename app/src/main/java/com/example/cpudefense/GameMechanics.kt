@@ -33,11 +33,12 @@ class GameMechanics(val gameActivity: GameActivity) {
         const val scoreTextSize = 36f
         const val scoreHeaderSize = 18f
         const val chipTextSize = 20f
-        const val computerTextSize = 32f
+        const val computerTextSize = 26f
         const val notificationTextSize = 22f
         const val instructionTextSize = 24f
-        const val biographyTextSize = 24f
-        const val purchaseButtonTextSize = 24f
+        const val biographyTextSize = 22f
+        const val heroCardTextSize = 18f
+        const val purchaseButtonTextSize = 22f
 
         const val coinSizeOnScoreboard = 48
         const val coinSizeOnScreen = 16
