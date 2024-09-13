@@ -61,7 +61,7 @@ class GameActivity : Activity() {
 
     /** if onCreate is _not_ called, this stays "true".
      * The other possibility to make it "true" is to use the button "Resume Game". */
-    var resumeGame = true
+    private var resumeGame = true
 
     override fun onCreate(savedInstanceState: Bundle?)
             /** this function gets called when the app was started, but not when the user returns
@@ -112,6 +112,7 @@ class GameActivity : Activity() {
             else -> startGameAtLevel(startOnLevel ?: Stage.Identifier())
         }
         gameIsRunning = true
+        resumeGame = true // for the next time we come here
         startGameThreads()
     }
 
