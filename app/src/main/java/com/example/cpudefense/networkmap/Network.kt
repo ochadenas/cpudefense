@@ -127,7 +127,7 @@ class Network(val gameMechanics: GameMechanics, val gameView: GameView, x: Int, 
      * and places the network elements on it */
     {
         validateViewport()
-        gameView.background.setSize(viewport.viewportWidth, viewport.viewportHeight)
+        gameView.background.setSize(gameView.width, gameView.height)
         gameView.background.basicBackground?.let{
             networkImage = it.copy(it.config, true)
             val canvas = Canvas(networkImage)

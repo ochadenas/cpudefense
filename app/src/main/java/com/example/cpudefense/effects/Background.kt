@@ -8,7 +8,6 @@ import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Rect
-import android.widget.Toast
 import com.example.cpudefense.GameView
 import com.example.cpudefense.R
 import com.example.cpudefense.Stage
@@ -84,8 +83,11 @@ class Background(val gameView: GameView)
      * @param number the number of the background chosen. Must be between 1 and maxBackgroundNumber */
     {
         val resources: Resources = gameView.resources
+        // since loading now happens in small chunks, there is no need to display the toast */
+        /*
         gameView.gameMechanics.gameActivity.runOnUiThread {
             Toast.makeText(gameView.gameMechanics.gameActivity, resources.getString(R.string.toast_loading), Toast.LENGTH_SHORT).show() }
+         */
         val options = BitmapFactory.Options()
         options.inScaled = false
         return if (useSpecial)   // allows use of special backgrounds, currently disabled
