@@ -104,21 +104,21 @@ class Marketplace(val gameView: GameView): GameElement()
                               style = Button.Style.HP_KEY, preferredWidth = biographyArea.width())
         buttonFinish?.let {
             Fader(gameView, it, Fader.Type.APPEAR, Fader.Speed.SLOW)
-            it.alignRight(myArea.right, myArea.bottom - bottomMargin - it.area.height())
+            it.alignRight(biographyArea.right, myArea.bottom - bottomMargin - it.area.height())
         }
         buttonRefund = Button(gameView, resources.getString(R.string.button_refund_all),
                               textSize = GameMechanics.purchaseButtonTextSize * gameView.textScaleFactor,
                               style = Button.Style.HP_KEY, preferredWidth = biographyArea.width())
         buttonRefund?.let {
             Fader(gameView, it, Fader.Type.APPEAR, Fader.Speed.SLOW)
-            it.alignRight(myArea.right, myArea.bottom - bottomMargin - 2*it.area.height())
+            it.alignRight(biographyArea.right, myArea.bottom - bottomMargin - 2*it.area.height())
         }
         buttonPurchase = Button(gameView, purchaseButtonText(null),
                                 textSize = GameMechanics.purchaseButtonTextSize * gameView.textScaleFactor,
                                 style = Button.Style.HP_KEY, preferredWidth = biographyArea.width())
         buttonPurchase?.let {
             Fader(gameView, it, Fader.Type.APPEAR, Fader.Speed.SLOW)
-            it.alignRight(myArea.right, myArea.bottom - bottomMargin - 3*it.area.height())
+            it.alignRight(biographyArea.right, myArea.bottom - bottomMargin - 3*it.area.height())
         }
         biographyArea.bottom = ((buttonPurchase?.area?.top ?: buttonFinish?.area?.top) ?: myArea.bottom ) - biographyAreaMargin
     }

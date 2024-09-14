@@ -128,7 +128,7 @@ class GameView(context: Context):
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
         setComponentSize(w, h)
-        background.setSize(w, h)
+        background.setBackgroundDimensions(w, h, false)
     }
 
     @Suppress("UNUSED_VARIABLE")
@@ -151,7 +151,6 @@ class GameView(context: Context):
         speedControlPanel.resetButtons()
         scoreBoard.recreateBitmap()
         viewport.reset()
-        // viewport.setGridSize(stageIdent.network.data.gridSizeX, stageIdent.network.data.gridSizeY)
         viewport.setScreenSize(this.width, this.height)
     }
 
@@ -278,7 +277,7 @@ class GameView(context: Context):
             {
                 if (scrollAllowed) {
                     viewport.addOffset(-dx, -dy)
-                    gameMechanics.currentlyActiveStage?.network?.recreateNetworkImage(viewport)
+                    gameMechanics.currentlyActiveStage?.network?.recreateNetworkImage(false)
                 }
             }
         }

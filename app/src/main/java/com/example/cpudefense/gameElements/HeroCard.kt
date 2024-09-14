@@ -22,8 +22,6 @@ class HeroCard(val gameView: GameView, val hero: Hero): GameElement(), Fadable
     val type = hero.data.type
     val resources: Resources = gameView.resources
 
-    private val heroPictureSize = 160
-
     /** rectangle with the size of the card, positioned at (0|0) */
     var cardArea = Rect()
     /** rectangle at the actual position on the screen */
@@ -219,7 +217,7 @@ class HeroCard(val gameView: GameView, val hero: Hero): GameElement(), Fadable
     fun create(showNextUpdate: Boolean = true, monochrome: Boolean = false)
     {
         cardArea = Rect(0, 0, (GameMechanics.cardWidth*gameView.scaleFactor).toInt(), (GameMechanics.cardHeight*gameView.scaleFactor).toInt())
-        portraitArea = Rect(0, 0, (heroPictureSize*gameView.scaleFactor).toInt(), (heroPictureSize*gameView.scaleFactor).toInt())
+        portraitArea = Rect(0, 0, (GameMechanics.cardPictureSize*gameView.scaleFactor).toInt(), (GameMechanics.cardPictureSize*gameView.scaleFactor).toInt())
         paintText.textSize = GameMechanics.heroCardTextSize * gameView.textScaleFactor
         indicatorSize = portraitArea.width() / 10
         this.showNextUpdate = showNextUpdate
@@ -248,6 +246,7 @@ class HeroCard(val gameView: GameView, val hero: Hero): GameElement(), Fadable
         }
         val margin = (10*resources.displayMetrics.scaledDensity).toInt()
         val heroPaintText = Paint(paintText)
+        heroPaintText.textSize = GameMechanics.heroCardNameSize * gameView.textScaleFactor
         heroPaintText.color = if (hero.data.level == 0) inactiveColor else activeColor
         val heroTextRect = Rect(0, margin, cardArea.width(), margin+40)
         heroTextRect.displayTextCenteredInRect(canvas, hero.person.fullName, heroPaintText)

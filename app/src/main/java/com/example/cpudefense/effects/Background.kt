@@ -52,22 +52,35 @@ class Background(val gameView: GameView)
              */
     {
         enabled = !gameView.gameMechanics.gameActivity.settings.configDisableBackground
-        if (enabled)
+        if (enabled) {
             loadWholeBitmapOfStage(stage)
+            setBackgroundDimensions(gameView.width, gameView.height)
+        }
     }
 
-    fun setSize(width: Int, height: Int)
+    fun setBackgroundDimensions(width: Int, height: Int, forceNewBackground: Boolean = false)
+            /**
+             * Sets the size of the background and re-creates the image.
+             *
+             * @param forceNewBackground If true, forcibly create a new image. Otherwise keep the old one
+             * if the size has not changed.
+             */
     {
-        if (myArea.width() == width && myArea.height() == height) // size has not changed
-            return // no need to recalculate
-        if (width>0 && height>0)
+        if (forceNewBackground || width!=myArea.width() || height!=myArea.height())
         {
             myArea = Rect(0, 0, width, height)
-            if (enabled)
-                wholeBackground?.let { basicBackground = bitmapCroppedToSize(myArea, it) }
-            else
-                basicBackground = createBlankBackground(myArea)
+            setBasicBackgound()
         }
+    }
+
+    fun setBasicBackgound()
+    {
+        if (myArea.width()==0 || myArea.height()==0)
+            return
+        if (enabled)
+            wholeBackground?.let { basicBackground = bitmapCroppedToSize(myArea, it) }
+        else
+            basicBackground = createBlankBackground(myArea)
     }
 
     fun display(canvas: Canvas)
@@ -110,7 +123,7 @@ class Background(val gameView: GameView)
     @Suppress("KotlinConstantConditions", "SimplifyBooleanWithConstants")
     private fun loadWholeBitmapOfStage(stageIdent: Stage.Identifier?)
             /** chooses the background to use,
-             * and selects a random part of it
+             * and selects a random part of it as wholeBackground
              * @param stageIdent Series and number of the current stage
              */
     {

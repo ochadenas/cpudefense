@@ -34,15 +34,17 @@ class GameMechanics(val gameActivity: GameActivity) {
         const val chipTextSize = 20f
         const val computerTextSize = 26f
         const val notificationTextSize = 22f
-        const val instructionTextSize = 24f
-        const val biographyTextSize = 22f
-        const val heroCardTextSize = 18f
-        const val purchaseButtonTextSize = 22f
+        const val instructionTextSize = 20f
+        const val biographyTextSize = 20f
+        const val heroCardNameSize = 18f
+        const val heroCardTextSize = 14f
+        const val purchaseButtonTextSize = 20f
 
         const val coinSizeOnScoreboard = 48
         const val coinSizeOnScreen = 16
-        const val cardWidth = 240
+        const val cardWidth = 220
         const val cardHeight = cardWidth * 1.41
+        const val cardPictureSize = cardWidth * 2 / 3
         const val preferredSizeOfLED = 20  // horizontal size of LEDs, can be smaller if there is too little space
 
 
@@ -377,6 +379,7 @@ class GameMechanics(val gameActivity: GameActivity) {
         nextStage.calculateDifficulty()
         if (!nextStage.isInitialized())
             return  // something went wrong, possibly trying to create a level that doesn't exist
+        nextStage.network.recreateNetworkImage(true)
         gameActivity.setGameActivityStatus(GameActivity.GameActivityStatus.PLAYING)
         calculateLives()
         calculateStartingCash()

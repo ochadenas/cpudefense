@@ -116,23 +116,24 @@ class Network(val gameMechanics: GameMechanics, val gameView: GameView, x: Int, 
     {
         // displayFrame(canvas, viewport) // optional
         if (!this::networkImage.isInitialized)
-            recreateNetworkImage(viewport)
+            recreateNetworkImage(true)
         if (this::networkImage.isInitialized)
             canvas.drawBitmap(this.networkImage, null, viewport.screen, paint)
     }
 
-    fun recreateNetworkImage(viewport: Viewport)
+    fun recreateNetworkImage(newBackground: Boolean)
     /** function that must be called whenever the viewport (or the network configuration) changes.
      * It either takes the provided background image or an empty background
-     * and places the network elements on it */
+     * and places the network elements on it
+     * @param newBackground true if a new background image must be created */
     {
         validateViewport()
-        gameView.background.setSize(gameView.width, gameView.height)
+        gameView.background.setBackgroundDimensions(gameView.width, gameView.height, newBackground)
         gameView.background.basicBackground?.let{
             networkImage = it.copy(it.config, true)
             val canvas = Canvas(networkImage)
             for (obj in links.values)
-                obj.display(canvas, viewport)
+                obj.display(canvas, gameView.viewport)
         }
     }
 
