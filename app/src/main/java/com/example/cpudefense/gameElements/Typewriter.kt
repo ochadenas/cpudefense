@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package com.example.cpudefense.gameElements
 
 import android.graphics.*
@@ -18,7 +20,7 @@ class Typewriter(val gameView: GameView, myArea: Rect, private var lines: CopyOn
     init { showNextLine() }
 
     @Suppress("MoveLambdaOutsideParentheses")
-    fun showNextLine(): Boolean
+    private fun showNextLine(): Boolean
     {
         textBoxes.map { it.y -= lineSpacingY }
         if (lines.isEmpty()) {
@@ -33,12 +35,12 @@ class Typewriter(val gameView: GameView, myArea: Rect, private var lines: CopyOn
         textBoxes.map { it.display(canvas) }
     }
 
-    inner class TextBox(val gameView: GameView, var text: String, topLeft: Pair<Int, Int>, var callback: (() -> Unit)?):
+    inner class TextBox(val gameView: GameView, var text: String, topLeft: Pair<Int, Int>, private var callback: (() -> Unit)?):
         Fadable
     {
         var alpha = 255
         val textSize = GameMechanics.computerTextSize * gameView.textScaleFactor
-        var stringLength = 0 // number of characters to display
+        private var stringLength = 0 // number of characters to display
         var x = topLeft.first.toFloat()
         var y = topLeft.second.toFloat()
         val paint = Paint()

@@ -1,3 +1,5 @@
+@file:Suppress("NOTHING_TO_INLINE", "unused")
+
 package com.example.cpudefense.utils
 
 import android.graphics.*
@@ -126,7 +128,7 @@ inline fun Rect.makeSquare(): Rect
     return this
 }
 
-fun Rect.offset(dx: Int, dy: Int): Rect
+fun Rect.shiftBy(dx: Int, dy: Int): Rect
         /**
          * moves the rectangle by the offset given (in place).
          * @param dx offset in x direction

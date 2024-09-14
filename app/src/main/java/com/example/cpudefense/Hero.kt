@@ -2,6 +2,7 @@
 
 package com.example.cpudefense
 
+import android.content.res.Resources
 import android.graphics.*
 import android.graphics.Bitmap.createBitmap
 import android.text.Layout
@@ -50,7 +51,7 @@ class Hero(var gameMechanics: GameMechanics, type: Type)
     )
     var data = Data(type = type)
     
-    val resources = gameMechanics.gameActivity.resources
+    val resources: Resources = gameMechanics.gameActivity.resources
 
     /** only for the current level: whether hero is on leave */
     var isOnLeave = false

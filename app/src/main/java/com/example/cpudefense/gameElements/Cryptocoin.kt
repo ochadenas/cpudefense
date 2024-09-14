@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package com.example.cpudefense.gameElements
 
 import android.graphics.Bitmap
@@ -20,7 +22,7 @@ class Cryptocoin(network: com.example.cpudefense.networkmap.Network, number: ULo
 
     init {
         this.attackerData.isCoin = true
-        this.animationCount = 2 * animationCount
+        this.animationCount *= 2
     }
     override fun display(canvas: Canvas, viewport: Viewport) {
         val size =  (GameMechanics.coinSizeOnScreen * network.gameView.resources.displayMetrics.scaledDensity).toInt()

@@ -1,13 +1,16 @@
+@file:Suppress("DEPRECATION")
+
 package com.example.cpudefense.networkmap
+import android.content.res.Resources
 import android.graphics.Canvas
 import android.graphics.Paint
 import com.example.cpudefense.*
 import com.example.cpudefense.gameElements.GameElement
 import kotlin.math.abs
 
-class Link(val theNetwork: Network, var node1: Node, var node2: Node, var ident: Int, var mask: Int = 0x0F, var variant: Variant? = Variant.CONVEX): GameElement()
+class Link(theNetwork: Network, var node1: Node, var node2: Node, var ident: Int, var mask: Int = 0x0F, variant: Variant? = Variant.CONVEX): GameElement()
 {
-    val resources = theNetwork.gameView.resources
+    val resources: Resources = theNetwork.gameView.resources
 
     data class Data
         (
@@ -28,18 +31,18 @@ class Link(val theNetwork: Network, var node1: Node, var node2: Node, var ident:
 
     enum class Variant { CONCAVE, CONVEX }
 
-    var startPointOnGrid: Coord = node1.posOnGrid
-    var endPointOnGrid: Coord = node2.posOnGrid
-    var interPointOnGrid: Coord? = null
+    private var startPointOnGrid: Coord = node1.posOnGrid
+    private var endPointOnGrid: Coord = node2.posOnGrid
+    private var interPointOnGrid: Coord? = null
 
     var lengthOnGrid: Float = 0f
     var usageCount: Int = 0 // number of times this link is in a track. Used during creation.
-    var connectorWidth = 6f
-    var connectorRadius = 8f
-    val paintConnector = Paint()
-    val paintEntry = Paint()
-    val paintBackground = Paint()
-    var paintLineBackground = Paint()
+    private var connectorWidth = 6f
+    private var connectorRadius = 8f
+    private val paintConnector = Paint()
+    private val paintEntry = Paint()
+    private val paintBackground = Paint()
+    private var paintLineBackground = Paint()
 
     init {
         calculateIntermediatePointPosition()
@@ -65,16 +68,16 @@ class Link(val theNetwork: Network, var node1: Node, var node2: Node, var ident:
 
     private fun calculateIntermediatePointPosition()
     {
-        val distHori = endPointOnGrid.x - startPointOnGrid.x
-        val distVert = endPointOnGrid.y - startPointOnGrid.y
+        val distHorizontal = endPointOnGrid.x - startPointOnGrid.x
+        val distVertical = endPointOnGrid.y - startPointOnGrid.y
 
-        if (distHori>0 && distVert>0)
+        if (distHorizontal>0 && distVertical>0)
             calculate4thQuadrant(startPointOnGrid, endPointOnGrid)
-        else if (distHori<0 && distVert<0)
+        else if (distHorizontal<0 && distVertical<0)
             calculate4thQuadrant(endPointOnGrid, startPointOnGrid)
-        else if (distHori>0 && distVert<0)
+        else if (distHorizontal>0 && distVertical<0)
             calculate1stQuadrant(startPointOnGrid, endPointOnGrid)
-        else if (distHori<0 && distVert>0)
+        else if (distHorizontal<0 && distVertical>0)
             calculate1stQuadrant(endPointOnGrid, startPointOnGrid)
         else
             interPointOnGrid = null
@@ -87,21 +90,21 @@ class Link(val theNetwork: Network, var node1: Node, var node2: Node, var ident:
              * from 1st to 2nd point is positive and vertical is negative
              */
     {
-        val distHori: Float = abs(point2.x - point1.x)
-        val distVert: Float = abs(point2.y - point1.y)
+        val distHorizontal: Float = abs(point2.x - point1.x)
+        val distVertical: Float = abs(point2.y - point1.y)
 
         when (data.variant ?: Variant.CONVEX) {
             Variant.CONCAVE -> {
-                if (distVert < distHori)
-                    interPointOnGrid = Coord(point1.x+distVert, point2.y)  // done
-                else if (distVert > distHori)
-                    interPointOnGrid = Coord(point2.x, point1.y-distHori) // done
+                if (distVertical < distHorizontal)
+                    interPointOnGrid = Coord(point1.x+distVertical, point2.y)  // done
+                else if (distVertical > distHorizontal)
+                    interPointOnGrid = Coord(point2.x, point1.y-distHorizontal) // done
             }
             Variant.CONVEX -> {
-                if (distVert < distHori)
-                    interPointOnGrid = Coord(point2.x-distVert, point1.y)
-                else if (distVert > distHori)
-                    interPointOnGrid = Coord(point1.x, point2.y + distHori)
+                if (distVertical < distHorizontal)
+                    interPointOnGrid = Coord(point2.x-distVertical, point1.y)
+                else if (distVertical > distHorizontal)
+                    interPointOnGrid = Coord(point1.x, point2.y + distHorizontal)
             }
         }
     }
@@ -111,22 +114,22 @@ class Link(val theNetwork: Network, var node1: Node, var node2: Node, var ident:
              * from 1st to 2nd point is positive.
              */
     {
-        val distHori: Float = abs(point2.x - point1.x)
-        val distVert: Float = abs(point2.y - point1.y)
+        val distHorizontal: Float = abs(point2.x - point1.x)
+        val distVertical: Float = abs(point2.y - point1.y)
 
         when (data.variant ?: Variant.CONVEX)
         {
             Variant.CONCAVE -> {
-                if (distVert > distHori)
-                    interPointOnGrid = Coord(point2.x, point1.y+distHori) // done
-                else if (distVert < distHori)
-                    interPointOnGrid = Coord(point1.x+distVert, point2.y) // done
+                if (distVertical > distHorizontal)
+                    interPointOnGrid = Coord(point2.x, point1.y+distHorizontal) // done
+                else if (distVertical < distHorizontal)
+                    interPointOnGrid = Coord(point1.x+distVertical, point2.y) // done
             }
             Variant.CONVEX -> {
-                if (distVert > distHori)
-                    interPointOnGrid = Coord(point1.x, point2.y-distHori)
-                else if (distVert < distHori)
-                    interPointOnGrid = Coord(point2.x-distVert, point1.y)
+                if (distVertical > distHorizontal)
+                    interPointOnGrid = Coord(point1.x, point2.y-distHorizontal)
+                else if (distVertical < distHorizontal)
+                    interPointOnGrid = Coord(point2.x-distVertical, point1.y)
             }
         }
     }
@@ -218,7 +221,7 @@ class Link(val theNetwork: Network, var node1: Node, var node2: Node, var ident:
     }
 
     private fun displayLine(canvas: Canvas, viewport: Viewport, startGridPoint: Coord, endGridPoint: Coord)
-            /** draws one single line from start point to end point, in grid coords */
+            /** draws one single line from start point to end point, in grid coordinates */
     {
         val startPoint = viewport.gridToViewport(startGridPoint)
         val endPoint = viewport.gridToViewport(endGridPoint)

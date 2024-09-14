@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package com.example.cpudefense
 
 import android.app.Activity.MODE_PRIVATE
@@ -15,7 +17,6 @@ import android.view.SurfaceHolder
 import android.view.SurfaceView
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.GestureDetectorCompat
-import com.example.cpudefense.GameActivity.GameActivityStatus
 import com.example.cpudefense.GameMechanics.GamePhase
 import com.example.cpudefense.GameMechanics.LevelMode
 import com.example.cpudefense.effects.Background
@@ -65,14 +66,14 @@ class GameView(context: Context):
     var intermezzo = Intermezzo(this)
     var marketplace = Marketplace(this)
     val scoreBoard = ScoreBoard(this)
-    val speedControlPanel = SpeedControl(this)
+    private val speedControlPanel = SpeedControl(this)
     /** list of all mover objects that are created for game elements */
     var movers = CopyOnWriteArrayList<Mover>()
     /** list of all fader objects that are created for game elements */
     var faders = CopyOnWriteArrayList<Fader>()
     /** list of all flipper objects that are created for game elements */
     var flippers = CopyOnWriteArrayList<Flipper>()
-    val notification = ProgressNotification(this)
+    private val notification = ProgressNotification(this)
 
     /** text scale factor, based on ScaledDensity */
     var textScaleFactor = 1.0f
@@ -130,6 +131,7 @@ class GameView(context: Context):
         background.setSize(w, h)
     }
 
+    @Suppress("UNUSED_VARIABLE")
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int)
             /** function that is called to calculate height and width of this view.
              */
@@ -153,7 +155,7 @@ class GameView(context: Context):
         viewport.setScreenSize(this.width, this.height)
     }
 
-    private inline fun scoreBoardHeight(h: Int): Int
+    private fun scoreBoardHeight(h: Int): Int
     /** calculate score board size for a given screen size
     @param h total height of screen
      */
@@ -167,7 +169,7 @@ class GameView(context: Context):
             return scoreBoardHeight
     }
 
-    private inline fun viewportHeight(h: Int): Int
+    private fun viewportHeight(h: Int): Int
     /** calculate viewport size for a given screen size
     @param h total height of screen
      */
@@ -374,7 +376,7 @@ class GameView(context: Context):
         }
     }
 
-    fun saveGraphicalState()
+    private fun saveGraphicalState()
     {
         val editor = gameActivity.getSharedPreferences(resources.getString(R.string.pref_filename_state), MODE_PRIVATE).edit()
         editor.putFloat("SCALE_FACTOR", scaleFactor)
@@ -382,7 +384,7 @@ class GameView(context: Context):
         editor.apply()
     }
 
-    fun loadGraphicalState()
+    private fun loadGraphicalState()
     {
         val prefs = gameActivity.getSharedPreferences(resources.getString(R.string.pref_filename_state), MODE_PRIVATE)
         scaleFactor = prefs.getFloat("SCALE_FACTOR", 1.0f)

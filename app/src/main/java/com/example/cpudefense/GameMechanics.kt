@@ -1,10 +1,9 @@
+@file:Suppress("NOTHING_TO_INLINE", "ConstPropertyName")
+
 package com.example.cpudefense
 
-import android.app.Activity
 import android.content.Context
-import android.content.res.Resources
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.widget.Toast
 import com.example.cpudefense.gameElements.Chip
 import com.example.cpudefense.gameElements.Wave
@@ -14,12 +13,12 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.random.Random
 
-
+@Suppress("ReplaceWithEnumMap", "ConstPropertyName")
 class GameMechanics(val gameActivity: GameActivity) {
     companion object Params {
         const val maxLevelAvailable = 32
 
-        val makeAllLevelsAvailable = false  // for debugging purposes only. TODO: SET TO FALSE
+        const val makeAllLevelsAvailable = false  // for debugging purposes only. TODO: SET TO FALSE
         // feature toggles:
         const val enableEndlessMode = true
 
@@ -206,7 +205,7 @@ class GameMechanics(val gameActivity: GameActivity) {
         }
     }
 
-    fun resumeGame()
+    private fun resumeGame()
     {
         /** function to resume a running game at exactly the point where the app was left. */
         // persistency.loadState(this)
@@ -235,7 +234,6 @@ class GameMechanics(val gameActivity: GameActivity) {
                 currentlyActiveStage?.let {
                     currentlyActiveWave = if (it.waves.size > 0) it.waves[0]
                     else it.nextWave()
-                    gameActivity.gameView.speedControlPanel.resetButtons()
                 }
                 state.phase = GamePhase.RUNNING
             }

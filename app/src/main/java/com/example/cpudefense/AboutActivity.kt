@@ -10,10 +10,10 @@ import android.text.method.ScrollingMovementMethod
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.setPadding
 
 
+@Suppress("DEPRECATION")
 class AboutActivity : AppCompatActivity()
 {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,7 +38,7 @@ class AboutActivity : AppCompatActivity()
         try {
             startActivity(browserIntent)
         }
-        catch (exception: Exception) {}  // come here if no external app can handle the request
+        catch (_: Exception) {}  // come here if no external app can handle the request
     }
 
     fun releaseNotes(@Suppress("UNUSED_PARAMETER") v: View)
@@ -56,7 +56,7 @@ class AboutActivity : AppCompatActivity()
             textView.movementMethod = ScrollingMovementMethod()
             contentView.addView(textView)
         }
-        catch (exception: Exception) {}
+        catch (_: Exception) {}
     }
 
 }

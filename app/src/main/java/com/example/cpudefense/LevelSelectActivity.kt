@@ -1,7 +1,6 @@
 package com.example.cpudefense
 
 import android.content.Intent
-import android.content.SharedPreferences
 import android.graphics.*
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
@@ -95,21 +94,25 @@ class LevelSelectActivity : AppCompatActivity() {
              */
     {
         val listView = findViewById<LinearLayout>(R.id.levelList)
-        val prefs = getSharedPreferences(getString(R.string.pref_filename), MODE_PRIVATE)
+        getSharedPreferences(getString(R.string.pref_filename), MODE_PRIVATE)
         listView.removeAllViews()
         selectedSeries = series
         when (series)
         {
             GameMechanics.SERIES_NORMAL -> {
                 levels = Persistency(this).loadLevelSummaries(GameMechanics.SERIES_NORMAL)
-                populateStageList(listView, levels, prefs, GameMechanics.SERIES_NORMAL,
-                                  resources.getColor(R.color.text_green), resources.getColor(R.color.text_lightgreen))
+                populateStageList(
+                        listView, levels, GameMechanics.SERIES_NORMAL, resources.getColor(R.color.text_green),
+                        resources.getColor(R.color.text_lightgreen)
+                )
             }
             GameMechanics.SERIES_TURBO-> {
                 if (isTurboAvailable) {
                     levels = Persistency(this).loadLevelSummaries(GameMechanics.SERIES_TURBO)
-                    populateStageList(listView, levels, prefs, GameMechanics.SERIES_NORMAL,
-                                      resources.getColor(R.color.text_amber), resources.getColor(R.color.text_lightamber))
+                    populateStageList(
+                            listView, levels, GameMechanics.SERIES_NORMAL, resources.getColor(R.color.text_amber),
+                            resources.getColor(R.color.text_lightamber)
+                    )
                 }
                 else
                 {
@@ -127,8 +130,10 @@ class LevelSelectActivity : AppCompatActivity() {
             GameMechanics.SERIES_ENDLESS -> {
                 if (isEndlessAvailable) {
                     levels = Persistency(this).loadLevelSummaries(GameMechanics.SERIES_ENDLESS)
-                    populateStageList(listView, levels, prefs, GameMechanics.SERIES_ENDLESS,
-                                      resources.getColor(R.color.text_red), resources.getColor(R.color.text_lightred))
+                    populateStageList(
+                            listView, levels, GameMechanics.SERIES_ENDLESS, resources.getColor(R.color.text_red),
+                            resources.getColor(R.color.text_lightred)
+                    )
                 }
                 else
                 {
@@ -147,15 +152,14 @@ class LevelSelectActivity : AppCompatActivity() {
     }
 
     private fun populateStageList(
-        listView: LinearLayout, stageSummary: HashMap<Int, Stage.Summary>, prefs: SharedPreferences,
-        series: Int, colorFinished: Int, colorUnfinished: Int
+        listView: LinearLayout, stageSummary: HashMap<Int, Stage.Summary>, series: Int,
+        colorFinished: Int, colorUnfinished: Int
     )
             /**
              * Populate the scrollable list for a given set of levels, depending on the series.
              *
              * @param listView The list where the entries should be added
              * @param stageSummary The dictionary with the level data. May be an empty set.
-             * @param prefs The preferences, used for loading level thumbnails
              */
     {
         /* create empty first and last stage, if necessary */

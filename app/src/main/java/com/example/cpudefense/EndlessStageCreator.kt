@@ -197,6 +197,7 @@ class EndlessStageCreator(val stage: Stage)
         return null
     }
 
+    @Suppress("UNUSED_PARAMETER")
     private fun getMask(link: Link? = null): Int
     /** returns a random value for the link mask */
     {
@@ -269,7 +270,7 @@ class EndlessStageCreator(val stage: Stage)
                 lastNode = node
             }
         }
-        catch (ex: Exception)
+        catch (_: Exception)
         {}
         return linkList
     }

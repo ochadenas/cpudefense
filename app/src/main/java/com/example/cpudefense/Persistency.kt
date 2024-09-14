@@ -187,8 +187,8 @@ class Persistency(activity: Activity) {
     fun saveHolidays(gameMechanics: GameMechanics)
     {
         val editor = prefsSaves.edit()
-        var data = SerializableHolidays(gameMechanics.holidays)
-        var json = Gson().toJson(data)
+        val data = SerializableHolidays(gameMechanics.holidays)
+        val json = Gson().toJson(data)
         editor.putString("holidays", json)
         editor.apply()
     }

@@ -23,8 +23,7 @@ class GameActivity : Activity() {
     /** flag used to keep the threads running. Set to false when leaving activity */
     private var gameIsRunning = true
 
-    companion object {
-    }
+    companion object;
 
     enum class GameActivityStatus { PLAYING, BETWEEN_LEVELS }
 
@@ -50,9 +49,9 @@ class GameActivity : Activity() {
 
     data class Settings(
         var configDisableBackground: Boolean = true,
-        var configShowAttsInRange: Boolean = false,
+        var configShowAttackersInRange: Boolean = false,
         var configUseLargeButtons: Boolean = false,
-        var showFramerate: Boolean = false,
+        var showFrameRate: Boolean = false,
         var fastFastForward: Boolean = false,
         var keepLevels: Boolean = true,
     )
@@ -124,7 +123,7 @@ class GameActivity : Activity() {
         super.onDestroy()
     }
 
-    fun setupGameView()
+    private fun setupGameView()
     /** creates the game view including all game components */
     {
         if (gameView.parent == null)
@@ -179,9 +178,9 @@ class GameActivity : Activity() {
     {
         val prefs = getSharedPreferences(getString(R.string.pref_filename), MODE_PRIVATE)
         settings.configDisableBackground = prefs.getBoolean("DISABLE_BACKGROUND", false)
-        settings.configShowAttsInRange = prefs.getBoolean("SHOW_ATTS_IN_RANGE", false)
+        settings.configShowAttackersInRange = prefs.getBoolean("SHOW_ATTS_IN_RANGE", false)
         settings.configUseLargeButtons = prefs.getBoolean("USE_LARGE_BUTTONS", false)
-        settings.showFramerate = prefs.getBoolean("SHOW_FRAMERATE", false)
+        settings.showFrameRate = prefs.getBoolean("SHOW_FRAMERATE", false)
         settings.keepLevels = prefs.getBoolean("KEEP_LEVELS", true)
         settings.fastFastForward = prefs.getBoolean("USE_FAST_FAST_FORWARD", false)
     }

@@ -1,5 +1,8 @@
+@file:Suppress("DEPRECATION")
+
 package com.example.cpudefense.gameElements
 
+import android.content.res.Resources
 import android.graphics.*
 import com.example.cpudefense.GameMechanics
 import com.example.cpudefense.GameView
@@ -17,7 +20,7 @@ class HeroCard(val gameView: GameView, val hero: Hero): GameElement(), Fadable
 /** graphical representation of a hero or a heroine */
 {
     val type = hero.data.type
-    val resources = gameView.resources
+    val resources: Resources = gameView.resources
 
     private val heroPictureSize = 160
 
@@ -26,8 +29,8 @@ class HeroCard(val gameView: GameView, val hero: Hero): GameElement(), Fadable
     /** rectangle at the actual position on the screen */
     var cardAreaOnScreen = Rect(cardArea)
     /** the area where the hero photo goes */
-    var portraitArea = Rect()
-    var portraitAreaOnScreen = Rect(portraitArea)
+    private var portraitArea = Rect()
+    private var portraitAreaOnScreen = Rect(portraitArea)
     private var myBitmap: Bitmap? = null
     private var effectBitmap = BitmapFactory.decodeResource(resources, R.drawable.glow)
     private var shortDescRect = Rect(cardAreaOnScreen)
@@ -54,7 +57,7 @@ class HeroCard(val gameView: GameView, val hero: Hero): GameElement(), Fadable
     private val paintHero = Paint()
 
     var inactiveColor = resources.getColor(R.color.upgrade_inactive)
-    var monochromeColor = inactiveColor
+    private var monochromeColor = inactiveColor
     var activeColor: Int = if (monochrome) monochromeColor
     else when(type)
     {

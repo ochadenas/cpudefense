@@ -28,7 +28,6 @@ class Network(val gameMechanics: GameMechanics, val gameView: GameView, x: Int, 
     var links = hashMapOf<Int, Link>()
     var vehicles: CopyOnWriteArrayList<Vehicle> = CopyOnWriteArrayList<Vehicle>()
 
-    var backgroundImage: Bitmap? = null
     private lateinit var networkImage: Bitmap
     private var paint = Paint()
     private var gridPointDistance: Pair<Int, Int>? = null
@@ -97,6 +96,7 @@ class Network(val gameMechanics: GameMechanics, val gameView: GameView, x: Int, 
             obj.display(canvas, viewport)
         for (obj in nodes.values)
             (obj as Chip).displayUpgrades(canvas)
+        @Suppress("ConstantConditionIf")
         if (false)  // for debugging purposes
             if (data.sectorSizeX > 0 && data.sectorSizeY > 0)
                 EndlessStageCreator.displaySectors(canvas, viewport, data)
@@ -181,6 +181,7 @@ class Network(val gameMechanics: GameMechanics, val gameView: GameView, x: Int, 
         vehicles.add(vehicle)
     }
 
+    @Suppress("UNUSED_PARAMETER")
     fun onLongPress(p0: MotionEvent?) {
     }
 }

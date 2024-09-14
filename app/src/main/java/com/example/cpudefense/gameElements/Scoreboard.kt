@@ -1,4 +1,4 @@
-@file:Suppress("DEPRECATION")
+@file:Suppress("DEPRECATION", "SpellCheckingInspection")
 
 package com.example.cpudefense.gameElements
 
@@ -40,8 +40,9 @@ class ScoreBoard(val gameView: GameView): GameElement()
         areaRemaining = waves.setSize(areaRemaining, divider)
         areaRemaining = coins.setSize(areaRemaining, divider)
         areaRemaining = lives.setSize(areaRemaining, divider)
+        @Suppress("UNUSED_VALUE")
         areaRemaining = temperature.setSize(areaRemaining, divider)
-        if (gameView.gameMechanics.gameActivity.settings.showFramerate) {
+        if (gameView.gameMechanics.gameActivity.settings.showFrameRate) {
             debugStatusLine = DebugStatusLine()
             debugStatusLine?.setSize(area, divider)
         }
@@ -316,7 +317,7 @@ class ScoreBoard(val gameView: GameView): GameElement()
                             glowPaint.color = resources.getColor(R.color.led_red_glow)
                         }
                     }
-                else if (i > state.lives)
+                else // if (i > state.lives)
                 {
                     paint.color = resources.getColor(R.color.led_off)
                     glowPaint.color = resources.getColor(R.color.led_off_glow)
@@ -456,6 +457,7 @@ class ScoreBoard(val gameView: GameView): GameElement()
         }
 
         fun display(canvas: Canvas) {
+            @Suppress("SimplifyBooleanWithConstants")
             if (gameView.gameMechanics.timeBetweenFrames != lastValue || true)
               recreateBitmap()
             bitmap?.let { canvas.drawBitmap(it, null, area, paint) }

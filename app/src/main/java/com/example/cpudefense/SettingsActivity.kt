@@ -19,7 +19,7 @@ class SettingsActivity : AppCompatActivity()
         loadPrefs()
     }
 
-    fun loadPrefs()
+    private fun loadPrefs()
     {
         val disableBackgroundView = findViewById<SwitchCompat>(R.id.switch_disable_background)
         val showRangeView = findViewById<SwitchCompat>(R.id.switch_show_atts_in_range)
@@ -36,6 +36,7 @@ class SettingsActivity : AppCompatActivity()
         keepLevels.isChecked = prefs.getBoolean("KEEP_LEVELS", true)
     }
 
+    @Suppress("UNUSED_PARAMETER")
     fun savePrefs(v: View)
     {
         val prefs = getSharedPreferences(getString(R.string.pref_filename), MODE_PRIVATE)
@@ -53,12 +54,6 @@ class SettingsActivity : AppCompatActivity()
     fun dismiss(@Suppress("UNUSED_PARAMETER") v: View)
     {
         finish()
-    }
-
-    fun about(@Suppress("UNUSED_PARAMETER") v: View)
-    {
-        val intent = Intent(this, AboutActivity::class.java)
-        startActivity(intent)
     }
 
     fun startNewGame(@Suppress("UNUSED_PARAMETER") v: View)

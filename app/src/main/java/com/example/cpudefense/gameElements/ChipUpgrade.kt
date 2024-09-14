@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package com.example.cpudefense.gameElements
 
 import android.graphics.*
@@ -6,8 +8,9 @@ import com.example.cpudefense.*
 import com.example.cpudefense.effects.Movable
 import com.example.cpudefense.utils.*
 
-class ChipUpgrade(val chipToUpgrade: Chip, val type: Chip.ChipUpgrades,
-                  var posX: Int, var posY: Int, val color: Int): Movable
+class ChipUpgrade(
+    private val chipToUpgrade: Chip, val type: Chip.ChipUpgrades,
+    private var posX: Int, private var posY: Int, val color: Int): Movable
 {
     val gameMechanics = chipToUpgrade.network.gameMechanics
     val gameView = chipToUpgrade.network.gameView
@@ -18,7 +21,7 @@ class ChipUpgrade(val chipToUpgrade: Chip, val type: Chip.ChipUpgrades,
     private val paintText = Paint()
     private val paintFrame = Paint()
 
-    fun calculatePrice(): Int
+    private fun calculatePrice(): Int
     {
         var penalty = 0 // possible price modification
         when (type){
@@ -51,7 +54,7 @@ class ChipUpgrade(val chipToUpgrade: Chip, val type: Chip.ChipUpgrades,
         }
     }
 
-    fun canAfford(): Boolean
+    private fun canAfford(): Boolean
     {
         return (price<=gameMechanics.state.cash)
     }
@@ -79,7 +82,7 @@ class ChipUpgrade(val chipToUpgrade: Chip, val type: Chip.ChipUpgrades,
             return false
     }
 
-    fun buyUpgrade(type: Chip.ChipUpgrades)
+    private fun buyUpgrade(type: Chip.ChipUpgrades)
     {
         when (type)
         {

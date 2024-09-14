@@ -362,7 +362,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int):
         outlineWidth = 2f * resources.displayMetrics.scaledDensity
         actualRect?.setCenter(viewport.gridToViewport(posOnGrid))
         actualRect?.let { displayRect(canvas, it) }
-        if (theNetwork.gameMechanics.gameActivity.settings.configShowAttsInRange && chipData.type != ChipType.EMPTY)
+        if (theNetwork.gameMechanics.gameActivity.settings.configShowAttackersInRange && chipData.type != ChipType.EMPTY)
             actualRect?.let { displayLineToAttacker(canvas, attackersInRange(), it) }
     }
 

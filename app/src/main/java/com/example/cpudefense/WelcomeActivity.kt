@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package com.example.cpudefense
 
 import android.app.Dialog
@@ -17,7 +19,7 @@ import com.example.cpudefense.gameElements.SevenSegmentDisplay
 
 
 class WelcomeActivity : AppCompatActivity() {
-    var info: PackageInfo? = null
+    private var info: PackageInfo? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -75,6 +77,7 @@ class WelcomeActivity : AppCompatActivity() {
         }
     }
 
+    @Suppress("UNUSED_PARAMETER")
     fun showMaxLevelInfo(v: View) {
         /** displays the max level reached so far as graphical display */
         val seriesName = when (maxLevel.series)
@@ -159,6 +162,7 @@ class WelcomeActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
+    @Suppress("unused")
     fun showVersionMessage()
     /** display version message, if not already displayed earlier */
     {

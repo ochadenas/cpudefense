@@ -59,15 +59,13 @@ class Viewport
         val height = viewportHeight.toFloat()
         if (width == 0f || height == 0f)
             isValid = false
-        else if (standardGridSizeX>0 && standardGridSizeY>0) {
+        else {
             scaleX = viewportWidth.toFloat() / standardGridSizeX
             scaleY = viewportHeight.toFloat() / standardGridSizeY
             scaleX *= userScale
             scaleY *= userScale
             isValid = true
         }
-        else
-            isValid = false  // screen size is known, but grid size isn't
     }
 
     fun addOffset(deltaX: Float, deltaY: Float)
@@ -95,19 +93,14 @@ class Viewport
 
     fun rectToViewport(rectInGridCoord: Rect): Rect
     {
-        val upperleft = gridToViewport(Coord(rectInGridCoord.left, rectInGridCoord.top))
-        val lowerright = gridToViewport(Coord(rectInGridCoord.right, rectInGridCoord.bottom))
-        return Rect(upperleft.first, upperleft.second, lowerright.first, lowerright.second)
+        val upperLeft = gridToViewport(Coord(rectInGridCoord.left, rectInGridCoord.top))
+        val lowerRight = gridToViewport(Coord(rectInGridCoord.right, rectInGridCoord.bottom))
+        return Rect(upperLeft.first, upperLeft.second, lowerRight.first, lowerRight.second)
     }
 
     fun isInRightHalfOfViewport(posX: Int): Boolean
     {
         return posX > viewportWidth / 2
-    }
-
-    fun getRect(): Rect
-    {
-        return Rect(0, 0, viewportWidth, viewportHeight)
     }
 
 }

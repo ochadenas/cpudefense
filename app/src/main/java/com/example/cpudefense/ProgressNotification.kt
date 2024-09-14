@@ -11,15 +11,15 @@ import com.example.cpudefense.utils.shrink
 class ProgressNotification (gameView: GameView)
 /** Class that displays a "loading 40% ..." message */
 {
-    var isVisible = false
-    var sizeX = 200
-    var sizeY = 100
-    var baseText = "Loading ..."
-    var currentText: String = ""
-    var myRect = Rect(0, 0, sizeX, sizeY)
-    var value = 0.0f  // ranging from 0 to 1
-    var paintRect = Paint()
-    var paintText = Paint()
+    private var isVisible = false
+    private var sizeX = 200
+    private var sizeY = 100
+    private var baseText = "Loading ..."
+    private var currentText: String = ""
+    private var myRect = Rect(0, 0, sizeX, sizeY)
+    private var value = 0.0f  // ranging from 0 to 1
+    private var paintRect = Paint()
+    private var paintText = Paint()
 
     init {
         paintRect.color = Color.YELLOW
@@ -36,6 +36,7 @@ class ProgressNotification (gameView: GameView)
         myRect.setCenter(x, y)
     }
 
+    @Suppress("unused")
     fun showProgress(value: Float)
     {
         this.value = value
@@ -43,6 +44,7 @@ class ProgressNotification (gameView: GameView)
         isVisible = true
     }
 
+    @Suppress("unused")
     fun hide()
     {
         isVisible = false

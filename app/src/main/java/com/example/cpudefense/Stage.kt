@@ -20,6 +20,7 @@ class Stage(var gameMechanics: GameMechanics, var gameView: GameView)
         /** returns an identifier of the next level */
         { return Identifier(series, number+1)}
 
+        @Suppress("unused")
         fun previous(): Identifier
         /** returns an identifier of the previous level */
         { return Identifier(series, if (number<=1) 1 else number-1)}

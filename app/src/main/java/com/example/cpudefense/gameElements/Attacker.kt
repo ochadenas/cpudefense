@@ -162,7 +162,7 @@ open class Attacker(network: Network, representation: Representation = Represent
     fun gainCash()
     /** credit the info gained for eliminating this attacker */
     {
-        if (attackerData.hasNoValue == false)
+        if (!attackerData.hasNoValue)
             network.gameView.scoreBoard.addCash(attackerData.bits + extraCash())
     }
 
