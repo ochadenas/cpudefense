@@ -297,7 +297,10 @@ open class Chip(val network: Network, gridX: Int, gridY: Int):
         val attackers = attackersInRange()
         if (attackers.isEmpty())
             return // no need to check
-        selectTarget(attackers)?.let { shootAt(it)}
+        if (chipData.type == ChipType.RES)
+            attackers.forEach { shootAt(it) } // resistors shoot at all attackers simultaneously
+        else
+            selectTarget(attackers)?.let { shootAt(it)}
     }
 
     private fun selectTarget(attackerList: List<Attacker>): Attacker?
