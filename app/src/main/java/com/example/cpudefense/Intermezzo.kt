@@ -229,7 +229,6 @@ class Intermezzo(var gameView: GameView): GameElement(), Fadable {
             Fader(gameView, this, Fader.Type.APPEAR, Fader.Speed.SLOW)
         }
         gameView.background.prepareAtStartOfStage(level)
-        gameView.resetAtStartOfStage()
         gameView.gameMechanics.state.phase = GameMechanics.GamePhase.INTERMEZZO
         activity.setGameActivityStatus(GameActivity.GameActivityStatus.BETWEEN_LEVELS)
     }

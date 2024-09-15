@@ -400,6 +400,7 @@ class GameMechanics(val gameActivity: GameActivity) {
         state.phase = GamePhase.RUNNING
         currentlyActiveWave = nextStage.nextWave()
         currentlyActiveStage = nextStage
+        nextStage.gameView.resetAtStartOfStage()
         takeLevelSnapshot()
     }
 
