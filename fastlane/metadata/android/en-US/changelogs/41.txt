@@ -1,0 +1,10 @@
+Bug fixes:
+- Fixed some problems when returning after switching apps
+- Better loading and scaling of background images
+- Margaret Hamilton must not appear before stage 24.
+- Some text corrections
+
+Miscellaneous:
+- Massively reduced the number of waves for higher stages in Endless mode
+- Resistors now act simultaneously on all targets in range.
+- Slightly changed the screen size of several game elements
