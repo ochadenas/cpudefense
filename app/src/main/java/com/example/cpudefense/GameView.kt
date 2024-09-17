@@ -269,7 +269,7 @@ class GameView(context: Context):
         return false
     }
 
-    override fun onScroll(p0: MotionEvent, p1: MotionEvent, dx: Float, dy: Float): Boolean {
+    override fun onScroll(p0: MotionEvent?, p1: MotionEvent, dx: Float, dy: Float): Boolean {
         when (gameMechanics.state.phase)
         {
             GamePhase.MARKETPLACE -> marketplace.onScroll(p0, p1, dx, dy)
@@ -294,7 +294,7 @@ class GameView(context: Context):
         }
     }
 
-    override fun onFling(p0: MotionEvent, p1: MotionEvent, p2: Float, p3: Float): Boolean {
+    override fun onFling(p0: MotionEvent?, p1: MotionEvent, p2: Float, p3: Float): Boolean {
         return false
     }
 
