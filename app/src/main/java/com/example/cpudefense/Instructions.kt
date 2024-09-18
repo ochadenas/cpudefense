@@ -13,7 +13,7 @@ import com.example.cpudefense.effects.Fadable
 import com.example.cpudefense.effects.Fader
 import kotlin.random.Random
 
-class Instructions(val gameView: GameView, var stage: Stage.Identifier, private var showLeaveDialogue: Boolean,
+class Instructions(val gameView: GameView, var stage: Stage.Identifier, var showLeaveDialogue: Boolean,
                    private var callback: (()->Unit)? ): Fadable
 {
     var alpha = 0

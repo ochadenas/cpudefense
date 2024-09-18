@@ -220,6 +220,9 @@ class GameActivity : Activity() {
     }
 
     fun prepareLevelAtStartOfGame(ident: Stage.Identifier)
+            /** function that is called when starting a new level from the main menu.
+             * Does not get called when resuming a running game.
+              */
     {
         gameView.resetAtStartOfStage()
         gameView.intermezzo.prepareLevel(ident, true)

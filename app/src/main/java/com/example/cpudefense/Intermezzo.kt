@@ -33,7 +33,11 @@ class Intermezzo(var gameView: GameView): GameElement(), Fadable {
     private var buttonContinue: Button? = null
     private var buttonPurchase: Button? = null
     private var instructions: Instructions? = null
+    /** a panel containing several heroes to choose from */
     private var heroSelection: HeroSelection? = null
+    /** whether the player must choose a hero to go on leave */
+    private var showLeaveDialogue = false
+
     var coinsGathered = 0
     var durationOfLeave = 2
 
@@ -55,18 +59,10 @@ class Intermezzo(var gameView: GameView): GameElement(), Fadable {
 
     override fun fadeDone(type: Fader.Type) {
         alpha = 255
-        var showLeaveDialogue = false
-        if (oneHeroMustGoOnLeave(level)) {
-            heroSelection = HeroSelection()
-            heroSelection?.let {
-                if (it.heroesAskingToTakeLeave.isNotEmpty())
-                    showLeaveDialogue = true
-            }
-        }
-        instructions = Instructions(gameView, level, showLeaveDialogue) { displayText() }
+        instructions = Instructions(gameView, level, showLeaveDialogue) { displayTypewriterText() }
     }
 
-    private fun displayText()
+    private fun displayTypewriterText()
     {
         val lines = CopyOnWriteArrayList<String>()
         when (type)
@@ -230,6 +226,17 @@ class Intermezzo(var gameView: GameView): GameElement(), Fadable {
         }
         gameView.background.prepareAtStartOfStage(level)
         gameView.gameMechanics.state.phase = GameMechanics.GamePhase.INTERMEZZO
+
+        // determine whether the "hero selection screen" must be displayed
+        showLeaveDialogue = false
+        if (oneHeroMustGoOnLeave(level)) {
+            heroSelection = HeroSelection()
+            heroSelection?.let {
+                if (it.heroesAskingToTakeLeave.isNotEmpty())
+                    showLeaveDialogue = true
+            }
+        }
+        instructions?.showLeaveDialogue = showLeaveDialogue
         activity.setGameActivityStatus(GameActivity.GameActivityStatus.BETWEEN_LEVELS)
     }
 
@@ -282,7 +289,7 @@ class Intermezzo(var gameView: GameView): GameElement(), Fadable {
         else {
             type = Type.GAME_LOST
             alpha = 255
-            displayText()
+            displayTypewriterText()
         }
         activity.setGameActivityStatus(GameActivity.GameActivityStatus.BETWEEN_LEVELS)
         gameView.gameMechanics.state.phase = GameMechanics.GamePhase.INTERMEZZO
