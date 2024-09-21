@@ -490,10 +490,11 @@ class GameMechanics(val gameActivity: GameActivity) {
      * @return the part of the generated heat that has not been applied
      */
     {
-        val factor = 100f - heroModifier(Hero.Type.REDUCE_HEAT)
-        val generatedHeat = amount * (factor * heatAdjustmentFactor / 100f)
-        state.heat += (generatedHeat * (100-percent)) / 100
-        return percent * generatedHeat.toInt() / 100
+        val heat = amount * heatAdjustmentFactor  // heat in in-game units
+        val convertedHeat = heat * percent / 100f // part that is converted into cash
+        val factor = 100f - heroModifier(Hero.Type.REDUCE_HEAT) // heat reduction in %
+        state.heat += (heat-convertedHeat) * factor / 100f
+        return convertedHeat.toInt()
     }
 
 
