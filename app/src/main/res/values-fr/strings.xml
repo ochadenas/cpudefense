@@ -92,7 +92,7 @@
     <string name="shortdesc_refund">remboursement vente</string>
     <string name="shortdesc_max_hero_upgrade">niveau max des héros</string>
     <string name="upgrade_format">%s  [coût: %d]</string>
-    <string name="toast_next_stage">Niveau %d</string>
+    <string name="stage_number">Niveau %d</string>
     <string name="toast_stage_cleared">Niveau réussi</string>
     <string name="HERO_EFFECT_CHIPSPEED">réduit le temps de recharge de toutes les puces %s</string>
     <string name="HERO_EFFECT_HEAT">réduit la géneration de chaleur</string>
@@ -203,4 +203,5 @@
     <string name="HERO_EFFECT_COINSTRENGTH">réduit la puissance des crypto-écus</string>
     <string name="boole">L\'exploit de George Boole Jr. est d\'avoir formalisé les concepts de la logique et d\'en avoir ainsi fait une partie des mathématiques. L\'algèbre booléenne est à la base du fonctionnement interne de tous les ordinateurs modernes.\n\nBoole était le fils d\'un cordonnier et n\'a jamais fréquenté d\'école autre que l\'école primaire. Il a appris seul les mathématiques, le latin et le grec, le français et l\'allemand.</string>
     <string name="diffie">Avec Martin Hellmann, Whitfield Diffie a développé l\'échange de clés entre deux parties, qui porte leur nom, et a ainsi créé une condition essentielle pour des connexions sécurisées sur Internet.\n\nDiffie s\'intéresse également aux questions sociétales liées à la cryptographie et est un fervent défenseur du droit à la vie privée.</string>
+    <string name="toast_enter_stage">Niveau %d</string>
 </resources>

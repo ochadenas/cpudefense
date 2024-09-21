@@ -131,7 +131,7 @@ Turing wurde aufgrund seiner Homosexualität massiv diskriminiert. Er starb 1954
     <string name="shortdesc_refund">Erstattung bei Verkauf</string>
     <string name="shortdesc_max_hero_upgrade">max. Helden-Stufe</string>
     <string name="upgrade_format">%s  [Kosten: %d]</string>
-    <string name="toast_next_stage">Level %d</string>
+    <string name="stage_number">Level %d</string>
     <string name="toast_stage_cleared">Level geschafft</string>
     <string name="instr_12">Zwei weitere Chiparten: ADD und SHL (für „shift left“).\n\nDiese tun das Gegenteil von SUB und SHR: Sie addieren 1 zu der Zahl bzw. schieben die Bits nach links.\n\nDas ist natürlich unerwünscht, denn es macht die Zahlen größer. Für diese Chips bedeutet „Verbesserung“, dass sie schwächer werden oder ganz verschwinden.</string>
     <string name="instr_13">"Beachte, dass CryptoCoins weder von ACC- noch von MEM-Chips beeinflusst werden.\n "</string>
@@ -249,4 +249,5 @@ Turing wurde aufgrund seiner Homosexualität massiv diskriminiert. Er starb 1954
     <string name="HERO_EFFECT_COINSTRENGTH">verringert die Stärke der Crypto-Coins</string>
     <string name="boole">Die Leistung von George Boole Jr. liegt darin, dass er die Begriffe der Logik formalisiert und dadurch zu einem Teil der Mathematik gemacht hat. Die Boolesche Algebra ist Grundlage für die interne Funktionsweise aller modernen Computer.\n\nBoole war der Sohn eines Schusters und hat nie eine Schule außer der Grundschule besucht. Mathematik, Latein und Griechisch, Französisch und Deutsch brachte er sich selber bei.</string>
     <string name="diffie">Zusammen mit Martin Hellmann entwickelte Bailey Whitfield Diffie den nach den beiden benannten DH-Schlüsselaustausch zwischen zwei Parteien und schuf damit eine wesentliche Voraussetzung für sichere Verbindungen im Internet.\n\nDiffie beschäftigt sich auch mit gesellschaftlichen Fragen der Kryptographie und ist ein überzeugter Verfechter des Rechts auf Privatsphäre.</string>
+    <string name="toast_enter_stage">Level %d</string>
 </resources>

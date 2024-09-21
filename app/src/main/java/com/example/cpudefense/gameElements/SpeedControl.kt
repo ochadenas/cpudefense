@@ -1,14 +1,21 @@
 package com.example.cpudefense.gameElements
 
+import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.graphics.Paint
 import android.graphics.Rect
+import android.graphics.Typeface
 import android.view.MotionEvent
 import com.example.cpudefense.GameMechanics
 import com.example.cpudefense.GameView
+import com.example.cpudefense.R
 import com.example.cpudefense.utils.setCenter
 import com.example.cpudefense.utils.setLeft
 
 class SpeedControl(var gameView: GameView)
+/** set of buttons that control the game speed, but also provide additional interaction such
+ * as "lock scrolling" or "return to main menu". Also shows the level number.
+ */
 {
     private val gameMechanics = gameView.gameMechanics
     private var button1 = SpeedControlButton(gameView, gameMechanics, SpeedControlButton.Type.FAST, this)
@@ -18,6 +25,11 @@ class SpeedControl(var gameView: GameView)
     private var buttons = listOf( button1, button2, returnButton, lockButton )
     private var areaRight = Rect(0,0,0,0)
     private var areaLeft = Rect(0,0,0,0)
+    private var areaCenter = Rect(0,0,0,0)
+    
+    private var stageInfoText = ""
+    private var statusInfoBitmap: Bitmap? = null
+    private var bitmapPaint = Paint()
 
     fun setSize(parentArea: Rect)
     {
@@ -34,8 +46,37 @@ class SpeedControl(var gameView: GameView)
         // put the 'return' button on the other side
         areaLeft = Rect(areaRight)
         areaLeft.setLeft(margin)
+        areaCenter = Rect(areaLeft.left, areaLeft.top, areaRight.right, areaRight.bottom)
         returnButton.area.setCenter(areaLeft.left + actualButtonSize / 2, areaLeft.centerY())
         lockButton.area.setCenter(areaLeft.right - actualButtonSize / 2, areaLeft.centerY())
+    }
+    
+    fun setInfoline(newText: String)
+    {
+        if (newText == stageInfoText)
+            return
+        else
+        {
+            stageInfoText = newText
+            recreateBitmap()
+        }
+    }
+
+    fun recreateBitmap()
+    {
+        bitmapPaint.alpha = 255
+        val paint = Paint()
+        paint.color = gameView.resources.getColor(R.color.connectors)
+        paint.typeface = Typeface.SANS_SERIF
+        paint.textSize = GameMechanics.scoreHeaderSize * gameView.textScaleFactor
+        paint.textAlign = Paint.Align.LEFT
+        val bounds = Rect()
+        paint.getTextBounds(stageInfoText, 0, stageInfoText.length, bounds)
+        statusInfoBitmap = Bitmap.createBitmap(bounds.width(), bounds.height(), Bitmap.Config.ARGB_8888)
+        statusInfoBitmap?.let {
+            val canvas = Canvas(it)
+            canvas.drawText(stageInfoText, 0f, (it.height-bounds.bottom).toFloat(), paint)
+        }
     }
 
     fun resetButtons()
@@ -52,5 +93,10 @@ class SpeedControl(var gameView: GameView)
         if (areaRight.left == 0)
             return
         buttons.forEach { it.display(canvas)}
+        statusInfoBitmap?.let {
+            val statusLineRect = Rect(0, 0, it.width, it.height)
+            statusLineRect.setCenter(areaCenter.centerX(), areaCenter.centerY())
+            canvas.drawBitmap(it, null, statusLineRect, bitmapPaint)
+        }
     }
 }

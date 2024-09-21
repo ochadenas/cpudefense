@@ -237,6 +237,7 @@ class Intermezzo(var gameView: GameView): GameElement(), Fadable {
             }
         }
         instructions?.showLeaveDialogue = showLeaveDialogue
+        gameView.speedControlPanel.setInfoline(gameView.resources.getString(R.string.stage_number).format(level.number))
         activity.setGameActivityStatus(GameActivity.GameActivityStatus.BETWEEN_LEVELS)
     }
 

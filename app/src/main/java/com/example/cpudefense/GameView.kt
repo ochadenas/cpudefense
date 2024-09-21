@@ -66,7 +66,7 @@ class GameView(context: Context):
     var intermezzo = Intermezzo(this)
     var marketplace = Marketplace(this)
     val scoreBoard = ScoreBoard(this)
-    private val speedControlPanel = SpeedControl(this)
+    val speedControlPanel = SpeedControl(this)
     /** list of all mover objects that are created for game elements */
     var movers = CopyOnWriteArrayList<Mover>()
     /** list of all fader objects that are created for game elements */

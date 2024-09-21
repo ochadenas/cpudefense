@@ -18,9 +18,13 @@ class GameMechanics(val gameActivity: GameActivity) {
     companion object Params {
         const val maxLevelAvailable = 32
 
-        const val makeAllLevelsAvailable = false  // for debugging purposes only. TODO: SET TO FALSE
-        // feature toggles:
-        const val enableEndlessMode = true
+        // debug options
+
+        const val makeAllLevelsAvailable = true  // for debugging purposes only. MUST BE SET TO FALSE
+        const val resetHeroHolidays = false // for debugging purposes only. MUST BE SET TO FALSE
+
+        // end of debug options
+
 
         val chipSize = Coord(6,3)
         const val viewportMargin = 10
@@ -131,8 +135,8 @@ class GameMechanics(val gameActivity: GameActivity) {
     var levelThumbnailEndless = HashMap<Int, Bitmap?>()  // level snapshots for series 3
     var heroes = HashMap<Hero.Type, Hero>()
     var heroesByMode = hashMapOf(
-        LevelMode.BASIC to HashMap<Hero.Type, Hero>(),
-        LevelMode.ENDLESS to HashMap<Hero.Type, Hero>(),
+            LevelMode.BASIC to HashMap(),
+            LevelMode.ENDLESS to HashMap<Hero.Type, Hero>(),
     )
     private var currentlyActiveWave: Wave? = null
     var holidays = HashMap<Int, Hero.Holiday>()
@@ -385,9 +389,9 @@ class GameMechanics(val gameActivity: GameActivity) {
         calculateStartingCash()
         gameActivity.runOnUiThread {
             val toast: Toast = Toast.makeText(
-                gameActivity,
-                gameActivity.resources.getString(R.string.toast_next_stage).format(nextStage.getLevel()),
-                Toast.LENGTH_SHORT
+                    gameActivity,
+                    gameActivity.resources.getString(R.string.toast_enter_stage).format(nextStage.getLevel()),
+                    Toast.LENGTH_SHORT
             )
             toast.show()
         }
@@ -442,7 +446,7 @@ class GameMechanics(val gameActivity: GameActivity) {
              * */
     {
         val prefs = gameActivity.getSharedPreferences(gameActivity.getString(R.string.pref_filename), Context.MODE_PRIVATE)
-        val maxStage = Stage.Identifier(prefs.getInt("MAXSERIES", 1), prefs.getInt("MAXSTAGE", 0))
+        val maxStage = Stage.Identifier(prefs.getInt("MAX SERIES", 1), prefs.getInt("MAXSTAGE", 0))
         with (prefs.edit())
         {
             if (resetProgress)
