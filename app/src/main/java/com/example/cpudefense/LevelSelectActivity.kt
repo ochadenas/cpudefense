@@ -45,12 +45,6 @@ class LevelSelectActivity : AppCompatActivity() {
             isTurboAvailable = true
             isEndlessAvailable = true
         }
-        if (GameMechanics.enableEndlessMode)
-        {
-            val tab = tabLayout.newTab().setText("Endless")
-            tabLayout.addTab(tab)
-        }
-
         tabLayout.setOnTabSelectedListener(
             (object : TabLayout.OnTabSelectedListener {
 
@@ -72,8 +66,6 @@ class LevelSelectActivity : AppCompatActivity() {
         // set the active tab depending on the current series
         val tab = tabLayout.getTabAt(currentSeries-1)
         tab?.select()
-
-        // tabLayout.setupWithViewPager(findViewById(RES.id.pager))
     }
 
     private fun nextLevelPossible(level: Int, series: Int): Boolean

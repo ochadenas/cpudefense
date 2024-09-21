@@ -58,6 +58,13 @@
                 android:layout_height="wrap_content"
                 android:text="@string/name_series_2" />
 
+
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/series3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/name_series_3" />
+
         </com.google.android.material.tabs.TabLayout>
 
 
