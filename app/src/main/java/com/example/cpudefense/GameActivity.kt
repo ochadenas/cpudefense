@@ -11,6 +11,11 @@ import android.view.WindowManager
 import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.Toast
+import com.example.cpudefense.GameMechanics.GamePhase
+import com.example.cpudefense.GameMechanics.LevelMode
+import com.example.cpudefense.GameMechanics.Params.SERIES_ENDLESS
+import com.example.cpudefense.GameMechanics.Params.SERIES_NORMAL
+import com.example.cpudefense.GameMechanics.Params.SERIES_TURBO
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -138,14 +143,14 @@ class GameActivity : Activity() {
             /** starts a new game from level 1, discarding all progress */
     {
         gameMechanics.setLastPlayedStage(Stage.Identifier())
-        gameMechanics.beginGame(resetProgress = true)
+        beginGame(resetProgress = true)
     }
 
     private fun startGameAtLevel(level: Stage.Identifier)
             /** continues a current match at a given level, keeping the progress and upgrades */
     {
         gameMechanics.state.startingLevel = level
-        gameMechanics.beginGame(resetProgress = false)
+        beginGame(resetProgress = false)
     }
 
     private fun resumeCurrentGame()
@@ -153,7 +158,7 @@ class GameActivity : Activity() {
              */
     {
         Persistency(this).loadState(gameMechanics)
-        gameMechanics.beginGame(resumeGame = true)
+        beginGame(resumeGame = true)
         if (gameMechanics.state.phase == GameMechanics.GamePhase.RUNNING) {
             runOnUiThread {
                 val toast: Toast = Toast.makeText(
@@ -165,6 +170,69 @@ class GameActivity : Activity() {
             }
         }
     }
+
+    fun beginGame(resetProgress: Boolean = false, resumeGame: Boolean = false)
+    {
+        /** Begins the current game on a chosen level. Also called when starting a completely
+         * new game.
+         * @param resetProgress If true, the whole game is started from the first level, and
+         * all coins and heroes are cleared. Otherwise, start on the level given in the saved state.
+         */
+        loadSettings()
+        if (resetProgress)
+        {
+            gameMechanics.beginGameAndResetProgress()
+            prepareLevelAtStartOfGame(gameMechanics.state.startingLevel)
+        }
+        else
+        {
+            val persistency = Persistency(this)
+            gameMechanics.beginGameWithoutResettingProgress(persistency)
+
+            if (resumeGame)
+                resumeGame()
+            else
+            {
+                gameMechanics.currentStage = gameMechanics.state.startingLevel
+                prepareLevelAtStartOfGame(gameMechanics.state.startingLevel)
+            }
+        }
+    }
+
+    fun resumeGame()
+    /** function to resume a running game at exactly the point where the app was left. */
+    {
+        gameMechanics.stageData?.let {
+            gameMechanics.currentStage = it.ident
+            gameMechanics.currentlyActiveStage = Stage.createStageFromData(gameMechanics, gameView, it)
+        }
+        gameMechanics.currentlyActiveStage?.let {
+            it.network.validateViewport()
+            gameView.viewport.setGridSize(it.sizeX, it.sizeY)
+            gameView.background.prepareAtStartOfStage(it.data.ident)
+        }
+        when (gameMechanics.state.phase)
+        {
+            GamePhase.MARKETPLACE -> {
+                gameView.marketplace.nextGameLevel = gameMechanics.state.startingLevel
+                setGameActivityStatus(GameActivityStatus.BETWEEN_LEVELS)
+            }
+            GamePhase.INTERMEZZO -> {
+                setGameActivityStatus(GameActivityStatus.BETWEEN_LEVELS)
+            }
+            GamePhase.START -> {
+                setGameActivityStatus(GameActivityStatus.BETWEEN_LEVELS)
+            }
+            else -> {
+                gameMechanics.currentlyActiveStage?.let {
+                    gameMechanics.currentlyActiveWave = if (it.waves.size > 0) it.waves[0]
+                    else it.nextWave()
+                }
+                gameMechanics.state.phase = GamePhase.RUNNING
+            }
+        }
+    }
+
 
     private fun startGameThreads() {
 
@@ -242,7 +310,7 @@ class GameActivity : Activity() {
             val timeAtStartOfCycle = SystemClock.uptimeMillis()
             gameMechanics.ticksCount++
             gameMechanics.update()
-
+            gameView.scoreBoard.update()
             // determine whether to update the display
             if (timeAtStartOfCycle-timeOfLastFrame > 30 && displayJob?.isActive != true)
                 displayJob = GlobalScope.launch { display() }

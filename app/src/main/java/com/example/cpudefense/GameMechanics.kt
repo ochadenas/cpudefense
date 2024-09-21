@@ -138,7 +138,7 @@ class GameMechanics(val gameActivity: GameActivity) {
             LevelMode.BASIC to HashMap(),
             LevelMode.ENDLESS to HashMap<Hero.Type, Hero>(),
     )
-    private var currentlyActiveWave: Wave? = null
+    var currentlyActiveWave: Wave? = null
     var holidays = HashMap<Int, Hero.Holiday>()
 
     enum class LevelMode { BASIC, ENDLESS }
@@ -164,86 +164,34 @@ class GameMechanics(val gameActivity: GameActivity) {
     enum class GamePhase { START, RUNNING, INTERMEZZO, MARKETPLACE, PAUSED }
     enum class GameSpeed { NORMAL, MAX }
 
-    fun beginGame(resetProgress: Boolean = false, resumeGame: Boolean = false)
+    fun beginGameAndResetProgress()
     {
-        /** Begins the current game on a chosen level. Also called when starting a completely
-         * new game.
-         * @param resetProgress If true, the whole game is started from the first level, and
-         * all coins and heroes are cleared. Otherwise, start on the level given in the saved state.
+        /** Begins a completely new game, starting from the first level.
+         * All coins and heroes are cleared.
          */
-        gameActivity.loadSettings()
-
-        if (resetProgress)
-        {
-            state.startingLevel = Stage.Identifier(1,1)
-            summaryPerNormalLevel = HashMap()
-            summaryPerTurboLevel = HashMap()
-            setLastPlayedStage(state.startingLevel)
-            setMaxPlayedStage(state.startingLevel, resetProgress=true)
-            currentStage = state.startingLevel
-            gameActivity.prepareLevelAtStartOfGame(state.startingLevel)
-        }
-        else
-        {
-            val persistency = Persistency(gameActivity)
-            global = persistency.loadGlobalData()
-            summaryPerNormalLevel  = persistency.loadLevelSummaries(SERIES_NORMAL)
-            summaryPerTurboLevel   = persistency.loadLevelSummaries(SERIES_TURBO)
-            summaryPerEndlessLevel = persistency.loadLevelSummaries(SERIES_ENDLESS)
-            heroes = persistency.loadHeroes(this, null) // load the upgrades gained so far
-            heroesByMode[LevelMode.BASIC] = persistency.loadHeroes(this, LevelMode.BASIC)
-            heroesByMode[LevelMode.ENDLESS] = persistency.loadHeroes(this, LevelMode.ENDLESS)
-            correctNumberOfCoins()
-
-            // calculate coins
-            persistency.loadCoins(this)
-            if (purseOfCoins[LevelMode.BASIC]?.initialized == false)
-                migrateHeroes()
-            additionalCashDelay = heroModifier(Hero.Type.GAIN_CASH).toInt()
-
-            if (resumeGame)
-                resumeGame()
-            else
-            {
-                currentStage = state.startingLevel
-                gameActivity.prepareLevelAtStartOfGame(state.startingLevel)
-            }
-        }
+        state.startingLevel = Stage.Identifier(1,1)
+        summaryPerNormalLevel = HashMap()
+        summaryPerTurboLevel = HashMap()
+        setLastPlayedStage(state.startingLevel)
+        setMaxPlayedStage(state.startingLevel, resetProgress=true)
+        currentStage = state.startingLevel
     }
 
-    private fun resumeGame()
-    {
-        /** function to resume a running game at exactly the point where the app was left. */
-        // persistency.loadState(this)
-        stageData?.let {
-            currentStage = it.ident
-            currentlyActiveStage = Stage.createStageFromData(this, gameActivity.gameView, it)
-        }
-        currentlyActiveStage?.let {
-            it.network.validateViewport()
-            gameActivity.gameView.viewport.setGridSize(it.sizeX, it.sizeY)
-            gameActivity.gameView.background.prepareAtStartOfStage(it.data.ident)
-        }
-        when (state.phase)
-        {
-            GamePhase.MARKETPLACE -> {
-                gameActivity.gameView.marketplace.nextGameLevel = state.startingLevel
-                gameActivity.setGameActivityStatus(GameActivity.GameActivityStatus.BETWEEN_LEVELS)
-            }
-            GamePhase.INTERMEZZO -> {
-                gameActivity.setGameActivityStatus(GameActivity.GameActivityStatus.BETWEEN_LEVELS)
-            }
-            GamePhase.START -> {
-                gameActivity.setGameActivityStatus(GameActivity.GameActivityStatus.BETWEEN_LEVELS)
-            }
-            else -> {
-                currentlyActiveStage?.let {
-                    currentlyActiveWave = if (it.waves.size > 0) it.waves[0]
-                    else it.nextWave()
-                }
-                state.phase = GamePhase.RUNNING
-            }
-        }
+    fun beginGameWithoutResettingProgress(persistency: Persistency) {
+        global = persistency.loadGlobalData()
+        summaryPerNormalLevel = persistency.loadLevelSummaries(SERIES_NORMAL)
+        summaryPerTurboLevel = persistency.loadLevelSummaries(SERIES_TURBO)
+        summaryPerEndlessLevel = persistency.loadLevelSummaries(SERIES_ENDLESS)
+        heroes = persistency.loadHeroes(this, null) // load the upgrades gained so far
+        heroesByMode[LevelMode.BASIC] = persistency.loadHeroes(this, LevelMode.BASIC)
+        heroesByMode[LevelMode.ENDLESS] = persistency.loadHeroes(this, LevelMode.ENDLESS)
+        correctNumberOfCoins()
+
+        // calculate coins
+        persistency.loadCoins(this)
+        if (purseOfCoins[LevelMode.BASIC]?.initialized == false)
+            migrateHeroes()
+        additionalCashDelay = heroModifier(Hero.Type.GAIN_CASH).toInt()
     }
 
     inline fun globalSpeedFactor(): Float
@@ -288,7 +236,6 @@ class GameMechanics(val gameActivity: GameActivity) {
         {
             checkTemperature()
             currentlyActiveStage?.network?.update()
-            gameActivity.gameView.scoreBoard.update()
             currentlyActiveWave?.update()
             gainAdditionalCash()
         }
