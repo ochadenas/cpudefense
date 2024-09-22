@@ -20,7 +20,7 @@ class GameMechanics(val gameActivity: GameActivity) {
 
         // debug options
 
-        const val makeAllLevelsAvailable = true  // for debugging purposes only. MUST BE SET TO FALSE
+        const val makeAllLevelsAvailable = false  // for debugging purposes only. MUST BE SET TO FALSE
         const val resetHeroHolidays = false // for debugging purposes only. MUST BE SET TO FALSE
 
         // end of debug options
