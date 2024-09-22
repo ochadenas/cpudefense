@@ -356,6 +356,7 @@ class Stage(var gameMechanics: GameMechanics, var gameView: GameView)
         { sumOfObstacles += it.obstacleDifficulty() }
         return sumOfObstacles
     }
+
     fun calculateDifficulty()
     {
         var minLength = 999
@@ -366,7 +367,14 @@ class Stage(var gameMechanics: GameMechanics, var gameView: GameView)
             if (minLength>track.links.size)
                 minLength = track.links.size
         }
-        if (minLength<4 || tracks.size == 0) {
+        // the shortest path must have a minimum length, especially in later levels
+        val requiredLength = when
+        {
+            data.ident.number>400 -> 6
+            data.ident.number>200 -> 5
+            else -> 4
+        }
+        if (minLength<requiredLength || tracks.size == 0) {
             data.difficulty = 999.0  // too difficult
             return
         }

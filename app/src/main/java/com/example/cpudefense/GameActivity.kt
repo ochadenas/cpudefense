@@ -97,6 +97,7 @@ class GameActivity : Activity() {
              */
     {
         super.onResume()
+        Toast.makeText(this, "Loading ...", Toast.LENGTH_SHORT).show()
         loadSettings()
         setupGameView()
 

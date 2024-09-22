@@ -13,7 +13,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.setPadding
 
 
-@Suppress("DEPRECATION")
 class AboutActivity : AppCompatActivity()
 {
     override fun onCreate(savedInstanceState: Bundle?) {
