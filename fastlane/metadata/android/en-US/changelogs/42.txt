@@ -1,0 +1,9 @@
+New features:
+- Stage number is displayed on the game screen
+
+Bug fixes:
+- Fixed some problems when selecting heroes for leave
+- Fixed "heat to cash" conversion calculation for resistors
+
+Miscellaneous:
+- The required "shortest path length" in endless mode has been raised for stage numbers > 200
