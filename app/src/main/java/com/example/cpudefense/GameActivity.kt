@@ -2,6 +2,7 @@ package com.example.cpudefense
 
 import android.app.Activity
 import android.app.Dialog
+import android.content.Context
 import android.os.Bundle
 import android.os.SystemClock
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
@@ -12,10 +13,6 @@ import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.Toast
 import com.example.cpudefense.GameMechanics.GamePhase
-import com.example.cpudefense.GameMechanics.LevelMode
-import com.example.cpudefense.GameMechanics.Params.SERIES_ENDLESS
-import com.example.cpudefense.GameMechanics.Params.SERIES_NORMAL
-import com.example.cpudefense.GameMechanics.Params.SERIES_TURBO
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -78,7 +75,7 @@ class GameActivity : Activity() {
         setContentView(R.layout.activity_main_game)
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         resumeGame = false
-        gameMechanics = GameMechanics(this)
+        gameMechanics = GameMechanics()
         gameView = GameView(this)
     }
 
@@ -140,10 +137,68 @@ class GameActivity : Activity() {
         gameView.setupView()
     }
 
+
+    fun setLastPlayedStage(identifier: Stage.Identifier)
+            /** when completing a level, record the current number in the SharedPrefs.
+             * @param identifier number of the level successfully completed */
+    {
+        val prefs = getSharedPreferences(getString(R.string.pref_filename), Context.MODE_PRIVATE)
+        with (prefs.edit())
+        {
+            putInt("LASTSTAGE", identifier.number)
+            putInt("LASTSERIES", identifier.series)
+            commit()
+        }
+    }
+
+    fun setMaxPlayedStage(identifier: Stage.Identifier, resetProgress: Boolean = false)
+            /** when completing a level, record the level as highest completed, but only if the old max level is not higher.
+             * @param identifier number of the level successfully completed
+             * @param resetProgress If true, forces resetting the max stage to the given currentStage
+             * */
+    {
+        val prefs = getSharedPreferences(getString(R.string.pref_filename), Context.MODE_PRIVATE)
+        val maxStage = Stage.Identifier(prefs.getInt("MAX SERIES", 1), prefs.getInt("MAXSTAGE", 0))
+        with (prefs.edit())
+        {
+            if (resetProgress)
+            {
+                putInt("MAXSTAGE", 0)
+                putInt("MAXSERIES", 1)
+                putBoolean("TURBO_AVAILABLE", false)
+                putBoolean("ENDLESS_AVAILABLE", false)
+                apply()
+            }
+            if (identifier.isGreaterThan(maxStage))
+            {
+                putInt("MAXSTAGE", identifier.number)
+                putInt("MAXSERIES", identifier.series)
+                apply()
+            }
+            // make advanced series available
+            when (identifier.series)
+            {
+                1 ->
+                    if (identifier.number== com.example.cpudefense.GameMechanics.maxLevelAvailable)
+                        putBoolean("TURBO_AVAILABLE", true)
+                2 -> {
+                    putBoolean("TURBO_AVAILABLE", true)
+                    if (identifier.number == com.example.cpudefense.GameMechanics.maxLevelAvailable)
+                        putBoolean("ENDLESS_AVAILABLE", true)
+                }
+                3 -> {
+                    putBoolean("TURBO_AVAILABLE", true)
+                    putBoolean("ENDLESS_AVAILABLE", true)
+                }
+            }
+            commit()
+        }
+    }
+
     private fun startNewGame()
             /** starts a new game from level 1, discarding all progress */
     {
-        gameMechanics.setLastPlayedStage(Stage.Identifier())
+        setLastPlayedStage(Stage.Identifier())
         beginGame(resetProgress = true)
     }
 
@@ -183,6 +238,8 @@ class GameActivity : Activity() {
         if (resetProgress)
         {
             gameMechanics.beginGameAndResetProgress()
+            setLastPlayedStage(gameMechanics.state.startingLevel)
+            setMaxPlayedStage(gameMechanics.state.startingLevel, resetProgress=true)
             prepareLevelAtStartOfGame(gameMechanics.state.startingLevel)
         }
         else
@@ -233,7 +290,6 @@ class GameActivity : Activity() {
             }
         }
     }
-
 
     private fun startGameThreads() {
 
@@ -310,7 +366,21 @@ class GameActivity : Activity() {
         if (gameIsRunning) {
             val timeAtStartOfCycle = SystemClock.uptimeMillis()
             gameMechanics.ticksCount++
-            gameMechanics.update()
+            try {
+                gameMechanics.update(this)
+            }
+            catch (ex: TemperatureDamageException)
+            {
+                gameMechanics.removeOneLife(this)
+                runOnUiThread {
+                    val toast: Toast = Toast.makeText(this, resources.getString(R.string.overheat), Toast.LENGTH_SHORT)
+                    toast.show()
+                }
+            }
+            catch (ex: CpuReached)
+            {
+                gameMechanics.removeOneLife(this)
+            }
             gameView.scoreBoard.update()
             // determine whether to update the display
             if (timeAtStartOfCycle-timeOfLastFrame > 30 && displayJob?.isActive != true)

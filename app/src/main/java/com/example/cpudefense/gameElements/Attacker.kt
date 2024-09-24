@@ -38,7 +38,7 @@ open class Attacker(network: Network, representation: Representation = Represent
         bits = 0, vehicle = super.data
     )
     private val resources = network.gameView.resources
-    private val activity = network.gameView.gameMechanics.gameActivity
+    private val activity = network.gameView.gameActivity
     private var numberBitmap: Bitmap = Bitmap.createBitmap(100, 32, Bitmap.Config.ARGB_8888)
     var actualRect = Rect()
     private var oldNumber: ULong = 0U
@@ -200,7 +200,7 @@ open class Attacker(network: Network, representation: Representation = Represent
                 val newNumber =  attackerData.number.toLong() - power
                 if (newNumber < 0)
                 {
-                    network.gameMechanics.gameActivity.gameView.effects?.explode(this)
+                    network.gameView.effects?.explode(this)
                     gainCash()
                     return true
                 }

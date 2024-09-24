@@ -46,8 +46,8 @@ class StageCatalog
                     // if the stage is in the save file (from an earlier try on this level),
                     // restore the structure. Otherwise, create an empty level.
                     // Depending on the settings, always create a new random level.
-                    val structure: HashMap<Int, Stage.Data> = Persistency(stage.gameMechanics.gameActivity).loadLevelStructure(GameMechanics.SERIES_ENDLESS)
-                    if (stage.gameMechanics.gameActivity.settings.keepLevels)
+                    val structure: HashMap<Int, Stage.Data> = Persistency(stage.gameView.gameActivity).loadLevelStructure(GameMechanics.SERIES_ENDLESS)
+                    if (stage.gameView.gameActivity.settings.keepLevels)
                         structure[level.number]?.let {
                             Stage.fillEmptyStageWithData(stage, it)
                             EndlessStageCreator(stage).createWaves()
@@ -64,7 +64,7 @@ class StageCatalog
                     createObstaclesForDifficulty(stage, targetDifficulty - stage.data.difficulty)
                     stage.provideStructureData()
                     structure[level.number] = stage.data
-                    Persistency(stage.gameMechanics.gameActivity).saveLevelStructure(GameMechanics.SERIES_ENDLESS, structure)
+                    Persistency(stage.gameView.gameActivity).saveLevelStructure(GameMechanics.SERIES_ENDLESS, structure)
                 }
             }
             stage.calculateDifficulty()

@@ -12,10 +12,10 @@ import com.example.cpudefense.gameElements.HeroCard
 import kotlin.math.exp
 import kotlin.math.truncate
 
-class Hero(var gameMechanics: GameMechanics, type: Type)
+class Hero(var gameActivity: GameActivity, type: Type)
 /** class representing the various personalities in the game, and the effect
  * they have on game play.
- * @param gameMechanics Reference to the main game object
+ * @param gameActivity Reference to the main game object. Mainly needed for access to resources.
  * @param type Type of the hero (main key for all hero attributes)
  */
 {
@@ -27,8 +27,6 @@ class Hero(var gameMechanics: GameMechanics, type: Type)
     - Torvalds
     - Baudot
     - John Conway
-    - Claude Shannon
-    - George Boole
     - Auguste Kerckhoff?
      */
 
@@ -51,7 +49,7 @@ class Hero(var gameMechanics: GameMechanics, type: Type)
     )
     var data = Data(type = type)
     
-    val resources: Resources = gameMechanics.gameActivity.resources
+    val resources: Resources = gameActivity.resources
 
     /** only for the current level: whether hero is on leave */
     var isOnLeave = false
@@ -75,7 +73,7 @@ class Hero(var gameMechanics: GameMechanics, type: Type)
     private var maxLevel = 7
 
     /** reference to the graphical representation of this hero */
-    var card = HeroCard(gameMechanics.gameActivity.gameView, this)
+    var card = HeroCard(gameActivity.gameView, this)
 
     fun createBiography(area: Rect)
     /** create the biography object if it does not exist */
@@ -258,7 +256,7 @@ class Hero(var gameMechanics: GameMechanics, type: Type)
      * the possible effect of Sid Meier
      */
     {
-        val additionalUpgradePossibility = gameMechanics.heroModifier(Type.INCREASE_MAX_HERO_LEVEL).toInt()
+        val additionalUpgradePossibility = gameActivity.gameMechanics.heroModifier(Type.INCREASE_MAX_HERO_LEVEL).toInt()
         if (data.type in
             listOf( Type.ADDITIONAL_LIVES, Type.INCREASE_MAX_HERO_LEVEL, Type.GAIN_CASH, Type.INCREASE_REFUND, Type.ENABLE_MEM_UPGRADE))
             return maxLevel
@@ -270,7 +268,7 @@ class Hero(var gameMechanics: GameMechanics, type: Type)
     /** gets the upgrade level of a hero (different from this one)
      * @param type The hero's type */
     {
-        val level = gameMechanics.currentHeroes()[type]?.data?.level
+        val level = gameActivity.gameMechanics.currentHeroes()[type]?.data?.level
         return level ?: 0
     }
 
@@ -341,7 +339,7 @@ class Hero(var gameMechanics: GameMechanics, type: Type)
         if (data.level <= 0)
             return
         data.level -= 1
-        Persistency(gameMechanics.gameActivity).saveHeroes(gameMechanics)
+        Persistency(gameActivity).saveHeroes(gameActivity.gameMechanics)
         card.downgradeAnimation()
     }
 
@@ -355,18 +353,18 @@ class Hero(var gameMechanics: GameMechanics, type: Type)
     }
 
     companion object {
-        fun createFromData(gameMechanics: GameMechanics, data: Data): Hero
+        fun createFromData(gameActivity: GameActivity, data: Data): Hero
                 /** reconstruct a Hero object based on the saved data
                  * and set all inner proprieties
                  */
         {
-            val newInstance = Hero(gameMechanics, data.type)
+            val newInstance = Hero(gameActivity, data.type)
             newInstance.data.level = data.level
             newInstance.data.coinsSpent = data.coinsSpent
             newInstance.person.setType()
             newInstance.card.heroOpacity = when (data.level) { 0 -> 0f else -> 1f}
             newInstance.setDesc()
-            newInstance.isOnLeave = newInstance.isOnLeave(gameMechanics.currentStage)
+            newInstance.isOnLeave = newInstance.isOnLeave(gameActivity.gameMechanics.currentStage)
             return newInstance
         }
 
@@ -643,7 +641,7 @@ class Hero(var gameMechanics: GameMechanics, type: Type)
                 paintBiography.color = selected?.card?.inactiveColor ?: Color.WHITE
             }
             canvas.drawColor(Color.BLACK)
-            paintBiography.textSize = GameMechanics.biographyTextSize*gameMechanics.gameActivity.gameView.textScaleFactor
+            paintBiography.textSize = GameMechanics.biographyTextSize*gameActivity.gameView.textScaleFactor
             paintBiography.alpha = 255
             val textLayout = StaticLayout(
                 text, paintBiography, myArea.width(),
@@ -679,10 +677,10 @@ class Hero(var gameMechanics: GameMechanics, type: Type)
             return false
         if (leaveStartsOnLevel)
         {
-            return gameMechanics.holidays[level.number]?.hero == this.data.type
+            return gameActivity.gameMechanics.holidays[level.number]?.hero == this.data.type
         }
         else
-            gameMechanics.holidays.values.forEach()
+            gameActivity.gameMechanics.holidays.values.forEach()
             {
                 if (it.hero == this.data.type && it.from <= level.number && it.to >= level.number)
                     return true
@@ -696,8 +694,8 @@ class Hero(var gameMechanics: GameMechanics, type: Type)
      * @param duration how many stages the leave will last (including start and end) */
     {
         val levelTo = Stage.Identifier(level.series, level.number+duration-1)
-        gameMechanics.holidays[level.number]=Holiday(data.type, level.number, levelTo.number)
-        Persistency(gameMechanics.gameActivity).saveHolidays(gameMechanics)
+        gameActivity.gameMechanics.holidays[level.number]=Holiday(data.type, level.number, levelTo.number)
+        Persistency(gameActivity).saveHolidays(gameActivity.gameMechanics)
     }
 
 }

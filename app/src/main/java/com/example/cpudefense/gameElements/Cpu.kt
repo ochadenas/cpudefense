@@ -2,6 +2,7 @@ package com.example.cpudefense.gameElements
 
 import android.graphics.*
 import android.view.MotionEvent
+import com.example.cpudefense.CpuReached
 import com.example.cpudefense.networkmap.Network
 import com.example.cpudefense.networkmap.Viewport
 import com.example.cpudefense.utils.makeSquare
@@ -40,9 +41,9 @@ class Cpu(network: Network, gridX: Int, gridY: Int): Chip(network, gridX, gridY)
         val attackers = attackersInRange()
         if (attackers.isNotEmpty())
         {
-            scoreHit()
             animationCount = maxAnimationCount
             attackers[0].remove()
+            scoreHit()
         }
     }
 
@@ -81,7 +82,7 @@ class Cpu(network: Network, gridX: Int, gridY: Int): Chip(network, gridX, gridY)
      */
     {
         cpuData.hits++
-        theNetwork.gameMechanics.removeOneLife()
+        throw CpuReached()
     }
 
     override fun onDown(event: MotionEvent): Boolean

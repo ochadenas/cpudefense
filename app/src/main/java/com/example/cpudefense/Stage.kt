@@ -238,7 +238,7 @@ class Stage(var gameMechanics: GameMechanics, var gameView: GameView)
             else -> {
                 if (waves.size == 0)
                 {
-                    gameMechanics.onEndOfStage()
+                    gameMechanics.onEndOfStage(gameView.gameActivity)
                     return null
                 }
                 else {
@@ -397,7 +397,7 @@ class Stage(var gameMechanics: GameMechanics, var gameView: GameView)
             var bigSnapshot = createBitmap(p.viewportWidth, p.viewportHeight)
             network.makeSnapshot(Canvas(bigSnapshot), p)
             /* blur the image */
-            bigSnapshot = bigSnapshot.blur(gameMechanics.gameActivity, 3f) ?: bigSnapshot
+            bigSnapshot = bigSnapshot.blur(gameView.gameActivity, 3f) ?: bigSnapshot
             return Bitmap.createScaledBitmap(bigSnapshot, size, size, true)
         }
         else

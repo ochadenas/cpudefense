@@ -7,7 +7,7 @@ import org.junit.Assert.*
 class GameMechanicsTest {
     val gameActivity = GameActivity()
     val gameView = GameView(gameActivity)
-    val gameMechanics = GameMechanics(gameActivity)
+    val gameMechanics = GameMechanics()
 
     @Test
     fun generateHeat() {

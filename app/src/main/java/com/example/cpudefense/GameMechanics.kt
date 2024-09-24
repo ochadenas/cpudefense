@@ -2,7 +2,6 @@
 
 package com.example.cpudefense
 
-import android.content.Context
 import android.graphics.Bitmap
 import android.widget.Toast
 import com.example.cpudefense.gameElements.Chip
@@ -13,8 +12,12 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.random.Random
 
+class TemperatureDamageException: Exception("CPU damage by heat")
+
+class CpuReached: Exception("CPU got hit, removed one life point")
+
 @Suppress("ReplaceWithEnumMap", "ConstPropertyName")
-class GameMechanics(val gameActivity: GameActivity) {
+class GameMechanics {
     companion object Params {
         const val maxLevelAvailable = 32
 
@@ -172,8 +175,6 @@ class GameMechanics(val gameActivity: GameActivity) {
         state.startingLevel = Stage.Identifier(1,1)
         summaryPerNormalLevel = HashMap()
         summaryPerTurboLevel = HashMap()
-        setLastPlayedStage(state.startingLevel)
-        setMaxPlayedStage(state.startingLevel, resetProgress=true)
         currentStage = state.startingLevel
     }
 
@@ -230,14 +231,14 @@ class GameMechanics(val gameActivity: GameActivity) {
         return purseOfCoins[stage.mode()] ?: PurseOfCoins(this)
     }
 
-    fun update()
+    fun update(activity: GameActivity)
     {
         if (state.phase == GamePhase.RUNNING)
         {
             checkTemperature()
             currentlyActiveStage?.network?.update()
             currentlyActiveWave?.update()
-            gainAdditionalCash()
+            gainAdditionalCash(activity)
         }
     }
 
@@ -276,28 +277,28 @@ class GameMechanics(val gameActivity: GameActivity) {
         startNextWave()
     }
 
-    fun onEndOfStage()
+    fun onEndOfStage(activity: GameActivity)
     {
         if (currentlyActiveStage == null)
             return // in this case, the stage has already been left
-        takeLevelSnapshot()
+        takeLevelSnapshot(activity)
         currentlyActiveStage?.let {
             if (it.attackerCount()>0)
                 // still attackers left, wait until wave is really over
-                GlobalScope.launch { delay(2000L); onEndOfStage() }
+                GlobalScope.launch { delay(2000L); onEndOfStage(activity) }
             else {
-                onStageCleared(it)
-                Persistency(gameActivity).saveState(this)
-                gameActivity.setGameActivityStatus(GameActivity.GameActivityStatus.BETWEEN_LEVELS)
+                onStageCleared(it, activity)
+                Persistency(activity).saveState(this)
+                activity.setGameActivityStatus(GameActivity.GameActivityStatus.BETWEEN_LEVELS)
             }
         }
     }
 
-    private fun onStageCleared(stage: Stage)
+    private fun onStageCleared(stage: Stage, activity: GameActivity)
     {
-        val intermezzo = gameActivity.gameView.intermezzo
-        gameActivity.runOnUiThread {
-            val toast: Toast = Toast.makeText(gameActivity, gameActivity.resources.getString(R.string.toast_stage_cleared), Toast.LENGTH_SHORT)
+        val intermezzo = activity.gameView.intermezzo
+        activity.runOnUiThread {
+            val toast: Toast = Toast.makeText(activity, activity.resources.getString(R.string.toast_stage_cleared), Toast.LENGTH_SHORT)
             toast.show()
         }
         intermezzo.coinsGathered = state.coinsExtra + state.coinsInLevel
@@ -310,7 +311,7 @@ class GameMechanics(val gameActivity: GameActivity) {
         currentStage = stage.data.ident
         val nextStage = currentStage.next()
         setSummaryOfStage(currentStage, summaryOfCompletedStage)
-        setMaxPlayedStage(currentStage)
+        activity.setMaxPlayedStage(currentStage)
         if (stage.data.type == Stage.Type.FINAL)
         {
             intermezzo.endOfGame(currentStage, hasWon = true)
@@ -322,22 +323,22 @@ class GameMechanics(val gameActivity: GameActivity) {
         }
     }
 
-    fun startNextStage(level: Stage.Identifier)
+    fun startNextStage(level: Stage.Identifier, activity: GameActivity)
     {
         currentStage = level
-        val nextStage = Stage(this, gameActivity.gameView)
+        val nextStage = Stage(this, activity.gameView)
         StageCatalog.createStage(nextStage, level)
         nextStage.calculateDifficulty()
         if (!nextStage.isInitialized())
             return  // something went wrong, possibly trying to create a level that doesn't exist
         nextStage.network.recreateNetworkImage(true)
-        gameActivity.setGameActivityStatus(GameActivity.GameActivityStatus.PLAYING)
+        activity.setGameActivityStatus(GameActivity.GameActivityStatus.PLAYING)
         calculateLives()
         calculateStartingCash()
-        gameActivity.runOnUiThread {
+        activity.runOnUiThread {
             val toast: Toast = Toast.makeText(
-                    gameActivity,
-                    gameActivity.resources.getString(R.string.toast_enter_stage).format(nextStage.getLevel()),
+                    activity,
+                    activity.resources.getString(R.string.toast_enter_stage).format(nextStage.getLevel()),
                     Toast.LENGTH_SHORT
             )
             toast.show()
@@ -346,112 +347,53 @@ class GameMechanics(val gameActivity: GameActivity) {
         state.coinsExtra = 0
         setSummaryOfStage(level, nextStage.summary)
         state.heat = 0.0
-        gameActivity.setGameSpeed(GameSpeed.NORMAL)  // reset speed to normal when starting next stage
-        Persistency(gameActivity).saveState(this)
+        activity.setGameSpeed(GameSpeed.NORMAL)  // reset speed to normal when starting next stage
+        Persistency(activity).saveState(this)
         state.phase = GamePhase.RUNNING
         currentlyActiveWave = nextStage.nextWave()
         currentlyActiveStage = nextStage
         nextStage.gameView.resetAtStartOfStage()
-        takeLevelSnapshot()
+        takeLevelSnapshot(activity)
     }
 
-    fun removeOneLife()
+    fun removeOneLife(activity: GameActivity)
     {
         if (state.coinsInLevel > 0)
             state.coinsInLevel--
         state.lives--
         if (state.lives == 0)
         {
-            takeLevelSnapshot()
+            takeLevelSnapshot(activity)
             currentlyActiveStage = null
-            gameActivity.gameView.intermezzo.endOfGame(currentStage, hasWon = false)
+            activity.gameView.intermezzo.endOfGame(currentStage, hasWon = false)
         }
     }
 
-    fun quitGame()
-    {
-        gameActivity.finish()
-    }
-
-    fun setLastPlayedStage(identifier: Stage.Identifier)
-    /** when completing a level, record the current number in the SharedPrefs.
-     * @param identifier number of the level successfully completed */
-    {
-        val prefs = gameActivity.getSharedPreferences(gameActivity.getString(R.string.pref_filename), Context.MODE_PRIVATE)
-        with (prefs.edit())
-        {
-            putInt("LASTSTAGE", identifier.number)
-            putInt("LASTSERIES", identifier.series)
-            commit()
-        }
-    }
-
-    private fun setMaxPlayedStage(identifier: Stage.Identifier, resetProgress: Boolean = false)
-            /** when completing a level, record the level as highest completed, but only if the old max level is not higher.
-             * @param identifier number of the level successfully completed
-             * @param resetProgress If true, forces resetting the max stage to the given currentStage
-             * */
-    {
-        val prefs = gameActivity.getSharedPreferences(gameActivity.getString(R.string.pref_filename), Context.MODE_PRIVATE)
-        val maxStage = Stage.Identifier(prefs.getInt("MAX SERIES", 1), prefs.getInt("MAXSTAGE", 0))
-        with (prefs.edit())
-        {
-            if (resetProgress)
-            {
-                putInt("MAXSTAGE", 0)
-                putInt("MAXSERIES", 1)
-                putBoolean("TURBO_AVAILABLE", false)
-                putBoolean("ENDLESS_AVAILABLE", false)
-                apply()
-            }
-            if (identifier.isGreaterThan(maxStage))
-            {
-                putInt("MAXSTAGE", identifier.number)
-                putInt("MAXSERIES", identifier.series)
-                apply()
-            }
-            // make advanced series available
-            when (identifier.series)
-            {
-                1 ->
-                    if (identifier.number==maxLevelAvailable)
-                        putBoolean("TURBO_AVAILABLE", true)
-                2 -> {
-                    putBoolean("TURBO_AVAILABLE", true)
-                    if (identifier.number == maxLevelAvailable)
-                        putBoolean("ENDLESS_AVAILABLE", true)
-                }
-                3 -> {
-                    putBoolean("TURBO_AVAILABLE", true)
-                    putBoolean("ENDLESS_AVAILABLE", true)
-                }
-            }
-            commit()
-        }
-    }
     private fun calculateLives()
     {
         val extraLives = heroModifier(Hero.Type.ADDITIONAL_LIVES)
         state.currentMaxLives = state.maxLives + extraLives.toInt()
         state.lives = state.currentMaxLives
     }
+
     private fun calculateStartingCash()
     {
         state.cash = heroModifier(Hero.Type.INCREASE_STARTING_CASH).toInt()
     }
 
-    private fun gainAdditionalCash()
+    private fun gainAdditionalCash(activity: GameActivity)
     /** increases the amount of cash in regular intervals */
     {
         if (additionalCashDelay == 0)
             return
         additionalCashTicks -= globalSpeedFactor()
         if (additionalCashTicks<0) {
-            gameActivity.gameView.scoreBoard.addCash(1)
+            activity.gameView.scoreBoard.addCash(1)
             additionalCashTicks = additionalCashDelay.toFloat()
         }
     }
 
+    @Throws(TemperatureDamageException::class)
     private fun checkTemperature()
     {
         if (state.heat == 0.0)
@@ -460,12 +402,8 @@ class GameMechanics(val gameActivity: GameActivity) {
         val overheat = state.heat - (temperatureLimit- baseTemperature)*heatPerDegree
         if ((overheat > 0) && (Random.nextDouble() < (overheat * 0.00001)))  // chance of damaging the CPU
         {
-            gameActivity.runOnUiThread {
-                val toast: Toast = Toast.makeText(gameActivity, gameActivity.resources.getString(R.string.overheat), Toast.LENGTH_SHORT)
-                toast.show()
-            }
             state.heat *= 0.6f
-            removeOneLife()
+            throw TemperatureDamageException()
         }
     }
 
@@ -498,14 +436,14 @@ class GameMechanics(val gameActivity: GameActivity) {
     }
 
 
-    private fun takeLevelSnapshot()
+    private fun takeLevelSnapshot(activity: GameActivity)
     {
         currentlyActiveStage?.let {
             if (it.getSeries() == SERIES_ENDLESS)
                 levelThumbnailEndless[it.getLevel()] = it.takeSnapshot(levelSnapshotIconSize)
             else
                 levelThumbnail[it.getLevel()] = it.takeSnapshot(levelSnapshotIconSize)
-            Persistency(gameActivity).saveThumbnailOfLevel(this, it)
+            Persistency(activity).saveThumbnailOfLevel(this, it)
         }
     }
 

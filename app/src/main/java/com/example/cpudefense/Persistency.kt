@@ -9,9 +9,8 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.gson.Gson
 import java.io.ByteArrayOutputStream
-import kotlin.Exception
 
-class Persistency(activity: Activity) {
+class Persistency(private var activity: Activity) {
 
     // define preferences files
     private val prefs: SharedPreferences = activity.getSharedPreferences(activity.getString(R.string.pref_filename),
@@ -114,7 +113,7 @@ class Persistency(activity: Activity) {
                     Gson().fromJson(json, SerializableStateData::class.java)
                 it.state = data.general
                 it.stageData = data.stage
-                it.gameActivity.setGameSpeed(it.global.speed)  // restore game speed mode
+                (activity as GameActivity).setGameSpeed(it.global.speed)  // restore game speed mode
             }
 
             // load contents of purses
@@ -273,7 +272,7 @@ class Persistency(activity: Activity) {
             }
             for (heroData in listOfHeroData) {
                 try {
-                    heroMap[heroData.type] = Hero.createFromData(gameMechanics, heroData)
+                    heroMap[heroData.type] = Hero.createFromData(activity as GameActivity, heroData)
                 } catch (ex: NullPointerException) {
                     /* may happen if a previously existing hero type is definitely removed from the game */
                 }
@@ -282,8 +281,8 @@ class Persistency(activity: Activity) {
         }
         catch (ex: Exception) {
             // save file has not the expected structure
-            gameMechanics.gameActivity.runOnUiThread {
-                Toast.makeText(gameMechanics.gameActivity, "Save file corrupted.", Toast.LENGTH_LONG).show()
+            activity.runOnUiThread {
+                Toast.makeText(activity, "Save file corrupted.", Toast.LENGTH_LONG).show()
             }
         }
         return heroMap
@@ -302,7 +301,7 @@ class Persistency(activity: Activity) {
     }
 
 
-    fun loadHolidays(gameMechanics: GameMechanics)
+    private fun loadHolidays(gameMechanics: GameMechanics)
     {
         val json = prefsSaves.getString("holidays", "none")
         if (json != "none" && !GameMechanics.resetHeroHolidays) {

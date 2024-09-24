@@ -27,7 +27,7 @@ class Intermezzo(var gameView: GameView): GameElement(), Fadable {
     var level = Stage.Identifier()
     val resources: Resources = gameView.resources
     var alpha = 0
-    private val activity = gameView.gameMechanics.gameActivity
+    private val activity = gameView.gameActivity
     private var myArea = Rect()
     private var typewriter: Typewriter? = null
     private var buttonContinue: Button? = null
@@ -71,7 +71,7 @@ class Intermezzo(var gameView: GameView): GameElement(), Fadable {
                 lines.add(resources.getString(R.string.failed))
                 lines.add(resources.getString(R.string.last_stage).format(level.number))
                 textOnContinueButton = resources.getString(R.string.button_retry)
-                gameView.gameMechanics.setLastPlayedStage(level) // TODO: should be done somewhere else
+                gameView.gameActivity.setLastPlayedStage(level) // TODO: should be done somewhere else
             }
             Type.GAME_WON  -> {
                 lines.add(resources.getString(R.string.success))
@@ -87,14 +87,14 @@ class Intermezzo(var gameView: GameView): GameElement(), Fadable {
                 else
                     lines.add(resources.getString(R.string.win))
                 textOnContinueButton = resources.getString(R.string.button_exit)
-                gameView.gameMechanics.setLastPlayedStage(level)
+                gameView.gameActivity.setLastPlayedStage(level)
             }
             Type.STARTING_LEVEL -> {
                 lines.add(resources.getString(R.string.game_start))
                 if (gameView.gameMechanics.currentHeroesOnLeave(level).isNotEmpty())
                     lines += heroesOnLeaveText()
                 textOnContinueButton = resources.getString(R.string.enter_game)
-                gameView.gameMechanics.setLastPlayedStage(level)
+                gameView.gameActivity.setLastPlayedStage(level)
             }
             Type.NORMAL_LEVEL ->
             {
@@ -105,7 +105,7 @@ class Intermezzo(var gameView: GameView): GameElement(), Fadable {
                 if (gameView.gameMechanics.currentHeroesOnLeave(level).isNotEmpty())
                     lines += heroesOnLeaveText()
                 textOnContinueButton = resources.getString(R.string.enter_game)
-                gameView.gameMechanics.setLastPlayedStage(level)
+                gameView.gameActivity.setLastPlayedStage(level)
             }
         }
         typewriter = Typewriter(gameView, myArea, lines) { onTypewriterDone() }
@@ -200,7 +200,7 @@ class Intermezzo(var gameView: GameView): GameElement(), Fadable {
             startMarketplace()
         else if (buttonContinue?.touchableArea?.contains(event.x.toInt(), event.y.toInt()) == true) {
             when (type) {
-                Type.GAME_WON -> { gameView.gameMechanics.quitGame() }
+                Type.GAME_WON -> { gameView.gameActivity.finish() }
                 Type.GAME_LOST -> { startLevel() }
                 else -> { startLevel() }
             }
@@ -253,7 +253,7 @@ class Intermezzo(var gameView: GameView): GameElement(), Fadable {
     private fun startLevel()
     {
         if (holidayGranted()) {
-            gameView.gameMechanics.startNextStage(level)
+            gameView.gameMechanics.startNextStage(level, gameView.gameActivity)
         }
     }
 

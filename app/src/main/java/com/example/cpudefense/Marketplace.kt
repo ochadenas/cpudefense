@@ -65,7 +65,7 @@ class Marketplace(val gameView: GameView): GameElement()
              */
             var hero: Hero? = heroes[type]
             if (hero == null)
-               hero = Hero.createFromData(gameMechanics, Hero.Data(type))
+               hero = Hero.createFromData(gameView.gameActivity, Hero.Data(type))
             if (hero.isAvailable(level)) {
                 hero.createBiography(biographyArea)
                 newUpgrades.add(hero)
@@ -127,7 +127,7 @@ class Marketplace(val gameView: GameView): GameElement()
         /** test if a button has been pressed: */
         if (buttonFinish?.area?.contains(event.x.toInt(), event.y.toInt()) == true)
         {
-            gameMechanics.startNextStage(nextGameLevel)
+            gameMechanics.startNextStage(nextGameLevel, gameView.gameActivity)
             return true
         }
         if (buttonRefund?.area?.contains(event.x.toInt(), event.y.toInt()) == true)
@@ -140,7 +140,7 @@ class Marketplace(val gameView: GameView): GameElement()
                     return true
                 }
             }
-            val dialog = Dialog(gameMechanics.gameActivity)
+            val dialog = Dialog(gameView.gameActivity)
             dialog.setContentView(R.layout.layout_dialog_heroes)
             dialog.window?.setLayout(
                 ViewGroup.LayoutParams.WRAP_CONTENT,
@@ -168,7 +168,7 @@ class Marketplace(val gameView: GameView): GameElement()
                     Fader(gameView, coins.last(), Fader.Type.DISAPPEAR)
                     it.doUpgrade()
                     gameMechanics.currentHeroes(nextGameLevel)[it.data.type] = it
-                    Persistency(gameMechanics.gameActivity).saveHeroes(gameMechanics)
+                    Persistency(gameView.gameActivity).saveHeroes(gameMechanics)
                     fillMarket(nextGameLevel)
                     makeButtonText(it)
                 }
@@ -200,7 +200,7 @@ class Marketplace(val gameView: GameView): GameElement()
     fun onLongPress(event: MotionEvent): Boolean {
         for (hero in upgrades)
             if (hero.card.cardAreaOnScreen.contains(event.x.toInt(), event.y.toInt())) {
-                Toast.makeText(gameMechanics.gameActivity, hero.upgradeInfo(), Toast.LENGTH_LONG).show()
+                Toast.makeText(gameView.gameActivity, hero.upgradeInfo(), Toast.LENGTH_LONG).show()
                 return true
             }
         return false
@@ -218,8 +218,8 @@ class Marketplace(val gameView: GameView): GameElement()
             purse.spend(-refund)
             card.resetUpgrade()
         }
-        Persistency(gameMechanics.gameActivity).saveHeroes(gameMechanics)
-        Persistency(gameMechanics.gameActivity).saveState(gameMechanics)
+        Persistency(gameView.gameActivity).saveHeroes(gameMechanics)
+        Persistency(gameView.gameActivity).saveState(gameMechanics)
         fillMarket(nextGameLevel)
         makeButtonText(null)
     }
@@ -232,7 +232,7 @@ class Marketplace(val gameView: GameView): GameElement()
             {
                 val res = resources
                 val text = res.getString(R.string.message_cannot_fire).format(res.getString(R.string.button_refund_all))
-                Toast.makeText(gameMechanics.gameActivity, text, Toast.LENGTH_SHORT).show()
+                Toast.makeText(gameView.gameActivity, text, Toast.LENGTH_SHORT).show()
                 return
             }
             if (heroIsOnLeave(hero)) return
@@ -254,8 +254,8 @@ class Marketplace(val gameView: GameView): GameElement()
             }
 
         }
-        Persistency(gameMechanics.gameActivity).saveHeroes(gameMechanics)
-        Persistency(gameMechanics.gameActivity).saveState(gameMechanics)
+        Persistency(gameView.gameActivity).saveHeroes(gameMechanics)
+        Persistency(gameView.gameActivity).saveState(gameMechanics)
         fillMarket(nextGameLevel)
         makeButtonText(hero)
     }
@@ -288,7 +288,7 @@ class Marketplace(val gameView: GameView): GameElement()
         if (hero.isOnLeave) {
             val res = resources
             val text = res.getString(R.string.message_is_on_leave).format(hero.person.name)
-            Toast.makeText(gameMechanics.gameActivity, text, Toast.LENGTH_SHORT).show()
+            Toast.makeText(gameView.gameActivity, text, Toast.LENGTH_SHORT).show()
             return true
         } else
             return false
@@ -299,8 +299,8 @@ class Marketplace(val gameView: GameView): GameElement()
             return
         if (myArea.width() == 0 || myArea.height() == 0)
         {
-            val width = gameMechanics.gameActivity.gameView.width
-            val height = gameMechanics.gameActivity.gameView.height
+            val width = gameView.gameActivity.gameView.width
+            val height = gameView.gameActivity.gameView.height
             if (width > 0 && height > 0) {
                 setSize(Rect(0, 0, width, height))
                 fillMarket(nextGameLevel)

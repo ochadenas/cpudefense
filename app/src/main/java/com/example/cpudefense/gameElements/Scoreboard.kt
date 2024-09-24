@@ -42,7 +42,7 @@ class ScoreBoard(val gameView: GameView): GameElement()
         areaRemaining = lives.setSize(areaRemaining, divider)
         @Suppress("UNUSED_VALUE")
         areaRemaining = temperature.setSize(areaRemaining, divider)
-        if (gameView.gameMechanics.gameActivity.settings.showFrameRate) {
+        if (gameView.gameActivity.settings.showFrameRate) {
             debugStatusLine = DebugStatusLine()
             debugStatusLine?.setSize(area, divider)
         }
@@ -402,7 +402,7 @@ class ScoreBoard(val gameView: GameView): GameElement()
             this.divider = divider
             this.area = Rect(area.left, area.top, area.right, area.bottom)
             actualSize = this.area.height() - divider
-            sevenSegmentDisplay = SevenSegmentDisplay(2, actualSize, gameView.gameMechanics.gameActivity)
+            sevenSegmentDisplay = SevenSegmentDisplay(2, actualSize, gameView.gameActivity)
             sevenSegmentDisplay?.let {
                 bitmap = it.getDisplayBitmap(0, SevenSegmentDisplay.LedColors.WHITE)
             }

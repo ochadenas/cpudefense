@@ -365,7 +365,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int):
         outlineWidth = 2f * resources.displayMetrics.scaledDensity
         actualRect?.setCenter(viewport.gridToViewport(posOnGrid))
         actualRect?.let { displayRect(canvas, it) }
-        if (theNetwork.gameMechanics.gameActivity.settings.configShowAttackersInRange && chipData.type != ChipType.EMPTY)
+        if (theNetwork.gameView.gameActivity.settings.configShowAttackersInRange && chipData.type != ChipType.EMPTY)
             actualRect?.let { displayLineToAttacker(canvas, attackersInRange(), it) }
     }
 
@@ -661,7 +661,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int):
             val paint = Paint()
 
             paint.textSize = (GameMechanics.chipTextSize * network.gameView.textScaleFactor) *
-                    if (theNetwork.gameMechanics.gameActivity.settings.configUseLargeButtons) 1.0f else 0.95f // multiple sizes possible
+                    if (theNetwork.gameView.gameActivity.settings.configUseLargeButtons) 1.0f else 0.95f // multiple sizes possible
             paint.alpha = 255
             paint.typeface = theNetwork.gameView.boldTypeface
             paint.textAlign = Paint.Align.CENTER
@@ -866,7 +866,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int):
             attacker.immuneTo = this@Chip
             attacker.data.state = Vehicle.State.HELD
             attacker.attackerData.storageNodeId = this@Chip.data.ident
-            theNetwork.gameMechanics.gameActivity.gameView.effects?.fade(attacker)
+            theNetwork.gameView.effects?.fade(attacker)
         }
 
         fun retrieve(): Attacker?

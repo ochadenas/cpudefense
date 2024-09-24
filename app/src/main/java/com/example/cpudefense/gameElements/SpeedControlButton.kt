@@ -40,31 +40,31 @@ class SpeedControlButton(val gameView: GameView, val gameMechanics: GameMechanic
             when (type)
             {
                 Type.PAUSE -> {
-                    gameMechanics.gameActivity.setGameSpeed(GameMechanics.GameSpeed.NORMAL)
+                    gameView.gameActivity.setGameSpeed(GameMechanics.GameSpeed.NORMAL)
                     gameMechanics.state.phase = GameMechanics.GamePhase.PAUSED
                     panel.resetButtons()
                     type = Type.NORMAL
                 }
                 Type.NORMAL -> {
-                    gameMechanics.gameActivity.setGameSpeed(GameMechanics.GameSpeed.NORMAL)
+                    gameView.gameActivity.setGameSpeed(GameMechanics.GameSpeed.NORMAL)
                     gameMechanics.state.phase = GameMechanics.GamePhase.RUNNING
                     panel.resetButtons()
                 }
                 Type.FAST -> {
-                    gameMechanics.gameActivity.setGameSpeed(GameMechanics.GameSpeed.MAX)
+                    gameView.gameActivity.setGameSpeed(GameMechanics.GameSpeed.MAX)
                     gameMechanics.state.phase = GameMechanics.GamePhase.RUNNING
                     panel.resetButtons()
                     type = Type.NORMAL
                 }
                 Type.RETURN -> {
-                    gameMechanics.gameActivity.showReturnDialog()
+                    gameView.gameActivity.showReturnDialog()
                 }
                 Type.LOCK -> {
-                    gameMechanics.gameActivity.gameView.scrollAllowed = true
+                    gameView.scrollAllowed = true
                     type = Type.UNLOCK
                 }
                 Type.UNLOCK -> {
-                    gameMechanics.gameActivity.gameView.scrollAllowed = false
+                    gameView.scrollAllowed = false
                     type = Type.LOCK
                 }
             }

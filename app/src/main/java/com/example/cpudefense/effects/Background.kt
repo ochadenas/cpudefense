@@ -51,7 +51,7 @@ class Background(val gameView: GameView)
              * and crops or scales it to the required size.
              */
     {
-        enabled = !gameView.gameMechanics.gameActivity.settings.configDisableBackground
+        enabled = !gameView.gameActivity.settings.configDisableBackground
         if (enabled) {
             loadWholeBitmapOfStage(stage)
             setBackgroundDimensions(gameView.width, gameView.height)
@@ -69,11 +69,11 @@ class Background(val gameView: GameView)
         if (forceNewBackground || width!=myArea.width() || height!=myArea.height())
         {
             myArea = Rect(0, 0, width, height)
-            setBasicBackgound()
+            setBasicBackground()
         }
     }
 
-    fun setBasicBackgound()
+    private fun setBasicBackground()
     {
         if (myArea.width()==0 || myArea.height()==0)
             return
