@@ -169,9 +169,9 @@ Turing wurde aufgrund seiner Homosexualität massiv diskriminiert. Er starb 1954
     <string name="cost_desc">[Kosten: %d]</string>
     <string name="hopper">\nGrace Brewster Murray Hopper hatte die Idee,  Computerprogramme  statt als Abfolge von Einsen und Nullen in einer für den Menschen lesbaren Sprache zu formulieren. \n\nSie entwickelte die Programmiersprache FLOW-MATIC und erfand damit den ersten Compiler.</string>
     <string name="query_quit">Aktuellen Level abbrechen?</string>
-    <string name="return_to_main_menu">Zurück zum Hauptmenü</string>
+    <string name="button_return_to_main_menu">Zurück zum Hauptmenü</string>
     <string name="continue_game">Weiterspielen</string>
-    <string name="replay">Level erneut spielen</string>
+    <string name="buttton_replay">Level erneut spielen</string>
     <string name="settings_use_large_buttons">Große Schaltflächen verwenden</string>
     <string name="settings_show_framerate">Framerate anzeigen</string>
     <string name="button_purchase_plural">Anheuern [%d Coins]</string>

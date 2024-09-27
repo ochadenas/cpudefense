@@ -44,6 +44,7 @@ class GameActivity : Activity() {
     private val meanCount = 10
     private var updateJob: Job? = null
     private var displayJob: Job? = null
+    private var effectsJob: Job? = null
     /** how many samples have been taken */
     private var frameCount = 0
     /** cumulated time */
@@ -246,7 +247,6 @@ class GameActivity : Activity() {
         {
             val persistency = Persistency(this)
             gameMechanics.beginGameWithoutResettingProgress(persistency)
-
             if (resumeGame)
                 resumeGame()
             else
@@ -293,9 +293,13 @@ class GameActivity : Activity() {
 
     private fun startGameThreads() {
 
+        if (updateJob?.isActive == true)
+            return
         updateJob = GlobalScope.launch { delay(updateDelay); update(); }
 
-        GlobalScope.launch { delay(effectsDelay); updateGraphicalEffects(); }
+        if (effectsJob?.isActive == true)
+            return
+        effectsJob = GlobalScope.launch { delay(effectsDelay); updateGraphicalEffects(); }
     }
 
     fun loadSettings()
@@ -330,8 +334,10 @@ class GameActivity : Activity() {
             ?.setOnClickListener { dialog.dismiss(); returnToMainMenu() }
         dialog.findViewById<Button>(R.id.button_replay)
             ?.setOnClickListener { dialog.dismiss(); replayLevel() }
-
-
+        dialog.findViewById<Button>(R.id.button_cancel)
+            ?.setOnClickListener { dialog.dismiss() }
+        dialog.setOnDismissListener { gameIsRunning = true; startGameThreads() }
+        gameIsRunning = false
         dialog.show()
     }
 

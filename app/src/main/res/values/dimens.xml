@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="replay_dialog_text_size">16sp</dimen>
+    <dimen name="replay_dialog_button_margin">20dp</dimen>
+</resources>

@@ -127,9 +127,9 @@
     <string name="cost_desc">[coût : %s]</string>
     <string name="hopper">\nGrace Brewster Murray Hopper a eu l\'idée de formuler les programmes informatiques dans un langage lisible par l\'homme plutôt que comme une suite de uns et de zéros. \n\nElle développa le langage de programmation FLOW-MATIC et a ainsi inventé le premier compilateur.</string>
     <string name="query_quit">Voulez-vous abandonner le niveau actuel ?</string>
-    <string name="return_to_main_menu">Retour au menu principal</string>
+    <string name="button_return_to_main_menu">Retour au menu principal</string>
     <string name="continue_game">Continuer à jouer</string>
-    <string name="replay">Rejouer le niveau</string>
+    <string name="buttton_replay">Rejouer le niveau</string>
     <string name="settings_use_large_buttons">Utiliser de grands boutons</string>
     <string name="settings_show_framerate">Afficher le frame-rate</string>
     <string name="button_purchase_plural">"Recruter [%d écus] "</string>

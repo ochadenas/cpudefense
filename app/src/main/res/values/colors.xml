@@ -66,6 +66,7 @@
     <color name="text_amber">#B9921C</color>
     <color name="text_lightamber">#fdd300</color>
     <color name="text_white">#FFFFFF</color>
+    <color name="text_gray">#9A9A9A</color>
     <color name="text_blue">#1BB8FF</color>
     <color name="text_lightblue">#7AC8EC</color>
     <color name="text_red">#D50000</color>
