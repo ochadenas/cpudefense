@@ -293,13 +293,11 @@ class GameActivity : Activity() {
 
     private fun startGameThreads() {
 
-        if (updateJob?.isActive == true)
-            return
-        updateJob = GlobalScope.launch { delay(updateDelay); update(); }
+        if (updateJob?.isActive != true)  // (!= true) is not the same as (false) here!
+            updateJob = GlobalScope.launch { delay(updateDelay); update(); }
 
-        if (effectsJob?.isActive == true)
-            return
-        effectsJob = GlobalScope.launch { delay(effectsDelay); updateGraphicalEffects(); }
+        if (effectsJob?.isActive != true)
+            effectsJob = GlobalScope.launch { delay(effectsDelay); updateGraphicalEffects(); }
     }
 
     fun loadSettings()
