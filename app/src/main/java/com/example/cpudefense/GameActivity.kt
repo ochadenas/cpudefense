@@ -357,12 +357,6 @@ class GameActivity : Activity() {
     /** Thread for all physical processes on the screen, i.e. movement of attackers, cool-down times, etc.
      * This thread must run on a fixed pace. When accelerating the game, the delay of this thread is shortened. */
     {
-        /* if (gameView.width == 0)  // surface has not been set up yet
-        {
-            GlobalScope.launch { delay(updateDelay); update() } // wait for game view to appear
-        }
-        else
-        */
         if (gameIsRunning) {
             val timeAtStartOfCycle = SystemClock.uptimeMillis()
             gameMechanics.ticksCount++
@@ -371,7 +365,7 @@ class GameActivity : Activity() {
             }
             catch (ex: TemperatureDamageException)
             {
-                gameMechanics.removeOneLife(this)
+                removeOneLife()
                 runOnUiThread {
                     val toast: Toast = Toast.makeText(this, resources.getString(R.string.overheat), Toast.LENGTH_SHORT)
                     toast.show()
@@ -379,7 +373,7 @@ class GameActivity : Activity() {
             }
             catch (ex: CpuReached)
             {
-                gameMechanics.removeOneLife(this)
+                removeOneLife()
             }
             gameView.scoreBoard.update()
             // determine whether to update the display
@@ -390,6 +384,17 @@ class GameActivity : Activity() {
                 if (updateDelay > elapsed) updateDelay - elapsed - 1 else 0  // rest of time in this cycle
             updateJob = GlobalScope.launch { delay(wait); update() }
         }
+    }
+
+    private fun removeOneLife()
+    {
+        val livesLeft = gameMechanics.removeOneLife()
+        if (livesLeft == 0)
+        {
+            gameMechanics.takeLevelSnapshot(this)
+            gameView.intermezzo.endOfGame(gameMechanics.currentStage, hasWon = false)
+        }
+
     }
 
     private fun display()

@@ -126,6 +126,7 @@ class ScoreBoard(val gameView: GameView): GameElement()
         if (area.width()>0 && area.height()>0) {
             information.recreateBitmap()
             waves.recreateBitmap()
+            lives.calculateLedSize()
             lives.recreateBitmap()
             coins.recreateBitmap()
             temperature.recreateBitmap()
@@ -248,21 +249,25 @@ class ScoreBoard(val gameView: GameView): GameElement()
         private var sizeLedY = 0 // will be calculated in setSize
         private var deltaX = 0
 
-
         fun setSize(area: Rect, divider: Int): Rect
         {
-            val state = gameView.gameMechanics.state
             this.area = Rect(area.left, area.top, (area.left+area.width()*0.7f).toInt(), area.bottom)
             bitmap = Bitmap.createBitmap(this.area.width(), this.area.height(), Bitmap.Config.ARGB_8888)
             this.divider = divider
+            calculateLedSize()
+            return Rect(this.area.right, area.top, area.right, area.bottom)
+        }
+
+        fun calculateLedSize()
+        {
+            val maxLives = gameView.gameMechanics.state.currentMaxLives
             // calculate size and spacing of LEDs
             sizeLedY = (area.height()-divider-2*margin)*74/100
-            val maxPossibleDeltaX = area.width()/(state.currentMaxLives + 0.0f)
+            val maxPossibleDeltaX = area.width()/(maxLives + 1.0f)
             preferredSizeLedX = (GameMechanics.preferredSizeOfLED * gameView.scaleFactor).toInt()
             deltaX = kotlin.math.min(preferredSizeLedX * 1.2f, maxPossibleDeltaX).toInt()
-            ledAreaWidth = (state.currentMaxLives + 1) * deltaX
+            ledAreaWidth = (maxLives + 1) * deltaX
             sizeLedX = kotlin.math.min(preferredSizeLedX.toFloat(), deltaX / 1.2f).toInt()
-            return Rect(this.area.right, area.top, area.right, area.bottom)
         }
 
         fun display(canvas: Canvas)

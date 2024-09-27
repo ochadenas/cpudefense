@@ -149,6 +149,7 @@ class GameView(context: Context):
     fun resetAtStartOfStage()
     {
         speedControlPanel.resetButtons()
+        scoreBoard.Lives()
         scoreBoard.recreateBitmap()
         viewport.reset()
         viewport.setScreenSize(this.width, this.height)

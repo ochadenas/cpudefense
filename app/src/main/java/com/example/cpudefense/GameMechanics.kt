@@ -356,17 +356,19 @@ class GameMechanics {
         takeLevelSnapshot(activity)
     }
 
-    fun removeOneLife(activity: GameActivity)
+    fun removeOneLife(): Int
+            /**
+             * Remove one of the player's lives.
+             *
+             * @return the number of lives left.
+             */
     {
         if (state.coinsInLevel > 0)
             state.coinsInLevel--
         state.lives--
         if (state.lives == 0)
-        {
-            takeLevelSnapshot(activity)
             currentlyActiveStage = null
-            activity.gameView.intermezzo.endOfGame(currentStage, hasWon = false)
-        }
+        return state.lives
     }
 
     private fun calculateLives()
@@ -436,7 +438,7 @@ class GameMechanics {
     }
 
 
-    private fun takeLevelSnapshot(activity: GameActivity)
+    fun takeLevelSnapshot(activity: GameActivity)
     {
         currentlyActiveStage?.let {
             if (it.getSeries() == SERIES_ENDLESS)
