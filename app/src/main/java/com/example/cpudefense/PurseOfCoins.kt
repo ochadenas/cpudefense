@@ -7,11 +7,12 @@ class PurseOfCoins(val gameMechanics: GameMechanics, private val levelMode: Game
  *
  */
 {
+    // DO NOT change the names of the variables!
     data class Contents (
         /** total coins gathered in the game mode */
         var totalCoins: Int = 0,
         /** coins spent on heroes */
-        var coinsSpentOnHeroes: Int = 0,
+        var spentCoins: Int = 0,
         /** coins got from level rewards */
         var rewardCoins: Int = 0,
         /** coins caught running in the stages */
@@ -49,14 +50,14 @@ class PurseOfCoins(val gameMechanics: GameMechanics, private val levelMode: Game
     {
         when (spendFor)
         {
-            ExpenditureType.HEROES -> contents.coinsSpentOnHeroes += amount
+            ExpenditureType.HEROES -> contents.spentCoins += amount
             ExpenditureType.LIVES -> contents.coinsSpentOnPurchases += amount
         }
     }
 
     fun availableCoins(): Int
     {
-        return contents.totalCoins - contents.coinsSpentOnHeroes - contents.coinsSpentOnPurchases
+        return contents.totalCoins - contents.spentCoins - contents.coinsSpentOnPurchases
     }
 
     fun canAfford(price: Int): Boolean
@@ -84,19 +85,19 @@ class PurseOfCoins(val gameMechanics: GameMechanics, private val levelMode: Game
         {
             contents.rewardCoins = 0
             contents.runningCoins = 0
-            contents.coinsSpentOnHeroes = 0
+            contents.spentCoins = 0
         }
         else when (levelMode)   // distribute the coins into the series according to the general percentage
         {
             GameMechanics.LevelMode.BASIC -> {
                 contents.rewardCoins = sumRewardCoinsInBasicMode
                 contents.runningCoins = totalRunningCoins * sumRewardCoinsInBasicMode / totalRewardCoins
-                contents.coinsSpentOnHeroes = 0  // initial value, will be set later accordingly
+                contents.spentCoins = 0  // initial value, will be set later accordingly
             }
             GameMechanics.LevelMode.ENDLESS -> {
                 contents.rewardCoins = sumRewardCoinsInEndlessMode
                 contents.runningCoins = totalRunningCoins * sumRewardCoinsInEndlessMode / totalRewardCoins
-                contents.coinsSpentOnHeroes = 0
+                contents.spentCoins = 0
             }
         }
         contents.totalCoins = contents.rewardCoins + contents.runningCoins

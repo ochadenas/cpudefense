@@ -428,6 +428,7 @@ class GameActivity : Activity() {
     private fun restoreOneLife()
     {
         gameMechanics.restoreOneLife()
+        Persistency(this).saveState(gameMechanics)
     }
 
     private fun display()
