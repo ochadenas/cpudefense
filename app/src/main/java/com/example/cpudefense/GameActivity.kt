@@ -11,6 +11,7 @@ import android.view.Window
 import android.view.WindowManager
 import android.widget.Button
 import android.widget.FrameLayout
+import android.widget.TextView
 import android.widget.Toast
 import com.example.cpudefense.GameMechanics.GamePhase
 import kotlinx.coroutines.GlobalScope
@@ -348,6 +349,22 @@ class GameActivity : Activity() {
         gameMechanics.currentlyActiveStage?.let { startGameAtLevel(it.data.ident) }
     }
 
+    fun showPurchaseLifeDialog() {
+        val dialog = Dialog(this)
+        dialog.setContentView(R.layout.layout_dialog_purchaselife)
+        dialog.window?.setLayout(MATCH_PARENT, WRAP_CONTENT)
+        dialog.setCancelable(true)
+        dialog.findViewById<TextView>(R.id.textView)?.text =
+            resources.getString(R.string.query_purchase_life).format(PurseOfCoins.coinsAsString(gameMechanics.costOfLife(), resources))
+        dialog.findViewById<Button>(R.id.button_yes)
+            ?.setOnClickListener { restoreOneLife(); dialog.dismiss(); }
+        dialog.findViewById<Button>(R.id.button_no)
+            ?.setOnClickListener { dialog.dismiss();  }
+        dialog.setOnDismissListener { gameIsRunning = true; startGameThreads() }
+        gameIsRunning = false
+        dialog.show()
+    }
+
     fun prepareLevelAtStartOfGame(ident: Stage.Identifier)
             /** function that is called when starting a new level from the main menu.
              * Does not get called when resuming a running game.
@@ -393,12 +410,24 @@ class GameActivity : Activity() {
     private fun removeOneLife()
     {
         val livesLeft = gameMechanics.removeOneLife()
-        if (livesLeft == 0)
+        when (livesLeft)
         {
-            gameMechanics.takeLevelSnapshot(this)
-            gameView.intermezzo.endOfGame(gameMechanics.currentStage, hasWon = false)
+            0-> {
+                gameMechanics.takeLevelSnapshot(this)
+                gameView.intermezzo.endOfGame(gameMechanics.currentStage, hasWon = false)
+            }
+            1 -> {
+                val price = gameMechanics.costOfLife()
+                if (price>0 && gameMechanics.currentPurse().canAfford(price))
+                    runOnUiThread() { showPurchaseLifeDialog() }
+            }
+            else -> {}
         }
+    }
 
+    private fun restoreOneLife()
+    {
+        gameMechanics.restoreOneLife()
     }
 
     private fun display()

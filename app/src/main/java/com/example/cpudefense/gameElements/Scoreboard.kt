@@ -82,7 +82,8 @@ class ScoreBoard(val gameView: GameView): GameElement()
         paint.color = myColor
         paint.style = Paint.Style.STROKE
         paint.strokeWidth = scoreboardBorderWidth
-        canvas.drawRect(area, paint)
+        // canvas.drawRect(area, paint)
+        canvas.drawLine(area.left.toFloat(), area.top.toFloat(), area.right.toFloat(), area.top.toFloat(), paint)
         if (currentStage.series > 1 || currentStage.number > 2)
             information.display(canvas)
         waves.display(canvas)

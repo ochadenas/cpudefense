@@ -162,7 +162,7 @@ class Marketplace(val gameView: GameView): GameElement()
             selected?.let {
                 if (heroIsOnLeave(it)) return true
                 val price = it.getPrice(it.data.level)
-                if (purse.availableCoins() >= price && it.data.level < it.getMaxUpgradeLevel()) {
+                if (purse.canAfford(price) && it.data.level < it.getMaxUpgradeLevel()) {
                     purse.spend(price)
                     it.data.coinsSpent += price
                     Fader(gameView, coins.last(), Fader.Type.DISAPPEAR)

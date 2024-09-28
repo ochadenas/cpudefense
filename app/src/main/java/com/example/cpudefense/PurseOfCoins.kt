@@ -1,5 +1,7 @@
 package com.example.cpudefense
 
+import android.content.res.Resources
+
 class PurseOfCoins(val gameMechanics: GameMechanics, private val levelMode: GameMechanics.LevelMode = GameMechanics.LevelMode.BASIC)
 /** Auxiliary object that holds the current amount of coins for a level mode
  *
@@ -9,12 +11,28 @@ class PurseOfCoins(val gameMechanics: GameMechanics, private val levelMode: Game
         /** total coins gathered in the game mode */
         var totalCoins: Int = 0,
         /** coins spent on heroes */
-        var spentCoins: Int = 0,
+        var coinsSpentOnHeroes: Int = 0,
         /** coins got from level rewards */
         var rewardCoins: Int = 0,
         /** coins caught running in the stages */
         var runningCoins: Int = 0,
+        /** coins used to purchase lost lives */
+        var coinsSpentOnPurchases: Int = 0
     )
+
+    enum class ExpenditureType { HEROES, LIVES }
+
+    companion object
+    {
+        fun coinsAsString(number: Int, resources: Resources): String
+        {
+            when (number) {
+                0 -> return resources.getString(R.string.coins_none)
+                1 -> return resources.getString(R.string.coins_singular)
+                else -> return resources.getString(R.string.coins_plural).format(number)
+            }
+        }
+    }
 
     /** whether this purse has already been used. Must be migrated otherwise */
     var initialized: Boolean = false
@@ -27,18 +45,27 @@ class PurseOfCoins(val gameMechanics: GameMechanics, private val levelMode: Game
         contents.rewardCoins += amount
     }
 
-    fun spend(amount: Int)
+    fun spend(amount: Int, spendFor: ExpenditureType = ExpenditureType.HEROES)
     {
-        contents.spentCoins += amount
+        when (spendFor)
+        {
+            ExpenditureType.HEROES -> contents.coinsSpentOnHeroes += amount
+            ExpenditureType.LIVES -> contents.coinsSpentOnPurchases += amount
+        }
     }
 
     fun availableCoins(): Int
     {
-        return contents.totalCoins - contents.spentCoins
+        return contents.totalCoins - contents.coinsSpentOnHeroes - contents.coinsSpentOnPurchases
+    }
+
+    fun canAfford(price: Int): Boolean
+    {
+        return availableCoins() >= price
     }
 
     fun calculateInitialContents()
-    /** method for migrating the "old" style of coin-keeping */
+    /** method for migrating the "old" style of coin-keeping. */
     {
         // get number of reward coins
         val sumRewardCoinsInBasicMode = gameMechanics.summaryPerNormalLevel.values.sumOf { it.coinsGot } +
@@ -57,27 +84,21 @@ class PurseOfCoins(val gameMechanics: GameMechanics, private val levelMode: Game
         {
             contents.rewardCoins = 0
             contents.runningCoins = 0
-            contents.spentCoins = 0
+            contents.coinsSpentOnHeroes = 0
         }
         else when (levelMode)   // distribute the coins into the series according to the general percentage
         {
             GameMechanics.LevelMode.BASIC -> {
                 contents.rewardCoins = sumRewardCoinsInBasicMode
                 contents.runningCoins = totalRunningCoins * sumRewardCoinsInBasicMode / totalRewardCoins
-                contents.spentCoins = 0  // initial value, will be set later accordingly
+                contents.coinsSpentOnHeroes = 0  // initial value, will be set later accordingly
             }
             GameMechanics.LevelMode.ENDLESS -> {
                 contents.rewardCoins = sumRewardCoinsInEndlessMode
                 contents.runningCoins = totalRunningCoins * sumRewardCoinsInEndlessMode / totalRewardCoins
-                contents.spentCoins = 0
+                contents.coinsSpentOnHeroes = 0
             }
         }
         contents.totalCoins = contents.rewardCoins + contents.runningCoins
     }
-
-
-
-
-
-
 }

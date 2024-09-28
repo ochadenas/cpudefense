@@ -107,6 +107,8 @@ class GameMechanics {
         var currentMaxLives: Int,
         /** current number of lives */
         var lives: Int,
+        /** number of lives that have already been purchased in this stage */
+        var livesRestored: Int = 0,
         /** current amount of 'information' currency in bits */
         var cash: Int,
         /** cryptocoins that can be obtained by completing the current level */
@@ -357,11 +359,10 @@ class GameMechanics {
     }
 
     fun removeOneLife(): Int
-            /**
-             * Remove one of the player's lives.
-             *
-             * @return the number of lives left.
-             */
+    /**
+     * Remove one of the player's lives.
+     * @return the number of lives still left.
+     */
     {
         if (state.coinsInLevel > 0)
             state.coinsInLevel--
@@ -371,11 +372,39 @@ class GameMechanics {
         return state.lives
     }
 
+    fun restoreOneLife(): Int
+    /** restores one of the lives, purchasing it with coins.
+     * @return the new number of lives
+      */
+    {
+        val price = costOfLife()
+        if (currentPurse().canAfford(price) && state.lives<state.maxLives)
+        {
+            currentPurse().spend(price, PurseOfCoins.ExpenditureType.LIVES)
+            state.livesRestored++
+            state.lives++
+        }
+        return state.lives
+    }
+
+
     private fun calculateLives()
     {
         val extraLives = heroModifier(Hero.Type.ADDITIONAL_LIVES)
         state.currentMaxLives = state.maxLives + extraLives.toInt()
         state.lives = state.currentMaxLives
+        state.livesRestored = 0
+    }
+
+    fun costOfLife(): Int
+            /** Calculates the cost to restore one life lost in the game.
+             * @return Number of coins required
+             */
+    {
+        // TODO: remove comment!
+        // if (currentStage.series != SERIES_ENDLESS)
+        //    return 0
+        return 1 + state.livesRestored + (currentStage.number / 32)
     }
 
     private fun calculateStartingCash()
@@ -491,12 +520,12 @@ class GameMechanics {
                 it.calculateInitialContents()
                 if (it.contents.totalCoins >= coinsActuallySpentOnHeroes) {
                     heroesByMode[mode] = HashMap(heroes)
-                    it.contents.spentCoins= coinsActuallySpentOnHeroes
+                    it.contents.coinsSpentOnHeroes= coinsActuallySpentOnHeroes
                 }
                 else
                 {
                     heroesByMode[mode] = hashMapOf() // no heroes
-                    it.contents.spentCoins= 0
+                    it.contents.coinsSpentOnHeroes= 0
                 }
             }
         }

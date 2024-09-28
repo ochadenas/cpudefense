@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="replay_dialog_text_size">16sp</dimen>
-    <dimen name="replay_dialog_button_margin">20dp</dimen>
+    <dimen name="dialog_text_size">16sp</dimen>
+    <dimen name="dialog_button_margin_vertical">20dp</dimen>
+    <dimen name="dialog_button_margin_horizontal">40dp</dimen>
+    <dimen name="dialog_annotation_size">10dp</dimen>
 </resources>
