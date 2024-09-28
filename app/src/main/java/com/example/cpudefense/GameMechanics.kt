@@ -378,7 +378,7 @@ class GameMechanics {
       */
     {
         val price = costOfLife()
-        if (currentPurse().canAfford(price) && state.lives<state.maxLives)
+        if (currentPurse().canAfford(price) && state.lives<state.currentMaxLives)
         {
             currentPurse().spend(price, PurseOfCoins.ExpenditureType.LIVES)
             state.livesRestored++
@@ -401,9 +401,8 @@ class GameMechanics {
              * @return Number of coins required
              */
     {
-        // TODO: remove comment!
-        // if (currentStage.series != SERIES_ENDLESS)
-        //    return 0
+        if (currentStage.series != SERIES_ENDLESS)
+            return 0
         return 1 + state.livesRestored + (currentStage.number / 32)
     }
 
@@ -520,12 +519,12 @@ class GameMechanics {
                 it.calculateInitialContents()
                 if (it.contents.totalCoins >= coinsActuallySpentOnHeroes) {
                     heroesByMode[mode] = HashMap(heroes)
-                    it.contents.coinsSpentOnHeroes= coinsActuallySpentOnHeroes
+                    it.contents.spentCoins = coinsActuallySpentOnHeroes
                 }
                 else
                 {
                     heroesByMode[mode] = hashMapOf() // no heroes
-                    it.contents.coinsSpentOnHeroes= 0
+                    it.contents.spentCoins = 0
                 }
             }
         }

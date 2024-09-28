@@ -60,6 +60,14 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         >
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/switch_disable_purchase_dialog"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="36dp"
+            android:onClick="savePrefs"
+            android:text="@string/settings_disable_purchase_dialog"
+            android:textColor="#FFFFFF" />
 
         <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/switch_disable_background"

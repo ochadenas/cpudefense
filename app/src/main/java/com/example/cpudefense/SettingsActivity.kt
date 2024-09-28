@@ -21,6 +21,7 @@ class SettingsActivity : AppCompatActivity()
 
     private fun loadPrefs()
     {
+        val disablePurchaseDialog = findViewById<SwitchCompat>(R.id.switch_disable_purchase_dialog)
         val disableBackgroundView = findViewById<SwitchCompat>(R.id.switch_disable_background)
         val showRangeView = findViewById<SwitchCompat>(R.id.switch_show_atts_in_range)
         val useLargeButtons = findViewById<SwitchCompat>(R.id.switch_use_large_buttons)
@@ -28,6 +29,7 @@ class SettingsActivity : AppCompatActivity()
         val fastFastForward = findViewById<SwitchCompat>(R.id.switch_fast_fast_forward)
         val keepLevels = findViewById<SwitchCompat>(R.id.switch_keep_levels)
         val prefs = getSharedPreferences(getString(R.string.pref_filename), MODE_PRIVATE)
+        disablePurchaseDialog.isChecked = prefs.getBoolean("DISABLE_PURCHASE_DIALOG", false)
         disableBackgroundView.isChecked = prefs.getBoolean("DISABLE_BACKGROUND", false)
         showRangeView.isChecked = prefs.getBoolean("SHOW_ATTS_IN_RANGE", false)
         useLargeButtons.isChecked = prefs.getBoolean("USE_LARGE_BUTTONS", false)
@@ -41,6 +43,7 @@ class SettingsActivity : AppCompatActivity()
     {
         val prefs = getSharedPreferences(getString(R.string.pref_filename), MODE_PRIVATE)
         prefs.edit().apply {
+            putBoolean("DISABLE_PURCHASE_DIALOG", findViewById<SwitchCompat>(R.id.switch_disable_purchase_dialog)?.isChecked ?: false)
             putBoolean("DISABLE_BACKGROUND", findViewById<SwitchCompat>(R.id.switch_disable_background)?.isChecked ?: false)
             putBoolean("SHOW_ATTS_IN_RANGE", findViewById<SwitchCompat>(R.id.switch_show_atts_in_range)?.isChecked ?: false)
             putBoolean("USE_LARGE_BUTTONS", findViewById<SwitchCompat>(R.id.switch_use_large_buttons)?.isChecked ?: false)

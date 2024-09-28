@@ -52,6 +52,7 @@ class GameActivity : Activity() {
     private var frameTimeSum = 0L
 
     data class Settings(
+        var configDisablePurchaseDialog: Boolean = false,
         var configDisableBackground: Boolean = true,
         var configShowAttackersInRange: Boolean = false,
         var configUseLargeButtons: Boolean = false,
@@ -305,6 +306,7 @@ class GameActivity : Activity() {
             /** load global configuration and debug settings from preferences */
     {
         val prefs = getSharedPreferences(getString(R.string.pref_filename), MODE_PRIVATE)
+        settings.configDisablePurchaseDialog = prefs.getBoolean("DISABLE_PURCHASE_DIALOG", false)
         settings.configDisableBackground = prefs.getBoolean("DISABLE_BACKGROUND", false)
         settings.configShowAttackersInRange = prefs.getBoolean("SHOW_ATTS_IN_RANGE", false)
         settings.configUseLargeButtons = prefs.getBoolean("USE_LARGE_BUTTONS", false)
@@ -349,20 +351,31 @@ class GameActivity : Activity() {
         gameMechanics.currentlyActiveStage?.let { startGameAtLevel(it.data.ident) }
     }
 
-    fun showPurchaseLifeDialog() {
-        val dialog = Dialog(this)
-        dialog.setContentView(R.layout.layout_dialog_purchaselife)
-        dialog.window?.setLayout(MATCH_PARENT, WRAP_CONTENT)
-        dialog.setCancelable(true)
-        dialog.findViewById<TextView>(R.id.textView)?.text =
-            resources.getString(R.string.query_purchase_life).format(PurseOfCoins.coinsAsString(gameMechanics.costOfLife(), resources))
-        dialog.findViewById<Button>(R.id.button_yes)
-            ?.setOnClickListener { restoreOneLife(); dialog.dismiss(); }
-        dialog.findViewById<Button>(R.id.button_no)
-            ?.setOnClickListener { dialog.dismiss();  }
-        dialog.setOnDismissListener { gameIsRunning = true; startGameThreads() }
-        gameIsRunning = false
-        dialog.show()
+    fun showPurchaseLifeDialog(showHint: Boolean = true)
+            /** @param showHint Whether to display the text how to disable this dialog
+             */
+    {
+        val price = gameMechanics.costOfLife()
+        if (price>0 && gameMechanics.currentPurse().canAfford(price)
+            && gameMechanics.state.lives<gameMechanics.state.currentMaxLives)
+        {
+            val dialog = Dialog(this)
+            dialog.setContentView(R.layout.layout_dialog_purchaselife)
+            dialog.window?.setLayout(MATCH_PARENT, WRAP_CONTENT)
+            dialog.setCancelable(true)
+            dialog.findViewById<TextView>(R.id.textView)?.text =
+                resources.getString(R.string.query_purchase_life)
+                    .format(PurseOfCoins.coinsAsString(gameMechanics.costOfLife(), resources))
+            if (!showHint)
+                dialog.findViewById<TextView>(R.id.textViewAnnotation)?.text = ""
+            dialog.findViewById<Button>(R.id.button_yes)
+                ?.setOnClickListener { restoreOneLife(); dialog.dismiss(); }
+            dialog.findViewById<Button>(R.id.button_no)
+                ?.setOnClickListener { dialog.dismiss(); }
+            dialog.setOnDismissListener { gameIsRunning = true; startGameThreads() }
+            gameIsRunning = false
+            dialog.show()
+        }
     }
 
     fun prepareLevelAtStartOfGame(ident: Stage.Identifier)
@@ -417,8 +430,7 @@ class GameActivity : Activity() {
                 gameView.intermezzo.endOfGame(gameMechanics.currentStage, hasWon = false)
             }
             1 -> {
-                val price = gameMechanics.costOfLife()
-                if (price>0 && gameMechanics.currentPurse().canAfford(price))
+                if (!settings.configDisablePurchaseDialog)
                     runOnUiThread() { showPurchaseLifeDialog() }
             }
             else -> {}

@@ -3,6 +3,7 @@ package com.example.cpudefense.gameElements
 import android.graphics.*
 import android.view.MotionEvent
 import com.example.cpudefense.CpuReached
+import com.example.cpudefense.GameMechanics
 import com.example.cpudefense.networkmap.Network
 import com.example.cpudefense.networkmap.Viewport
 import com.example.cpudefense.utils.makeSquare
@@ -87,6 +88,14 @@ class Cpu(network: Network, gridX: Int, gridY: Int): Chip(network, gridX, gridY)
 
     override fun onDown(event: MotionEvent): Boolean
     {
-        return false
+        if (actualRect?.contains(event.x.toInt(), event.y.toInt()) == false)
+            return false
+        if (network.gameView.gameMechanics.currentStage.mode() == GameMechanics.LevelMode.ENDLESS )
+        {
+            network.gameView.gameActivity.showPurchaseLifeDialog(showHint = false)
+            return true
+        }
+        else
+            return false
     }
 }
