@@ -1,0 +1,6 @@
+New features:
+- In “endless” mode, lost lives can be recovered for coins by tapping on the CPU.
+
+Bug fixes:
+- Some text size and other layout corrections
+- The “quit level” dialogue now freezes the game.
