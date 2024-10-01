@@ -23,8 +23,12 @@ class GameMechanics {
 
         // debug options
 
-        const val makeAllLevelsAvailable = false  // for debugging purposes only. MUST BE SET TO FALSE
-        const val resetHeroHolidays = false // for debugging purposes only. MUST BE SET TO FALSE
+        /** for debugging purposes only. MUST BE SET TO FALSE */
+        const val makeAllLevelsAvailable = false
+        /** for debugging purposes only. MUST BE SET TO FALSE */
+        const val resetHeroHolidays = false
+        /** for debugging purposes only. MUST BE SET TO FALSE */
+        const val forceHeroMigration = false
 
         // end of debug options
 
@@ -192,7 +196,7 @@ class GameMechanics {
 
         // calculate coins
         persistency.loadCoins(this)
-        if (purseOfCoins[LevelMode.BASIC]?.initialized == false)
+        if (purseOfCoins[LevelMode.BASIC]?.initialized == false || forceHeroMigration )
             migrateHeroes()
         additionalCashDelay = heroModifier(Hero.Type.GAIN_CASH).toInt()
     }

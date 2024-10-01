@@ -7,17 +7,39 @@
     android:background="@drawable/shape_border_bicolour"
     android:scaleType="centerCrop">
 
+    <ImageView
+        android:id="@+id/deko"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginEnd="8dp"
+        android:adjustViewBounds="true"
+        android:padding="0dp"
+        android:scaleType="fitEnd"
+        app:layout_constraintBottom_toBottomOf="@id/inner_layout"
+        app:layout_constraintEnd_toStartOf="@id/inner_layout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/inner_layout"
+        app:srcCompat="@drawable/deko_border" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/inner_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@id/deko"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        >
+
     <TextView
         android:id="@+id/question"
-        android:layout_width="240sp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:text="Question"
         android:textColor="@color/text_blue"
-        android:textSize="24sp"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:textSize="@dimen/dialog_text_size"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         />
@@ -26,19 +48,21 @@
         android:id="@+id/button1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="0dp"
         android:background="@color/black"
         android:backgroundTint="@color/black"
         android:backgroundTintMode="src_over"
         android:text="Answer 1"
         android:textAllCaps="true"
         android:textColor="@color/text_blue"
-        android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/question"
-        app:layout_constraintBottom_toTopOf="@id/button2" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="@dimen/dialog_button_margin_vertical"
+        android:layout_marginBottom="@dimen/dialog_button_margin_vertical"
+        android:layout_marginStart="@dimen/dialog_button_margin_horizontal"
+        android:layout_marginEnd="@dimen/dialog_button_margin_horizontal"
+        android:textSize="@dimen/dialog_text_size"
+        />
 
     <Button
         android:id="@+id/button2"
@@ -48,9 +72,17 @@
         android:text="Answer 2"
         android:textAllCaps="true"
         android:textColor="@color/text_lightblue"
-        android:textSize="24sp"
-        android:layout_marginBottom="16dp"
-        app:layout_constraintStart_toStartOf="@+id/button1"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        android:textSize="@dimen/dialog_text_size"
+        android:layout_marginTop="@dimen/dialog_button_margin_vertical"
+        android:layout_marginBottom="@dimen/dialog_button_margin_vertical"
+        android:layout_marginStart="@dimen/dialog_button_margin_horizontal"
+        android:layout_marginEnd="@dimen/dialog_button_margin_horizontal"
+        app:layout_constraintBottom_toBottomOf="@+id/button1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/button1"
+        app:layout_constraintStart_toEndOf="@id/button1"
+        />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

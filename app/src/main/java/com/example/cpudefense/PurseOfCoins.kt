@@ -57,7 +57,8 @@ class PurseOfCoins(val gameMechanics: GameMechanics, private val levelMode: Game
 
     fun availableCoins(): Int
     {
-        return contents.totalCoins - contents.spentCoins - contents.coinsSpentOnPurchases
+        val value = contents.totalCoins - contents.spentCoins - contents.coinsSpentOnPurchases
+        return if (value>=0) value else 0
     }
 
     fun canAfford(price: Int): Boolean
@@ -93,11 +94,13 @@ class PurseOfCoins(val gameMechanics: GameMechanics, private val levelMode: Game
                 contents.rewardCoins = sumRewardCoinsInBasicMode
                 contents.runningCoins = totalRunningCoins * sumRewardCoinsInBasicMode / totalRewardCoins
                 contents.spentCoins = 0  // initial value, will be set later accordingly
+                contents.coinsSpentOnPurchases = 0
             }
             GameMechanics.LevelMode.ENDLESS -> {
                 contents.rewardCoins = sumRewardCoinsInEndlessMode
                 contents.runningCoins = totalRunningCoins * sumRewardCoinsInEndlessMode / totalRewardCoins
                 contents.spentCoins = 0
+                contents.coinsSpentOnPurchases = 0
             }
         }
         contents.totalCoins = contents.rewardCoins + contents.runningCoins
