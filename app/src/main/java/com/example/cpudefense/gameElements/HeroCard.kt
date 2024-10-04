@@ -64,6 +64,7 @@ class HeroCard(val gameView: GameView, val hero: Hero): GameElement(), Fadable
         Hero.Type.DOUBLE_HIT_SUB -> resources.getColor(R.color.upgrade_active_chip_sub)
         Hero.Type.INCREASE_CHIP_SHR_SPEED -> resources.getColor(R.color.upgrade_active_chip_shr)
         Hero.Type.INCREASE_CHIP_SHR_RANGE -> resources.getColor(R.color.upgrade_active_chip_shr)
+        Hero.Type.DOUBLE_HIT_SHR -> resources.getColor(R.color.upgrade_active_chip_shr)
         Hero.Type.INCREASE_CHIP_MEM_SPEED -> resources.getColor(R.color.upgrade_active_chip_mem)
         Hero.Type.INCREASE_CHIP_MEM_RANGE -> resources.getColor(R.color.upgrade_active_chip_mem)
         Hero.Type.ENABLE_MEM_UPGRADE -> resources.getColor(R.color.upgrade_active_chip_mem)

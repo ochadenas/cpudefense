@@ -483,6 +483,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int):
         val hitChancePercent = when (chipData.type)
         {
             ChipType.SUB -> theNetwork.gameMechanics.heroModifier(Hero.Type.DOUBLE_HIT_SUB).toInt()
+            ChipType.SHR -> theNetwork.gameMechanics.heroModifier(Hero.Type.DOUBLE_HIT_SHR).toInt()
             else -> 0
         }
         return if (hitChancePercent > 0 && Random.nextInt(0,100) < hitChancePercent) 2 else 1

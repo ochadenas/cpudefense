@@ -31,7 +31,7 @@ class Hero(var gameActivity: GameActivity, type: Type)
      */
 
     enum class Type { INCREASE_CHIP_SUB_SPEED, INCREASE_CHIP_SUB_RANGE, DOUBLE_HIT_SUB,
-        INCREASE_CHIP_SHR_SPEED,  INCREASE_CHIP_SHR_RANGE,
+        INCREASE_CHIP_SHR_SPEED,  INCREASE_CHIP_SHR_RANGE, DOUBLE_HIT_SHR,
         INCREASE_CHIP_MEM_SPEED,  INCREASE_CHIP_MEM_RANGE, ENABLE_MEM_UPGRADE,
         INCREASE_CHIP_RES_STRENGTH, INCREASE_CHIP_RES_DURATION, CONVERT_HEAT,
         DECREASE_ATT_FREQ, DECREASE_ATT_SPEED, DECREASE_ATT_STRENGTH, DECREASE_COIN_STRENGTH, REDUCE_HEAT,
@@ -232,6 +232,11 @@ class Hero(var gameActivity: GameActivity, type: Type)
                 strengthDesc = "%d%%".format(strength.toInt())
                 upgradeDesc = " → %d%%".format(next.toInt())
             }
+            Type.DOUBLE_HIT_SHR -> {
+                shortDesc = resources.getString(R.string.shortdesc_double_chance).format("SHR")
+                strengthDesc = "%d%%".format(strength.toInt())
+                upgradeDesc = " → %d%%".format(next.toInt())
+            }
         }
         val cost = getPrice(data.level)
         costDesc = resources.getString(R.string.cost_desc).format(cost)
@@ -303,6 +308,7 @@ class Hero(var gameActivity: GameActivity, type: Type)
             Type.INCREASE_CHIP_RES_DURATION -> upgradeLevel(Type.INCREASE_CHIP_RES_STRENGTH) >= 3
             Type.CONVERT_HEAT           -> upgradeLevel(Type.INCREASE_CHIP_RES_DURATION) >= 3
             Type.DOUBLE_HIT_SUB          -> upgradeLevel(Type.INCREASE_CHIP_SUB_RANGE) >= 3
+            Type.DOUBLE_HIT_SHR          -> upgradeLevel(Type.INCREASE_CHIP_SHR_RANGE) >= 3
             else -> true
         }
     }
@@ -400,6 +406,7 @@ class Hero(var gameActivity: GameActivity, type: Type)
                 Type.INCREASE_CHIP_RES_DURATION -> return 1.0f + level * 0.2f
                 Type.CONVERT_HEAT -> return level * 3f
                 Type.DOUBLE_HIT_SUB -> return if (level < 10) level * 10f else 100f
+                Type.DOUBLE_HIT_SHR -> return if (level < 10) level * 10f else 100f
                 else -> return level.toFloat()
             }
         }
@@ -613,6 +620,13 @@ class Hero(var gameActivity: GameActivity, type: Type)
                     effect = resources.getString(R.string.HERO_EFFECT_CHANCE_DOUBLE).format("SUB")
                     vitae = resources.getString(R.string.boole)
                     picture = BitmapFactory.decodeResource(resources, R.drawable.boole)
+                }
+                Type.DOUBLE_HIT_SHR -> {
+                    name = "Conway"
+                    fullName = "John Horton COnway"
+                    effect = resources.getString(R.string.HERO_EFFECT_CHANCE_DOUBLE).format("SHR")
+                    vitae = resources.getString(R.string.conway)
+                    picture = BitmapFactory.decodeResource(resources, R.drawable.conway)
                 }
             }
         }
