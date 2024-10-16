@@ -145,7 +145,7 @@ class GameActivity : Activity() {
             /** when completing a level, record the current number in the SharedPrefs.
              * @param identifier number of the level successfully completed */
     {
-        val prefs = getSharedPreferences(getString(R.string.pref_filename), Context.MODE_PRIVATE)
+        val prefs = getSharedPreferences(Persistency.filename_preferences, Context.MODE_PRIVATE)
         with (prefs.edit())
         {
             putInt("LASTSTAGE", identifier.number)
@@ -160,7 +160,7 @@ class GameActivity : Activity() {
              * @param resetProgress If true, forces resetting the max stage to the given currentStage
              * */
     {
-        val prefs = getSharedPreferences(getString(R.string.pref_filename), Context.MODE_PRIVATE)
+        val prefs = getSharedPreferences(Persistency.filename_preferences, Context.MODE_PRIVATE)
         val maxStage = Stage.Identifier(prefs.getInt("MAX SERIES", 1), prefs.getInt("MAXSTAGE", 0))
         with (prefs.edit())
         {
@@ -305,7 +305,7 @@ class GameActivity : Activity() {
     fun loadSettings()
             /** load global configuration and debug settings from preferences */
     {
-        val prefs = getSharedPreferences(getString(R.string.pref_filename), MODE_PRIVATE)
+        val prefs = getSharedPreferences(Persistency.filename_preferences, MODE_PRIVATE)
         settings.configDisablePurchaseDialog = prefs.getBoolean("DISABLE_PURCHASE_DIALOG", false)
         settings.configDisableBackground = prefs.getBoolean("DISABLE_BACKGROUND", false)
         settings.configShowAttackersInRange = prefs.getBoolean("SHOW_ATTS_IN_RANGE", false)
@@ -475,7 +475,8 @@ class GameActivity : Activity() {
     }
 
     fun setGameActivityStatus(status: GameActivityStatus) {
-        val prefs = getSharedPreferences(getString(R.string.pref_filename), MODE_PRIVATE)
+        // TODO: better move to "state"
+        val prefs = getSharedPreferences(Persistency.filename_preferences, MODE_PRIVATE)
         val editor = prefs.edit()
         when (status) {
             GameActivityStatus.PLAYING -> editor.putString("STATUS", "running")

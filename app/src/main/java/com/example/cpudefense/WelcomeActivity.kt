@@ -93,7 +93,7 @@ class WelcomeActivity : AppCompatActivity() {
     }
 
     private fun setupButtons() {
-        val prefs = getSharedPreferences(getString(R.string.pref_filename), MODE_PRIVATE)
+        val prefs = getSharedPreferences(Persistency.filename_preferences, MODE_PRIVATE)
         gameState = prefs.getString("STATUS", "")
         determineLevels(prefs)
         showLevelReached()
@@ -166,7 +166,7 @@ class WelcomeActivity : AppCompatActivity() {
     fun showVersionMessage()
     /** display version message, if not already displayed earlier */
     {
-        val prefs = getSharedPreferences(getString(R.string.pref_filename), MODE_PRIVATE)
+        val prefs = getSharedPreferences(Persistency.filename_preferences, MODE_PRIVATE)
         info?.let {
             val messageDisplayed = prefs.getString("VERSIONMESSAGE_SEEN", "")
             if (messageDisplayed != it.versionName) {

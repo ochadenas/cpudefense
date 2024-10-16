@@ -378,7 +378,7 @@ class GameView(context: Context):
 
     private fun saveGraphicalState()
     {
-        val editor = gameActivity.getSharedPreferences(resources.getString(R.string.pref_filename_state), MODE_PRIVATE).edit()
+        val editor = gameActivity.getSharedPreferences(Persistency.filename_state, MODE_PRIVATE).edit()
         editor.putFloat("SCALE_FACTOR", scaleFactor)
         editor.putFloat("TEXT_SCALE_FACTOR", textScaleFactor)
         editor.apply()
@@ -386,7 +386,7 @@ class GameView(context: Context):
 
     private fun loadGraphicalState()
     {
-        val prefs = gameActivity.getSharedPreferences(resources.getString(R.string.pref_filename_state), MODE_PRIVATE)
+        val prefs = gameActivity.getSharedPreferences(Persistency.filename_state, MODE_PRIVATE)
         scaleFactor = prefs.getFloat("SCALE_FACTOR", 1.0f)
         textScaleFactor = prefs.getFloat("TEXT_SCALE_FACTOR", 1.0f)
     }

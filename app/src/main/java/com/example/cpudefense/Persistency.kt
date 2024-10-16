@@ -10,14 +10,34 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.gson.Gson
 import java.io.ByteArrayOutputStream
 
-class Persistency(private var activity: Activity) {
+class Persistency(private var activity: Activity)
+{
+    companion object
+    {
+        // DO NOT change the file names,
+        // this would break the saved games.
+        val filename_preferences = "prefs.xml"
+        val filename_structure   = "structure"
+        val filename_thumbnails  = "thumbnails"
+        val filename_saves       = "saves"
+        val filename_state       = "state"
+    }
 
     // define preferences files
-    private val prefs: SharedPreferences = activity.getSharedPreferences(activity.getString(R.string.pref_filename),
-        AppCompatActivity.MODE_PRIVATE)
-    private val prefsStructure: SharedPreferences = activity.getSharedPreferences("structure", AppCompatActivity.MODE_PRIVATE)
-    private val prefsThumbnails: SharedPreferences = activity.getSharedPreferences("thumbnails", AppCompatActivity.MODE_PRIVATE)
-    private val prefsSaves: SharedPreferences = activity.getSharedPreferences(activity.getString(R.string.pref_filename_savegames), AppCompatActivity.MODE_PRIVATE)
+    /** file that holds all settings and preferences.
+     * For historical reasons, there are some more data in this file, such as:
+     *
+     */
+    private val prefs: SharedPreferences = activity.getSharedPreferences(filename_preferences, AppCompatActivity.MODE_PRIVATE)
+    /** file that holds the structure of levels without any attackers. Used in ENDLESS series. */
+    private val prefsStructure: SharedPreferences = activity.getSharedPreferences(filename_structure, AppCompatActivity.MODE_PRIVATE)
+    /** file for the small thumbnails that are displayed in the level selector */
+    private val prefsThumbnails: SharedPreferences = activity.getSharedPreferences(filename_thumbnails, AppCompatActivity.MODE_PRIVATE)
+    /** file for the overall game progress, such as heroes or coins in the purse */
+    private val prefsSaves: SharedPreferences = activity.getSharedPreferences(filename_saves, AppCompatActivity.MODE_PRIVATE)
+    /** file for the state within the current level, such as attacker and chip positions, number of waves, etc. */
+    private val prefsState: SharedPreferences = activity.getSharedPreferences(filename_state, AppCompatActivity.MODE_PRIVATE)
+
     data class SerializableStateData (
         val general: GameMechanics.StateData,
         val stage: Stage.Data?
