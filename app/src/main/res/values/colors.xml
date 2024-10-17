@@ -70,7 +70,7 @@
     <color name="text_blue">#1BB8FF</color>
     <color name="text_lightblue">#7AC8EC</color>
     <color name="text_red">#D50000</color>
-    <color name="text_lightred">#F86B6B</color>
+    <color name="text_lightred">#f04662</color>
 
     <color name="upgrade_inactive">#7C878C</color>
     <color name="upgrade_monochrome">#B9921C</color>

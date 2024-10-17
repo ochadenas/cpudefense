@@ -1,50 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/deko_dialog"
     android:scaleType="centerCrop">
 
-    <TextView
-        android:id="@+id/textView"
+    <ImageView
+        android:id="@+id/decoView"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="@dimen/dialog_button_margin_vertical"
-        android:layout_marginEnd="16dp"
-        android:fontFamily="sans-serif"
-        android:text="@string/query_purchase_life"
-        android:textColor="@color/text_lightred"
-        android:textSize="@dimen/dialog_text_size"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginBottom="16dp"
+        android:adjustViewBounds="true"
+        android:padding="0dp"
+        android:scaleType="fitStart"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/inner_layout"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintHorizontal_weight="0.1"
+        app:srcCompat="@drawable/cpu_out_of_lives"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/inner_layout"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/decoView"
+        app:layout_constraintHorizontal_weight="0.3"
+        tools:layout_editor_absoluteY="16dp">
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="@dimen/dialog_button_margin_vertical"
+            android:layout_marginEnd="16dp"
+            android:fontFamily="sans-serif"
+            android:text="@string/query_purchase_life"
+            android:textColor="@color/text_lightred"
+            android:textSize="@dimen/dialog_text_size"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
 
-    <TextView
-        android:id="@+id/textViewAnnotation"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="@dimen/dialog_button_margin_vertical"
-        android:layout_marginEnd="16dp"
-        android:fontFamily="sans-serif"
-        android:text="@string/annotation_purchase_life"
-        android:textColor="@color/text_lightred"
-        android:textSize="@dimen/dialog_annotation_size"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        <TextView
+            android:id="@+id/textViewAnnotation"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="@dimen/dialog_button_margin_vertical"
+            android:layout_marginEnd="16dp"
+            android:fontFamily="sans-serif"
+            android:text="@string/annotation_purchase_life"
+            android:textColor="@color/text_lightred"
+            android:textSize="@dimen/dialog_annotation_size"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
     <Button
         android:id="@+id/button_yes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dialog_button_margin_vertical"
-        android:layout_marginBottom="@dimen/dialog_button_margin_vertical"
         android:layout_marginStart="@dimen/dialog_button_margin_horizontal"
+        android:layout_marginTop="@dimen/dialog_button_margin_vertical"
         android:layout_marginEnd="@dimen/dialog_button_margin_horizontal"
+        android:layout_marginBottom="@dimen/dialog_button_margin_vertical"
         android:background="@color/black"
         android:backgroundTint="@color/black"
         android:backgroundTintMode="src_over"
@@ -53,18 +82,18 @@
         android:textAllCaps="true"
         android:textColor="@color/text_lightred"
         android:textSize="@dimen/dialog_text_size"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textViewAnnotation"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/inner_layout" />
 
     <Button
         android:id="@+id/button_no"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dialog_button_margin_vertical"
-        android:layout_marginBottom="@dimen/dialog_button_margin_vertical"
         android:layout_marginStart="@dimen/dialog_button_margin_horizontal"
+        android:layout_marginTop="@dimen/dialog_button_margin_vertical"
         android:layout_marginEnd="@dimen/dialog_button_margin_horizontal"
+        android:layout_marginBottom="@dimen/dialog_button_margin_vertical"
         android:background="@color/black"
         android:fontFamily="monospace"
         android:text="@string/no"

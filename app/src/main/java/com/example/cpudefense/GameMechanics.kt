@@ -29,6 +29,8 @@ class GameMechanics {
         const val resetHeroHolidays = false
         /** for debugging purposes only. MUST BE SET TO FALSE */
         const val forceHeroMigration = false
+        /** for debugging purposes only. MUST BE SET TO FALSE */
+        const val allowLivesPurchaseInAllStages = true
 
         // end of debug options
 
@@ -405,7 +407,7 @@ class GameMechanics {
              * @return Number of coins required
              */
     {
-        if (currentStage.series != SERIES_ENDLESS)
+        if (currentStage.series != SERIES_ENDLESS && !allowLivesPurchaseInAllStages)
             return 0
         return 1 + state.livesRestored + (currentStage.number / 32)
     }
