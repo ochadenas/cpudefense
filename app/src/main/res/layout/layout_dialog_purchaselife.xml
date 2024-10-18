@@ -11,33 +11,25 @@
         android:id="@+id/decoView"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="16dp"
         android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
-        android:adjustViewBounds="true"
+        android:adjustViewBounds="false"
         android:padding="0dp"
-        android:scaleType="fitStart"
+        android:scaleType="centerInside"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/inner_layout"
+        app:layout_constraintEnd_toStartOf="@id/textView"
+        app:layout_constraintHorizontal_weight="0.1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintHorizontal_weight="0.1"
-        app:srcCompat="@drawable/cpu_out_of_lives"/>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/inner_layout"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/decoView"
-        app:layout_constraintHorizontal_weight="0.3"
-        tools:layout_editor_absoluteY="16dp">
+        app:srcCompat="@drawable/cpu" />
 
         <TextView
             android:id="@+id/textView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
+            app:layout_constraintHorizontal_weight="0.2"
+            android:layout_marginStart="0dp"
             android:layout_marginTop="@dimen/dialog_button_margin_vertical"
             android:layout_marginEnd="16dp"
             android:fontFamily="sans-serif"
@@ -45,7 +37,7 @@
             android:textColor="@color/text_lightred"
             android:textSize="@dimen/dialog_text_size"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toEndOf="@id/decoView"
             app:layout_constraintTop_toTopOf="parent" />
 
 
@@ -53,7 +45,7 @@
             android:id="@+id/textViewAnnotation"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="0dp"
             android:layout_marginTop="@dimen/dialog_button_margin_vertical"
             android:layout_marginEnd="16dp"
             android:fontFamily="sans-serif"
@@ -61,10 +53,8 @@
             android:textColor="@color/text_lightred"
             android:textSize="@dimen/dialog_annotation_size"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="@id/textView"
             app:layout_constraintTop_toBottomOf="@+id/textView" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
 
     <Button
         android:id="@+id/button_yes"
@@ -80,11 +70,12 @@
         android:fontFamily="monospace"
         android:text="@string/yes"
         android:textAllCaps="true"
+        app:backgroundTint="@null"
         android:textColor="@color/text_lightred"
         android:textSize="@dimen/dialog_text_size"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/inner_layout" />
+        app:layout_constraintStart_toStartOf="@id/textView"
+        app:layout_constraintTop_toBottomOf="@id/textViewAnnotation" />
 
     <Button
         android:id="@+id/button_no"
@@ -100,9 +91,9 @@
         android:textAllCaps="true"
         android:textColor="@color/text_red"
         android:textSize="@dimen/dialog_text_size"
+        app:backgroundTint="@null"
         app:layout_constraintBottom_toBottomOf="@+id/button_yes"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/button_yes" />
-
-
+    
 </androidx.constraintlayout.widget.ConstraintLayout>
