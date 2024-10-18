@@ -62,6 +62,7 @@ class SettingsActivity : AppCompatActivity()
     fun startNewGame(@Suppress("UNUSED_PARAMETER") v: View)
     {
         val dialog = Dialog(this)
+        // dialog.setContentView(R.layout.layout_dialog_new_game)
         dialog.setContentView(R.layout.layout_dialog_new_game)
         dialog.window?.setLayout(
             ViewGroup.LayoutParams.WRAP_CONTENT,

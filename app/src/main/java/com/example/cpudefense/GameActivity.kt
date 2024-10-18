@@ -13,6 +13,7 @@ import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.app.ActivityCompat
 import com.example.cpudefense.GameMechanics.GamePhase
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job

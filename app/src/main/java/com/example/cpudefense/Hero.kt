@@ -626,7 +626,7 @@ class Hero(var gameActivity: GameActivity, type: Type)
                     fullName = "John Horton Conway"
                     effect = resources.getString(R.string.HERO_EFFECT_CHANCE_DOUBLE).format("SHR")
                     vitae = resources.getString(R.string.conway)
-                    picture = BitmapFactory.decodeResource(resources, R.drawable.conway)
+                    picture = BitmapFactory.decodeResource(resources, R.drawable.cernettes)
                 }
             }
         }

@@ -1,37 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/deko_dialog"
+    android:background="@drawable/shape_border_bicolour"
     android:scaleType="centerCrop">
 
-    <ImageView
-        android:id="@+id/decoView"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/inner_layout"
         android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"
-        android:adjustViewBounds="false"
-        android:padding="0dp"
-        android:scaleType="centerInside"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/textView"
-        app:layout_constraintHorizontal_weight="0.1"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/cpu" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        >
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/decoView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="0dp"
+            android:adjustViewBounds="true"
+            app:layout_constraintHorizontal_weight="0.1"
+            android:contentDescription="CPU"
+            android:padding="0dp"
+            android:scaleType="fitStart"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/textView"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/cpu_out_of_lives"
+            />
 
         <TextView
             android:id="@+id/textView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintHorizontal_weight="0.2"
-            android:layout_marginStart="0dp"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="@dimen/dialog_button_margin_vertical"
-            android:layout_marginEnd="16dp"
+            android:layout_marginEnd="8dp"
             android:fontFamily="sans-serif"
             android:text="@string/query_purchase_life"
             android:textColor="@color/text_lightred"
@@ -56,6 +66,8 @@
             app:layout_constraintStart_toStartOf="@id/textView"
             app:layout_constraintTop_toBottomOf="@+id/textView" />
 
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
     <Button
         android:id="@+id/button_yes"
         android:layout_width="wrap_content"
@@ -71,11 +83,11 @@
         android:text="@string/yes"
         android:textAllCaps="true"
         app:backgroundTint="@null"
-        android:textColor="@color/text_lightred"
+        android:textColor="@color/text_lightblue"
         android:textSize="@dimen/dialog_text_size"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@id/textView"
-        app:layout_constraintTop_toBottomOf="@id/textViewAnnotation" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/inner_layout" />
 
     <Button
         android:id="@+id/button_no"

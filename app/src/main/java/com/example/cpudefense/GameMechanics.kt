@@ -30,7 +30,7 @@ class GameMechanics {
         /** for debugging purposes only. MUST BE SET TO FALSE */
         const val forceHeroMigration = false
         /** for debugging purposes only. MUST BE SET TO FALSE */
-        const val allowLivesPurchaseInAllStages = true
+        const val allowLivesPurchaseInAllStages = false
 
         // end of debug options
 
