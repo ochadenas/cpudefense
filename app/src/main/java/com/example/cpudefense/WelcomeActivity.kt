@@ -25,6 +25,11 @@ class WelcomeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_welcome)
         info = packageManager.getPackageInfo(this.packageName, PackageManager.GET_ACTIVITIES)
+
+        // migrate preferences files, if needed
+        val prefsLegacy = getSharedPreferences(Persistency.filename_legacy, MODE_PRIVATE)
+        val prefsSettings = getSharedPreferences(Persistency.filename_settings, MODE_PRIVATE)
+        Settings().migrateSettings(prefsLegacy, prefsSettings)
     }
 
     private var gameState: String? = null
@@ -93,8 +98,9 @@ class WelcomeActivity : AppCompatActivity() {
     }
 
     private fun setupButtons() {
-        val prefs = getSharedPreferences(Persistency.filename_preferences, MODE_PRIVATE)
-        gameState = prefs.getString("STATUS", "")
+        val state = getSharedPreferences(Persistency.filename_state, MODE_PRIVATE)
+        gameState = state.getString("STATUS", "")
+        val prefs = getSharedPreferences(Persistency.filename_legacy, MODE_PRIVATE)
         determineLevels(prefs)
         showLevelReached()
         val buttonResume = findViewById<Button>(R.id.continueGameButton)
@@ -166,7 +172,7 @@ class WelcomeActivity : AppCompatActivity() {
     fun showVersionMessage()
     /** display version message, if not already displayed earlier */
     {
-        val prefs = getSharedPreferences(Persistency.filename_preferences, MODE_PRIVATE)
+        val prefs = getSharedPreferences(Persistency.filename_legacy, MODE_PRIVATE)
         info?.let {
             val messageDisplayed = prefs.getString("VERSIONMESSAGE_SEEN", "")
             if (messageDisplayed != it.versionName) {

@@ -86,7 +86,7 @@ class LevelSelectActivity : AppCompatActivity() {
              */
     {
         val listView = findViewById<LinearLayout>(R.id.levelList)
-        getSharedPreferences(Persistency.filename_preferences, MODE_PRIVATE)
+        getSharedPreferences(Persistency.filename_legacy, MODE_PRIVATE)
         listView.removeAllViews()
         selectedSeries = series
         when (series)

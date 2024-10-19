@@ -13,7 +13,6 @@ import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.TextView
 import android.widget.Toast
-import androidx.core.app.ActivityCompat
 import com.example.cpudefense.GameMechanics.GamePhase
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
@@ -51,16 +50,6 @@ class GameActivity : Activity() {
     private var frameCount = 0
     /** cumulated time */
     private var frameTimeSum = 0L
-
-    data class Settings(
-        var configDisablePurchaseDialog: Boolean = false,
-        var configDisableBackground: Boolean = true,
-        var configShowAttackersInRange: Boolean = false,
-        var configUseLargeButtons: Boolean = false,
-        var showFrameRate: Boolean = false,
-        var fastFastForward: Boolean = false,
-        var keepLevels: Boolean = true,
-    )
 
     var settings = Settings()
 
@@ -146,7 +135,7 @@ class GameActivity : Activity() {
             /** when completing a level, record the current number in the SharedPrefs.
              * @param identifier number of the level successfully completed */
     {
-        val prefs = getSharedPreferences(Persistency.filename_preferences, Context.MODE_PRIVATE)
+        val prefs = getSharedPreferences(Persistency.filename_legacy, Context.MODE_PRIVATE)
         with (prefs.edit())
         {
             putInt("LASTSTAGE", identifier.number)
@@ -161,7 +150,7 @@ class GameActivity : Activity() {
              * @param resetProgress If true, forces resetting the max stage to the given currentStage
              * */
     {
-        val prefs = getSharedPreferences(Persistency.filename_preferences, Context.MODE_PRIVATE)
+        val prefs = getSharedPreferences(Persistency.filename_legacy, Context.MODE_PRIVATE)
         val maxStage = Stage.Identifier(prefs.getInt("MAX SERIES", 1), prefs.getInt("MAXSTAGE", 0))
         with (prefs.edit())
         {
@@ -306,18 +295,12 @@ class GameActivity : Activity() {
     fun loadSettings()
             /** load global configuration and debug settings from preferences */
     {
-        val prefs = getSharedPreferences(Persistency.filename_preferences, MODE_PRIVATE)
-        settings.configDisablePurchaseDialog = prefs.getBoolean("DISABLE_PURCHASE_DIALOG", false)
-        settings.configDisableBackground = prefs.getBoolean("DISABLE_BACKGROUND", false)
-        settings.configShowAttackersInRange = prefs.getBoolean("SHOW_ATTS_IN_RANGE", false)
-        settings.configUseLargeButtons = prefs.getBoolean("USE_LARGE_BUTTONS", false)
-        settings.showFrameRate = prefs.getBoolean("SHOW_FRAMERATE", false)
-        settings.keepLevels = prefs.getBoolean("KEEP_LEVELS", true)
-        settings.fastFastForward = prefs.getBoolean("USE_FAST_FAST_FORWARD", false)
+        val prefs = getSharedPreferences(Persistency.filename_settings, MODE_PRIVATE)
+        settings.loadFromFile(prefs)
     }
 
     fun setGameSpeed(speed: GameMechanics.GameSpeed) {
-        gameMechanics.global.speed = speed
+        gameMechanics.state.speed = speed
         if (speed == GameMechanics.GameSpeed.MAX) {
             updateDelay = fastForwardDelay
             if (settings.fastFastForward)
@@ -476,8 +459,7 @@ class GameActivity : Activity() {
     }
 
     fun setGameActivityStatus(status: GameActivityStatus) {
-        // TODO: better move to "state"
-        val prefs = getSharedPreferences(Persistency.filename_preferences, MODE_PRIVATE)
+        val prefs = getSharedPreferences(Persistency.filename_state, MODE_PRIVATE)
         val editor = prefs.edit()
         when (status) {
             GameActivityStatus.PLAYING -> editor.putString("STATUS", "running")

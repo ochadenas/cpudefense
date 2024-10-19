@@ -2,6 +2,7 @@ package com.example.cpudefense
 
 import android.app.Dialog
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
@@ -9,10 +10,13 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
+import java.util.prefs.Preferences
 
 
 class SettingsActivity : AppCompatActivity()
 {
+    var settings = Settings()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
@@ -21,37 +25,29 @@ class SettingsActivity : AppCompatActivity()
 
     private fun loadPrefs()
     {
-        val disablePurchaseDialog = findViewById<SwitchCompat>(R.id.switch_disable_purchase_dialog)
-        val disableBackgroundView = findViewById<SwitchCompat>(R.id.switch_disable_background)
-        val showRangeView = findViewById<SwitchCompat>(R.id.switch_show_atts_in_range)
-        val useLargeButtons = findViewById<SwitchCompat>(R.id.switch_use_large_buttons)
-        val showFrameRate = findViewById<SwitchCompat>(R.id.switch_show_framerate)
-        val fastFastForward = findViewById<SwitchCompat>(R.id.switch_fast_fast_forward)
-        val keepLevels = findViewById<SwitchCompat>(R.id.switch_keep_levels)
-        val prefs = getSharedPreferences(Persistency.filename_preferences, MODE_PRIVATE)
-        disablePurchaseDialog.isChecked = prefs.getBoolean("DISABLE_PURCHASE_DIALOG", false)
-        disableBackgroundView.isChecked = prefs.getBoolean("DISABLE_BACKGROUND", false)
-        showRangeView.isChecked = prefs.getBoolean("SHOW_ATTS_IN_RANGE", false)
-        useLargeButtons.isChecked = prefs.getBoolean("USE_LARGE_BUTTONS", false)
-        showFrameRate.isChecked = prefs.getBoolean("SHOW_FRAMERATE", false)
-        fastFastForward.isChecked = prefs.getBoolean("USE_FAST_FAST_FORWARD", false)
-        keepLevels.isChecked = prefs.getBoolean("KEEP_LEVELS", true)
+        val prefs = getSharedPreferences(Persistency.filename_settings, MODE_PRIVATE)
+        settings.loadFromFile(prefs)
+        findViewById<SwitchCompat>(R.id.switch_disable_purchase_dialog)?.isChecked = settings.configDisablePurchaseDialog
+        findViewById<SwitchCompat>(R.id.switch_disable_background)?.isChecked = settings.configDisableBackground
+        findViewById<SwitchCompat>(R.id.switch_show_atts_in_range)?.isChecked = settings.configShowAttackersInRange
+        findViewById<SwitchCompat>(R.id.switch_use_large_buttons)?.isChecked = settings.configUseLargeButtons
+        findViewById<SwitchCompat>(R.id.switch_show_framerate)?.isChecked = settings.showFrameRate
+        findViewById<SwitchCompat>(R.id.switch_fast_fast_forward)?.isChecked = settings.fastFastForward
+        findViewById<SwitchCompat>(R.id.switch_keep_levels)?.isChecked = settings.keepLevels
     }
 
     @Suppress("UNUSED_PARAMETER")
     fun savePrefs(v: View)
     {
-        val prefs = getSharedPreferences(Persistency.filename_preferences, MODE_PRIVATE)
-        prefs.edit().apply {
-            putBoolean("DISABLE_PURCHASE_DIALOG", findViewById<SwitchCompat>(R.id.switch_disable_purchase_dialog)?.isChecked ?: false)
-            putBoolean("DISABLE_BACKGROUND", findViewById<SwitchCompat>(R.id.switch_disable_background)?.isChecked ?: false)
-            putBoolean("SHOW_ATTS_IN_RANGE", findViewById<SwitchCompat>(R.id.switch_show_atts_in_range)?.isChecked ?: false)
-            putBoolean("USE_LARGE_BUTTONS", findViewById<SwitchCompat>(R.id.switch_use_large_buttons)?.isChecked ?: false)
-            putBoolean("SHOW_FRAMERATE", findViewById<SwitchCompat>(R.id.switch_show_framerate)?.isChecked ?: false)
-            putBoolean("USE_FAST_FAST_FORWARD", findViewById<SwitchCompat>(R.id.switch_fast_fast_forward)?.isChecked ?: false)
-            putBoolean("KEEP_LEVELS", findViewById<SwitchCompat>(R.id.switch_keep_levels)?.isChecked ?: true)
-            apply()
-        }
+        settings.configDisablePurchaseDialog = findViewById<SwitchCompat>(R.id.switch_disable_purchase_dialog)?.isChecked ?: false
+        settings.configDisableBackground = findViewById<SwitchCompat>(R.id.switch_disable_background)?.isChecked ?: false
+        settings.configShowAttackersInRange = findViewById<SwitchCompat>(R.id.switch_show_atts_in_range)?.isChecked ?: false
+        settings.configUseLargeButtons = findViewById<SwitchCompat>(R.id.switch_use_large_buttons)?.isChecked ?: false
+        settings.showFrameRate = findViewById<SwitchCompat>(R.id.switch_show_framerate)?.isChecked ?: false
+        settings.fastFastForward = findViewById<SwitchCompat>(R.id.switch_fast_fast_forward)?.isChecked ?: false
+        settings.keepLevels = findViewById<SwitchCompat>(R.id.switch_keep_levels)?.isChecked ?: true
+        val prefs = getSharedPreferences(Persistency.filename_settings, MODE_PRIVATE)
+        settings.saveToFile(prefs)
     }
 
     fun dismiss(@Suppress("UNUSED_PARAMETER") v: View)

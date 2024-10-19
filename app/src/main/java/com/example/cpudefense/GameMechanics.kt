@@ -105,6 +105,8 @@ class GameMechanics {
     data class StateData(
         /** whether the game is running, paused or between levels */
         var phase: GamePhase,
+        /** speed setting of the current level */
+        var speed: GameSpeed,
         /** level to begin the next game with */
         var startingLevel: Stage.Identifier,
         /** maximum number of lives */
@@ -126,6 +128,7 @@ class GameMechanics {
         )
     var state = StateData(
         phase = GamePhase.START,
+        speed = GameSpeed.NORMAL,
         startingLevel = Stage.Identifier(),
         maxLives = maxLivesPerStage,
         currentMaxLives = maxLivesPerStage,
@@ -134,9 +137,9 @@ class GameMechanics {
     )
 
     data class GlobalData(
-        var speed: GameSpeed = GameSpeed.NORMAL,
-        var coinsTotal: Int = 0
+        var coinsTotal: Int = 0  // deprecated. Use PurseOfCoins instead
     )
+
     var global = GlobalData()
     var stageData: Stage.Data? = null
     var summaryPerNormalLevel  = HashMap<Int, Stage.Summary>()
@@ -213,7 +216,7 @@ class GameMechanics {
              * and the function always returns the same value.
              */
     {
-        if (global.speed == GameSpeed.MAX)
+        if (state.speed == GameSpeed.MAX)
             return defaultSpeedFactor
         else
             return defaultSpeedFactor

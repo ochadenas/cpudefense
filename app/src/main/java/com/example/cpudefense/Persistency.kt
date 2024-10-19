@@ -16,7 +16,8 @@ class Persistency(private var activity: Activity)
     {
         // DO NOT change the file names,
         // this would break the saved games.
-        val filename_preferences = "prefs.xml"
+        val filename_legacy      = "prefs.xml"
+        val filename_settings    = "settings"
         val filename_structure   = "structure"
         val filename_thumbnails  = "thumbnails"
         val filename_saves       = "saves"
@@ -28,7 +29,9 @@ class Persistency(private var activity: Activity)
      * For historical reasons, there are some more data in this file, such as:
      *
      */
-    private val prefs: SharedPreferences = activity.getSharedPreferences(filename_preferences, AppCompatActivity.MODE_PRIVATE)
+    private val prefsLegacy: SharedPreferences = activity.getSharedPreferences(filename_legacy, AppCompatActivity.MODE_PRIVATE)
+    /** file for the user's preferences and settings */
+    private val prefsSettings: SharedPreferences = activity.getSharedPreferences(filename_settings, AppCompatActivity.MODE_PRIVATE)
     /** file that holds the structure of levels without any attackers. Used in ENDLESS series. */
     private val prefsStructure: SharedPreferences = activity.getSharedPreferences(filename_structure, AppCompatActivity.MODE_PRIVATE)
     /** file for the small thumbnails that are displayed in the level selector */
@@ -72,13 +75,22 @@ class Persistency(private var activity: Activity)
         val period: HashMap<Int, Hero.Holiday> = HashMap(),
     )
 
+    fun saveLevelState(gameMechanics: GameMechanics)
+            /** saves the state of the current level, i.e. the layout of the board, the level of chips,
+             * position of attackers, etc.
+             */
+    {
+
+
+    }
+
     fun saveState(gameMechanics: GameMechanics?)
             /** saves all data that is needed to continue a game later.
              * This includes levels completed and coins got,
              * but also the state of the currently running game.
              */
     {
-        val editor = prefs.edit()
+        val editor = prefsLegacy.edit()
         gameMechanics?.let {
             // save global data:
             var json = Gson().toJson(it.global)
@@ -105,8 +117,6 @@ class Persistency(private var activity: Activity)
             gameMechanics.purseOfCoins[GameMechanics.LevelMode.BASIC]?.contents?.let { purse -> purseData.basic = purse }
             gameMechanics.purseOfCoins[GameMechanics.LevelMode.ENDLESS]?.contents?.let { purse -> purseData.endless = purse }
             prefsSaves.edit().putString("coins", Gson().toJson(purseData)).commit()
-
-            // it.coins.values.forEach { purse -> purse.saveContentsOfPurse() }
         }
     }
 
@@ -127,13 +137,13 @@ class Persistency(private var activity: Activity)
             it.heroesByMode[GameMechanics.LevelMode.ENDLESS] =  loadHeroes(it, GameMechanics.LevelMode.ENDLESS)
 
             // get state of running game
-            val json = prefs.getString("state", "none")
+            val json = prefsLegacy.getString("state", "none")
             if (json != "none") {
                 val data: SerializableStateData =
                     Gson().fromJson(json, SerializableStateData::class.java)
                 it.state = data.general
                 it.stageData = data.stage
-                (activity as GameActivity).setGameSpeed(it.global.speed)  // restore game speed mode
+                (activity as GameActivity).setGameSpeed(it.state.speed)  // restore game speed mode
             }
 
             // load contents of purses
@@ -143,7 +153,7 @@ class Persistency(private var activity: Activity)
 
     private fun saveLevels(gameMechanics: GameMechanics?)
     {
-        val editor = prefs.edit()
+        val editor = prefsLegacy.edit()
         gameMechanics?.let {
             // level summary for series 1:
             var data = SerializableLevelSummary(it.summaryPerNormalLevel)
@@ -188,7 +198,7 @@ class Persistency(private var activity: Activity)
 
     fun saveHeroes(gameMechanics: GameMechanics)
     {
-        var editor = prefs.edit()
+        var editor = prefsLegacy.edit()
         val upgradesData = SerializableHeroData()
         for (hero in gameMechanics.heroes.values)
             upgradesData.upgrades.add(hero.data)
@@ -217,7 +227,7 @@ class Persistency(private var activity: Activity)
         Saving is done in saveState().
          */
     {
-        val json = prefs.getString("global", "none")
+        val json = prefsLegacy.getString("global", "none")
         if (json == "none")
             return GameMechanics.GlobalData()
         else
@@ -230,7 +240,7 @@ class Persistency(private var activity: Activity)
              */
     {
         try {
-            val json = prefs.getString(seriesKey[series], "none")
+            val json = prefsLegacy.getString(seriesKey[series], "none")
             val data: SerializableLevelSummary =
                 Gson().fromJson(json, SerializableLevelSummary::class.java)
             return data.level
@@ -248,14 +258,14 @@ class Persistency(private var activity: Activity)
             GameMechanics.SERIES_ENDLESS -> "thumbnail_%d_endless".format(level)
             else -> "thumbnail_%d".format(level)
         }
-        var encodedString = prefs.getString(key, "")
+        var encodedString = prefsLegacy.getString(key, "")
         if (encodedString != "")
         {
             // migrate into new thumbnails file
             val editorOfNewFile = prefsThumbnails.edit()
             editorOfNewFile.putString(key, encodedString)
             editorOfNewFile.apply()
-            val editorOfOldFile = prefs.edit()
+            val editorOfOldFile = prefsLegacy.edit()
             editorOfOldFile.remove(key)
             editorOfOldFile.apply()
         }
@@ -279,7 +289,7 @@ class Persistency(private var activity: Activity)
     fun loadHeroes(gameMechanics: GameMechanics, mode: GameMechanics.LevelMode?): HashMap<Hero.Type, Hero>
     {
         val heroMap = HashMap<Hero.Type, Hero>()
-        val file = if (mode == null) prefs else prefsSaves
+        val file = if (mode == null) prefsLegacy else prefsSaves
         val key = if (mode == null) "upgrades" else "heroes"
         val json = file.getString(key, "none")
         if (json == "none")
