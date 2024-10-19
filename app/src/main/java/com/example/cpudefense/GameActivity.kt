@@ -3,6 +3,7 @@ package com.example.cpudefense
 import android.app.Activity
 import android.app.Dialog
 import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.SystemClock
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
@@ -135,7 +136,7 @@ class GameActivity : Activity() {
             /** when completing a level, record the current number in the SharedPrefs.
              * @param identifier number of the level successfully completed */
     {
-        val prefs = getSharedPreferences(Persistency.filename_legacy, Context.MODE_PRIVATE)
+        val prefs = getSharedPreferences(Persistency.filename_state, Context.MODE_PRIVATE)
         with (prefs.edit())
         {
             putInt("LASTSTAGE", identifier.number)
@@ -150,8 +151,8 @@ class GameActivity : Activity() {
              * @param resetProgress If true, forces resetting the max stage to the given currentStage
              * */
     {
-        val prefs = getSharedPreferences(Persistency.filename_legacy, Context.MODE_PRIVATE)
-        val maxStage = Stage.Identifier(prefs.getInt("MAX SERIES", 1), prefs.getInt("MAXSTAGE", 0))
+        val prefs = getSharedPreferences(Persistency.filename_state, Context.MODE_PRIVATE)
+        val maxStage = Stage.Identifier(prefs.getInt("MAXSERIES", 1), prefs.getInt("MAXSTAGE", 0))
         with (prefs.edit())
         {
             if (resetProgress)

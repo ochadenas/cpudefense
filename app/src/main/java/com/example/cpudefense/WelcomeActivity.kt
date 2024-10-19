@@ -97,11 +97,46 @@ class WelcomeActivity : AppCompatActivity() {
 
     }
 
+    fun migrateLevelInfo(oldPrefs: SharedPreferences, newPrefs: SharedPreferences)
+            /** gets the level info out of the "old" prefs file and puts it into the "new" one.
+             * The keys are deleted from oldPrefs.
+             * This function is used for upgrade to version 1.44.
+             */
+    {
+        determineLevels(newPrefs)
+        if (maxLevel.series==1 && maxLevel.number==0)
+        {
+            // no level info, try to use old values
+            determineLevels(oldPrefs)
+            newPrefs.edit().apply() {
+                putInt("MAXSERIES", maxLevel.series)
+                putInt("MAXSTAGE", maxLevel.number)
+                putInt("LASTSERIES", nextLevelToPlay.series)
+                putInt("LASTSTAGE", nextLevelToPlay.number)
+                putBoolean("TURBO_AVAILABLE", turboSeriesAvailable)
+                putBoolean("ENDLESS_AVAILABLE", turboSeriesAvailable)
+                apply()
+            }
+            oldPrefs.edit().apply {
+                remove("MAXSERIES")
+                remove("MAXSTAGE")
+                remove("LASTSERIES")
+                remove("LASTSTAGE")
+                remove("TURBO_AVAILABLE")
+                remove("ENDLESS_AVAILABLE")
+                remove("STATUS")  // has also been migrated
+                apply()
+            }
+        }
+    }
+
     private fun setupButtons() {
-        val state = getSharedPreferences(Persistency.filename_state, MODE_PRIVATE)
-        gameState = state.getString("STATUS", "")
-        val prefs = getSharedPreferences(Persistency.filename_legacy, MODE_PRIVATE)
-        determineLevels(prefs)
+        val prefsState = getSharedPreferences(Persistency.filename_state, MODE_PRIVATE)
+        val prefsLegacy = getSharedPreferences(Persistency.filename_legacy, MODE_PRIVATE)
+        gameState = prefsState.getString("STATUS", "")
+        determineLevels(prefsState)
+        if (maxLevel.series == 1 && maxLevel.number == 0)  // no level info, try other file
+            migrateLevelInfo(prefsLegacy, prefsState)
         showLevelReached()
         val buttonResume = findViewById<Button>(R.id.continueGameButton)
         when {
