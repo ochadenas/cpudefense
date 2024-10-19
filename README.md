@@ -11,6 +11,7 @@ Currently, there are more than 25 heroes and heroines. The game comes with 32 pr
 ## Download
 
 [<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png" alt="Get it on F-Droid" height="64">](https://f-droid.org/packages/de.chadenas.cpudefense/) 
+
 This game is free to play. Find it on F-Droid, or get the latest APK from the [Releases Section](https://github.com/ochadenas/cpudefense/releases/latest).
 
      
