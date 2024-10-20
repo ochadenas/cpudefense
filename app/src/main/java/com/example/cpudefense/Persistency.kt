@@ -153,7 +153,7 @@ class Persistency(private var activity: Activity)
 
     private fun saveLevels(gameMechanics: GameMechanics?)
     {
-        val editor = prefsLegacy.edit()
+        val editor = prefsSaves.edit()
         gameMechanics?.let {
             // level summary for series 1:
             var data = SerializableLevelSummary(it.summaryPerNormalLevel)
@@ -238,7 +238,14 @@ class Persistency(private var activity: Activity)
              */
     {
         try {
-            val json = prefsLegacy.getString(seriesKey[series], "none")
+            val key = seriesKey[series]
+            var json = prefsSaves.getString(key, "none")
+            if (json == "none")
+            {
+                // Migration hack: If the data is not in saves.xml, get it from the legacy file and then delete it there.
+                json = prefsLegacy.getString(seriesKey[series], "none")
+            }
+            prefsLegacy.edit().let { it.remove(key); it.apply() }
             val data: SerializableLevelSummary =
                 Gson().fromJson(json, SerializableLevelSummary::class.java)
             return data.level
