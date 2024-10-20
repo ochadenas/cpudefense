@@ -197,7 +197,6 @@ class GameMechanics {
         heroes = persistency.loadHeroes(this, null) // load the upgrades gained so far
         heroesByMode[LevelMode.BASIC] = persistency.loadHeroes(this, LevelMode.BASIC)
         heroesByMode[LevelMode.ENDLESS] = persistency.loadHeroes(this, LevelMode.ENDLESS)
-        correctNumberOfCoins()
 
         // calculate coins
         persistency.loadCoins(this)
@@ -490,6 +489,8 @@ class GameMechanics {
             /** the purpose of this method is to verify if the total number of coins spent
              * corresponds to the coins got, and to correct this number if coins have been "lost"
              * due to corrupt save files etc.
+             *
+             * Removed in version 1.44 due to new heroes / purseOfCoins structure.
              */
     {
         var sumCoinsGot = 0
@@ -513,6 +514,7 @@ class GameMechanics {
          */
          global.coinsTotal = theoreticalAmountOfCoins + sumCoinsGot / 4
     }
+
     private fun migrateHeroes()
             /** method to separate heroes and coins between the modes of playing (basic/endless).
              * Called when migrating from 1.33 to 1.34

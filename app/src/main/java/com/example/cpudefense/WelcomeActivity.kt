@@ -207,7 +207,7 @@ class WelcomeActivity : AppCompatActivity() {
     fun showVersionMessage()
     /** display version message, if not already displayed earlier */
     {
-        val prefs = getSharedPreferences(Persistency.filename_legacy, MODE_PRIVATE)
+        val prefs = getSharedPreferences(Persistency.filename_state, MODE_PRIVATE)
         info?.let {
             val messageDisplayed = prefs.getString("VERSIONMESSAGE_SEEN", "")
             if (messageDisplayed != it.versionName) {

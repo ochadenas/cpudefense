@@ -198,11 +198,9 @@ class Persistency(private var activity: Activity)
 
     fun saveHeroes(gameMechanics: GameMechanics)
     {
+        // remove deprecated hero saves (prior to 1.34)
         var editor = prefsLegacy.edit()
-        val upgradesData = SerializableHeroData()
-        for (hero in gameMechanics.heroes.values)
-            upgradesData.upgrades.add(hero.data)
-        editor.putString("upgrades", Gson().toJson(upgradesData))
+        editor.remove("upgrades")
         editor.apply()
 
         editor = prefsSaves.edit()
@@ -287,6 +285,10 @@ class Persistency(private var activity: Activity)
     }
 
     fun loadHeroes(gameMechanics: GameMechanics, mode: GameMechanics.LevelMode?): HashMap<Hero.Type, Hero>
+            /** gets the heroes from the appropriate save file.
+             * @param mode The level series moder (normal or endless). If 'null', get teh data from
+             * the "old" heroes save file (now deprecated).
+              */
     {
         val heroMap = HashMap<Hero.Type, Hero>()
         val file = if (mode == null) prefsLegacy else prefsSaves
