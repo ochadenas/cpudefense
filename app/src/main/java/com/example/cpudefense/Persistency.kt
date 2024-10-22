@@ -12,16 +12,17 @@ import java.io.ByteArrayOutputStream
 
 class Persistency(private var activity: Activity)
 {
+    @Suppress("ConstPropertyName")
     companion object
     {
         // DO NOT change the file names,
         // this would break the saved games.
-        val filename_legacy      = "prefs.xml"
-        val filename_settings    = "settings"
-        val filename_structure   = "structure"
-        val filename_thumbnails  = "thumbnails"
-        val filename_saves       = "saves"
-        val filename_state       = "state"
+        const val filename_legacy      = "prefs.xml"
+        const val filename_settings    = "settings"
+        const val filename_structure   = "structure"
+        const val filename_thumbnails  = "thumbnails"
+        const val filename_saves       = "saves"
+        const val filename_state       = "state"
     }
 
     // define preferences files
@@ -31,6 +32,7 @@ class Persistency(private var activity: Activity)
      */
     private val prefsLegacy: SharedPreferences = activity.getSharedPreferences(filename_legacy, AppCompatActivity.MODE_PRIVATE)
     /** file for the user's preferences and settings */
+    @Suppress("unused")
     private val prefsSettings: SharedPreferences = activity.getSharedPreferences(filename_settings, AppCompatActivity.MODE_PRIVATE)
     /** file that holds the structure of levels without any attackers. Used in ENDLESS series. */
     private val prefsStructure: SharedPreferences = activity.getSharedPreferences(filename_structure, AppCompatActivity.MODE_PRIVATE)
@@ -81,7 +83,7 @@ class Persistency(private var activity: Activity)
              */
     {
         val editor = prefsSaves.edit()
-        var json = Gson().toJson(gameMechanics.currentlyActiveStage?.provideData())
+        val json = Gson().toJson(gameMechanics.currentlyActiveStage?.provideData())
         editor.putString("currentstage", json)
         editor.apply()
     }
@@ -92,7 +94,7 @@ class Persistency(private var activity: Activity)
      */
     {
         val editor = prefsState.edit()
-        var json = Gson().toJson(gameMechanics.state)
+        val json = Gson().toJson(gameMechanics.state)
         editor.putString("GENERAL", json)
         editor.apply()
     }
@@ -266,9 +268,8 @@ class Persistency(private var activity: Activity)
      * position of attackers, etc.
      */
     {
-        // TODO: bei RESUME kommt man hier zweimal vorbei
         val key = "currentstage"
-        var json = prefsSaves.getString(key, "none")
+        val json = prefsSaves.getString(key, "none")
         if (json != "none") {
             gameMechanics.stageData =
                 Gson().fromJson(json, Stage.Data::class.java)
@@ -282,7 +283,7 @@ class Persistency(private var activity: Activity)
              */
     {
         val key = "GENERAL"
-        var json = prefsSaves.getString(key, "none")
+        val json = prefsState.getString(key, "none")
         if (json != "none") {
             gameMechanics.state =
                 Gson().fromJson(json, GameMechanics.StateData::class.java)

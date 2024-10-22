@@ -207,14 +207,9 @@ class GameActivity : Activity() {
     }
 
     private fun resumeCurrentGame()
-            /** continues at exactly the same point within a level, restoring the complete game state.
-             */
+    /** continues at exactly the same point within a level, restoring the complete game state.
+     */
     {
-        Persistency(this).loadAllStageSummaries(gameMechanics)
-        Persistency(this).loadAllHeroes(gameMechanics)
-        Persistency(this).loadGeneralState(gameMechanics)
-        Persistency(this).loadCoins(gameMechanics)
-        Persistency(this).loadCurrentLevelState(gameMechanics)
         beginGame(resumeGame = true)
         if (gameMechanics.state.phase == GameMechanics.GamePhase.RUNNING) {
             runOnUiThread {
@@ -229,12 +224,13 @@ class GameActivity : Activity() {
     }
 
     fun beginGame(resetProgress: Boolean = false, resumeGame: Boolean = false)
+    /** Begins the current game on a chosen level. Also called when starting a completely
+     * new game.
+     * @param resetProgress If true, the whole game is started from the first level, and
+     * all coins and heroes are cleared. Otherwise, start on the level given in the saved state.
+     * @param resumeGame Continue the game within a level, at exactly the point where it has been left.
+     */
     {
-        /** Begins the current game on a chosen level. Also called when starting a completely
-         * new game.
-         * @param resetProgress If true, the whole game is started from the first level, and
-         * all coins and heroes are cleared. Otherwise, start on the level given in the saved state.
-         */
         loadSettings()
         if (resetProgress)
         {
