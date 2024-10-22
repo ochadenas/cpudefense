@@ -107,8 +107,6 @@ class GameMechanics {
         var phase: GamePhase,
         /** speed setting of the current level */
         var speed: GameSpeed,
-        /** level to begin the next game with */
-        var startingLevel: Stage.Identifier,
         /** maximum number of lives */
         var maxLives: Int,
         /** maximum number of lives, taking into account modifiers */
@@ -129,7 +127,6 @@ class GameMechanics {
     var state = StateData(
         phase = GamePhase.START,
         speed = GameSpeed.NORMAL,
-        startingLevel = Stage.Identifier(),
         maxLives = maxLivesPerStage,
         currentMaxLives = maxLivesPerStage,
         lives = 0,
@@ -178,15 +175,14 @@ class GameMechanics {
     enum class GamePhase { START, RUNNING, INTERMEZZO, MARKETPLACE, PAUSED }
     enum class GameSpeed { NORMAL, MAX }
 
-    fun beginGameAndResetProgress()
+    fun beginGameAndResetProgress(startingLevel: Stage.Identifier)
     {
         /** Begins a completely new game, starting from the first level.
          * All coins and heroes are cleared.
          */
-        state.startingLevel = Stage.Identifier(1,1)
         summaryPerNormalLevel = HashMap()
         summaryPerTurboLevel = HashMap()
-        currentStage = state.startingLevel
+        currentStage = startingLevel
     }
 
     inline fun globalSpeedFactor(): Float
@@ -335,6 +331,7 @@ class GameMechanics {
         activity.setGameActivityStatus(GameActivity.GameActivityStatus.PLAYING)
         calculateLives()
         calculateStartingCash()
+        activity.showStageMessage(nextStage.data.ident)
         activity.runOnUiThread {
             val toast: Toast = Toast.makeText(
                     activity,

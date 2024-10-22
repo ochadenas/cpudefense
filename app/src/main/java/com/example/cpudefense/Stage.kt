@@ -16,6 +16,10 @@ class Stage(var gameMechanics: GameMechanics, var gameView: GameView)
     class Identifier(var series: Int = GameMechanics.SERIES_NORMAL, var number: Int =0)
     /** A stage is identified by the combination of series (1 to 3) and the level number. */
     {
+        companion object {
+            val startOfNewGame = Identifier(GameMechanics.SERIES_NORMAL, 1)
+        }
+
         fun next(): Identifier
         /** returns an identifier of the next level */
         { return Identifier(series, number+1)}

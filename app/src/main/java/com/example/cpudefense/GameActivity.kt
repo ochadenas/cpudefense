@@ -24,7 +24,6 @@ import kotlinx.coroutines.launch
 class GameActivity : Activity() {
     lateinit var gameMechanics: GameMechanics
     lateinit var gameView: GameView
-    private var startOnLevel: Stage.Identifier? = null
     /** flag used to keep the threads running. Set to false when leaving activity */
     private var gameIsRunning = true
 
@@ -95,24 +94,32 @@ class GameActivity : Activity() {
         setupGameView()
 
         // determine what to do: resume, restart, or play next level
-        if (!intent.getBooleanExtra("RESET_PROGRESS", false)) {
-            startOnLevel = Stage.Identifier(
+        val restartGame = intent.getBooleanExtra("RESET_PROGRESS", false)
+        val startOnLevel =
+            if (restartGame)
+                Stage.Identifier.startOfNewGame
+            else
+                Stage.Identifier(
                     series = intent.getIntExtra("START_ON_SERIES", 1),
-                    number = intent.getIntExtra("START_ON_STAGE", 1)
-            )
-        } else
-            startOnLevel = null
+                    number = intent.getIntExtra("START_ON_STAGE", 1))
         if (!resumeGame)
             resumeGame = intent.getBooleanExtra("RESUME_GAME", false)
-        when {
-            resumeGame -> resumeCurrentGame()
-            startOnLevel == null -> startNewGame()
-            else -> startGameAtLevel(startOnLevel ?: Stage.Identifier())
-        }
+
+        beginGame(resumeGame = resumeGame, resetProgress = restartGame, startingLevel = startOnLevel)
+
+        if (resumeGame && gameMechanics.state.phase == GamePhase.RUNNING)
+            showStageMessage(gameMechanics.currentStage)
+
         gameIsRunning = true
         resumeGame = true // for the next time we come here
         setGameSpeed(GameMechanics.GameSpeed.NORMAL) // always start with normal speed
         startGameThreads()
+    }
+
+    fun showStageMessage(ident: Stage.Identifier)
+    {
+        runOnUiThread { Toast.makeText(this, resources.getString(R.string.toast_enter_stage).format(ident.number),
+                    Toast.LENGTH_SHORT).show() }
     }
 
     override fun onStop() {
@@ -176,11 +183,11 @@ class GameActivity : Activity() {
             when (identifier.series)
             {
                 1 ->
-                    if (identifier.number== com.example.cpudefense.GameMechanics.maxLevelAvailable)
+                    if (identifier.number== GameMechanics.maxLevelAvailable)
                         putBoolean("TURBO_AVAILABLE", true)
                 2 -> {
                     putBoolean("TURBO_AVAILABLE", true)
-                    if (identifier.number == com.example.cpudefense.GameMechanics.maxLevelAvailable)
+                    if (identifier.number == GameMechanics.maxLevelAvailable)
                         putBoolean("ENDLESS_AVAILABLE", true)
                 }
                 3 -> {
@@ -192,38 +199,9 @@ class GameActivity : Activity() {
         }
     }
 
-    private fun startNewGame()
-            /** starts a new game from level 1, discarding all progress */
-    {
-        setLastPlayedStage(Stage.Identifier())
-        beginGame(resetProgress = true)
-    }
-
-    private fun startGameAtLevel(level: Stage.Identifier)
-            /** continues a current match at a given level, keeping the progress and upgrades */
-    {
-        gameMechanics.state.startingLevel = level
-        beginGame(resetProgress = false)
-    }
-
-    private fun resumeCurrentGame()
-    /** continues at exactly the same point within a level, restoring the complete game state.
-     */
-    {
-        beginGame(resumeGame = true)
-        if (gameMechanics.state.phase == GameMechanics.GamePhase.RUNNING) {
-            runOnUiThread {
-                val toast: Toast = Toast.makeText(
-                        this,
-                        "Stage %d".format(gameMechanics.currentStage.number),
-                        Toast.LENGTH_SHORT
-                )
-                toast.show()
-            }
-        }
-    }
-
-    fun beginGame(resetProgress: Boolean = false, resumeGame: Boolean = false)
+    private fun beginGame(resetProgress: Boolean = false,
+                          resumeGame: Boolean = false,
+                          startingLevel: Stage.Identifier = Stage.Identifier())
     /** Begins the current game on a chosen level. Also called when starting a completely
      * new game.
      * @param resetProgress If true, the whole game is started from the first level, and
@@ -234,10 +212,10 @@ class GameActivity : Activity() {
         loadSettings()
         if (resetProgress)
         {
-            gameMechanics.beginGameAndResetProgress()
-            setLastPlayedStage(gameMechanics.state.startingLevel)
-            setMaxPlayedStage(gameMechanics.state.startingLevel, resetProgress=true)
-            prepareLevelAtStartOfGame(gameMechanics.state.startingLevel)
+            gameMechanics.beginGameAndResetProgress(Stage.Identifier.startOfNewGame)
+            setLastPlayedStage(Stage.Identifier.startOfNewGame)
+            setMaxPlayedStage(Stage.Identifier.startOfNewGame, resetProgress=true)
+            prepareLevelAtStartOfGame(Stage.Identifier.startOfNewGame)
         }
         else
         {
@@ -254,13 +232,13 @@ class GameActivity : Activity() {
                 resumeGame()
             else
             {
-                gameMechanics.currentStage = gameMechanics.state.startingLevel
-                prepareLevelAtStartOfGame(gameMechanics.state.startingLevel)
+                gameMechanics.currentStage = startingLevel
+                prepareLevelAtStartOfGame(startingLevel)
             }
         }
     }
 
-    fun resumeGame()
+    private fun resumeGame()
     /** function to resume a running game at exactly the point where the app was left. */
     {
         Persistency(this).loadCurrentLevelState(gameMechanics)
@@ -276,7 +254,7 @@ class GameActivity : Activity() {
         when (gameMechanics.state.phase)
         {
             GamePhase.MARKETPLACE -> {
-                gameView.marketplace.nextGameLevel = gameMechanics.state.startingLevel
+                gameView.marketplace.nextGameLevel = gameMechanics.currentStage
                 setGameActivityStatus(GameActivityStatus.BETWEEN_LEVELS)
             }
             GamePhase.INTERMEZZO -> {
@@ -307,7 +285,7 @@ class GameActivity : Activity() {
             effectsJob = GlobalScope.launch { delay(effectsDelay); updateGraphicalEffects(); }
     }
 
-    fun loadSettings()
+    private fun loadSettings()
             /** load global configuration and debug settings from preferences */
     {
         val prefs = getSharedPreferences(Persistency.filename_settings, MODE_PRIVATE)
@@ -349,7 +327,7 @@ class GameActivity : Activity() {
     }
 
     private fun replayLevel() {
-        gameMechanics.currentlyActiveStage?.let { startGameAtLevel(it.data.ident) }
+        gameMechanics.currentlyActiveStage?.let { beginGame(resetProgress = false, startingLevel = it.data.ident) }
     }
 
     fun showPurchaseLifeDialog(showHint: Boolean = true)
@@ -379,7 +357,7 @@ class GameActivity : Activity() {
         }
     }
 
-    fun prepareLevelAtStartOfGame(ident: Stage.Identifier)
+    private fun prepareLevelAtStartOfGame(ident: Stage.Identifier)
             /** function that is called when starting a new level from the main menu.
              * Does not get called when resuming a running game.
               */
@@ -433,7 +411,7 @@ class GameActivity : Activity() {
             }
             1 -> {
                 if (!settings.configDisablePurchaseDialog)
-                    runOnUiThread() { showPurchaseLifeDialog() }
+                    runOnUiThread { showPurchaseLifeDialog() }
             }
             else -> {}
         }
