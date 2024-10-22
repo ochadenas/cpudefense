@@ -167,7 +167,7 @@ class GameMechanics {
     var currentlyActiveStage: Stage? = null
 
     // other temporary variables
-    private var additionalCashDelay = 0
+    var additionalCashDelay = 0
     private var additionalCashTicks: Float = 0.0f
 
     /** time between frames in ms. Used by wait cycles in the game */
@@ -187,22 +187,6 @@ class GameMechanics {
         summaryPerNormalLevel = HashMap()
         summaryPerTurboLevel = HashMap()
         currentStage = state.startingLevel
-    }
-
-    fun beginGameWithoutResettingProgress(persistency: Persistency) {
-        global = persistency.loadGlobalData()
-        summaryPerNormalLevel = persistency.loadLevelSummaries(SERIES_NORMAL)
-        summaryPerTurboLevel = persistency.loadLevelSummaries(SERIES_TURBO)
-        summaryPerEndlessLevel = persistency.loadLevelSummaries(SERIES_ENDLESS)
-        heroes = persistency.loadHeroes(this, null) // load the upgrades gained so far
-        heroesByMode[LevelMode.BASIC] = persistency.loadHeroes(this, LevelMode.BASIC)
-        heroesByMode[LevelMode.ENDLESS] = persistency.loadHeroes(this, LevelMode.ENDLESS)
-
-        // calculate coins
-        persistency.loadCoins(this)
-        if (purseOfCoins[LevelMode.BASIC]?.initialized == false || forceHeroMigration )
-            migrateHeroes()
-        additionalCashDelay = heroModifier(Hero.Type.GAIN_CASH).toInt()
     }
 
     inline fun globalSpeedFactor(): Float
@@ -298,7 +282,8 @@ class GameMechanics {
                 GlobalScope.launch { delay(2000L); onEndOfStage(activity) }
             else {
                 onStageCleared(it, activity)
-                Persistency(activity).saveState(this)
+                Persistency(activity).saveGeneralState(this)
+                Persistency(activity).saveStageSummaries(this, currentStage.series)
                 activity.setGameActivityStatus(GameActivity.GameActivityStatus.BETWEEN_LEVELS)
             }
         }
@@ -331,6 +316,11 @@ class GameMechanics {
             setSummaryOfStage(nextStage, getSummaryOfStage(nextStage) ?: Stage.Summary())
             intermezzo.prepareLevel(nextStage, false)
         }
+        Persistency(activity).let {
+            it.saveCoins(this)
+            it.saveStageSummaries(this, currentStage.series)
+            it.saveGeneralState(this)
+        }
     }
 
     fun startNextStage(level: Stage.Identifier, activity: GameActivity)
@@ -358,11 +348,12 @@ class GameMechanics {
         setSummaryOfStage(level, nextStage.summary)
         state.heat = 0.0
         activity.setGameSpeed(GameSpeed.NORMAL)  // reset speed to normal when starting next stage
-        Persistency(activity).saveState(this)
         state.phase = GamePhase.RUNNING
         currentlyActiveWave = nextStage.nextWave()
         currentlyActiveStage = nextStage
         nextStage.gameView.resetAtStartOfStage()
+        Persistency(activity).saveCurrentLevelState(this)
+        Persistency(activity).saveGeneralState(this)
         takeLevelSnapshot(activity)
     }
 
@@ -515,7 +506,7 @@ class GameMechanics {
          global.coinsTotal = theoreticalAmountOfCoins + sumCoinsGot / 4
     }
 
-    private fun migrateHeroes()
+    fun migrateHeroes()
             /** method to separate heroes and coins between the modes of playing (basic/endless).
              * Called when migrating from 1.33 to 1.34
              */

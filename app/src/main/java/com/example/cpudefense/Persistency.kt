@@ -75,16 +75,38 @@ class Persistency(private var activity: Activity)
         val period: HashMap<Int, Hero.Holiday> = HashMap(),
     )
 
-    fun saveLevelState(gameMechanics: GameMechanics)
+    fun saveCurrentLevelState(gameMechanics: GameMechanics)
             /** saves the state of the current level, i.e. the layout of the board, the level of chips,
-             * position of attackers, etc.
+             * position of attackers, etc., and also their waves.
              */
     {
-
-
+        val editor = prefsSaves.edit()
+        var json = Gson().toJson(gameMechanics.currentlyActiveStage?.provideData())
+        editor.putString("currentstage", json)
+        editor.apply()
     }
 
-    fun saveState(gameMechanics: GameMechanics?)
+    fun saveGeneralState(gameMechanics: GameMechanics)
+    /** saves the state of the current level (but not the level layout).
+     * This includes current lives, speed control settings, game phase.
+     */
+    {
+        val editor = prefsState.edit()
+        var json = Gson().toJson(gameMechanics.state)
+        editor.putString("GENERAL", json)
+        editor.apply()
+    }
+
+    fun saveCoins(gameMechanics: GameMechanics)
+    {
+        val emptyContents = PurseOfCoins.Contents()
+        val purseData = SerializablePurseContents(basic = emptyContents, endless = emptyContents)
+        gameMechanics.purseOfCoins[GameMechanics.LevelMode.BASIC]?.contents?.let { purse -> purseData.basic = purse }
+        gameMechanics.purseOfCoins[GameMechanics.LevelMode.ENDLESS]?.contents?.let { purse -> purseData.endless = purse }
+        prefsSaves.edit().putString("coins", Gson().toJson(purseData)).apply()
+    }
+
+    private fun saveCompleteState(gameMechanics: GameMechanics?)
             /** saves all data that is needed to continue a game later.
              * This includes levels completed and coins got,
              * but also the state of the currently running game.
@@ -108,7 +130,7 @@ class Persistency(private var activity: Activity)
             saveHeroes(it)
 
             // save level data:
-            saveLevels(it)
+            saveAllStageSummaries(it)
             editor.apply()
 
             // save coins in purse:
@@ -120,54 +142,31 @@ class Persistency(private var activity: Activity)
         }
     }
 
-    fun loadState(gameMechanics: GameMechanics?)
+    fun saveStageSummaries(gameMechanics: GameMechanics, series: Int)
+            /** saves all summaries of the levels that belong to the given series
+             */
     {
-        gameMechanics?.let {
-            // get level data
-            it.summaryPerNormalLevel = loadLevelSummaries(GameMechanics.SERIES_NORMAL)
-            it.summaryPerTurboLevel = loadLevelSummaries(GameMechanics.SERIES_TURBO)
-            it.summaryPerEndlessLevel = loadLevelSummaries(GameMechanics.SERIES_ENDLESS)
-
-            // get global data
-            it.global = loadGlobalData()
-
-            // get upgrades
-            it.heroes = loadHeroes(it, null)
-            it.heroesByMode[GameMechanics.LevelMode.BASIC] =  loadHeroes(it, GameMechanics.LevelMode.BASIC)
-            it.heroesByMode[GameMechanics.LevelMode.ENDLESS] =  loadHeroes(it, GameMechanics.LevelMode.ENDLESS)
-
-            // get state of running game
-            val json = prefsLegacy.getString("state", "none")
-            if (json != "none") {
-                val data: SerializableStateData =
-                    Gson().fromJson(json, SerializableStateData::class.java)
-                it.state = data.general
-                it.stageData = data.stage
-                (activity as GameActivity).setGameSpeed(it.state.speed)  // restore game speed mode
-            }
-
-            // load contents of purses
-            loadCoins(gameMechanics)
+        val editor = prefsSaves.edit()
+        val data = when (series)
+        {
+            GameMechanics.SERIES_NORMAL -> SerializableLevelSummary(gameMechanics.summaryPerNormalLevel)
+            GameMechanics.SERIES_TURBO -> SerializableLevelSummary(gameMechanics.summaryPerTurboLevel)
+            GameMechanics.SERIES_ENDLESS -> SerializableLevelSummary(gameMechanics.summaryPerEndlessLevel)
+            else -> null
+        }
+        data?.let {
+            val json = Gson().toJson(it)
+            editor.putString(seriesKey[series], json)
+            editor.apply()
         }
     }
 
-    private fun saveLevels(gameMechanics: GameMechanics?)
+    private fun saveAllStageSummaries(gameMechanics: GameMechanics?)
     {
-        val editor = prefsSaves.edit()
         gameMechanics?.let {
-            // level summary for series 1:
-            var data = SerializableLevelSummary(it.summaryPerNormalLevel)
-            var json = Gson().toJson(data)
-            editor.putString(seriesKey[GameMechanics.SERIES_NORMAL], json)
-            // same for series 2:
-            data = SerializableLevelSummary(it.summaryPerTurboLevel)
-            json = Gson().toJson(data)
-            editor.putString(seriesKey[GameMechanics.SERIES_TURBO], json)
-            // for endless series:
-            data = SerializableLevelSummary(it.summaryPerEndlessLevel)
-            json = Gson().toJson(data)
-            editor.putString(seriesKey[GameMechanics.SERIES_ENDLESS], json)
-            editor.commit()
+            saveStageSummaries(it, GameMechanics.SERIES_NORMAL)
+            saveStageSummaries(it, GameMechanics.SERIES_TURBO)
+            saveStageSummaries(it, GameMechanics.SERIES_ENDLESS)
         }
     }
 
@@ -220,20 +219,80 @@ class Persistency(private var activity: Activity)
         editor.apply()
     }
 
-    fun loadGlobalData(): GameMechanics.GlobalData
+    fun loadState(gameMechanics: GameMechanics?)
+    {
+        gameMechanics?.let {
+            // get level data
+            loadAllStageSummaries(it)
+
+            // get global data
+            loadGlobalData(it)
+
+            // get upgrades
+            loadAllHeroes(it)
+
+            // get state of running game
+            loadGeneralState(it)
+
+            val json = prefsLegacy.getString("state", "none")
+            if (json != "none") {
+                val data: SerializableStateData =
+                    Gson().fromJson(json, SerializableStateData::class.java)
+                it.state = data.general
+                it.stageData = data.stage
+                (activity as GameActivity).setGameSpeed(it.state.speed)  // restore game speed mode
+            }
+
+            // load contents of purses
+            loadCoins(gameMechanics)
+        }
+    }
+
+    fun loadGlobalData(gameMechanics: GameMechanics)
     /** retrieve some global game data, such as total number of coins.
         Saving is done in saveState().
-         */
+     DEPRECATED.
+     */
     {
         val json = prefsLegacy.getString("global", "none")
         if (json == "none")
-            return GameMechanics.GlobalData()
+            gameMechanics.global = GameMechanics.GlobalData()
         else
-            return Gson().fromJson(json, GameMechanics.GlobalData::class.java)
+            gameMechanics.global = Gson().fromJson(json, GameMechanics.GlobalData::class.java)
     }
 
-    fun loadLevelSummaries(series: Int): HashMap<Int, Stage.Summary>
+    fun loadCurrentLevelState(gameMechanics: GameMechanics)
+    /** retrieves the state of the current level, i.e. the layout of the board, the level of chips,
+     * position of attackers, etc.
+     */
+    {
+        // TODO: bei RESUME kommt man hier zweimal vorbei
+        val key = "currentstage"
+        var json = prefsSaves.getString(key, "none")
+        if (json != "none") {
+            gameMechanics.stageData =
+                Gson().fromJson(json, Stage.Data::class.java)
+        }
+        prefsLegacy.edit().let { it.remove(key); it.apply() }
+    }
+
+    fun loadGeneralState(gameMechanics: GameMechanics)
+            /** loads the state of the current level (but not the level layout).
+             * This includes current lives, speed control settings, game phase.
+             */
+    {
+        val key = "GENERAL"
+        var json = prefsSaves.getString(key, "none")
+        if (json != "none") {
+            gameMechanics.state =
+                Gson().fromJson(json, GameMechanics.StateData::class.java)
+        }
+        prefsLegacy.edit().let { it.remove(key); it.apply() }
+    }
+
+    fun loadStageSummaries(series: Int): HashMap<Int, Stage.Summary>
             /** loads the summaries for the given series (1, 2, ...).
+             * @param series one of GameMechanics.SERIES_NORMAL, _TURBO, _ENDLESS
              * @return the set of all level summaries, or null if none can be found (or the series doesn't exist)
              */
     {
@@ -254,6 +313,13 @@ class Persistency(private var activity: Activity)
         {
             return hashMapOf()
         }
+    }
+
+    fun loadAllStageSummaries(gameMechanics: GameMechanics)
+    {
+        gameMechanics.summaryPerNormalLevel = loadStageSummaries(GameMechanics.SERIES_NORMAL)
+        gameMechanics.summaryPerTurboLevel = loadStageSummaries(GameMechanics.SERIES_TURBO)
+        gameMechanics.summaryPerEndlessLevel = loadStageSummaries(GameMechanics.SERIES_ENDLESS)
     }
 
     fun loadThumbnailOfLevel(level: Int, series: Int): Bitmap?
@@ -291,9 +357,16 @@ class Persistency(private var activity: Activity)
         return snapshot
     }
 
-    fun loadHeroes(gameMechanics: GameMechanics, mode: GameMechanics.LevelMode?): HashMap<Hero.Type, Hero>
+    fun loadAllHeroes(gameMechanics: GameMechanics)
+    {
+        gameMechanics.heroes = loadHeroes(gameMechanics, null)  // legacy, now deprecated
+        gameMechanics.heroesByMode[GameMechanics.LevelMode.BASIC] =  loadHeroes(gameMechanics, GameMechanics.LevelMode.BASIC)
+        gameMechanics.heroesByMode[GameMechanics.LevelMode.ENDLESS] =  loadHeroes(gameMechanics, GameMechanics.LevelMode.ENDLESS)
+    }
+
+    private fun loadHeroes(gameMechanics: GameMechanics, mode: GameMechanics.LevelMode?): HashMap<Hero.Type, Hero>
             /** gets the heroes from the appropriate save file.
-             * @param mode The level series moder (normal or endless). If 'null', get teh data from
+             * @param mode The level series mode (normal or endless). If 'null', get the data from
              * the "old" heroes save file (now deprecated).
               */
     {

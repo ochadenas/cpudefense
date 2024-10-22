@@ -3,7 +3,6 @@ package com.example.cpudefense
 import android.app.Activity
 import android.app.Dialog
 import android.content.Context
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.SystemClock
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
@@ -15,6 +14,8 @@ import android.widget.FrameLayout
 import android.widget.TextView
 import android.widget.Toast
 import com.example.cpudefense.GameMechanics.GamePhase
+import com.example.cpudefense.GameMechanics.LevelMode
+import com.example.cpudefense.GameMechanics.Params.forceHeroMigration
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -76,7 +77,8 @@ class GameActivity : Activity() {
     override fun onPause() {
         // this method get executed when the user presses the system's "back" button,
         // but also when she navigates to another app
-        Persistency(this).saveState(gameMechanics)
+        Persistency(this).saveGeneralState(gameMechanics)
+        Persistency(this).saveCurrentLevelState(gameMechanics)
         gameIsRunning = false
         super.onPause()
     }
@@ -109,6 +111,7 @@ class GameActivity : Activity() {
         }
         gameIsRunning = true
         resumeGame = true // for the next time we come here
+        setGameSpeed(GameMechanics.GameSpeed.NORMAL) // always start with normal speed
         startGameThreads()
     }
 
@@ -207,7 +210,11 @@ class GameActivity : Activity() {
             /** continues at exactly the same point within a level, restoring the complete game state.
              */
     {
-        Persistency(this).loadState(gameMechanics)
+        Persistency(this).loadAllStageSummaries(gameMechanics)
+        Persistency(this).loadAllHeroes(gameMechanics)
+        Persistency(this).loadGeneralState(gameMechanics)
+        Persistency(this).loadCoins(gameMechanics)
+        Persistency(this).loadCurrentLevelState(gameMechanics)
         beginGame(resumeGame = true)
         if (gameMechanics.state.phase == GameMechanics.GamePhase.RUNNING) {
             runOnUiThread {
@@ -238,8 +245,15 @@ class GameActivity : Activity() {
         }
         else
         {
-            val persistency = Persistency(this)
-            gameMechanics.beginGameWithoutResettingProgress(persistency)
+            Persistency(this).let {
+                it.loadAllStageSummaries(gameMechanics)
+                it.loadAllHeroes(gameMechanics)
+                it.loadGeneralState(gameMechanics)
+                it.loadCoins(gameMechanics)
+            }
+            if (gameMechanics.purseOfCoins[LevelMode.BASIC]?.initialized == false || forceHeroMigration )
+                gameMechanics.migrateHeroes()
+            gameMechanics.additionalCashDelay = gameMechanics.heroModifier(Hero.Type.GAIN_CASH).toInt() // TODO: nach gameMechanics verschieben
             if (resumeGame)
                 resumeGame()
             else
@@ -253,6 +267,7 @@ class GameActivity : Activity() {
     fun resumeGame()
     /** function to resume a running game at exactly the point where the app was left. */
     {
+        Persistency(this).loadCurrentLevelState(gameMechanics)
         gameMechanics.stageData?.let {
             gameMechanics.currentStage = it.ident
             gameMechanics.currentlyActiveStage = Stage.createStageFromData(gameMechanics, gameView, it)
@@ -273,15 +288,18 @@ class GameActivity : Activity() {
             }
             GamePhase.START -> {
                 setGameActivityStatus(GameActivityStatus.BETWEEN_LEVELS)
+                gameMechanics.currentlyActiveStage?.let {
+                    gameMechanics.currentlyActiveWave = if (it.waves.size > 0) it.waves[0]
+                    else it.nextWave() }
             }
             else -> {
                 gameMechanics.currentlyActiveStage?.let {
                     gameMechanics.currentlyActiveWave = if (it.waves.size > 0) it.waves[0]
                     else it.nextWave()
                 }
-                gameMechanics.state.phase = GamePhase.RUNNING
             }
         }
+        gameMechanics.state.phase = GamePhase.RUNNING
     }
 
     private fun startGameThreads() {
@@ -302,6 +320,7 @@ class GameActivity : Activity() {
 
     fun setGameSpeed(speed: GameMechanics.GameSpeed) {
         gameMechanics.state.speed = speed
+        Persistency(this).saveGeneralState(gameMechanics)
         if (speed == GameMechanics.GameSpeed.MAX) {
             updateDelay = fastForwardDelay
             if (settings.fastFastForward)
@@ -328,7 +347,8 @@ class GameActivity : Activity() {
     }
 
     private fun returnToMainMenu() {
-        Persistency(this).saveState(gameMechanics)
+        Persistency(this).saveGeneralState(gameMechanics)
+        Persistency(this).saveCurrentLevelState(gameMechanics)
         finish()
     }
 
@@ -408,6 +428,7 @@ class GameActivity : Activity() {
     private fun removeOneLife()
     {
         val livesLeft = gameMechanics.removeOneLife()
+        Persistency(this).saveGeneralState(gameMechanics)
         when (livesLeft)
         {
             0-> {
@@ -425,7 +446,8 @@ class GameActivity : Activity() {
     private fun restoreOneLife()
     {
         gameMechanics.restoreOneLife()
-        Persistency(this).saveState(gameMechanics)
+        Persistency(this).saveGeneralState(gameMechanics)
+        Persistency(this).saveCoins(gameMechanics)
     }
 
     private fun display()

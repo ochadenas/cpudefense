@@ -92,7 +92,7 @@ class LevelSelectActivity : AppCompatActivity() {
         when (series)
         {
             GameMechanics.SERIES_NORMAL -> {
-                levels = Persistency(this).loadLevelSummaries(GameMechanics.SERIES_NORMAL)
+                levels = Persistency(this).loadStageSummaries(GameMechanics.SERIES_NORMAL)
                 populateStageList(
                         listView, levels, GameMechanics.SERIES_NORMAL, resources.getColor(R.color.text_green),
                         resources.getColor(R.color.text_lightgreen)
@@ -100,7 +100,7 @@ class LevelSelectActivity : AppCompatActivity() {
             }
             GameMechanics.SERIES_TURBO-> {
                 if (isTurboAvailable) {
-                    levels = Persistency(this).loadLevelSummaries(GameMechanics.SERIES_TURBO)
+                    levels = Persistency(this).loadStageSummaries(GameMechanics.SERIES_TURBO)
                     populateStageList(
                             listView, levels, GameMechanics.SERIES_NORMAL, resources.getColor(R.color.text_amber),
                             resources.getColor(R.color.text_lightamber)
@@ -121,7 +121,7 @@ class LevelSelectActivity : AppCompatActivity() {
             }
             GameMechanics.SERIES_ENDLESS -> {
                 if (isEndlessAvailable) {
-                    levels = Persistency(this).loadLevelSummaries(GameMechanics.SERIES_ENDLESS)
+                    levels = Persistency(this).loadStageSummaries(GameMechanics.SERIES_ENDLESS)
                     populateStageList(
                             listView, levels, GameMechanics.SERIES_ENDLESS, resources.getColor(R.color.text_red),
                             resources.getColor(R.color.text_lightred)

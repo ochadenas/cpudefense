@@ -168,7 +168,7 @@ class Marketplace(val gameView: GameView): GameElement()
                     Fader(gameView, coins.last(), Fader.Type.DISAPPEAR)
                     it.doUpgrade()
                     gameMechanics.currentHeroes(nextGameLevel)[it.data.type] = it
-                    Persistency(gameView.gameActivity).saveHeroes(gameMechanics)
+                    save()
                     fillMarket(nextGameLevel)
                     makeButtonText(it)
                 }
@@ -218,8 +218,7 @@ class Marketplace(val gameView: GameView): GameElement()
             purse.spend(-refund)
             card.resetUpgrade()
         }
-        Persistency(gameView.gameActivity).saveHeroes(gameMechanics)
-        Persistency(gameView.gameActivity).saveState(gameMechanics)
+        save()
         fillMarket(nextGameLevel)
         makeButtonText(null)
     }
@@ -254,11 +253,17 @@ class Marketplace(val gameView: GameView): GameElement()
             }
 
         }
-        Persistency(gameView.gameActivity).saveHeroes(gameMechanics)
-        Persistency(gameView.gameActivity).saveState(gameMechanics)
+        save()
         fillMarket(nextGameLevel)
         makeButtonText(hero)
     }
+
+    private fun save() {
+        Persistency(gameView.gameActivity).saveHeroes(gameMechanics)
+        Persistency(gameView.gameActivity).saveCoins(gameMechanics)
+    }
+
+
     @Suppress("UNUSED_PARAMETER")
     fun onScroll(event1: MotionEvent?, event2: MotionEvent?, dX: Float, dY: Float): Boolean {
         val scrollFactor = 1.1f  // higher values make scrolling faster
