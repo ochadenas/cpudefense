@@ -26,8 +26,9 @@ class Hero(var gameActivity: GameActivity, type: Type)
     - Berners-Lee?
     - Torvalds
     - Baudot
-    - John Conway
     - Auguste Kerckhoff?
+    - Al Chwarizmi
+    - Josef Čapek
      */
 
     enum class Type { INCREASE_CHIP_SUB_SPEED, INCREASE_CHIP_SUB_RANGE, DOUBLE_HIT_SUB,
