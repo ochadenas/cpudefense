@@ -1,0 +1,11 @@
+New features:
+- New hero: John Conway
+- Some more "Did you know" texts.
+
+Bug fixes:
+- Some fixes to the "purchase lives" dialogue
+
+Miscellaneous:
+- Major re-organisation of save files. This should result in faster loading, and generally
+  less laggy behaviour of the app.
+
