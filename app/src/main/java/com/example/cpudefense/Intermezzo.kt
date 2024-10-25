@@ -27,6 +27,7 @@ class Intermezzo(var gameView: GameView): GameElement(), Fadable {
     var level = Stage.Identifier()
     val resources: Resources = gameView.resources
     var alpha = 0
+    var paintLine = Paint()
     private val activity = gameView.gameActivity
     private var myArea = Rect()
     private var typewriter: Typewriter? = null
@@ -41,6 +42,7 @@ class Intermezzo(var gameView: GameView): GameElement(), Fadable {
     var coinsGathered = 0
     var durationOfLeave = 2
 
+    private val widthOfConsoleLine = 4
     private var textOnContinueButton = ""
 
     enum class Type {STARTING_LEVEL, NORMAL_LEVEL, GAME_LOST, GAME_WON}
@@ -109,6 +111,20 @@ class Intermezzo(var gameView: GameView): GameElement(), Fadable {
             }
         }
         typewriter = Typewriter(gameView, myArea, lines) { onTypewriterDone() }
+    }
+
+    private fun heightOfConsoleLine(): Int
+    {
+        var y = myArea.bottom - 80  // TODO: define in one place
+        typewriter?.let { y = it.topOfTypewriterArea() }
+        return y
+    }
+
+    fun displayLine(canvas: Canvas, y: Int)
+    {
+        paintLine.style = Paint.Style.FILL_AND_STROKE
+        paintLine.color = resources.getColor(R.color.text_green)
+        canvas.drawRect(Rect(0, y-widthOfConsoleLine, gameView.right, y), paintLine)
     }
 
     private fun heroesOnLeaveText(): List<String>
@@ -192,6 +208,7 @@ class Intermezzo(var gameView: GameView): GameElement(), Fadable {
         buttonContinue?.display(canvas)
         buttonPurchase?.display(canvas)
         heroSelection?.display(canvas, viewport)
+        displayLine(canvas, heightOfConsoleLine())
     }
 
     fun onDown(event: MotionEvent): Boolean {
