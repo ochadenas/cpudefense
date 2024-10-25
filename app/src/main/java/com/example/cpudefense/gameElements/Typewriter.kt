@@ -9,6 +9,7 @@ import com.example.cpudefense.R
 import com.example.cpudefense.effects.Fadable
 import com.example.cpudefense.effects.Fader
 import java.util.concurrent.CopyOnWriteArrayList
+import kotlin.reflect.typeOf
 
 class Typewriter(val gameView: GameView, myArea: Rect, private var lines: CopyOnWriteArrayList<String>, private var callback: (() -> Unit)?)
 {
@@ -16,6 +17,7 @@ class Typewriter(val gameView: GameView, myArea: Rect, private var lines: CopyOn
     private var textBoxes = CopyOnWriteArrayList<TextBox>()
     private val pos = Pair(myArea.left + 50, myArea.bottom - 80)
     private val lineSpacingY = GameMechanics.computerTextSize * gameView.textScaleFactor * 1.8f
+    private val widthOfConsoleLine = 4
 
     init { showNextLine() }
 
@@ -33,6 +35,14 @@ class Typewriter(val gameView: GameView, myArea: Rect, private var lines: CopyOn
 
     fun display(canvas: Canvas) {
         textBoxes.map { it.display(canvas) }
+        textBoxes[0]?.let { it.displayLine(canvas, heightOfConsoleLine()) }
+    }
+
+    private fun heightOfConsoleLine(): Int
+    {
+        var y = pos.second
+        textBoxes[0]?.let { y = it.y.toInt() }
+        return (y - lineSpacingY).toInt()
     }
 
     inner class TextBox(val gameView: GameView, var text: String, topLeft: Pair<Int, Int>, private var callback: (() -> Unit)?):
@@ -43,10 +53,14 @@ class Typewriter(val gameView: GameView, myArea: Rect, private var lines: CopyOn
         private var stringLength = 0 // number of characters to display
         var x = topLeft.first.toFloat()
         var y = topLeft.second.toFloat()
-        val paint = Paint()
+        val paintText = Paint()
+        private var paintLine = Paint()
 
         init {
             Fader(gameView, this, Fader.Type.APPEAR, Fader.Speed.SLOW)
+            paintText.color = resources.getColor(R.color.text_green)
+            paintText.typeface = gameView.monoTypeface
+            paintText.textSize = textSize
         }
 
         override fun fadeDone(type: Fader.Type) {
@@ -62,12 +76,17 @@ class Typewriter(val gameView: GameView, myArea: Rect, private var lines: CopyOn
                 text.substring(0, stringLength) + "█"
             else
                 text.substring(0, stringLength)
-            val paint = Paint()
-            paint.color = resources.getColor(R.color.text_green)
-            paint.typeface = gameView.monoTypeface
-            paint.textSize = textSize
-            paint.alpha = alpha
-            canvas.drawText(stringToDisplay, x, y, paint)
+            paintText.alpha = alpha
+            canvas.drawText(stringToDisplay, x, y, paintText)
+        }
+
+        fun displayLine(canvas: Canvas, y: Int)
+        {
+            paintLine.style = Paint.Style.FILL_AND_STROKE
+            paintLine.color = paintText.color
+            canvas.drawRect(Rect(0, y, gameView.right, y+widthOfConsoleLine), paintLine)
+            paintLine.color = resources.getColor(R.color.text_lightgreen)
+            canvas.drawRect(Rect(0, y, gameView.right, y), paintLine)
         }
 
     }
