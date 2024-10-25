@@ -58,7 +58,10 @@ class Typewriter(val gameView: GameView, myArea: Rect, private var lines: CopyOn
         }
 
         fun display(canvas: Canvas) {
-            val stringToDisplay = text.substring(0, stringLength)
+            val stringToDisplay = if (text.length > stringLength)
+                text.substring(0, stringLength) + "█"
+            else
+                text.substring(0, stringLength)
             val paint = Paint()
             paint.color = resources.getColor(R.color.text_green)
             paint.typeface = gameView.monoTypeface
