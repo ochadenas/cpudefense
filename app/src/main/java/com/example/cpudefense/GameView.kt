@@ -37,6 +37,27 @@ class GameView(context: Context):
     SurfaceView(context), SurfaceHolder.Callback,
     GestureDetector.OnGestureListener
 {
+    companion object {
+        // defaut sizes for graphical game elements.
+        const val scoreTextSize = 36f
+        const val scoreHeaderSize = 18f
+        const val chipTextSize = 20f
+        const val computerTextSize = 26f
+        const val notificationTextSize = 22f
+        const val instructionTextSize = 22f
+        const val biographyTextSize = 20f
+        const val heroCardNameSize = 18f
+        const val heroCardTextSize = 14f
+        const val purchaseButtonTextSize = 20f
+
+        const val coinSizeOnScoreboard = 48
+        const val coinSizeOnScreen = 16
+        const val cardWidth = 220
+        const val cardHeight = cardWidth * 1.41
+        const val cardPictureSize = cardWidth * 2 / 3
+        const val preferredSizeOfLED = 20  // horizontal size of LEDs, can be smaller if there is too little space
+    }
+
     val gameActivity = context as GameActivity
     val gameMechanics = gameActivity.gameMechanics
     var canvas: Canvas? = null

@@ -27,7 +27,7 @@ class Intermezzo(var gameView: GameView): GameElement(), Fadable {
     var level = Stage.Identifier()
     val resources: Resources = gameView.resources
     var alpha = 0
-    var paintLine = Paint()
+    private var paintLine = Paint()
     private val activity = gameView.gameActivity
     private var myArea = Rect()
     private var typewriter: Typewriter? = null
@@ -120,7 +120,7 @@ class Intermezzo(var gameView: GameView): GameElement(), Fadable {
         return y
     }
 
-    fun displayLine(canvas: Canvas, y: Int)
+    private fun displayLine(canvas: Canvas, y: Int)
     {
         paintLine.style = Paint.Style.FILL_AND_STROKE
         paintLine.color = resources.getColor(R.color.text_green)
@@ -172,7 +172,7 @@ class Intermezzo(var gameView: GameView): GameElement(), Fadable {
     {
         val bottomMargin = 40
         buttonContinue = Button(gameView, textOnContinueButton,
-                                textSize = GameMechanics.computerTextSize * gameView.textScaleFactor,
+                                textSize = GameView.computerTextSize * gameView.textScaleFactor,
                                 color = resources.getColor(R.color.text_green), style = Button.Style.FILLED)
         val buttonTop = myArea.bottom - (buttonContinue?.area?.height() ?: 20) - bottomMargin
         buttonContinue?.let {
@@ -183,7 +183,7 @@ class Intermezzo(var gameView: GameView): GameElement(), Fadable {
         if (level.number > 6 || level.series != GameMechanics.SERIES_NORMAL)  // level 6 in series 1 is the first one where coins may be present
         {
             buttonPurchase = Button(gameView, resources.getString(R.string.button_marketplace),
-                                    textSize = GameMechanics.computerTextSize * gameView.textScaleFactor,
+                                    textSize = GameView.computerTextSize * gameView.textScaleFactor,
                                     color = resources.getColor(R.color.text_blue), style = Button.Style.FILLED)
             buttonPurchase?.let {
                 Fader(gameView, it, Fader.Type.APPEAR, Fader.Speed.SLOW)
@@ -235,8 +235,6 @@ class Intermezzo(var gameView: GameView): GameElement(), Fadable {
         if (dY == 0f)
             return false  // only vertical movements are considered here
         event1?.let {
-            val posX = it.x.toInt()
-            val posY = it.y.toInt()
             instructions?.let {
                 it.vertOffset += dY * scrollFactor
                 val max = it.myArea.height().toFloat()
@@ -391,7 +389,7 @@ class Intermezzo(var gameView: GameView): GameElement(), Fadable {
             val cardWidth  = heroesAskingToTakeLeave.first().card.cardArea.width()
             val cardHeight = heroesAskingToTakeLeave.first().card.cardArea.height()
             val margin = (20 * gameView.scaleFactor).toInt()
-            val textLineHeight = GameMechanics.instructionTextSize * gameView.textScaleFactor // approx.
+            val textLineHeight = GameView.instructionTextSize * gameView.textScaleFactor // approx.
             val top = containingRect.top + (6*textLineHeight).toInt()
             val bottom = top + 2*cardHeight + 3*margin
             myOuterArea = Rect(0, 0, containingRect.right, bottom)

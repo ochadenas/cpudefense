@@ -136,7 +136,7 @@ class ChipUpgrade(
         paintFrame.color = if (type== Chip.ChipUpgrades.SELL) Color.RED else color
 
         val newCanvas = Canvas(bitmap)
-        paintText.textSize = GameMechanics.chipTextSize * gameView.textScaleFactor
+        paintText.textSize = GameView.chipTextSize * gameView.textScaleFactor
         paintText.alpha = 255
         paintText.typeface = gameView.boldTypeface
         paintText.textAlign = Paint.Align.CENTER
@@ -159,7 +159,7 @@ class ChipUpgrade(
         paintBackground.alpha = 40
         paintBackground.color = Color.BLACK
         paintText.typeface = Typeface.create("sans-serif-condensed", Typeface.ITALIC)
-        paintText.textSize = (GameMechanics.chipTextSize - 0) * gameView.textScaleFactor
+        paintText.textSize = (GameView.chipTextSize - 0) * gameView.textScaleFactor
         paintText.color = if (canAfford()) paintFrame.color else Color.YELLOW
         val priceText = gameView.scoreBoard.informationToString(price)
         paintText.getTextBounds(priceText, 0, priceText.length, labelRect)

@@ -97,7 +97,7 @@ class WelcomeActivity : AppCompatActivity() {
 
     }
 
-    fun migrateLevelInfo(oldPrefs: SharedPreferences, newPrefs: SharedPreferences)
+    private fun migrateLevelInfo(oldPrefs: SharedPreferences, newPrefs: SharedPreferences)
             /** gets the level info out of the "old" prefs file and puts it into the "new" one.
              * The keys are deleted from oldPrefs.
              * This function is used for upgrade to version 1.44.
@@ -108,7 +108,7 @@ class WelcomeActivity : AppCompatActivity() {
         {
             // no level info, try to use old values
             determineLevels(oldPrefs)
-            newPrefs.edit().apply() {
+            newPrefs.edit().apply {
                 putInt("MAXSERIES", maxLevel.series)
                 putInt("MAXSTAGE", maxLevel.number)
                 putInt("LASTSERIES", nextLevelToPlay.series)

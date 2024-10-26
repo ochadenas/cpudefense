@@ -2,21 +2,21 @@
 
 package com.example.cpudefense.gameElements
 
-import android.graphics.*
-import com.example.cpudefense.GameMechanics
+import android.graphics.Canvas
+import android.graphics.Paint
+import android.graphics.Rect
 import com.example.cpudefense.GameView
 import com.example.cpudefense.R
 import com.example.cpudefense.effects.Fadable
 import com.example.cpudefense.effects.Fader
 import java.util.concurrent.CopyOnWriteArrayList
-import kotlin.reflect.typeOf
 
 class Typewriter(val gameView: GameView, myArea: Rect, private var lines: CopyOnWriteArrayList<String>, private var callback: (() -> Unit)?)
 {
     private var resources = gameView.resources
     private var textBoxes = CopyOnWriteArrayList<TextBox>()
     private val pos = Pair(myArea.left + 50, myArea.bottom - 80)
-    private val lineSpacingY = GameMechanics.computerTextSize * gameView.textScaleFactor * 1.8f
+    private val lineSpacingY = GameView.computerTextSize * gameView.textScaleFactor * 1.8f
     private var paintLine = Paint()
 
     init { showNextLine() }
@@ -49,11 +49,11 @@ class Typewriter(val gameView: GameView, myArea: Rect, private var lines: CopyOn
         Fadable
     {
         var alpha = 255
-        val textSize = GameMechanics.computerTextSize * gameView.textScaleFactor
+        val textSize = GameView.computerTextSize * gameView.textScaleFactor
         private var stringLength = 0 // number of characters to display
         var x = topLeft.first.toFloat()
         var y = topLeft.second.toFloat()
-        val paintText = Paint()
+        private val paintText = Paint()
 
         init {
             Fader(gameView, this, Fader.Type.APPEAR, Fader.Speed.SLOW)

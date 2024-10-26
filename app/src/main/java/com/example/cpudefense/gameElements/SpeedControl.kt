@@ -62,13 +62,14 @@ class SpeedControl(var gameView: GameView)
         }
     }
 
-    fun recreateBitmap()
+    @Suppress("DEPRECATION")
+    private fun recreateBitmap()
     {
         bitmapPaint.alpha = 255
         val paint = Paint()
         paint.color = gameView.resources.getColor(R.color.connectors)
         paint.typeface = Typeface.SANS_SERIF
-        paint.textSize = GameMechanics.scoreHeaderSize * gameView.textScaleFactor
+        paint.textSize = GameView.scoreHeaderSize * gameView.textScaleFactor
         paint.textAlign = Paint.Align.LEFT
         val bounds = Rect()
         paint.getTextBounds(stageInfoText, 0, stageInfoText.length, bounds)

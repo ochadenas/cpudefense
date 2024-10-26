@@ -7,6 +7,7 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Rect
 import com.example.cpudefense.GameMechanics
+import com.example.cpudefense.GameView
 import com.example.cpudefense.R
 import com.example.cpudefense.effects.Flippable
 import com.example.cpudefense.effects.Flipper
@@ -25,7 +26,7 @@ class Cryptocoin(network: com.example.cpudefense.networkmap.Network, number: ULo
         this.animationCount *= 2
     }
     override fun display(canvas: Canvas, viewport: Viewport) {
-        val size =  (GameMechanics.coinSizeOnScreen * network.gameView.resources.displayMetrics.scaledDensity).toInt()
+        val size =  (GameView.coinSizeOnScreen * network.gameView.resources.displayMetrics.scaledDensity).toInt()
         actualRect = Rect(0, 0, size, size)
         actualRect.setCenter(getPositionOnScreen())
         actualRect.offset(displacement.first, displacement.second)

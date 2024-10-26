@@ -31,7 +31,7 @@ class Instructions(val gameView: GameView, var stage: Stage.Identifier, var show
         resources.getString(R.string.instr_did_you_know) + "\n\n" +
         resources.getStringArray(R.array.fun_fact).random()
     else ""
-    private val textSize = GameMechanics.computerTextSize * gameView.textScaleFactor
+    private val textSize = GameView.computerTextSize * gameView.textScaleFactor
     private var bitmap: Bitmap = createBitmap(instructionText(stage.number), gameView.width-2*margin)
 
     fun setTextArea(rect: Rect)
@@ -116,8 +116,8 @@ class Instructions(val gameView: GameView, var stage: Stage.Identifier, var show
             if (showLeaveDialogue) resources.getColor(R.color.text_green)
             else Color.WHITE
         textPaint.alpha = 255
-        var textLayout = StaticLayout(text, textPaint, width,
-                     Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false)
+        val textLayout = StaticLayout(text, textPaint, width,
+                                      Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false)
         val bitmap = Bitmap.createBitmap(textLayout.width, textLayout.height, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)
         textLayout.draw(canvas)

@@ -656,7 +656,7 @@ class Hero(var gameActivity: GameActivity, type: Type)
                 paintBiography.color = selected?.card?.inactiveColor ?: Color.WHITE
             }
             canvas.drawColor(Color.BLACK)
-            paintBiography.textSize = GameMechanics.biographyTextSize*gameActivity.gameView.textScaleFactor
+            paintBiography.textSize = GameView.biographyTextSize*gameActivity.gameView.textScaleFactor
             paintBiography.alpha = 255
             val textLayout = StaticLayout(
                 text, paintBiography, myArea.width(),

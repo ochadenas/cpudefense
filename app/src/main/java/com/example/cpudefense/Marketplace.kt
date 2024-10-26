@@ -45,7 +45,7 @@ class Marketplace(val gameView: GameView): GameElement()
     {
         myArea = Rect(area)
         val margin = (120 * gameView.scaleFactor).toInt()
-        cardsArea = Rect(margin, margin, ((GameMechanics.cardWidth + 20)*gameView.scaleFactor).toInt(), myArea.bottom)
+        cardsArea = Rect(margin, margin, ((GameView.cardWidth + 20)*gameView.scaleFactor).toInt(), myArea.bottom)
         coinSize = 80 * margin / 100
         biographyArea= Rect(cardsArea.right+biographyAreaMargin, margin, myArea.right-biographyAreaMargin, myArea.bottom-biographyAreaMargin)
         createButton()
@@ -100,21 +100,21 @@ class Marketplace(val gameView: GameView): GameElement()
     {
         val bottomMargin = 40
         buttonFinish = Button(gameView, resources.getString(R.string.button_playlevel),
-                              textSize = GameMechanics.purchaseButtonTextSize * gameView.textScaleFactor,
+                              textSize = GameView.purchaseButtonTextSize * gameView.textScaleFactor,
                               style = Button.Style.HP_KEY, preferredWidth = biographyArea.width())
         buttonFinish?.let {
             Fader(gameView, it, Fader.Type.APPEAR, Fader.Speed.SLOW)
             it.alignRight(biographyArea.right, myArea.bottom - bottomMargin - it.area.height())
         }
         buttonRefund = Button(gameView, resources.getString(R.string.button_refund_all),
-                              textSize = GameMechanics.purchaseButtonTextSize * gameView.textScaleFactor,
+                              textSize = GameView.purchaseButtonTextSize * gameView.textScaleFactor,
                               style = Button.Style.HP_KEY, preferredWidth = biographyArea.width())
         buttonRefund?.let {
             Fader(gameView, it, Fader.Type.APPEAR, Fader.Speed.SLOW)
             it.alignRight(biographyArea.right, myArea.bottom - bottomMargin - 2*it.area.height())
         }
         buttonPurchase = Button(gameView, purchaseButtonText(null),
-                                textSize = GameMechanics.purchaseButtonTextSize * gameView.textScaleFactor,
+                                textSize = GameView.purchaseButtonTextSize * gameView.textScaleFactor,
                                 style = Button.Style.HP_KEY, preferredWidth = biographyArea.width())
         buttonPurchase?.let {
             Fader(gameView, it, Fader.Type.APPEAR, Fader.Speed.SLOW)

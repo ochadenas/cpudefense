@@ -194,7 +194,7 @@ class HeroCard(val gameView: GameView, val hero: Hero): GameElement(), Fadable
         val center = cardAreaOnScreen.center()
         portraitAreaOnScreen = Rect(portraitArea)
         portraitAreaOnScreen.setCenter(center)
-        paintText.textSize = GameMechanics.heroCardTextSize * gameView.textScaleFactor
+        paintText.textSize = GameView.heroCardTextSize * gameView.textScaleFactor
         indicatorSize = portraitArea.width() / 10
     }
 
@@ -217,9 +217,9 @@ class HeroCard(val gameView: GameView, val hero: Hero): GameElement(), Fadable
 
     fun create(showNextUpdate: Boolean = true, monochrome: Boolean = false)
     {
-        cardArea = Rect(0, 0, (GameMechanics.cardWidth*gameView.scaleFactor).toInt(), (GameMechanics.cardHeight*gameView.scaleFactor).toInt())
-        portraitArea = Rect(0, 0, (GameMechanics.cardPictureSize*gameView.scaleFactor).toInt(), (GameMechanics.cardPictureSize*gameView.scaleFactor).toInt())
-        paintText.textSize = GameMechanics.heroCardTextSize * gameView.textScaleFactor
+        cardArea = Rect(0, 0, (GameView.cardWidth*gameView.scaleFactor).toInt(), (GameView.cardHeight*gameView.scaleFactor).toInt())
+        portraitArea = Rect(0, 0, (GameView.cardPictureSize*gameView.scaleFactor).toInt(), (GameView.cardPictureSize*gameView.scaleFactor).toInt())
+        paintText.textSize = GameView.heroCardTextSize * gameView.textScaleFactor
         indicatorSize = portraitArea.width() / 10
         this.showNextUpdate = showNextUpdate
         this.monochrome = monochrome
@@ -247,7 +247,7 @@ class HeroCard(val gameView: GameView, val hero: Hero): GameElement(), Fadable
         }
         val margin = (10*resources.displayMetrics.scaledDensity).toInt()
         val heroPaintText = Paint(paintText)
-        heroPaintText.textSize = GameMechanics.heroCardNameSize * gameView.textScaleFactor
+        heroPaintText.textSize = GameView.heroCardNameSize * gameView.textScaleFactor
         heroPaintText.color = if (hero.data.level == 0) inactiveColor else activeColor
         val heroTextRect = Rect(0, margin, cardArea.width(), margin+40)
         heroTextRect.displayTextCenteredInRect(canvas, hero.person.fullName, heroPaintText)
