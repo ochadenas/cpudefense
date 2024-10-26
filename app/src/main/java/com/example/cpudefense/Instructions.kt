@@ -3,26 +3,41 @@
 package com.example.cpudefense
 
 import android.content.res.Resources
+import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
+import android.graphics.Paint
 import android.graphics.Rect
+import android.graphics.Typeface
 import android.text.Layout
 import android.text.StaticLayout
 import android.text.TextPaint
 import com.example.cpudefense.effects.Fadable
 import com.example.cpudefense.effects.Fader
+import com.example.cpudefense.utils.setTopLeft
 import kotlin.random.Random
 
 class Instructions(val gameView: GameView, var stage: Stage.Identifier, var showLeaveDialogue: Boolean,
                    private var callback: (()->Unit)? ): Fadable
 {
+    val margin = 32
+    var myArea = Rect()
+    var vertOffset = 0f
+
     var alpha = 0
     val resources: Resources = gameView.resources
-
+    var paint = Paint()
     private var funFact = if (Random.nextFloat() > 0.3)
         resources.getString(R.string.instr_did_you_know) + "\n\n" +
         resources.getStringArray(R.array.fun_fact).random()
     else ""
+    private val textSize = GameMechanics.computerTextSize * gameView.textScaleFactor
+    private var bitmap: Bitmap = createBitmap(instructionText(stage.number), gameView.width-2*margin)
+
+    fun setTextArea(rect: Rect)
+    {
+        myArea = Rect(rect.left+margin, 0+margin, rect.right-margin, rect.bottom-margin)
+    }
 
     private fun instructionText(level: Int): String
     {
@@ -87,28 +102,25 @@ class Instructions(val gameView: GameView, var stage: Stage.Identifier, var show
     }
 
     fun display(canvas: Canvas) {
-        val margin = 32
-        val textArea = Rect(0, 0, canvas.width - 2 * margin, canvas.height - 200)
-        canvas.save()
+        paint.alpha = alpha
+        val sourceRect = Rect(myArea).setTopLeft(0, vertOffset.toInt())
+        canvas.drawBitmap(bitmap, sourceRect, myArea, paint)
+    }
 
-        canvas.translate(margin.toFloat(), margin.toFloat())
-        val text = instructionText(stage.number)
+    private fun createBitmap(text: String, width: Int): Bitmap
+    {
         val textPaint = TextPaint()
-        textPaint.textSize = GameMechanics.instructionTextSize * gameView.textScaleFactor
+        textPaint.textSize = textSize
+        textPaint.typeface = Typeface.SANS_SERIF
         textPaint.color =
             if (showLeaveDialogue) resources.getColor(R.color.text_green)
             else Color.WHITE
-        textPaint.alpha = alpha
-        val textLayout = StaticLayout(
-            text,
-            textPaint,
-            textArea.width(),
-            Layout.Alignment.ALIGN_NORMAL,
-            1.0f,
-            0.0f,
-            false
-        )
+        textPaint.alpha = 255
+        var textLayout = StaticLayout(text, textPaint, width,
+                     Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false)
+        val bitmap = Bitmap.createBitmap(textLayout.width, textLayout.height, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bitmap)
         textLayout.draw(canvas)
-        canvas.restore()
+        return bitmap
     }
 }

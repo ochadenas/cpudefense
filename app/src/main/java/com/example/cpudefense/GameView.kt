@@ -274,6 +274,7 @@ class GameView(context: Context):
         when (gameMechanics.state.phase)
         {
             GamePhase.MARKETPLACE -> marketplace.onScroll(p0, p1, dx, dy)
+            GamePhase.INTERMEZZO -> intermezzo.onScroll(p0, p1, dx, dy)
             else ->
             {
                 if (scrollAllowed) {

@@ -203,6 +203,7 @@ class Intermezzo(var gameView: GameView): GameElement(), Fadable {
         paint.color = Color.BLACK
         paint.alpha = 255 // alpha
         canvas.drawRect(myArea, paint)
+        instructions?.setTextArea(Rect(myArea.left,0,myArea.right,heightOfConsoleLine()))
         instructions?.display(canvas)
         typewriter?.display(canvas)
         buttonContinue?.display(canvas)
@@ -226,6 +227,27 @@ class Intermezzo(var gameView: GameView): GameElement(), Fadable {
         else if (heroSelection?.onDown(event) == true)
             return true
         return false
+    }
+
+    @Suppress("UNUSED_PARAMETER")
+    fun onScroll(event1: MotionEvent?, event2: MotionEvent?, dX: Float, dY: Float): Boolean {
+        val scrollFactor = 1.1f  // higher values make scrolling faster
+        if (dY == 0f)
+            return false  // only vertical movements are considered here
+        event1?.let {
+            val posX = it.x.toInt()
+            val posY = it.y.toInt()
+            instructions?.let {
+                it.vertOffset += dY * scrollFactor
+                val max = it.myArea.height().toFloat()
+                val min = -it.myArea.height().toFloat()
+                if (it.vertOffset > max)
+                    it.vertOffset = max
+                if (it.vertOffset < min)
+                    it.vertOffset = min
+            }
+        }
+        return true
     }
 
     fun prepareLevel(nextLevel: Stage.Identifier, isStartingLevel: Boolean)
