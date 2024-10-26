@@ -324,4 +324,5 @@ Furthermore, some slots are already taken by unwanted chips you'll have to deal 
     <string name="coins_plural">%d coins</string>
     <string name="coins_none">no coins</string>
     <string name="settings_disable_purchase_dialog">Disable the life purchase dialog</string>
+    <string name="version">Version</string>
 </resources>

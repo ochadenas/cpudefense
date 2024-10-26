@@ -3,7 +3,7 @@
     <style name="CustomAlertDialog" parent="android:Theme.Material.Dialog.Alert">
         <item name="android:background">@color/black</item>
         <item name="android:textColorPrimary">@color/text_amber</item> <!-- influences title -->
-        <item name="android:textSize">16dp</item> <!-- influences the button text -->
+        <item name="android:textSize">16sp</item> <!-- influences the button text -->
         <item name="android:typeface">monospace</item> <!-- influences the button text -->
         <item name="android:textColor">@color/text_lightgreen</item> <!-- influences nothing -->
         <item name="android:borderlessButtonStyle">@style/PositiveButtonStyle</item>

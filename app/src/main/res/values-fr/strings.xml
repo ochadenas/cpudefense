@@ -124,7 +124,7 @@
     <string name="shortdesc_info_on_kill">Gain d\'info additionnel</string>
     <string name="HERO_EFFECT_GAININFO">augmente le gain d\'information en détruisant les attaquants</string>
     <string name="schneier">"Bruce Schneier est un expert en cryptographie et en sécurité de l'information. Il a écrit d'importants ouvrages sur le sujet, notamment « Applied Cryptography », et a développé plusieurs algorithmes cryptographiques.\nIl n'hésite pas à critiquer les gouvernements ou les entreprises internationales s'il estime que leurs mesures vont à l'encontre de la sécurité ou violent le droit à la vie privée.\n "</string>
-    <string name="cost_desc">[coût : %s]</string>
+    <string name="cost_desc">[coût : %d]</string>
     <string name="hopper">\nGrace Brewster Murray Hopper a eu l\'idée de formuler les programmes informatiques dans un langage lisible par l\'homme plutôt que comme une suite de uns et de zéros. \n\nElle développa le langage de programmation FLOW-MATIC et a ainsi inventé le premier compilateur.</string>
     <string name="query_quit">Voulez-vous abandonner le niveau actuel ?</string>
     <string name="button_return_to_main_menu">Retour au menu principal</string>
@@ -215,4 +215,5 @@
     <string name="coins_plural">%d écus</string>
     <string name="coins_none">aucun écu</string>
     <string name="settings_disable_purchase_dialog">Désactiver la boîte de dialogue de rachat des vies.</string>
+    <string name="version">Version</string>
 </resources>
