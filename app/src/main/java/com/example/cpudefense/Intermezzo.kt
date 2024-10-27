@@ -4,6 +4,9 @@ package com.example.cpudefense
 
 import android.content.res.Resources
 import android.graphics.*
+import android.text.Layout
+import android.text.StaticLayout
+import android.text.TextPaint
 import android.view.MotionEvent
 import android.widget.Toast
 import com.example.cpudefense.effects.Explosion
@@ -13,6 +16,8 @@ import com.example.cpudefense.gameElements.Button
 import com.example.cpudefense.gameElements.GameElement
 import com.example.cpudefense.gameElements.Typewriter
 import com.example.cpudefense.networkmap.Viewport
+import com.example.cpudefense.utils.shiftBy
+import com.example.cpudefense.utils.shrink
 import java.util.concurrent.CopyOnWriteArrayList
 import kotlin.random.Random
 
@@ -28,7 +33,6 @@ class Intermezzo(var gameView: GameView): GameElement(), Fadable {
     val resources: Resources = gameView.resources
     var alpha = 0
     private var paintLine = Paint()
-    private val activity = gameView.gameActivity
     private var myArea = Rect()
     private var typewriter: Typewriter? = null
     private var buttonContinue: Button? = null
@@ -42,6 +46,7 @@ class Intermezzo(var gameView: GameView): GameElement(), Fadable {
     var coinsGathered = 0
     var durationOfLeave = 2
 
+    var vertOffset = 0f
     private val widthOfConsoleLine = 4
     private var textOnContinueButton = ""
 
@@ -51,7 +56,7 @@ class Intermezzo(var gameView: GameView): GameElement(), Fadable {
     fun setSize(area: Rect)
     {
         myArea = Rect(area)
-        heroSelection?.setSize(myArea)
+        heroSelection?.setSize(Rect(myArea.left, myArea.top, myArea.right, heightOfConsoleLine()))
     }
 
     override fun update() {
@@ -62,6 +67,7 @@ class Intermezzo(var gameView: GameView): GameElement(), Fadable {
     override fun fadeDone(type: Fader.Type) {
         alpha = 255
         instructions = Instructions(gameView, level, showLeaveDialogue) { displayTypewriterText() }
+        heroSelection?.prepareScreen()
     }
 
     private fun displayTypewriterText()
@@ -114,6 +120,7 @@ class Intermezzo(var gameView: GameView): GameElement(), Fadable {
     }
 
     private fun heightOfConsoleLine(): Int
+    /** @return the y position of the green line that separates the typeweriter text */
     {
         var y = myArea.bottom - 80  // TODO: define in one place
         typewriter?.let { y = it.topOfTypewriterArea() }
@@ -121,6 +128,7 @@ class Intermezzo(var gameView: GameView): GameElement(), Fadable {
     }
 
     private fun displayLine(canvas: Canvas, y: Int)
+    /** paints the green line that separates the typeweriter text */
     {
         paintLine.style = Paint.Style.FILL_AND_STROKE
         paintLine.color = resources.getColor(R.color.text_green)
@@ -208,7 +216,7 @@ class Intermezzo(var gameView: GameView): GameElement(), Fadable {
         typewriter?.display(canvas)
         buttonContinue?.display(canvas)
         buttonPurchase?.display(canvas)
-        heroSelection?.display(canvas, viewport)
+        heroSelection?.display(canvas)
         displayLine(canvas, heightOfConsoleLine())
     }
 
@@ -235,18 +243,33 @@ class Intermezzo(var gameView: GameView): GameElement(), Fadable {
         if (dY == 0f)
             return false  // only vertical movements are considered here
         event1?.let {
-            instructions?.let {
-                it.vertOffset += dY * scrollFactor
-                val max = it.myArea.height().toFloat()
-                val min = -it.myArea.height().toFloat()
-                if (it.vertOffset > max)
-                    it.vertOffset = max
-                if (it.vertOffset < min)
-                    it.vertOffset = min
-            }
+            val max = maxVerticalDisplacement()
+            vertOffset += dY * scrollFactor
+            if (vertOffset > max)
+                vertOffset = max
+            if (vertOffset < 0f)
+                vertOffset = 0f
+            instructions?.vertOffset = vertOffset
+            heroSelection?.setSize(myArea) //TODO
         }
         return true
     }
+
+    fun maxVerticalDisplacement(): Float
+    {
+        var max = 0
+        if (showLeaveDialogue)
+            heroSelection?.let { selection ->
+                selection.bitmap?.height?.let { max = it - myArea.height()}
+            }
+        else instructions?.let {
+            max = it.bitmap.height - it.myArea.height()
+        }
+        if (max<0)
+            max = 0
+        return max.toFloat()
+    }
+
 
     fun prepareLevel(nextLevel: Stage.Identifier, isStartingLevel: Boolean)
     {
@@ -275,7 +298,7 @@ class Intermezzo(var gameView: GameView): GameElement(), Fadable {
         }
         instructions?.showLeaveDialogue = showLeaveDialogue
         gameView.speedControlPanel.setInfoline(gameView.resources.getString(R.string.stage_number).format(level.number))
-        activity.setGameActivityStatus(GameActivity.GameActivityStatus.BETWEEN_LEVELS)
+        gameView.gameActivity.setGameActivityStatus(GameActivity.GameActivityStatus.BETWEEN_LEVELS)
     }
 
     private fun startMarketplace()
@@ -299,12 +322,12 @@ class Intermezzo(var gameView: GameView): GameElement(), Fadable {
         if (oneHeroMustGoOnLeave(level))
         {
             if (heroSelection?.selectedHero == null) {
-                Toast.makeText(activity, "You must select one hero and give them leave!", Toast.LENGTH_SHORT)
+                Toast.makeText(gameView.gameActivity, "You must select one hero and give them leave!", Toast.LENGTH_SHORT)
                     .show()
                 return false
             }
             heroSelection?.selectedHero?.addLeave(level, durationOfLeave)
-            Persistency(activity).saveHolidays(gameView.gameMechanics)
+            Persistency(gameView.gameActivity).saveHolidays(gameView.gameMechanics)
             return true
         }
         else
@@ -329,7 +352,7 @@ class Intermezzo(var gameView: GameView): GameElement(), Fadable {
             alpha = 255
             displayTypewriterText()
         }
-        activity.setGameActivityStatus(GameActivity.GameActivityStatus.BETWEEN_LEVELS)
+        gameView.gameActivity.setGameActivityStatus(GameActivity.GameActivityStatus.BETWEEN_LEVELS)
         gameView.gameMechanics.state.phase = GameMechanics.GamePhase.INTERMEZZO
     }
 
@@ -369,10 +392,11 @@ class Intermezzo(var gameView: GameView): GameElement(), Fadable {
         var heroesAskingToTakeLeave = listOf<Hero>()
         var selectedHero: Hero? = null
         var width: Int = 0
+        var bitmap: Bitmap? = null
+        /** outer rectangle with a green border */
         private var myOuterArea = Rect()
-        private var myInnerArea = Rect()
-        private var myBackgroundArea = Rect()
-        private val backgroundPaint: Paint = Paint()
+
+        private val paint: Paint = Paint()
 
         init {
             heroesAskingToTakeLeave = choosePossibleHeroes()
@@ -380,28 +404,64 @@ class Intermezzo(var gameView: GameView): GameElement(), Fadable {
                 heroesAskingToTakeLeave = heroesAskingToTakeLeave.takeLast(sizeOfHeroPanel)
         }
 
+        fun prepareScreen()
+        {
+            if (myOuterArea.height() > 0)
+                bitmap = createBitmap(myOuterArea)
+        }
+
+        fun createBitmap(area: Rect): Bitmap
+        /** @param area the rectangle that can be used by the bitmap */
+        {
+            // create empty bitmap
+            val bitmap = Bitmap.createBitmap(area.width(), area.height(), Bitmap.Config.ARGB_8888)
+            val canvas = Canvas(bitmap)
+            canvas.drawColor(resources.getColor(R.color.alternate_background))
+            // create text for bitmap
+            val margin = 20 * gameView.scaleFactor
+            canvas.save()
+            canvas.translate(margin, margin)
+            val text = when (durationOfLeave)
+            {
+                1 -> resources.getString(R.string.instr_leave_1)
+                else -> resources.getString(R.string.instr_leave).format(gameView.intermezzo.durationOfLeave)
+            }
+            val textPaint = TextPaint()
+            textPaint.textSize = GameView.computerTextSize * gameView.textScaleFactor
+            textPaint.typeface = Typeface.SANS_SERIF
+            textPaint.color = resources.getColor(R.color.text_amber)
+            textPaint.alpha = 255
+            val textLayout = StaticLayout(text, textPaint, area.width()-2*margin.toInt(), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false)
+            textLayout.draw(canvas)
+            canvas.restore()
+
+            // put hero cards
+            val viewport = Viewport()
+            determineCardPositions(textLayout.height, margin.toInt())
+            heroesAskingToTakeLeave.forEach()
+            {
+                it.card.display(canvas, viewport)
+            }
+            return bitmap
+        }
+
         fun setSize(containingRect: Rect)
         {
-            if (heroesAskingToTakeLeave.isEmpty()) return
+            myOuterArea = containingRect
+        }
+
+        private fun determineCardPositions(upperEdge: Int, margin: Int)
+        {
             heroesAskingToTakeLeave.forEach {
                 it.card.create(showNextUpdate = false, monochrome = true)
             }
             val cardWidth  = heroesAskingToTakeLeave.first().card.cardArea.width()
             val cardHeight = heroesAskingToTakeLeave.first().card.cardArea.height()
-            val margin = (20 * gameView.scaleFactor).toInt()
-            val textLineHeight = GameView.instructionTextSize * gameView.textScaleFactor // approx.
-            val top = containingRect.top + (6*textLineHeight).toInt()
-            val bottom = top + 2*cardHeight + 3*margin
-            myOuterArea = Rect(0, 0, containingRect.right, bottom)
-            myBackgroundArea = Rect(myOuterArea.left, top, myOuterArea.right, myOuterArea.bottom)
-            myInnerArea = Rect(margin,top+margin,containingRect.right-margin,bottom-margin)
-
-            // if (4*margin+3*cardWidth > containingRect.width())
-            //    cardWidth = (containingRect.width()-4*margin) / 3
-            val xLeft = myInnerArea.left
-            val xRight = myInnerArea.right - cardWidth
-            val yBottom = myInnerArea.bottom - cardHeight
-            val yTop = myInnerArea.top
+            val heroRect = Rect(myOuterArea.left, upperEdge, myOuterArea.right, myOuterArea.bottom).apply { shrink(margin) }
+            val xLeft = heroRect.left
+            val xRight = heroRect.left + cardWidth + margin
+            val yBottom = heroRect.top + cardHeight + 2*margin
+            val yTop = heroRect.top + margin
             heroesAskingToTakeLeave.forEachIndexed()
             {
                 index, hero ->
@@ -415,20 +475,18 @@ class Intermezzo(var gameView: GameView): GameElement(), Fadable {
             }
         }
 
-        fun display(canvas: Canvas, viewport: Viewport)
+        fun display(canvas: Canvas)
         {
-            backgroundPaint.color = resources.getColor(R.color.alternate_background)
-            backgroundPaint.style = Paint.Style.FILL
-            canvas.drawRect(myBackgroundArea, backgroundPaint)
-            backgroundPaint.color = resources.getColor(R.color.text_green)
-            backgroundPaint.style = Paint.Style.STROKE
-            backgroundPaint.strokeWidth = 6f
-            canvas.drawRect(myOuterArea, backgroundPaint)
-            heroesAskingToTakeLeave.forEach()
-            {
-                it.card.display(canvas, viewport)
+            myOuterArea.bottom = heightOfConsoleLine()
+            paint.color = resources.getColor(R.color.text_amber)
+            paint.style = Paint.Style.STROKE
+            paint.strokeWidth = 6f
+            paint.alpha = 255
+            val sourceRect = Rect(myOuterArea).apply { shiftBy(0, vertOffset.toInt()) }
+            bitmap?.let {
+                canvas.drawBitmap(it, sourceRect, myOuterArea, paint)
+                // canvas.drawRect(myOuterArea, paint)
             }
-
         }
 
         private fun choosePossibleHeroes(): List<Hero>
@@ -449,8 +507,10 @@ class Intermezzo(var gameView: GameView): GameElement(), Fadable {
         fun onDown(event: MotionEvent): Boolean {
             heroesAskingToTakeLeave.forEach()
             {
-                if (it.card.cardAreaOnScreen.contains(event.x.toInt(), event.y.toInt())) {
+                val yCoord = event.y + vertOffset
+                if (it.card.cardAreaOnScreen.contains(event.x.toInt(), yCoord.toInt())) {
                     selectForLeave(it)
+                    prepareScreen()
                     return true
                 }
             }

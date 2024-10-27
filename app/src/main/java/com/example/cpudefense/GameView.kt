@@ -44,7 +44,7 @@ class GameView(context: Context):
         const val chipTextSize = 20f
         const val computerTextSize = 26f
         const val notificationTextSize = 22f
-        const val instructionTextSize = 22f
+        const val instructionTextSize = 26f
         const val biographyTextSize = 20f
         const val heroCardNameSize = 18f
         const val heroCardTextSize = 14f

@@ -31,8 +31,7 @@ class Instructions(val gameView: GameView, var stage: Stage.Identifier, var show
         resources.getString(R.string.instr_did_you_know) + "\n\n" +
         resources.getStringArray(R.array.fun_fact).random()
     else ""
-    private val textSize = GameView.computerTextSize * gameView.textScaleFactor
-    private var bitmap: Bitmap = createBitmap(instructionText(stage.number), gameView.width-2*margin)
+    var bitmap: Bitmap = createBitmap(instructionText(stage.number), gameView.width-2*margin)
 
     fun setTextArea(rect: Rect)
     {
@@ -44,11 +43,7 @@ class Instructions(val gameView: GameView, var stage: Stage.Identifier, var show
         if (gameView.intermezzo.type in setOf(Intermezzo.Type.GAME_LOST, Intermezzo.Type.GAME_WON))
             return ""
         else if (showLeaveDialogue)
-            when (gameView.intermezzo.durationOfLeave)
-            {
-                1 -> return resources.getString(R.string.instr_leave_1)
-                else -> return resources.getString(R.string.instr_leave).format(gameView.intermezzo.durationOfLeave)
-            }
+            return ""
         else if (stage.series == GameMechanics.SERIES_NORMAL) {
             return when (level) {
                 1 -> resources.getString(R.string.instr_1)
@@ -110,11 +105,9 @@ class Instructions(val gameView: GameView, var stage: Stage.Identifier, var show
     private fun createBitmap(text: String, width: Int): Bitmap
     {
         val textPaint = TextPaint()
-        textPaint.textSize = textSize
+        textPaint.textSize = GameView.computerTextSize * gameView.textScaleFactor
         textPaint.typeface = Typeface.SANS_SERIF
-        textPaint.color =
-            if (showLeaveDialogue) resources.getColor(R.color.text_green)
-            else Color.WHITE
+        textPaint.color = Color.WHITE
         textPaint.alpha = 255
         val textLayout = StaticLayout(text, textPaint, width,
                                       Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false)
