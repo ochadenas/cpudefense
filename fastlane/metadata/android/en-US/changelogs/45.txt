@@ -1,0 +1,6 @@
+New features:
+- The "mission briefing" text is now scrollable. This should avoid the text overlapping if it doesn't fit on the screen.
+
+Bug fixes:
+- Corrected portrait image for John Conway
+
