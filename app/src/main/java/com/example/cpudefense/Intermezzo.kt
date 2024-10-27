@@ -46,6 +46,7 @@ class Intermezzo(var gameView: GameView): GameElement(), Fadable {
     var coinsGathered = 0
     var durationOfLeave = 2
 
+    /** used for vertical scrolling */
     var vertOffset = 0f
     private val widthOfConsoleLine = 4
     private var textOnContinueButton = ""
@@ -56,7 +57,7 @@ class Intermezzo(var gameView: GameView): GameElement(), Fadable {
     fun setSize(area: Rect)
     {
         myArea = Rect(area)
-        heroSelection?.setSize(Rect(myArea.left, myArea.top, myArea.right, heightOfConsoleLine()))
+        heroSelection?.adjustArea()
     }
 
     override fun update() {
@@ -120,15 +121,15 @@ class Intermezzo(var gameView: GameView): GameElement(), Fadable {
     }
 
     private fun heightOfConsoleLine(): Int
-    /** @return the y position of the green line that separates the typeweriter text */
+    /** @return the y position of the green line that separates the typewriter text */
     {
-        var y = myArea.bottom - 80  // TODO: define in one place
+        var y = myArea.bottom - Typewriter.heightOfEmptyTypewriterArea
         typewriter?.let { y = it.topOfTypewriterArea() }
         return y
     }
 
     private fun displayLine(canvas: Canvas, y: Int)
-    /** paints the green line that separates the typeweriter text */
+    /** paints the green line that separates the typewriter text */
     {
         paintLine.style = Paint.Style.FILL_AND_STROKE
         paintLine.color = resources.getColor(R.color.text_green)
@@ -250,12 +251,11 @@ class Intermezzo(var gameView: GameView): GameElement(), Fadable {
             if (vertOffset < 0f)
                 vertOffset = 0f
             instructions?.vertOffset = vertOffset
-            heroSelection?.setSize(myArea) //TODO
         }
         return true
     }
 
-    fun maxVerticalDisplacement(): Float
+    private fun maxVerticalDisplacement(): Float
     {
         var max = 0
         if (showLeaveDialogue)
@@ -394,7 +394,7 @@ class Intermezzo(var gameView: GameView): GameElement(), Fadable {
         var width: Int = 0
         var bitmap: Bitmap? = null
         /** outer rectangle with a green border */
-        private var myOuterArea = Rect()
+        private var heroSelectionArea = Rect()
 
         private val paint: Paint = Paint()
 
@@ -406,8 +406,8 @@ class Intermezzo(var gameView: GameView): GameElement(), Fadable {
 
         fun prepareScreen()
         {
-            if (myOuterArea.height() > 0)
-                bitmap = createBitmap(myOuterArea)
+            if (heroSelectionArea.height() > 0)
+                bitmap = createBitmap(heroSelectionArea)
         }
 
         fun createBitmap(area: Rect): Bitmap
@@ -445,9 +445,9 @@ class Intermezzo(var gameView: GameView): GameElement(), Fadable {
             return bitmap
         }
 
-        fun setSize(containingRect: Rect)
+        fun adjustArea()
         {
-            myOuterArea = containingRect
+            heroSelectionArea = Rect(myArea.left, myArea.top, myArea.right, heightOfConsoleLine())
         }
 
         private fun determineCardPositions(upperEdge: Int, margin: Int)
@@ -457,7 +457,7 @@ class Intermezzo(var gameView: GameView): GameElement(), Fadable {
             }
             val cardWidth  = heroesAskingToTakeLeave.first().card.cardArea.width()
             val cardHeight = heroesAskingToTakeLeave.first().card.cardArea.height()
-            val heroRect = Rect(myOuterArea.left, upperEdge, myOuterArea.right, myOuterArea.bottom).apply { shrink(margin) }
+            val heroRect = Rect(heroSelectionArea.left, upperEdge, heroSelectionArea.right, heroSelectionArea.bottom).apply { shrink(margin) }
             val xLeft = heroRect.left
             val xRight = heroRect.left + cardWidth + margin
             val yBottom = heroRect.top + cardHeight + 2*margin
@@ -477,14 +477,14 @@ class Intermezzo(var gameView: GameView): GameElement(), Fadable {
 
         fun display(canvas: Canvas)
         {
-            myOuterArea.bottom = heightOfConsoleLine()
+            heroSelectionArea.bottom = heightOfConsoleLine()
             paint.color = resources.getColor(R.color.text_amber)
             paint.style = Paint.Style.STROKE
             paint.strokeWidth = 6f
             paint.alpha = 255
-            val sourceRect = Rect(myOuterArea).apply { shiftBy(0, vertOffset.toInt()) }
+            val sourceRect = Rect(heroSelectionArea).apply { shiftBy(0, vertOffset.toInt()) }
             bitmap?.let {
-                canvas.drawBitmap(it, sourceRect, myOuterArea, paint)
+                canvas.drawBitmap(it, sourceRect, heroSelectionArea, paint)
                 // canvas.drawRect(myOuterArea, paint)
             }
         }

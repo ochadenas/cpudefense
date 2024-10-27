@@ -15,7 +15,7 @@ class Typewriter(val gameView: GameView, myArea: Rect, private var lines: CopyOn
 {
     private var resources = gameView.resources
     private var textBoxes = CopyOnWriteArrayList<TextBox>()
-    private val pos = Pair(myArea.left + 50, myArea.bottom - 80)
+    private val pos = Pair(myArea.left + 50, myArea.bottom - heightOfEmptyTypewriterArea)
     private val lineSpacingY = GameView.computerTextSize * gameView.textScaleFactor * 1.8f
     private var paintLine = Paint()
 
@@ -79,4 +79,9 @@ class Typewriter(val gameView: GameView, myArea: Rect, private var lines: CopyOn
             canvas.drawText(stringToDisplay, x, y, paintText)
         }
     }
+
+    companion object {
+        val heightOfEmptyTypewriterArea = 80
+    }
+
 }
