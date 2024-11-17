@@ -325,4 +325,6 @@ Furthermore, some slots are already taken by unwanted chips you'll have to deal 
     <string name="coins_none">no coins</string>
     <string name="settings_disable_purchase_dialog">Disable the life purchase dialog</string>
     <string name="version">Version</string>
+    <string name="settings_language_selection_title">Language selection</string>
+    <string name="settings_language_selection_text">To change the game\'s language, use the system “Settings”  of your device and go to “App Languages”.</string>
 </resources>

@@ -89,7 +89,7 @@ class GameActivity : Activity() {
              */
     {
         super.onResume()
-        Toast.makeText(this, "Loading ...", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, resources.getString(R.string.toast_loading), Toast.LENGTH_SHORT).show()
         loadSettings()
         setupGameView()
 

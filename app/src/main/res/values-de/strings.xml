@@ -260,4 +260,6 @@ Turing wurde aufgrund seiner Homosexualität massiv diskriminiert. Er starb 1954
     <string name="coins_none">keinen Coin</string>
     <string name="settings_disable_purchase_dialog">Dialog „Kaufen von Leben“ deaktivieren</string>
     <string name="version">Version</string>
+    <string name="settings_language_selection_title">Sprachauswahl</string>
+    <string name="settings_language_selection_text">Die Sprache des Spiels kann in den System-Einstellungen unter „App-Sprachen“ ausgewählt werden.\n</string>
 </resources>

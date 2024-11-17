@@ -216,4 +216,6 @@
     <string name="coins_none">aucun écu</string>
     <string name="settings_disable_purchase_dialog">Désactiver la boîte de dialogue de rachat des vies.</string>
     <string name="version">Version</string>
+    <string name="settings_language_selection_title">Choix de langue</string>
+    <string name="settings_language_selection_text">"Pour changer la langue du jeu, ouvrez le dialogue « Paramètres » de l'appareil et naviguez sur « Langues de l'application ».\n "</string>
 </resources>
