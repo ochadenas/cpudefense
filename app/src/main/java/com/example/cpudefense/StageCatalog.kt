@@ -353,6 +353,7 @@ class StageCatalog
                             )
                         rewardCoins = 3
                     }
+/*
                     8 -> {
                         initializeNetwork(50, 50)
 
@@ -402,6 +403,56 @@ class StageCatalog
                             )
                         rewardCoins = 3
                     }
+
+ */
+                    8 -> {
+                        initializeNetwork(50, 50)
+
+                        createChip(25, 48, 0, type = Chip.ChipType.ENTRY)
+                        createChip(25, 38, 1)
+                        createChip(5,  38, 2)
+                        createChip(45, 38, 12)
+                        createChip(25, 26, 3)
+                        createChip(10, 26, 4)
+                        createChip(40, 26, 14)
+                        createChip(25, 15, 5)
+                        createChip(15, 15, 6)
+                        createChip(35, 15, 16)
+                        createChip(25, 5, 999, type = Chip.ChipType.CPU)
+
+                        createLink(0, 1, 1)
+                        createLink(1, 2, 2, mask=0x03)
+                        createLink(2, 3, 3, mask=0x0C, variant = Link.Variant.CONVEX)
+                        createLink(3, 4, 4, 0x03)
+                        createLink(5, 4, 5, 0x0C)
+                        createLink(5, 6, 6, 0x06, variant = Link.Variant.CONVEX)
+                        createLink(6, 999, 7, 0x06, variant = Link.Variant.CONVEX)
+                        createLink(1, 12, 8, 0x03)
+                        createLink(12, 3, 9, mask = 0x03,  variant = Link.Variant.CONCAVE)
+                        createLink(3, 14, 10, 0x03)
+                        createLink(14, 5, 11, mask = 0x03,  variant = Link.Variant.CONCAVE)
+                        createLink(5, 16,12,0x06)
+                        createLink(16, 999,13,0x06)
+
+                        createTrack(listOf(1, 2, 3, 4, 5, 6, 7), 1)
+                        createTrack(listOf(1, 8, 9, 10, 11, 12, 13), 2)
+
+                        createWave(16, 2, .125f, 1.1f)
+                        createWave(20, 3, .120f, 1.3f)
+                        createWave(20, 5, .105f, 1.6f)
+                        createWave(20, 7, .100f, 1.8f)
+                        createWave(20, 11, .090f, 2.0f, coins = 1)
+                        createWave(20, 27, .080f, 2.2f, coins = 0)
+
+                        data.chipsAllowed =
+                            setOf(
+                                    Chip.ChipUpgrades.SUB,
+                                    Chip.ChipUpgrades.POWERUP,
+                                    Chip.ChipUpgrades.SHR
+                            )
+                        rewardCoins = 3
+                    }
+
                     9 -> {
                         initializeNetwork(50, 50)
 

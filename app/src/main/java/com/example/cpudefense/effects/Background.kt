@@ -104,7 +104,8 @@ class Background(val gameView: GameView)
         val options = BitmapFactory.Options()
         options.inScaled = false
         return if (useSpecial)   // allows use of special backgrounds, currently disabled
-            BitmapFactory.decodeResource(resources, R.drawable.background_flowers)
+            // BitmapFactory.decodeResource(resources, R.drawable.background_flowers)
+            BitmapFactory.decodeResource(resources, R.drawable.background_winter)
         else when (number)
         {
             1 -> BitmapFactory.decodeResource(resources, R.drawable.background_1, options)
@@ -127,7 +128,7 @@ class Background(val gameView: GameView)
              * @param stageIdent Series and number of the current stage
              */
     {
-        if (false && stageIdent?.let {it.series < 3 && it.number == 8 } == true)
+        if (stageIdent?.let {it.series < 3 && it.number == 8 } == true) // TODO: determine based on calendar date
             useSpecialBackground = true
         val n = stageIdent?.number ?: 0
         wholeBackground = loadWholeBitmap(n % maxBackgroundNumber + 1, useSpecialBackground)
