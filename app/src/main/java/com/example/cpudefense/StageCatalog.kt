@@ -434,8 +434,8 @@ class StageCatalog
                         createLink(5, 16,12,0x06)
                         createLink(16, 999,13,0x06)
 
-                        createTrack(listOf(1, 2, 3, 4, 5, 6, 7), 1)
-                        createTrack(listOf(1, 8, 9, 10, 11, 12, 13), 2)
+                        createTrack(listOf(1, 2, 3, 4, 5, 6, 7), 0)
+                        createTrack(listOf(1, 8, 9, 10, 11, 12, 13), 1)
 
                         createWave(16, 2, .125f, 1.1f)
                         createWave(20, 3, .120f, 1.3f)

@@ -358,8 +358,8 @@ open class Chip(val network: Network, gridX: Int, gridY: Int):
          */
         val sizeOnScreen = theNetwork.distanceBetweenGridPoints()
         sizeOnScreen?.let {
-            widthOnScreen = it.first * GameMechanics.chipSize.x.toInt()
-            heightOnScreen = it.second * GameMechanics.chipSize.y.toInt()
+            widthOnScreen = it.first * GameView.chipSize.x.toInt()
+            heightOnScreen = it.second * GameView.chipSize.y.toInt()
             actualRect = Rect(0, 0, widthOnScreen, heightOnScreen)
         }
         outlineWidth = 2f * resources.displayMetrics.scaledDensity

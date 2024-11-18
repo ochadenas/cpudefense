@@ -8,6 +8,7 @@ import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Rect
+import com.example.cpudefense.GameMechanics
 import com.example.cpudefense.GameView
 import com.example.cpudefense.R
 import com.example.cpudefense.Stage
@@ -128,8 +129,13 @@ class Background(val gameView: GameView)
              * @param stageIdent Series and number of the current stage
              */
     {
-        if (stageIdent?.let {it.series < 3 && it.number == 8 } == true) // TODO: determine based on calendar date
+        if (stageIdent?.let {it.mode()==GameMechanics.LevelMode.BASIC && it.number == 8 } == true) // TODO: determine based on calendar date
+        {
             useSpecialBackground = true
+            gameView.effects?.addSnow()
+        }
+        else
+            useSpecialBackground = false
         val n = stageIdent?.number ?: 0
         wholeBackground = loadWholeBitmap(n % maxBackgroundNumber + 1, useSpecialBackground)
     }

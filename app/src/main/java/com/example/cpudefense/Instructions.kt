@@ -105,7 +105,7 @@ class Instructions(val gameView: GameView, var stage: Stage.Identifier, var show
     private fun createBitmap(text: String, width: Int): Bitmap
     {
         val textPaint = TextPaint()
-        textPaint.textSize = GameView.computerTextSize * gameView.textScaleFactor
+        textPaint.textSize = GameView.instructionTextSize * gameView.textScaleFactor
         textPaint.typeface = Typeface.SANS_SERIF
         textPaint.color = Color.WHITE
         textPaint.alpha = 255

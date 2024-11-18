@@ -2,7 +2,6 @@ package com.example.cpudefense.effects
 
 import android.graphics.Canvas
 import android.graphics.Rect
-import com.example.cpudefense.GameMechanics
 import com.example.cpudefense.GameView
 import com.example.cpudefense.R
 import java.util.concurrent.CopyOnWriteArrayList
@@ -24,12 +23,12 @@ class Effects(var gameView: GameView) {
     fun setSize(area: Rect)
     {
         gameArea = Rect(area)
-        snow?.apply { snowfallArea = Rect(gameArea) }
+        snow.apply { snowfallArea = Rect(gameArea) }
     }
 
     fun addSnow()
     {
-        snow.frequency = 1.0f
+        snow.frequency = 0.4f
     }
 
     fun fade(thing: Fadable)
@@ -42,12 +41,10 @@ class Effects(var gameView: GameView) {
         faders.map { it.update() }
         explosions.map { it.update() }
         explosions.removeAll { it.expired() }
-        snow.updateGraphicalEffects()
     }
 
-    fun display(canvas: Canvas)
+    fun displayGraphicalEffects(canvas: Canvas)
     {
         explosions.map { it.display(canvas) }
-        snow.display(canvas)
     }
 }

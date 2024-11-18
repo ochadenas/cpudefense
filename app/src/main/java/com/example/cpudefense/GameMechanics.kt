@@ -34,12 +34,8 @@ class GameMechanics {
 
         // end of debug options
 
-
-        val chipSize = Coord(6,3)
-        const val viewportMargin = 10
-        const val minScoreBoardHeight = 100
-        const val maxScoreBoardHeight = 320
-        const val speedControlButtonSize = 48
+        /** level that shows an Easter egg */
+        const val specialLevelNumber = 8
 
         // some adjustable game playing parameters
         const val minimalAmountOfCash = 8

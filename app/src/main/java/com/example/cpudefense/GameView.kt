@@ -28,6 +28,7 @@ import com.example.cpudefense.gameElements.Attacker
 import com.example.cpudefense.gameElements.Chip
 import com.example.cpudefense.gameElements.ScoreBoard
 import com.example.cpudefense.gameElements.SpeedControl
+import com.example.cpudefense.networkmap.Coord
 import com.example.cpudefense.networkmap.Network
 import com.example.cpudefense.networkmap.Viewport
 import com.example.cpudefense.utils.displayTextCenteredInRect
@@ -37,14 +38,15 @@ class GameView(context: Context):
     SurfaceView(context), SurfaceHolder.Callback,
     GestureDetector.OnGestureListener
 {
+    @Suppress("ConstPropertyName")
     companion object {
-        // defaut sizes for graphical game elements.
+        // default sizes for graphical game elements.
         const val scoreTextSize = 36f
         const val scoreHeaderSize = 18f
         const val chipTextSize = 20f
         const val computerTextSize = 26f
         const val notificationTextSize = 22f
-        const val instructionTextSize = 24f
+        const val instructionTextSize = 26f
         const val biographyTextSize = 20f
         const val heroCardNameSize = 18f
         const val heroCardTextSize = 14f
@@ -55,7 +57,14 @@ class GameView(context: Context):
         const val cardWidth = 220
         const val cardHeight = cardWidth * 1.41
         const val cardPictureSize = cardWidth * 2 / 3
-        const val preferredSizeOfLED = 20  // horizontal size of LEDs, can be smaller if there is too little space
+        /** horizontal size of LEDs, can be smaller if there is too little space */
+        const val preferredSizeOfLED = 20
+
+        val chipSize = Coord(6,3)
+        const val viewportMargin = 10
+        const val minScoreBoardHeight = 100
+        const val maxScoreBoardHeight = 320
+        const val speedControlButtonSize = 48
     }
 
     val gameActivity = context as GameActivity
@@ -182,10 +191,10 @@ class GameView(context: Context):
      */
     {
         val scoreBoardHeight = (h*0.1).toInt()
-        if (scoreBoardHeight < GameMechanics.minScoreBoardHeight)
-            return GameMechanics.minScoreBoardHeight
-        else if (scoreBoardHeight > GameMechanics.maxScoreBoardHeight)
-            return GameMechanics.maxScoreBoardHeight
+        if (scoreBoardHeight < minScoreBoardHeight)
+            return minScoreBoardHeight
+        else if (scoreBoardHeight > maxScoreBoardHeight)
+            return maxScoreBoardHeight
         else
             return scoreBoardHeight
     }
@@ -347,6 +356,8 @@ class GameView(context: Context):
             else
                 m?.update()
         }
+        if (showAdditionalEffects())
+            effects?.snow?.updateGraphicalEffects()
     }
 
     @Synchronized fun display()
@@ -358,12 +369,14 @@ class GameView(context: Context):
         {
             if (state.phase == GamePhase.RUNNING || state.phase == GamePhase.PAUSED)
                 displayNetwork(it)
+            if (showAdditionalEffects())
+                effects?.snow?.display(it)
             if (state.phase == GamePhase.PAUSED)
                 displayPauseIndicator(it)
             intermezzo.display(it, viewport)
             marketplace.display(it, viewport)
             notification.display(it)
-            effects?.display(it)
+            effects?.displayGraphicalEffects(it)
             holder.unlockCanvasAndPost(it)
         }
     }
@@ -371,7 +384,6 @@ class GameView(context: Context):
     private fun displayNetwork(canvas: Canvas)
     {
         canvas.let {
-            // background.display(it)
             gameMechanics.currentlyActiveStage?.network?.display(it, viewport)
             scoreBoard.display(it, viewport)
             speedControlPanel.display(it)
@@ -412,5 +424,13 @@ class GameView(context: Context):
         val prefs = gameActivity.getSharedPreferences(Persistency.filename_state, MODE_PRIVATE)
         scaleFactor = prefs.getFloat("SCALE_FACTOR", 1.0f)
         textScaleFactor = prefs.getFloat("TEXT_SCALE_FACTOR", 1.0f)
+    }
+
+    private fun showAdditionalEffects(): Boolean
+    {
+        if (gameMechanics.currentStage.mode() == LevelMode.BASIC && gameMechanics.currentStage.number == GameMechanics.specialLevelNumber)
+            return (gameMechanics.state.phase == GamePhase.RUNNING || gameMechanics.state.phase == GamePhase.PAUSED)
+        else
+            return false
     }
 }

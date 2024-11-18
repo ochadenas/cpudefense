@@ -56,7 +56,7 @@ class Flake(x: Int, y: Int)
 }
 
 class Snow() {
-    var delay = 1  // update only once in <delay> times
+    var delay = 2  // update only once in <delay> times
     var flakes = CopyOnWriteArrayList<Flake>()
     private var count = delay
     var frequency: Float = 0f // used to set the snow flake amount. 0 = none, 1 = max
@@ -75,7 +75,7 @@ class Snow() {
 
         if (Random.nextFloat() > 0.8 && Random.nextFloat() > (1.0-frequency))
         {
-            var flake = Flake(Random.nextInt(0, snowfallArea.width()), snowfallArea.height())
+            var flake = Flake(Random.nextInt(0, snowfallArea.width()), 0)
             flakes.add(flake)
         }
         for (f in flakes)
