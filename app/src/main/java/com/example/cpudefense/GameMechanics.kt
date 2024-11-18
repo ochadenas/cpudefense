@@ -51,6 +51,8 @@ class GameMechanics {
         const val SERIES_TURBO   = 2
         const val SERIES_ENDLESS = 3
 
+        /** price in bits for the purchase of the first level of a chip,
+         * may be modified by heroes' effects. */
         val basePrice = mapOf(Chip.ChipUpgrades.REDUCE to 10,
             Chip.ChipUpgrades.SUB to 8, Chip.ChipUpgrades.ACC to 10,
             Chip.ChipUpgrades.SHR to 16, Chip.ChipUpgrades.MEM to 12,
@@ -167,6 +169,7 @@ class GameMechanics {
              * - cooldown of the chips
              * - cash gain over time
              * - frequency of attacker generation.
+             *
              * Actually, this factor is no longer actively used to handle different speeds,
              * and the function always returns the same value.
              */

@@ -21,10 +21,13 @@ open class Attacker(network: Network, representation: Representation = Represent
     enum class Representation { UNDEFINED, BINARY, HEX, DECIMAL, FLOAT }
 
     data class Data(
+        /** numerical representation of the number: hex or binary */
         var representation: Representation,
+        /** the attacker's actual value */
         var number: ULong,
         var binaryDigits: Int,
         var hexDigits: Int,
+        /** information contents. Equal to the number of binary digits */
         var bits: Int,
         var isCoin: Boolean = false,
         var vehicle: Vehicle.Data,
@@ -343,7 +346,7 @@ open class Attacker(network: Network, representation: Representation = Represent
         endNode?.notify(this, distanceToNextNode, Node.VehicleDirection.APPROACHING)
         startNode?.notify(this, distanceFromLastNode, Node.VehicleDirection.LEAVING)
 
-        when
+        when // apply resistor effect
         {
             data.speedModificationTimer > 0 ->
             { data.speedModificationTimer -= network.gameMechanics.globalSpeedFactor() }
@@ -355,8 +358,6 @@ open class Attacker(network: Network, representation: Representation = Represent
                     makeNumber()
             }
         }
-
-
         // animation, if any
         if (animationCount>0)
             animationCount--

@@ -8,6 +8,7 @@ import com.example.cpudefense.GameView
 import com.example.cpudefense.gameElements.Chip
 import com.example.cpudefense.gameElements.GameElement
 import com.example.cpudefense.gameElements.Vehicle
+import com.example.cpudefense.gameElements.Vehicle.State
 import java.util.concurrent.CopyOnWriteArrayList
 
 class Network(val gameMechanics: GameMechanics, val gameView: GameView, x: Int, y: Int): GameElement() {
@@ -65,6 +66,26 @@ class Network(val gameMechanics: GameMechanics, val gameView: GameView, x: Int, 
             obj.update()
         for (obj in vehicles)
             obj.update()
+        checkVehicleStates()
+    }
+
+    fun checkVehicleStates()
+            /** function to make sure that all vehicles are in a valid state.
+             * If there are some "forgotten" vehicles, i.e. without a link,
+             * remove them after a certain grace period.
+             */
+    {
+        vehicles.forEach()
+        {
+            if (it.onLink == null)  // should happen only during initialization
+            {
+                it.idleCount--
+                if (it.idleCount <= 0) {
+                    it.data.state = State.GONE // remove attackers that are trapped somewhere
+                }
+            } else it.idleCount = it.gracePeriod
+        }
+        vehicles.removeAll { it.data.state == State.GONE }
     }
 
     fun validateViewport(): Boolean

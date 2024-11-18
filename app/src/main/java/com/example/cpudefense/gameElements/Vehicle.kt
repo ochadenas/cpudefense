@@ -21,6 +21,7 @@ open class Vehicle(val network: Network): GameElement()
         var speed: Float,
         /** temporary modifier of the speed */
         var speedModifier: Float,
+        /** timer count for a temporary speed modification, for example because of resistors */
         var speedModificationTimer: Float,
         /** position on the virtual grid */
         var gridPos: Pair<Float, Float>,
@@ -28,8 +29,11 @@ open class Vehicle(val network: Network): GameElement()
         var distanceTravelledOnLink: Float,
         /** the link we're currently on */
         var linkId: Int,
+        /** ID of the node the vehicle is coming from */
         var startNodeId: Int,
+        /** ID of the node the vehicle is going to */
         var endNodeId: Int,
+        /** ID of the track the vehicle is on, or -1 if none is currently defined */
         var trackId: Int,
         var sizeOnScreenInDp: Float,
         /** the state of the vehicle determines whether it is to be considered active by the network */
@@ -58,6 +62,10 @@ open class Vehicle(val network: Network): GameElement()
 
     var distanceFromLastNode = 0.0f
     var distanceToNextNode = 0.0f
+
+    /** the maximal number of updates that a vehicle may linger without link, before it gets removed */
+    val gracePeriod = 10
+    var idleCount = gracePeriod
 
     override fun update() {
         if (data.state == State.HELD)
