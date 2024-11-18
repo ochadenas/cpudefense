@@ -224,7 +224,7 @@ class GameView(context: Context):
         intermezzo.setSize(Rect(0, 0, w, h))
         marketplace.setSize(Rect(0, 0, w, h))
         notification.setPositionOnScreen(w/2, h/2)
-        effects?.setSize(Rect(0, 0, w, h))
+        effects?.setSize(Rect(0, 0, w, viewportHeight))
 
         /* increase attacker size on larger screens */
         // theGame.globalResolutionFactorX = (w / )
