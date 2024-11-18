@@ -304,7 +304,7 @@ class Persistency(private var activity: Activity)
             {
                 // Migration hack: If the data is not in saves.xml, get it from the legacy file and then delete it there.
                 json = prefsLegacy.getString(seriesKey[series], "none")
-                prefsLegacy.edit().let { it.remove(key); it.apply() }
+                // prefsLegacy.edit().let { it.remove(key); it.apply() } // TODO: activate this again in later versions
             }
             val data: SerializableLevelSummary =
                 Gson().fromJson(json, SerializableLevelSummary::class.java)
