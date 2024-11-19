@@ -10,10 +10,17 @@ android {
         applicationId 'de.chadenas.cpudefense'
         minSdk 21
         targetSdk 34
-        versionCode 46
-        versionName "1.46"
+        versionCode 47
+        versionName "1.47-alpha"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        dependenciesInfo {
+            // Disables dependency metadata when building APKs.
+            includeInApk = false
+            // Disables dependency metadata when building Android App Bundles.
+            includeInBundle = false
+            // see https://gitlab.com/fdroid/fdroidserver/-/issues/1056
+        }
     }
 
     androidResources {
