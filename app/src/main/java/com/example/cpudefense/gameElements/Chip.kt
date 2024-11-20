@@ -33,8 +33,11 @@ open class Chip(val network: Network, gridX: Int, gridY: Int):
         var cooldownTimer: Float = 0.0f,
         /** the price paid for the chip and its upgrades */
         var value: Int = 0,
+        /** data of the underlying node object */
         var node: Node.Data,
+        /** the chip's text colour */
         var color: Int = Color.WHITE,
+        /** glow around the text, for display purposes */
         var glowColor: Int = Color.WHITE,
         /** indicator that the chip has been sold, but is not removed yet */
         var sold: Boolean = false
@@ -808,7 +811,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int):
         {
             if (isActivated() && !isInCooldown())
             {
-                internalRegister.retrieve()
+                internalRegister.retrieve()?.also { it.data.state = Vehicle.State.GONE }
                 startCooldown()
                 return true
             }
@@ -850,7 +853,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int):
     }
 
     inner class Register
-    /** some chips have a 'register' where one or several attackers' value can be held. */
+    /** some chips have a 'register' where one or several attackers' values can be held. */
     {
         private var register = CopyOnWriteArrayList<Attacker>()
 
@@ -871,6 +874,9 @@ open class Chip(val network: Network, gridX: Int, gridY: Int):
         }
 
         fun retrieve(): Attacker?
+                /** removes the last attacker from the register.
+                 * @return the attacker, or null if the register is empty.
+                 */
         {
             try {
                 return register.removeAt(0)
