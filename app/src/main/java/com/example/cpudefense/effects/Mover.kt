@@ -1,11 +1,10 @@
 package com.example.cpudefense.effects
 
-import com.example.cpudefense.GameMechanics
 import com.example.cpudefense.GameView
-import java.lang.Math.*
+import java.lang.Math.PI
 
 class Mover(
-    private val gameView: GameView, private val thing: Movable,
+    gameView: GameView, private val thing: Movable,
     fromX: Int, fromY: Int, toX: Int, toY: Int,
     var type: Type = Type.STRAIGHT, speed: Speed = Speed.FAST, wait: Int = 0)
 /**

@@ -1,7 +1,6 @@
 package com.example.cpudefense.networkmap
 
 import android.graphics.Rect
-import com.example.cpudefense.GameMechanics
 import com.example.cpudefense.GameView
 
 class Viewport

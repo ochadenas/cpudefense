@@ -1,4 +1,4 @@
-@file:Suppress("DEPRECATION")
+@file:Suppress("DEPRECATION", "NOTHING_TO_INLINE")
 
 package com.example.cpudefense.gameElements
 
@@ -630,6 +630,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int):
                     break
             }
             val firstDigit: Int = ohm
+            @Suppress("CatchMayIgnoreException")
             try {
                 // 1st ring
                 var left = leftMarginOfRings
@@ -906,11 +907,13 @@ open class Chip(val network: Network, gridX: Int, gridY: Int):
             return register.size
         }
 
+        @Suppress("unused")
         fun slotsFree(): Int
         {
             return slotsTotal() - slotsUsed()
         }
 
+        @Suppress("MemberVisibilityCanBePrivate")
         fun slotsTotal(): Int
         {
             return when (chipData.type)

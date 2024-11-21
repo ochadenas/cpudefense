@@ -1,3 +1,5 @@
+@file:Suppress("ConstPropertyName")
+
 package com.example.cpudefense.networkmap
 
 import android.graphics.*
@@ -69,7 +71,7 @@ class Network(val gameMechanics: GameMechanics, val gameView: GameView, x: Int, 
         checkVehicleStates()
     }
 
-    fun checkVehicleStates()
+    private fun checkVehicleStates()
             /** function to make sure that all vehicles are in a valid state.
              * If there are some "forgotten" vehicles, i.e. without a link,
              * remove them after a certain grace period.

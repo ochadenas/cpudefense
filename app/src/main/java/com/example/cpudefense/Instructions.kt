@@ -20,7 +20,7 @@ import kotlin.random.Random
 class Instructions(val gameView: GameView, var stage: Stage.Identifier, var showLeaveDialogue: Boolean,
                    private var callback: (()->Unit)? ): Fadable
 {
-    val margin = 32
+    private val margin = 32
     var myArea = Rect()
     var vertOffset = 0f
 

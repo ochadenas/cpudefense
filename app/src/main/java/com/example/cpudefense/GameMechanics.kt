@@ -18,10 +18,10 @@ class CpuReached: Exception("CPU got hit, removed one life point")
 @Suppress("ReplaceWithEnumMap", "ConstPropertyName")
 class GameMechanics {
     companion object Params {
+        /** how many stages there are in NORMAL and TURBO. Must be changed when adding new stages. */
         const val maxLevelAvailable = 32
 
         // debug options
-
         /** for debugging purposes only. MUST BE SET TO FALSE */
         const val makeAllLevelsAvailable = false
         /** for debugging purposes only. MUST BE SET TO FALSE */
@@ -30,7 +30,6 @@ class GameMechanics {
         const val forceHeroMigration = false
         /** for debugging purposes only. MUST BE SET TO FALSE */
         const val allowLivesPurchaseInAllStages = false
-
         // end of debug options
 
         /** level that shows an Easter egg */
@@ -371,6 +370,7 @@ class GameMechanics {
 
 
     private fun calculateLives()
+    /** calculates the number of lives at the beginning of the stage */
     {
         val extraLives = heroModifier(Hero.Type.ADDITIONAL_LIVES)
         state.currentMaxLives = state.maxLives + extraLives.toInt()
@@ -389,6 +389,7 @@ class GameMechanics {
     }
 
     private fun calculateStartingCash()
+    /** calculates the information available at the beginning of a stage */
     {
         state.cash = heroModifier(Hero.Type.INCREASE_STARTING_CASH).toInt()
     }
@@ -408,6 +409,7 @@ class GameMechanics {
 
     @Throws(TemperatureDamageException::class)
     private fun checkTemperature()
+    /** check for exceeding temperature. Create an exception if the heat damage is triggered */
     {
         if (state.heat == 0.0)
             return
@@ -421,12 +423,15 @@ class GameMechanics {
     }
 
     fun actualMaxInternalChipStorage(): Int
+    /** @return the maximal number of internal slots in MEM chips, taking hero effects into account */
     {
         val maxStorage = heroModifier(Hero.Type.ENABLE_MEM_UPGRADE).toInt()
         return if (maxStorage > maxInternalChipStorage) maxInternalChipStorage else maxStorage
     }
 
-    fun heroModifier(type: Hero.Type): Float {
+    fun heroModifier(type: Hero.Type): Float
+    /** gives the hero modifier value for any given type, even if the hero is not present. */
+    {
         val hero: Hero? = currentHeroes()[type]
         hero?.let {
             if (!it.isOnLeave)

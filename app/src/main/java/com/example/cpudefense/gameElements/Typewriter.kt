@@ -1,4 +1,4 @@
-@file:Suppress("DEPRECATION")
+@file:Suppress("DEPRECATION", "ConstPropertyName")
 
 package com.example.cpudefense.gameElements
 
@@ -81,7 +81,7 @@ class Typewriter(val gameView: GameView, myArea: Rect, private var lines: CopyOn
     }
 
     companion object {
-        val heightOfEmptyTypewriterArea = 80
+        const val heightOfEmptyTypewriterArea = 80
     }
 
 }

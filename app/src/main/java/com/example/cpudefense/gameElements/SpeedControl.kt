@@ -6,7 +6,6 @@ import android.graphics.Paint
 import android.graphics.Rect
 import android.graphics.Typeface
 import android.view.MotionEvent
-import com.example.cpudefense.GameMechanics
 import com.example.cpudefense.GameView
 import com.example.cpudefense.R
 import com.example.cpudefense.utils.setCenter
@@ -51,7 +50,7 @@ class SpeedControl(var gameView: GameView)
         lockButton.area.setCenter(areaLeft.right - actualButtonSize / 2, areaLeft.centerY())
     }
     
-    fun setInfoline(newText: String)
+    fun setInfoLine(newText: String)
     {
         if (newText == stageInfoText)
             return
