@@ -42,7 +42,8 @@ class GameActivity : Activity() {
     private var updateDelay: Long = defaultDelay
     private val effectsDelay: Long = 15
 
-    /** additional properties for displaying an average frame rate */
+    // additional properties for displaying an average frame rate
+    /** the moment when the last frame was displayed (in ms since last device reboot) */
     private var timeOfLastFrame = SystemClock.uptimeMillis()
     /** how many samples in one count */
     private val meanCount = 10
@@ -61,9 +62,9 @@ class GameActivity : Activity() {
     private var resumeGame = true
 
     override fun onCreate(savedInstanceState: Bundle?)
-            /** this function gets called when the app was started, but not when the user returns
-             * here from another app.
-             */
+    /** this function gets called when the app was started, but not when the user returns
+     * here from another app.
+     */
     {
         super.onCreate(savedInstanceState)
         /* here, the size of the surfaces might not be known */
@@ -75,9 +76,12 @@ class GameActivity : Activity() {
         gameView = GameView(this)
     }
 
-    override fun onPause() {
-        // this method get executed when the user presses the system's "back" button,
-        // but also when she navigates to another app
+    override fun onPause()
+    /** this method get executed when the user presses the system's "back" button,
+     *  but also when she navigates to another app
+     */
+    {
+
         Persistency(this).saveGeneralState(gameMechanics)
         Persistency(this).saveCurrentLevelState(gameMechanics)
         gameIsRunning = false
@@ -85,10 +89,10 @@ class GameActivity : Activity() {
     }
 
     override fun onResume()
-            /** this function gets called in any case, regardless of whether
-             * a new game is started or the user just navigates back to the app.
-             * theGame already exists when we come here.
-             */
+    /** this function gets called in any case, regardless of whether
+     * a new game is started or the user just navigates back to the app.
+     * theGame already exists when we come here.
+     */
     {
         super.onResume()
         Toast.makeText(this, resources.getString(R.string.toast_loading), Toast.LENGTH_SHORT).show()
@@ -97,13 +101,16 @@ class GameActivity : Activity() {
 
         // determine what to do: resume, restart, or play next level
         val restartGame = intent.getBooleanExtra("RESET_PROGRESS", false)
-        val startOnLevel =
-            if (restartGame)
-                Stage.Identifier.startOfNewGame
-            else
-                Stage.Identifier(
+        val restartEndless = intent.getBooleanExtra("RESET_ENDLESS", false)
+
+        val startOnLevel = when
+        {
+            restartGame -> Stage.Identifier.startOfNewGame
+            restartEndless -> Stage.Identifier.startOfEndless
+            else -> Stage.Identifier(
                     series = intent.getIntExtra("START_ON_SERIES", 1),
                     number = intent.getIntExtra("START_ON_STAGE", 1))
+        }
         if (!resumeGame)
             resumeGame = intent.getBooleanExtra("RESUME_GAME", false)
 
@@ -145,8 +152,8 @@ class GameActivity : Activity() {
 
 
     fun setLastPlayedStage(identifier: Stage.Identifier)
-            /** when completing a level, record the current number in the SharedPrefs.
-             * @param identifier number of the level successfully completed */
+    /** when completing a level, record the current number in the SharedPrefs.
+     * @param identifier number of the level successfully completed */
     {
         val prefs = getSharedPreferences(Persistency.filename_state, Context.MODE_PRIVATE)
         with (prefs.edit())

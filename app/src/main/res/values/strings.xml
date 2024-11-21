@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">ChipDefense</string>
-    <string name="button_startGame">Start new game</string>
+    <string name="button_start_game">Start new game</string>
+    <string name="button_reset_progress">Reset game progress</string>
     <string name="quit">Quit</string>
     <string name="button_resume">Resume game</string>
     <string name="button_playlevel">Play stage</string>
@@ -29,9 +30,12 @@
     <string name="level_entry">Level %d</string>
     <string name="level_selector">Level Selector</string>
     <string name="query_reset">Do you want to reset all heroes?</string>
-    <string name="query_restart_game">Really start a new game? This will reset all your progress.</string>
+    <string name="query_restart_game">Do you want to reset all your current progress?</string>
     <string name="no">No</string>
     <string name="yes">Yes</string>
+    <string name="choice_1">Yes, start a fresh game from the beginning.</string>
+    <string name="choice_2">Only reset the “endless” levels.</string>
+    <string name="choice_3">No, keep my progress.</string>
     <string name="close">Close</string>
 
     <string name="instr_1">

@@ -2,6 +2,7 @@ package com.example.cpudefense
 
 import android.app.Dialog
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
@@ -14,9 +15,12 @@ import androidx.appcompat.widget.SwitchCompat
 class SettingsActivity : AppCompatActivity()
 {
     var settings = Settings()
+    var isEndlessAvailable = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        if (intent.getIntExtra("MAXSERIES", 1) >= GameMechanics.SERIES_ENDLESS)
+            isEndlessAvailable = true
         setContentView(R.layout.activity_settings)
         loadPrefs()
     }
@@ -56,27 +60,45 @@ class SettingsActivity : AppCompatActivity()
     fun startNewGame(@Suppress("UNUSED_PARAMETER") v: View)
     {
         val dialog = Dialog(this)
-        // dialog.setContentView(R.layout.layout_dialog_new_game)
-        dialog.setContentView(R.layout.layout_dialog_new_game)
+        dialog.setContentView(R.layout.layout_dialog_reset_progress)
         dialog.window?.setLayout(
-            ViewGroup.LayoutParams.WRAP_CONTENT,
+            ViewGroup.LayoutParams.MATCH_PARENT,
             ViewGroup.LayoutParams.WRAP_CONTENT
         )
         dialog.setCancelable(true)
         dialog.findViewById<TextView>(R.id.question).text = resources.getText(R.string.query_restart_game)
-        val button1 = dialog.findViewById<Button>(R.id.button1)
-        val button2 = dialog.findViewById<Button>(R.id.button2)
-        button2?.text = resources.getText(R.string.yes)
-        button1?.text = resources.getText(R.string.no)
-        button2?.setOnClickListener {
-            dialog.dismiss()
-            val intent = Intent(this, GameActivity::class.java)
-            intent.putExtra("RESET_PROGRESS", true)
-            intent.putExtra("START_ON_STAGE", 1)
-            intent.putExtra("CONTINUE_GAME", false)
-            startActivity(intent)
+        dialog.findViewById<TextView>(R.id.button1)?.let{
+            it.text = resources.getText(R.string.choice_1)
+            it.setOnClickListener {
+                val intent = Intent(this, GameActivity::class.java)
+                intent.putExtra("RESET_PROGRESS", true)
+                intent.putExtra("CONTINUE_GAME", false)
+                startActivity(intent)
+                dialog.dismiss()
+            }
         }
-        button1?.setOnClickListener { dialog.dismiss() }
+        dialog.findViewById<TextView>(R.id.button2)?.let{
+            it.text = resources.getText(R.string.choice_2)
+            if (isEndlessAvailable) {
+                it.setOnClickListener {
+                    val intent = Intent(this, GameActivity::class.java)
+                    intent.putExtra("RESET_ENDLESS", true)
+                    intent.putExtra("CONTINUE_GAME", false)
+                    startActivity(intent)
+                    dialog.dismiss()
+                }
+            }
+            else
+            {
+                it.setTextColor(Color.BLACK)
+            }
+        }
+        dialog.findViewById<TextView>(R.id.button3)?.let{
+            it.text = resources.getText(R.string.choice_3)
+            it.setOnClickListener {
+                dialog.dismiss()
+            }
+        }
         dialog.show()
     }
 

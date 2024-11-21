@@ -35,7 +35,7 @@
         android:clickable="true"
         android:focusable="true"
         android:onClick="startNewGame"
-        android:text="@string/button_startGame"
+        android:text="@string/button_reset_progress"
         android:textColor="@color/white"
         android:textStyle="bold"
         app:layout_constraintTop_toTopOf="parent"

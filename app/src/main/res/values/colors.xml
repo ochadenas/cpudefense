@@ -9,6 +9,10 @@
     <color name="white">#FFFFFFFF</color>
     <color name="deco_blue">#0C65EA</color>
     <color name="deco_white">#FFFFFF</color>
+    <color name="choice_3">#fdd300</color>
+    <color name="choice_2">#EB9109</color>
+    <color name="choice_1">#eb6909</color>
+
     <color name="circuit">#fdd300</color>
     <color name="circuit_edge">#eb6909</color>
 

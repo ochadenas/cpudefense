@@ -140,7 +140,7 @@ class WelcomeActivity : AppCompatActivity() {
         showLevelReached()
         val buttonResume = findViewById<Button>(R.id.continueGameButton)
         when {
-            maxLevel.number == 0 -> buttonResume.text = getString(R.string.button_startGame)
+            maxLevel.number == 0 -> buttonResume.text = getString(R.string.button_start_game)
             gameState == "running" -> buttonResume.text = getString(R.string.button_resume)
             gameState == "complete" -> {
                 buttonResume.text = getString(R.string.play_level_x).format(nextLevelToPlay.number)
@@ -194,6 +194,7 @@ class WelcomeActivity : AppCompatActivity() {
 
     fun displaySettingsDialog(@Suppress("UNUSED_PARAMETER") v: View) {
         val intent = Intent(this, SettingsActivity::class.java)
+        intent.putExtra("MAXSERIES", maxLevel.series)
         startActivity(intent)
         setupButtons()
     }
