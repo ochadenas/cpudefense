@@ -6,7 +6,6 @@ import android.graphics.Bitmap
 import android.widget.Toast
 import com.example.cpudefense.gameElements.Chip
 import com.example.cpudefense.gameElements.Wave
-import com.example.cpudefense.networkmap.Coord
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -130,6 +129,7 @@ class GameMechanics {
     var currentlyActiveWave: Wave? = null
     var holidays = HashMap<Int, Hero.Holiday>()
 
+    /** the two different kind of series: BASIC (which means NORMAL and TURBO) and ENDLESS */
     enum class LevelMode { BASIC, ENDLESS }
     /** coin management */
     var purseOfCoins = hashMapOf(
@@ -141,8 +141,7 @@ class GameMechanics {
     /** current stage when it is actually played and the game is running */
     var currentlyActiveStage: Stage? = null
 
-    // other temporary variables
-    var additionalCashDelay = 0
+    /** counter for information gain over time */
     private var additionalCashTicks: Float = 0.0f
 
     /** time between frames in ms. Used by wait cycles in the game */
@@ -153,14 +152,22 @@ class GameMechanics {
     enum class GamePhase { START, RUNNING, INTERMEZZO, MARKETPLACE, PAUSED }
     enum class GameSpeed { NORMAL, MAX }
 
-    fun beginGameAndResetProgress(startingLevel: Stage.Identifier)
+    fun deleteProgressOfSeries(mode: LevelMode)
+            /** initializes the data structures for level summaries, heroes and coin purse with empty values.
+             * @param mode selects whether only the ENDLESS series gets deleted, or all series (including ENDLESS).
+             */
     {
-        /** Begins a completely new game, starting from the first level.
-         * All coins and heroes are cleared.
-         */
-        summaryPerNormalLevel = HashMap()
-        summaryPerTurboLevel = HashMap()
-        currentStage = startingLevel
+        // this gets deleted in any case:
+        summaryPerEndlessLevel = HashMap()
+        heroesByMode[LevelMode.ENDLESS] = HashMap()
+        purseOfCoins[LevelMode.ENDLESS] = PurseOfCoins(this, LevelMode.ENDLESS)
+        // additionally, the BASIC series if requested:
+        if (mode==LevelMode.BASIC) {
+            summaryPerTurboLevel = HashMap()
+            summaryPerNormalLevel = HashMap()
+            heroesByMode[LevelMode.BASIC] = HashMap()
+            purseOfCoins[LevelMode.BASIC] = PurseOfCoins(this, LevelMode.BASIC)
+        }
     }
 
     inline fun globalSpeedFactor(): Float
@@ -389,12 +396,13 @@ class GameMechanics {
     private fun gainAdditionalCash(activity: GameActivity)
     /** increases the amount of cash in regular intervals */
     {
-        if (additionalCashDelay == 0)
+        val additionalCashDelay = heroModifier(Hero.Type.GAIN_CASH)
+        if (additionalCashDelay.toInt() == 0)
             return
         additionalCashTicks -= globalSpeedFactor()
         if (additionalCashTicks<0) {
             activity.gameView.scoreBoard.addCash(1)
-            additionalCashTicks = additionalCashDelay.toFloat()
+            additionalCashTicks = additionalCashDelay
         }
     }
 

@@ -18,6 +18,7 @@ class Stage(var gameMechanics: GameMechanics, var gameView: GameView)
     {
         companion object {
             val startOfNewGame = Identifier(GameMechanics.SERIES_NORMAL, 1)
+            val startOfEndless = Identifier(GameMechanics.SERIES_ENDLESS, 1)
         }
 
         fun next(): Identifier

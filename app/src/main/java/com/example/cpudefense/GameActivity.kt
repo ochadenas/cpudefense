@@ -1,3 +1,5 @@
+@file:Suppress("SpellCheckingInspection")
+
 package com.example.cpudefense
 
 import android.app.Activity
@@ -155,85 +157,82 @@ class GameActivity : Activity() {
         }
     }
 
-    fun setMaxPlayedStage(identifier: Stage.Identifier, resetProgress: Boolean = false)
+    fun setMaxPlayedStage(identifier: Stage.Identifier, forceReset: Boolean = false)
             /** when completing a level, record the level as highest completed, but only if the old max level is not higher.
              * @param identifier number of the level successfully completed
-             * @param resetProgress If true, forces resetting the max stage to the given currentStage
+             * @param forceReset If true, forces resetting the max stage to the given currentStage
              * */
     {
         val prefs = getSharedPreferences(Persistency.filename_state, Context.MODE_PRIVATE)
-        val maxStage = Stage.Identifier(prefs.getInt("MAXSERIES", 1), prefs.getInt("MAXSTAGE", 0))
+        val previousMaxStage = Stage.Identifier(prefs.getInt("MAXSERIES", 1), prefs.getInt("MAXSTAGE", 0))
+        val newMaxStage = if (identifier.isGreaterThan(previousMaxStage) || forceReset) identifier else previousMaxStage
         with (prefs.edit())
         {
-            if (resetProgress)
-            {
-                putInt("MAXSTAGE", 0)
-                putInt("MAXSERIES", 1)
-                putBoolean("TURBO_AVAILABLE", false)
-                putBoolean("ENDLESS_AVAILABLE", false)
-                apply()
-            }
-            if (identifier.isGreaterThan(maxStage))
-            {
-                putInt("MAXSTAGE", identifier.number)
-                putInt("MAXSERIES", identifier.series)
-                apply()
-            }
-            // make advanced series available
-            when (identifier.series)
-            {
-                1 ->
-                    if (identifier.number== GameMechanics.maxLevelAvailable)
-                        putBoolean("TURBO_AVAILABLE", true)
-                2 -> {
-                    putBoolean("TURBO_AVAILABLE", true)
-                    if (identifier.number == GameMechanics.maxLevelAvailable)
-                        putBoolean("ENDLESS_AVAILABLE", true)
+            putInt("MAXSTAGE", newMaxStage.number)
+            putInt("MAXSERIES", newMaxStage.series)
+            // make next series available if last level is completed, otherwise remove access
+            val completedLastStageOfSeries: Boolean = (identifier.number == GameMechanics.maxLevelAvailable)
+            when (newMaxStage.series) {
+                GameMechanics.SERIES_NORMAL -> {
+                    putBoolean("TURBO_AVAILABLE", completedLastStageOfSeries)
+                    putBoolean("ENDLESS_AVAILABLE", false)
                 }
-                3 -> {
+                GameMechanics.SERIES_TURBO -> {
+                    putBoolean("TURBO_AVAILABLE", true)
+                    putBoolean("ENDLESS_AVAILABLE", completedLastStageOfSeries)
+                }
+                GameMechanics.SERIES_ENDLESS -> {
                     putBoolean("TURBO_AVAILABLE", true)
                     putBoolean("ENDLESS_AVAILABLE", true)
                 }
             }
-            commit()
+            apply()
         }
     }
 
     private fun beginGame(resetProgress: Boolean = false,
+                          resetEndless: Boolean = false,
                           resumeGame: Boolean = false,
                           startingLevel: Stage.Identifier = Stage.Identifier())
     /** Begins the current game on a chosen level. Also called when starting a completely
      * new game.
      * @param resetProgress If true, the whole game is started from the first level, and
      * all coins and heroes are cleared. Otherwise, start on the level given in the saved state.
+     * @param resetEndless same as resetProgress, but only for the 'endless' series.
      * @param resumeGame Continue the game within a level, at exactly the point where it has been left.
      */
     {
         loadSettings()
-        if (resetProgress)
-        {
-            gameMechanics.beginGameAndResetProgress(Stage.Identifier.startOfNewGame)
-            setLastPlayedStage(Stage.Identifier.startOfNewGame)
-            setMaxPlayedStage(Stage.Identifier.startOfNewGame, resetProgress=true)
-            prepareLevelAtStartOfGame(Stage.Identifier.startOfNewGame)
-        }
-        else
-        {
-            Persistency(this).let {
-                it.loadAllStageSummaries(gameMechanics)
-                it.loadAllHeroes(gameMechanics)
-                it.loadGeneralState(gameMechanics)
-                it.loadCoins(gameMechanics)
+        when {
+            resetProgress -> {
+                gameMechanics.deleteProgressOfSeries(LevelMode.BASIC)
+                gameMechanics.currentStage = Stage.Identifier.startOfNewGame
+                setLastPlayedStage(Stage.Identifier.startOfNewGame)
+                setMaxPlayedStage(Stage.Identifier.startOfNewGame, forceReset=true)
+                prepareLevelAtStartOfGame(Stage.Identifier.startOfNewGame)
             }
-            if (gameMechanics.purseOfCoins[LevelMode.BASIC]?.initialized == false || forceHeroMigration )
-                gameMechanics.migrateHeroes()
-            gameMechanics.additionalCashDelay = gameMechanics.heroModifier(Hero.Type.GAIN_CASH).toInt() // TODO: nach gameMechanics verschieben
-            if (resumeGame)
-                resumeGame()
-            else
-            {
-                gameMechanics.currentStage = startingLevel
-                prepareLevelAtStartOfGame(startingLevel)
+            resetEndless -> {
+                gameMechanics.deleteProgressOfSeries(LevelMode.ENDLESS)
+                gameMechanics.currentStage = Stage.Identifier.startOfEndless
+                setLastPlayedStage(Stage.Identifier.startOfEndless)
+                setMaxPlayedStage(Stage.Identifier.startOfEndless, forceReset=true)
+                prepareLevelAtStartOfGame(Stage.Identifier.startOfEndless)
+            }
+            else -> {
+                Persistency(this).let {
+                    it.loadAllStageSummaries(gameMechanics)
+                    it.loadAllHeroes(gameMechanics)
+                    it.loadGeneralState(gameMechanics)
+                    it.loadCoins(gameMechanics)
+                }
+                if (gameMechanics.purseOfCoins[LevelMode.BASIC]?.initialized == false || forceHeroMigration)
+                    gameMechanics.migrateHeroes()
+                if (resumeGame)
+                    resumeGame()
+                else {
+                    gameMechanics.currentStage = startingLevel
+                    prepareLevelAtStartOfGame(startingLevel)
+                }
             }
         }
     }
@@ -327,7 +326,7 @@ class GameActivity : Activity() {
     }
 
     private fun replayLevel() {
-        gameMechanics.currentlyActiveStage?.let { beginGame(resetProgress = false, startingLevel = it.data.ident) }
+        gameMechanics.currentlyActiveStage?.let { beginGame(startingLevel = it.data.ident) }
     }
 
     fun showPurchaseLifeDialog(showHint: Boolean = true)
