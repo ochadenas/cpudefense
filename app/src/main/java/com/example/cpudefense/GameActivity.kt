@@ -17,6 +17,9 @@ import android.widget.TextView
 import android.widget.Toast
 import com.example.cpudefense.GameMechanics.GamePhase
 import com.example.cpudefense.GameMechanics.LevelMode
+import com.example.cpudefense.GameMechanics.Params.SERIES_ENDLESS
+import com.example.cpudefense.GameMechanics.Params.SERIES_NORMAL
+import com.example.cpudefense.GameMechanics.Params.SERIES_TURBO
 import com.example.cpudefense.GameMechanics.Params.forceHeroMigration
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
@@ -91,7 +94,6 @@ class GameActivity : Activity() {
     override fun onResume()
     /** this function gets called in any case, regardless of whether
      * a new game is started or the user just navigates back to the app.
-     * theGame already exists when we come here.
      */
     {
         super.onResume()
@@ -108,13 +110,13 @@ class GameActivity : Activity() {
             restartGame -> Stage.Identifier.startOfNewGame
             restartEndless -> Stage.Identifier.startOfEndless
             else -> Stage.Identifier(
-                    series = intent.getIntExtra("START_ON_SERIES", 1),
+                    series = intent.getIntExtra("START_ON_SERIES", SERIES_NORMAL),
                     number = intent.getIntExtra("START_ON_STAGE", 1))
         }
         if (!resumeGame)
             resumeGame = intent.getBooleanExtra("RESUME_GAME", false)
 
-        beginGame(resumeGame = resumeGame, resetProgress = restartGame, startingLevel = startOnLevel)
+        beginGame(resumeGame = resumeGame, resetProgress = restartGame, resetEndless = restartEndless, startingLevel = startOnLevel)
 
         if (resumeGame && gameMechanics.state.phase == GamePhase.RUNNING)
             showStageMessage(gameMechanics.currentStage)
@@ -180,15 +182,15 @@ class GameActivity : Activity() {
             // make next series available if last level is completed, otherwise remove access
             val completedLastStageOfSeries: Boolean = (identifier.number == GameMechanics.maxLevelAvailable)
             when (newMaxStage.series) {
-                GameMechanics.SERIES_NORMAL -> {
+                SERIES_NORMAL -> {
                     putBoolean("TURBO_AVAILABLE", completedLastStageOfSeries)
                     putBoolean("ENDLESS_AVAILABLE", false)
                 }
-                GameMechanics.SERIES_TURBO -> {
+                SERIES_TURBO -> {
                     putBoolean("TURBO_AVAILABLE", true)
                     putBoolean("ENDLESS_AVAILABLE", completedLastStageOfSeries)
                 }
-                GameMechanics.SERIES_ENDLESS -> {
+                SERIES_ENDLESS -> {
                     putBoolean("TURBO_AVAILABLE", true)
                     putBoolean("ENDLESS_AVAILABLE", true)
                 }
@@ -210,37 +212,47 @@ class GameActivity : Activity() {
      */
     {
         loadSettings()
-        when {
-            resetProgress -> {
+        Persistency(this).let {
+            it.loadAllStageSummaries(gameMechanics)
+            it.loadAllHeroes(gameMechanics)
+            it.loadGeneralState(gameMechanics)
+            it.loadCoins(gameMechanics)
+        }
+
+        var level = startingLevel
+        val resetRequested = (resetEndless || resetProgress)
+
+        if (resetRequested)
+        {
+            level =  Stage.Identifier.startOfEndless
+            gameMechanics.deleteProgressOfSeries(LevelMode.ENDLESS)
+            if (resetProgress)
+            // in addition: if a complete reset is requested, also clear the BASIC series
+            {
+                level =  Stage.Identifier.startOfNewGame
                 gameMechanics.deleteProgressOfSeries(LevelMode.BASIC)
-                gameMechanics.currentStage = Stage.Identifier.startOfNewGame
-                setLastPlayedStage(Stage.Identifier.startOfNewGame)
-                setMaxPlayedStage(Stage.Identifier.startOfNewGame, forceReset=true)
-                prepareLevelAtStartOfGame(Stage.Identifier.startOfNewGame)
             }
-            resetEndless -> {
-                gameMechanics.deleteProgressOfSeries(LevelMode.ENDLESS)
-                gameMechanics.currentStage = Stage.Identifier.startOfEndless
-                setLastPlayedStage(Stage.Identifier.startOfEndless)
-                setMaxPlayedStage(Stage.Identifier.startOfEndless, forceReset=true)
-                prepareLevelAtStartOfGame(Stage.Identifier.startOfEndless)
+            gameMechanics.currentStage = level
+            setLastPlayedStage(level)
+            setMaxPlayedStage(level, forceReset=true)
+            prepareLevelAtStartOfGame(level)
+            Persistency(this).apply {
+                saveHeroes(gameMechanics)
+                saveCoins(gameMechanics)
+                saveStageSummaries(gameMechanics, SERIES_NORMAL)
+                saveStageSummaries(gameMechanics, SERIES_TURBO)
+                saveStageSummaries(gameMechanics, SERIES_ENDLESS)
             }
-            else -> {
-                Persistency(this).let {
-                    it.loadAllStageSummaries(gameMechanics)
-                    it.loadAllHeroes(gameMechanics)
-                    it.loadGeneralState(gameMechanics)
-                    it.loadCoins(gameMechanics)
-                }
-                if (gameMechanics.purseOfCoins[LevelMode.BASIC]?.initialized == false || forceHeroMigration)
-                    gameMechanics.migrateHeroes()
-                if (resumeGame)
-                    resumeGame()
-                else {
-                    gameMechanics.currentStage = startingLevel
-                    prepareLevelAtStartOfGame(startingLevel)
-                }
-            }
+        }
+        // final actions, to be executed in any case
+        if (gameMechanics.purseOfCoins[LevelMode.BASIC]?.initialized == false || forceHeroMigration)
+            gameMechanics.migrateHeroes()
+
+        if (resumeGame)
+            resumeGame()
+        else {
+            gameMechanics.currentStage = level
+            prepareLevelAtStartOfGame(level)
         }
     }
 

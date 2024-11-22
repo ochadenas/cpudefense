@@ -42,6 +42,7 @@ class GameMechanics {
         const val minAttackerSpeed = 0.02f
         const val numberOfHeroesConsideredForLeave = 5
         const val numberOfHeroesToChooseFrom = 3
+        const val defaultRewardCoins = 3
 
         const val levelSnapshotIconSize = 120
 

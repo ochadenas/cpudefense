@@ -176,7 +176,10 @@ class Stage(var gameMechanics: GameMechanics, var gameView: GameView)
                 stage.tracks[id] = track
             }
             // set summary and available coins
-            stage.gameMechanics.getSummaryOfStage(stage.data.ident)?.let {
+            var stageSummary = stage.gameMechanics.getSummaryOfStage(stage.data.ident)
+            if (stageSummary == null)
+                stageSummary = Stage.Summary(coinsMaxAvailable = GameMechanics.defaultRewardCoins)
+            stageSummary?.let {
                 stage.summary = it
                 stage.rewardCoins = it.coinsMaxAvailable
                 // stage.theGame.state.coinsInLevel = it.coinsAvailable ?: 0
