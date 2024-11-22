@@ -121,7 +121,7 @@
     <string name="series_completed_message_2">Vous pouvez rejouer</string>
     <string name="series_completed_message_3">tous les niveaux</string>
     <string name="series_completed_message_4">en mode \'turbo\'.</string>
-    <string name="instr_2_1">"En mode turbo, les attaquants sont plus rapides, plus forts et plus nombreux.  De plus, certains slots sont déjà occupés par des puces indésirables que tu dois gérer. "</string>
+    <string name="instr_2_1">"En mode turbo, les attaquants sont plus rapides, plus forts et plus nombreux.  De plus, certains slots sont déjà occupés par des puces indésirables que vous devez gérer. "</string>
     <string name="settings_disable_background">Désactiver l\'arrière-plan</string>
     <string name="settings_show_atts_in_range">Montrer les attaquants à portée</string>
     <string name="mandelbrot">Benoît Mandelbrot a été le principal fondateur de la géométrie fractale, qui permet non seulement de décrire très bien de nombreuses structures dans la nature, mais aussi de créer des graphiques fantastiques sur ordinateur. \n\nLa représentation graphique de l\'ensemble de Mandelbrot est devenu virale et a démarré une nouvelle ère de l\'art informatique.</string>

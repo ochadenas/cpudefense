@@ -6,7 +6,6 @@ import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
@@ -15,7 +14,7 @@ import androidx.appcompat.widget.SwitchCompat
 class SettingsActivity : AppCompatActivity()
 {
     var settings = Settings()
-    var isEndlessAvailable = false
+    private var isEndlessAvailable = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -75,6 +74,7 @@ class SettingsActivity : AppCompatActivity()
                 intent.putExtra("CONTINUE_GAME", false)
                 startActivity(intent)
                 dialog.dismiss()
+                dismiss(v)
             }
         }
         dialog.findViewById<TextView>(R.id.button2)?.let{
@@ -86,6 +86,7 @@ class SettingsActivity : AppCompatActivity()
                     intent.putExtra("CONTINUE_GAME", false)
                     startActivity(intent)
                     dialog.dismiss()
+                    dismiss(v)
                 }
             }
             else

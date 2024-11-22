@@ -37,6 +37,12 @@ class Background(val gameView: GameView)
     var opacity = backgroundOpacity
     var paint = Paint()
 
+    /** the x coordinate of the "window" on the bigger bitmap that is to be displayed */
+    var displacementX = 0
+    /** the y coordinate of the "window" on the bigger bitmap that is to be displayed */
+    var displacementY = 0
+
+
     /** a bitmap that has arbitrary dimensions. Usually bigger than the screen size.
      * Must be scaled to viewport dimensions whenever they change. */
     private var wholeBackground: Bitmap? = null
@@ -170,10 +176,11 @@ class Background(val gameView: GameView)
         // here, largeBitmap is at least as big as the destination rectangle (in both dimensions)
         val deltaX = largeBitmap.width - destRect.width()
         val deltaY = largeBitmap.height - destRect.height()
+        displacementX = if (deltaX>0) Random.nextInt(deltaX) else 0
+        displacementY = if (deltaY>0) Random.nextInt(deltaY) else 0
+
         val bitmap = createBlankBackground(destRect)
         val canvas = Canvas(bitmap)
-        val displacementX = if (deltaX>0) Random.nextInt(deltaX) else 0
-        val displacementY = if (deltaY>0) Random.nextInt(deltaY) else 0
         val sourceRect = Rect(destRect)
         paint.alpha = (opacity * 255).toInt()
         sourceRect.setTopLeft(displacementX, displacementY)

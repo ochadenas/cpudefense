@@ -139,7 +139,7 @@ class Network(val gameMechanics: GameMechanics, val gameView: GameView, x: Int, 
     {
         // displayFrame(canvas, viewport) // optional
         if (!this::networkImage.isInitialized)
-            recreateNetworkImage(true)
+            recreateNetworkImage(false)
         if (this::networkImage.isInitialized)
             canvas.drawBitmap(this.networkImage, null, viewport.screen, paint)
     }

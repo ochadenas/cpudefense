@@ -46,7 +46,7 @@ class GameView(context: Context):
         const val chipTextSize = 20f
         const val computerTextSize = 26f
         const val notificationTextSize = 22f
-        const val instructionTextSize = 26f
+        const val instructionTextSize = 25f
         const val biographyTextSize = 20f
         const val heroCardNameSize = 18f
         const val heroCardTextSize = 14f
@@ -183,6 +183,7 @@ class GameView(context: Context):
         scoreBoard.recreateBitmap()
         viewport.reset()
         viewport.setScreenSize(this.width, this.height)
+        gameMechanics.currentlyActiveStage?.network?.recreateNetworkImage(false)
     }
 
     private fun scoreBoardHeight(h: Int): Int
