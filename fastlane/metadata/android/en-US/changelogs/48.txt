@@ -1,0 +1,6 @@
+Bug fixes:
+- No reward coins were awarded in Endless series after a game reset.
+
+Miscellaneous:
+- Heros are no longer automatically available in TURBO and ENDLESS. The "hero tree" applies for all series.
+
