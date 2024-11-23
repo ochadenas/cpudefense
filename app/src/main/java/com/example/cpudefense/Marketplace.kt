@@ -266,7 +266,7 @@ class Marketplace(val gameView: GameView): GameElement()
 
     @Suppress("UNUSED_PARAMETER")
     fun onScroll(event1: MotionEvent?, event2: MotionEvent?, dX: Float, dY: Float): Boolean {
-        val scrollFactor = 1.1f  // higher values make scrolling faster
+        val scrollFactor = 1.4f  // higher values make scrolling faster
         if (dY == 0f)
             return false  // only vertical movements are considered here
         event1?.let {
