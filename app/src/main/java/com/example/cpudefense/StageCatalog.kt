@@ -52,19 +52,19 @@ class StageCatalog
                             Stage.fillEmptyStageWithData(stage, it)
                             EndlessStageCreator(stage).createWaves()
                             stage.calculateDifficulty()
-                            return
                         }
-                    while (stage.data.difficulty > 900f) {
-                        EndlessStageCreator(stage).createStage(level)
-                        stage.calculateDifficulty() // avoid levels that are impossible to play
+                    else {
+                        while (stage.data.difficulty > 900f) {
+                            EndlessStageCreator(stage).createStage(level)
+                            stage.calculateDifficulty() // avoid levels that are impossible to play
+                        }
+                        val targetDifficulty = 4 + 1.5 * sqrt(level.number.toDouble())
+                        createObstaclesForDifficulty(stage, targetDifficulty - stage.data.difficulty)
+                        stage.provideStructureData()
+                        structure[level.number] = stage.data
+                        Persistency(stage.gameView.gameActivity).saveLevelStructure(GameMechanics.SERIES_ENDLESS, structure)
                     }
-                    // val numberOfObstacles = level.number - stage.difficulty.toInt()
-                    // createFixedNumberOfObstacles(stage, numberOfObstacles)
-                    val targetDifficulty = 4 + 1.5 * sqrt(level.number.toDouble())
-                    createObstaclesForDifficulty(stage, targetDifficulty - stage.data.difficulty)
-                    stage.provideStructureData()
-                    structure[level.number] = stage.data
-                    Persistency(stage.gameView.gameActivity).saveLevelStructure(GameMechanics.SERIES_ENDLESS, structure)
+                    stage.rewardCoins = GameMechanics.defaultRewardCoins
                 }
             }
             stage.calculateDifficulty()

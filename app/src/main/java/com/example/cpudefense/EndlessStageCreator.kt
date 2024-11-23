@@ -147,7 +147,6 @@ class EndlessStageCreator(val stage: Stage)
             setMask(link)
 
         createWaves()
-        stage.rewardCoins = GameMechanics.defaultRewardCoins
         return
     }
 
