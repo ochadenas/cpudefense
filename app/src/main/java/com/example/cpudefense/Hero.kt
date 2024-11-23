@@ -284,8 +284,6 @@ class Hero(var gameActivity: GameActivity, type: Type)
      * @param stageIdentifier cards may depend on the stage and/or series
      */
     {
-        if (stageIdentifier.series > 1)  // restrictions only apply for series 1
-            return true
         return when (data.type) {
             Type.LIMIT_UNWANTED_CHIPS ->    upgradeLevel(Type.INCREASE_MAX_HERO_LEVEL) >= 3
             Type.INCREASE_MAX_HERO_LEVEL -> upgradeLevel(Type.ADDITIONAL_LIVES) >= 3
