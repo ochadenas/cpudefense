@@ -4,11 +4,13 @@ package com.example.cpudefense
 
 import android.graphics.Bitmap
 import android.widget.Toast
+import com.example.cpudefense.activities.GameActivity
 import com.example.cpudefense.gameElements.Chip
 import com.example.cpudefense.gameElements.Wave
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.util.Calendar
 import kotlin.random.Random
 
 class TemperatureDamageException: Exception("CPU damage by heat")
@@ -44,8 +46,6 @@ class GameMechanics {
         const val numberOfHeroesToChooseFrom = 3
         const val defaultRewardCoins = 3
 
-        const val levelSnapshotIconSize = 120
-
         const val SERIES_NORMAL  = 1
         const val SERIES_TURBO   = 2
         const val SERIES_ENDLESS = 3
@@ -74,6 +74,32 @@ class GameMechanics {
         const val resistorBaseStrength = 10f // ohms
         const val resistorBaseDuration = 160f // ticks
         const val resistorMaxDuration = 1600f // ticks
+
+        enum class Season { DEFAULT, EASTER, CHRISTMAS }
+
+        fun specialSeason(): Season
+                /** for "easter egg" purposes. Determine whether - at the time of playing - we are in
+                 * a special season.
+                 */
+        {
+            when (Calendar.getInstance().get(Calendar.MONTH))
+            {
+                0 -> return Season.CHRISTMAS  // January
+                2 -> return Season.EASTER
+                3 -> return Season.EASTER
+                10 -> return Season.DEFAULT
+                11 -> return Season.CHRISTMAS
+                else -> return Season.DEFAULT
+            }
+        }
+
+        fun specialLevel(stageIdent: Stage.Identifier): Season
+        {
+            if (stageIdent.mode() == LevelMode.BASIC && stageIdent.number == specialLevelNumber)
+                return specialSeason()
+            else
+                return Season.DEFAULT
+        }
 
     }
 
@@ -455,13 +481,13 @@ class GameMechanics {
     }
 
 
-    fun takeLevelSnapshot(activity: GameActivity)
+    fun takeLevelSnapshot(activity: GameActivity) // TODO: move to GameActivity
     {
         currentlyActiveStage?.let {
             if (it.getSeries() == SERIES_ENDLESS)
-                levelThumbnailEndless[it.getLevel()] = it.takeSnapshot(levelSnapshotIconSize)
+                levelThumbnailEndless[it.getLevel()] = it.takeSnapshot(GameView.levelSnapshotIconSize)
             else
-                levelThumbnail[it.getLevel()] = it.takeSnapshot(levelSnapshotIconSize)
+                levelThumbnail[it.getLevel()] = it.takeSnapshot(GameView.levelSnapshotIconSize)
             Persistency(activity).saveThumbnailOfLevel(this, it)
         }
     }

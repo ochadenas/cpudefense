@@ -10,15 +10,15 @@
         android:theme="@style/Theme.CpuDefense">
         <profileable android:shell="true" />
         <activity
-            android:name=".GameActivity"
+            android:name=".activities.GameActivity"
             android:screenOrientation="portrait"
             android:exported="false" />
         <activity
-            android:name=".LevelSelectActivity"
+            android:name=".activities.LevelSelectActivity"
             android:screenOrientation="portrait"
             android:exported="false" />
         <activity
-            android:name=".WelcomeActivity"
+            android:name=".activities.WelcomeActivity"
             android:screenOrientation="portrait"
             android:exported="true">
             <intent-filter>
@@ -27,11 +27,11 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".SettingsActivity"
+            android:name=".activities.SettingsActivity"
             android:screenOrientation="portrait"
             android:exported="false" />
         <activity
-            android:name=".AboutActivity"
+            android:name=".activities.AboutActivity"
             android:screenOrientation="portrait"
             android:exported="false" />
 

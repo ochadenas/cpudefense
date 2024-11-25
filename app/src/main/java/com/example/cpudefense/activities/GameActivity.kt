@@ -1,6 +1,6 @@
 @file:Suppress("SpellCheckingInspection")
 
-package com.example.cpudefense
+package com.example.cpudefense.activities
 
 import android.app.Activity
 import android.app.Dialog
@@ -15,12 +15,21 @@ import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.TextView
 import android.widget.Toast
+import com.example.cpudefense.CpuReached
+import com.example.cpudefense.GameMechanics
 import com.example.cpudefense.GameMechanics.GamePhase
 import com.example.cpudefense.GameMechanics.LevelMode
 import com.example.cpudefense.GameMechanics.Params.SERIES_ENDLESS
 import com.example.cpudefense.GameMechanics.Params.SERIES_NORMAL
 import com.example.cpudefense.GameMechanics.Params.SERIES_TURBO
 import com.example.cpudefense.GameMechanics.Params.forceHeroMigration
+import com.example.cpudefense.GameView
+import com.example.cpudefense.Persistency
+import com.example.cpudefense.PurseOfCoins
+import com.example.cpudefense.R
+import com.example.cpudefense.Settings
+import com.example.cpudefense.Stage
+import com.example.cpudefense.TemperatureDamageException
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -71,7 +80,7 @@ class GameActivity : Activity() {
     {
         super.onCreate(savedInstanceState)
         /* here, the size of the surfaces might not be known */
-        requestWindowFeature(Window.FEATURE_NO_TITLE)
+        requestWindowFeature(Window.FEATURE_NO_TITLE) // method of Activity
         setContentView(R.layout.activity_main_game)
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         resumeGame = false
@@ -111,7 +120,8 @@ class GameActivity : Activity() {
             restartEndless -> Stage.Identifier.startOfEndless
             else -> Stage.Identifier(
                     series = intent.getIntExtra("START_ON_SERIES", SERIES_NORMAL),
-                    number = intent.getIntExtra("START_ON_STAGE", 1))
+                    number = intent.getIntExtra("START_ON_STAGE", 1)
+            )
         }
         if (!resumeGame)
             resumeGame = intent.getBooleanExtra("RESUME_GAME", false)
@@ -130,7 +140,7 @@ class GameActivity : Activity() {
     fun showStageMessage(ident: Stage.Identifier)
     {
         runOnUiThread { Toast.makeText(this, resources.getString(R.string.toast_enter_stage).format(ident.number),
-                    Toast.LENGTH_SHORT).show() }
+                                       Toast.LENGTH_SHORT).show() }
     }
 
     override fun onStop() {
@@ -173,7 +183,8 @@ class GameActivity : Activity() {
              * */
     {
         val prefs = getSharedPreferences(Persistency.filename_state, Context.MODE_PRIVATE)
-        val previousMaxStage = Stage.Identifier(prefs.getInt("MAXSERIES", 1), prefs.getInt("MAXSTAGE", 0))
+        val previousMaxStage =
+            Stage.Identifier(prefs.getInt("MAXSERIES", 1), prefs.getInt("MAXSTAGE", 0))
         val newMaxStage = if (identifier.isGreaterThan(previousMaxStage) || forceReset) identifier else previousMaxStage
         with (prefs.edit())
         {
@@ -202,7 +213,8 @@ class GameActivity : Activity() {
     private fun beginGame(resetProgress: Boolean = false,
                           resetEndless: Boolean = false,
                           resumeGame: Boolean = false,
-                          startingLevel: Stage.Identifier = Stage.Identifier())
+                          startingLevel: Stage.Identifier = Stage.Identifier()
+    )
     /** Begins the current game on a chosen level. Also called when starting a completely
      * new game.
      * @param resetProgress If true, the whole game is started from the first level, and
@@ -224,12 +236,12 @@ class GameActivity : Activity() {
 
         if (resetRequested)
         {
-            level =  Stage.Identifier.startOfEndless
+            level = Stage.Identifier.startOfEndless
             gameMechanics.deleteProgressOfSeries(LevelMode.ENDLESS)
             if (resetProgress)
             // in addition: if a complete reset is requested, also clear the BASIC series
             {
-                level =  Stage.Identifier.startOfNewGame
+                level = Stage.Identifier.startOfNewGame
                 gameMechanics.deleteProgressOfSeries(LevelMode.BASIC)
             }
             gameMechanics.currentStage = level
@@ -262,7 +274,8 @@ class GameActivity : Activity() {
         Persistency(this).loadCurrentLevelState(gameMechanics)
         gameMechanics.stageData?.let {
             gameMechanics.currentStage = it.ident
-            gameMechanics.currentlyActiveStage = Stage.createStageFromData(gameMechanics, gameView, it)
+            gameMechanics.currentlyActiveStage =
+                Stage.createStageFromData(gameMechanics, gameView, it)
         }
         gameMechanics.currentlyActiveStage?.let {
             it.network.validateViewport()

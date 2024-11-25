@@ -19,6 +19,7 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.GestureDetectorCompat
 import com.example.cpudefense.GameMechanics.GamePhase
 import com.example.cpudefense.GameMechanics.LevelMode
+import com.example.cpudefense.activities.GameActivity
 import com.example.cpudefense.effects.Background
 import com.example.cpudefense.effects.Effects
 import com.example.cpudefense.effects.Fader
@@ -65,6 +66,7 @@ class GameView(context: Context):
         const val minScoreBoardHeight = 100
         const val maxScoreBoardHeight = 320
         const val speedControlButtonSize = 48
+        const val levelSnapshotIconSize = 120
     }
 
     val gameActivity = context as GameActivity

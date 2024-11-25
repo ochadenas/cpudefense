@@ -13,14 +13,13 @@ class StageCatalog
     companion object {
         private val possibleChipTypesWhereObstaclesCanBePut =
             setOf(Chip.ChipType.EMPTY, Chip.ChipType.ADD, Chip.ChipType.SHL, Chip.ChipType.NOP)
-        fun createStage(stage: Stage, level: Stage.Identifier)
-        {
-            when (level.series)
-            {
+
+        fun createStage(stage: Stage, level: Stage.Identifier) {
+            when (level.series) {
                 GameMechanics.SERIES_NORMAL ->
                     createStageWithoutObstacles(stage, level)
-                GameMechanics.SERIES_TURBO ->
-                {
+
+                GameMechanics.SERIES_TURBO -> {
                     createStageWithoutObstacles(stage, level)  // make basic layout
                     val difficulty = when (level.number) {
                         1 -> 0
@@ -42,11 +41,13 @@ class StageCatalog
                     }
                     createObstaclesForDifficulty(stage, difficulty.toDouble())
                 }
+
                 GameMechanics.SERIES_ENDLESS -> {
                     // if the stage is in the save file (from an earlier try on this level),
                     // restore the structure. Otherwise, create an empty level.
                     // Depending on the settings, always create a new random level.
-                    val structure: HashMap<Int, Stage.Data> = Persistency(stage.gameView.gameActivity).loadLevelStructure(GameMechanics.SERIES_ENDLESS)
+                    val structure: HashMap<Int, Stage.Data> =
+                        Persistency(stage.gameView.gameActivity).loadLevelStructure(GameMechanics.SERIES_ENDLESS)
                     if (stage.gameView.gameActivity.settings.keepLevels)
                         structure[level.number]?.let {
                             Stage.fillEmptyStageWithData(stage, it)
@@ -70,20 +71,19 @@ class StageCatalog
             stage.calculateDifficulty()
         }
 
-        private fun createFixedNumberOfObstacles(stage: Stage, numberOfObstacles: Int)
-        {
-            val reduce = stage.gameMechanics.heroModifier(Hero.Type.LIMIT_UNWANTED_CHIPS) // consider Kilby's effect
+        private fun createFixedNumberOfObstacles(stage: Stage, numberOfObstacles: Int) {
+            val reduce =
+                stage.gameMechanics.heroModifier(Hero.Type.LIMIT_UNWANTED_CHIPS) // consider Kilby's effect
             val reducedNumberOfObstacles = numberOfObstacles - reduce.toInt()
             if (reducedNumberOfObstacles > 0)
                 for (i in 1..reducedNumberOfObstacles)  // set or upgrade the slots
                 {
-                    val possibleSlotsForObstacles = stage.chips.values.filter { it.chipData.type in possibleChipTypesWhereObstaclesCanBePut }
-                    if (possibleSlotsForObstacles.isNotEmpty())
-                    {
+                    val possibleSlotsForObstacles =
+                        stage.chips.values.filter { it.chipData.type in possibleChipTypesWhereObstaclesCanBePut }
+                    if (possibleSlotsForObstacles.isNotEmpty()) {
                         val obstacleSlot = possibleSlotsForObstacles.random()
-                        when (obstacleSlot.chipData.type)
-                        {
-                            in listOf( Chip.ChipType.ADD, Chip.ChipType.SHL, Chip.ChipType.NOP) -> obstacleSlot.addPower(1)
+                        when (obstacleSlot.chipData.type) {
+                            in listOf(Chip.ChipType.ADD, Chip.ChipType.SHL, Chip.ChipType.NOP) -> obstacleSlot.addPower(1)
                             Chip.ChipType.EMPTY -> obstacleSlot.setType(Chip.obstacleTypes.random())
                             else -> {}
                         }
@@ -100,42 +100,42 @@ class StageCatalog
             val reduce = stage.gameMechanics.heroModifier(Hero.Type.LIMIT_UNWANTED_CHIPS)
             val targetDifficulty = difficulty - reduce
             var stageDifficulty = stage.difficultyOfObstacles()
-            while (stageDifficulty < targetDifficulty)
-            {
-                val possibleSlotsForObstacles = stage.chips.values.filter { it.chipData.type in possibleChipTypesWhereObstaclesCanBePut }
-                if (possibleSlotsForObstacles.isNotEmpty())
-                {
+            while (stageDifficulty < targetDifficulty) {
+                val possibleSlotsForObstacles =
+                    stage.chips.values.filter { it.chipData.type in possibleChipTypesWhereObstaclesCanBePut }
+                if (possibleSlotsForObstacles.isNotEmpty()) {
                     val obstacleSlot = possibleSlotsForObstacles.random()
-                    when (obstacleSlot.chipData.type)
-                    {
-                        in listOf( Chip.ChipType.ADD, Chip.ChipType.SHL, Chip.ChipType.NOP ) -> obstacleSlot.addPower(1)
+                    when (obstacleSlot.chipData.type) {
+                        in listOf(Chip.ChipType.ADD, Chip.ChipType.SHL, Chip.ChipType.NOP) -> obstacleSlot.addPower(1)
                         Chip.ChipType.EMPTY -> obstacleSlot.setType(Chip.obstacleTypes.random())
                         else -> {}
                     }
                     stageDifficulty = stage.difficultyOfObstacles()
-                }
-                else
+                } else
                     return // no more obstacles can be placed
             }
         }
-        private fun createStageWithoutObstacles(stage: Stage, level: Stage.Identifier)
-        {
+
+        private fun createStageWithoutObstacles(stage: Stage, level: Stage.Identifier) {
             stage.data.ident = level
             stage.waves.clear()
             stage.data.type = Stage.Type.REGULAR
             stage.data.chipsAllowed =
                 setOf(
-                    Chip.ChipUpgrades.ACC,
-                    Chip.ChipUpgrades.SUB,
-                    Chip.ChipUpgrades.SHR,
-                    Chip.ChipUpgrades.MEM,
-                    Chip.ChipUpgrades.CLK,
-                    Chip.ChipUpgrades.POWERUP,
-                    Chip.ChipUpgrades.REDUCE,
-                    Chip.ChipUpgrades.SELL
+                        Chip.ChipUpgrades.ACC,
+                        Chip.ChipUpgrades.SUB,
+                        Chip.ChipUpgrades.SHR,
+                        Chip.ChipUpgrades.MEM,
+                        Chip.ChipUpgrades.CLK,
+                        Chip.ChipUpgrades.POWERUP,
+                        Chip.ChipUpgrades.REDUCE,
+                        Chip.ChipUpgrades.SELL
                 )
 
-            with(stage)
+            val specialLevel = GameMechanics.specialLevel(stage.data.ident)
+            if (specialLevel != GameMechanics.Params.Season.DEFAULT)
+                createSpecialStageWithoutObstacles(stage, level, specialLevel)
+            else with(stage)
             {
                 when (stage.getLevel()) {
                     1 -> {
@@ -154,6 +154,7 @@ class StageCatalog
 
                         data.chipsAllowed = setOf(Chip.ChipUpgrades.SUB)
                     }
+
                     2 -> {
                         initializeNetwork(40, 40)
 
@@ -171,6 +172,7 @@ class StageCatalog
 
                         data.chipsAllowed = setOf(Chip.ChipUpgrades.SUB)
                     }
+
                     3 -> {
                         initializeNetwork(50, 50)
 
@@ -194,6 +196,7 @@ class StageCatalog
 
                         data.chipsAllowed = setOf(Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.POWERUP)
                     }
+
                     4 -> {
                         initializeNetwork(50, 50)
 
@@ -223,6 +226,7 @@ class StageCatalog
 
                         data.chipsAllowed = setOf(Chip.ChipUpgrades.SUB, Chip.ChipUpgrades.POWERUP)
                     }
+
                     5 -> {
                         initializeNetwork(50, 50)
 
@@ -260,11 +264,12 @@ class StageCatalog
 
                         data.chipsAllowed =
                             setOf(
-                                Chip.ChipUpgrades.SUB,
-                                Chip.ChipUpgrades.POWERUP,
-                                Chip.ChipUpgrades.SHR
+                                    Chip.ChipUpgrades.SUB,
+                                    Chip.ChipUpgrades.POWERUP,
+                                    Chip.ChipUpgrades.SHR
                             )
                     }
+
                     6 -> {
                         initializeNetwork(50, 50)
 
@@ -295,21 +300,22 @@ class StageCatalog
                         createTrack(listOf(1, 2, 4, 5, 6, 8, 10, 11, 12), 0)
                         createTrack(listOf(1, 3, 5, 7, 8, 9, 12), 1)
 
-                        createWave(10, 2, .125f, 1.2f, coins=0)
-                        createWave(15, 3, .120f, 1.1f, coins=0)
-                        createWave(15, 3, .110f, 1.1f, coins=0)
+                        createWave(10, 2, .125f, 1.2f, coins = 0)
+                        createWave(15, 3, .120f, 1.1f, coins = 0)
+                        createWave(15, 3, .110f, 1.1f, coins = 0)
                         createWave(20, 4, .110f, 1.1f)
                         createWave(20, 7, .050f, 1f, coins = 0)
                         createWave(15, 15, .050f, 1f, coins = 0)
 
                         data.chipsAllowed =
                             setOf(
-                                Chip.ChipUpgrades.SUB,
-                                Chip.ChipUpgrades.POWERUP,
-                                Chip.ChipUpgrades.SHR
+                                    Chip.ChipUpgrades.SUB,
+                                    Chip.ChipUpgrades.POWERUP,
+                                    Chip.ChipUpgrades.SHR
                             )
                         rewardCoins = 3
                     }
+
                     7 -> {
                         initializeNetwork(50, 50)
 
@@ -347,27 +353,26 @@ class StageCatalog
 
                         data.chipsAllowed =
                             setOf(
-                                Chip.ChipUpgrades.SUB,
-                                Chip.ChipUpgrades.POWERUP,
-                                Chip.ChipUpgrades.SHR
+                                    Chip.ChipUpgrades.SUB,
+                                    Chip.ChipUpgrades.POWERUP,
+                                    Chip.ChipUpgrades.SHR
                             )
                         rewardCoins = 3
                     }
-/*
                     8 -> {
                         initializeNetwork(50, 50)
 
-                        createChip(23, 45, 0, type = Chip.ChipType.ENTRY)
-                        createChip(12, 40, 1)
+                        createChip(40, 45, 0, type = Chip.ChipType.ENTRY)
+                        createChip(5, 40, 1)
                         createChip(5, 30, 2)
                         createChip(5, 20, 3)
-                        createChip(12, 10, 4)
-                        createChip(25, 5, 5)
-                        createChip(38, 10, 6)
+                        createChip(5, 10, 4)
+                        createChip(45, 5, 5)
+                        createChip(45, 10, 6)
                         createChip(45, 20, 7)
                         createChip(45, 30, 8)
-                        createChip(38, 40, 9)
-                        createChip(28, 45, 10, type = Chip.ChipType.CPU)
+                        createChip(45, 40, 9)
+                        createChip(45, 45, 10, type = Chip.ChipType.CPU)
 
                         createLink(0, 1, 1, variant = Link.Variant.CONCAVE)
                         createLink(1, 2, 2)
@@ -400,55 +405,6 @@ class StageCatalog
                                 Chip.ChipUpgrades.SUB,
                                 Chip.ChipUpgrades.POWERUP,
                                 Chip.ChipUpgrades.SHR
-                            )
-                        rewardCoins = 3
-                    }
-
- */
-                    8 -> {
-                        initializeNetwork(50, 50)
-
-                        createChip(25, 48, 0, type = Chip.ChipType.ENTRY)
-                        createChip(25, 38, 1)
-                        createChip(5,  38, 2)
-                        createChip(45, 38, 12)
-                        createChip(25, 26, 3)
-                        createChip(10, 26, 4)
-                        createChip(40, 26, 14)
-                        createChip(25, 15, 5)
-                        createChip(15, 15, 6)
-                        createChip(35, 15, 16)
-                        createChip(25, 5, 999, type = Chip.ChipType.CPU)
-
-                        createLink(0, 1, 1)
-                        createLink(1, 2, 2, mask=0x03)
-                        createLink(2, 3, 3, mask=0x0C, variant = Link.Variant.CONVEX)
-                        createLink(3, 4, 4, 0x03)
-                        createLink(5, 4, 5, 0x0C)
-                        createLink(5, 6, 6, 0x06, variant = Link.Variant.CONVEX)
-                        createLink(6, 999, 7, 0x06, variant = Link.Variant.CONVEX)
-                        createLink(1, 12, 8, 0x03)
-                        createLink(12, 3, 9, mask = 0x03,  variant = Link.Variant.CONCAVE)
-                        createLink(3, 14, 10, 0x03)
-                        createLink(14, 5, 11, mask = 0x03,  variant = Link.Variant.CONCAVE)
-                        createLink(5, 16,12,0x06)
-                        createLink(16, 999,13,0x06)
-
-                        createTrack(listOf(1, 2, 3, 4, 5, 6, 7), 0)
-                        createTrack(listOf(1, 8, 9, 10, 11, 12, 13), 1)
-
-                        createWave(16, 2, .125f, 1.1f)
-                        createWave(20, 3, .120f, 1.3f)
-                        createWave(20, 5, .105f, 1.6f)
-                        createWave(20, 7, .100f, 1.8f)
-                        createWave(20, 11, .090f, 2.0f, coins = 1)
-                        createWave(20, 27, .080f, 2.2f, coins = 0)
-
-                        data.chipsAllowed =
-                            setOf(
-                                    Chip.ChipUpgrades.SUB,
-                                    Chip.ChipUpgrades.POWERUP,
-                                    Chip.ChipUpgrades.SHR
                             )
                         rewardCoins = 3
                     }
@@ -486,13 +442,14 @@ class StageCatalog
 
                         data.chipsAllowed =
                             setOf(
-                                Chip.ChipUpgrades.SUB,
-                                Chip.ChipUpgrades.POWERUP,
-                                Chip.ChipUpgrades.SELL,
-                                Chip.ChipUpgrades.SHR
+                                    Chip.ChipUpgrades.SUB,
+                                    Chip.ChipUpgrades.POWERUP,
+                                    Chip.ChipUpgrades.SELL,
+                                    Chip.ChipUpgrades.SHR
                             )
                         rewardCoins = 3
                     }
+
                     10 -> {
                         initializeNetwork(50, 50)
 
@@ -508,9 +465,9 @@ class StageCatalog
 
                         createLink(0, 1, 1, mask = 0x0C)
                         createLink(1, 2, 2, mask = 0x0C)
-                        createLink(2, 3, 3, mask = 0x03, variant= Link.Variant.CONCAVE)
+                        createLink(2, 3, 3, mask = 0x03, variant = Link.Variant.CONCAVE)
                         createLink(2, 4, 4, mask = 0x0C)
-                        createLink(2, 5, 5, mask = 0x03, variant= Link.Variant.CONCAVE)
+                        createLink(2, 5, 5, mask = 0x03, variant = Link.Variant.CONCAVE)
                         createLink(3, 4, 7, mask = 0x06)
                         createLink(5, 6, 6, mask = 0x06)
                         createLink(6, 999, 8, mask = 0x06)
@@ -529,13 +486,14 @@ class StageCatalog
 
                         data.chipsAllowed =
                             setOf(
-                                Chip.ChipUpgrades.SUB,
-                                Chip.ChipUpgrades.POWERUP,
-                                Chip.ChipUpgrades.SELL,
-                                Chip.ChipUpgrades.SHR
+                                    Chip.ChipUpgrades.SUB,
+                                    Chip.ChipUpgrades.POWERUP,
+                                    Chip.ChipUpgrades.SELL,
+                                    Chip.ChipUpgrades.SHR
                             )
                         rewardCoins = 3
                     }
+
                     11 -> {
                         initializeNetwork(50, 50)
 
@@ -582,14 +540,15 @@ class StageCatalog
 
                         data.chipsAllowed =
                             setOf(
-                                Chip.ChipUpgrades.SUB,
-                                Chip.ChipUpgrades.POWERUP,
-                                Chip.ChipUpgrades.SELL,
-                                Chip.ChipUpgrades.SHR
+                                    Chip.ChipUpgrades.SUB,
+                                    Chip.ChipUpgrades.POWERUP,
+                                    Chip.ChipUpgrades.SELL,
+                                    Chip.ChipUpgrades.SHR
                             )
                         rewardCoins = 3
 
                     }
+
                     12 -> {
                         initializeNetwork(50, 50)
 
@@ -631,13 +590,14 @@ class StageCatalog
 
                         data.chipsAllowed =
                             setOf(
-                                Chip.ChipUpgrades.SUB,
-                                Chip.ChipUpgrades.POWERUP,
-                                Chip.ChipUpgrades.SELL,
-                                Chip.ChipUpgrades.SHR
+                                    Chip.ChipUpgrades.SUB,
+                                    Chip.ChipUpgrades.POWERUP,
+                                    Chip.ChipUpgrades.SELL,
+                                    Chip.ChipUpgrades.SHR
                             )
                         rewardCoins = 3
                     }
+
                     13 -> {
                         initializeNetwork(50, 50)
 
@@ -680,13 +640,14 @@ class StageCatalog
 
                         data.chipsAllowed =
                             setOf(
-                                Chip.ChipUpgrades.SUB,
-                                Chip.ChipUpgrades.POWERUP,
-                                Chip.ChipUpgrades.SELL,
-                                Chip.ChipUpgrades.SHR
+                                    Chip.ChipUpgrades.SUB,
+                                    Chip.ChipUpgrades.POWERUP,
+                                    Chip.ChipUpgrades.SELL,
+                                    Chip.ChipUpgrades.SHR
                             )
                         rewardCoins = 3
                     }
+
                     14 -> {
                         initializeNetwork(50, 55)
 
@@ -729,14 +690,15 @@ class StageCatalog
                         createWaveHex(20, 80, .10f, 1f, coins = 0)
 
                         data.chipsAllowed = setOf(
-                            Chip.ChipUpgrades.SUB,
-                            Chip.ChipUpgrades.POWERUP,
-                            Chip.ChipUpgrades.SELL,
-                            Chip.ChipUpgrades.SHR,
-                            Chip.ChipUpgrades.MEM
+                                Chip.ChipUpgrades.SUB,
+                                Chip.ChipUpgrades.POWERUP,
+                                Chip.ChipUpgrades.SELL,
+                                Chip.ChipUpgrades.SHR,
+                                Chip.ChipUpgrades.MEM
                         )
                         rewardCoins = 3
                     }
+
                     15 -> {
                         initializeNetwork(50, 55)
 
@@ -783,14 +745,15 @@ class StageCatalog
                         createWaveHex(20, 100, .10f, 1f, coins = 0)
 
                         data.chipsAllowed = setOf(
-                            Chip.ChipUpgrades.SUB,
-                            Chip.ChipUpgrades.POWERUP,
-                            Chip.ChipUpgrades.SELL,
-                            Chip.ChipUpgrades.SHR,
-                            Chip.ChipUpgrades.MEM
+                                Chip.ChipUpgrades.SUB,
+                                Chip.ChipUpgrades.POWERUP,
+                                Chip.ChipUpgrades.SELL,
+                                Chip.ChipUpgrades.SHR,
+                                Chip.ChipUpgrades.MEM
                         )
                         rewardCoins = 3
                     }
+
                     16 -> {
                         initializeNetwork(50, 55)
 
@@ -835,14 +798,15 @@ class StageCatalog
                         createWaveHex(20, 80, .10f, 1f, coins = 1)
 
                         data.chipsAllowed = setOf(
-                            Chip.ChipUpgrades.SUB,
-                            Chip.ChipUpgrades.POWERUP,
-                            Chip.ChipUpgrades.SELL,
-                            Chip.ChipUpgrades.SHR,
-                            Chip.ChipUpgrades.MEM
+                                Chip.ChipUpgrades.SUB,
+                                Chip.ChipUpgrades.POWERUP,
+                                Chip.ChipUpgrades.SELL,
+                                Chip.ChipUpgrades.SHR,
+                                Chip.ChipUpgrades.MEM
                         )
                         rewardCoins = 3
                     }
+
                     17 -> {
                         initializeNetwork(45, 55)
 
@@ -886,14 +850,15 @@ class StageCatalog
                         createWaveHex(24, 80, .10f, 1f, coins = 1)
 
                         data.chipsAllowed = setOf(
-                            Chip.ChipUpgrades.SUB,
-                            Chip.ChipUpgrades.POWERUP,
-                            Chip.ChipUpgrades.SELL,
-                            Chip.ChipUpgrades.SHR,
-                            Chip.ChipUpgrades.MEM
+                                Chip.ChipUpgrades.SUB,
+                                Chip.ChipUpgrades.POWERUP,
+                                Chip.ChipUpgrades.SELL,
+                                Chip.ChipUpgrades.SHR,
+                                Chip.ChipUpgrades.MEM
                         )
                         rewardCoins = 3
                     }
+
                     18 -> {
                         initializeNetwork(50, 50)
 
@@ -935,14 +900,15 @@ class StageCatalog
                         createWaveHex(24, 127, .12f, 1.4f, coins = 0)
 
                         data.chipsAllowed = setOf(
-                            Chip.ChipUpgrades.SUB,
-                            Chip.ChipUpgrades.POWERUP,
-                            Chip.ChipUpgrades.SELL,
-                            Chip.ChipUpgrades.SHR,
-                            Chip.ChipUpgrades.MEM
+                                Chip.ChipUpgrades.SUB,
+                                Chip.ChipUpgrades.POWERUP,
+                                Chip.ChipUpgrades.SELL,
+                                Chip.ChipUpgrades.SHR,
+                                Chip.ChipUpgrades.MEM
                         )
                         rewardCoins = 3
                     }
+
                     19 -> {
                         initializeNetwork(65, 70)
 
@@ -999,14 +965,15 @@ class StageCatalog
                         createWaveHex(24, 127, .12f, 1.4f, coins = 0)
 
                         data.chipsAllowed = setOf(
-                            Chip.ChipUpgrades.SUB,
-                            Chip.ChipUpgrades.POWERUP,
-                            Chip.ChipUpgrades.SELL,
-                            Chip.ChipUpgrades.SHR,
-                            Chip.ChipUpgrades.MEM
+                                Chip.ChipUpgrades.SUB,
+                                Chip.ChipUpgrades.POWERUP,
+                                Chip.ChipUpgrades.SELL,
+                                Chip.ChipUpgrades.SHR,
+                                Chip.ChipUpgrades.MEM
                         )
                         rewardCoins = 3
                     }
+
                     20 -> {
                         initializeNetwork(50, 50)
 
@@ -1045,15 +1012,16 @@ class StageCatalog
                         createWaveHex(24, 80, .12f, 1.4f, coins = 0)
 
                         data.chipsAllowed = setOf(
-                            Chip.ChipUpgrades.SUB,
-                            Chip.ChipUpgrades.POWERUP,
-                            Chip.ChipUpgrades.SELL,
-                            Chip.ChipUpgrades.SHR,
-                            Chip.ChipUpgrades.MEM,
-                            Chip.ChipUpgrades.ACC
+                                Chip.ChipUpgrades.SUB,
+                                Chip.ChipUpgrades.POWERUP,
+                                Chip.ChipUpgrades.SELL,
+                                Chip.ChipUpgrades.SHR,
+                                Chip.ChipUpgrades.MEM,
+                                Chip.ChipUpgrades.ACC
                         )
                         rewardCoins = 3
                     }
+
                     21 -> {
                         initializeNetwork(70, 60)
 
@@ -1119,15 +1087,16 @@ class StageCatalog
                         createWaveHex(24, 120, .12f, 1.4f, coins = 1)
 
                         data.chipsAllowed = setOf(
-                            Chip.ChipUpgrades.SUB,
-                            Chip.ChipUpgrades.POWERUP,
-                            Chip.ChipUpgrades.SELL,
-                            Chip.ChipUpgrades.SHR,
-                            Chip.ChipUpgrades.MEM,
-                            Chip.ChipUpgrades.ACC
+                                Chip.ChipUpgrades.SUB,
+                                Chip.ChipUpgrades.POWERUP,
+                                Chip.ChipUpgrades.SELL,
+                                Chip.ChipUpgrades.SHR,
+                                Chip.ChipUpgrades.MEM,
+                                Chip.ChipUpgrades.ACC
                         )
                         rewardCoins = 3
                     }
+
                     22 -> {
                         initializeNetwork(55, 50)
 
@@ -1167,12 +1136,13 @@ class StageCatalog
 
                         data.chipsAllowed =
                             setOf(
-                                Chip.ChipUpgrades.SUB,
-                                Chip.ChipUpgrades.POWERUP,
-                                Chip.ChipUpgrades.SHR
+                                    Chip.ChipUpgrades.SUB,
+                                    Chip.ChipUpgrades.POWERUP,
+                                    Chip.ChipUpgrades.SHR
                             )
                         rewardCoins = 3
                     }
+
                     23 -> {
                         initializeNetwork(50, 55)
 
@@ -1226,16 +1196,17 @@ class StageCatalog
                         createWave(24, 160, .12f, 1.4f, coins = 0)
 
                         data.chipsAllowed = setOf(
-                            Chip.ChipUpgrades.SUB,
-                            Chip.ChipUpgrades.POWERUP,
-                            Chip.ChipUpgrades.SELL,
-                            Chip.ChipUpgrades.SHR,
-                            Chip.ChipUpgrades.MEM,
-                            Chip.ChipUpgrades.ACC,
-                            Chip.ChipUpgrades.REDUCE
+                                Chip.ChipUpgrades.SUB,
+                                Chip.ChipUpgrades.POWERUP,
+                                Chip.ChipUpgrades.SELL,
+                                Chip.ChipUpgrades.SHR,
+                                Chip.ChipUpgrades.MEM,
+                                Chip.ChipUpgrades.ACC,
+                                Chip.ChipUpgrades.REDUCE
                         )
                         rewardCoins = 3
                     }
+
                     24 -> {
                         initializeNetwork(50, 55)
 
@@ -1280,16 +1251,17 @@ class StageCatalog
                         createWave(10, 80, .16f, 2.0f)
 
                         data.chipsAllowed = setOf(
-                            Chip.ChipUpgrades.SUB,
-                            Chip.ChipUpgrades.POWERUP,
-                            Chip.ChipUpgrades.SELL,
-                            Chip.ChipUpgrades.SHR,
-                            Chip.ChipUpgrades.MEM,
-                            Chip.ChipUpgrades.ACC,
-                            Chip.ChipUpgrades.REDUCE
+                                Chip.ChipUpgrades.SUB,
+                                Chip.ChipUpgrades.POWERUP,
+                                Chip.ChipUpgrades.SELL,
+                                Chip.ChipUpgrades.SHR,
+                                Chip.ChipUpgrades.MEM,
+                                Chip.ChipUpgrades.ACC,
+                                Chip.ChipUpgrades.REDUCE
                         )
                         rewardCoins = 3
                     }
+
                     25 -> {
                         initializeNetwork(50, 50)
 
@@ -1302,10 +1274,10 @@ class StageCatalog
                         createChip(5 + Random.nextInt(5), 40 + Random.nextInt(5), 6)
                         createChip(25, 40 + Random.nextInt(5), 7)
                         createChip(
-                            40 + Random.nextInt(5),
-                            40 + Random.nextInt(5),
-                            ident = 900,
-                            type = Chip.ChipType.CPU
+                                40 + Random.nextInt(5),
+                                40 + Random.nextInt(5),
+                                ident = 900,
+                                type = Chip.ChipType.CPU
                         )
 
                         createLink(100, 1, 1)
@@ -1336,16 +1308,17 @@ class StageCatalog
                         createWave(16, 80, .16f, 1.2f)
 
                         data.chipsAllowed = setOf(
-                            Chip.ChipUpgrades.SUB,
-                            Chip.ChipUpgrades.POWERUP,
-                            Chip.ChipUpgrades.SELL,
-                            Chip.ChipUpgrades.SHR,
-                            Chip.ChipUpgrades.MEM,
-                            Chip.ChipUpgrades.ACC,
-                            Chip.ChipUpgrades.REDUCE
+                                Chip.ChipUpgrades.SUB,
+                                Chip.ChipUpgrades.POWERUP,
+                                Chip.ChipUpgrades.SELL,
+                                Chip.ChipUpgrades.SHR,
+                                Chip.ChipUpgrades.MEM,
+                                Chip.ChipUpgrades.ACC,
+                                Chip.ChipUpgrades.REDUCE
                         )
                         rewardCoins = 3
                     }
+
                     26 -> {
                         initializeNetwork(50, 50)
 
@@ -1363,24 +1336,24 @@ class StageCatalog
                         createChip(45, 20, 11)
                         createChip(40, 32, 12)
                         createChip(
-                            40 + Random.nextInt(5),
-                            40 + Random.nextInt(5),
-                            ident = 900,
-                            type = Chip.ChipType.CPU
+                                40 + Random.nextInt(5),
+                                40 + Random.nextInt(5),
+                                ident = 900,
+                                type = Chip.ChipType.CPU
                         )
 
                         createLink(100, 1, 1)
                         createLink(1, 2, 2)
-                        createLink(2, 3, 3, variant= Link.Variant.CONCAVE)
-                        createLink(3, 4, 4, variant= Link.Variant.CONCAVE)
+                        createLink(2, 3, 3, variant = Link.Variant.CONCAVE)
+                        createLink(3, 4, 4, variant = Link.Variant.CONCAVE)
                         createLink(4, 5, 5)
                         createLink(5, 6, 6)
                         createLink(6, 7, 7)
                         createLink(7, 8, 8)
-                        createLink(8, 9, 9, variant= Link.Variant.CONCAVE)
-                        createLink(9, 10, 10, variant= Link.Variant.CONCAVE)
-                        createLink(10, 11, 11, variant= Link.Variant.CONCAVE)
-                        createLink(11, 12, 12, variant= Link.Variant.CONCAVE)
+                        createLink(8, 9, 9, variant = Link.Variant.CONCAVE)
+                        createLink(9, 10, 10, variant = Link.Variant.CONCAVE)
+                        createLink(10, 11, 11, variant = Link.Variant.CONCAVE)
+                        createLink(11, 12, 12, variant = Link.Variant.CONCAVE)
                         createLink(12, 900, 13)
                         createLink(3, 12, 14, 0x02)
 
@@ -1394,23 +1367,24 @@ class StageCatalog
                         createWaveHex(16, 16, .12f, 1.1f)
                         createWaveHex(16, 64, .16f, 1.1f, coins = 1)
                         createWaveHex(16, 128, .16f, 1.2f)
-                        createWaveHex(16,256, .16f, 1.2f)
-                        createWaveHex(16,512, .16f, 1.2f)
-                        createWaveHex(16,1024, .16f, 1.2f)
-                        createWaveHex(16,2048, .16f, 1.6f)
-                        createWaveHex(16,4096, .16f, 1.6f)
+                        createWaveHex(16, 256, .16f, 1.2f)
+                        createWaveHex(16, 512, .16f, 1.2f)
+                        createWaveHex(16, 1024, .16f, 1.2f)
+                        createWaveHex(16, 2048, .16f, 1.6f)
+                        createWaveHex(16, 4096, .16f, 1.6f)
 
                         data.chipsAllowed = setOf(
-                            Chip.ChipUpgrades.SUB,
-                            Chip.ChipUpgrades.POWERUP,
-                            Chip.ChipUpgrades.SELL,
-                            Chip.ChipUpgrades.SHR,
-                            Chip.ChipUpgrades.MEM,
-                            Chip.ChipUpgrades.ACC,
-                            Chip.ChipUpgrades.REDUCE
+                                Chip.ChipUpgrades.SUB,
+                                Chip.ChipUpgrades.POWERUP,
+                                Chip.ChipUpgrades.SELL,
+                                Chip.ChipUpgrades.SHR,
+                                Chip.ChipUpgrades.MEM,
+                                Chip.ChipUpgrades.ACC,
+                                Chip.ChipUpgrades.REDUCE
                         )
                         rewardCoins = 3
                     }
+
                     27 -> {
                         initializeNetwork(50, 60)
                         createChip(0, 30, ident = 101, type = Chip.ChipType.ENTRY)
@@ -1423,7 +1397,7 @@ class StageCatalog
                         createChip(40, 30, 4)
                         createChip(25, 40, 5)
                         createChip(25, 50, 6).setType(Chip.ChipType.CLK)
-                        createChip(25,30, ident = 900, type = Chip.ChipType.CPU)
+                        createChip(25, 30, ident = 900, type = Chip.ChipType.CPU)
 
                         createLink(101, 1, 1)
                         createLink(102, 2, 2)
@@ -1456,9 +1430,10 @@ class StageCatalog
 
                         rewardCoins = 3
                     }
+
                     28 -> {
                         initializeNetwork(50, 60)
-                        createChip(10,  5, ident = 101, type = Chip.ChipType.ENTRY)
+                        createChip(10, 5, ident = 101, type = Chip.ChipType.ENTRY)
                         createChip(10, 12, 4)
                         createChip(10, 25, 3)
                         createChip(10, 35, 2)
@@ -1479,20 +1454,20 @@ class StageCatalog
                         createLink(2, 3, 3)
                         createLink(3, 4, 4)
                         createLink(101, 4, 5)
-                        createLink(1, 5, 6, mask=0x06)
-                        createLink(2, 6, 7, mask=0x06)
-                        createLink(3, 7, 8, mask=0x06)
-                        createLink(4, 8, 9, mask=0x03)
+                        createLink(1, 5, 6, mask = 0x06)
+                        createLink(2, 6, 7, mask = 0x06)
+                        createLink(3, 7, 8, mask = 0x06)
+                        createLink(4, 8, 9, mask = 0x03)
                         createLink(5, 6, 10)
                         createLink(6, 7, 11)
                         createLink(7, 8, 12)
-                        createLink(5, 9, 14, mask=0x06)
-                        createLink(6, 10, 15, mask=0x08)
-                        createLink(8, 11, 16, mask=0x06)
+                        createLink(5, 9, 14, mask = 0x06)
+                        createLink(6, 10, 15, mask = 0x08)
+                        createLink(8, 11, 16, mask = 0x06)
                         createLink(9, 10, 17)
                         createLink(10, 11, 18)
-                        createLink(9, 902, 19, mask=0x07)
-                        createLink(11, 901, 20, mask=0x07)
+                        createLink(9, 902, 19, mask = 0x07)
+                        createLink(11, 901, 20, mask = 0x07)
 
                         createTrack(listOf(5, 4, 3, 7, 11, 12, 16, 18, 17, 19), 0)
                         createTrack(listOf(5, 4, 3, 2, 6, 10, 15, 18, 20), 1)
@@ -1505,13 +1480,14 @@ class StageCatalog
                         createWaveHex(16, 32, .10f, 1.4f)
                         createWaveHex(16, 64, .12f, 1.2f)
                         createWaveHex(16, 128, .14f, 1.2f)
-                        createWaveHex(16,256, .12f, 1.4f)
-                        createWaveHex(16,512, .14f, 1.2f)
-                        createWaveHex(16,1024, .12f, 1.3f, coins = 1)
-                        createWaveHex(16,4096, .14f, 1.2f)
+                        createWaveHex(16, 256, .12f, 1.4f)
+                        createWaveHex(16, 512, .14f, 1.2f)
+                        createWaveHex(16, 1024, .12f, 1.3f, coins = 1)
+                        createWaveHex(16, 4096, .14f, 1.2f)
 
                         rewardCoins = 3
                     }
+
                     29 -> {
                         initializeNetwork(50, 50)
 
@@ -1563,17 +1539,18 @@ class StageCatalog
                         createWave(12, 32, .14f, 0.9f)
 
                         data.chipsAllowed = setOf(
-                            Chip.ChipUpgrades.SUB,
-                            Chip.ChipUpgrades.POWERUP,
-                            Chip.ChipUpgrades.SELL,
-                            Chip.ChipUpgrades.SHR,
-                            Chip.ChipUpgrades.MEM,
-                            Chip.ChipUpgrades.ACC,
-                            Chip.ChipUpgrades.CLK,
-                            Chip.ChipUpgrades.REDUCE
+                                Chip.ChipUpgrades.SUB,
+                                Chip.ChipUpgrades.POWERUP,
+                                Chip.ChipUpgrades.SELL,
+                                Chip.ChipUpgrades.SHR,
+                                Chip.ChipUpgrades.MEM,
+                                Chip.ChipUpgrades.ACC,
+                                Chip.ChipUpgrades.CLK,
+                                Chip.ChipUpgrades.REDUCE
                         )
                         rewardCoins = 3
                     }
+
                     30 -> {
                         initializeNetwork(50, 50)
 
@@ -1622,23 +1599,24 @@ class StageCatalog
                         createWaveHex(16, 32, .10f, 1.0f)
                         createWaveHex(16, 64, .12f, 1.1f)
                         createWaveHex(16, 128, .14f, 1.1f)
-                        createWaveHex(16,256, .12f, 1.2f)
-                        createWaveHex(16,512, .14f, 1.2f)
-                        createWaveHex(16,1024, .12f, 1.2f, coins = 1)
-                        createWaveHex(16,4096, .14f, 1.2f)
+                        createWaveHex(16, 256, .12f, 1.2f)
+                        createWaveHex(16, 512, .14f, 1.2f)
+                        createWaveHex(16, 1024, .12f, 1.2f, coins = 1)
+                        createWaveHex(16, 4096, .14f, 1.2f)
 
                         data.chipsAllowed = setOf(
-                            Chip.ChipUpgrades.SUB,
-                            Chip.ChipUpgrades.POWERUP,
-                            Chip.ChipUpgrades.SELL,
-                            Chip.ChipUpgrades.SHR,
-                            Chip.ChipUpgrades.MEM,
-                            Chip.ChipUpgrades.ACC,
-                            Chip.ChipUpgrades.CLK,
-                            Chip.ChipUpgrades.REDUCE
+                                Chip.ChipUpgrades.SUB,
+                                Chip.ChipUpgrades.POWERUP,
+                                Chip.ChipUpgrades.SELL,
+                                Chip.ChipUpgrades.SHR,
+                                Chip.ChipUpgrades.MEM,
+                                Chip.ChipUpgrades.ACC,
+                                Chip.ChipUpgrades.CLK,
+                                Chip.ChipUpgrades.REDUCE
                         )
                         rewardCoins = 3
                     }
+
                     31 -> {
                         initializeNetwork(50, 50)
 
@@ -1674,23 +1652,24 @@ class StageCatalog
                         createWave(16, 12, .10f, 1.3f)
                         createWave(16, 16, .12f, 1.3f)
                         createWave(16, 32, .14f, 1.3f)
-                        createWave(16,64, .12f, 1.2f)
-                        createWave(16,100, .14f, 1.2f)
-                        createWave(16,128, .12f, 1.2f, coins = 1)
-                        createWave(16,200, .14f, 1.2f)
+                        createWave(16, 64, .12f, 1.2f)
+                        createWave(16, 100, .14f, 1.2f)
+                        createWave(16, 128, .12f, 1.2f, coins = 1)
+                        createWave(16, 200, .14f, 1.2f)
 
                         data.chipsAllowed = setOf(
-                            Chip.ChipUpgrades.SUB,
-                            Chip.ChipUpgrades.POWERUP,
-                            Chip.ChipUpgrades.SELL,
-                            Chip.ChipUpgrades.SHR,
-                            Chip.ChipUpgrades.MEM,
-                            Chip.ChipUpgrades.ACC,
-                            Chip.ChipUpgrades.CLK,
-                            Chip.ChipUpgrades.REDUCE
+                                Chip.ChipUpgrades.SUB,
+                                Chip.ChipUpgrades.POWERUP,
+                                Chip.ChipUpgrades.SELL,
+                                Chip.ChipUpgrades.SHR,
+                                Chip.ChipUpgrades.MEM,
+                                Chip.ChipUpgrades.ACC,
+                                Chip.ChipUpgrades.CLK,
+                                Chip.ChipUpgrades.REDUCE
                         )
                         rewardCoins = 3
                     }
+
                     32 -> {
                         initializeNetwork(50, 50)
 
@@ -1737,21 +1716,21 @@ class StageCatalog
                         createWave(16, 12, .10f, 1.6f)
                         createWave(16, 16, .12f, 1.6f)
                         createWave(16, 32, .14f, 1.8f)
-                        createWave(16,64, .12f, 2.0f)
-                        createWave(16,128, .14f, 2.4f)
-                        createWave(16,200, .12f, 2.6f)
-                        createWave(16,240, .14f, 2.6f, coins = 1)
+                        createWave(16, 64, .12f, 2.0f)
+                        createWave(16, 128, .14f, 2.4f)
+                        createWave(16, 200, .12f, 2.6f)
+                        createWave(16, 240, .14f, 2.6f, coins = 1)
 
                         data.chipsAllowed = setOf(
-                            Chip.ChipUpgrades.SUB,
-                            Chip.ChipUpgrades.POWERUP,
-                            Chip.ChipUpgrades.SELL,
-                            Chip.ChipUpgrades.SHR,
-                            Chip.ChipUpgrades.MEM,
-                            Chip.ChipUpgrades.ACC,
-                            Chip.ChipUpgrades.CLK,
-                            Chip.ChipUpgrades.RES,
-                            Chip.ChipUpgrades.REDUCE
+                                Chip.ChipUpgrades.SUB,
+                                Chip.ChipUpgrades.POWERUP,
+                                Chip.ChipUpgrades.SELL,
+                                Chip.ChipUpgrades.SHR,
+                                Chip.ChipUpgrades.MEM,
+                                Chip.ChipUpgrades.ACC,
+                                Chip.ChipUpgrades.CLK,
+                                Chip.ChipUpgrades.RES,
+                                Chip.ChipUpgrades.REDUCE
                         )
                         data.type = Stage.Type.FINAL
                         rewardCoins = 3
@@ -1838,6 +1817,133 @@ class StageCatalog
                     type = Type.FINAL
                     }
                      */
+                }
+                data.maxWaves = waves.size
+            }
+        }
+
+        private fun createSpecialStageWithoutObstacles(
+            stage: Stage, level: Stage.Identifier,
+            special: GameMechanics.Params.Season
+        ) {
+            stage.data.ident = level
+            stage.waves.clear()
+            stage.data.type = Stage.Type.REGULAR
+            stage.data.chipsAllowed =
+                setOf(
+                        Chip.ChipUpgrades.ACC,
+                        Chip.ChipUpgrades.SUB,
+                        Chip.ChipUpgrades.SHR,
+                        Chip.ChipUpgrades.MEM,
+                        Chip.ChipUpgrades.CLK,
+                        Chip.ChipUpgrades.POWERUP,
+                        Chip.ChipUpgrades.REDUCE,
+                        Chip.ChipUpgrades.SELL
+                )
+            with(stage)
+            {
+                when (special) {
+                    GameMechanics.Params.Season.EASTER -> {
+                        initializeNetwork(50, 50)
+
+                        createChip(23, 45, 0, type = Chip.ChipType.ENTRY)
+                        createChip(12, 40, 1)
+                        createChip(5, 30, 2)
+                        createChip(5, 20, 3)
+                        createChip(12, 10, 4)
+                        createChip(25, 5, 5)
+                        createChip(38, 10, 6)
+                        createChip(45, 20, 7)
+                        createChip(45, 30, 8)
+                        createChip(38, 40, 9)
+                        createChip(28, 45, 10, type = Chip.ChipType.CPU)
+
+                        createLink(0, 1, 1, variant = Link.Variant.CONCAVE)
+                        createLink(1, 2, 2)
+                        createLink(2, 3, 3)
+                        createLink(3, 4, 4)
+                        createLink(5, 4, 5, variant = Link.Variant.CONCAVE)
+                        createLink(5, 6, 6)
+                        createLink(6, 7, 7, variant = Link.Variant.CONCAVE)
+                        createLink(7, 8, 8)
+                        createLink(8, 9, 9, variant = Link.Variant.CONCAVE)
+                        createLink(9, 10, 10)
+                        createLink(2, 8, 11, 0x06)
+                        createLink(3, 7, 12, 0x06)
+
+                        createTrack(listOf(1, 2, 11, 9, 10), 0)
+                        createTrack(listOf(1, 2, 3, 12, 8, 9, 10), 1)
+                        createTrack(listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10), 2)
+                        createTrack(listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10), 3)
+                        createTrack(listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10), 4)
+
+                        createWave(20, 2, .125f, 1.1f)
+                        createWave(20, 3, .120f, 1.2f)
+                        createWave(20, 4, .105f, 1.4f)
+                        createWave(20, 6, .100f, 1.6f)
+                        createWave(20, 9, .090f, 1.6f, coins = 1)
+                        createWave(20, 27, .080f, 1.8f, coins = 0)
+
+                        data.chipsAllowed =
+                            setOf(
+                                    Chip.ChipUpgrades.SUB,
+                                    Chip.ChipUpgrades.POWERUP,
+                                    Chip.ChipUpgrades.SHR
+                            )
+                        rewardCoins = 3
+                    }
+
+                    GameMechanics.Params.Season.CHRISTMAS -> {
+                        initializeNetwork(50, 50)
+
+                        createChip(25, 48, 0, type = Chip.ChipType.ENTRY)
+                        createChip(25, 38, 1)
+                        createChip(5, 38, 2)
+                        createChip(45, 38, 12)
+                        createChip(25, 26, 3)
+                        createChip(10, 26, 4)
+                        createChip(40, 26, 14)
+                        createChip(25, 15, 5)
+                        createChip(15, 15, 6)
+                        createChip(35, 15, 16)
+                        createChip(25, 5, 999, type = Chip.ChipType.CPU)
+
+                        createLink(0, 1, 1)
+                        createLink(1, 2, 2, mask = 0x03)
+                        createLink(2, 3, 3, mask = 0x0C, variant = Link.Variant.CONVEX)
+                        createLink(3, 4, 4, 0x03)
+                        createLink(5, 4, 5, 0x0C)
+                        createLink(5, 6, 6, 0x06, variant = Link.Variant.CONVEX)
+                        createLink(6, 999, 7, 0x06, variant = Link.Variant.CONVEX)
+                        createLink(1, 12, 8, 0x03)
+                        createLink(12, 3, 9, mask = 0x03, variant = Link.Variant.CONCAVE)
+                        createLink(3, 14, 10, 0x03)
+                        createLink(14, 5, 11, mask = 0x03, variant = Link.Variant.CONCAVE)
+                        createLink(5, 16, 12, 0x06)
+                        createLink(16, 999, 13, 0x06)
+
+                        createTrack(listOf(1, 2, 3, 4, 5, 6, 7), 0)
+                        createTrack(listOf(1, 8, 9, 10, 11, 12, 13), 1)
+
+                        createWave(16, 2, .125f, 1.1f)
+                        createWave(20, 3, .120f, 1.4f)
+                        createWave(20, 5, .105f, 1.8f)
+                        createWave(20, 7, .100f, 2.0f)
+                        createWave(20, 11, .090f, 2.2f, coins = 1)
+                        createWave(20, 27, .080f, 2.4f, coins = 0)
+
+                        data.chipsAllowed =
+                            setOf(
+                                    Chip.ChipUpgrades.SUB,
+                                    Chip.ChipUpgrades.POWERUP,
+                                    Chip.ChipUpgrades.SHR
+                            )
+                        rewardCoins = 3
+                    }
+
+                    else -> {
+                        createStageWithoutObstacles(stage, level)
+                    } // should not happen
                 }
                 data.maxWaves = waves.size
             }

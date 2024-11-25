@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/shape_border_yellow"
-    tools:context=".SettingsActivity">
+    tools:context=".activities.SettingsActivity">
 
     <TextView
         android:id="@+id/settings_title_view"

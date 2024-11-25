@@ -1,4 +1,4 @@
-package com.example.cpudefense
+package com.example.cpudefense.activities
 
 import android.content.Intent
 import android.graphics.*
@@ -6,10 +6,16 @@ import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.view.Gravity
 import android.view.View
+import android.view.Window
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.example.cpudefense.GameMechanics
+import com.example.cpudefense.GameView
+import com.example.cpudefense.Persistency
+import com.example.cpudefense.R
+import com.example.cpudefense.Stage
 import com.google.android.material.tabs.TabLayout
 
 @Suppress("DEPRECATION")
@@ -23,6 +29,7 @@ class LevelSelectActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        supportRequestWindowFeature(Window.FEATURE_NO_TITLE)  // method of AppCompatActivity
         isTurboAvailable = intent.getBooleanExtra("TURBO_AVAILABLE", false)
         isEndlessAvailable = intent.getBooleanExtra("ENDLESS_AVAILABLE", false)
         setContentView(R.layout.activity_level)
@@ -97,7 +104,7 @@ class LevelSelectActivity : AppCompatActivity() {
                         resources.getColor(R.color.text_lightgreen)
                 )
             }
-            GameMechanics.SERIES_TURBO-> {
+            GameMechanics.SERIES_TURBO -> {
                 if (isTurboAvailable) {
                     levels = Persistency(this).loadStageSummaries(GameMechanics.SERIES_TURBO)
                     populateStageList(
@@ -208,7 +215,7 @@ class LevelSelectActivity : AppCompatActivity() {
     {
         // add bitmap to text view
         val iconPadding = 10
-        val iconSize = GameMechanics.levelSnapshotIconSize + iconPadding
+        val iconSize = GameView.levelSnapshotIconSize + iconPadding
         val bitmap = Bitmap.createBitmap(iconSize, iconSize, Bitmap.Config.ARGB_8888)
         icon?.let {
             val canvas = Canvas(bitmap)

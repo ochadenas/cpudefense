@@ -8,6 +8,7 @@ import android.graphics.Bitmap.createBitmap
 import android.text.Layout
 import android.text.StaticLayout
 import android.text.TextPaint
+import com.example.cpudefense.activities.GameActivity
 import com.example.cpudefense.gameElements.HeroCard
 import kotlin.math.exp
 import kotlin.math.truncate

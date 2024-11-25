@@ -28,9 +28,6 @@ class Background(val gameView: GameView)
     /** number of different background pictures available */
     private val maxBackgroundNumber = 9
 
-    /** special background on selected levels */
-    private var useSpecialBackground = false
-
     /** standard opacity of the background */
     private val backgroundOpacity = 0.6f
 
@@ -98,7 +95,7 @@ class Background(val gameView: GameView)
         }
     }
 
-    private fun loadWholeBitmap(number: Int, useSpecial: Boolean = false): Bitmap
+    private fun loadWholeBitmap(number: Int, useSpecial: GameMechanics.Params.Season = GameMechanics.Params.Season.DEFAULT): Bitmap
     /** loads a large background image into memory
      * @param number the number of the background chosen. Must be between 1 and maxBackgroundNumber */
     {
@@ -110,39 +107,35 @@ class Background(val gameView: GameView)
          */
         val options = BitmapFactory.Options()
         options.inScaled = false
-        return if (useSpecial)   // allows use of special backgrounds, currently disabled
-            // BitmapFactory.decodeResource(resources, R.drawable.background_flowers)
-            BitmapFactory.decodeResource(resources, R.drawable.background_winter)
-        else when (number)
-        {
-            1 -> BitmapFactory.decodeResource(resources, R.drawable.background_1, options)
-            2 -> BitmapFactory.decodeResource(resources, R.drawable.background_2, options)
-            3 -> BitmapFactory.decodeResource(resources, R.drawable.background_3, options)
-            4 -> BitmapFactory.decodeResource(resources, R.drawable.background_4, options)
-            5 -> BitmapFactory.decodeResource(resources, R.drawable.background_5, options)
-            6 -> BitmapFactory.decodeResource(resources, R.drawable.background_6, options)
-            7 -> BitmapFactory.decodeResource(resources, R.drawable.background_7, options)
-            8 -> BitmapFactory.decodeResource(resources, R.drawable.background_8, options)
-            9 -> BitmapFactory.decodeResource(resources, R.drawable.background_9, options)
-            else -> BitmapFactory.decodeResource(resources, R.drawable.background_9, options)
+        return when (useSpecial) {
+            GameMechanics.Params.Season.EASTER -> BitmapFactory.decodeResource(resources, R.drawable.background_flowers)
+            GameMechanics.Params.Season.CHRISTMAS -> BitmapFactory.decodeResource(resources, R.drawable.background_winter)
+            else -> when (number) {
+                1 -> BitmapFactory.decodeResource(resources, R.drawable.background_1, options)
+                2 -> BitmapFactory.decodeResource(resources, R.drawable.background_2, options)
+                3 -> BitmapFactory.decodeResource(resources, R.drawable.background_3, options)
+                4 -> BitmapFactory.decodeResource(resources, R.drawable.background_4, options)
+                5 -> BitmapFactory.decodeResource(resources, R.drawable.background_5, options)
+                6 -> BitmapFactory.decodeResource(resources, R.drawable.background_6, options)
+                7 -> BitmapFactory.decodeResource(resources, R.drawable.background_7, options)
+                8 -> BitmapFactory.decodeResource(resources, R.drawable.background_8, options)
+                9 -> BitmapFactory.decodeResource(resources, R.drawable.background_9, options)
+                else -> BitmapFactory.decodeResource(resources, R.drawable.background_9, options)
+            }
         }
     }
 
     @Suppress("KotlinConstantConditions", "SimplifyBooleanWithConstants")
-    private fun loadWholeBitmapOfStage(stageIdent: Stage.Identifier?)
+    private fun loadWholeBitmapOfStage(stageIdent: Stage.Identifier)
             /** chooses the background to use,
              * and selects a random part of it as wholeBackground
              * @param stageIdent Series and number of the current stage
              */
     {
-        if (stageIdent?.let {it.mode()==GameMechanics.LevelMode.BASIC && it.number == 8 } == true) // TODO: determine based on calendar date
-        {
-            useSpecialBackground = true
+        var useSpecialBackground = GameMechanics.specialLevel(stageIdent)
+        if (useSpecialBackground == GameMechanics.Params.Season.CHRISTMAS)
             gameView.effects?.addSnow()
-        }
-        else
-            useSpecialBackground = false
-        val n = stageIdent?.number ?: 0
+        val n = stageIdent.number ?: 0
         wholeBackground = loadWholeBitmap(n % maxBackgroundNumber + 1, useSpecialBackground)
     }
 

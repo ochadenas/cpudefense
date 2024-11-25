@@ -1,6 +1,6 @@
 @file:Suppress("DEPRECATION")
 
-package com.example.cpudefense
+package com.example.cpudefense.activities
 
 import android.app.Dialog
 import android.content.Intent
@@ -10,11 +10,17 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.cpudefense.GameMechanics
+import com.example.cpudefense.Persistency
+import com.example.cpudefense.R
+import com.example.cpudefense.Settings
+import com.example.cpudefense.Stage
 import com.example.cpudefense.gameElements.SevenSegmentDisplay
 
 
@@ -23,6 +29,7 @@ class WelcomeActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        supportRequestWindowFeature(Window.FEATURE_NO_TITLE)  // method of AppCompatActivity
         setContentView(R.layout.activity_welcome)
         info = packageManager.getPackageInfo(this.packageName, PackageManager.GET_ACTIVITIES)
 

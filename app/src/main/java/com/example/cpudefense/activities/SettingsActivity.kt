@@ -1,4 +1,4 @@
-package com.example.cpudefense
+package com.example.cpudefense.activities
 
 import android.app.Dialog
 import android.content.Intent
@@ -6,9 +6,14 @@ import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
+import com.example.cpudefense.GameMechanics
+import com.example.cpudefense.Persistency
+import com.example.cpudefense.R
+import com.example.cpudefense.Settings
 
 
 class SettingsActivity : AppCompatActivity()
@@ -18,6 +23,7 @@ class SettingsActivity : AppCompatActivity()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        supportRequestWindowFeature(Window.FEATURE_NO_TITLE)  // method of AppCompatActivity
         if (intent.getIntExtra("MAXSERIES", 1) >= GameMechanics.SERIES_ENDLESS)
             isEndlessAvailable = true
         setContentView(R.layout.activity_settings)

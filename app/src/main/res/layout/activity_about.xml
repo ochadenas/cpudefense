@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/shape_border_yellow"
-    tools:context=".AboutActivity">
+    tools:context=".activities.AboutActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/contents_section"
@@ -70,7 +70,7 @@
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/button_releasenotes"
-                android:layout_width="196dp"
+                android:layout_width="140sp"
                 android:layout_height="48dp"
                 android:layout_marginBottom="24dp"
                 android:text="@string/button_releasenotes"
