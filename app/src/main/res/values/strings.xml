@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">ChipDefense</string>
+    <string name="app_name_last">Defense</string>
     <string name="button_start_game">Start new game</string>
     <string name="button_reset_progress">Reset game progress</string>
     <string name="quit">Quit</string>
@@ -331,4 +332,7 @@ Furthermore, some slots are already taken by unwanted chips you'll have to deal 
     <string name="version">Version</string>
     <string name="settings_language_selection_title">Language selection</string>
     <string name="settings_language_selection_text">To change the game\'s language, use the system “Settings”  of your device and go to “App Languages”.</string>
+    <string name="deco">Deco</string>
+    <string name="coins_got">Got %d coin out of %d</string>
+    <string name="coins_got_plural">Got %d out of %d coins</string>
 </resources>

@@ -222,4 +222,8 @@
     <string name="version">Version</string>
     <string name="settings_language_selection_title">Choix de langue</string>
     <string name="settings_language_selection_text">"Pour changer la langue du jeu, ouvrez le dialogue « Paramètres » de l'appareil et naviguez sur « Langues de l'application ».\n "</string>
+    <string name="app_name_last">Defense</string>
+    <string name="deco">Deco</string>
+    <string name="coins_got">%d écu reçu sur %d</string>
+    <string name="coins_got_plural">%d écus reçus sur %d</string>
 </resources>

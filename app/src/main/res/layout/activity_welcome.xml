@@ -105,13 +105,14 @@
         app:layout_constraintEnd_toStartOf="@+id/settingsButton"
         app:layout_constraintTop_toTopOf="@+id/settingsButton"
         app:srcCompat="@drawable/dip_with_relief"
-        tools:ignore="SpeakableTextPresentCheck" />
+        tools:ignore="ContentDescription,SpeakableTextPresentCheck" />
 
     <ImageView
         android:id="@+id/deko1"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_marginEnd="8dp"
+        android:contentDescription="@string/deco"
         android:scaleType="fitEnd"
         app:layout_constraintBottom_toBottomOf="@+id/continueGameButton"
         app:layout_constraintEnd_toStartOf="@+id/continueGameButton"
@@ -127,7 +128,9 @@
         app:layout_constraintBottom_toBottomOf="@+id/selectLevelButton"
         app:layout_constraintEnd_toStartOf="@+id/selectLevelButton"
         app:layout_constraintTop_toTopOf="@+id/selectLevelButton"
-        app:srcCompat="@drawable/deko" />
+        app:srcCompat="@drawable/deko"
+        android:contentDescription="@string/deco"
+        />
 
     <ImageView
         android:id="@+id/deko3"
@@ -138,19 +141,40 @@
         app:layout_constraintBottom_toBottomOf="@+id/startNewGameButton"
         app:layout_constraintEnd_toStartOf="@+id/startNewGameButton"
         app:layout_constraintTop_toTopOf="@+id/startNewGameButton"
-        app:srcCompat="@drawable/deko" />
+        app:srcCompat="@drawable/deko"
+        android:contentDescription="@string/deco"
+        />
 
+    <!--
+    <ImageView
+        android:id="@+id/gameTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/app_name"
+        android:paddingTop="0dp"
+        android:paddingBottom="0dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintVertical_bias="0.40"
+        app:srcCompat="@drawable/game_title"
+        />
+        -->
 
     <ImageView
         android:id="@+id/sevenSegmentDisplay"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:contentDescription="@string/stage_number"
         android:onClick="showMaxLevelInfo"
         app:layout_constraintBottom_toTopOf="@+id/continueGameButton"
         app:layout_constraintEnd_toEndOf="@+id/continueGameButton"
+
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.6"
         app:srcCompat="@drawable/mask"
         tools:ignore="SpeakableTextPresentCheck" />
+    <!-- app:layout_constraintTop_toBottomOf="@+id/gameTitle" -->
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

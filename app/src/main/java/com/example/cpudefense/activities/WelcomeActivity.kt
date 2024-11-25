@@ -29,7 +29,7 @@ class WelcomeActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        supportRequestWindowFeature(Window.FEATURE_NO_TITLE)  // method of AppCompatActivity
+        // supportRequestWindowFeature(Window.FEATURE_NO_TITLE)  // method of AppCompatActivity
         setContentView(R.layout.activity_welcome)
         info = packageManager.getPackageInfo(this.packageName, PackageManager.GET_ACTIVITIES)
 

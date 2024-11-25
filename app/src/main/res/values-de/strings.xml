@@ -266,4 +266,8 @@ Turing wurde aufgrund seiner Homosexualität massiv diskriminiert. Er starb 1954
     <string name="version">Version</string>
     <string name="settings_language_selection_title">Sprachauswahl</string>
     <string name="settings_language_selection_text">Die Sprache des Spiels kann in den System-Einstellungen unter „App-Sprachen“ ausgewählt werden.\n</string>
+    <string name="app_name_last">Defense</string>
+    <string name="deco">Deco</string>
+    <string name="coins_got">%d von %d Coins erhalten</string>
+    <string name="coins_got_plural">%d von %d Coins erhalten</string>
 </resources>

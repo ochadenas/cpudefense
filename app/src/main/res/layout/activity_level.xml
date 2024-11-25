@@ -18,15 +18,45 @@
 
     <TextView
         android:id="@+id/levelSelectorText"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="8dp"
         android:text="@string/level_selector"
+        android:textColor="@color/text_white"
+        android:textStyle="normal"
+        android:textSize="24sp"
         app:layout_constrainedHeight="true"
-        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-        android:textColor="@color/text_green"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/deko1"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:contentDescription="@string/deco"
+        android:scaleType="fitXY"
+        app:layout_constraintBottom_toBottomOf="@+id/levelSelectorText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/levelSelectorText"
+        app:layout_constraintTop_toTopOf="@+id/levelSelectorText"
+        app:srcCompat="@drawable/lane_mirror" />
+
+    <ImageView
+        android:id="@+id/deko2"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:contentDescription="@string/deco"
+        android:scaleType="fitXY"
+        app:layout_constraintBottom_toBottomOf="@+id/levelSelectorText"
+        app:layout_constraintEnd_toStartOf="@+id/levelSelectorText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/levelSelectorText"
+        app:srcCompat="@drawable/lane" />
+
 
 
         <com.google.android.material.tabs.TabLayout
@@ -87,6 +117,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
             android:layout_marginTop="8dp"
+            android:layout_marginBottom="16dp"
             android:orientation="vertical" >
 
         </LinearLayout>

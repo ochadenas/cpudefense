@@ -179,7 +179,10 @@ class LevelSelectActivity : AppCompatActivity() {
                 else -> summary.coinsAvailable + summary.coinsGot
             }
             if (coinsMaxAvailable > 0)
-                textString = textString.plus("\n%d of %d coins got.".format(summary.coinsGot, coinsMaxAvailable))
+            {
+                val formatString = if (summary.coinsGot==1) resources.getString(R.string.coins_got) else resources.getString(R.string.coins_got_plural)
+                textString = textString.plus("\n"+formatString.format(summary.coinsGot, coinsMaxAvailable))
+            }
             levelEntryView.text = textString
             levelEntryView.textSize = 32f
             levelEntryView.isAllCaps = false
