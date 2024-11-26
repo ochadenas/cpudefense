@@ -28,6 +28,17 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             >
+            <ImageView
+                android:id="@+id/game_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="0dp"
+                android:layout_marginEnd="0dp"
+                android:adjustViewBounds="true"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:srcCompat="@drawable/game_title" />
 
             <TextView
                 android:id="@+id/info_title_view"
@@ -39,7 +50,7 @@
                 android:textColor="#FFFFFF"
                 android:textSize="24sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/game_title"
                 />
 
             <TextView
@@ -65,12 +76,12 @@
                 android:onClick="wiki"
                 app:layout_constraintEnd_toEndOf="@id/button_releasenotes"
                 app:layout_constraintStart_toStartOf="@id/button_releasenotes"
-                app:layout_constraintTop_toTopOf="@id/about_version"
+                app:layout_constraintTop_toBottomOf="@id/info_text_view"
                 />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/button_releasenotes"
-                android:layout_width="140sp"
+                android:layout_width="160sp"
                 android:layout_height="48dp"
                 android:layout_marginBottom="24dp"
                 android:text="@string/button_releasenotes"
@@ -97,7 +108,7 @@
                 android:text="@string/about_info_text"
                 android:textAlignment="viewStart"
                 android:textColor="@color/white"
-                app:layout_constraintEnd_toStartOf="@id/button_wiki"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/about_version"
              />
