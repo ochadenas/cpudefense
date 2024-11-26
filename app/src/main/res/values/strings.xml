@@ -223,7 +223,7 @@ The programming language Pascal is named after him."</string>
     <string name="shortdesc_limit_unwanted">Unwanted chip count</string>
     <string name="shortdesc_reduce_removal">Chip removal cost</string>
     <string name="shortdesc_enable_mem_upgrade">MEM max. level</string>
-    <string name="upgrade_format">%s  [cost: %d]</string>
+    <string name="upgrade_format">%1$s  [cost: %2$d]</string>
     <string name="stage_number">Stage %d</string>
     <string name="toast_stage_cleared">Stage cleared</string>
     <string name="toast_enter_stage">Stage %d</string>
@@ -254,7 +254,7 @@ The programming language Pascal is named after him."</string>
     <string name="name_series_3">Endless</string>
     <string name="message_series_unavailable">Complete all levels in “normal” mode first.</string>
     <string name="message_endless_unavailable">Available after completing all previous levels.</string>
-    <string name="stage_reached">Stage reached: %s %d</string>
+    <string name="stage_reached">Stage reached: %1$s %2$d</string>
     <string name="series_completed_message_2">You may replay all levels</string>
     <string name="series_completed_message_3">in “turbo” mode now.</string>
     <string name="instr_2_1">
@@ -333,6 +333,6 @@ Furthermore, some slots are already taken by unwanted chips you'll have to deal 
     <string name="settings_language_selection_title">Language selection</string>
     <string name="settings_language_selection_text">To change the game\'s language, use the system “Settings”  of your device and go to “App Languages”.</string>
     <string name="deco">Deco</string>
-    <string name="coins_got">Got %d coin out of %d</string>
-    <string name="coins_got_plural">Got %d out of %d coins</string>
+    <string name="coins_got">Got %1$d out of %2$d coins got.</string>
+    <string name="coins_got_plural">Got %1$d out of %2$d coins</string>
 </resources>

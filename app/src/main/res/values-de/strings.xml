@@ -134,7 +134,7 @@ Turing wurde aufgrund seiner Homosexualität massiv diskriminiert. Er starb 1954
     <string name="shortdesc_range">Reichweite %s-Chips</string>
     <string name="shortdesc_refund">Erstattung bei Verkauf</string>
     <string name="shortdesc_max_hero_upgrade">max. Helden-Stufe</string>
-    <string name="upgrade_format">%s  [Kosten: %d]</string>
+    <string name="upgrade_format">%1$s  [Kosten: %2$d]</string>
     <string name="stage_number">Level %d</string>
     <string name="toast_stage_cleared">Level geschafft</string>
     <string name="instr_12">Zwei weitere Chiparten: ADD und SHL (für „shift left“).\n\nDiese tun das Gegenteil von SUB und SHR: Sie addieren 1 zu der Zahl bzw. schieben die Bits nach links.\n\nDas ist natürlich unerwünscht, denn es macht die Zahlen größer. Für diese Chips bedeutet „Verbesserung“, dass sie schwächer werden oder ganz verschwinden.</string>
@@ -157,7 +157,7 @@ Turing wurde aufgrund seiner Homosexualität massiv diskriminiert. Er starb 1954
     <string name="name_series_1">Normal</string>
     <string name="name_series_2">Turbo</string>
     <string name="message_series_unavailable">Wird freigeschaltet, wenn alle Level im Modus „Normal“ geschafft sind.</string>
-    <string name="stage_reached">Erreichter Level: %s %d</string>
+    <string name="stage_reached">Erreichter Level: %1$s %2$d</string>
     <string name="series_completed_message_1">" "</string>
     <string name="series_completed_message_2">Du kannst alle Levels</string>
     <string name="series_completed_message_3">nun noch einmal im</string>
@@ -268,6 +268,6 @@ Turing wurde aufgrund seiner Homosexualität massiv diskriminiert. Er starb 1954
     <string name="settings_language_selection_text">Die Sprache des Spiels kann in den System-Einstellungen unter „App-Sprachen“ ausgewählt werden.\n</string>
     <string name="app_name_last">Defense</string>
     <string name="deco">Deco</string>
-    <string name="coins_got">%d von %d Coins erhalten</string>
-    <string name="coins_got_plural">%d von %d Coins erhalten</string>
+    <string name="coins_got">%1$d von %2$d Coins erhalten</string>
+    <string name="coins_got_plural">%1$d von %2$d Coins erhalten</string>
 </resources>

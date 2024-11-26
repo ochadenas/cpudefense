@@ -116,7 +116,7 @@
     <string name="name_series_1">Normal</string>
     <string name="name_series_2">Turbo</string>
     <string name="message_series_unavailable">Complétez tous les niveaux en mode normal d\'abord.</string>
-    <string name="stage_reached">Niveau atteint : %s %d</string>
+    <string name="stage_reached">Niveau atteint : %1$s %2$d</string>
     <string name="series_completed_message_1">" "</string>
     <string name="series_completed_message_2">Vous pouvez rejouer</string>
     <string name="series_completed_message_3">tous les niveaux</string>
@@ -224,6 +224,6 @@
     <string name="settings_language_selection_text">"Pour changer la langue du jeu, ouvrez le dialogue « Paramètres » de l'appareil et naviguez sur « Langues de l'application ».\n "</string>
     <string name="app_name_last">Defense</string>
     <string name="deco">Deco</string>
-    <string name="coins_got">%d écu reçu sur %d</string>
-    <string name="coins_got_plural">%d écus reçus sur %d</string>
+    <string name="coins_got">%1$d écu reçu sur %2$d</string>
+    <string name="coins_got_plural">%1$d écus reçus sur %2$d</string>
 </resources>
