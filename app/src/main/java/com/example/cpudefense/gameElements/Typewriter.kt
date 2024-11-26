@@ -35,7 +35,7 @@ class Typewriter(val gameView: GameView, myArea: Rect, private var lines: CopyOn
 
     fun topOfTypewriterArea(): Int
     {
-        var y = pos.second  // TODO: define in one place
+        var y = pos.second
         textBoxes[0]?.let { y = it.y.toInt() }
         return (y - lineSpacingY).toInt()
     }
