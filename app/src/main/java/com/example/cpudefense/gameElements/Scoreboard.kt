@@ -52,10 +52,6 @@ class ScoreBoard(val gameView: GameView): GameElement()
         recreateBitmap()
     }
 
-    fun addCash(amount: Int) {
-        gameView.gameMechanics.state.cash += amount
-    }
-
     fun informationToString(number: Int): String {
         if (number < 512 && number > -512)
             return "%d bit".format(number)

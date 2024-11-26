@@ -166,7 +166,7 @@ open class Attacker(network: Network, representation: Representation = Represent
     /** credit the info gained for eliminating this attacker */
     {
         if (!attackerData.hasNoValue)
-            network.gameView.scoreBoard.addCash(attackerData.bits + extraCash())
+            network.gameMechanics.state.cash += (attackerData.bits + extraCash())
     }
 
     fun slowDown(modifier: Float)

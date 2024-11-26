@@ -462,7 +462,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int):
                 val ohm = resistorValue().toFloat()
                 attacker.slowDown(attacker.effectOfResistanceOnSpeed(ohm))
                 val amount = theNetwork.gameMechanics.generateHeat(ohm, theNetwork.gameMechanics.heroModifier(Hero.Type.CONVERT_HEAT).toInt())
-                theNetwork.gameView.scoreBoard.addCash(amount)
+                theNetwork.gameMechanics.state.cash += amount
                 attacker.immuneTo = this
                 return // no cooldown phase here
             }

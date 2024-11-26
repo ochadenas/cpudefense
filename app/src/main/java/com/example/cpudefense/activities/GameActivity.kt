@@ -405,7 +405,7 @@ class GameActivity : Activity() {
             val timeAtStartOfCycle = SystemClock.uptimeMillis()
             gameMechanics.ticksCount++
             try {
-                gameMechanics.update(this)
+                gameMechanics.update()
             }
             catch (ex: TemperatureDamageException)
             {

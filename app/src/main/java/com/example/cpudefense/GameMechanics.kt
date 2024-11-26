@@ -233,14 +233,14 @@ class GameMechanics {
         return purseOfCoins[stage.mode()] ?: PurseOfCoins(this)
     }
 
-    fun update(activity: GameActivity)
+    fun update()
     {
         if (state.phase == GamePhase.RUNNING)
         {
             checkTemperature()
             currentlyActiveStage?.network?.update()
             currentlyActiveWave?.update()
-            gainAdditionalCash(activity)
+            gainAdditionalCash()
         }
     }
 
@@ -421,7 +421,7 @@ class GameMechanics {
         state.cash = heroModifier(Hero.Type.INCREASE_STARTING_CASH).toInt()
     }
 
-    private fun gainAdditionalCash(activity: GameActivity)
+    fun gainAdditionalCash()
     /** increases the amount of cash in regular intervals */
     {
         val additionalCashDelay = heroModifier(Hero.Type.GAIN_CASH)
@@ -429,7 +429,7 @@ class GameMechanics {
             return
         additionalCashTicks -= globalSpeedFactor()
         if (additionalCashTicks<0) {
-            activity.gameView.scoreBoard.addCash(1)
+            state.cash += 1
             additionalCashTicks = additionalCashDelay
         }
     }
