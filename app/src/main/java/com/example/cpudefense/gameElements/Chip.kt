@@ -661,7 +661,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int):
     {
         val bitmap: Bitmap? = actualRect?.let {
             val bitmap = Bitmap.createBitmap(it.width(), it.height(), Bitmap.Config.ARGB_8888)
-            val rect = Rect(0, 0, bitmap.width, bitmap.height)
+            val rect = Rect(0, 0, bitmap.width-2*outlineWidth.toInt(), bitmap.height)
             val canvas = Canvas(bitmap)
             val paint = Paint()
 

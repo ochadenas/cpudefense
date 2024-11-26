@@ -139,24 +139,35 @@ fun Rect.shiftBy(dx: Int, dy: Int): Rect
     setCenter(centerX()+dx, centerY()+dy)
     return this
 }
+private fun Rect.displayTextInRect(canvas: Canvas, text: String, paint: Paint, baseline: Int = 0, centered: Boolean, scaleToFit: Boolean): Rect
+{
+    val bounds = Rect()
+    paint.getTextBounds(text, 0, text.length, bounds)
+    if (scaleToFit) {
+        // scale down text if it doesn't fit:
+        val excessSize = bounds.width().toFloat() / width().toFloat()
+        if (excessSize > 1.0f) {
+            paint.textSize /= excessSize
+            paint.getTextBounds(text, 0, text.length, bounds)
+        }
+    }
+    paint.textAlign = Paint.Align.LEFT
+    val left = if (centered) this.centerX() - bounds.width()/2 else this.left
+    val bottom = if (baseline>0) baseline else this.centerY() + bounds.height()/2
+    canvas.drawText(text, left.toFloat(), bottom.toFloat(), paint)
+    return Rect(left, bottom-bounds.height(), left+bounds.width(), bottom)
+}
 
 fun Rect.displayTextCenteredInRect(canvas: Canvas, text: String, paint: Paint, baseline: Int = 0): Rect
         /**
          * draws text centered to the center of this rectangle, using the actual text size.
          * @param text text to be drawn in the rectangle
          * @param paint paint that is used for the text
+         * @param baseline if given, use as baseline for the text. Otherwise, center the text vertically.
          * @return the rectangle that bounds the text actually drawn
          */
 {
-    val bounds = Rect()
-    paint.getTextBounds(text, 0, text.length, bounds)
-    paint.textAlign = Paint.Align.LEFT
-    val rect = Rect(this.centerX() - bounds.width()/2, this.centerY() - bounds.height()/2, this.centerX() + bounds.width()/2, this.centerY() + bounds.height()/2)
-    if (baseline == 0)
-        canvas.drawText(text, rect.left.toFloat(), rect.bottom.toFloat(), paint)
-    else
-        canvas.drawText(text, rect.left.toFloat(), baseline.toFloat(), paint)
-    return rect
+    return this.displayTextInRect(canvas, text, paint, baseline, centered = true, scaleToFit = true)
 }
 
 fun Rect.displayTextLeftAlignedInRect(canvas: Canvas, text: String, paint: Paint, baseline: Int = 0): Rect
@@ -164,19 +175,13 @@ fun Rect.displayTextLeftAlignedInRect(canvas: Canvas, text: String, paint: Paint
          * draws text left-aligned and centered to the vertical center of this rectangle, using the actual text size.
          * @param text text to be drawn in the rectangle
          * @param paint paint that is used for the text
+         * @param baseline if given, use as baseline for the text. Otherwise, center the text vertically.
          * @return the rectangle that bounds the text actually drawn
          */
 {
-    val bounds = Rect()
-    paint.getTextBounds(text, 0, text.length, bounds)
-    paint.textAlign = Paint.Align.LEFT
-    val rect = Rect(this.left, this.centerY() - bounds.height()/2, this.left+bounds.width(), this.centerY() + bounds.height()/2)
-    if (baseline == 0)
-        canvas.drawText(text, rect.left.toFloat(), rect.bottom.toFloat(), paint)
-    else
-        canvas.drawText(text, rect.left.toFloat(), baseline.toFloat(), paint)
-    return rect
+    return this.displayTextInRect(canvas, text, paint, baseline, centered = false, scaleToFit = true)
 }
+
 fun Rect.drawOutline(canvas: Canvas)
 /**
  * for debugging purposes. Shows the rectangle by drawing a white outline around it
