@@ -156,7 +156,8 @@ class EndlessStageCreator(val stage: Stage)
         val waveCount = sqrt(2 * levelNumber.toDouble()).toInt() + 2
         for (waveNumber in 1 .. waveCount) {
             val attackerCount = 16
-            val strength = (waveNumber+levelNumber)/2
+            var strength = (waveNumber+levelNumber)/2 - 1
+            if (strength<0) strength=0
             val attackerStrength = (Attacker.powerOfTwo[strength] ?: 1048576u).toInt()
             val attackerSpeed = (16 + strength) * 0.06f
             val attackerFrequency = (8 + strength) * 0.006f
