@@ -22,7 +22,10 @@ class ScoreBoard(val gameView: GameView): GameElement()
     private var temperature = Temperature()
     private var debugStatusLine: DebugStatusLine? = null
     private var myColor = Color.WHITE
-    private var divider = 0  // between the display title and the actual display
+    /** height of the (virtual) line between the display title and the actual display */
+    private var divider: Int = 0
+    /** the amount in pixels that separates the header text from the divider */
+    private var dividerMargin: Int = 8
 
     val fractionOfScoreBoardUsedForInf = 0.3f
     private val scoreboardBorderWidth = 4.0f
@@ -105,18 +108,17 @@ class ScoreBoard(val gameView: GameView): GameElement()
              * @param text The actual string to be displayed
              */
     {
-        // TODO: Problem is that text with letters below the line (such as 'Temp') is slightly off-center vertically
-        // due to calculation in rect.displayTextCenteredInRect
         val rect = Rect(area)
         rect.bottom = divider
         val paint = Paint()
         paint.color = resources.getColor(R.color.scoreboard_text)
         paint.typeface = Typeface.create("sans-serif", Typeface.NORMAL)
         paint.textSize = GameView.scoreHeaderSize * gameView.textScaleFactor
+        paint.textAlign = Paint.Align.LEFT
         if (centered)
-            rect.displayTextCenteredInRect(canvas, text, paint)
+            rect.displayTextCenteredInRect(canvas, text, paint, baseline = divider-dividerMargin)
         else
-            rect.displayTextLeftAlignedInRect(canvas, text, paint)
+            rect.displayTextLeftAlignedInRect(canvas, text, paint, baseline = divider-dividerMargin)
     }
 
     fun recreateBitmap()

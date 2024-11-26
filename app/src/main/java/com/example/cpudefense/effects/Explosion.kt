@@ -54,7 +54,6 @@ class Explosion(posOnScreen: Pair<Int, Int>,
 
     fun update() {
         sparks.map { it.update() }
-        // TODO: the following seems to be rather CPU consuming. Try to find a better way
         sparks.removeAll { x: Spark -> x.expired() } // remove sparks after their lifetime
     }
 

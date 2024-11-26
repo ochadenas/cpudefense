@@ -267,7 +267,7 @@ open class Attacker(network: Network, representation: Representation = Represent
             it.node1.notify(this, direction = Node.VehicleDirection.GONE)
             it.node2.notify(this, direction = Node.VehicleDirection.GONE)
             data.state = State.GONE
-            network.vehicles.remove(this) // TODO: this might not be thread safe
+            network.vehicles.remove(this)
         }
     }
 

@@ -140,7 +140,7 @@ fun Rect.shiftBy(dx: Int, dy: Int): Rect
     return this
 }
 
-fun Rect.displayTextCenteredInRect(canvas: Canvas, text: String, paint: Paint): Rect
+fun Rect.displayTextCenteredInRect(canvas: Canvas, text: String, paint: Paint, baseline: Int = 0): Rect
         /**
          * draws text centered to the center of this rectangle, using the actual text size.
          * @param text text to be drawn in the rectangle
@@ -152,11 +152,14 @@ fun Rect.displayTextCenteredInRect(canvas: Canvas, text: String, paint: Paint): 
     paint.getTextBounds(text, 0, text.length, bounds)
     paint.textAlign = Paint.Align.LEFT
     val rect = Rect(this.centerX() - bounds.width()/2, this.centerY() - bounds.height()/2, this.centerX() + bounds.width()/2, this.centerY() + bounds.height()/2)
-    canvas.drawText(text, rect.left.toFloat(), rect.bottom.toFloat(), paint)
+    if (baseline == 0)
+        canvas.drawText(text, rect.left.toFloat(), rect.bottom.toFloat(), paint)
+    else
+        canvas.drawText(text, rect.left.toFloat(), baseline.toFloat(), paint)
     return rect
 }
 
-fun Rect.displayTextLeftAlignedInRect(canvas: Canvas, text: String, paint: Paint): Rect
+fun Rect.displayTextLeftAlignedInRect(canvas: Canvas, text: String, paint: Paint, baseline: Int = 0): Rect
         /**
          * draws text left-aligned and centered to the vertical center of this rectangle, using the actual text size.
          * @param text text to be drawn in the rectangle
@@ -168,7 +171,10 @@ fun Rect.displayTextLeftAlignedInRect(canvas: Canvas, text: String, paint: Paint
     paint.getTextBounds(text, 0, text.length, bounds)
     paint.textAlign = Paint.Align.LEFT
     val rect = Rect(this.left, this.centerY() - bounds.height()/2, this.left+bounds.width(), this.centerY() + bounds.height()/2)
-    canvas.drawText(text, rect.left.toFloat(), rect.bottom.toFloat(), paint)
+    if (baseline == 0)
+        canvas.drawText(text, rect.left.toFloat(), rect.bottom.toFloat(), paint)
+    else
+        canvas.drawText(text, rect.left.toFloat(), baseline.toFloat(), paint)
     return rect
 }
 fun Rect.drawOutline(canvas: Canvas)
