@@ -145,8 +145,6 @@ class GameMechanics {
     var summaryPerNormalLevel  = HashMap<Int, Stage.Summary>()
     var summaryPerTurboLevel  = HashMap<Int, Stage.Summary>()
     var summaryPerEndlessLevel = HashMap<Int, Stage.Summary>()
-    var levelThumbnail = HashMap<Int, Bitmap?>()  // level snapshots (common for series 1 and 2)
-    var levelThumbnailEndless = HashMap<Int, Bitmap?>()  // level snapshots for series 3
     var heroes = HashMap<Hero.Type, Hero>()
     var heroesByMode = hashMapOf(
             LevelMode.BASIC to HashMap(),
@@ -283,7 +281,7 @@ class GameMechanics {
     {
         if (currentlyActiveStage == null)
             return // in this case, the stage has already been left
-        takeLevelSnapshot(activity)
+        activity.takeLevelSnapshot()
         currentlyActiveStage?.let {
             if (it.attackerCount()>0)
                 // still attackers left, wait until wave is really over
@@ -363,7 +361,7 @@ class GameMechanics {
         nextStage.gameView.resetAtStartOfStage()
         Persistency(activity).saveCurrentLevelState(this)
         Persistency(activity).saveGeneralState(this)
-        takeLevelSnapshot(activity)
+        activity.takeLevelSnapshot()
     }
 
     fun removeOneLife(): Int
@@ -421,7 +419,7 @@ class GameMechanics {
         state.cash = heroModifier(Hero.Type.INCREASE_STARTING_CASH).toInt()
     }
 
-    fun gainAdditionalCash()
+    private fun gainAdditionalCash()
     /** increases the amount of cash in regular intervals */
     {
         val additionalCashDelay = heroModifier(Hero.Type.GAIN_CASH)
@@ -478,18 +476,6 @@ class GameMechanics {
         val factor = 100f - heroModifier(Hero.Type.REDUCE_HEAT) // heat reduction in %
         state.heat += (heat-convertedHeat) * factor / 100f
         return convertedHeat.toInt()
-    }
-
-
-    fun takeLevelSnapshot(activity: GameActivity) // TODO: move to GameActivity
-    {
-        currentlyActiveStage?.let {
-            if (it.getSeries() == SERIES_ENDLESS)
-                levelThumbnailEndless[it.getLevel()] = it.takeSnapshot(GameView.levelSnapshotIconSize)
-            else
-                levelThumbnail[it.getLevel()] = it.takeSnapshot(GameView.levelSnapshotIconSize)
-            Persistency(activity).saveThumbnailOfLevel(this, it)
-        }
     }
 
     private fun correctNumberOfCoins()

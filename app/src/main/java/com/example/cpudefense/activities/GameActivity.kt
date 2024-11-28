@@ -5,6 +5,7 @@ package com.example.cpudefense.activities
 import android.app.Activity
 import android.app.Dialog
 import android.content.Context
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.os.SystemClock
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
@@ -66,6 +67,10 @@ class GameActivity : Activity() {
     private var frameCount = 0
     /** cumulated time */
     private var frameTimeSum = 0L
+    /** level snapshots (common for series 1 and 2) */
+    var levelThumbnail = HashMap<Int, Bitmap?>()
+    /** level snapshots for series 3 */
+    var levelThumbnailEndless = HashMap<Int, Bitmap?>()
 
     var settings = Settings()
 
@@ -437,7 +442,7 @@ class GameActivity : Activity() {
         when (livesLeft)
         {
             0-> {
-                gameMechanics.takeLevelSnapshot(this)
+                takeLevelSnapshot()
                 gameView.intermezzo.endOfGame(gameMechanics.currentStage, hasWon = false)
             }
             1 -> {
@@ -495,4 +500,16 @@ class GameActivity : Activity() {
         }
         editor.apply()
     }
+
+    fun takeLevelSnapshot()
+    {
+        gameMechanics.currentlyActiveStage?.let {
+            if (it.getSeries() == SERIES_ENDLESS)
+                levelThumbnailEndless[it.getLevel()] = it.takeSnapshot(GameView.levelSnapshotIconSize)
+            else
+                levelThumbnail[it.getLevel()] = it.takeSnapshot(GameView.levelSnapshotIconSize)
+            Persistency(this).saveThumbnailOfLevel(this, it)
+        }
+    }
+
 }

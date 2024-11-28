@@ -173,28 +173,26 @@ class Persistency(private var activity: Activity)
         }
     }
 
-    fun saveThumbnailOfLevel(gameMechanics: GameMechanics?, stage: Stage) {
+    fun saveThumbnailOfLevel(gameActivity: GameActivity, stage: Stage) {
         val editor = prefsThumbnails.edit()
-        gameMechanics?.let {
-            val levelIdent = stage.data.ident
-            if (levelIdent.number != 0) {
-                val outputStream = ByteArrayOutputStream()
-                val snapshot: Bitmap? = when (levelIdent.series)
-                {
-                    GameMechanics.SERIES_ENDLESS -> it.levelThumbnailEndless[levelIdent.number]
-                    else -> it.levelThumbnail[levelIdent.number]
-                }
-                snapshot?.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
-                val encodedImage: String =
-                    Base64.encodeToString(outputStream.toByteArray(), Base64.DEFAULT)
-                val key: String = when (levelIdent.series)
-                {
-                    GameMechanics.SERIES_ENDLESS -> "thumbnail_%d_endless".format(levelIdent.number)
-                    else -> "thumbnail_%d".format(levelIdent.number)
-                }
-                editor.putString(key, encodedImage)
-                editor.apply()
+        val levelIdent = stage.data.ident
+        if (levelIdent.number != 0) {
+            val outputStream = ByteArrayOutputStream()
+            val snapshot: Bitmap? = when (levelIdent.series)
+            {
+                GameMechanics.SERIES_ENDLESS -> gameActivity.levelThumbnailEndless[levelIdent.number]
+                else -> gameActivity.levelThumbnail[levelIdent.number]
             }
+            snapshot?.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
+            val encodedImage: String =
+                Base64.encodeToString(outputStream.toByteArray(), Base64.DEFAULT)
+            val key: String = when (levelIdent.series)
+            {
+                GameMechanics.SERIES_ENDLESS -> "thumbnail_%d_endless".format(levelIdent.number)
+                else -> "thumbnail_%d".format(levelIdent.number)
+            }
+            editor.putString(key, encodedImage)
+            editor.apply()
         }
     }
 
