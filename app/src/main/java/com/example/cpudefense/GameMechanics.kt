@@ -57,7 +57,7 @@ class GameMechanics {
         val basePrice = mapOf(Chip.ChipUpgrades.REDUCE to 10,
             Chip.ChipUpgrades.SUB to 8, Chip.ChipUpgrades.ACC to 10,
             Chip.ChipUpgrades.SHR to 16, Chip.ChipUpgrades.MEM to 12,
-            Chip.ChipUpgrades.CLK to 32, Chip.ChipUpgrades.RES to 20)
+            Chip.ChipUpgrades.CLK to 32, Chip.ChipUpgrades.RES to 8)
 
         // temperature control:
         /** amount of heat that is generated per shortened tick */
