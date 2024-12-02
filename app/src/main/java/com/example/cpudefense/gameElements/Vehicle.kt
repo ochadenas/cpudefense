@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Rect
 import com.example.cpudefense.networkmap.*
+import com.example.cpudefense.utils.Logger
 import com.example.cpudefense.utils.setCenter
 
 open class Vehicle(val network: Network): GameElement()
@@ -54,6 +55,8 @@ open class Vehicle(val network: Network): GameElement()
         state = State.ACTIVE,
     )
 
+    private var logger: Logger? = network.gameView.gameActivity.logger
+
     var posOnGrid: Coord? = null
     var onLink: Link? = null
     var onTrack: Track? = null
@@ -87,8 +90,10 @@ open class Vehicle(val network: Network): GameElement()
             if (posOnGrid == endNode.posOnGrid) // reached end of link
             {
                 startNode.notify(this, direction = Node.VehicleDirection.GONE) // out of reach, so stop notification
-                setOntoLink(onTrack?.nextLink(it), endNode) // get next link on track, if any
+                val nextLink = onTrack?.nextLink(it)
+                setOntoLink(nextLink, endNode) // get next link on track, if any
                 data.distanceTravelledOnLink = 0f // and start at the beginning of the link
+                logger?.log("Vehicle %s changing link from %d to %d at node %d".format(this.hashCode().toString(radix=16), it.data.ident, nextLink?.data?.ident ?: -1, startNode.data.ident))
             }
             setCurrentDistanceOnLink(it)
         }
@@ -133,6 +138,7 @@ open class Vehicle(val network: Network): GameElement()
         data.endNodeId = endNode?.data?.ident ?: -1
         onLink = link
         setCurrentDistanceOnLink(link)
+        logger?.log("Vehicle %s set onto link %d, going from %d to %d".format(toString(), link.data.ident, data.startNodeId, data.endNodeId))
     }
 
     fun setCurrentDistanceOnLink(link: Link)

@@ -29,9 +29,11 @@ class Logger(activity: GameActivity)
 
         val logString = "%s [%-4.4s] %s%s\n".format(
                 timeFormatShort.format(Date()),
+                leveltext[loglevel],
                 " ".repeat(indent),
-                leveltext[loglevel], text)
+                text)
         outputStreamWriter.write(logString)
+        outputStreamWriter.flush()
 
     }
 

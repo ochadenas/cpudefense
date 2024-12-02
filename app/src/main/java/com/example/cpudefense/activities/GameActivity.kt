@@ -38,7 +38,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class GameActivity : Activity() {
-    private var logger: Logger? = null
+    var logger: Logger? = null
     lateinit var gameMechanics: GameMechanics
     lateinit var gameView: GameView
     /** flag used to keep the threads running. Set to false when leaving activity */
@@ -180,7 +180,7 @@ class GameActivity : Activity() {
     /** when completing a level, record the current number in the SharedPrefs.
      * @param identifier number of the level successfully completed */
     {
-        logger?.debug("Setting last played stage to series %d / level %d.".format(identifier.series, identifier.number))
+        logger?.log("Setting last played stage to series %d / level %d.".format(identifier.series, identifier.number))
         val prefs = getSharedPreferences(Persistency.filename_state, Context.MODE_PRIVATE)
         with (prefs.edit())
         {
@@ -200,7 +200,7 @@ class GameActivity : Activity() {
         val previousMaxStage =
             Stage.Identifier(prefs.getInt("MAXSERIES", 1), prefs.getInt("MAXSTAGE", 0))
         val newMaxStage = if (identifier.isGreaterThan(previousMaxStage) || forceReset) identifier else previousMaxStage
-        logger?.debug("Setting max stage to series %d / level %d.".format(newMaxStage.series, newMaxStage.number))
+        logger?.log("Setting max stage to series %d / level %d.".format(newMaxStage.series, newMaxStage.number))
         with (prefs.edit())
         {
             putInt("MAXSTAGE", newMaxStage.number)

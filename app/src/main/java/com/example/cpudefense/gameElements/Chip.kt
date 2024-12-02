@@ -441,13 +441,15 @@ open class Chip(val network: Network, gridX: Int, gridY: Int):
 
     private fun shootAt(attacker: Attacker)
     {
-        if (chipData.type == ChipType.EMPTY)
+        if (chipData.type == ChipType.EMPTY || chipData.type == ChipType.NOP)
             return
         if (attacker.immuneTo == this || attacker.immuneToAll)
             return
         if (chipData.type in chipsThatDoNotAffectCoins
             && attacker.attackerData.isCoin)
             return  // coins are unaffected by certain chip types
+        network.gameView.gameActivity.logger?.log("Chip %d (%s) shooting at %s (value %s)".format(data.ident, chipDescription(), attacker.toString(), attacker.numberAsString()))
+        attacker.logState()
         when (chipData.type)
         {
             ChipType.ACC -> { processInAccumulator(attacker) }
@@ -562,6 +564,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int):
             attacker.jitterSpeed()
             internalRegister.clear()
             attacker.immuneTo = this
+            previousAttacker.data.state = Vehicle.State.GONE
         }
     }
 
@@ -573,31 +576,42 @@ open class Chip(val network: Network, gridX: Int, gridY: Int):
         return (internalRegister.slotsUsed()>0)
     }
 
+    private fun chipDescription(): String
+    /** the description printed on the chip, such as "SUB 2" */
+    {
+        return when (chipData.type)
+        {
+            ChipType.SUB -> "SUB%2d".format(chipData.upgradeLevel)
+            ChipType.SHR -> "SHR%2d".format(chipData.upgradeLevel)
+            ChipType.MEM -> if (chipData.upgradeLevel == 1) "MEM" else "MEM%2d".format(chipData.upgradeLevel)
+            ChipType.ACC -> when (chipData.upgradeLevel)
+            {
+                1 -> "ACC +"
+                2 -> "ACC v"
+                else -> "ACC &"
+            }
+            ChipType.SHL -> "SHL%2d".format(chipData.upgradeLevel)
+            ChipType.ADD -> "ADD%2d".format(chipData.upgradeLevel)
+            ChipType.CLK -> "CLK%2d".format(chipData.upgradeLevel)
+            ChipType.RES -> "R"
+            ChipType.SPLT ->"SPLT"
+            ChipType.DUP -> "DUP"
+            ChipType.NOP -> if (chipData.upgradeLevel == 1) "NOP" else "NOP%2d".format(chipData.upgradeLevel)
+            ChipType.ENTRY -> "ENTRY"
+            ChipType.CPU -> "CPU"
+            ChipType.EMPTY -> "<EMPTY>"
+        }
+    }
+
     private fun createBitmapForType(): Bitmap?
     {
         return when (chipData.type)
         {
-            ChipType.SUB -> createBitmap("SUB%2d".format(chipData.upgradeLevel))
-            ChipType.SHR -> createBitmap("SHR%2d".format(chipData.upgradeLevel))
-            ChipType.MEM -> { if (chipData.upgradeLevel == 1) createBitmap("MEM")
-                else createBitmap("MEM%2d".format(chipData.upgradeLevel)) }
-            ChipType.ACC -> when (chipData.upgradeLevel)
-            {
-                1 -> createBitmap("ACC +")
-                2 -> createBitmap("ACC v")
-                else -> createBitmap("ACC &")
-            }
-            ChipType.SHL -> createBitmap("SHL%2d".format(chipData.upgradeLevel))
-            ChipType.ADD -> createBitmap("ADD%2d".format(chipData.upgradeLevel))
-            ChipType.CLK -> createBitmap("CLK%2d".format(chipData.upgradeLevel))
             ChipType.RES -> createBitmapForResistor()
-            ChipType.SPLT -> createBitmap("SPLT")
-            ChipType.DUP -> createBitmap("DUP")
-            ChipType.NOP -> if (chipData.upgradeLevel == 1)  createBitmap("NOP")
-                else createBitmap("NOP%2d".format(chipData.upgradeLevel))
             ChipType.ENTRY -> null
             ChipType.CPU -> null
             ChipType.EMPTY -> null
+            else -> createBitmap(chipDescription())
         }
     }
 
@@ -866,6 +880,8 @@ open class Chip(val network: Network, gridX: Int, gridY: Int):
         fun store(attacker: Attacker)
         /** stores a value or a coin in the internal register, putting the attacker to HELD status */
         {
+            network.gameView.gameActivity.logger?.log("Storing attacker %s (value %s) in %s".format(attacker.toString(), attacker.numberAsString(), chipDescription()))
+            attacker.logState()
             register.add(attacker)
             attacker.gainCash()
             attacker.immuneTo = this@Chip
@@ -880,7 +896,10 @@ open class Chip(val network: Network, gridX: Int, gridY: Int):
                  */
         {
             try {
-                return register.removeAt(0)
+                val attacker = register.removeAt(0)
+                network.gameView.gameActivity.logger?.log("Retrieving attacker %s (value %s) from %s".format(attacker.toString(), attacker.numberAsString(), chipDescription()))
+                attacker.logState()
+                return attacker
             }
             catch (ex: ArrayIndexOutOfBoundsException) // register is empty
             {

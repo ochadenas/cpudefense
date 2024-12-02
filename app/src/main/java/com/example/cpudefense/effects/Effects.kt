@@ -19,7 +19,6 @@ class Effects(var gameView: GameView) {
     {
         val explosionColour = thing.explosionColour ?: gameView.resources.getColor(R.color.attackers_glow_bin)
         explosions.add(Explosion(thing.getPositionOnScreen(), gameView.resources.getColor(R.color.attackers_foreground_bin), explosionColour ))
-        thing.remove()
     }
 
     fun setSize(area: Rect)

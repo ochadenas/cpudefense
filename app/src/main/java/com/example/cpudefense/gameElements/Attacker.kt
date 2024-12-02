@@ -42,6 +42,7 @@ open class Attacker(network: Network, representation: Representation = Represent
     )
     private val resources = network.gameView.resources
     private val activity = network.gameView.gameActivity
+    private val logger = activity.logger
     private var numberBitmap: Bitmap = Bitmap.createBitmap(100, 32, Bitmap.Config.ARGB_8888)
     var actualRect = Rect()
     private var oldNumber: ULong = 0U
@@ -263,6 +264,7 @@ open class Attacker(network: Network, representation: Representation = Represent
     override fun remove()
     /** removes this attacker from the network */
     {
+        logger?.log("Removing %s".format(toString()))
         onLink?.let {
             it.node1.notify(this, direction = Node.VehicleDirection.GONE)
             it.node2.notify(this, direction = Node.VehicleDirection.GONE)
@@ -271,17 +273,19 @@ open class Attacker(network: Network, representation: Representation = Represent
         }
     }
 
+    fun numberAsString(): String
+    /** returns the number that is shown on the attacker (in binary or hex) */
+    {
+        return if (attackerData.representation == Representation.BINARY) attackerData.number.toString(radix=2).padStart(attackerData.binaryDigits, '0')
+            else "x" + attackerData.number.toString(radix=16).uppercase().padStart(attackerData.hexDigits, '0')
+    }
+
     open fun makeNumber()
     /** creates a bitmap using the current number (strength) of the attacker.
      * N.B.: Cryptocoins have their own implementation of this method.
      */
     {
-        val text: String
-        if (attackerData.representation == Representation.BINARY)
-            text = attackerData.number.toString(radix=2).padStart(attackerData.binaryDigits, '0')
-        else
-            text = "x" + attackerData.number.toString(radix=16).uppercase().padStart(attackerData.hexDigits, '0')
-        createBitmap(text)
+        createBitmap(numberAsString())
         scale = 1.0f  // reset any shrinking effects
     }
 
@@ -404,9 +408,12 @@ open class Attacker(network: Network, representation: Representation = Represent
     fun onDown(event: MotionEvent): Boolean {
         val boundingRect = Rect(actualRect)
         boundingRect.inflate(20).setCenter(actualRect.center())
-        if (boundingRect.contains(event.x.toInt(), event.y.toInt())) // gesture is inside this object
+        if (boundingRect.contains(event.x.toInt(), event.y.toInt()) // gesture is inside this object
+            && data.state == State.ACTIVE)  // do not allow tapping on objects HELD or GONE
         {
+            logger?.log("Tap on %s. Former value was %s".format(toString(), numberAsString()))
             invertNumber()
+            logState()
             return true
         }
         else
@@ -465,5 +472,15 @@ open class Attacker(network: Network, representation: Representation = Represent
             }
             return attacker
         }
+    }
+
+    fun logState()
+    {
+        val stateText = data.state.toString()
+        logger?.debug("%s: Attacker [%s] on track %d, link %d, speed %f, going from %s to %s, distance travelled is %f, still %f to go. State is %s".format(
+                this.hashCode().toString(radix=16), numberAsString(),
+                onTrack?.data?.ident ?: -1, onLink?.data?.ident ?: -1, data.speed, startNode?.data?.ident ?: -1, endNode?.data?.ident ?: -1,
+                distanceFromLastNode, distanceToNextNode, stateText),
+                                                    indent = 1)
     }
 }
