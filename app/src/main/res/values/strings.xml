@@ -277,6 +277,7 @@ Furthermore, some slots are already taken by unwanted chips you'll have to deal 
     <string name="text_about">About …</string>
     <string name="instr_did_you_know">Did you know?</string>
     <string name="settings_keep_levels">Keep created stages in “endless” mode</string>
+    <string name="settings_activate_log">Enable debug logging</string>
     <string name="settings_fast_fast_forward">Use really fast forward</string>
     <string name="game_paused">GAME PAUSED</string>
     <string name="overheat">CPU damage from overheating</string>

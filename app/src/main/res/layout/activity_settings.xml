@@ -124,6 +124,18 @@
             android:text="@string/settings_keep_levels"
             android:textColor="#FFFFFF" />
 
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/switch_activate_log"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:enabled="false"
+            android:minHeight="36dp"
+            android:onClick="savePrefs"
+            android:text="@string/settings_activate_log"
+            android:textColor="#FFFFFF"
+            android:visibility="gone" />
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

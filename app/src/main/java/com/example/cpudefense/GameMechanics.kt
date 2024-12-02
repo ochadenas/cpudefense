@@ -32,6 +32,8 @@ class GameMechanics {
         const val forceHeroMigration = false
         /** for debugging purposes only. MUST BE SET TO FALSE */
         const val allowLivesPurchaseInAllStages = false
+        /** for debugging purposes only. MUST BE SET TO FALSE */
+        const val enableLogging = true
         // end of debug options
 
         /** level that shows an Easter egg */

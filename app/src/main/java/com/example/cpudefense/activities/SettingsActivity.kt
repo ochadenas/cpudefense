@@ -5,6 +5,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.view.Window
 import android.widget.TextView
@@ -41,6 +42,13 @@ class SettingsActivity : AppCompatActivity()
         findViewById<SwitchCompat>(R.id.switch_show_framerate)?.isChecked = settings.showFrameRate
         findViewById<SwitchCompat>(R.id.switch_fast_fast_forward)?.isChecked = settings.fastFastForward
         findViewById<SwitchCompat>(R.id.switch_keep_levels)?.isChecked = settings.keepLevels
+        findViewById<SwitchCompat>(R.id.switch_activate_log)?.let {
+            it.isChecked = settings.activateLogging
+            if (GameMechanics.enableLogging) {
+                it.visibility = VISIBLE
+                it.isEnabled = true
+            }
+        }
     }
 
     @Suppress("UNUSED_PARAMETER")

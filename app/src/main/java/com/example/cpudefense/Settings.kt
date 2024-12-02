@@ -10,6 +10,7 @@ class Settings {
     var showFrameRate: Boolean = false
     var fastFastForward: Boolean = false
     var keepLevels: Boolean = true
+    var activateLogging: Boolean = true
 
     fun loadFromFile(prefs: SharedPreferences): Boolean
     {
@@ -20,6 +21,7 @@ class Settings {
         showFrameRate = prefs.getBoolean("SHOW_FRAMERATE", false)
         fastFastForward = prefs.getBoolean("USE_FAST_FAST_FORWARD", false)
         keepLevels = prefs.getBoolean("KEEP_LEVELS", true)
+        activateLogging = prefs.getBoolean("LOGGING_ACTIVE", false)
         return prefs.getBoolean("USE_PREFS_FILE", false) // marker whether this file is initialized and in use
     }
 
@@ -33,6 +35,7 @@ class Settings {
             putBoolean("SHOW_FRAMERATE", showFrameRate)
             putBoolean("USE_FAST_FAST_FORWARD", fastFastForward)
             putBoolean("KEEP_LEVELS", keepLevels)
+            putBoolean("LOGGING_ACTIVE", activateLogging)
             putBoolean("USE_PREFS_FILE", true)
             apply()
         }

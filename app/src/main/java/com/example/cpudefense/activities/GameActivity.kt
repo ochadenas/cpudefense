@@ -31,12 +31,14 @@ import com.example.cpudefense.R
 import com.example.cpudefense.Settings
 import com.example.cpudefense.Stage
 import com.example.cpudefense.TemperatureDamageException
+import com.example.cpudefense.utils.Logger
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class GameActivity : Activity() {
+    private var logger: Logger? = null
     lateinit var gameMechanics: GameMechanics
     lateinit var gameView: GameView
     /** flag used to keep the threads running. Set to false when leaving activity */
@@ -84,6 +86,9 @@ class GameActivity : Activity() {
      */
     {
         super.onCreate(savedInstanceState)
+        if (settings.activateLogging)
+            logger = Logger(this)
+        logger?.log("Creating Game Activity")
         /* here, the size of the surfaces might not be known */
         requestWindowFeature(Window.FEATURE_NO_TITLE) // method of Activity
         setContentView(R.layout.activity_main_game)
@@ -98,7 +103,7 @@ class GameActivity : Activity() {
      *  but also when she navigates to another app
      */
     {
-
+        logger?.log("Leaving Game Activity")
         Persistency(this).saveGeneralState(gameMechanics)
         Persistency(this).saveCurrentLevelState(gameMechanics)
         gameIsRunning = false
@@ -110,6 +115,7 @@ class GameActivity : Activity() {
      * a new game is started or the user just navigates back to the app.
      */
     {
+        logger?.log("Entering Game Activity")
         super.onResume()
         Toast.makeText(this, resources.getString(R.string.toast_loading), Toast.LENGTH_SHORT).show()
         loadSettings()
@@ -149,6 +155,8 @@ class GameActivity : Activity() {
     }
 
     override fun onStop() {
+        logger?.log("Ending Game Activity")
+        logger?.stop()
         super.onStop()
     }
 
@@ -172,6 +180,7 @@ class GameActivity : Activity() {
     /** when completing a level, record the current number in the SharedPrefs.
      * @param identifier number of the level successfully completed */
     {
+        logger?.debug("Setting last played stage to series %d / level %d.".format(identifier.series, identifier.number))
         val prefs = getSharedPreferences(Persistency.filename_state, Context.MODE_PRIVATE)
         with (prefs.edit())
         {
@@ -191,6 +200,7 @@ class GameActivity : Activity() {
         val previousMaxStage =
             Stage.Identifier(prefs.getInt("MAXSERIES", 1), prefs.getInt("MAXSTAGE", 0))
         val newMaxStage = if (identifier.isGreaterThan(previousMaxStage) || forceReset) identifier else previousMaxStage
+        logger?.debug("Setting max stage to series %d / level %d.".format(newMaxStage.series, newMaxStage.number))
         with (prefs.edit())
         {
             putInt("MAXSTAGE", newMaxStage.number)
