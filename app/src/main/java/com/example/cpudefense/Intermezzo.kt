@@ -27,6 +27,7 @@ import kotlin.random.Random
 - IBM drum calculating machine
 - Susan Landau
 - esoteric programming languages
+- six women programmers for ENIAC (cf. Frances Spence)
  */
 
 class Intermezzo(var gameView: GameView): GameElement(), Fadable {

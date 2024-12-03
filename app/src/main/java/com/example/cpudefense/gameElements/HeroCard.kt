@@ -79,6 +79,7 @@ class HeroCard(val gameView: GameView, val hero: Hero): GameElement(), Fadable
         Hero.Type.ADDITIONAL_LIVES -> resources.getColor(R.color.upgrade_active_meta)
         Hero.Type.INCREASE_MAX_HERO_LEVEL -> resources.getColor(R.color.upgrade_active_meta)
         Hero.Type.LIMIT_UNWANTED_CHIPS -> resources.getColor(R.color.upgrade_active_meta)
+        Hero.Type.CREATE_ADDITIONAL_CHIPS -> resources.getColor(R.color.upgrade_active_meta)
         Hero.Type.INCREASE_STARTING_CASH -> resources.getColor(R.color.upgrade_active_eco)
         Hero.Type.GAIN_CASH -> resources.getColor(R.color.upgrade_active_eco)
         Hero.Type.GAIN_CASH_ON_KILL -> resources.getColor(R.color.upgrade_active_eco)

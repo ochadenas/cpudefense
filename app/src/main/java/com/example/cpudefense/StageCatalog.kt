@@ -13,6 +13,8 @@ class StageCatalog
     companion object {
         private val possibleChipTypesWhereObstaclesCanBePut =
             setOf(Chip.ChipType.EMPTY, Chip.ChipType.ADD, Chip.ChipType.SHL, Chip.ChipType.NOP)
+        private val possibleChipTypesWhereChipsCanBePut =
+            setOf(Chip.ChipType.EMPTY, Chip.ChipType.SUB, Chip.ChipType.SHR, Chip.ChipType.RES, Chip.ChipType.MEM, Chip.ChipType.ACC)
 
         fun createStage(stage: Stage, level: Stage.Identifier) {
             when (level.series) {
@@ -40,6 +42,7 @@ class StageCatalog
                         else -> 6
                     }
                     createObstaclesForDifficulty(stage, difficulty.toDouble())
+                    createAdditionalChips(stage)
                 }
 
                 GameMechanics.SERIES_ENDLESS -> {
@@ -61,6 +64,7 @@ class StageCatalog
                         }
                         val targetDifficulty = 4 + 1.5 * sqrt(level.number.toDouble())
                         createObstaclesForDifficulty(stage, targetDifficulty - stage.data.difficulty)
+                        createAdditionalChips(stage)
                         stage.provideStructureData()
                         structure[level.number] = stage.data
                         Persistency(stage.gameView.gameActivity).saveLevelStructure(GameMechanics.SERIES_ENDLESS, structure)
@@ -92,10 +96,10 @@ class StageCatalog
         }
 
         private fun createObstaclesForDifficulty(stage: Stage, difficulty: Double)
-                /** creates an undetermined number of obstacles for the given stage,
-                 * so that the cumulated "strength" of these obstacles does not exceed the given difficulty.
-                 * Difficulty values may be < 0.
-                 */
+        /** creates an undetermined number of obstacles for the given stage,
+         * so that the cumulated "strength" of these obstacles does not exceed the given difficulty.
+         * Difficulty values may be < 0.
+         */
         {
             val reduce = stage.gameMechanics.heroModifier(Hero.Type.LIMIT_UNWANTED_CHIPS)
             val targetDifficulty = difficulty - reduce
@@ -115,6 +119,37 @@ class StageCatalog
                     return // no more obstacles can be placed
             }
         }
+
+        private fun createAdditionalChips(stage: Stage)
+        /** creates an undetermined number of additional chips for the given stage,
+         * so that the cumulated "strength" of these chips does not exceed the given difficulty.
+         */
+        {
+            var additionalCount = stage.gameMechanics.heroModifier(Hero.Type.CREATE_ADDITIONAL_CHIPS).toDouble()
+            while (additionalCount > 0) {
+                val possibleSlotsForChips = stage.chips.values.filter { it.chipData.type in possibleChipTypesWhereChipsCanBePut }
+                if (possibleSlotsForChips.isNotEmpty()) {
+                    val slot = possibleSlotsForChips.random()
+                    when (slot.chipData.type) {
+                        in listOf(Chip.ChipType.SUB, Chip.ChipType.SHR, Chip.ChipType.RES) -> {
+                            slot.addPower(1)
+                            additionalCount -= Chip.chipStrength[slot.chipData.type] ?: 0.0
+                        }
+                        Chip.ChipType.MEM -> {}
+                        Chip.ChipType.ACC -> {}
+                        Chip.ChipType.EMPTY -> {
+                            Chip.desiredTypes.random().let {
+                                slot.setType(it)
+                                additionalCount -= Chip.chipStrength[it] ?: 0.0
+                            }
+                        }
+                        else -> {}
+                    }
+                } else
+                    return // no more chips can be placed
+            }
+        }
+
 
         private fun createStageWithoutObstacles(stage: Stage, level: Stage.Identifier) {
             stage.data.ident = level

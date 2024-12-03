@@ -22,14 +22,14 @@ class Hero(var gameActivity: GameActivity, type: Type)
 {
     /*
     potential Heroes for versions to come:
-    - John von Neuman?
     - Babbage?
     - Berners-Lee?
     - Torvalds
     - Baudot
     - Auguste Kerckhoff?
     - Al Chwarizmi
-    - Josef Čapek
+    - Goldstine (he & she)
+    - Hoare
      */
 
     enum class Type { INCREASE_CHIP_SUB_SPEED, INCREASE_CHIP_SUB_RANGE, DOUBLE_HIT_SUB,
@@ -37,7 +37,7 @@ class Hero(var gameActivity: GameActivity, type: Type)
         INCREASE_CHIP_MEM_SPEED,  INCREASE_CHIP_MEM_RANGE, ENABLE_MEM_UPGRADE,
         INCREASE_CHIP_RES_STRENGTH, INCREASE_CHIP_RES_DURATION, CONVERT_HEAT,
         DECREASE_ATT_FREQ, DECREASE_ATT_SPEED, DECREASE_ATT_STRENGTH, DECREASE_COIN_STRENGTH, REDUCE_HEAT,
-        ADDITIONAL_LIVES, INCREASE_MAX_HERO_LEVEL, LIMIT_UNWANTED_CHIPS,
+        ADDITIONAL_LIVES, INCREASE_MAX_HERO_LEVEL, LIMIT_UNWANTED_CHIPS, CREATE_ADDITIONAL_CHIPS,
         INCREASE_STARTING_CASH, GAIN_CASH,
         DECREASE_UPGRADE_COST, INCREASE_REFUND, GAIN_CASH_ON_KILL, DECREASE_REMOVAL_COST}
 
@@ -170,6 +170,12 @@ class Hero(var gameActivity: GameActivity, type: Type)
                 strengthDesc = "-%d".format(strength.toInt())
                 upgradeDesc = " → -%d".format(next.toInt())
             }
+            Type.CREATE_ADDITIONAL_CHIPS ->
+            {
+                shortDesc = resources.getString(R.string.shortdesc_create_wanted)
+                strengthDesc = "+%d".format(strength.toInt())
+                upgradeDesc = " → +%d".format(next.toInt())
+            }
             Type.ENABLE_MEM_UPGRADE ->
             {
                 shortDesc = resources.getString(R.string.shortdesc_enable_mem_upgrade)
@@ -287,11 +293,12 @@ class Hero(var gameActivity: GameActivity, type: Type)
     {
         return when (data.type) {
             Type.LIMIT_UNWANTED_CHIPS ->    upgradeLevel(Type.INCREASE_MAX_HERO_LEVEL) >= 3
+            // Type.CREATE_ADDITIONAL_CHIPS -> upgradeLevel(Type.LIMIT_UNWANTED_CHIPS) >= 3
             Type.INCREASE_MAX_HERO_LEVEL -> upgradeLevel(Type.ADDITIONAL_LIVES) >= 3
             Type.DECREASE_COIN_STRENGTH ->  upgradeLevel(Type.DECREASE_ATT_STRENGTH) >= 3
             Type.DECREASE_ATT_STRENGTH ->   upgradeLevel(Type.DECREASE_ATT_SPEED) >= 3
-            Type.DECREASE_ATT_SPEED ->      upgradeLevel(Type.DECREASE_ATT_FREQ) >= 3
-            Type.ADDITIONAL_LIVES ->        upgradeLevel(Type.DECREASE_ATT_SPEED) >= 5
+            Type.DECREASE_ATT_SPEED ->      upgradeLevel(Type.DECREASE_ATT_FREQ) >= 5
+            Type.ADDITIONAL_LIVES ->        upgradeLevel(Type.DECREASE_ATT_FREQ) >= 3
             Type.DECREASE_ATT_FREQ ->       upgradeLevel(Type.INCREASE_CHIP_SHR_SPEED) >= 3
             Type.GAIN_CASH_ON_KILL ->       upgradeLevel(Type.INCREASE_REFUND) >= 3
             Type.INCREASE_REFUND ->         upgradeLevel(Type.DECREASE_UPGRADE_COST) >= 3
@@ -395,6 +402,7 @@ class Hero(var gameActivity: GameActivity, type: Type)
                 Type.DECREASE_COIN_STRENGTH -> return 1.0f - level * 0.05f
                 Type.INCREASE_MAX_HERO_LEVEL -> return level.toFloat()
                 Type.LIMIT_UNWANTED_CHIPS -> return level.toFloat()
+                Type.CREATE_ADDITIONAL_CHIPS -> return level.toFloat()
                 Type.ENABLE_MEM_UPGRADE -> return (level+1).toFloat()
                 Type.GAIN_CASH -> return if (level>0) (8f - level) * 9 else 0f
                 Type.GAIN_CASH_ON_KILL -> return truncate((level+1) * 0.5f)
@@ -486,6 +494,14 @@ class Hero(var gameActivity: GameActivity, type: Type)
                     effect = resources.getString(R.string.HERO_EFFECT_LIMITUNWANTED)
                     vitae = resources.getString(R.string.kilby)
                     picture = BitmapFactory.decodeResource(resources, R.drawable.kilby)
+                }
+                Type.CREATE_ADDITIONAL_CHIPS ->
+                {
+                    name = "von Neumann"
+                    fullName = "John von Neumann"
+                    effect = resources.getString(R.string.HERO_CREATE_CHIPS)
+                    vitae = resources.getString(R.string.neumann)
+                    picture = BitmapFactory.decodeResource(resources, R.drawable.neumann)
                 }
                 Type.ENABLE_MEM_UPGRADE ->
                 {

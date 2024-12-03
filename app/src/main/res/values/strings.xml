@@ -221,6 +221,7 @@ The programming language Pascal is named after him."</string>
     <string name="shortdesc_refund">Refund when selling chips</string>
     <string name="shortdesc_max_hero_upgrade">Max hero level</string>
     <string name="shortdesc_limit_unwanted">Unwanted chip count</string>
+    <string name="shortdesc_create_wanted">Additional chip count</string>
     <string name="shortdesc_reduce_removal">Chip removal cost</string>
     <string name="shortdesc_enable_mem_upgrade">MEM max. level</string>
     <string name="upgrade_format">%1$s  [cost: %2$d]</string>
@@ -242,6 +243,7 @@ The programming language Pascal is named after him."</string>
     <string name="HERO_EFFECT_GAININFO">Increases information gain through destroying attackers</string>
     <string name="HERO_EFFECT_RANGE">Increases %s chip range</string>
     <string name="HERO_EFFECT_LIMITUNWANTED">Reduces the number of unwanted chips</string>
+    <string name="HERO_CREATE_CHIPS">Creates additional chips</string>
     <string name="HERO_EFFECT_DECREASEREMOVAL">Reduces the cost of unwanted chip removal</string>
     <string name="HERO_EFFECT_ENABLEMEM">Enables upgrading of MEM chips</string>
     <string name="HERO_EFFECT_RES_STRENGTH">Increases the strength of resistors</string>
@@ -339,4 +341,5 @@ Furthermore, some slots are already taken by unwanted chips you'll have to deal 
     <string name="deco">Deco</string>
     <string name="coins_got">Got %1$d out of %2$d coins got.</string>
     <string name="coins_got_plural">Got %1$d out of %2$d coins</string>
+    <string name="neumann">"All modern computers have an internal von Neumann architecture. This way of combining memory, arithmetic unit and program control to create a freely programmable machine was largely developed by John von Neumann, who is considered one of the fathers of computer science. He was a brilliant mathematician who, among other things, laid the mathematical foundations of quantum mechanics, but also decisively advanced game theory. He was also a highly intelligent and witty person and a real party animal.\n\nThe darker side of von Neumann's life is his contributions to military research and the development and use of weapons of mass destruction.\n "</string>
 </resources>

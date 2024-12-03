@@ -273,4 +273,6 @@ Turing wurde aufgrund seiner Homosexualität massiv diskriminiert. Er starb 1954
     <string name="deco">Deco</string>
     <string name="coins_got">%1$d von %2$d Coins erhalten</string>
     <string name="coins_got_plural">%1$d von %2$d Coins erhalten</string>
+    <string name="settings_activate_log">Debugging-Protokoll aktivieren</string>
+    <string name="neumann">Alle modernen Computer haben intern eine von-Neumann-Architektur. Diese Art, wie Speicher, Rechenwerk und Programmsteuerung zu einer frei programmierbaren Maschine zusammengebaut werden, wurde wesentlich von John von Neumann mit entwickelt, der damit als einer der Väter der Informatik gilt. Er war ein brillanter Mathematiker, der unter anderem mathematische Grundlagen der Quantenmechanik legte, aber auch die Spieltheorie entscheidend voranbrachte. Zudem war er ein hochintelligenter und witziger Mensch und eine echte Partysau.\n\nDie dunkle Kehrseite von Neumanns sind seine Beiträge zur militärischen Forschung, zur Entwicklung und zum Einsatz von Massenvernichtungswaffen. \n</string>
 </resources>

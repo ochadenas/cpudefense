@@ -230,4 +230,6 @@
     <string name="deco">Deco</string>
     <string name="coins_got">%1$d écu reçu sur %2$d</string>
     <string name="coins_got_plural">%1$d écus reçus sur %2$d</string>
+    <string name="settings_activate_log">Activer la journalisation de débogage</string>
+    <string name="neumann">"Tous les ordinateurs modernes ont une architecture interne de type von Neumann. Cette manière d'assembler la mémoire, l'unité de calcul et la commande de programme en une machine librement programmable a été largement développée par John von Neumann, qui est ainsi considéré comme l'un des pères de l'informatique. C'était un mathématicien brillant, qui a notamment posé les bases mathématiques de la mécanique quantique, mais qui a également fait progresser de manière décisive la théorie des jeux. C'était en outre un homme très intelligent et drôle, et un véritable fêtard.\n\nLe revers sombre de von Neumann est sa contribution à la recherche militaire, au développement et à l'utilisation d'armes de destruction massive.\n "</string>
 </resources>

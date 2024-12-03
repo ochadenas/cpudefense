@@ -848,6 +848,16 @@ open class Chip(val network: Network, gridX: Int, gridY: Int):
                 ChipType.DUP to 2.0)
         val obstacleTypes = obstacleStrength.keys
 
+        /** list of positive (desired) chips that can additionally be placed */
+        val chipStrength =
+            hashMapOf(
+                    ChipType.SUB to 0.8,
+                    ChipType.SHR to 1.2,
+                    ChipType.ACC to 1.0,
+                    ChipType.MEM to 1.2,
+                    ChipType.RES to 0.5)
+        val desiredTypes = chipStrength.keys
+
         fun createFromData(network: Network, data: Data): Chip
                 /** reconstruct an object based on the saved data
                  * and set all inner proprieties
