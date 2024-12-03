@@ -1,0 +1,12 @@
+New features:
+- New hero: John von Neumann
+- Some more "did you know" text
+
+Bug fixes:
+- Attackers stored in MEM or ACC sometimes remained visible on the screen.
+- The text on the chips is scaled down if it doesn't fit into the rectangle.
+
+Miscellaneous:
+- Small changes in the hero dependency tree. For the current tree, see the game's wiki.
+- Ameliorations to the "Level Select" and the "Info" screen
+- Reduced cost of resistor chips
