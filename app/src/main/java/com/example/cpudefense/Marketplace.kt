@@ -1,9 +1,12 @@
 package com.example.cpudefense
 
 import android.app.Dialog
+import android.content.Intent
 import android.content.res.Resources
 import android.graphics.*
+import android.net.Uri
 import android.view.MotionEvent
+import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.example.cpudefense.effects.*
@@ -201,9 +204,17 @@ class Marketplace(val gameView: GameView): GameElement()
         for (hero in upgrades)
             if (hero.card.cardAreaOnScreen.contains(event.x.toInt(), event.y.toInt())) {
                 Toast.makeText(gameView.gameActivity, hero.upgradeInfo(), Toast.LENGTH_LONG).show()
+                // wikipedia()
                 return true
             }
         return false
+    }
+
+    fun wikipedia()
+    {
+        val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://en.wikipedia.org/wiki/Alan_Turing"))
+        try { gameView.gameActivity.startActivity(browserIntent) }
+        catch (_: Exception) {}  // come here if no external app can handle the request
     }
 
     private fun refundAll()

@@ -10,7 +10,7 @@ class Settings {
     var showFrameRate: Boolean = false
     var fastFastForward: Boolean = false
     var keepLevels: Boolean = true
-    var activateLogging: Boolean = true
+    var activateLogging: Boolean = false
 
     fun loadFromFile(prefs: SharedPreferences): Boolean
     {
