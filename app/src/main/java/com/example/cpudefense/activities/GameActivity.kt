@@ -86,7 +86,7 @@ class GameActivity : Activity() {
      */
     {
         super.onCreate(savedInstanceState)
-        if (settings.activateLogging)
+        if (GameMechanics.enableLogging && settings.activateLogging)
             logger = Logger(this)
         logger?.log("Creating Game Activity")
         /* here, the size of the surfaces might not be known */
