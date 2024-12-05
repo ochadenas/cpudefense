@@ -125,7 +125,6 @@ class Background(val gameView: GameView)
         }
     }
 
-    @Suppress("KotlinConstantConditions", "SimplifyBooleanWithConstants")
     private fun loadWholeBitmapOfStage(stageIdent: Stage.Identifier)
             /** chooses the background to use,
              * and selects a random part of it as wholeBackground

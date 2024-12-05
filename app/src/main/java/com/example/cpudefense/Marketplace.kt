@@ -203,8 +203,8 @@ class Marketplace(val gameView: GameView): GameElement()
     fun onLongPress(event: MotionEvent): Boolean {
         for (hero in upgrades)
             if (hero.card.cardAreaOnScreen.contains(event.x.toInt(), event.y.toInt())) {
-                Toast.makeText(gameView.gameActivity, hero.upgradeInfo(), Toast.LENGTH_LONG).show()
-                // wikipedia()
+                // Toast.makeText(gameView.gameActivity, hero.upgradeInfo(), Toast.LENGTH_LONG).show()
+                wikipedia()
                 return true
             }
         return false
