@@ -37,6 +37,8 @@ class Marketplace(val gameView: GameView): GameElement()
     private var coins = mutableListOf<Coin>()
     private var coinSize = (32 * gameView.scaleFactor).toInt()
 
+    private var currentWiki: Hero? = null
+
     var nextGameLevel = Stage.Identifier()
 
     init {
@@ -201,8 +203,8 @@ class Marketplace(val gameView: GameView): GameElement()
     }
 
     fun onLongPress(event: MotionEvent): Boolean {
-        for (hero in upgrades)
-            if (hero.card.cardAreaOnScreen.contains(event.x.toInt(), event.y.toInt())) {
+        if (biographyArea.contains(event.x.toInt(), event.y.toInt()))
+        {
                 // Toast.makeText(gameView.gameActivity, hero.upgradeInfo(), Toast.LENGTH_LONG).show()
                 wikipedia()
                 return true
@@ -210,11 +212,17 @@ class Marketplace(val gameView: GameView): GameElement()
         return false
     }
 
-    fun wikipedia()
+    private fun wikipedia()
     {
-        val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://en.wikipedia.org/wiki/Alan_Turing"))
-        try { gameView.gameActivity.startActivity(browserIntent) }
-        catch (_: Exception) {}  // come here if no external app can handle the request
+        if (currentWiki == null) {
+            val browserIntent =
+                Intent(Intent.ACTION_VIEW, Uri.parse("https://en.wikipedia.org/wiki/Alan_Turing"))
+            try {
+                gameView.gameActivity.startActivity(browserIntent)
+                currentWiki = selected
+            } catch (_: Exception) {
+            }  // come here if no external app can handle the request
+        }
     }
 
     private fun refundAll()
