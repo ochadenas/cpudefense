@@ -44,7 +44,7 @@ class GameActivity : Activity() {
     lateinit var gameMechanics: GameMechanics
     lateinit var gameView: GameView
     /** flag used to keep the threads running. Set to false when leaving activity */
-    private var gameIsRunning = true
+    private var gameThreadsRunning = true
 
     companion object;
 
@@ -108,7 +108,7 @@ class GameActivity : Activity() {
         logger?.log("Pausing Game Activity")
         Persistency(this).saveGeneralState(gameMechanics)
         Persistency(this).saveCurrentLevelState(gameMechanics)
-        gameIsRunning = false
+        gameThreadsRunning = false
         super.onPause()
     }
 
@@ -118,7 +118,6 @@ class GameActivity : Activity() {
      */
     {
         super.onResume()
-        // Toast.makeText(this, resources.getString(R.string.toast_loading), Toast.LENGTH_SHORT).show()
         loadSettings()
         setupGameView()
 
@@ -140,14 +139,23 @@ class GameActivity : Activity() {
         if (!resumeGame)
             resumeGame = intent.getBooleanExtra("RESUME_GAME", false)
 
-        beginGame(resumeGame = resumeGame, resetProgress = restartGame, resetEndless = restartEndless, startingLevel = startOnLevel)
-
-        if (resumeGame && gameMechanics.state.phase == GamePhase.RUNNING)
-            showStageMessage(gameMechanics.currentStageIdent)
-
-        gameIsRunning = true
+        when (gameMechanics.state.phase)
+        {
+            GamePhase.START -> {
+                beginGame(resumeGame = resumeGame, resetProgress = restartGame, resetEndless = restartEndless, startingLevel = startOnLevel)
+            }
+            GamePhase.RUNNING -> {
+                beginGame(resumeGame = resumeGame, resetProgress = restartGame, resetEndless = restartEndless, startingLevel = startOnLevel)
+                if (resumeGame)
+                    showStageMessage(gameMechanics.currentStageIdent)
+            }
+            GamePhase.INTERMEZZO -> {}
+            GamePhase.MARKETPLACE -> {}
+            GamePhase.PAUSED -> {}
+        }
+        gameThreadsRunning = true
         resumeGame = true // for the next time we come here
-        setGameSpeed(GameMechanics.GameSpeed.NORMAL) // always start with normal speed
+        setGameSpeed(GameSpeed.NORMAL) // always start with normal speed
         startGameThreads()
     }
 
@@ -426,10 +434,10 @@ class GameActivity : Activity() {
         settings.loadFromFile(prefs)
     }
 
-    fun setGameSpeed(speed: GameMechanics.GameSpeed) {
+    fun setGameSpeed(speed: GameSpeed) {
         gameMechanics.state.speed = speed
         Persistency(this).saveGeneralState(gameMechanics)
-        if (speed == GameMechanics.GameSpeed.MAX) {
+        if (speed == GameSpeed.MAX) {
             updateDelay = fastForwardDelay
             if (settings.fastFastForward)
                 updateDelay = fastFastForwardDelay
@@ -450,8 +458,8 @@ class GameActivity : Activity() {
             ?.setOnClickListener { dialog.dismiss(); replayLevel() }
         dialog.findViewById<Button>(R.id.button_cancel)
             ?.setOnClickListener { dialog.dismiss() }
-        dialog.setOnDismissListener { gameIsRunning = true; startGameThreads() }
-        gameIsRunning = false
+        dialog.setOnDismissListener { gameThreadsRunning = true; startGameThreads() }
+        gameThreadsRunning = false
         dialog.show()
     }
 
@@ -486,8 +494,8 @@ class GameActivity : Activity() {
                 ?.setOnClickListener { restoreOneLife(); dialog.dismiss(); }
             dialog.findViewById<Button>(R.id.button_no)
                 ?.setOnClickListener { dialog.dismiss(); }
-            dialog.setOnDismissListener { gameIsRunning = true; startGameThreads() }
-            gameIsRunning = false
+            dialog.setOnDismissListener { gameThreadsRunning = true; startGameThreads() }
+            gameThreadsRunning = false
             dialog.show()
         }
     }
@@ -506,7 +514,7 @@ class GameActivity : Activity() {
     /** Thread for all physical processes on the screen, i.e. movement of attackers, cool-down times, etc.
      * This thread must run on a fixed pace. When accelerating the game, the delay of this thread is shortened. */
     {
-        if (gameIsRunning) {
+        if (gameThreadsRunning) {
             val timeAtStartOfCycle = SystemClock.uptimeMillis()
             gameMechanics.ticksCount++
             try {
@@ -564,7 +572,7 @@ class GameActivity : Activity() {
     /** Thread for refreshing the display on the screen.
      * The delay between two executions may vary. */
     {
-        if (gameIsRunning) {
+        if (gameThreadsRunning) {
             gameMechanics.frameCount++
             val timeAtStartOfFrame = SystemClock.uptimeMillis()
             val timeSinceLastFrame = timeAtStartOfFrame - timeOfLastFrame
@@ -584,7 +592,7 @@ class GameActivity : Activity() {
     private fun updateGraphicalEffects()
     /** do all faders, explosions etc. This thread is independent of the update() cycle. */
     {
-        if (gameIsRunning) {
+        if (gameThreadsRunning) {
             gameView.updateEffects()
             gameView.effects?.updateGraphicalEffects()
             GlobalScope.launch { delay(effectsDelay); updateGraphicalEffects() }
