@@ -255,7 +255,7 @@ class GameMechanics {
         }
     }
 
-    private fun setSummaryOfStage(stage: Stage.Identifier, summary: Stage.Summary?)
+    fun setSummaryOfStage(stage: Stage.Identifier, summary: Stage.Summary?)
     {
         summary?.let {
             when (stage.series) {
@@ -279,25 +279,7 @@ class GameMechanics {
         startNextWave()
     }
 
-    fun onEndOfStage(activity: GameActivity)
-    {
-        if (currentlyActiveStage == null)
-            return // in this case, the stage has already been left
-        activity.takeLevelSnapshot()
-        currentlyActiveStage?.let {
-            if (it.attackerCount()>0)
-                // still attackers left, wait until wave is really over
-                GlobalScope.launch { delay(2000L); onEndOfStage(activity) }
-            else {
-                onStageCleared(it, activity)
-                Persistency(activity).saveGeneralState(this)
-                Persistency(activity).saveStageSummaries(this, currentStage.series)
-                activity.setGameActivityStatus(GameActivity.GameActivityStatus.BETWEEN_LEVELS)
-            }
-        }
-    }
-
-    private fun onStageCleared(stage: Stage, activity: GameActivity)
+    fun onStageCleared(stage: Stage, activity: GameActivity)
     {
         val intermezzo = activity.gameView.intermezzo
         activity.runOnUiThread {
@@ -331,41 +313,6 @@ class GameMechanics {
         }
     }
 
-    fun startNextStage(level: Stage.Identifier, activity: GameActivity)
-    {
-        currentStage = level
-        val nextStage = Stage(this, activity.gameView)
-        StageCatalog.createStage(nextStage, level)
-        nextStage.calculateDifficulty()
-        if (!nextStage.isInitialized())
-            return  // something went wrong, possibly trying to create a level that doesn't exist
-        nextStage.network.recreateNetworkImage(true)
-        activity.setGameActivityStatus(GameActivity.GameActivityStatus.PLAYING)
-        calculateLives()
-        calculateStartingCash()
-        activity.showStageMessage(nextStage.data.ident)
-        activity.runOnUiThread {
-            val toast: Toast = Toast.makeText(
-                    activity,
-                    activity.resources.getString(R.string.toast_enter_stage).format(nextStage.getLevel()),
-                    Toast.LENGTH_SHORT
-            )
-            toast.show()
-        }
-        state.coinsInLevel = nextStage.calculateRewardCoins(getSummaryOfStage(level))
-        state.coinsExtra = 0
-        setSummaryOfStage(level, nextStage.summary)
-        state.heat = 0.0
-        activity.setGameSpeed(GameSpeed.NORMAL)  // reset speed to normal when starting next stage
-        state.phase = GamePhase.RUNNING
-        currentlyActiveWave = nextStage.nextWave()
-        currentlyActiveStage = nextStage
-        nextStage.gameView.resetAtStartOfStage()
-        Persistency(activity).saveCurrentLevelState(this)
-        Persistency(activity).saveGeneralState(this)
-        activity.takeLevelSnapshot()
-    }
-
     fun removeOneLife(): Int
     /**
      * Remove one of the player's lives.
@@ -396,7 +343,7 @@ class GameMechanics {
     }
 
 
-    private fun calculateLives()
+    fun calculateLives()
     /** calculates the number of lives at the beginning of the stage */
     {
         val extraLives = heroModifier(Hero.Type.ADDITIONAL_LIVES)
@@ -415,10 +362,17 @@ class GameMechanics {
         return 1 + state.livesRestored + (currentStage.number / 32)
     }
 
-    private fun calculateStartingCash()
+    fun calculateStartingCash()
     /** calculates the information available at the beginning of a stage */
     {
         state.cash = heroModifier(Hero.Type.INCREASE_STARTING_CASH).toInt()
+    }
+
+    fun calculateCoins(nextStage: Stage)
+    /** calculates the amount of coins available at the beginning of a stage */
+    {
+        state.coinsInLevel = nextStage.calculateRewardCoins(getSummaryOfStage(nextStage.data.ident))
+        state.coinsExtra = 0
     }
 
     private fun gainAdditionalCash()

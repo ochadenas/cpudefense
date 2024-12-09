@@ -41,18 +41,18 @@ class SpeedControlButton(val gameView: GameView, val gameMechanics: GameMechanic
             {
                 Type.PAUSE -> {
                     gameView.gameActivity.setGameSpeed(GameMechanics.GameSpeed.NORMAL)
-                    gameMechanics.state.phase = GameMechanics.GamePhase.PAUSED
+                    gameView.gameActivity.changeToGamePhase(GameMechanics.GamePhase.PAUSED)
                     panel.resetButtons()
                     type = Type.NORMAL
                 }
                 Type.NORMAL -> {
                     gameView.gameActivity.setGameSpeed(GameMechanics.GameSpeed.NORMAL)
-                    gameMechanics.state.phase = GameMechanics.GamePhase.RUNNING
+                    gameView.gameActivity.changeToGamePhase(GameMechanics.GamePhase.RUNNING)
                     panel.resetButtons()
                 }
                 Type.FAST -> {
                     gameView.gameActivity.setGameSpeed(GameMechanics.GameSpeed.MAX)
-                    gameMechanics.state.phase = GameMechanics.GamePhase.RUNNING
+                    gameView.gameActivity.changeToGamePhase(GameMechanics.GamePhase.RUNNING)
                     panel.resetButtons()
                     type = Type.NORMAL
                 }

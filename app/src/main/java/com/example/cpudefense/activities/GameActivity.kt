@@ -19,6 +19,7 @@ import android.widget.Toast
 import com.example.cpudefense.CpuReached
 import com.example.cpudefense.GameMechanics
 import com.example.cpudefense.GameMechanics.GamePhase
+import com.example.cpudefense.GameMechanics.GameSpeed
 import com.example.cpudefense.GameMechanics.LevelMode
 import com.example.cpudefense.GameMechanics.Params.SERIES_ENDLESS
 import com.example.cpudefense.GameMechanics.Params.SERIES_NORMAL
@@ -30,6 +31,7 @@ import com.example.cpudefense.PurseOfCoins
 import com.example.cpudefense.R
 import com.example.cpudefense.Settings
 import com.example.cpudefense.Stage
+import com.example.cpudefense.StageCatalog
 import com.example.cpudefense.TemperatureDamageException
 import com.example.cpudefense.utils.Logger
 import kotlinx.coroutines.GlobalScope
@@ -149,7 +151,7 @@ class GameActivity : Activity() {
         startGameThreads()
     }
 
-    fun showStageMessage(ident: Stage.Identifier)
+    private fun showStageMessage(ident: Stage.Identifier)
     {
         runOnUiThread { Toast.makeText(this, resources.getString(R.string.toast_enter_stage).format(ident.number),
                                        Toast.LENGTH_SHORT).show() }
@@ -175,6 +177,12 @@ class GameActivity : Activity() {
             parentView?.addView(gameView)
         }
         gameView.setupView()
+    }
+
+    fun changeToGamePhase(phase: GamePhase)
+    {
+        gameMechanics.state.phase = phase
+        logger?.log("Switching to game phase %s".format(phase.toString()))
     }
 
 
@@ -321,9 +329,55 @@ class GameActivity : Activity() {
                 }
             }
         }
-        gameMechanics.state.phase = GamePhase.RUNNING
+        changeToGamePhase(GamePhase.RUNNING)
     }
 
+    fun startNextStage(level: Stage.Identifier)
+    {
+        val nextStage = Stage(gameMechanics, gameView)
+        logger?.log("Starting level %s".format(level.toString()))
+        StageCatalog.createStage(nextStage, level)
+        nextStage.calculateDifficulty()
+        if (!nextStage.isInitialized())
+            return  // something went wrong, possibly trying to create a level that doesn't exist
+        nextStage.network.recreateNetworkImage(true)
+        setGameActivityStatus(GameActivityStatus.PLAYING)
+        with (gameMechanics) {
+            currentStage = level
+            calculateLives()
+            calculateStartingCash()
+            calculateCoins(nextStage)
+            setSummaryOfStage(level, nextStage.summary)
+            state.heat = 0.0
+            currentlyActiveStage = nextStage
+        }
+        showStageMessage(nextStage.data.ident)
+        setGameSpeed(GameSpeed.NORMAL)  // reset speed to normal when starting next stage
+        changeToGamePhase(GamePhase.RUNNING)
+        nextStage.gameView.resetAtStartOfStage()
+        gameMechanics.currentlyActiveWave = nextStage.nextWave()
+        Persistency(this).saveCurrentLevelState(gameMechanics)
+        Persistency(this).saveGeneralState(gameMechanics)
+        takeLevelSnapshot()
+    }
+
+    fun onEndOfStage()
+    {
+        if (gameMechanics.currentlyActiveStage == null)
+            return // in this case, the stage has already been left
+        takeLevelSnapshot()
+        gameMechanics.currentlyActiveStage?.let {
+            if (it.attackerCount()>0)
+            // still attackers left, wait until wave is really over
+                GlobalScope.launch { delay(2000L); onEndOfStage() }
+            else {
+                gameMechanics.onStageCleared(it, this)
+                Persistency(this).saveGeneralState(gameMechanics)
+                Persistency(this).saveStageSummaries(gameMechanics, gameMechanics.currentStage.series)
+                setGameActivityStatus(GameActivityStatus.BETWEEN_LEVELS)
+            }
+        }
+    }
     private fun startGameThreads() {
 
         if (updateJob?.isActive != true)  // (!= true) is not the same as (false) here!

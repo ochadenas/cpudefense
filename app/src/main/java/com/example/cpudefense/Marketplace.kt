@@ -132,7 +132,7 @@ class Marketplace(val gameView: GameView): GameElement()
         /** test if a button has been pressed: */
         if (buttonFinish?.area?.contains(event.x.toInt(), event.y.toInt()) == true)
         {
-            gameMechanics.startNextStage(nextGameLevel, gameView.gameActivity)
+            gameView.gameActivity.startNextStage(nextGameLevel)
             return true
         }
         if (buttonRefund?.area?.contains(event.x.toInt(), event.y.toInt()) == true)

@@ -287,7 +287,7 @@ class Intermezzo(var gameView: GameView): GameElement(), Fadable {
             Fader(gameView, this, Fader.Type.APPEAR, Fader.Speed.SLOW)
         }
         gameView.background.prepareAtStartOfStage(level)
-        gameView.gameMechanics.state.phase = GameMechanics.GamePhase.INTERMEZZO
+        gameView.gameActivity.changeToGamePhase(GameMechanics.GamePhase.INTERMEZZO)
 
         // determine whether the "hero selection screen" must be displayed
         showLeaveDialogue = false
@@ -308,14 +308,14 @@ class Intermezzo(var gameView: GameView): GameElement(), Fadable {
         if (holidayGranted()) {
             clear()
             gameView.marketplace.fillMarket(level)
-            gameView.gameMechanics.state.phase = GameMechanics.GamePhase.MARKETPLACE
+            gameView.gameActivity.changeToGamePhase(GameMechanics.GamePhase.MARKETPLACE)
         }
     }
 
     private fun startLevel()
     {
         if (holidayGranted()) {
-            gameView.gameMechanics.startNextStage(level, gameView.gameActivity)
+            gameView.gameActivity.startNextStage(level)
         }
     }
 
@@ -355,7 +355,7 @@ class Intermezzo(var gameView: GameView): GameElement(), Fadable {
             displayTypewriterText()
         }
         gameView.gameActivity.setGameActivityStatus(GameActivity.GameActivityStatus.BETWEEN_LEVELS)
-        gameView.gameMechanics.state.phase = GameMechanics.GamePhase.INTERMEZZO
+        gameView.gameActivity.changeToGamePhase(GameMechanics.GamePhase.INTERMEZZO)
     }
 
     private fun clear()
