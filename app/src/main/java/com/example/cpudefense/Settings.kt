@@ -42,6 +42,9 @@ class Settings {
     }
 
     fun migrateSettings(oldPrefs: SharedPreferences, newPrefs: SharedPreferences)
+    /** try to load the settings either from the "old" or the "new" preferences files.
+     * In any case, the object contains the current settings afterwards.
+     */
     {
         if (loadFromFile(newPrefs))
             return // already migrated

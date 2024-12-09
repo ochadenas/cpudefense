@@ -10,16 +10,19 @@ import java.util.Locale
 
 class Logger(activity: GameActivity)
 {
-    val logfileName = "log.txt"
+    private val logfileName = "log.txt"
     enum class Level { DEBUG, MESSAGE, WARN, ERROR }
     private val timeFormatShort = SimpleDateFormat("HH:mm:ss.SSS", Locale.getDefault())
     private val timeFormatLong = SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS Z", Locale.getDefault())
     private val leveltext = hashMapOf(Level.MESSAGE to "INFO", Level.WARN to "WARN", Level.DEBUG to "DBG", Level.ERROR to "ERR")
     private var logfile = File(activity.filesDir, logfileName)
-    var fileOutputStream: FileOutputStream = FileOutputStream(logfile, false)
-    var outputStreamWriter: OutputStreamWriter = OutputStreamWriter(fileOutputStream)
+    private var fileOutputStream: FileOutputStream? = null
+    private var outputStreamWriter: OutputStreamWriter? = null
 
-    init {
+    fun start()
+    {
+        fileOutputStream = FileOutputStream(logfile, false)
+        outputStreamWriter = OutputStreamWriter(fileOutputStream)
         val logString = "Start of log. Current time is "+timeFormatLong.format(Date())
         log(logString)
     }
@@ -32,9 +35,10 @@ class Logger(activity: GameActivity)
                 leveltext[loglevel],
                 " ".repeat(indent),
                 text)
-        outputStreamWriter.write(logString)
-        outputStreamWriter.flush()
-
+        outputStreamWriter?.write(logString)
+        outputStreamWriter?.flush()
+        if (loglevel != Level.DEBUG)
+            print(text)
     }
 
     fun debug(text: String, indent: Int =0)
@@ -50,7 +54,9 @@ class Logger(activity: GameActivity)
     {
         val logString = "End of log. Current time is "+timeFormatLong.format(Date())
         log(logString)
-        outputStreamWriter.close()
-        fileOutputStream.close()
+        outputStreamWriter?.close()
+        fileOutputStream?.close()
+        outputStreamWriter = null
+        fileOutputStream = null
     }
 }

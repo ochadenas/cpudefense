@@ -10,7 +10,6 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
-import android.view.Window
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
@@ -26,6 +25,7 @@ import com.example.cpudefense.gameElements.SevenSegmentDisplay
 
 class WelcomeActivity : AppCompatActivity() {
     private var info: PackageInfo? = null
+    private var settings = Settings()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,7 +36,7 @@ class WelcomeActivity : AppCompatActivity() {
         // migrate preferences files, if needed
         val prefsLegacy = getSharedPreferences(Persistency.filename_legacy, MODE_PRIVATE)
         val prefsSettings = getSharedPreferences(Persistency.filename_settings, MODE_PRIVATE)
-        Settings().migrateSettings(prefsLegacy, prefsSettings)
+        settings.migrateSettings(prefsLegacy, prefsSettings)
     }
 
     private var gameState: String? = null
@@ -169,6 +169,7 @@ class WelcomeActivity : AppCompatActivity() {
 
     fun resumeGame(@Suppress("UNUSED_PARAMETER") v: View) {
         val intent = Intent(this, GameActivity::class.java)
+        intent.putExtra("ACTIVATE_LOGGING", settings.activateLogging)
         when {
             maxLevel.number == 0 -> {
                 // start new game

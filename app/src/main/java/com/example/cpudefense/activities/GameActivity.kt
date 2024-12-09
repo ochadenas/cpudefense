@@ -86,13 +86,13 @@ class GameActivity : Activity() {
      */
     {
         super.onCreate(savedInstanceState)
-        if (GameMechanics.enableLogging && settings.activateLogging)
-            logger = Logger(this)
-        logger?.log("Creating Game Activity")
         /* here, the size of the surfaces might not be known */
         requestWindowFeature(Window.FEATURE_NO_TITLE) // method of Activity
         setContentView(R.layout.activity_main_game)
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        if (intent.getBooleanExtra("ACTIVATE_LOGGING", false) && GameMechanics.enableLogging)
+            logger = Logger(this)
+        logger?.start()
         resumeGame = false
         gameMechanics = GameMechanics()
         gameView = GameView(this)
@@ -103,7 +103,7 @@ class GameActivity : Activity() {
      *  but also when she navigates to another app
      */
     {
-        logger?.log("Leaving Game Activity")
+        logger?.log("Pausing Game Activity")
         Persistency(this).saveGeneralState(gameMechanics)
         Persistency(this).saveCurrentLevelState(gameMechanics)
         gameIsRunning = false
@@ -115,15 +115,16 @@ class GameActivity : Activity() {
      * a new game is started or the user just navigates back to the app.
      */
     {
-        logger?.log("Entering Game Activity")
         super.onResume()
-        Toast.makeText(this, resources.getString(R.string.toast_loading), Toast.LENGTH_SHORT).show()
+        // Toast.makeText(this, resources.getString(R.string.toast_loading), Toast.LENGTH_SHORT).show()
         loadSettings()
         setupGameView()
 
         // determine what to do: resume, restart, or play next level
         val restartGame = intent.getBooleanExtra("RESET_PROGRESS", false)
         val restartEndless = intent.getBooleanExtra("RESET_ENDLESS", false)
+
+        logger?.log("Entering game activity, game state is %s".format(gameMechanics.state.toString()))
 
         val startOnLevel = when
         {
@@ -155,12 +156,13 @@ class GameActivity : Activity() {
     }
 
     override fun onStop() {
-        logger?.log("Ending Game Activity")
-        logger?.stop()
+        logger?.log("Stopping Game Activity")
         super.onStop()
     }
 
     override fun onDestroy() {
+        logger?.log("Ending Game Activity")
+        logger?.stop()
         super.onDestroy()
     }
 
@@ -348,6 +350,7 @@ class GameActivity : Activity() {
         } else {
             updateDelay = defaultDelay
         }
+        logger?.log("Game speed set to %s. Update delay is %s".format(speed.toString(), updateDelay.toString()))
     }
 
     fun showReturnDialog() {
@@ -408,6 +411,7 @@ class GameActivity : Activity() {
              * Does not get called when resuming a running game.
               */
     {
+        logger?.log("Preparing level %s".format(ident.toString()))
         gameView.resetAtStartOfStage()
         gameView.intermezzo.prepareLevel(ident, true)
     }
@@ -509,6 +513,7 @@ class GameActivity : Activity() {
             GameActivityStatus.BETWEEN_LEVELS -> editor.putString("STATUS", "complete")
         }
         editor.apply()
+        logger?.log("Activity status set to %s".format(status.toString()))
     }
 
     fun takeLevelSnapshot()
@@ -519,6 +524,7 @@ class GameActivity : Activity() {
             else
                 levelThumbnail[it.getLevel()] = it.takeSnapshot(GameView.levelSnapshotIconSize)
             Persistency(this).saveThumbnailOfLevel(this, it)
+            logger?.log("Level snapshot taken.")
         }
     }
 
