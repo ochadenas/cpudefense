@@ -90,7 +90,7 @@ class Cpu(network: Network, gridX: Int, gridY: Int): Chip(network, gridX, gridY)
     {
         if (actualRect?.contains(event.x.toInt(), event.y.toInt()) == false)
             return false
-        if (network.gameView.gameMechanics.currentStage.mode() == GameMechanics.LevelMode.ENDLESS )
+        if (network.gameView.gameMechanics.currentStageIdent.mode() == GameMechanics.LevelMode.ENDLESS )
         {
             network.gameView.gameActivity.showPurchaseLifeDialog(showHint = false)
             return true

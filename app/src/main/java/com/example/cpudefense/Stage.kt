@@ -247,7 +247,7 @@ class Stage(var gameMechanics: GameMechanics, var gameView: GameView)
             else -> {
                 if (waves.size == 0)
                 {
-                    gameMechanics.onEndOfStage(gameView.gameActivity)
+                    gameView.gameActivity.onEndOfStage()
                     return null
                 }
                 else {

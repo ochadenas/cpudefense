@@ -405,7 +405,7 @@ class GameView(context: Context):
         }
     }
 
-    fun currentCoinBitmap(stage: Stage.Identifier = gameMechanics.currentStage): Bitmap
+    fun currentCoinBitmap(stage: Stage.Identifier = gameMechanics.currentStageIdent): Bitmap
     {
         return when (stage.mode())
         {
@@ -431,7 +431,7 @@ class GameView(context: Context):
 
     private fun showAdditionalEffects(): Boolean
     {
-        if (gameMechanics.currentStage.mode() == LevelMode.BASIC && gameMechanics.currentStage.number == GameMechanics.specialLevelNumber)
+        if (gameMechanics.currentStageIdent.mode() == LevelMode.BASIC && gameMechanics.currentStageIdent.number == GameMechanics.specialLevelNumber)
             return (gameMechanics.state.phase == GamePhase.RUNNING || gameMechanics.state.phase == GamePhase.PAUSED)
         else
             return false

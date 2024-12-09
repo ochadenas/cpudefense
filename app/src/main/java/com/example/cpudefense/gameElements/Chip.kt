@@ -448,7 +448,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int):
         if (chipData.type in chipsThatDoNotAffectCoins
             && attacker.attackerData.isCoin)
             return  // coins are unaffected by certain chip types
-        network.gameView.gameActivity.logger?.log("Chip %d (%s) shooting at %s (value %s)".format(data.ident, chipDescription(), attacker.toString(), attacker.numberAsString()))
+        network.gameView.gameActivity.logger?.debug("Chip %d (%s) shooting at %s (value %s)".format(data.ident, chipDescription(), attacker.toString(), attacker.numberAsString()))
         attacker.logState()
         when (chipData.type)
         {
@@ -769,7 +769,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int):
         // discard the alternatives that are not allowed for this stage,
         // but only for series 1.
         // In series 2 and 3, all upgrades are always possible
-        if (theNetwork.gameMechanics.currentStage.series == GameMechanics.SERIES_NORMAL) {
+        if (theNetwork.gameMechanics.currentStageIdent.series == GameMechanics.SERIES_NORMAL) {
             val allowed = theNetwork.gameMechanics.currentlyActiveStage?.data?.chipsAllowed ?: setOf()
             for (a in alternatives)
                 if (a !in allowed)

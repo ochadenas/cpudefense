@@ -93,7 +93,7 @@ class GameActivity : Activity() {
         setContentView(R.layout.activity_main_game)
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         if (intent.getBooleanExtra("ACTIVATE_LOGGING", false) && GameMechanics.enableLogging)
-            logger = Logger(this)
+            logger = Logger(this, GameMechanics.logLevel)
         logger?.start()
         resumeGame = false
         gameMechanics = GameMechanics()
@@ -143,7 +143,7 @@ class GameActivity : Activity() {
         beginGame(resumeGame = resumeGame, resetProgress = restartGame, resetEndless = restartEndless, startingLevel = startOnLevel)
 
         if (resumeGame && gameMechanics.state.phase == GamePhase.RUNNING)
-            showStageMessage(gameMechanics.currentStage)
+            showStageMessage(gameMechanics.currentStageIdent)
 
         gameIsRunning = true
         resumeGame = true // for the next time we come here
@@ -269,7 +269,7 @@ class GameActivity : Activity() {
                 level = Stage.Identifier.startOfNewGame
                 gameMechanics.deleteProgressOfSeries(LevelMode.BASIC)
             }
-            gameMechanics.currentStage = level
+            gameMechanics.currentStageIdent = level
             setLastPlayedStage(level)
             setMaxPlayedStage(level, forceReset=true)
             prepareLevelAtStartOfGame(level)
@@ -288,7 +288,7 @@ class GameActivity : Activity() {
         if (resumeGame)
             resumeGame()
         else {
-            gameMechanics.currentStage = level
+            gameMechanics.currentStageIdent = level
             prepareLevelAtStartOfGame(level)
         }
     }
@@ -298,7 +298,7 @@ class GameActivity : Activity() {
     {
         Persistency(this).loadCurrentLevelState(gameMechanics)
         gameMechanics.stageData?.let {
-            gameMechanics.currentStage = it.ident
+            gameMechanics.currentStageIdent = it.ident
             gameMechanics.currentlyActiveStage =
                 Stage.createStageFromData(gameMechanics, gameView, it)
         }
@@ -310,7 +310,7 @@ class GameActivity : Activity() {
         when (gameMechanics.state.phase)
         {
             GamePhase.MARKETPLACE -> {
-                gameView.marketplace.nextGameLevel = gameMechanics.currentStage
+                gameView.marketplace.nextGameLevel = gameMechanics.currentStageIdent
                 setGameActivityStatus(GameActivityStatus.BETWEEN_LEVELS)
             }
             GamePhase.INTERMEZZO -> {
@@ -332,22 +332,22 @@ class GameActivity : Activity() {
         changeToGamePhase(GamePhase.RUNNING)
     }
 
-    fun startNextStage(level: Stage.Identifier)
+    fun startNextStage(ident: Stage.Identifier)
     {
         val nextStage = Stage(gameMechanics, gameView)
-        logger?.log("Starting level %s".format(level.toString()))
-        StageCatalog.createStage(nextStage, level)
+        logger?.log("Starting level %d of series %d".format(ident.number, ident.series))
+        StageCatalog.createStage(nextStage, ident)
         nextStage.calculateDifficulty()
         if (!nextStage.isInitialized())
             return  // something went wrong, possibly trying to create a level that doesn't exist
         nextStage.network.recreateNetworkImage(true)
         setGameActivityStatus(GameActivityStatus.PLAYING)
         with (gameMechanics) {
-            currentStage = level
+            currentStageIdent = ident
             calculateLives()
             calculateStartingCash()
             calculateCoins(nextStage)
-            setSummaryOfStage(level, nextStage.summary)
+            setSummaryOfStage(ident, nextStage.summary)
             state.heat = 0.0
             currentlyActiveStage = nextStage
         }
@@ -365,19 +365,51 @@ class GameActivity : Activity() {
     {
         if (gameMechanics.currentlyActiveStage == null)
             return // in this case, the stage has already been left
-        takeLevelSnapshot()
         gameMechanics.currentlyActiveStage?.let {
             if (it.attackerCount()>0)
             // still attackers left, wait until wave is really over
                 GlobalScope.launch { delay(2000L); onEndOfStage() }
             else {
-                gameMechanics.onStageCleared(it, this)
+                onStageCleared(it)
                 Persistency(this).saveGeneralState(gameMechanics)
-                Persistency(this).saveStageSummaries(gameMechanics, gameMechanics.currentStage.series)
+                Persistency(this).saveStageSummaries(gameMechanics, gameMechanics.currentStageIdent.series)
                 setGameActivityStatus(GameActivityStatus.BETWEEN_LEVELS)
+                takeLevelSnapshot()
             }
         }
     }
+
+    fun onStageCleared(stage: Stage)
+    {
+        runOnUiThread { Toast.makeText(this, resources.getString(R.string.toast_stage_cleared), Toast.LENGTH_SHORT).show() }
+        gameView.intermezzo.coinsGathered = gameMechanics.state.coinsExtra + gameMechanics.state.coinsInLevel
+        gameMechanics.currentPurse().addReward(gameView.intermezzo.coinsGathered)
+        val summaryOfCompletedStage = Stage.Summary(won = true,
+                                                    coinsGot = stage.summary.coinsGot + gameMechanics.state.coinsInLevel,
+                                                    coinsMaxAvailable = stage.summary.coinsMaxAvailable,
+                                                    coinsAvailable = stage.summary.coinsMaxAvailable - gameMechanics.state.coinsInLevel
+        )
+        val currentStageIdent = stage.data.ident
+        gameMechanics.currentStageIdent = currentStageIdent
+        val nextStage = currentStageIdent.next()
+        gameMechanics.setSummaryOfStage(currentStageIdent, summaryOfCompletedStage)
+        setMaxPlayedStage(currentStageIdent)
+        if (stage.data.type == Stage.Type.FINAL)
+        {
+            gameView.intermezzo.endOfGame(currentStageIdent, hasWon = true)
+        }
+        else {
+            // make next level available. Create an empty one if necessary
+            gameMechanics.setSummaryOfStage(nextStage, gameMechanics.getSummaryOfStage(nextStage) ?: Stage.Summary())
+            gameView.intermezzo.prepareLevel(nextStage, false)
+        }
+        Persistency(this).let {
+            it.saveCoins(gameMechanics)
+            it.saveStageSummaries(gameMechanics, currentStageIdent.series)
+            it.saveGeneralState(gameMechanics)
+        }
+    }
+
     private fun startGameThreads() {
 
         if (updateJob?.isActive != true)  // (!= true) is not the same as (false) here!
@@ -511,7 +543,7 @@ class GameActivity : Activity() {
         {
             0-> {
                 takeLevelSnapshot()
-                gameView.intermezzo.endOfGame(gameMechanics.currentStage, hasWon = false)
+                gameView.intermezzo.endOfGame(gameMechanics.currentStageIdent, hasWon = false)
             }
             1 -> {
                 if (!settings.configDisablePurchaseDialog)
@@ -570,7 +602,7 @@ class GameActivity : Activity() {
         logger?.log("Activity status set to %s".format(status.toString()))
     }
 
-    fun takeLevelSnapshot()
+    private fun takeLevelSnapshot()
     {
         gameMechanics.currentlyActiveStage?.let {
             if (it.getSeries() == SERIES_ENDLESS)

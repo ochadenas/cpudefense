@@ -264,7 +264,7 @@ open class Attacker(network: Network, representation: Representation = Represent
     override fun remove()
     /** removes this attacker from the network */
     {
-        logger?.log("Removing %s".format(toString()))
+        logger?.debug("Removing %s".format(toString()))
         onLink?.let {
             it.node1.notify(this, direction = Node.VehicleDirection.GONE)
             it.node2.notify(this, direction = Node.VehicleDirection.GONE)

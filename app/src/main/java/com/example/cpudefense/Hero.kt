@@ -377,7 +377,7 @@ class Hero(var gameActivity: GameActivity, type: Type)
             newInstance.person.setType()
             newInstance.card.heroOpacity = when (data.level) { 0 -> 0f else -> 1f}
             newInstance.setDesc()
-            newInstance.isOnLeave = newInstance.isOnLeave(gameActivity.gameMechanics.currentStage)
+            newInstance.isOnLeave = newInstance.isOnLeave(gameActivity.gameMechanics.currentStageIdent)
             return newInstance
         }
 

@@ -73,7 +73,7 @@ class ScoreBoard(val gameView: GameView): GameElement()
 
     override fun display(canvas: Canvas, viewport: Viewport)
     {
-        val currentStage = gameView.gameMechanics.currentStage
+        val currentStage = gameView.gameMechanics.currentStageIdent
         val paint = Paint()
         paint.color = Color.BLACK
         paint.style = Paint.Style.FILL
@@ -306,7 +306,7 @@ class ScoreBoard(val gameView: GameView): GameElement()
                 glowRect.setCenter(ledArea.right - i * deltaX, ledArea.centerY())
                 val ledRect = Rect(glowRect).inflate(-4)
                 if (i <= state.lives)
-                    when (gameView.gameMechanics.currentStage.series)
+                    when (gameView.gameMechanics.currentStageIdent.series)
                     {
                         GameMechanics.SERIES_NORMAL -> {
                             paint.color = resources.getColor(R.color.led_green)

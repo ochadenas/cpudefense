@@ -2,14 +2,9 @@
 
 package com.example.cpudefense
 
-import android.graphics.Bitmap
-import android.widget.Toast
-import com.example.cpudefense.activities.GameActivity
 import com.example.cpudefense.gameElements.Chip
 import com.example.cpudefense.gameElements.Wave
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import com.example.cpudefense.utils.Logger
 import java.util.Calendar
 import kotlin.random.Random
 
@@ -35,6 +30,9 @@ class GameMechanics {
         /** for debugging purposes only. MUST BE SET TO FALSE */
         const val enableLogging = true
         // end of debug options
+
+        /** minimum log level (if logging is enabled) */
+        val logLevel = Logger.Level.MESSAGE
 
         /** level that shows an Easter egg */
         const val specialLevelNumber = 8
@@ -163,7 +161,7 @@ class GameMechanics {
         LevelMode.ENDLESS to PurseOfCoins(this, LevelMode.ENDLESS),
     )
     /** the stage that has been selected in the level selector */
-    var currentStage: Stage.Identifier = Stage.Identifier()
+    var currentStageIdent: Stage.Identifier = Stage.Identifier()
     /** current stage when it is actually played and the game is running */
     var currentlyActiveStage: Stage? = null
 
@@ -213,7 +211,7 @@ class GameMechanics {
             return defaultSpeedFactor
     }
 
-    fun currentHeroes(stage: Stage.Identifier = currentStage): HashMap<Hero.Type, Hero>
+    fun currentHeroes(stage: Stage.Identifier = currentStageIdent): HashMap<Hero.Type, Hero>
     /** @return the set of heroes for the current level, depending on the mode (BASIC or ENDLESS) */
     {
         val heroes = heroesByMode[stage.mode()]
@@ -228,7 +226,7 @@ class GameMechanics {
         return currentHeroes().filterValues { it.isOnLeave(stage, leaveStartsOnLevel) } as HashMap<Hero.Type, Hero>
     }
 
-    fun currentPurse(stage: Stage.Identifier = currentStage): PurseOfCoins
+    fun currentPurse(stage: Stage.Identifier = currentStageIdent): PurseOfCoins
     {
         return purseOfCoins[stage.mode()] ?: PurseOfCoins(this)
     }
@@ -279,40 +277,6 @@ class GameMechanics {
         startNextWave()
     }
 
-    fun onStageCleared(stage: Stage, activity: GameActivity)
-    {
-        val intermezzo = activity.gameView.intermezzo
-        activity.runOnUiThread {
-            val toast: Toast = Toast.makeText(activity, activity.resources.getString(R.string.toast_stage_cleared), Toast.LENGTH_SHORT)
-            toast.show()
-        }
-        intermezzo.coinsGathered = state.coinsExtra + state.coinsInLevel
-        currentPurse().addReward(intermezzo.coinsGathered)
-        val summaryOfCompletedStage = Stage.Summary(won = true,
-            coinsGot = stage.summary.coinsGot + state.coinsInLevel,
-            coinsMaxAvailable = stage.summary.coinsMaxAvailable,
-            coinsAvailable = stage.summary.coinsMaxAvailable - state.coinsInLevel
-        )
-        currentStage = stage.data.ident
-        val nextStage = currentStage.next()
-        setSummaryOfStage(currentStage, summaryOfCompletedStage)
-        activity.setMaxPlayedStage(currentStage)
-        if (stage.data.type == Stage.Type.FINAL)
-        {
-            intermezzo.endOfGame(currentStage, hasWon = true)
-        }
-        else {
-            // make next level available. Create an empty one if necessary
-            setSummaryOfStage(nextStage, getSummaryOfStage(nextStage) ?: Stage.Summary())
-            intermezzo.prepareLevel(nextStage, false)
-        }
-        Persistency(activity).let {
-            it.saveCoins(this)
-            it.saveStageSummaries(this, currentStage.series)
-            it.saveGeneralState(this)
-        }
-    }
-
     fun removeOneLife(): Int
     /**
      * Remove one of the player's lives.
@@ -357,9 +321,9 @@ class GameMechanics {
              * @return Number of coins required
              */
     {
-        if (currentStage.series != SERIES_ENDLESS && !allowLivesPurchaseInAllStages)
+        if (currentStageIdent.series != SERIES_ENDLESS && !allowLivesPurchaseInAllStages)
             return 0
-        return 1 + state.livesRestored + (currentStage.number / 32)
+        return 1 + state.livesRestored + (currentStageIdent.number / 32)
     }
 
     fun calculateStartingCash()

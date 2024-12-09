@@ -34,7 +34,7 @@ class Cryptocoin(network: com.example.cpudefense.networkmap.Network, number: ULo
     }
 
     override val explosionColour: Int
-        get() = if (network.gameMechanics.currentStage.series == GameMechanics.SERIES_ENDLESS) network.gameView.resources.getColor(R.color.attackers_glow_coin_endless)
+        get() = if (network.gameMechanics.currentStageIdent.series == GameMechanics.SERIES_ENDLESS) network.gameView.resources.getColor(R.color.attackers_glow_coin_endless)
                 else network.gameView.resources.getColor(R.color.attackers_glow_coin)
 
     override fun onShot(type: Chip.ChipType, power: Int): Boolean

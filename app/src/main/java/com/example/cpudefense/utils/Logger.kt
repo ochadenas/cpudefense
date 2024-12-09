@@ -8,7 +8,7 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-class Logger(activity: GameActivity)
+class Logger(activity: GameActivity, val logLevel: Level = Level.MESSAGE)
 {
     private val logfileName = "log.txt"
     enum class Level { DEBUG, MESSAGE, WARN, ERROR }
@@ -27,17 +27,18 @@ class Logger(activity: GameActivity)
         log(logString)
     }
 
-    fun log(text: String, loglevel: Level = Level.MESSAGE, indent: Int =0)
+    fun log(text: String, messagelevel: Level = Level.MESSAGE, indent: Int =0)
     {
-
+        if (messagelevel == Level.DEBUG && logLevel != Level.DEBUG)
+            return
         val logString = "%s [%-4.4s] %s%s\n".format(
                 timeFormatShort.format(Date()),
-                leveltext[loglevel],
+                leveltext[messagelevel],
                 " ".repeat(indent),
                 text)
         outputStreamWriter?.write(logString)
         outputStreamWriter?.flush()
-        if (loglevel != Level.DEBUG)
+        if (messagelevel != Level.DEBUG)
             print(text)
     }
 
