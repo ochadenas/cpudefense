@@ -7,7 +7,7 @@ import com.example.cpudefense.effects.Fader
 import com.example.cpudefense.utils.*
 import java.util.*
 
-class Button(var gameView: GameView, var text: String, val textSize: Float, val color: Int = Color.GREEN, val style: Style = Style.FILLED, val preferredWidth: Int = 0): Fadable
+class Button(var gameView: GameView, var text: String, val textSize: Float, var color: Int = Color.GREEN, val style: Style = Style.FILLED, val preferredWidth: Int = 0): Fadable
 {
     var alpha = 0
     var area = Rect()
@@ -23,14 +23,12 @@ class Button(var gameView: GameView, var text: String, val textSize: Float, val 
         {
             Style.FRAME ->
             {
-                buttonPaint.color = Color.WHITE  // default, should be overridden
                 buttonPaint.style = Paint.Style.STROKE
                 buttonPaint.strokeWidth = 2f
                 textPaint.typeface = gameView.boldTypeface
                 textPaint.color = Color.WHITE
             }
             Style.FILLED -> {
-                buttonPaint.color = color
                 buttonPaint.style = Paint.Style.FILL
                 textPaint.typeface = gameView.boldTypeface
                 textPaint.color = Color.BLACK
@@ -79,7 +77,9 @@ class Button(var gameView: GameView, var text: String, val textSize: Float, val 
 
     fun display(canvas: Canvas) {
         var stringToDisplay = text
+        buttonPaint.color = color
         buttonPaint.alpha = alpha
+        textPaint.alpha = alpha
         if (style == Style.HP_KEY) {
             stringToDisplay = stringToDisplay.uppercase(Locale.getDefault())
             background?.let { canvas.drawBitmap(it, null, area, buttonPaint) }

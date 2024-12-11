@@ -120,13 +120,11 @@ class GameActivity : Activity() {
         super.onResume()
         loadSettings()
         setupGameView()
+        logger?.log("Entering game activity, game state is %s".format(gameMechanics.state.toString()))
 
         // determine what to do: resume, restart, or play next level
         val restartGame = intent.getBooleanExtra("RESET_PROGRESS", false)
         val restartEndless = intent.getBooleanExtra("RESET_ENDLESS", false)
-
-        logger?.log("Entering game activity, game state is %s".format(gameMechanics.state.toString()))
-
         val startOnLevel = when
         {
             restartGame -> Stage.Identifier.startOfNewGame

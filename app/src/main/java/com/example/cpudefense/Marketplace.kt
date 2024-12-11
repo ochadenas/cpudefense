@@ -6,7 +6,6 @@ import android.content.res.Resources
 import android.graphics.*
 import android.net.Uri
 import android.view.MotionEvent
-import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.example.cpudefense.effects.*
@@ -24,12 +23,12 @@ class Marketplace(val gameView: GameView): GameElement()
     private var buttonPurchase: Button? = null
     private var myArea = Rect()
     private var cardsArea = Rect()  // area used for cards, without header
+    private var rightPanelArea = Rect()
     private var biographyArea = Rect()
     private var biographyAreaMargin = 20
     private var clearPaint = Paint()
     private var paint = Paint()
     private var cardViewOffset = 0f  // used for scrolling
-    private var biographyViewOffset = 0f  // used for scrolling
 
     private var upgrades = mutableListOf<Hero>()
     private var purse = gameMechanics.currentPurse()
@@ -52,8 +51,9 @@ class Marketplace(val gameView: GameView): GameElement()
         val margin = (120 * gameView.scaleFactor).toInt()
         cardsArea = Rect(margin, margin, ((GameView.cardWidth + 20)*gameView.scaleFactor).toInt(), myArea.bottom)
         coinSize = 80 * margin / 100
-        biographyArea= Rect(cardsArea.right+biographyAreaMargin, margin, myArea.right-biographyAreaMargin, myArea.bottom-biographyAreaMargin)
+        rightPanelArea= Rect(cardsArea.right+biographyAreaMargin, margin, myArea.right-biographyAreaMargin, myArea.bottom-biographyAreaMargin)
         createButton()
+        biographyArea = Rect(rightPanelArea).apply { bottom = buttonPurchase?.area?.top ?: rightPanelArea.bottom }
     }
 
     fun fillMarket(level: Stage.Identifier)
@@ -106,26 +106,25 @@ class Marketplace(val gameView: GameView): GameElement()
         val bottomMargin = 40
         buttonFinish = Button(gameView, resources.getString(R.string.button_playlevel),
                               textSize = GameView.purchaseButtonTextSize * gameView.textScaleFactor,
-                              style = Button.Style.HP_KEY, preferredWidth = biographyArea.width())
+                              style = Button.Style.HP_KEY, preferredWidth = rightPanelArea.width())
         buttonFinish?.let {
             Fader(gameView, it, Fader.Type.APPEAR, Fader.Speed.SLOW)
-            it.alignRight(biographyArea.right, myArea.bottom - bottomMargin - it.area.height())
+            it.alignRight(rightPanelArea.right, myArea.bottom - bottomMargin - it.area.height())
         }
         buttonRefund = Button(gameView, resources.getString(R.string.button_refund_all),
                               textSize = GameView.purchaseButtonTextSize * gameView.textScaleFactor,
-                              style = Button.Style.HP_KEY, preferredWidth = biographyArea.width())
+                              style = Button.Style.HP_KEY, preferredWidth = rightPanelArea.width())
         buttonRefund?.let {
             Fader(gameView, it, Fader.Type.APPEAR, Fader.Speed.SLOW)
-            it.alignRight(biographyArea.right, myArea.bottom - bottomMargin - 2*it.area.height())
+            it.alignRight(rightPanelArea.right, myArea.bottom - bottomMargin - 2*it.area.height())
         }
         buttonPurchase = Button(gameView, purchaseButtonText(null),
                                 textSize = GameView.purchaseButtonTextSize * gameView.textScaleFactor,
-                                style = Button.Style.HP_KEY, preferredWidth = biographyArea.width())
+                                style = Button.Style.HP_KEY, preferredWidth = rightPanelArea.width())
         buttonPurchase?.let {
             Fader(gameView, it, Fader.Type.APPEAR, Fader.Speed.SLOW)
-            it.alignRight(biographyArea.right, myArea.bottom - bottomMargin - 3*it.area.height())
+            it.alignRight(rightPanelArea.right, myArea.bottom - bottomMargin - 3*it.area.height())
         }
-        biographyArea.bottom = ((buttonPurchase?.area?.top ?: buttonFinish?.area?.top) ?: myArea.bottom ) - biographyAreaMargin
     }
 
     fun onDown(event: MotionEvent): Boolean {
@@ -189,26 +188,23 @@ class Marketplace(val gameView: GameView): GameElement()
             }
         }
         for (hero in upgrades)
-            if (hero.card.cardAreaOnScreen.contains(event.x.toInt(), event.y.toInt())) {
-                selected = hero
-                biographyViewOffset = 0f
-                makeButtonText(hero)
-                return true
-            }
+            if (hero.card.cardAreaOnScreen.contains(event.x.toInt(), event.y.toInt()))
+                hero.let {
+                    selected = it
+                    it.biography?.viewOffset = 0f
+                    makeButtonText(it)
+                    return true
+                }
         if (cardsArea.contains(event.x.toInt(), event.y.toInt())) {
             selected = null
             makeButtonText(null)
         }
-        return false
-    }
-
-    fun onLongPress(event: MotionEvent): Boolean {
-        if (biographyArea.contains(event.x.toInt(), event.y.toInt()))
-        {
-                // Toast.makeText(gameView.gameActivity, hero.upgradeInfo(), Toast.LENGTH_LONG).show()
+        selected?.biography?.let {
+            if (it.wikiButtonActive && it.wikiButton.area.contains(event.x.toInt(), event.y.toInt())) {
+                Fader(gameView, it.wikiButton, Fader.Type.BLINK, Fader.Speed.FAST)
                 wikipedia()
-                return true
             }
+        }
         return false
     }
 
@@ -298,11 +294,10 @@ class Marketplace(val gameView: GameView): GameElement()
                         cardViewOffset=0f
                     arrangeCards(upgrades, cardViewOffset)
                 }
-                biographyArea.contains(posX, posY) -> {
-                    biographyViewOffset -= dY * scrollFactor
-                    if (biographyViewOffset>0f) // avoid scrolling when already at end of area
-                        biographyViewOffset=0f
+                rightPanelArea.contains(posX, posY) -> {
+                    selected?.biography?.scroll(dY)
                 }
+                else -> {}
             }
         }
         return true
@@ -332,7 +327,6 @@ class Marketplace(val gameView: GameView): GameElement()
             else
                 return
         }
-
         canvas.drawColor(Color.BLACK)
         // draw cards
         selected?.card?.displayHighlightFrame(canvas)
@@ -371,10 +365,7 @@ class Marketplace(val gameView: GameView): GameElement()
         }
 
         // draw biography
-        selected?.biography?.let {
-            val sourceRect = Rect(0, -biographyViewOffset.toInt(), it.bitmap.width, it.myArea.height()-biographyViewOffset.toInt())
-            canvas.drawBitmap(it.bitmap, sourceRect, biographyArea, paint)
-        }
+        selected?.biography?.display(canvas)
     }
 
     private fun makeButtonText(card: Hero?)

@@ -9,7 +9,11 @@ import android.text.Layout
 import android.text.StaticLayout
 import android.text.TextPaint
 import com.example.cpudefense.activities.GameActivity
+import com.example.cpudefense.effects.Fader
+import com.example.cpudefense.gameElements.Button
 import com.example.cpudefense.gameElements.HeroCard
+import com.example.cpudefense.utils.setTop
+import com.example.cpudefense.utils.setTopLeft
 import kotlin.math.exp
 import kotlin.math.truncate
 
@@ -81,7 +85,7 @@ class Hero(var gameActivity: GameActivity, type: Type)
     /** create the biography object if it does not exist */
     {
         if (biography == null)
-            biography = Biography(Rect(0,0,area.width(), area.height()))
+            biography = Biography(area)
         biography?.createBiography(this)
 
     }
@@ -649,21 +653,32 @@ class Hero(var gameActivity: GameActivity, type: Type)
 
     }
 
-    inner class Biography(var myArea: Rect)
+    inner class Biography(var screenArea: Rect)
     /** The curriculum vitae of the hero, including graphical representation on the screen,
-     * @param myArea The rectangle on the screen provided for the biography. */
+     * @param screenArea The rectangle on the screen provided for the biography. */
     {
-        var bitmap: Bitmap = createBitmap(myArea.width(), myArea.height(), Bitmap.Config.ARGB_8888)
+        var area = Rect(screenArea)
+        var bitmap: Bitmap = createBitmap(area.width(), area.height(), Bitmap.Config.ARGB_8888)
+        var viewOffset: Float = 0f
+        /** the amount by which the biography should be scrolled at the most */
+        private var maxViewOffset = 0f
         private var canvas = Canvas(bitmap)
         private var paintBiography = TextPaint()
+        var wikiButton = Button(gameActivity.gameView, "Wikipedia",
+                                        textSize = GameView.purchaseButtonTextSize * gameActivity.gameView.textScaleFactor,
+                                        style = Button.Style.FRAME, preferredWidth = area.width()-4)
+        var wikiButtonActive = false
+        /** distance to lower edge of area where the wikipedia button begins to fade */
+        private var margin = 10 * gameActivity.gameView.scaleFactor
 
         fun createBiography(selected: Hero?)
         {
             val text: String
             if (data.level>0)
             {
-                text = vitae
+                text = vitae + "\n"
                 paintBiography.color = selected?.card?.activeColor ?: Color.WHITE
+                wikiButton.color = paintBiography.color
             }
             else
             {
@@ -674,19 +689,50 @@ class Hero(var gameActivity: GameActivity, type: Type)
             paintBiography.textSize = GameView.biographyTextSize*gameActivity.gameView.textScaleFactor
             paintBiography.alpha = 255
             val textLayout = StaticLayout(
-                text, paintBiography, myArea.width(),
-                Layout.Alignment.ALIGN_NORMAL,
-                1.0f,
-                0.0f,
-                false
+                    text, paintBiography, screenArea.width(),
+                    Layout.Alignment.ALIGN_NORMAL,1.0f,
+                    0.0f,
+                    false
             )
-            // if the text exceeds the area provided, enlarge the bitmap
-            if (textLayout.height>this.bitmap.height)
-            {
-                this.bitmap = createBitmap(myArea.width(), textLayout.height, Bitmap.Config.ARGB_8888)
-                canvas = Canvas(bitmap)
-            }
+            area.bottom = screenArea.top + textLayout.height  // may be bigger or smaller than myArea
+            this.bitmap = createBitmap(area.width(), area.height(), Bitmap.Config.ARGB_8888)
+            canvas = Canvas(bitmap)
             textLayout.draw(canvas)
+            maxViewOffset = (area.height()+2*wikiButton.area.height()-screenArea.height()).toFloat()
+            maxViewOffset = if (maxViewOffset<0f) 0f else maxViewOffset
+            placeButton()
+        }
+
+        fun display(canvas: Canvas)
+        {
+            val sourceRect = Rect(0, -viewOffset.toInt(), bitmap.width, screenArea.height()-viewOffset.toInt())
+            canvas.drawBitmap(bitmap, sourceRect, screenArea, paintBiography)
+            wikiButton.display(canvas)
+        }
+
+        private fun placeButton()
+        {
+            wikiButton.area.setTopLeft(area.left, (area.bottom+viewOffset).toInt())
+            val buttonDisappearsBelowThisLine = screenArea.bottom-margin
+            if (!wikiButtonActive && wikiButton.area.bottom < buttonDisappearsBelowThisLine)
+            {
+                wikiButtonActive = true
+                Fader(gameActivity.gameView, wikiButton, Fader.Type.APPEAR, Fader.Speed.FAST)
+            }
+            else if (wikiButtonActive && wikiButton.area.bottom > buttonDisappearsBelowThisLine)
+            {
+                wikiButtonActive = false
+                Fader(gameActivity.gameView, wikiButton, Fader.Type.DISAPPEAR, Fader.Speed.VERY_FAST)
+            }
+        }
+
+        fun scroll(displacement: Float)
+        {
+            val scrollFactor = 1.0f  // higher values make scrolling faster
+            viewOffset -= displacement * scrollFactor
+            if (viewOffset > 0f) viewOffset = 0f // avoid scrolling when already at end of area
+            if (viewOffset < -maxViewOffset) viewOffset = -maxViewOffset
+            placeButton()
         }
     }
 
@@ -699,7 +745,7 @@ class Hero(var gameActivity: GameActivity, type: Type)
 
     fun isOnLeave(level: Stage.Identifier, leaveStartsOnLevel: Boolean = false): Boolean
     /**
-     * @param leaveStartsOnLevel if true, consider that are actually leaving on the level.
+     * @param leaveStartsOnLevel if true, consider only heroes that are actually leaving on this level.
      * Otherwise, also include those that are _still_ on leave.
      * @return whether the hero is on leave for the given stage. */
     {

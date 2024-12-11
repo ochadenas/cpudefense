@@ -324,7 +324,6 @@ class GameView(context: Context):
         p0.let {
             when (gameMechanics.state.phase) {
                 GamePhase.RUNNING -> gameMechanics.currentlyActiveStage?.network?.onLongPress(p0)
-                GamePhase.MARKETPLACE -> marketplace.onLongPress(p0)
                 else -> {}
             }
         }

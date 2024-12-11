@@ -15,9 +15,9 @@ class Fader(
     private var waitCycles = wait
     private var dAlpha = 0f
 
-    enum class Type { NONE, APPEAR, DISAPPEAR }
+    enum class Type { NONE, APPEAR, DISAPPEAR, BLINK }
 
-    enum class Speed { FAST, MEDIUM, SLOW, VERY_SLOW }
+    enum class Speed { VERY_FAST, FAST, MEDIUM, SLOW, VERY_SLOW }
 
     init {
         when (type) {
@@ -31,6 +31,7 @@ class Fader(
         }
         thing.setOpacity(opacity)
         when (speed) {
+            Speed.VERY_FAST -> { dAlpha = 0.25f }
             Speed.FAST      -> { dAlpha = 0.05f }
             Speed.MEDIUM    -> { dAlpha = 0.03f }
             Speed.SLOW      -> { dAlpha = 0.02f }
@@ -71,6 +72,19 @@ class Fader(
                     thing.setOpacity(1.0f)
                     endFade()
                 }
+            }
+            Type.BLINK -> {
+                opacity += dAlpha
+                if (opacity < 0.0f) {
+                    dAlpha = -dAlpha
+                    thing.setOpacity(0.0f)
+                }
+                else if (opacity >= 1.0f) {
+                    thing.setOpacity(1.0f)
+                    endFade()
+                }
+                else
+                    thing.setOpacity(opacity)
             }
         }
         return
