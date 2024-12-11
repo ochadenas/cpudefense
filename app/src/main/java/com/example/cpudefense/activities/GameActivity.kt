@@ -118,6 +118,7 @@ class GameActivity : Activity() {
      */
     {
         super.onResume()
+        Toast.makeText(this, resources.getString(R.string.toast_loading), Toast.LENGTH_SHORT).show()
         loadSettings()
         setupGameView()
         logger?.log("Entering game activity, game state is %s".format(gameMechanics.state.toString()))

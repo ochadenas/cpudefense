@@ -192,6 +192,7 @@ class Marketplace(val gameView: GameView): GameElement()
                 hero.let {
                     selected = it
                     it.biography?.viewOffset = 0f
+                    it.biography?.placeButton()
                     makeButtonText(it)
                     return true
                 }
@@ -209,10 +210,11 @@ class Marketplace(val gameView: GameView): GameElement()
     }
 
     private fun wikipedia()
+    /** opens the system's default browser and points it to the hero's wikipedia article */
     {
-        if (currentWiki == null) {
+        if (currentWiki != selected) {
             val browserIntent =
-                Intent(Intent.ACTION_VIEW, Uri.parse("https://en.wikipedia.org/wiki/Alan_Turing"))
+                Intent(Intent.ACTION_VIEW, Uri.parse(selected?.person?.url))
             try {
                 gameView.gameActivity.startActivity(browserIntent)
                 currentWiki = selected

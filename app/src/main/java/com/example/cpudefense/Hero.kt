@@ -12,7 +12,6 @@ import com.example.cpudefense.activities.GameActivity
 import com.example.cpudefense.effects.Fader
 import com.example.cpudefense.gameElements.Button
 import com.example.cpudefense.gameElements.HeroCard
-import com.example.cpudefense.utils.setTop
 import com.example.cpudefense.utils.setTopLeft
 import kotlin.math.exp
 import kotlin.math.truncate
@@ -334,6 +333,7 @@ class Hero(var gameActivity: GameActivity, type: Type)
         return if (level == 0) 1 else level
     }
 
+    @Suppress("unused")
     fun upgradeInfo(): String
     /** displays a text with info on the next available upgrade */
     {
@@ -429,7 +429,10 @@ class Hero(var gameActivity: GameActivity, type: Type)
     {
         var name = ""
         var fullName = ""
+        /** the hero's photo */
         var picture: Bitmap? = null
+        /** link to the hero's wikipedia article */
+        var url = ""
 
         fun setType()
         {
@@ -501,7 +504,7 @@ class Hero(var gameActivity: GameActivity, type: Type)
                 }
                 Type.CREATE_ADDITIONAL_CHIPS ->
                 {
-                    name = "von Neumann"
+                    name = "Neumann"
                     fullName = "John von Neumann"
                     effect = resources.getString(R.string.HERO_CREATE_CHIPS)
                     vitae = resources.getString(R.string.neumann)
@@ -649,11 +652,20 @@ class Hero(var gameActivity: GameActivity, type: Type)
                     picture = BitmapFactory.decodeResource(resources, R.drawable.conway)
                 }
             }
-        }
 
+            // determine the wikipedia link
+            try {
+                val resourceId =
+                    resources.getIdentifier("url_" + name.toLowerCase(), "string", gameActivity.packageName)
+                url = resources.getString(resourceId)
+            }
+            catch (_: Exception) {
+                url = resources.getString(R.string.url_wikipedia_fallback)  // resource doesn't exist
+            }
+        }
     }
 
-    inner class Biography(var screenArea: Rect)
+    inner class Biography(private var screenArea: Rect)
     /** The curriculum vitae of the hero, including graphical representation on the screen,
      * @param screenArea The rectangle on the screen provided for the biography. */
     {
@@ -664,7 +676,7 @@ class Hero(var gameActivity: GameActivity, type: Type)
         private var maxViewOffset = 0f
         private var canvas = Canvas(bitmap)
         private var paintBiography = TextPaint()
-        var wikiButton = Button(gameActivity.gameView, "Wikipedia",
+        var wikiButton = Button(gameActivity.gameView, resources.getString(R.string.button_wiki),
                                         textSize = GameView.purchaseButtonTextSize * gameActivity.gameView.textScaleFactor,
                                         style = Button.Style.FRAME, preferredWidth = area.width()-4)
         var wikiButtonActive = false
@@ -700,6 +712,8 @@ class Hero(var gameActivity: GameActivity, type: Type)
             textLayout.draw(canvas)
             maxViewOffset = (area.height()+2*wikiButton.area.height()-screenArea.height()).toFloat()
             maxViewOffset = if (maxViewOffset<0f) 0f else maxViewOffset
+            wikiButtonActive = false
+            wikiButton.alpha = 0
             placeButton()
         }
 
@@ -707,10 +721,11 @@ class Hero(var gameActivity: GameActivity, type: Type)
         {
             val sourceRect = Rect(0, -viewOffset.toInt(), bitmap.width, screenArea.height()-viewOffset.toInt())
             canvas.drawBitmap(bitmap, sourceRect, screenArea, paintBiography)
-            wikiButton.display(canvas)
+            if (data.level > 0)
+                wikiButton.display(canvas)
         }
 
-        private fun placeButton()
+        fun placeButton()
         {
             wikiButton.area.setTopLeft(area.left, (area.bottom+viewOffset).toInt())
             val buttonDisappearsBelowThisLine = screenArea.bottom-margin
@@ -722,7 +737,7 @@ class Hero(var gameActivity: GameActivity, type: Type)
             else if (wikiButtonActive && wikiButton.area.bottom > buttonDisappearsBelowThisLine)
             {
                 wikiButtonActive = false
-                Fader(gameActivity.gameView, wikiButton, Fader.Type.DISAPPEAR, Fader.Speed.VERY_FAST)
+                Fader(gameActivity.gameView, wikiButton, Fader.Type.DISAPPEAR, Fader.Speed.IMMEDIATE)
             }
         }
 

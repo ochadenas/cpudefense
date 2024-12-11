@@ -17,7 +17,7 @@ class Fader(
 
     enum class Type { NONE, APPEAR, DISAPPEAR, BLINK }
 
-    enum class Speed { VERY_FAST, FAST, MEDIUM, SLOW, VERY_SLOW }
+    enum class Speed { IMMEDIATE, VERY_FAST, FAST, MEDIUM, SLOW, VERY_SLOW }
 
     init {
         when (type) {
@@ -36,6 +36,7 @@ class Fader(
             Speed.MEDIUM    -> { dAlpha = 0.03f }
             Speed.SLOW      -> { dAlpha = 0.02f }
             Speed.VERY_SLOW -> { dAlpha = 0.005f }
+            Speed.IMMEDIATE -> { dAlpha = 1.0f }
         }
         gameView.faders.add(this) // make sure we are in the list so that we can be called during update
     }

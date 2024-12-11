@@ -80,7 +80,7 @@
     <color name="upgrade_monochrome">#B9921C</color>
     <color name="upgrade_active_general">#79D5FF</color>
     <color name="upgrade_active_eco">#FF6F00</color>
-    <color name="upgrade_active_meta">#FF3138</color>
+    <color name="upgrade_active_meta">#F23D43</color>
     <color name="upgrade_active_chip_sub">#07DD00</color>
     <color name="upgrade_active_chip_shr">#649DF3</color>
     <color name="upgrade_active_chip_acc">#FFC107</color>
