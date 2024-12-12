@@ -679,6 +679,8 @@ class Hero(var gameActivity: GameActivity, type: Type)
         var wikiButton = Button(gameActivity.gameView, resources.getString(R.string.button_wiki),
                                         textSize = GameView.purchaseButtonTextSize * gameActivity.gameView.textScaleFactor,
                                         style = Button.Style.FRAME, preferredWidth = area.width()-4)
+        var wikiButtonVisible = false
+        /** whether clicking on the button triggers an action */
         var wikiButtonActive = false
         /** distance to lower edge of area where the wikipedia button begins to fade */
         private var margin = 10 * gameActivity.gameView.scaleFactor
@@ -691,6 +693,8 @@ class Hero(var gameActivity: GameActivity, type: Type)
                 text = vitae + "\n"
                 paintBiography.color = selected?.card?.activeColor ?: Color.WHITE
                 wikiButton.color = paintBiography.color
+                if (gameActivity.gameMechanics.currentStageIdent.series > GameMechanics.SERIES_NORMAL)
+                    wikiButtonVisible = true
             }
             else
             {
@@ -721,12 +725,13 @@ class Hero(var gameActivity: GameActivity, type: Type)
         {
             val sourceRect = Rect(0, -viewOffset.toInt(), bitmap.width, screenArea.height()-viewOffset.toInt())
             canvas.drawBitmap(bitmap, sourceRect, screenArea, paintBiography)
-            if (data.level > 0)
-                wikiButton.display(canvas)
+            if (wikiButtonVisible) wikiButton.display(canvas)
         }
 
         fun placeButton()
         {
+            if (!wikiButtonVisible)
+                return
             wikiButton.area.setTopLeft(area.left, (area.bottom+viewOffset).toInt())
             val buttonDisappearsBelowThisLine = screenArea.bottom-margin
             if (!wikiButtonActive && wikiButton.area.bottom < buttonDisappearsBelowThisLine)

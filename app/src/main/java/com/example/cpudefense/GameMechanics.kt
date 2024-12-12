@@ -28,7 +28,7 @@ class GameMechanics {
         /** for debugging purposes only. MUST BE SET TO FALSE */
         const val allowLivesPurchaseInAllStages = false
         /** for debugging purposes only. MUST BE SET TO FALSE */
-        const val enableLogging = true
+        const val enableLogging = false
         // end of debug options
 
         /** minimum log level (if logging is enabled) */
