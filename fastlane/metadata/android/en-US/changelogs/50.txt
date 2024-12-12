@@ -1,0 +1,6 @@
+New features:
+- Link to Wikipedia articles added for heroes and heroines
+
+Bug fixes:
+- Fixed a bug when changing between apps in the hero screen
+
