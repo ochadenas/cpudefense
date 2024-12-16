@@ -14,7 +14,7 @@ class Settings {
 
     fun loadFromFile(prefs: SharedPreferences): Boolean
     {
-        configDisableBackground = prefs.getBoolean("DISABLE_PURCHASE_DIALOG", false)
+        configDisablePurchaseDialog = prefs.getBoolean("DISABLE_PURCHASE_DIALOG", false)
         configDisableBackground = prefs.getBoolean("DISABLE_BACKGROUND", false)
         configShowAttackersInRange = prefs.getBoolean("SHOW_ATTS_IN_RANGE", false)
         configUseLargeButtons = prefs.getBoolean("USE_LARGE_BUTTONS", false)
