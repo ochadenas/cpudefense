@@ -124,11 +124,7 @@ In hex, you have digits from 0 to 9 and then from A to F. The hex number x0F equ
     <string name="instr_endless">You have successfully cleared all stages and won the game!\n\nIf you want, you can continue in “endless” mode, with randomly generated circuits that get more and more difficult. You will start the “endless” series without heroes, and you cannot use the coins gathered until now. \n\nHow far will you get?</string>
 
 
-    <string name="turing">
-"Alan Turing was one of the most important persons in computer science. He created many of the foundations in theoretical computing, such as the Turing machine and the Turing test, but he is also famous for cracking the Enigma code in World War 2. His impact on the outcome of the war can hardly be overestimated.
-
-He was heavily discriminated against because of his homosexuality. He died, probably by his own hand, in 1954."
-    </string>
+    <string name="turing">Alan Turing was one of the most important persons in computer science. He created many of the foundations in theoretical computing, such as the Turing machine and the Turing test, and made important breakthroughs in cryptology. Building on the work of the Polish Cipher Bureau, he led the team that was responsible for deciphering the Enigma code during the Second World War. His impact on the outcome of the war can hardly be overestimated.\n\nHe was heavily discriminated against because of his homosexuality. He died, probably by his own hand, in 1954.\n</string>
     <string name="lovelace">
 "Ada, Countess of Lovelace is held to have invented the concept of Programming.
 
