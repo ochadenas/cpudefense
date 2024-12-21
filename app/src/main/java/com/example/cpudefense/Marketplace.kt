@@ -71,7 +71,7 @@ class Marketplace(val gameView: GameView): GameElement()
             var hero: Hero? = heroes[type]
             if (hero == null)
                hero = Hero.createFromData(gameView.gameActivity, Hero.Data(type))
-            if (hero.isAvailable(level)) {
+            if (hero.isAvailable(level) || hero.data.level > 0) {
                 hero.createBiography(biographyArea)
                 newUpgrades.add(hero)
             }

@@ -700,6 +700,7 @@ class Hero(var gameActivity: GameActivity, type: Type)
             {
                 text = "%s\n\n%s".format(person.fullName, effect)
                 paintBiography.color = selected?.card?.inactiveColor ?: Color.WHITE
+                wikiButtonVisible = false
             }
             canvas.drawColor(Color.BLACK)
             paintBiography.textSize = GameView.biographyTextSize*gameActivity.gameView.textScaleFactor
