@@ -92,7 +92,7 @@ class Stage(var gameMechanics: GameMechanics, var gameView: GameView)
 
     fun getSeries(): Int {return data.ident.series}
 
-    fun asString(): String
+    fun identAsString(): String
     /** ident of the stage as string, for logging purposes */
     {
         return "stage %d (series %s)".format(getLevel(), getSeries())

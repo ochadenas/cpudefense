@@ -69,30 +69,17 @@ class StageCatalog
                         structure[level.number] = stage.data
                         Persistency(stage.gameView.gameActivity).saveLevelStructure(GameMechanics.SERIES_ENDLESS, structure)
                     }
+                    // safety catch:
+                    // check whether there are chips with level 0. This should not happen,
+                    // but if there are, remove them
+                    stage.chips.values.forEach {
+                        if (it.isRegularSlot() && it.chipData.upgradeLevel < 1)
+                            it.resetToEmptyChip()
+                    }
                     stage.rewardCoins = GameMechanics.defaultRewardCoins
                 }
             }
             stage.calculateDifficulty()
-        }
-
-        private fun createFixedNumberOfObstacles(stage: Stage, numberOfObstacles: Int) {
-            val reduce =
-                stage.gameMechanics.heroModifier(Hero.Type.LIMIT_UNWANTED_CHIPS) // consider Kilby's effect
-            val reducedNumberOfObstacles = numberOfObstacles - reduce.toInt()
-            if (reducedNumberOfObstacles > 0)
-                for (i in 1..reducedNumberOfObstacles)  // set or upgrade the slots
-                {
-                    val possibleSlotsForObstacles =
-                        stage.chips.values.filter { it.chipData.type in possibleChipTypesWhereObstaclesCanBePut }
-                    if (possibleSlotsForObstacles.isNotEmpty()) {
-                        val obstacleSlot = possibleSlotsForObstacles.random()
-                        when (obstacleSlot.chipData.type) {
-                            in listOf(Chip.ChipType.ADD, Chip.ChipType.SHL, Chip.ChipType.NOP) -> obstacleSlot.addPower(1)
-                            Chip.ChipType.EMPTY -> obstacleSlot.setType(Chip.obstacleTypes.random())
-                            else -> {}
-                        }
-                    }
-                }
         }
 
         private fun createObstaclesForDifficulty(stage: Stage, difficulty: Double)

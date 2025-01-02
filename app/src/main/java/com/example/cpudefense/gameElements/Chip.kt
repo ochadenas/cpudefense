@@ -98,6 +98,12 @@ open class Chip(val network: Network, gridX: Int, gridY: Int):
         paintUpgradesBackground.alpha = 240
     }
 
+    fun isRegularSlot(): Boolean
+    /** @return true if the chip is neither Entry nor CPU */
+    {
+        return (chipData.type != ChipType.ENTRY && chipData.type != ChipType.CPU)
+    }
+
     fun sellChip()
             /** marks this chip as sold, but does not remove it directly.
              * Final removal is done after the cooldown expires.
@@ -116,7 +122,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int):
         }
     }
 
-    private fun resetToEmptyChip()
+    fun resetToEmptyChip()
     /** called when a sold chip is definitely removed */
     {
         with (chipData)
@@ -132,6 +138,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int):
         }
         bitmap = null
     }
+
     fun setIdent(ident: Int)
     {
         data.ident = ident
