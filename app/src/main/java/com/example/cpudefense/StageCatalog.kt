@@ -132,7 +132,9 @@ class StageCatalog
                     val slot = possibleSlotsForChips.random()
                     when (slot.chipData.type) {
                         in listOf(Chip.ChipType.SUB, Chip.ChipType.SHR, Chip.ChipType.RES) -> {
-                            slot.addPower(1)
+                            // chip already present, buy an upgrade
+                            val upgrade = ChipUpgrade(slot, Chip.ChipUpgrades.POWERUP, 0, 0, 0)
+                            upgrade.buyUpgrade(Chip.ChipUpgrades.POWERUP, doForFree = true)
                             additionalCount -= Chip.chipStrength[slot.chipData.type] ?: 0.0
                         }
                         Chip.ChipType.MEM -> {}

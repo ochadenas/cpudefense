@@ -11,7 +11,7 @@ import com.example.cpudefense.activities.GameActivity
 import com.google.gson.Gson
 import java.io.ByteArrayOutputStream
 
-class Persistency(private var activity: Activity)
+class Persistency(private val activity: Activity)
 {
     @Suppress("ConstPropertyName")
     companion object
@@ -43,8 +43,6 @@ class Persistency(private var activity: Activity)
     private val prefsSaves: SharedPreferences = activity.getSharedPreferences(filename_saves, AppCompatActivity.MODE_PRIVATE)
     /** file for the state within the current level, such as attacker and chip positions, number of waves, etc. */
     private val prefsState: SharedPreferences = activity.getSharedPreferences(filename_state, AppCompatActivity.MODE_PRIVATE)
-
-    private val logger = (activity as GameActivity).logger
 
     data class SerializableStateData (
         val general: GameMechanics.StateData,
@@ -159,7 +157,6 @@ class Persistency(private var activity: Activity)
             GameMechanics.SERIES_ENDLESS -> SerializableLevelSummary(gameMechanics.summaryPerEndlessLevel)
             else -> null
         }
-        logger?.log("Saving stage summaries for series %d".format(series))
         data?.let {
             val json = Gson().toJson(it)
             editor.putString(seriesKey[series], json)
@@ -194,7 +191,6 @@ class Persistency(private var activity: Activity)
                 GameMechanics.SERIES_ENDLESS -> "thumbnail_%d_endless".format(levelIdent.number)
                 else -> "thumbnail_%d".format(levelIdent.number)
             }
-            logger?.log("Saving thumbnail for %s".format(stage.asString()))
             editor.putString(key, encodedImage)
             editor.apply()
         }
@@ -211,7 +207,6 @@ class Persistency(private var activity: Activity)
         val heroData = SerializableHeroDataPerMode()
         gameMechanics.heroesByMode[GameMechanics.LevelMode.BASIC]?.values?.forEach { hero -> heroData.basic.add(hero.data) }
         gameMechanics.heroesByMode[GameMechanics.LevelMode.ENDLESS]?.values?.forEach { hero -> heroData.endless.add(hero.data) }
-        logger?.log("Saving heroes data")
         editor.putString("heroes", Gson().toJson(heroData))
         editor.apply()
     }
@@ -221,7 +216,6 @@ class Persistency(private var activity: Activity)
         val editor = prefsSaves.edit()
         val data = SerializableHolidays(gameMechanics.holidays)
         val json = Gson().toJson(data)
-        logger?.log("Saving holidays")
         editor.putString("holidays", json)
         editor.apply()
     }

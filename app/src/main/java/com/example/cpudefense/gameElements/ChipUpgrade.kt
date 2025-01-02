@@ -82,7 +82,11 @@ class ChipUpgrade(
             return false
     }
 
-    private fun buyUpgrade(type: Chip.ChipUpgrades)
+    fun buyUpgrade(type: Chip.ChipUpgrades, doForFree: Boolean = false)
+            /** performs the upgrade of the chip and spend the information.
+             * @param type Which of the update possibilities to choose
+             * @param doForFree if True, do not charge for this update
+             */
     {
         when (type)
         {
@@ -109,7 +113,8 @@ class ChipUpgrade(
             Chip.ChipUpgrades.CLK -> chipToUpgrade.setType(Chip.ChipType.CLK)
             Chip.ChipUpgrades.RES -> chipToUpgrade.setType(Chip.ChipType.RES)
         }
-        gameMechanics.state.cash -= price
+        if (!doForFree)
+            gameMechanics.state.cash -= price
     }
 
     fun display(canvas: Canvas)

@@ -359,6 +359,7 @@ class GameActivity : Activity() {
             currentlyActiveStage = nextStage
         }
         Persistency(this).saveStageSummaries(gameMechanics, ident.series)
+        logger?.log("Saving summary of series %d".format(ident.series))
         showStageMessage(nextStage.data.ident)
         setGameSpeed(GameSpeed.NORMAL)  // reset speed to normal when starting next stage
         changeToGamePhase(GamePhase.RUNNING)
