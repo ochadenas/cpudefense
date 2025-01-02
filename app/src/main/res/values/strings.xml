@@ -335,7 +335,7 @@ Furthermore, some slots are already taken by unwanted chips you'll have to deal 
     <string name="settings_language_selection_title">Language selection</string>
     <string name="settings_language_selection_text">To change the game\'s language, use the system “Settings”  of your device and go to “App Languages”.</string>
     <string name="deco">Deco</string>
-    <string name="coins_got">Got %1$d out of %2$d coins got.</string>
+    <string name="coins_got">Got %1$d out of %2$d coins</string>
     <string name="coins_got_plural">Got %1$d out of %2$d coins</string>
     <string name="neumann">"All modern computers have an internal von Neumann architecture. This way of combining memory, arithmetic unit and program control to create a freely programmable machine was largely developed by John von Neumann, who is considered one of the fathers of computer science. He was a brilliant mathematician who, among other things, laid the mathematical foundations of quantum mechanics, but also decisively advanced game theory. He was also a highly intelligent and witty person and a real party animal.\n\nThe darker side of von Neumann's life is his contributions to military research and the development and use of weapons of mass destruction."</string>
     <string name="button_wiki">"Wikipedia"</string>

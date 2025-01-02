@@ -254,6 +254,9 @@ class GameMechanics {
     }
 
     fun setSummaryOfStage(stage: Stage.Identifier, summary: Stage.Summary?)
+    /** Puts the summary data of the stage given as argument into the appropriate hash map,
+     * depending on the series (normal, turbo, endless)
+      */
     {
         summary?.let {
             when (stage.series) {

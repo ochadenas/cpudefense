@@ -358,6 +358,7 @@ class GameActivity : Activity() {
             state.heat = 0.0
             currentlyActiveStage = nextStage
         }
+        Persistency(this).saveStageSummaries(gameMechanics, ident.series)
         showStageMessage(nextStage.data.ident)
         setGameSpeed(GameSpeed.NORMAL)  // reset speed to normal when starting next stage
         changeToGamePhase(GamePhase.RUNNING)
