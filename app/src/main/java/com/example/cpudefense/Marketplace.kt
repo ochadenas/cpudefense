@@ -81,6 +81,15 @@ class Marketplace(val gameView: GameView): GameElement()
         }
         arrangeCards(newUpgrades, cardViewOffset)
         upgrades = newUpgrades
+        if (level.mode() == GameMechanics.LevelMode.ENDLESS) // grant a gift at the beginning of 'Endless'
+        {
+            val gift = purse.addGift(GameMechanics.defaultGiftCoins)
+            if (gift>0) {
+                Toast.makeText(gameView.gameActivity, "You received %d coins as gift.".format(gift), Toast.LENGTH_SHORT)
+                    .show()
+                Persistency(gameView.gameActivity).saveCoins(gameMechanics)
+            }
+        }
         coins = MutableList(purse.availableCoins()) { Coin(gameMechanics, coinSize) }
     }
 

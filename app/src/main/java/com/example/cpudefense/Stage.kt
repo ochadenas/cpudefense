@@ -39,6 +39,7 @@ class Stage(var gameMechanics: GameMechanics, var gameView: GameView)
         }
 
         fun mode(): GameMechanics.LevelMode
+        /** check whether we are in 'endless' or 'basic' mode */
         {
             if (series == GameMechanics.SERIES_ENDLESS)
                 return GameMechanics.LevelMode.ENDLESS

@@ -18,7 +18,9 @@ class PurseOfCoins(val gameMechanics: GameMechanics, private val levelMode: Game
         /** coins caught running in the stages */
         var runningCoins: Int = 0,
         /** coins used to purchase lost lives */
-        var coinsSpentOnPurchases: Int = 0
+        var coinsSpentOnPurchases: Int = 0,
+        /** coins got as a one-time gift */
+        var coinsGotAsGift: Int = 0
     )
 
     enum class ExpenditureType { HEROES, LIVES }
@@ -44,6 +46,20 @@ class PurseOfCoins(val gameMechanics: GameMechanics, private val levelMode: Game
     {
         contents.totalCoins += amount
         contents.rewardCoins += amount
+    }
+
+    fun addGift(amount: Int): Int
+    /** add a specific amount as a one-time gift.
+     * @return the number of coins actually got. Will be 0 if the gift had been granted before. */
+    {
+        val actual = amount - contents.coinsGotAsGift
+        if (actual>0) {
+            contents.totalCoins += actual
+            contents.coinsGotAsGift = amount
+            return actual
+        }
+        else
+            return 0
     }
 
     fun spend(amount: Int, spendFor: ExpenditureType = ExpenditureType.HEROES)
