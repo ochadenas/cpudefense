@@ -404,11 +404,19 @@ class Persistency(private val activity: Activity)
     {
         // get number of coins
         val json = prefsSaves.getString("coins", "none")
-        if (json != "none") {
-            val data: SerializablePurseContents =
-                Gson().fromJson(json, SerializablePurseContents::class.java)
-            gameMechanics.purseOfCoins[GameMechanics.LevelMode.BASIC]?.let { purse -> purse.contents = data.basic; purse.initialized = true }
-            gameMechanics.purseOfCoins[GameMechanics.LevelMode.ENDLESS]?.let { purse -> purse.contents = data.endless; purse.initialized = true }
+        try {
+            if (json != "none") {
+                val data: SerializablePurseContents =
+                    Gson().fromJson(json, SerializablePurseContents::class.java)
+                gameMechanics.purseOfCoins[GameMechanics.LevelMode.BASIC]?.let { purse -> purse.contents = data.basic; purse.initialized = true }
+                gameMechanics.purseOfCoins[GameMechanics.LevelMode.ENDLESS]?.let { purse -> purse.contents = data.endless; purse.initialized = true }
+            }
+        }
+        catch (ex: Exception) {
+            // save file has not the expected structure
+            activity.runOnUiThread {
+                Toast.makeText(activity, "Save file (coins info) corrupted.", Toast.LENGTH_LONG).show()
+            }
         }
     }
 

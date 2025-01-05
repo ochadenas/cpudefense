@@ -400,6 +400,14 @@ class Stage(var gameMechanics: GameMechanics, var gameView: GameView)
         difficulty +=  difficultyOfObstacles()
         data.difficulty = difficulty
     }
+
+    fun isValidStage(): Boolean
+    /** whether this is a stage that is suitable for playing */
+    {
+        return (data.difficulty < 999.0 &&
+                data.chips.size > 2 )
+    }
+
     fun takeSnapshot(size: Int): Bitmap?
             /** gets a miniature picture of the current level
              * @param size snapshot size in pixels (square)
