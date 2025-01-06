@@ -1,0 +1,14 @@
+New features:
+- When playing the first time in "endless", 4 coins are granted for free to help get things going.
+
+Bug fixes:
+- If a stage in "endless" mode cannot be loaded, a new stage layout is generated.
+- Chips created by von Neumann with level 2 or higher now have the correct value. When selling these chips, the refund is halved.
+- Heroes that are active are always visible now, even if their prerequisites are no longer met.
+- The number of available coins were not saved if a stage was not finished.
+- Chips with level < 1 are removed at the beginning of a stage.
+
+Miscellaneous:
+- The additional chips created by the game (both helpful and unwanted) are recreated every time the level is played.
+- Turing's biography now mentions that the Enigma was initially broken by the Polish Cipher Bureau.
+
