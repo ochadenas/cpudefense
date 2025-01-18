@@ -121,7 +121,7 @@ Das Verschieben ist gleichbedeutend mit einer Division durch 2."
     <string name="shortdesc_refund">Erstattung bei Verkauf</string>
     <string name="shortdesc_max_hero_upgrade">max. Helden-Stufe</string>
     <string name="upgrade_format">%1$s  [Kosten: %2$d]</string>
-    <string name="stage_number">Level %d</string>
+    <string name="stage_number">Level %s</string>
     <string name="toast_stage_cleared">Level geschafft</string>
     <string name="instr_12">Zwei weitere Chiparten: ADD und SHL (für „shift left“).\n\nDiese tun das Gegenteil von SUB und SHR: Sie addieren 1 zu der Zahl bzw. schieben die Bits nach links.\n\nDas ist natürlich unerwünscht, denn es macht die Zahlen größer. Für diese Chips bedeutet „Verbesserung“, dass sie schwächer werden oder ganz verschwinden.</string>
     <string name="instr_13">"Beachte, dass CryptoCoins weder von ACC- noch von MEM-Chips beeinflusst werden."</string>
@@ -244,7 +244,7 @@ Das Verschieben ist gleichbedeutend mit einer Division durch 2."
     <string name="HERO_EFFECT_COINSTRENGTH">verringert die Stärke der Crypto-Coins</string>
     <string name="boole">Die Leistung von George Boole Jr. liegt darin, dass er die Begriffe der Logik formalisiert und dadurch zu einem Teil der Mathematik gemacht hat. Die Boolesche Algebra ist Grundlage für die interne Funktionsweise aller modernen Computer.\n\nBoole war der Sohn eines Schusters und hat nie eine Schule außer der Grundschule besucht. Mathematik, Latein und Griechisch, Französisch und Deutsch brachte er sich selber bei.</string>
     <string name="diffie">Zusammen mit Martin Hellmann entwickelte Bailey Whitfield Diffie den nach den beiden benannten DH-Schlüsselaustausch zwischen zwei Parteien und schuf damit eine wesentliche Voraussetzung für sichere Verbindungen im Internet.\n\nDiffie beschäftigt sich auch mit gesellschaftlichen Fragen der Kryptographie und ist ein überzeugter Verfechter des Rechts auf Privatsphäre.</string>
-    <string name="toast_enter_stage">Level %d</string>
+    <string name="toast_enter_stage">Level %s</string>
     <string name="conway">John Horton Conway ist in erster Linie für die Erfindung von Conway\'s Game of Life bekannt, einem zellulären Automaten, der komplexe lebende Muster auf einem Computerbildschirm erzeugt. \n\nConway interessierte sich für mathematische Spiele mit und ohne Computer und veröffentlichte einen der ersten Algorithmen zur Lösung des Zauberwürfels. Er leistete aber auch viele Beiträge zur „ernsthaften“ Mathematik.</string>
     <string name="query_purchase_life">Willst du %s ausgeben, um ein Leben zurückzuerhalten?</string>
     <string name="annotation_purchase_life">Dieser Dialog kann unter „Einstellungen“ deaktviert werden. Auch durch Tippen auf die CPU lassen sich zusätzliche Leben „kaufen“.</string>

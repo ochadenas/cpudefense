@@ -22,13 +22,17 @@ class Stage(var gameMechanics: GameMechanics, var gameView: GameView)
         }
 
         fun next(): Identifier
-        /** returns an identifier of the next level */
-        { return Identifier(series, number+1)}
+                /** returns an identifier of the next level */
+        {
+            return Identifier(series, number + 1)
+        }
 
         @Suppress("unused")
         fun previous(): Identifier
-        /** returns an identifier of the previous level */
-        { return Identifier(series, if (number<=1) 1 else number-1)}
+                /** returns an identifier of the previous level */
+        {
+            return Identifier(series, if (number <= 1) 1 else number - 1)
+        }
 
         fun isGreaterThan(compare: Identifier): Boolean {
             return when {
@@ -39,12 +43,30 @@ class Stage(var gameMechanics: GameMechanics, var gameView: GameView)
         }
 
         fun mode(): GameMechanics.LevelMode
-        /** check whether we are in 'endless' or 'basic' mode */
+                /** check whether we are in 'endless' or 'basic' mode */
         {
             if (series == GameMechanics.SERIES_ENDLESS)
                 return GameMechanics.LevelMode.ENDLESS
             else
                 return GameMechanics.LevelMode.BASIC
+        }
+
+
+        fun numberAsString(mode: Attacker.Representation): String
+                /** returns the number in the desired representation, either decimal or hex.
+                 * Only works with numbers up to xFFFF or 11111111.
+                 */
+        {
+            when (mode)
+            {
+                Attacker.Representation.DECIMAL -> return number.toString()
+                Attacker.Representation.HEX -> if (number<256)
+                    return  "x" + number.toString(radix=16).uppercase().padStart(2, '0')
+                else
+                    return  "x" + number.toString(radix=16).uppercase().padStart(4, '0')
+                Attacker.Representation.BINARY -> return  number.toString(radix=2).uppercase().padStart(8, '0')
+                else -> return number.toString()
+            }
         }
     }
 

@@ -33,6 +33,7 @@ import com.example.cpudefense.Settings
 import com.example.cpudefense.Stage
 import com.example.cpudefense.StageCatalog
 import com.example.cpudefense.TemperatureDamageException
+import com.example.cpudefense.gameElements.Attacker
 import com.example.cpudefense.utils.Logger
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
@@ -160,7 +161,7 @@ class GameActivity : Activity() {
 
     private fun showStageMessage(ident: Stage.Identifier)
     {
-        runOnUiThread { Toast.makeText(this, resources.getString(R.string.toast_enter_stage).format(ident.number),
+        runOnUiThread { Toast.makeText(this, resources.getString(R.string.toast_enter_stage).format(ident.numberAsString(Attacker.Representation.HEX)),
                                        Toast.LENGTH_SHORT).show() }
     }
 

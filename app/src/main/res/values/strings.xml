@@ -221,9 +221,9 @@ The programming language Pascal is named after him."</string>
     <string name="shortdesc_reduce_removal">Chip removal cost</string>
     <string name="shortdesc_enable_mem_upgrade">MEM max. level</string>
     <string name="upgrade_format">%1$s  [cost: %2$d]</string>
-    <string name="stage_number">Stage %d</string>
+    <string name="stage_number">Stage %s</string>
     <string name="toast_stage_cleared">Stage cleared</string>
-    <string name="toast_enter_stage">Stage %d</string>
+    <string name="toast_enter_stage">Stage %s</string>
     <string name="HERO_EFFECT_CHIPSPEED">Decreases cooldown time of all %s chips</string>
     <string name="HERO_EFFECT_HEAT">Reduces the amount of generated heat</string>
     <string name="HERO_EFFECT_STARTINFO">Increases information at start of level</string>

@@ -13,6 +13,7 @@ import com.example.cpudefense.activities.GameActivity
 import com.example.cpudefense.effects.Explosion
 import com.example.cpudefense.effects.Fadable
 import com.example.cpudefense.effects.Fader
+import com.example.cpudefense.gameElements.Attacker
 import com.example.cpudefense.gameElements.Button
 import com.example.cpudefense.gameElements.GameElement
 import com.example.cpudefense.gameElements.Typewriter
@@ -299,7 +300,7 @@ class Intermezzo(var gameView: GameView): GameElement(), Fadable {
             }
         }
         instructions?.showLeaveDialogue = showLeaveDialogue
-        gameView.speedControlPanel.setInfoLine(gameView.resources.getString(R.string.stage_number).format(level.number))
+        gameView.speedControlPanel.setInfoLine(gameView.resources.getString(R.string.stage_number).format(level.numberAsString(Attacker.Representation.HEX)))
         gameView.gameActivity.setGameActivityStatus(GameActivity.GameActivityStatus.BETWEEN_LEVELS)
     }
 
