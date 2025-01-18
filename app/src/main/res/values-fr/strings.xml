@@ -262,4 +262,6 @@
     <string name="url_shannon">https://fr.wikipedia.org/wiki/Claude_Shannon</string>
     <string name="url_wiener">https://fr.wikipedia.org/wiki/Norbert_Wiener</string>
     <string name="url_boole">https://fr.wikipedia.org/wiki/George_Boole</string>
+    <string name="coins_available">Écus à disposition : %d</string>
+    <string name="coins_received_as_gift">Vous avez reçu un cadeau de %d écus.</string>
 </resources>

@@ -733,4 +733,6 @@ Miscellaneous:
     <string name="url_shannon">https://en.wikipedia.org/wiki/Claude_Shannon</string>
     <string name="url_wiener">https://en.wikipedia.org/wiki/Norbert_Wiener</string>
     <string name="url_boole">https://en.wikipedia.org/wiki/George_Boole</string>
+    <string name="coins_available">Coins available: %d</string>
+    <string name="coins_received_as_gift">You received %d coins as gift.</string>
 </resources>

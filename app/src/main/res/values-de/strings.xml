@@ -292,4 +292,6 @@ Das Verschieben ist gleichbedeutend mit einer Division durch 2."
     <string name="url_shannon">https://de.wikipedia.org/wiki/Claude_Shannon</string>
     <string name="url_wiener">https://de.wikipedia.org/wiki/Norbert_Wiener</string>
     <string name="url_boole">https://de.wikipedia.org/wiki/George_Boole</string>
+    <string name="coins_available">Verfügbare Coins: %d</string>
+    <string name="coins_received_as_gift">Du hast %d Coins geschenkt bekommen.</string>
 </resources>

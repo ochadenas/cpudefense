@@ -23,13 +23,15 @@ class Marketplace(val gameView: GameView): GameElement()
     private var buttonRefund: Button? = null
     private var buttonPurchase: Button? = null
     private var myArea = Rect()
-    private var cardsArea = Rect()  // area used for cards, without header
+    /** area used for cards, without header */
+    private var cardsArea = Rect()
     private var rightPanelArea = Rect()
     private var biographyArea = Rect()
     private var biographyAreaMargin = 20
     private var clearPaint = Paint()
     private var paint = Paint()
-    private var cardViewOffset = 0f  // used for scrolling
+    /** used for scrolling */
+    private var cardViewOffset = 0f  
 
     private var upgrades = mutableListOf<Hero>()
     private var purse = gameMechanics.currentPurse()
@@ -37,7 +39,7 @@ class Marketplace(val gameView: GameView): GameElement()
     private var coins = mutableListOf<Coin>()
     private var coinSize = (32 * gameView.scaleFactor).toInt()
     /** maximum number of coins that are displayed separately */
-    private var maxCoinsForEffects = 16
+    private var maxCoinsToDisplay = 16
 
     private var currentWiki: Hero? = null
 
@@ -88,7 +90,7 @@ class Marketplace(val gameView: GameView): GameElement()
         {
             val gift = purse.addGift(GameMechanics.defaultGiftCoins)
             if (gift>0) {
-                Toast.makeText(gameView.gameActivity, "You received %d coins as gift.".format(gift), Toast.LENGTH_SHORT)
+                Toast.makeText(gameView.gameActivity, resources.getString(R.string.coins_received_as_gift).format(gift), Toast.LENGTH_SHORT)
                     .show()
                 Persistency(gameView.gameActivity).saveCoins(gameMechanics)
             }
@@ -191,7 +193,7 @@ class Marketplace(val gameView: GameView): GameElement()
             }
             return true
         }
-        if (coins.size <= maxCoinsForEffects)
+        if (coins.size <= maxCoinsToDisplay)
             for (coin in coins)
             {
                 if (coin.myArea.contains(event.x.toInt(), event.y.toInt())) {
@@ -384,13 +386,14 @@ class Marketplace(val gameView: GameView): GameElement()
 
         // draw single coins if there are not too many
         // otherwise display only one icon and the total number
-        if (coins.size > maxCoinsForEffects)
+        if (coins.size > maxCoinsToDisplay)
         {
-            coins[0].let {
-                it.setCenter(coinPosX, coinPosY)
-                it.display(canvas, viewport)
-                coinsArea.left = it.myArea.right + coinLeftMargin
-                coinsArea.displayTextLeftAlignedInRect(canvas, "Coins available: %d", paint)
+            coins[0].let { coin ->
+                coin.setCenter(coinPosX, coinPosY)
+                coin.display(canvas, viewport)
+                coinsArea.left = coin.myArea.right + coinLeftMargin
+                resources.getString(R.string.coins_available).format(coinSize).let {
+                    coinsArea.displayTextLeftAlignedInRect(canvas, it, paint) }
             }
         }
         else for (c in coins)
