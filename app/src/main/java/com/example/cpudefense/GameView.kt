@@ -52,6 +52,7 @@ class GameView(context: Context):
         const val heroCardNameSize = 18f
         const val heroCardTextSize = 14f
         const val purchaseButtonTextSize = 20f
+        const val coinsAmountTextSize = 24f
 
         const val coinSizeOnScoreboard = 48
         const val coinSizeOnScreen = 16

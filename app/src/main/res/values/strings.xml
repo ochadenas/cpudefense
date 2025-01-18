@@ -329,7 +329,7 @@ Bug fixes:
 
 Miscellaneous:
 - The additional chips created by the game (both helpful and unwanted) are recreated every time the level is played.
-- Turing's biography now mentions that the Enigma was initially broken by the Polish Cipher Bureau.
+- Turing\'s biography now mentions that the Enigma was initially broken by the Polish Cipher Bureau.
 
 Version 1.50
 ============
@@ -347,10 +347,10 @@ New features:
 
 Bug fixes:
 - Attackers stored in MEM or ACC sometimes remained visible on the screen.
-- The text on the chips is scaled down if it doesn't fit into the rectangle.
+- The text on the chips is scaled down if it doesn\'t fit into the rectangle.
 
 Miscellaneous:
-- Small changes in the hero dependency tree. For the current tree, see the game's wiki.
+- Small changes in the hero dependency tree. For the current tree, see the game\'s wiki.
 - Ameliorations to the "Level Select" and the "Info" screen
 - Reduced cost of resistor chips
 
@@ -375,7 +375,7 @@ Version 1.46
 ============
 New features:
 - added a special Christmas level
-- The game's language can be changed via the device Settings dialogue.
+- The game\'s language can be changed via the device Settings dialogue.
 
 Bug fixes:
 - added a safety catch for "trapped" attackers
@@ -384,7 +384,7 @@ Bug fixes:
 Version 1.45
 ============
 New features:
-- The "mission briefing" text is now scrollable. This should avoid the text overlapping if it doesn't fit on the screen.
+- The "mission briefing" text is now scrollable. This should avoid the text overlapping if it doesn\'t fit on the screen.
 
 Bug fixes:
 - Corrected portrait image for John Conway
@@ -457,7 +457,7 @@ Bug fixes:
 - Attackers that were slowed down by resistors behaved weird in ACC and MEM chips.
 
 Miscellaneous:
-- The slowing effect of resistors now depend on the attacker's value. The stronger the attacker, the more it gets slowed.
+- The slowing effect of resistors now depend on the attacker\'s value. The stronger the attacker, the more it gets slowed.
 
 Version 1.38
 ============

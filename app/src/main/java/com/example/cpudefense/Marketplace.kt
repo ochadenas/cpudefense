@@ -12,6 +12,7 @@ import com.example.cpudefense.effects.*
 import com.example.cpudefense.gameElements.Button
 import com.example.cpudefense.gameElements.GameElement
 import com.example.cpudefense.networkmap.Viewport
+import com.example.cpudefense.utils.displayTextLeftAlignedInRect
 import com.example.cpudefense.utils.setCenter
 
 class Marketplace(val gameView: GameView): GameElement()
@@ -35,6 +36,8 @@ class Marketplace(val gameView: GameView): GameElement()
     private var selected: Hero? = null
     private var coins = mutableListOf<Coin>()
     private var coinSize = (32 * gameView.scaleFactor).toInt()
+    /** maximum number of coins that are displayed separately */
+    private var maxCoinsForEffects = 16
 
     private var currentWiki: Hero? = null
 
@@ -188,14 +191,15 @@ class Marketplace(val gameView: GameView): GameElement()
             }
             return true
         }
-        for (coin in coins)
-        {
-            if (coin.myArea.contains(event.x.toInt(), event.y.toInt())) {
-                if (!coin.isCurrentlyFlipping)
-                    Flipper(gameView, coin, Flipper.Type.HORIZONTAL)
-                return true
+        if (coins.size <= maxCoinsForEffects)
+            for (coin in coins)
+            {
+                if (coin.myArea.contains(event.x.toInt(), event.y.toInt())) {
+                    if (!coin.isCurrentlyFlipping)
+                        Flipper(gameView, coin, Flipper.Type.HORIZONTAL)
+                    return true
+                }
             }
-        }
         for (hero in upgrades)
             if (hero.card.cardAreaOnScreen.contains(event.x.toInt(), event.y.toInt()))
                 hero.let {
@@ -344,8 +348,22 @@ class Marketplace(val gameView: GameView): GameElement()
         for (hero in upgrades)
             hero.card.display(canvas, viewport)
 
+        displayAvailableCoins(canvas, viewport, Rect(0, 0, myArea.right, cardsArea.top))
+
+        // draw buttons
+        buttonFinish?.display(canvas)
+        buttonRefund?.display(canvas)
+        selected?.let {
+            buttonPurchase?.display(canvas)
+        }
+
+        // draw biography
+        selected?.biography?.display(canvas)
+    }
+
+    private fun displayAvailableCoins(canvas: Canvas, viewport: Viewport, coinsArea: Rect)
+    {
         // draw 'total coins' line
-        val coinsArea = Rect(0, 0, myArea.right, cardsArea.top)
         canvas.drawRect(coinsArea, clearPaint)
         paint.color = Color.WHITE
         paint.style = Paint.Style.STROKE
@@ -358,25 +376,29 @@ class Marketplace(val gameView: GameView): GameElement()
         val coinLeftMargin = coinSize / 2
         var deltaX = coinSize + 2
         if (coins.size * deltaX + 2*coinLeftMargin > coinsArea.width())  // coins do not fit, must overlap
-            deltaX = (myArea.width() - 2*coinLeftMargin) / coins.size
+        deltaX = (myArea.width() - 2*coinLeftMargin) / coins.size
         val coinPosY = coinsArea.centerY()
         var coinPosX = coinLeftMargin
-        for (c in coins)
+        paint.textSize = gameView.textScaleFactor * GameView.coinsAmountTextSize
+        paint.style = Paint.Style.FILL
+
+        // draw single coins if there are not too many
+        // otherwise display only one icon and the total number
+        if (coins.size > maxCoinsForEffects)
+        {
+            coins[0].let {
+                it.setCenter(coinPosX, coinPosY)
+                it.display(canvas, viewport)
+                coinsArea.left = it.myArea.right + coinLeftMargin
+                coinsArea.displayTextLeftAlignedInRect(canvas, "Coins available: %d", paint)
+            }
+        }
+        else for (c in coins)
         {
             c.setCenter(coinPosX, coinPosY)
             c.display(canvas, viewport)
             coinPosX += deltaX
         }
-
-        // draw buttons
-        buttonFinish?.display(canvas)
-        buttonRefund?.display(canvas)
-        selected?.let {
-            buttonPurchase?.display(canvas)
-        }
-
-        // draw biography
-        selected?.biography?.display(canvas)
     }
 
     private fun makeButtonText(card: Hero?)
