@@ -152,7 +152,8 @@ class WelcomeActivity : AppCompatActivity() {
             maxLevel.number == 0 -> buttonResume.text = getString(R.string.button_start_game)
             gameState == "running" -> buttonResume.text = getString(R.string.button_resume)
             gameState == "complete" -> {
-                buttonResume.text = getString(R.string.play_level_x).format(nextLevelToPlay.number)
+                val representation = if (settings.showLevelsInHex) Attacker.Representation.HEX else Attacker.Representation.DECIMAL
+                buttonResume.text = getString(R.string.play_level_x).format(Stage.numberToString(nextLevelToPlay.number,representation))
             }
             else -> buttonResume.isEnabled = false
         }

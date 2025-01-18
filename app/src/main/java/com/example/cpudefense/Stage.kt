@@ -50,24 +50,6 @@ class Stage(var gameMechanics: GameMechanics, var gameView: GameView)
             else
                 return GameMechanics.LevelMode.BASIC
         }
-
-
-        fun numberAsString(mode: Attacker.Representation): String
-                /** returns the number in the desired representation, either decimal or hex.
-                 * Only works with numbers up to xFFFF or 11111111.
-                 */
-        {
-            when (mode)
-            {
-                Attacker.Representation.DECIMAL -> return number.toString()
-                Attacker.Representation.HEX -> if (number<256)
-                    return  "x" + number.toString(radix=16).uppercase().padStart(2, '0')
-                else
-                    return  "x" + number.toString(radix=16).uppercase().padStart(4, '0')
-                Attacker.Representation.BINARY -> return  number.toString(radix=2).uppercase().padStart(8, '0')
-                else -> return number.toString()
-            }
-        }
     }
 
     lateinit var network: Network
@@ -119,6 +101,17 @@ class Stage(var gameMechanics: GameMechanics, var gameView: GameView)
     /** ident of the stage as string, for logging purposes */
     {
         return "stage %d (series %s)".format(getLevel(), getSeries())
+    }
+
+    fun numberAsString(): String
+            /** returns the number in the desired representation.
+             * Only works with numbers up to xFFFF or 11111111.
+             */
+    {
+        val number = data.ident.number
+        val mode = if (gameView.gameActivity.settings.showLevelsInHex)
+            Attacker.Representation.HEX else Attacker.Representation.DECIMAL
+        return Stage.numberToString(number, mode)
     }
 
     fun isInitialized(): Boolean
@@ -175,6 +168,24 @@ class Stage(var gameMechanics: GameMechanics, var gameView: GameView)
     }
 
     companion object {
+
+        fun numberToString(number: Int, mode: Attacker.Representation): String
+        /** returns the number in the desired representation.
+         * Only works with numbers up to xFFFF or 11111111.
+         */
+        {
+            when (mode)
+            {
+                Attacker.Representation.DECIMAL -> return number.toString()
+                Attacker.Representation.HEX -> if (number<256)
+                    return  "x" + number.toString(radix=16).uppercase().padStart(2, '0')
+                else
+                    return  "x" + number.toString(radix=16).uppercase().padStart(4, '0')
+                Attacker.Representation.BINARY -> return  number.toString(radix=2).uppercase().padStart(8, '0')
+                else -> return number.toString()
+            }
+        }
+
         fun fillEmptyStageWithData(stage: Stage, stageData: Data)
         /** restores the fixed part of a stage: Nodes, Links, Tracks.
          * @param stage The empty stage that must be filled
@@ -208,7 +219,7 @@ class Stage(var gameMechanics: GameMechanics, var gameView: GameView)
             var stageSummary = stage.gameMechanics.getSummaryOfStage(stage.data.ident)
             if (stageSummary == null)
                 stageSummary = Stage.Summary(coinsMaxAvailable = GameMechanics.defaultRewardCoins)
-            stageSummary?.let {
+            stageSummary.let {
                 stage.summary = it
                 stage.rewardCoins = it.coinsMaxAvailable
                 // stage.theGame.state.coinsInLevel = it.coinsAvailable ?: 0

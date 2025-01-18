@@ -15,7 +15,9 @@ import com.example.cpudefense.GameMechanics
 import com.example.cpudefense.GameView
 import com.example.cpudefense.Persistency
 import com.example.cpudefense.R
+import com.example.cpudefense.Settings
 import com.example.cpudefense.Stage
+import com.example.cpudefense.gameElements.Attacker
 import com.google.android.material.tabs.TabLayout
 
 @Suppress("DEPRECATION")
@@ -26,6 +28,8 @@ class LevelSelectActivity : AppCompatActivity() {
     private var selectedSeries: Int = 0
     private var isTurboAvailable = false
     private var isEndlessAvailable = false
+    private val settings = Settings()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,6 +50,8 @@ class LevelSelectActivity : AppCompatActivity() {
 
     private fun setupSelector()
     {
+        val prefs = getSharedPreferences(Persistency.filename_settings, MODE_PRIVATE)
+        settings.loadFromFile(prefs)
         val tabLayout = findViewById<TabLayout>(R.id.tab_layout)
         if (GameMechanics.makeAllLevelsAvailable)
         {
@@ -160,6 +166,8 @@ class LevelSelectActivity : AppCompatActivity() {
              * @param stageSummary The dictionary with the level data. May be an empty set.
              */
     {
+        val representation = if (settings.showLevelsInHex)
+            Attacker.Representation.HEX else Attacker.Representation.DECIMAL
         /* create empty first and last stage, if necessary */
         if (stageSummary.isEmpty())
             stageSummary[1] = Stage.Summary()  // create empty first level
@@ -172,7 +180,8 @@ class LevelSelectActivity : AppCompatActivity() {
         for ((level, summary) in stageSummary.entries)
         {
             val levelEntryView = Button(this)
-            var textString = getString(R.string.level_entry).format(level)
+            val levelNumber = Stage.numberToString(level, representation)
+            var textString = getString(R.string.level_entry).format(levelNumber)
             val coinsMaxAvailable = when {
                 // this is a hack to handle levels where coinsMaxAvailable is not set correctly
                 summary.coinsMaxAvailable>0 -> summary.coinsMaxAvailable
@@ -180,7 +189,8 @@ class LevelSelectActivity : AppCompatActivity() {
             }
             if (coinsMaxAvailable > 0)
             {
-                val formatString = if (summary.coinsGot==1) resources.getString(R.string.coins_got) else resources.getString(R.string.coins_got_plural)
+                val formatString =
+                    if (summary.coinsGot==1) resources.getString(R.string.coins_got) else resources.getString(R.string.coins_got_plural)
                 textString = textString.plus("\n"+formatString.format(summary.coinsGot, coinsMaxAvailable))
             }
             levelEntryView.text = textString

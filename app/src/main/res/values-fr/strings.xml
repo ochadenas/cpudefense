@@ -13,7 +13,7 @@
     <string name="enter_game">Entrer</string>
     <string name="game_start">Début du jeu.</string>
     <string name="coins_gathered">Écus collectés : %d.</string>
-    <string name="next_stage">Prochain niveau: %d</string>
+    <string name="next_stage">Prochain niveau: %s</string>
     <string name="win">Gagné.</string>
     <string name="last_stage">Le dernier niveau était %d.</string>
     <string name="cleared">Niveau réussi.</string>
@@ -24,7 +24,7 @@
     <string name="selectLevel">Choix de niveau</string>
     <string name="play_selected_level">Jouer le niveau choisi</string>
     <string name="button_marketplace">Recrutement</string>
-    <string name="level_entry">Niveau %d</string>
+    <string name="level_entry">Niveau %s</string>
     <string name="level_selector">Sélection de niveau</string>
     <string name="button_refund_all">Remise à zéro</string>
     <string name="query_restart_game">Vraiment remettre à zéro toute votre progression ?</string>
@@ -74,7 +74,7 @@
     <string name="about_license">"Ce jeu est open source. Visitez <a href="https://github.com/ochadenas/cpudefense">github.com/ochadenas/cpudefense</a> pour plus d\'informations.\n\nLes portraits des héros de l\'ère de l\'information sont pour la plupart issus d\'œuvres du domaine public.\n\nPhotos originales :\n  Alex Handy (CC BY-SA 2.0)\n  Jacob Appelbaum (CC BY-SA 2.5)\n  Konrad Jacobs (CC BY-SA 2.0 de)\n  Rama (CC BY-SA 2.0 fr)\n  Shervinafshar (CC BY-SA 3.0)\n  Tony Bove (CC BY 3.0)\n  Wolfgang Hunscher (CC BY-SA 3.0)\n  Silvano de Gennaro (courtesy of the author)\n  Clermont Auvergne Métropole (CC BY-SA 4.0)\n  Jean-Frédéric (CC BY 2.0)\n  Tekniska Museet (CC BY 2.0)\n  The Royal Society (CC BY-SA 4.0)\n  Tanyakh (CC BY-SA 4.0)\n    \nPlatines d\'ordinateur :\n  Autopilot (CC BY-SA 4.0)\n  Bill Bertram (CC-BY 2.0)\n  Oliver Chadenas (CC BY-SA 3.0)\n  Smial (FAL)\n\nToutes autres images :\n  Oliver Chadenas (CC BY-SA 3.0)"</string>
     <string name="about_info_title">Info</string>
     <string name="about_info_text">Des informations complémentaires et des astuces pour jouer se trouvent en ligne dans le wiki du jeu.</string>
-    <string name="play_level_x">Jouer niveau %d</string>
+    <string name="play_level_x">Jouer niveau %s</string>
     <string name="link_wiki">Wiki</string>
     <string name="button_exit">Sortir</string>
     <string name="button_retry">Rejouer</string>
@@ -95,7 +95,7 @@
     <string name="shortdesc_range">Portée puces %s</string>
     <string name="shortdesc_refund">remboursement vente</string>
     <string name="shortdesc_max_hero_upgrade">niveau max des héros</string>
-    <string name="upgrade_format">%s  [coût: %d]</string>
+    <string name="upgrade_format">%1$s  [coût: %2$d]</string>
     <string name="stage_number">Niveau %s</string>
     <string name="toast_stage_cleared">Niveau réussi</string>
     <string name="HERO_EFFECT_CHIPSPEED">réduit le temps de recharge de toutes les puces %s</string>
@@ -234,7 +234,7 @@
     <string name="shortdesc_create_wanted">Nombre de puces en plus</string>
     <string name="HERO_CREATE_CHIPS">Placement de puces additionnelles</string>
     <string name="button_wiki">"Wikipedia"</string>
-    <string name="url_wikipedia_fallback">https://fr.wikipedia.org/wiki/Wikip%C3%A9dia:Accueil_principal</string>
+    <string name="url_wikipedia_fallback">https://fr.wikipedia.org/wiki</string>
     <string name="url_turing">https://fr.wikipedia.org/wiki/Alan_Turing</string>
     <string name="url_lovelace">https://fr.wikipedia.org/wiki/Ada_Lovelace</string>
     <string name="url_hollerith">https://fr.wikipedia.org/wiki/Herman_Hollerith</string>

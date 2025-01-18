@@ -31,6 +31,7 @@ import com.example.cpudefense.PurseOfCoins
 import com.example.cpudefense.R
 import com.example.cpudefense.Settings
 import com.example.cpudefense.Stage
+import com.example.cpudefense.Stage.Identifier
 import com.example.cpudefense.StageCatalog
 import com.example.cpudefense.TemperatureDamageException
 import com.example.cpudefense.gameElements.Attacker
@@ -77,7 +78,7 @@ class GameActivity : Activity() {
     /** level snapshots for series 3 */
     var levelThumbnailEndless = HashMap<Int, Bitmap?>()
 
-    var settings = Settings()
+    val settings = Settings()
 
     /** if onCreate is _not_ called, this stays "true".
      * The other possibility to make it "true" is to use the button "Resume Game". */
@@ -131,7 +132,7 @@ class GameActivity : Activity() {
         {
             restartGame -> Stage.Identifier.startOfNewGame
             restartEndless -> Stage.Identifier.startOfEndless
-            else -> Stage.Identifier(
+            else -> Identifier(
                     series = intent.getIntExtra("START_ON_SERIES", SERIES_NORMAL),
                     number = intent.getIntExtra("START_ON_STAGE", 1)
             )
@@ -147,7 +148,7 @@ class GameActivity : Activity() {
             GamePhase.RUNNING -> {
                 beginGame(resumeGame = resumeGame, resetProgress = restartGame, resetEndless = restartEndless, startingLevel = startOnLevel)
                 if (resumeGame)
-                    showStageMessage(gameMechanics.currentStageIdent)
+                    showStageMessage(gameMechanics.currentlyActiveStage)
             }
             GamePhase.INTERMEZZO -> {}
             GamePhase.MARKETPLACE -> {}
@@ -159,10 +160,10 @@ class GameActivity : Activity() {
         startGameThreads()
     }
 
-    private fun showStageMessage(ident: Stage.Identifier)
+    private fun showStageMessage(stage: Stage?)
     {
-        runOnUiThread { Toast.makeText(this, resources.getString(R.string.toast_enter_stage).format(ident.numberAsString(Attacker.Representation.HEX)),
-                                       Toast.LENGTH_SHORT).show() }
+        runOnUiThread { stage?.let {Toast.makeText(this, resources.getString(R.string.toast_enter_stage).format(it.numberAsString()),
+                                       Toast.LENGTH_SHORT).show() }}
     }
 
     override fun onStop() {
@@ -194,7 +195,7 @@ class GameActivity : Activity() {
     }
 
 
-    fun setLastPlayedStage(identifier: Stage.Identifier)
+    fun setLastPlayedStage(identifier: Identifier)
     /** when completing a level, record the current number in the SharedPrefs.
      * @param identifier number of the level successfully completed */
     {
@@ -208,7 +209,7 @@ class GameActivity : Activity() {
         }
     }
 
-    fun setMaxPlayedStage(identifier: Stage.Identifier, forceReset: Boolean = false)
+    fun setMaxPlayedStage(identifier: Identifier, forceReset: Boolean = false)
             /** when completing a level, record the level as highest completed, but only if the old max level is not higher.
              * @param identifier number of the level successfully completed
              * @param forceReset If true, forces resetting the max stage to the given currentStage
@@ -216,7 +217,7 @@ class GameActivity : Activity() {
     {
         val prefs = getSharedPreferences(Persistency.filename_state, Context.MODE_PRIVATE)
         val previousMaxStage =
-            Stage.Identifier(prefs.getInt("MAXSERIES", 1), prefs.getInt("MAXSTAGE", 0))
+            Identifier(prefs.getInt("MAXSERIES", 1), prefs.getInt("MAXSTAGE", 0))
         val newMaxStage = if (identifier.isGreaterThan(previousMaxStage) || forceReset) identifier else previousMaxStage
         logger?.log("Setting max stage to series %d / level %d.".format(newMaxStage.series, newMaxStage.number))
         with (prefs.edit())
@@ -246,7 +247,7 @@ class GameActivity : Activity() {
     private fun beginGame(resetProgress: Boolean = false,
                           resetEndless: Boolean = false,
                           resumeGame: Boolean = false,
-                          startingLevel: Stage.Identifier = Stage.Identifier()
+                          startingLevel: Identifier = Identifier()
     )
     /** Begins the current game on a chosen level. Also called when starting a completely
      * new game.
@@ -269,12 +270,12 @@ class GameActivity : Activity() {
 
         if (resetRequested)
         {
-            level = Stage.Identifier.startOfEndless
+            level = Identifier.startOfEndless
             gameMechanics.deleteProgressOfSeries(LevelMode.ENDLESS)
             if (resetProgress)
             // in addition: if a complete reset is requested, also clear the BASIC series
             {
-                level = Stage.Identifier.startOfNewGame
+                level = Identifier.startOfNewGame
                 gameMechanics.deleteProgressOfSeries(LevelMode.BASIC)
             }
             gameMechanics.currentStageIdent = level
@@ -314,6 +315,8 @@ class GameActivity : Activity() {
             it.network.validateViewport()
             gameView.viewport.setGridSize(it.sizeX, it.sizeY)
             gameView.background.prepareAtStartOfStage(it.data.ident)
+            gameView.speedControlPanel.setInfoLine(gameView.resources.getString(R.string.stage_number)
+                                                       .format(it.numberAsString()))
         }
         when (gameMechanics.state.phase)
         {
@@ -340,7 +343,7 @@ class GameActivity : Activity() {
         changeToGamePhase(GamePhase.RUNNING)
     }
 
-    fun startNextStage(ident: Stage.Identifier)
+    fun startNextStage(ident: Identifier)
     {
         val nextStage = Stage(gameMechanics, gameView)
         logger?.log("Starting level %d of series %d".format(ident.number, ident.series))
@@ -361,7 +364,10 @@ class GameActivity : Activity() {
         }
         Persistency(this).saveStageSummaries(gameMechanics, ident.series)
         logger?.log("Saving summary of series %d".format(ident.series))
-        showStageMessage(nextStage.data.ident)
+        gameMechanics.currentlyActiveStage?.let {
+            gameView.speedControlPanel.setInfoLine(gameView.resources.getString(R.string.stage_number).format(it.numberAsString()))
+            showStageMessage(it)
+        }
         setGameSpeed(GameSpeed.NORMAL)  // reset speed to normal when starting next stage
         changeToGamePhase(GamePhase.RUNNING)
         nextStage.gameView.resetAtStartOfStage()
@@ -502,7 +508,7 @@ class GameActivity : Activity() {
         }
     }
 
-    private fun prepareLevelAtStartOfGame(ident: Stage.Identifier)
+    private fun prepareLevelAtStartOfGame(ident: Identifier)
             /** function that is called when starting a new level from the main menu.
              * Does not get called when resuming a running game.
               */

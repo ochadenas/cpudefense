@@ -187,6 +187,7 @@ class GameView(context: Context):
         viewport.reset()
         viewport.setScreenSize(this.width, this.height)
         gameMechanics.currentlyActiveStage?.network?.recreateNetworkImage(false)
+        speedControlPanel.setInfoLine(resources.getString(R.string.stage_number).format(gameMechanics.currentlyActiveStage?.numberAsString()))
     }
 
     private fun scoreBoardHeight(h: Int): Int

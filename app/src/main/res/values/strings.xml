@@ -12,7 +12,7 @@
     <string name="cleared">Stage cleared.</string>
     <string name="last_stage">Last stage was: %d</string>
     <string name="win">You win.</string>
-    <string name="next_stage">Next stage: %d</string>
+    <string name="next_stage">Next stage: %s</string>
     <string name="coins_gathered">Coins gathered: %d.</string>
     <string name="game_start">Starting game.</string>
     <string name="enter_game">Enter</string>
@@ -28,7 +28,7 @@
     <string name="button_purchase">Hire [1 coin] </string>
     <string name="button_purchase_plural">Hire [%d coins]</string>
     <string name="cost_desc">[cost: %d]</string>
-    <string name="level_entry">Level %d</string>
+    <string name="level_entry">Level %s</string>
     <string name="level_selector">Level Selector</string>
     <string name="query_reset">Do you want to reset all heroes?</string>
     <string name="query_restart_game">Do you want to reset all your current progress?</string>
@@ -191,7 +191,7 @@ The programming language Pascal is named after him."</string>
     <string name="about_license">"This game is open source. Visit <a href="https://github.com/ochadenas/cpudefense#MIT-1-ov-file">github.com/ochadenas/cpudefense</a> for more information.\n\nThe portraits of the Information Age Heroes are mostly derived from works of the public domain.\n\nOriginal photos:\n  Alex Handy (CC BY-SA 2.0)\n  Jacob Appelbaum (CC BY-SA 2.5)\n  Konrad Jacobs (CC BY-SA 2.0 de)\n  Rama (CC BY-SA 2.0 fr)\n  Shervinafshar (CC BY-SA 3.0)\n  Tony Bove (CC BY 3.0)\n  Wolfgang Hunscher (CC BY-SA 3.0)\n  Silvano de Gennaro (courtesy of the author)\n  Clermont Auvergne Métropole (CC BY-SA 4.0)\n  Jean-Frédéric (CC BY 2.0)\n  Tekniska Museet (CC BY 2.0)\n  The Royal Society (CC BY-SA 4.0)\n  Konrad Jacobs (CC BY-SA 2.0 de)\n  \nComputer boards:\n  Autopilot (CC BY-SA 4.0)\n  Bill Bertram (CC-BY 2.0)\n  Oliver Chadenas (CC BY-SA 3.0)\n  Smial (FAL)\n\nAll other artwork:\n  Oliver Chadenas (CC BY-SA 3.0)"</string>
     <string name="about_info_title">Info</string>
     <string name="about_info_text">For additional info and hints on game play visit the game\'s wiki on the web.</string>
-    <string name="play_level_x">Play level %d</string>
+    <string name="play_level_x">Play level %s</string>
     <string name="link_wiki">Game Wiki</string>
     <string name="button_exit">Exit</string>
     <string name="button_retry">Retry</string>

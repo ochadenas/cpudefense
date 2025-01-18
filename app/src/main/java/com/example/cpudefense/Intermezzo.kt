@@ -113,7 +113,8 @@ class Intermezzo(var gameView: GameView): GameElement(), Fadable {
                 lines.add(resources.getString(R.string.cleared))
                 if (coinsGathered>0)
                     lines.add(resources.getString(R.string.coins_gathered).format(coinsGathered))
-                lines.add(resources.getString(R.string.next_stage).format(level.number))
+                val representation = if (gameView.gameActivity.settings.showLevelsInHex) Attacker.Representation.HEX else Attacker.Representation.DECIMAL
+                lines.add(resources.getString(R.string.next_stage).format(Stage.numberToString(level.number, representation)))
                 if (gameView.gameMechanics.currentHeroesOnLeave(level).isNotEmpty())
                     lines += heroesOnLeaveText()
                 textOnContinueButton = resources.getString(R.string.enter_game)
@@ -315,7 +316,6 @@ class Intermezzo(var gameView: GameView): GameElement(), Fadable {
     private fun startLevel()
     {
         if (holidayGranted()) {
-            gameView.speedControlPanel.setInfoLine(gameView.resources.getString(R.string.stage_number).format(level.numberAsString(Attacker.Representation.HEX)))
             gameView.gameActivity.startNextStage(level)
         }
     }
