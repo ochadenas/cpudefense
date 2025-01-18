@@ -44,7 +44,7 @@
 
 Tap on the empty slot to add a chip as defense against the attack, and then tap again to confirm your choice.
 
-The most basic chip is “SUB 1” which subtracts 1 from the attacker's value. It turns 1's into 0's, and it makes 0's disappear. Only then they are no longer a threat."
+The most basic chip is “SUB 1” which subtracts 1 from the attacker´s value. It turns 1´s into 0´s, and it makes 0´s disappear. Only then they are no longer a threat."
     </string>
     <string name="instr_2">
 "You may also tap on an attacker. This will invert its value: 1 becomes 0, and 0 becomes 1.
@@ -65,7 +65,7 @@ Remember that in binary,
 100 equals 4,
 and so on.
 
-Try to tap on numbers starting with “1”. This reduces the attacker's number and makes the level much easier.
+Try to tap on numbers starting with “1”. This reduces the attacker´s number and makes the level much easier.
 
 Any attacker that gets through to the CPU will cost one life, regardless of its number. You must have at least one SUB chip to get rid of them."</string>
     <string name="instr_5">
@@ -80,7 +80,7 @@ For example, 0110 becomes 0011. This is equivalent to dividing the value by 2."
 
 There is a maximum amount of cryptocoins per level shown on the bottom, and each life lost will reduce the reward.
 
-If you do not get all the coins, you can always replay the level. However, once you have obtained the maximum, you won't receive any more coins for this stage.
+If you do not get all the coins, you can always replay the level. However, once you have obtained the maximum, you won´t receive any more coins for this stage.
 "
     </string>
     <string name="instr_7">
@@ -90,7 +90,7 @@ But be careful. The moving cryptocoin is stronger than ordinary attackers, and i
     </string>
     <string name="instr_7a">Chips need to cool down between operations. Hire heroes to reduce the chance of grouped attackers overwhelming a chip.\n\nIf you are stuck, you can replay a lower level trying to catch a running cryptocoin.</string>
     <string name="instr_8">"\nYou can sell existing chips and re-use their slot. Most, but not all of the information will be refunded.\n\nNote that an activated chip will complete its current cooldown cycle before disappearing."</string>
-    <string name="instr_9">"\nLet's introduce another chip. The MEM (for memory) chip takes a number and stores it safely away in memory. A little white indicator shows that there is a value inside.\n\nThe MEM chip must be “read out” (by tapping on it). Once you have tapped on the chip, its cool down cycle starts, and only after that the memory slot becomes available again. A thick white frame indicates whether you should tap on the chip.\n\nFor now, the MEM chip can hold only one attacker,. Later in the game you will be able to buy upgrades, creating additional slots.\n\nMEM chips are powerful because they can take out any attacker, but they require your attention, and they are quite slow."</string>
+    <string name="instr_9">"\nLet´s introduce another chip. The MEM (for memory) chip takes a number and stores it safely away in memory. A little white indicator shows that there is a value inside.\n\nThe MEM chip must be “read out” (by tapping on it). Once you have tapped on the chip, its cool down cycle starts, and only after that the memory slot becomes available again. A thick white frame indicates whether you should tap on the chip.\n\nFor now, the MEM chip can hold only one attacker,. Later in the game you will be able to buy upgrades, creating additional slots.\n\nMEM chips are powerful because they can take out any attacker, but they require your attention, and they are quite slow."</string>
     <string name="instr_10">
 "The accumulator chip (ACC) is a bit more complex than the others, but it can be very effective against large numbers of attackers. It takes two numbers and combines them into one result.
 
@@ -166,7 +166,7 @@ He was a pionier in the field of computer art and computer graphics, and develop
 Later, as manager at the NASA, she prepared for the introduction of electronic computers by teaching herself and her staff the FORTRAN programming language."
     </string>
     <string name="tramiel">
-"As a child, Idek Tramielski survived Auschwitz. In 1947, he emigrated to the USA, where in 1954 he founded Commodore International, a company manufacturing typewriters. In 1982, Commodore presented the C64, the world's first real home computer.
+"As a child, Idek Tramielski survived Auschwitz. In 1947, he emigrated to the USA, where in 1954 he founded Commodore International, a company manufacturing typewriters. In 1982, Commodore presented the C64, the world´s first real home computer.
 
 The record-selling C64 not only had an enormous 64 kiB of RAM, it also featured hi-res graphics, digital sound, a built-in BASIC interpreter, and two joystick ports. Countless persons made their first steps into the information age on good old C64."
     </string>
@@ -258,7 +258,7 @@ The programming language Pascal is named after him."</string>
     <string name="instr_2_1">
 "In turbo mode, the attackers are stronger, faster and more numerous.
 
-Furthermore, some slots are already taken by unwanted chips you'll have to deal with."</string>
+Furthermore, some slots are already taken by unwanted chips you´ll have to deal with."</string>
     <string name="settings_disable_background">Disable background</string>
     <string name="settings_show_atts_in_range">Show attackers in range</string>
     <string name="series_completed_message_1">" "</string>
@@ -347,7 +347,7 @@ New features:
 
 Bug fixes:
 - Attackers stored in MEM or ACC sometimes remained visible on the screen.
-- The text on the chips is scaled down if it doesn\'t fit into the rectangle.
+- The text on the chips is scaled down if it does not fit into the rectangle.
 
 Miscellaneous:
 - Small changes in the hero dependency tree. For the current tree, see the game\'s wiki.
@@ -457,7 +457,7 @@ Bug fixes:
 - Attackers that were slowed down by resistors behaved weird in ACC and MEM chips.
 
 Miscellaneous:
-- The slowing effect of resistors now depend on the attacker\'s value. The stronger the attacker, the more it gets slowed.
+- The slowing effect of resistors now depend on the attackers\' value. The stronger the attacker, the more it gets slowed.
 
 Version 1.38
 ============
@@ -587,7 +587,7 @@ Bugfixes:
 
 Miscellaneous:
 - decreased overall attacker frequency
-- slightly increased Mandelbrot's effect
+- slightly increased Mandelbrot´s effect
 - Attackers now have their speed slightly altered by ACC chips
 - several adjustments to game play
 
@@ -652,7 +652,7 @@ Version 1.24
 ============
 New Features:
 - new background pictures
-- hero costs are shown on the 'hire' button
+- hero costs are shown on the ´hire´ button
 - overall small graphical improvements
 
 Bugfixes:
@@ -703,7 +703,7 @@ Miscellaneous:
     <string name="deco">Deco</string>
     <string name="coins_got">Got %1$d out of %2$d coins</string>
     <string name="coins_got_plural">Got %1$d out of %2$d coins</string>
-    <string name="neumann">"All modern computers have an internal von Neumann architecture. This way of combining memory, arithmetic unit and program control to create a freely programmable machine was largely developed by John von Neumann, who is considered one of the fathers of computer science. He was a brilliant mathematician who, among other things, laid the mathematical foundations of quantum mechanics, but also decisively advanced game theory. He was also a highly intelligent and witty person and a real party animal.\n\nThe darker side of von Neumann's life is his contributions to military research and the development and use of weapons of mass destruction."</string>
+    <string name="neumann">"All modern computers have an internal von Neumann architecture. This way of combining memory, arithmetic unit and program control to create a freely programmable machine was largely developed by John von Neumann, who is considered one of the fathers of computer science. He was a brilliant mathematician who, among other things, laid the mathematical foundations of quantum mechanics, but also decisively advanced game theory. He was also a highly intelligent and witty person and a real party animal.\n\nThe darker side of von Neumann´s life is his contributions to military research and the development and use of weapons of mass destruction."</string>
     <string name="button_wiki">"Wikipedia"</string>
     <string name="url_wikipedia_fallback">https://en.wikipedia.org/wiki/Main_Page</string>
     <string name="url_turing">https://en.wikipedia.org/wiki/Alan_Turing</string>
