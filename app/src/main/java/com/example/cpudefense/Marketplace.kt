@@ -145,6 +145,8 @@ class Marketplace(val gameView: GameView): GameElement()
         /** test if a button has been pressed: */
         if (buttonFinish?.area?.contains(event.x.toInt(), event.y.toInt()) == true)
         {
+            selected = null
+            makeButtonText(null)
             gameView.gameActivity.startNextStage(nextGameLevel)
             return true
         }
@@ -183,7 +185,7 @@ class Marketplace(val gameView: GameView): GameElement()
                 if (purse.canAfford(price) && it.data.level < it.getMaxUpgradeLevel()) {
                     purse.spend(price)
                     it.data.coinsSpent += price
-                    Fader(gameView, coins.last(), Fader.Type.DISAPPEAR)
+                    (1 until price).run { Fader(gameView, coins.last(), Fader.Type.DISAPPEAR) }
                     it.doUpgrade()
                     gameMechanics.currentHeroes(nextGameLevel)[it.data.type] = it
                     save()
@@ -378,7 +380,7 @@ class Marketplace(val gameView: GameView): GameElement()
         val coinLeftMargin = coinSize / 2
         var deltaX = coinSize + 2
         if (coins.size * deltaX + 2*coinLeftMargin > coinsArea.width())  // coins do not fit, must overlap
-        deltaX = (myArea.width() - 2*coinLeftMargin) / coins.size
+            deltaX = (myArea.width() - 2*coinLeftMargin) / coins.size
         val coinPosY = coinsArea.centerY()
         var coinPosX = coinLeftMargin
         paint.textSize = gameView.textScaleFactor * GameView.coinsAmountTextSize
@@ -392,7 +394,7 @@ class Marketplace(val gameView: GameView): GameElement()
                 coin.setCenter(coinPosX, coinPosY)
                 coin.display(canvas, viewport)
                 coinsArea.left = coin.myArea.right + coinLeftMargin
-                resources.getString(R.string.coins_available).format(coinSize).let {
+                resources.getString(R.string.coins_available).format(coins.size).let {
                     coinsArea.displayTextLeftAlignedInRect(canvas, it, paint) }
             }
         }
