@@ -300,7 +300,6 @@ class Intermezzo(var gameView: GameView): GameElement(), Fadable {
             }
         }
         instructions?.showLeaveDialogue = showLeaveDialogue
-        gameView.speedControlPanel.setInfoLine(gameView.resources.getString(R.string.stage_number).format(level.numberAsString(Attacker.Representation.HEX)))
         gameView.gameActivity.setGameActivityStatus(GameActivity.GameActivityStatus.BETWEEN_LEVELS)
     }
 
@@ -316,6 +315,7 @@ class Intermezzo(var gameView: GameView): GameElement(), Fadable {
     private fun startLevel()
     {
         if (holidayGranted()) {
+            gameView.speedControlPanel.setInfoLine(gameView.resources.getString(R.string.stage_number).format(level.numberAsString(Attacker.Representation.HEX)))
             gameView.gameActivity.startNextStage(level)
         }
     }

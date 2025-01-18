@@ -294,4 +294,5 @@ Das Verschieben ist gleichbedeutend mit einer Division durch 2."
     <string name="url_boole">https://de.wikipedia.org/wiki/George_Boole</string>
     <string name="coins_available">Verfügbare Coins: %d</string>
     <string name="coins_received_as_gift">Du hast %d Coins geschenkt bekommen.</string>
+    <string name="settings_use_hex">Nummern der Level hexadezimal anzeigen</string>
 </resources>

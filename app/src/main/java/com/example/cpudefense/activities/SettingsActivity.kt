@@ -42,6 +42,7 @@ class SettingsActivity : AppCompatActivity()
         findViewById<SwitchCompat>(R.id.switch_show_framerate)?.isChecked = settings.showFrameRate
         findViewById<SwitchCompat>(R.id.switch_fast_fast_forward)?.isChecked = settings.fastFastForward
         findViewById<SwitchCompat>(R.id.switch_keep_levels)?.isChecked = settings.keepLevels
+        findViewById<SwitchCompat>(R.id.switch_use_hex)?.isChecked = settings.showLevelsInHex
         findViewById<SwitchCompat>(R.id.switch_activate_log)?.let {
             it.isChecked = settings.activateLogging
             if (GameMechanics.enableLogging) {
@@ -61,6 +62,7 @@ class SettingsActivity : AppCompatActivity()
         settings.showFrameRate = findViewById<SwitchCompat>(R.id.switch_show_framerate)?.isChecked ?: false
         settings.fastFastForward = findViewById<SwitchCompat>(R.id.switch_fast_fast_forward)?.isChecked ?: false
         settings.keepLevels = findViewById<SwitchCompat>(R.id.switch_keep_levels)?.isChecked ?: true
+        settings.showLevelsInHex = findViewById<SwitchCompat>(R.id.switch_use_hex)?.isChecked ?: false
         settings.activateLogging = findViewById<SwitchCompat>(R.id.switch_activate_log)?.isChecked ?: false
         val prefs = getSharedPreferences(Persistency.filename_settings, MODE_PRIVATE)
         settings.saveToFile(prefs)

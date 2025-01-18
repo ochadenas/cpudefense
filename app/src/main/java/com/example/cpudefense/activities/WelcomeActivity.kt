@@ -20,6 +20,7 @@ import com.example.cpudefense.Persistency
 import com.example.cpudefense.R
 import com.example.cpudefense.Settings
 import com.example.cpudefense.Stage
+import com.example.cpudefense.gameElements.Attacker
 import com.example.cpudefense.gameElements.SevenSegmentDisplay
 
 
@@ -62,6 +63,7 @@ class WelcomeActivity : AppCompatActivity() {
         val display =
             SevenSegmentDisplay(4, (80 * resources.displayMetrics.scaledDensity).toInt(), this)
         val imageView = findViewById<ImageView>(R.id.sevenSegmentDisplay)
+        val representation = if (settings.showLevelsInHex) Attacker.Representation.HEX else Attacker.Representation.DECIMAL
         if (maxLevel.number == 0)
             displayLit = false
         when (maxLevel.series) {
@@ -69,21 +71,21 @@ class WelcomeActivity : AppCompatActivity() {
                 display.getDisplayBitmap(
                     maxLevel.number,
                     SevenSegmentDisplay.LedColors.GREEN,
-                    displayLit
+                    displayLit, representation
                 )
             )
             GameMechanics.SERIES_TURBO -> imageView.setImageBitmap(
                 display.getDisplayBitmap(
                     maxLevel.number,
                     SevenSegmentDisplay.LedColors.YELLOW,
-                    displayLit
+                    displayLit, representation
                 )
             )
             else -> imageView.setImageBitmap(
                 display.getDisplayBitmap(
                     maxLevel.number,
                     SevenSegmentDisplay.LedColors.RED,
-                    displayLit
+                    displayLit, representation
                 )
             )
         }
@@ -164,7 +166,10 @@ class WelcomeActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        val prefs = getSharedPreferences(Persistency.filename_settings, MODE_PRIVATE)
+        settings.loadFromFile(prefs)
         setupButtons()
+        showLevelReached()
     }
 
     fun resumeGame(@Suppress("UNUSED_PARAMETER") v: View) {
