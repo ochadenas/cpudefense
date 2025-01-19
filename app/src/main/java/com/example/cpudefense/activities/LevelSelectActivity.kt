@@ -166,8 +166,6 @@ class LevelSelectActivity : AppCompatActivity() {
              * @param stageSummary The dictionary with the level data. May be an empty set.
              */
     {
-        val representation = if (settings.showLevelsInHex)
-            Attacker.Representation.HEX else Attacker.Representation.DECIMAL
         /* create empty first and last stage, if necessary */
         if (stageSummary.isEmpty())
             stageSummary[1] = Stage.Summary()  // create empty first level
@@ -180,7 +178,7 @@ class LevelSelectActivity : AppCompatActivity() {
         for ((level, summary) in stageSummary.entries)
         {
             val levelEntryView = Button(this)
-            val levelNumber = Stage.numberToString(level, representation)
+            val levelNumber = Stage.numberToString(level, settings.showLevelsInHex)
             var textString = getString(R.string.level_entry).format(levelNumber)
             val coinsMaxAvailable = when {
                 // this is a hack to handle levels where coinsMaxAvailable is not set correctly

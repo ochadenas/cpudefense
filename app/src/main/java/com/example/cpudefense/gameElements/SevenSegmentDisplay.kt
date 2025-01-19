@@ -55,10 +55,11 @@ class SevenSegmentDisplay(private val numberOfDigits: Int, val size: Int, activi
     }
 
 
-    fun getDisplayBitmap(number: Int, ledColor: LedColors, isLit: Boolean = true, representation: Attacker.Representation = Attacker.Representation.DECIMAL): Bitmap
+    fun getDisplayBitmap(number: Int, ledColor: LedColors, isLit: Boolean = true, radix: Int = 10): Bitmap
     {
-        val radix = if (representation == Attacker.Representation.HEX) 16 else 10
         val bitmap = Bitmap.createBitmap(numberOfDigits*sizeX+2*margin, sizeY+2*margin, Bitmap.Config.ARGB_8888)
+        if ((radix <= 0) || (radix > 16))
+            return bitmap // value not allowed. In fact, only 10 or 16 are reasonable bases
         val canvas = Canvas(bitmap)
         val destRect = Rect(0, 0, sizeX, sizeY)
         var n = number

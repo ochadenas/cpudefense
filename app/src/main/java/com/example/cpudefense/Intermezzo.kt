@@ -113,8 +113,8 @@ class Intermezzo(var gameView: GameView): GameElement(), Fadable {
                 lines.add(resources.getString(R.string.cleared))
                 if (coinsGathered>0)
                     lines.add(resources.getString(R.string.coins_gathered).format(coinsGathered))
-                val representation = if (gameView.gameActivity.settings.showLevelsInHex) Attacker.Representation.HEX else Attacker.Representation.DECIMAL
-                lines.add(resources.getString(R.string.next_stage).format(Stage.numberToString(level.number, representation)))
+                lines.add(resources.getString(R.string.next_stage)
+                              .format(Stage.numberToString(level.number, gameView.gameActivity.settings.showLevelsInHex)))
                 if (gameView.gameMechanics.currentHeroesOnLeave(level).isNotEmpty())
                     lines += heroesOnLeaveText()
                 textOnContinueButton = resources.getString(R.string.enter_game)
