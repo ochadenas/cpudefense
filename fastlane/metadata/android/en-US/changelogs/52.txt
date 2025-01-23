@@ -1,0 +1,8 @@
+New Features:
+- Stage numbers are optionally shown in hex (must be activated in Settings)
+
+Bug fixes:
+- When leaving the hero screen, the current hero is de-selected. Fixes issue #206.
+- Coins in the hero screen are no longer shown separately if there are too many of them. Fixes issue #208.
+- If an attacker becomes released from ACC or MEM during its fade-out animation, it no longer disappears. Fixes issue #212.
+
