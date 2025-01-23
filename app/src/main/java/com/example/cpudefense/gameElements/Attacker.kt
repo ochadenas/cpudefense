@@ -391,7 +391,12 @@ open class Attacker(network: Network, representation: Representation = Represent
     }
 
     override fun fadeDone(type: Fader.Type) {
-        scale = 0.0f
+        if (data.state == State.ACTIVE)
+            // this may happen if an attacker is released during its fade animation. In that case,
+            // fading must be cancelled. See issue #212
+            scale = 1.0f
+        else
+            scale = 0.0f
     }
 
     override fun setOpacity(opacity: Float) {
