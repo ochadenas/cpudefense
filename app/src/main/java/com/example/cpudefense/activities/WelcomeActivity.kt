@@ -20,7 +20,6 @@ import com.example.cpudefense.Persistency
 import com.example.cpudefense.R
 import com.example.cpudefense.Settings
 import com.example.cpudefense.Stage
-import com.example.cpudefense.gameElements.Attacker
 import com.example.cpudefense.gameElements.SevenSegmentDisplay
 
 

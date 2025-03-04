@@ -238,14 +238,9 @@ class GameView(context: Context):
 
     }
 
-    override fun onTouchEvent(motionEvent: MotionEvent): Boolean {
-        return this.gestureDetector.onTouchEvent(motionEvent)
-    }
-
-    override fun onSingleTapUp(motionEvent: MotionEvent): Boolean
-    /** detects a simple tap, as opposed to a long press */
-    {
-        return false
+    override fun onTouchEvent(event: MotionEvent?): Boolean {
+        this.gestureDetector.onTouchEvent(event)
+        return true
     }
 
     override fun onDown(motionEvent: MotionEvent): Boolean
@@ -302,6 +297,10 @@ class GameView(context: Context):
     }
 
     override fun onShowPress(p0: MotionEvent) {
+    }
+
+    override fun onSingleTapUp(p0: MotionEvent): Boolean {
+        return false
     }
 
     override fun onScroll(p0: MotionEvent?, p1: MotionEvent, dx: Float, dy: Float): Boolean {
