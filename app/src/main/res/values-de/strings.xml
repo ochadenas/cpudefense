@@ -11,7 +11,7 @@
     <string name="failed">Level nicht geschafft.</string>
     <string name="success">Alle Level geschafft!</string>
     <string name="cleared">Level geschafft.</string>
-    <string name="last_stage">Letzter Level war %d.</string>
+    <string name="last_stage">Letzter Level war %s.</string>
     <string name="win">Gewonnen.</string>
     <string name="next_stage">Nächster Level: %s</string>
     <string name="coins_gathered">Gesammelte Coins: %d.</string>

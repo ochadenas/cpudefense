@@ -10,7 +10,7 @@
     <string name="failed">Failed to clear stage.</string>
     <string name="success">All stages cleared!</string>
     <string name="cleared">Stage cleared.</string>
-    <string name="last_stage">Last stage was: %d</string>
+    <string name="last_stage">Last stage was: %s</string>
     <string name="win">You win.</string>
     <string name="next_stage">Next stage: %s</string>
     <string name="coins_gathered">Coins gathered: %d.</string>

@@ -81,7 +81,8 @@ class Intermezzo(var gameView: GameView): GameElement(), Fadable {
         {
             Type.GAME_LOST -> {
                 lines.add(resources.getString(R.string.failed))
-                lines.add(resources.getString(R.string.last_stage).format(level.number))
+                lines.add(resources.getString(R.string.last_stage)
+                              .format(Stage.numberToString(level.number, gameView.gameActivity.settings.showLevelsInHex)))
                 textOnContinueButton = resources.getString(R.string.button_retry)
                 gameView.gameActivity.setLastPlayedStage(level)
             }

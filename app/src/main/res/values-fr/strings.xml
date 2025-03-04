@@ -15,7 +15,7 @@
     <string name="coins_gathered">Écus collectés : %d.</string>
     <string name="next_stage">Prochain niveau: %s</string>
     <string name="win">Gagné.</string>
-    <string name="last_stage">Le dernier niveau était %d.</string>
+    <string name="last_stage">Le dernier niveau était %s.</string>
     <string name="cleared">Niveau réussi.</string>
     <string name="success">Tous les niveaus réussis.</string>
     <string name="button_playlevel">Jouer ce niveau</string>
