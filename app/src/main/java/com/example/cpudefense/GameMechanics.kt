@@ -175,7 +175,7 @@ class GameMechanics {
     var frameCount = 0
 
     enum class GamePhase { START, RUNNING, INTERMEZZO, MARKETPLACE, PAUSED }
-    enum class GameSpeed { NORMAL, MAX }
+    enum class GameSpeed { NORMAL, FAST, MAX }
 
     fun deleteProgressOfSeries(mode: LevelMode)
             /** initializes the data structures for level summaries, heroes and coin purse with empty values.
@@ -206,7 +206,7 @@ class GameMechanics {
              * and the function always returns the same value.
              */
     {
-        if (state.speed == GameSpeed.MAX)
+        if (state.speed == GameSpeed.FAST)
             return defaultSpeedFactor
         else
             return defaultSpeedFactor

@@ -88,6 +88,7 @@ class GameView(context: Context):
     val playIcon: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.play_active)
     val pauseIcon: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.pause_active)
     val fastIcon: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.fast_active)
+    val fastestIcon: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.fastest_active)
     val returnIcon: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.cancel_active)
     val moveLockIcon: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.move_lock)
     val moveUnlockIcon: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.move_unlock)
@@ -237,16 +238,21 @@ class GameView(context: Context):
 
     }
 
-    override fun onTouchEvent(event: MotionEvent?): Boolean {
-        this.gestureDetector.onTouchEvent(event)
-        return true
+    override fun onTouchEvent(motionEvent: MotionEvent): Boolean {
+        return this.gestureDetector.onTouchEvent(motionEvent)
     }
 
-    override fun onDown(motionEvent: MotionEvent): Boolean {
+    override fun onSingleTapUp(motionEvent: MotionEvent): Boolean
+    /** detects a simple tap, as opposed to a long press */
+    {
+        return false
+    }
+
+    override fun onDown(motionEvent: MotionEvent): Boolean
+    {
         when (gameMechanics.state.phase)
         {
-            GamePhase.RUNNING ->
-            {
+            GamePhase.RUNNING -> {
                 if (speedControlPanel.onDown(motionEvent))
                     return true
                 gameMechanics.currentlyActiveStage?.network?.let {
@@ -258,12 +264,9 @@ class GameView(context: Context):
                 }
                 return false
             }
-            GamePhase.INTERMEZZO ->
-                return intermezzo.onDown(motionEvent)
-            GamePhase.MARKETPLACE ->
-                return marketplace.onDown(motionEvent)
-            GamePhase.PAUSED ->
-            {
+            GamePhase.INTERMEZZO -> return intermezzo.onDown(motionEvent)
+            GamePhase.MARKETPLACE -> return marketplace.onDown(motionEvent)
+            GamePhase.PAUSED -> {
                 if (speedControlPanel.onDown(motionEvent))
                     return true
                 gameMechanics.currentlyActiveStage?.network?.let {
@@ -271,8 +274,7 @@ class GameView(context: Context):
                         return true
                 }
             }
-            else ->
-                return false
+            else -> return false
         }
         return false
     }
@@ -302,10 +304,6 @@ class GameView(context: Context):
     override fun onShowPress(p0: MotionEvent) {
     }
 
-    override fun onSingleTapUp(p0: MotionEvent): Boolean {
-        return false
-    }
-
     override fun onScroll(p0: MotionEvent?, p1: MotionEvent, dx: Float, dy: Float): Boolean {
         when (gameMechanics.state.phase)
         {
@@ -322,13 +320,7 @@ class GameView(context: Context):
         return false
     }
 
-    override fun onLongPress(p0: MotionEvent) {
-        p0.let {
-            when (gameMechanics.state.phase) {
-                GamePhase.RUNNING -> gameMechanics.currentlyActiveStage?.network?.onLongPress(p0)
-                else -> {}
-            }
-        }
+    override fun onLongPress(motionEvent: MotionEvent)     {
     }
 
     override fun onFling(p0: MotionEvent?, p1: MotionEvent, p2: Float, p3: Float): Boolean {

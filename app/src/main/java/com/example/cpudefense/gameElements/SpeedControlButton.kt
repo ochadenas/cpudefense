@@ -9,7 +9,7 @@ import com.example.cpudefense.effects.Fader
 
 class SpeedControlButton(val gameView: GameView, val gameMechanics: GameMechanics, var type: Type = Type.PAUSE, private val panel: SpeedControl): Fadable
 {
-    enum class Type { PAUSE, FAST, NORMAL, RETURN, LOCK, UNLOCK }
+    enum class Type { PAUSE, FAST, FASTEST, NORMAL, RETURN, LOCK, UNLOCK }
 
     var area = Rect()
     var paint = Paint()
@@ -22,6 +22,7 @@ class SpeedControlButton(val gameView: GameView, val gameMechanics: GameMechanic
         bitmapOfType[Type.PAUSE] = Bitmap.createScaledBitmap(gameView.pauseIcon, size, size, true)
         bitmapOfType[Type.NORMAL] = Bitmap.createScaledBitmap(gameView.playIcon, size, size, true)
         bitmapOfType[Type.FAST] = Bitmap.createScaledBitmap(gameView.fastIcon, size, size, true)
+        bitmapOfType[Type.FASTEST] = Bitmap.createScaledBitmap(gameView.fastestIcon, size, size, true)
         bitmapOfType[Type.RETURN] = Bitmap.createScaledBitmap(gameView.returnIcon, size, size, true)
         bitmapOfType[Type.LOCK] = Bitmap.createScaledBitmap(gameView.moveLockIcon, size, size, true)
         bitmapOfType[Type.UNLOCK] = Bitmap.createScaledBitmap(gameView.moveUnlockIcon, size, size, true)
@@ -51,6 +52,12 @@ class SpeedControlButton(val gameView: GameView, val gameMechanics: GameMechanic
                     panel.resetButtons()
                 }
                 Type.FAST -> {
+                    gameView.gameActivity.setGameSpeed(GameMechanics.GameSpeed.FAST)
+                    gameView.gameActivity.changeToGamePhase(GameMechanics.GamePhase.RUNNING)
+                    panel.resetButtons()
+                    type = Type.NORMAL
+                }
+                Type.FASTEST -> {
                     gameView.gameActivity.setGameSpeed(GameMechanics.GameSpeed.MAX)
                     gameView.gameActivity.changeToGamePhase(GameMechanics.GamePhase.RUNNING)
                     panel.resetButtons()

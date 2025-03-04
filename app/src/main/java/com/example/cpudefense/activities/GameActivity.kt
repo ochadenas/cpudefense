@@ -34,7 +34,6 @@ import com.example.cpudefense.Stage
 import com.example.cpudefense.Stage.Identifier
 import com.example.cpudefense.StageCatalog
 import com.example.cpudefense.TemperatureDamageException
-import com.example.cpudefense.gameElements.Attacker
 import com.example.cpudefense.utils.Logger
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
@@ -445,12 +444,11 @@ class GameActivity : Activity() {
     fun setGameSpeed(speed: GameSpeed) {
         gameMechanics.state.speed = speed
         Persistency(this).saveGeneralState(gameMechanics)
-        if (speed == GameSpeed.MAX) {
-            updateDelay = fastForwardDelay
-            if (settings.fastFastForward)
-                updateDelay = fastFastForwardDelay
-        } else {
-            updateDelay = defaultDelay
+        updateDelay = when (speed)
+        {
+            GameSpeed.NORMAL -> defaultDelay
+            GameSpeed.FAST -> fastForwardDelay
+            GameSpeed.MAX -> fastFastForwardDelay
         }
         logger?.log("Game speed set to %s. Update delay is %s".format(speed.toString(), updateDelay.toString()))
     }

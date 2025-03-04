@@ -19,9 +19,10 @@ class SpeedControl(var gameView: GameView)
     private val gameMechanics = gameView.gameMechanics
     private var button1 = SpeedControlButton(gameView, gameMechanics, SpeedControlButton.Type.FAST, this)
     private var button2 = SpeedControlButton(gameView, gameMechanics, SpeedControlButton.Type.PAUSE, this)
+    private var button3 = SpeedControlButton(gameView, gameMechanics, SpeedControlButton.Type.FASTEST, this)
     private var lockButton = SpeedControlButton(gameView, gameMechanics, SpeedControlButton.Type.UNLOCK, this)
     private var returnButton = SpeedControlButton(gameView, gameMechanics, SpeedControlButton.Type.RETURN, this)
-    private var buttons = listOf( button1, button2, returnButton, lockButton )
+    private var buttons = mutableListOf( button1, button2, returnButton, lockButton )
     private var areaRight = Rect(0,0,0,0)
     private var areaLeft = Rect(0,0,0,0)
     private var areaCenter = Rect(0,0,0,0)
@@ -35,6 +36,8 @@ class SpeedControl(var gameView: GameView)
         val actualButtonSize = (GameView.speedControlButtonSize * gameView.resources.displayMetrics.density.toInt() *
             if (gameView.gameActivity.settings.configUseLargeButtons) 1.6f else 1.0f).toInt()
         val margin = actualButtonSize / 5   // space between the buttons
+        if (gameView.gameActivity.settings.fastFastForward)
+            buttons.add(button3) // add a "fast fast forward" button
         buttons.forEach {it.setSize(actualButtonSize)}
         areaRight.right = parentArea.right - margin
         areaRight.bottom = parentArea.bottom - margin
@@ -42,6 +45,7 @@ class SpeedControl(var gameView: GameView)
         areaRight.top = areaRight.bottom - actualButtonSize
         button1.area.setCenter(areaRight.left + actualButtonSize / 2, areaRight.centerY())
         button2.area.setCenter(areaRight.right - actualButtonSize / 2, areaRight.centerY())
+        button3.area.setCenter(areaRight.left - actualButtonSize / 2 - margin, areaRight.centerY())
         // put the 'return' button on the other side
         areaLeft = Rect(areaRight)
         areaLeft.setLeft(margin)
@@ -83,10 +87,12 @@ class SpeedControl(var gameView: GameView)
     {
         button1.type = SpeedControlButton.Type.FAST
         button2.type = SpeedControlButton.Type.PAUSE
+        button3.type = SpeedControlButton.Type.FASTEST
     }
 
     fun onDown(p0: MotionEvent): Boolean {
-        return button1.onDown(p0) || button2.onDown(p0) || returnButton.onDown(p0) || lockButton.onDown(p0)
+        buttons.forEach { if (it.onDown(p0)) return true }
+        return false
     }
 
     fun display(canvas: Canvas) {
