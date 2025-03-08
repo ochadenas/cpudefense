@@ -30,6 +30,7 @@ class Instructions(val gameView: GameView, var stage: Stage.Identifier, var show
     private var funFact = if (Random.nextFloat() > 0.3)
         resources.getString(R.string.instr_did_you_know) + "\n\n" +
         resources.getStringArray(R.array.fun_fact).random()
+        // resources.getStringArray(R.array.fun_fact).last() // for debugging purposes
     else ""
     var bitmap: Bitmap = createBitmap(instructionText(stage.number), gameView.width-2*margin)
 

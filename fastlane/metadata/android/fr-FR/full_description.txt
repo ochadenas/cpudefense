@@ -1,0 +1,10 @@
+Chip Defense est un jeu décontracté pour les appareils Android du genre « tower defense ». Il est centré sur la conception de circuits électroniques et de puces logiques, évoquant le bon vieux temps des microprocesseurs 8 bits.
+
+
+Dans ce jeu, les attaquants sont représentés par des bits et des octets. Pour défendre le processeur contre eux, le joueur construit des puces dans les emplacements prévus à cet effet. Ces « tours » infligent des dégâts par des opérations telles que la soustraction, le décalage vers la droite, l´opération bitwise ET, etc. Comme d´habitude dans ces jeux, les puces peuvent être améliorées.
+
+
+Le jeu présente des « héros et héroïnes de l´ère de l´information » : des personnes qui ont eu une grande influence sur le développement des ordinateurs modernes. Ils sont accompagnés d´une courte biographie et fournissent des bonus globaux qui facilitent considérablement le jeu.
+
+
+Il existe actuellement plus de 25 héros et héroïnes. Le jeu comprend 32 niveaux prédéfinis, mais il dispose également d´un mode « sans fin » avec des niveaux générés de manière aléatoire. Les langues supportées sont l´anglais, le français et l´allemand.
