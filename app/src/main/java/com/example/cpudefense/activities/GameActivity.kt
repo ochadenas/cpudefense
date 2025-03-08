@@ -55,7 +55,7 @@ class GameActivity : Activity() {
     /** delta T in normal operation */
     private val defaultDelay = 40L
     /** delta T when accelerated */
-    private val fastForwardDelay = 7L
+    private val fastForwardDelay = 9L
     private val fastFastForwardDelay = 3L
     private var updateDelay: Long = defaultDelay
     private val effectsDelay: Long = 15
