@@ -1,0 +1,10 @@
+New Features:
+- Added a “really fast forward” button (must be enabled in the settings)
+
+Bug fixes:
+- level number was not shown in hex when failing a level
+
+Miscellaneous:
+- Made “fast forward” mode slightly slower
+- New "did you know" entry
+

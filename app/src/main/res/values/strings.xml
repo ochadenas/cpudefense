@@ -277,7 +277,7 @@ Furthermore, some slots are already taken by unwanted chips you´ll have to deal
     <string name="settings_keep_levels">Keep created stages in “endless” mode</string>
     <string name="settings_use_hex">Display stage numbers in hex</string>
     <string name="settings_activate_log">Enable debug logging</string>
-    <string name="settings_fast_fast_forward">Use really fast forward</string>
+    <string name="settings_fast_fast_forward">Show “really fast forward” button</string>
     <string name="game_paused">GAME PAUSED</string>
     <string name="overheat">CPU damage from overheating</string>
     <string-array name="fun_fact">

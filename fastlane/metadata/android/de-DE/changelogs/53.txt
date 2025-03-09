@@ -1,0 +1,9 @@
+Neue Funktionen:
+- Neue Schaltfläche „Schneller Zeitraffer“ (muss in den Einstellungen aktiviert werden)
+
+Fehlerbehebungen:
+- Die Levelnummer wurde nicht in Hex angezeigt, wenn ein Level nicht bestanden wurde
+
+Sonstiges:
+- Der „Zeitraffer“-Modus wurde leicht verlangsamt
+- Neuer „Schon gewusst“-Eintrag

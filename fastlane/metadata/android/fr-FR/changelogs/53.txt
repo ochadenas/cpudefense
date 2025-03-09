@@ -1,0 +1,9 @@
+Nouvelles fonctionnalités :
+- Ajout d'un bouton « fast forward rapide » (doit être activé dans les paramètres)
+
+Corrections de bugs :
+- le numéro de niveau n'était pas affiché en hex lorsqu'on échouait à un niveau
+
+Divers :
+- Le mode « fast forward » est devenu légèrement plus lent
+- Nouvelle entrée « Le saviez-vous ».
