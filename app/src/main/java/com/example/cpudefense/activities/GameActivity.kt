@@ -55,7 +55,7 @@ class GameActivity : Activity() {
     /** delta T in normal operation */
     private val defaultDelay = 40L
     /** delta T when accelerated */
-    private val fastForwardDelay = 9L
+    private val fastForwardDelay = 8L
     private val fastFastForwardDelay = 3L
     private var updateDelay: Long = defaultDelay
     private val effectsDelay: Long = 15
@@ -540,7 +540,7 @@ class GameActivity : Activity() {
             }
             gameView.scoreBoard.update()
             // determine whether to update the display
-            if (timeAtStartOfCycle-timeOfLastFrame > 30 && displayJob?.isActive != true)
+            if (timeAtStartOfCycle-timeOfLastFrame > 20 && displayJob?.isActive != true)
                 displayJob = GlobalScope.launch { display() }
             val elapsed = SystemClock.uptimeMillis() - timeAtStartOfCycle
             val wait: Long =
