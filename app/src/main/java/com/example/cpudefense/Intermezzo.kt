@@ -29,6 +29,9 @@ import kotlin.random.Random
 - Susan Landau
 - esoteric programming languages
 - six women programmers for ENIAC (cf. Frances Spence)
+- IBM 650
+- bi-quinary coded decimal
+- Olivetti Programma 101
  */
 
 class Intermezzo(var gameView: GameView): GameElement(), Fadable {
