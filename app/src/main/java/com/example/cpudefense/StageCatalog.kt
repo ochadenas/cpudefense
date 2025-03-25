@@ -6,10 +6,10 @@ import kotlin.math.sqrt
 import kotlin.random.Random
 
 class StageCatalog
+/** This class is used to create all the pre-defined [Stage]s in series 1 and 2.
+ * It is not meant to be instantiated.
+ */
 {
-    /** This class is used to create all the pre-defined stages in series 1 and 2.
-     * It is not meant to be instantiated.
-     */
     companion object {
         private val possibleChipTypesWhereObstaclesCanBePut =
             setOf(Chip.ChipType.EMPTY, Chip.ChipType.ADD, Chip.ChipType.SHL, Chip.ChipType.NOP)

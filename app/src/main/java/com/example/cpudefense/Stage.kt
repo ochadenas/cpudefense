@@ -14,7 +14,7 @@ import kotlin.random.Random
 class Stage(var gameMechanics: GameMechanics, var gameView: GameView)
 {
     class Identifier(var series: Int = GameMechanics.SERIES_NORMAL, var number: Int =0)
-    /** A stage is identified by the combination of series (1 to 3) and the level number. */
+    /** A [Stage] is identified by the combination of [series] (1 to 3) and the level [number]. */
     {
         companion object {
             val startOfNewGame = Identifier(GameMechanics.SERIES_NORMAL, 1)
@@ -22,19 +22,21 @@ class Stage(var gameMechanics: GameMechanics, var gameView: GameView)
         }
 
         fun next(): Identifier
-                /** returns an identifier of the next level */
+        /** returns an identifier of the next level */
         {
             return Identifier(series, number + 1)
         }
 
         @Suppress("unused")
         fun previous(): Identifier
-                /** returns an identifier of the previous level */
+        /** returns an identifier of the previous level */
         {
             return Identifier(series, if (number <= 1) 1 else number - 1)
         }
 
-        fun isGreaterThan(compare: Identifier): Boolean {
+        fun isGreaterThan(compare: Identifier): Boolean
+        /** used to establish a natural order of stage [Identifier]s */
+        {
             return when {
                 compare.series > this.series -> false
                 compare.series < this.series -> true
@@ -43,7 +45,7 @@ class Stage(var gameMechanics: GameMechanics, var gameView: GameView)
         }
 
         fun mode(): GameMechanics.LevelMode
-                /** check whether we are in 'endless' or 'basic' mode */
+        /** check whether we are in 'endless' or 'basic' mode */
         {
             if (series == GameMechanics.SERIES_ENDLESS)
                 return GameMechanics.LevelMode.ENDLESS
@@ -104,9 +106,9 @@ class Stage(var gameMechanics: GameMechanics, var gameView: GameView)
     }
 
     fun numberAsString(): String
-            /** returns the number in the desired representation.
-             * Only works with numbers up to xFFFF or 11111111.
-             */
+    /** returns the number in the desired representation.
+     * Only works with numbers up to xFFFF or 11111111.
+     */
     {
         val number = data.ident.number
         return numberToString(number, gameView.gameActivity.settings.showLevelsInHex)
@@ -119,10 +121,10 @@ class Stage(var gameMechanics: GameMechanics, var gameView: GameView)
 
     fun calculateRewardCoins(previousSummary: Summary?): Int
      /** calculate the coins available for completing this level,
-             * taking into account the coins already got in previous games.
-             * @param previousSummary Saved data set for this level, contains number of coins got earlier
-             * @return number of coins for the current game
-              */
+      * taking into account the coins already got in previous games.
+      * @param previousSummary Saved data set for this level, contains number of coins got earlier
+      * @return number of coins for the current game
+      */
     {
         summary = previousSummary ?: Summary()
         summary.coinsAvailable = rewardCoins - summary.coinsGot
@@ -131,10 +133,10 @@ class Stage(var gameMechanics: GameMechanics, var gameView: GameView)
     }
 
     fun provideStructureData(): Data
-            /** serialize all objects that belong to this stage
-             * and return the data object
-             * for saving and restoring the game.
-             */
+    /** serialize all objects that belong to this stage
+     * and return the data object
+     * for saving and restoring the game.
+     */
     {
         data.gridSizeX = network.data.gridSizeX
         data.gridSizeY = network.data.gridSizeY
@@ -153,10 +155,10 @@ class Stage(var gameMechanics: GameMechanics, var gameView: GameView)
         return data
     }
     fun provideData(): Data
-            /** serialize all objects that belong to this stage
-             * and return the data object
-             * for saving and restoring the game.
-             */
+    /** serialize all objects that belong to this stage
+     * and return the data object
+     * for saving and restoring the game.
+     */
     {
         provideStructureData()
         data.attackers.clear()
@@ -257,21 +259,20 @@ class Stage(var gameMechanics: GameMechanics, var gameView: GameView)
     }
 
     fun chipCount(type: Chip.ChipType): Int
-            /**
-             * @param type the type of chips to be counted
-             *  @return the number of chips of this type in the network
-             *  */
+    /** @return the number of [chip]s of this [type] in the network */
     {
         return chips.values.filter { it.chipData.type == type }.size
     }
 
     fun attackerCount(): Int
+    /** @return the number of attackers in the network */
     {
         return network.vehicles.filter {
             it.data.state == Vehicle.State.ACTIVE }.size
     }
 
     fun nextWave(): Wave?
+    /** starts the next [Wave] of the level. Returns null after the last wave. */
     {
         when (gameMechanics.state.phase)
         {
@@ -295,7 +296,7 @@ class Stage(var gameMechanics: GameMechanics, var gameView: GameView)
     /* methods for creating and setting up the stage */
 
     fun initializeNetwork(dimX: Int, dimY: Int)
-    /** creates an empty network with the given grid dimensions */
+    /** creates an empty [Network] with the given grid dimensions [dimX], [dimY] */
     {
         sizeX = dimX
         sizeY = dimY
@@ -304,13 +305,11 @@ class Stage(var gameMechanics: GameMechanics, var gameView: GameView)
     }
 
     fun createChip(gridX: Int, gridY: Int, ident: Int = -1, type: Chip.ChipType = Chip.ChipType.EMPTY): Chip
-            /**
-             * creates a chip at the given position. If an ident is given, it is used,
-             * otherwise a new ident is created.
-             * @param gridX Position in grid coordinates
-             * @param gridY Position in grid coordinates
-             * @param ident Node ident, or -1 to choose a new one
-             */
+    /** creates a [Chip] at the given position. If an ident is given, it is used, otherwise a new ident is created.
+     * @param gridX Position in grid coordinates
+     * @param gridY Position in grid coordinates
+     * @param ident Node ident, or -1 to choose a new one
+     */
     {
         var id = ident
         lateinit var chip: Chip
@@ -358,9 +357,9 @@ class Stage(var gameMechanics: GameMechanics, var gameView: GameView)
     }
 
     fun createTrack(linkIdents: List<Int>, ident: Int)
-            /** adds a track of connected links
-             * @param linkIdents List of the link idents in the track
-             * */
+    /** adds a track of connected links
+     * @param linkIdents List of the link idents in the track
+     * */
     {
         val track = network.createTrack(ident, linkIdents, false)
         tracks[ident] = track
@@ -393,6 +392,7 @@ class Stage(var gameMechanics: GameMechanics, var gameView: GameView)
     }
 
     fun difficultyOfObstacles(): Double
+    /** @return the sum of all obstacle difficulties for this [Stage] */
     {
         var sumOfObstacles = 0.0
         chips.values.forEach()
@@ -401,6 +401,9 @@ class Stage(var gameMechanics: GameMechanics, var gameView: GameView)
     }
 
     fun calculateDifficulty()
+    /** calculates a difficulty estimation, based on path length and obstacle strength,
+     * and stores it in [data]
+     */
     {
         var minLength = 999
         var sumLength = 0
@@ -421,7 +424,7 @@ class Stage(var gameMechanics: GameMechanics, var gameView: GameView)
             data.difficulty = 999.0  // too difficult
             return
         }
-        /* calculate weighted difficulty */
+        // calculate weighted difficulty
         var difficulty = 16.0 // base value
         difficulty -= sumLength.toDouble()/tracks.size * 0.4  // mean length of tracks
         difficulty -= minLength * 0.7 // shortest track
@@ -437,17 +440,17 @@ class Stage(var gameMechanics: GameMechanics, var gameView: GameView)
     }
 
     fun takeSnapshot(size: Int): Bitmap?
-            /** gets a miniature picture of the current level
-             * @param size snapshot size in pixels (square)
-             * @return the bitmap that holds the snapshot
-             */
+    /** gets a miniature picture of the current level
+     * @param size snapshot size in pixels (square)
+     * @return the bitmap that holds the snapshot
+     */
     {
         val p: Viewport = gameView.viewport
         if (p.viewportWidth > 0 && p.viewportHeight > 0)
         {
             var bigSnapshot = createBitmap(p.viewportWidth, p.viewportHeight)
             network.makeSnapshot(Canvas(bigSnapshot), p)
-            /* blur the image */
+            // blur the image
             bigSnapshot = bigSnapshot.blur(gameView.gameActivity, 3f) ?: bigSnapshot
             return Bitmap.createScaledBitmap(bigSnapshot, size, size, true)
         }

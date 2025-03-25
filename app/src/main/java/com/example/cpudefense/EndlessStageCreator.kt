@@ -31,7 +31,6 @@ class EndlessStageCreator(val stage: Stage)
     private val paths = mutableListOf<Path>()
 
     private var chipIdent = 0
-    /** global count for the chips */
 
     enum class Direction {UP, DOWN, LEFT, RIGHT }
     enum class SectorType { ENTRY, EXIT, NORMAL }
@@ -42,12 +41,12 @@ class EndlessStageCreator(val stage: Stage)
     fun createStage(level: Stage.Identifier)
         /**
          * Main method for the stage creation algorithm. It works as follows:
-         * First, the whole stage is divided into a coarse grid of Sectors.
-         * Through the Sectors, several Paths are laid that run from a start sector
+         * First, the whole stage is divided into a coarse grid of [Sector]s.
+         * Through the sectors, several [Path]s are laid that run from a start sector
          * to the exit sector.
-         * Then the Sectors are populated with nodes, according to the incoming and
-         * outgoing connections. Finally, Tracks are created from all nodes of the
-         * Sectors on the Path.
+         * Then the sectors are populated with [Node]s, according to the incoming and
+         * outgoing connections. Finally, tracks are created from all nodes of the
+         * sectors on the path.
          * @param level The identifier of the level to be created
          */
     {
@@ -323,7 +322,7 @@ class EndlessStageCreator(val stage: Stage)
     }
 
     class Path
-    /** a list of sectors that constitute a continuous path from an entry to an exit point */
+    /** a list of [Sector]s that constitute a continuous path from an entry to an exit point */
     {
         var sectors = mutableListOf<Sector>()
         var nodes = mutableListOf<Chip>()
