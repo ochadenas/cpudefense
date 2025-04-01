@@ -689,6 +689,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int):
     }
 
     private fun createBitmapForType(): Bitmap?
+    /** @return the bitmap for a chip of the appropriate type. Null for empty chips, or entry/exit. */
     {
         return when (chipData.type)
         {
@@ -757,7 +758,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int):
     }
 
     private fun createBitmap(text: String): Bitmap?
-    /** creates the bitmap of the chip with the current colours */
+    /** creates the bitmap of a 'standard' chip with [text], using the current colours */
     {
         val bitmap: Bitmap? = actualRect?.let {
             val bitmap = Bitmap.createBitmap(it.width(), it.height(), Bitmap.Config.ARGB_8888)
@@ -794,7 +795,9 @@ open class Chip(val network: Network, gridX: Int, gridY: Int):
         return bitmap
     }
 
-    private fun showUpgrades() {
+    private fun showUpgrades()
+    /** displays boxes with all available upgrades */
+    {
         if (chipData.sold)
             return
         val alternatives = CopyOnWriteArrayList<ChipUpgrades>()
@@ -957,9 +960,9 @@ open class Chip(val network: Network, gridX: Int, gridY: Int):
         val desiredTypes = chipStrength.keys
 
         fun createFromData(network: Network, data: Data): Chip
-                /** reconstruct an object based on the saved data
-                 * and set all inner proprieties
-                 */
+        /** reconstruct an object based on the saved data
+         * and set all inner proprieties
+         */
         {
             val gridX = data.node.gridX.toInt()
             val gridY = data.node.gridY.toInt()
@@ -1002,9 +1005,9 @@ open class Chip(val network: Network, gridX: Int, gridY: Int):
         }
 
         fun retrieve(): Attacker?
-                /** removes the last attacker from the register.
-                 * @return the attacker, or null if the register is empty.
-                 */
+        /** removes the last attacker from the register.
+         * @return the attacker, or null if the register is empty.
+         */
         {
             try {
                 val attacker = register.removeAt(0)
