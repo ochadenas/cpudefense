@@ -329,7 +329,7 @@ class Stage(var gameMechanics: GameMechanics, var gameView: GameView)
         }
         id = network.addNode(chip, id)
         chips[id] = chip
-        chip.setIdent(id)
+        chip.data.ident = id
         return chip
     }
 

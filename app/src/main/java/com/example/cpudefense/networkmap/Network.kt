@@ -7,8 +7,6 @@ import android.view.MotionEvent
 import com.example.cpudefense.EndlessStageCreator
 import com.example.cpudefense.GameMechanics
 import com.example.cpudefense.GameView
-import com.example.cpudefense.R
-import com.example.cpudefense.gameElements.Attacker
 import com.example.cpudefense.gameElements.Chip
 import com.example.cpudefense.gameElements.GameElement
 import com.example.cpudefense.gameElements.Vehicle
