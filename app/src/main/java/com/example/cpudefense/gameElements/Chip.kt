@@ -766,7 +766,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int):
             val paint = Paint()
 
             paint.textSize = (GameView.chipTextSize * network.gameView.textScaleFactor) *
-                    if (theNetwork.gameView.gameActivity.settings.configUseLargeButtons) 1.0f else 0.95f // multiple sizes possible
+                    if (theNetwork.gameView.gameActivity.settings.configUseLargeButtons) 1.0f else 0.96f // multiple sizes possible
             paint.alpha = 255
             paint.typeface = theNetwork.gameView.boldTypeface
             paint.textAlign = Paint.Align.CENTER
@@ -775,11 +775,12 @@ open class Chip(val network: Network, gridX: Int, gridY: Int):
             val alpha: Bitmap = bitmap.extractAlpha()
             /* create a transparent black background to have more contrast */
             paint.color = defaultBackgroundColor
-            canvas.drawRect(clippedRect, paint)
+            // canvas.drawRect(clippedRect, paint)
 
             /* use blurred image to create glow */
-            val blurMaskFilter = BlurMaskFilter(1.5f, BlurMaskFilter.Blur.OUTER)
-            paint.color = chipData.glowColor
+            val blurMaskFilter = BlurMaskFilter(2.5f, BlurMaskFilter.Blur.OUTER)
+            // paint.color = chipData.glowColor
+            paint.color = defaultBackgroundColor
             paint.maskFilter = blurMaskFilter
             val blurCanvas = Canvas(bitmap)
             blurCanvas.drawBitmap(alpha, 0f, 0f, paint)
