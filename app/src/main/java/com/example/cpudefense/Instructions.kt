@@ -73,7 +73,6 @@ class Instructions(val gameView: GameView, var stage: Stage.Identifier, var show
         else if (stage.series == GameMechanics.SERIES_TURBO) {
             return when (level) {
                 1 -> resources.getString(R.string.instr_2_1)
-                98 -> resources.getString(R.string.instr_2_98)
                 else -> ""
             }
         }
@@ -81,6 +80,7 @@ class Instructions(val gameView: GameView, var stage: Stage.Identifier, var show
         {
             return when (level) {
                 1 -> resources.getString(R.string.instr_endless)
+                98 -> resources.getString(R.string.instr_2_98)
                 else -> funFact
             }
         }
