@@ -33,6 +33,7 @@ class Hero(var gameActivity: GameActivity, type: Type)
     - Al Chwarizmi
     - Goldstine (he & she)
     - Hoare
+    - Holberton
      */
 
     enum class Type { INCREASE_CHIP_SUB_SPEED, INCREASE_CHIP_SUB_RANGE, DOUBLE_HIT_SUB,

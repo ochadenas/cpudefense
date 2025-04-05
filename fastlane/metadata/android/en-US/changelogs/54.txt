@@ -1,0 +1,7 @@
+New features:
+- Explanatory text added to level 98. Fixes issue #214.
+
+Bug fixes:
+- Selling chips created by von Neumann could yield absurdly high amounts of information. These chips now sell only for 8 bits max. Fixes issue #211.
+- Chips created by von Neumann are now limited to level 10. Fixes issue #207.
+

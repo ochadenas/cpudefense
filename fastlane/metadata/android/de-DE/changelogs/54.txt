@@ -1,0 +1,6 @@
+Neue Funktionen:
+- Erläuternder Text zu Level 98 hinzugefügt. Behebt Issue #214.
+
+Fehlerbehebungen:
+- Der Verkauf von Chips, die von Neumann erstellt wurden, konnte absurd hohe Mengen an Informationen liefern. Diese Chips werden jetzt nur noch für maximal 8 Bit verkauft. Behebt Issue #211.
+- Chips, die von Neumann erstellt wurden, sind nun auf Stufe 10 begrenzt. Behebt Issue #207.

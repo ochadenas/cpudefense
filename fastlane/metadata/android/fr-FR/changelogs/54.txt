@@ -1,0 +1,8 @@
+Version 1.54
+============
+Nouvelles fonctionnalités :
+- Ajout d'un texte explicatif au niveau 98. Résout le problème #214.
+
+Correction de bugs :
+- La vente de puces créées par von Neumann pouvait produire des quantités d'informations insensées. Ces puces ne se vendent plus que pour 8 bits maximum. Résout le problème #211.
+- Les puces créées par von Neumann sont désormais limitées au niveau 10. Résout le problème #207.
