@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ChipDefense</string>
+    <string name="app_name" translatable="false">ChipDefense</string>
     <string name="app_name_last">Defense</string>
     <string name="button_start_game">Start new game</string>
     <string name="button_reset_progress">Reset game progress</string>
