@@ -8,30 +8,8 @@
         errorLine2="                                                          ~~~~~~~~~~~">
         <location
             file="src/main/java/com/example/cpudefense/Hero.kt"
-            line="659"
+            line="660"
             column="59"/>
-    </issue>
-
-    <issue
-        id="NewApi"
-        message="This Kotlin extension function will be hidden by `java.util.SequencedCollection` starting in API 35: `removeFirst`. When this source code is recompiled against API level 35, it will crash on older levels. You can avoid this by using `removeAt(0)` instead."
-        errorLine1="                    return waves.removeFirst()"
-        errorLine2="                                 ~~~~~~~~~~~~~">
-        <location
-            file="src/main/java/com/example/cpudefense/Stage.kt"
-            line="290"
-            column="34"/>
-    </issue>
-
-    <issue
-        id="NewApi"
-        message="This Kotlin extension function will be hidden by `java.util.SequencedCollection` starting in API 35: `removeFirst`. When this source code is recompiled against API level 35, it will crash on older levels. You can avoid this by using `removeAt(0)` instead."
-        errorLine1="        textBoxes.add(TextBox(gameView, lines.removeFirst(), pos, {  showNextLine() } ))"
-        errorLine2="                                              ~~~~~~~~~~~~~">
-        <location
-            file="src/main/java/com/example/cpudefense/gameElements/Typewriter.kt"
-            line="32"
-            column="47"/>
     </issue>
 
     <issue
@@ -58,18 +36,7 @@
 
     <issue
         id="GradleDependency"
-        message="A newer version of `compileSdkVersion` than 34 is available: 35"
-        errorLine1="    compileSdk = 34"
-        errorLine2="    ~~~~~~~~~~~~~~~">
-        <location
-            file="build.gradle"
-            line="7"
-            column="5"/>
-    </issue>
-
-    <issue
-        id="GradleDependency"
-        message="A newer version of androidx.core:core-ktx than 1.7.0 is available: 1.15.0"
+        message="A newer version of androidx.core:core-ktx than 1.7.0 is available: 1.16.0"
         errorLine1="    implementation &apos;androidx.core:core-ktx:1.7.0&apos;"
         errorLine2="                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
@@ -80,18 +47,7 @@
 
     <issue
         id="GradleDependency"
-        message="A newer version of androidx.appcompat:appcompat than 1.4.1 is available: 1.7.0"
-        errorLine1="    implementation &apos;androidx.appcompat:appcompat:1.4.1&apos;"
-        errorLine2="                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="build.gradle"
-            line="60"
-            column="20"/>
-    </issue>
-
-    <issue
-        id="GradleDependency"
-        message="A newer version of org.jetbrains.kotlinx:kotlinx-coroutines-android than 1.3.9 is available: 1.7.3"
+        message="A newer version of org.jetbrains.kotlinx:kotlinx-coroutines-android than 1.3.9 is available: 1.8.0"
         errorLine1="    implementation &apos;org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9&apos;"
         errorLine2="                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
@@ -142,39 +98,6 @@
             file="build.gradle"
             line="65"
             column="20"/>
-    </issue>
-
-    <issue
-        id="GradleDependency"
-        message="A newer version of junit:junit than 4.12 is available: 4.13.2"
-        errorLine1="    testImplementation &apos;junit:junit:4.12&apos;"
-        errorLine2="                       ~~~~~~~~~~~~~~~~~~">
-        <location
-            file="build.gradle"
-            line="66"
-            column="24"/>
-    </issue>
-
-    <issue
-        id="GradleDependency"
-        message="A newer version of androidx.test.ext:junit than 1.1.3 is available: 1.2.1"
-        errorLine1="    androidTestImplementation &apos;androidx.test.ext:junit:1.1.3&apos;"
-        errorLine2="                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="build.gradle"
-            line="68"
-            column="31"/>
-    </issue>
-
-    <issue
-        id="GradleDependency"
-        message="A newer version of androidx.test.espresso:espresso-core than 3.4.0 is available: 3.6.1"
-        errorLine1="    androidTestImplementation &apos;androidx.test.espresso:espresso-core:3.4.0&apos;"
-        errorLine2="                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="build.gradle"
-            line="69"
-            column="31"/>
     </issue>
 
     <issue
@@ -294,7 +217,7 @@
         errorLine2="                              ~~~~~~~~~~~~~">
         <location
             file="src/main/java/com/example/cpudefense/Hero.kt"
-            line="659"
+            line="660"
             column="31"/>
     </issue>
 
@@ -2461,18 +2384,18 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="318"
+            line="321"
             column="13"/>
     </issue>
 
     <issue
         id="MissingTranslation"
         message="&quot;ZZ_release_notes&quot; is not translated in &quot;en&quot; (English)"
-        errorLine1="    &lt;string name=&quot;ZZ_release_notes&quot;>Release Notes\n\nVersion 1.52\n============\nNew Features:\n- Stage numbers are optionally shown in hex (must be activated in Settings)\n\nBug fixes:\n- When leaving the hero screen, the current hero is de-selected. Fixes issue #206.\n- Coins in the hero screen are no longer shown separately if there are too many of them. Fixes issue #208.\n- If an attacker becomes released from ACC or MEM during its fade-out animation, it no longer disappears. Fixes issue #212.\n\nVersion 1.51\n============\nNew features:\n- When playing for the first time in endless, 4 coins are granted for free to help get things going.\n\nBug fixes:\n- If a stage in endless mode cannot be loaded, a new stage layout is generated.\n- Chips created by von Neumann with level 2 or higher now have the correct value. When selling these chips, the refund is halved.\n- Heroes that are active are always visible now, even if their prerequisites are no longer met.\n- The number of available coins were not saved if a stage was not finished.\n- Chips with level 0 are removed at the beginning of a stage.\n\nMiscellaneous:\n- The additional chips created by the game (both helpful and unwanted) are recreated every time the level is played.\n- Turing\&apos;s biography now mentions that the Enigma was initially broken by the Polish Cipher Bureau.\n\nVersion 1.50\n============\nNew features:\n- Link to Wikipedia articles added for heroes and heroines\n\nBug fixes:\n- Fixed a bug when changing between apps in the hero screen\n\nVersion 1.49\n============\nNew features:\n- New hero: John von Neumann\n- Some more did you know text\n\nBug fixes:\n- Attackers stored in MEM or ACC sometimes remained visible on the screen.\n- The text on the chips is scaled down if it does not fit into the rectangle.\n\nMiscellaneous:\n- Small changes in the hero dependency tree. For the current tree, see the game\&apos;s wiki.\n- Ameliorations to the Level Select and the Info screen\n- Reduced cost of resistor chips\n\nVersion 1.48\n============\nBug fixes:\n- No reward coins were awarded in Endless series after a game reset.\n\nMiscellaneous:\n- Heroes are no longer automatically available in TURBO and ENDLESS. The hero tree applies for all series.\n\nVersion 1.47\n============\nNew features:\n- Endless series can be reset independently from the basic series.\n\nBug fixes:\n- Background image no longer changes when switching between apps.\n- Attackers held in MEM chips kept this state even after being released.\n\nVersion 1.46\n============\nNew features:\n- added a special Christmas level\n- The game\&apos;s language can be changed via the device Settings dialogue.\n\nBug fixes:\n- added a safety catch for trapped attackers\n- corrected a migration problem\n\nVersion 1.45\n============\nNew features:\n- The mission briefing text is now scrollable. This should avoid the text overlapping if it doesn\&apos;t fit on the screen.\n\nBug fixes:\n- Corrected portrait image for John Conway\n\nVersion 1.44\n============\nNew features:\n- New hero: John Conway\n- Some more Did you know texts.\n\nBug fixes:\n- Some fixes to the purchase lives dialogue\n\nMiscellaneous:\n- Major re-organisation of save files. This should result in faster loading, and generally\n  less laggy behaviour of the app.\n\nVersion 1.43\n============\nNew features:\n- In “endless” mode, lost lives can be recovered for coins by tapping on the CPU.\n\nBug fixes:\n- Some text size and other layout corrections\n- The “quit level” dialogue now freezes the game.\n\nVersion 1.42\n============\nNew features:\n- Stage number is displayed on the game screen\n\nBug fixes:\n- Fixed some problems when selecting heroes for leave\n- Fixed heat to cash conversion calculation for resistors\n\nMiscellaneous:\n- The required shortest path length in endless mode has been raised for stage numbers > 200\n\nVersion 1.41\n============\nBug fixes:\n- Fixed some problems when returning after switching apps\n- Better loading and scaling of background images\n- Margaret Hamilton must not appear before stage 24.\n- Some text corrections\n\nMiscellaneous:\n- Massively reduced the number of waves for higher stages in Endless mode\n- Resistors now act simultaneously on all targets in range.\n- Slightly changed the screen size of several game element\n\nVersion 1.40\n============\nNew features:\n- New heroes: Claude Shannon, George Boole, Whit Diffie\n- Resistors now produce heat, which can be converted into information if Shannon is available.\n- Some more Did you know messages.\n\nBug fixes:\n- Avoid a situation where the player must choose a hero, but none is displayed.\n- Heroes always went on leave for three levels, regardless of what the text said.\n- The game uses a default system font if the desired font is not available. This had led to crashes on some devices.\n\nVersion 1.39\n============\nNew features:\n- Starting with endless stage 16, heroes may go on holiday. The player must choose one of several proposed heroes and grant leave to one of them.\n\nBug fixes:\n- Attackers that were slowed down by resistors behaved weird in ACC and MEM chips.\n\nMiscellaneous:\n- The slowing effect of resistors now depend on the attackers\&apos; value. The stronger the attacker, the more it gets slowed.\n\nVersion 1.38\n============\nNew features:\n- The attackers held in the internal register of MEM and ACC are now released when selling the chip.\n\nBug fixes:\n- Game elements as well as hired heroes became active only when the stage was played a second time.\n- MEM and ACC chips are no longer emptied when resuming the app.\n\nMiscellaneous:\n- Removed the SELL option in stage 6\n\nVersion 1.37\n============\nBug fixes:\n- Fixed some bugs that occurred when re-entering the application.\n\nMiscellaneous:\n- Use of a custom font for chips and code fragments.\n\nVersion 1.36\n============\nNew functions:\n- New chip type: Resistors\n- Level 32 added\n- New heroes: Georg Ohm, Alessandro Volta\n\nBug fixes:\n- The level indicator on the welcome screen was limited to 99.\n\nVersion 1.35\n============\nBug fixes:\n- Fixed an occasional game crash when there were lots of attackers.\n- Leibniz is no longer affected by Sid Meier.\n- MEM chips are no longer sold instantly.\n\nVersion 1.34\n============\nIMPORTANT: The Endless level series now has its own CryptoCoins and a separate set of heroes. The existing coins have been distributed proportionally. Under certain circumstances, the heroes had to be reset; in this case, the coins have been credited to you and you will have to hire the heroes again.\nThe difficulty of the Endless levels has been drastically reduced in compensation.\n\nNew functions:\n- New hero: Gottfried Leibniz.\n\nBug fixes:\n- There were no CryptoCoins for level 30.\n- ACC chips showed more than one slot, although they can only hold one value.\n\nMiscellaneous:\n- Tramiel is limited to level 5 now.\n- Upgrade of MEM chips is significantly more expensive and requires Leibniz.\n\nVersion 1.33\n============\n    Two more levels were added, introducing SPLT and DUP.\n    Heroes now can be downgraded individually.\n    MEM chips can be upgraded (up to level 4) to hold more than one value. An explanatory text was added to stage 14.\n\nMiscellaneous:\n    Chips now target cryptocoins first.\n\nVersion 1.32\n============\nNew Features:\n    New hero added: Margaret Hamilton\n\nBugfixes:\n    Level selection in endless series was limited.\n    Two MEM chips could swallow the same attacker simultaneously.\n\nVersion 1.31\n============\nNew Features:\n    Two more types of negative chips: DUP and SPLT\n    (an introductory level with explanation will be added later).\n\nBugfixes:\n    Number of negative chips in endless stages reduced.\n    Revised the calculation of stage difficulty in endless stages.\n    Isolated slots are avoided, paths have a minimum length.\n\nMiscellaneous:\n    Removal cost of negative chips depend on how many have already been removed.\n\nVersion 1.30\n============\nNew Features:\n- new hero: Claude Chappe\n- Clearer design for buying and selling chips\n- Chips now choose their target intelligently (with more than one attacker in range)\n- Added an easter egg.\n\nBugfixes:\n- No new endless stages were available in the level selector beyond level 28.\n- Heat generation and damage corrected and adjusted\n- Fixed yet another bug when resuming the game\n\nMiscellaneous:\n- Changes in endless stage generation. Difficulty of the stage layout increases with the level. Impossible configurations are avoided.\n- Changed the order of some levels in normal mode to make the difficulty progress more consistently.\n\nVersion 1.29\n============\nNew Features:\n- New design for welcome screen. Moved start new game to settings. Added Release Notes in info section.\n- Revised generation of levels in endless series and made these levels clearer. Multiple CPUs are now possible.\n\nBugfixes:\n- Attackers were accelerated too much in ACC chips\n- Correction of speed control button size\n- Scrolling hero list was too slow\n\nMiscellaneous:\n- IMPORTANT: MEM chips must now be cleared by hand (by tapping on them) before they can absorb next attackers.\n\nVersion 1.28\n============\nNew Features:\n- New endless level series\n- In the About screen, added links for accessing the game wiki and the license on the Internet.\n- Chips are not removed instantly after being sold. Instead, they complete their current cooldown.\n\nBugfixes:\n- The game crashed when trying to display kiB values\n\nMiscellaneous:\n- decreased overall attacker frequency\n- slightly increased Mandelbrot´s effect\n- Attackers now have their speed slightly altered by ACC chips\n- several adjustments to game play\n\nVersion 1.27\n============\nNew Features:\n- Chips can be bought and sold even when game is paused.\n- Introduction of heat. Overheating may result in loss of one life.\n- Temperature sensor added to score board.\n- New chip type: NOP\n- New hero: Jack Kilby\n\nBugfixes:\n- Passing coins do no longer activate MEM chips.\n- Chip type is shown on description of range-extending heroes.\n- Text on Hire button did not change on purchase or reset.\n- Score board layout improved.\n\nMiscellaneous:\n- Re-organization of preferences / saved games file\n- Changed the way how game speed is handled\n\nVersion 1.26\n============\nNew Features:\n- new settings and about dialog\n- hero biography is now scrollable\n- added button to lock scrolling of the game viewport\n\nBugfixes:\n- fixed a bug that led to loss of heroes in version 1.25.\n  Added correction code to refund coins lost due to this bug.\n- chip sell prices were not converted to B or kiB\n- SHR 9 (and higher) chips had no effect\n- attackers stopped appearing when pausing the game between two waves\n- corrected delay between waves in fast forward mode\n\nMiscellaneous:\n- stage 8 made easier\n- LEDs now go out instead of turning red\n\nVersion 1.25\n============\nNew Features:\n- Chips can be bought and sold even when game is paused.\n- Introduction of heat. Overheating may result in loss of one life.\n- Temperature sensor added to score board.\n- New chip type: NOP\n- New hero: Jack Kilby\n\nBugfixes:\n- Passing coins do no longer activate MEM chips.\n- Chip type is shown on description of range-extending heroes.\n- Text on Hire button did not change on purchase or reset.\n- Score board layout improved.\n\nMiscellaneous:\n- Re-organization of preferences / saved games file\n- Changed the way how game speed is handled\n\n\nVersion 1.24\n============\nNew Features:\n- new background pictures\n- hero costs are shown on the ´hire´ button\n- overall small graphical improvements\n\nBugfixes:\n- game stays in portrait mode, keeps the device awake\n- corrected coin count and size of attackers when resuming game\n\nMiscellaneous:\n- replaced Android system style dialogs by custom design\n\nVersion 1.22\n============\nNew Features:\n- Chips can be bought and sold even when game is paused.\n- Introduction of heat. Overheating may result in loss of one life.\n- Temperature sensor added to score board.\n- New chip type: NOP\n- New hero: Jack Kilby\n\nBugfixes:\n- Passing coins do no longer activate MEM chips.\n- Chip type is shown on description of range-extending heroes.\n- Text on Hire button did not change on purchase or reset.\n- Score board layout improved.\n\nMiscellaneous:\n- Re-organization of preferences / saved games file\n- Changed the way how game speed is handled&lt;/string>"
+        errorLine1="    &lt;string name=&quot;ZZ_release_notes&quot;>Release Notes\n\nVersion 1.54\n============\nNew features:\n- Explanatory text added to level 98. Fixes issue #214.\n\nBug fixes:\n- Selling chips created by von Neumann could yield absurdly high amounts of information. These chips now sell only for 8 bits max. Fixes issue #211.\n- Chips created by von Neumann are limited to level 10. Fixes issue #207.\n\nVersion 1.53\n============\nNew Features:\n- Added a “really fast forward” button (must be enabled in the settings)\n\nBug fixes:\n- level number was not shown in hex when failing a level\n\nMiscellaneous:\n- Made “fast forward” mode slightly slower\n- New \&quot;did you know\&quot; entry\n\nVersion 1.52\n============\nNew Features:\n- Stage numbers are optionally shown in hex (must be activated in Settings)\n\nBug fixes:\n- When leaving the hero screen, the current hero is de-selected. Fixes issue #206.\n- Coins in the hero screen are no longer shown separately if there are too many of them. Fixes issue #208.\n- If an attacker becomes released from ACC or MEM during its fade-out animation, it no longer disappears. Fixes issue #212.\n\nVersion 1.51\n============\nNew features:\n- When playing for the first time in endless, 4 coins are granted for free to help get things going.\n\nBug fixes:\n- If a stage in endless mode cannot be loaded, a new stage layout is generated.\n- Chips created by von Neumann with level 2 or higher now have the correct value. When selling these chips, the refund is halved.\n- Heroes that are active are always visible now, even if their prerequisites are no longer met.\n- The number of available coins were not saved if a stage was not finished.\n- Chips with level 0 are removed at the beginning of a stage.\n\nMiscellaneous:\n- The additional chips created by the game (both helpful and unwanted) are recreated every time the level is played.\n- Turing\&apos;s biography now mentions that the Enigma was initially broken by the Polish Cipher Bureau.\n\nVersion 1.50\n============\nNew features:\n- Link to Wikipedia articles added for heroes and heroines\n\nBug fixes:\n- Fixed a bug when changing between apps in the hero screen\n\nVersion 1.49\n============\nNew features:\n- New hero: John von Neumann\n- Some more did you know text\n\nBug fixes:\n- Attackers stored in MEM or ACC sometimes remained visible on the screen.\n- The text on the chips is scaled down if it does not fit into the rectangle.\n\nMiscellaneous:\n- Small changes in the hero dependency tree. For the current tree, see the game\&apos;s wiki.\n- Ameliorations to the Level Select and the Info screen\n- Reduced cost of resistor chips\n\nVersion 1.48\n============\nBug fixes:\n- No reward coins were awarded in Endless series after a game reset.\n\nMiscellaneous:\n- Heroes are no longer automatically available in TURBO and ENDLESS. The hero tree applies for all series.\n\nVersion 1.47\n============\nNew features:\n- Endless series can be reset independently from the basic series.\n\nBug fixes:\n- Background image no longer changes when switching between apps.\n- Attackers held in MEM chips kept this state even after being released.\n\nVersion 1.46\n============\nNew features:\n- added a special Christmas level\n- The game\&apos;s language can be changed via the device Settings dialogue.\n\nBug fixes:\n- added a safety catch for trapped attackers\n- corrected a migration problem\n\nVersion 1.45\n============\nNew features:\n- The mission briefing text is now scrollable. This should avoid the text overlapping if it doesn\&apos;t fit on the screen.\n\nBug fixes:\n- Corrected portrait image for John Conway\n\nVersion 1.44\n============\nNew features:\n- New hero: John Conway\n- Some more Did you know texts.\n\nBug fixes:\n- Some fixes to the purchase lives dialogue\n\nMiscellaneous:\n- Major re-organisation of save files. This should result in faster loading, and generally\n  less laggy behaviour of the app.\n\nVersion 1.43\n============\nNew features:\n- In “endless” mode, lost lives can be recovered for coins by tapping on the CPU.\n\nBug fixes:\n- Some text size and other layout corrections\n- The “quit level” dialogue now freezes the game.\n\nVersion 1.42\n============\nNew features:\n- Stage number is displayed on the game screen\n\nBug fixes:\n- Fixed some problems when selecting heroes for leave\n- Fixed heat to cash conversion calculation for resistors\n\nMiscellaneous:\n- The required shortest path length in endless mode has been raised for stage numbers > 200\n\nVersion 1.41\n============\nBug fixes:\n- Fixed some problems when returning after switching apps\n- Better loading and scaling of background images\n- Margaret Hamilton must not appear before stage 24.\n- Some text corrections\n\nMiscellaneous:\n- Massively reduced the number of waves for higher stages in Endless mode\n- Resistors now act simultaneously on all targets in range.\n- Slightly changed the screen size of several game element\n\nVersion 1.40\n============\nNew features:\n- New heroes: Claude Shannon, George Boole, Whit Diffie\n- Resistors now produce heat, which can be converted into information if Shannon is available.\n- Some more Did you know messages.\n\nBug fixes:\n- Avoid a situation where the player must choose a hero, but none is displayed.\n- Heroes always went on leave for three levels, regardless of what the text said.\n- The game uses a default system font if the desired font is not available. This had led to crashes on some devices.\n\nVersion 1.39\n============\nNew features:\n- Starting with endless stage 16, heroes may go on holiday. The player must choose one of several proposed heroes and grant leave to one of them.\n\nBug fixes:\n- Attackers that were slowed down by resistors behaved weird in ACC and MEM chips.\n\nMiscellaneous:\n- The slowing effect of resistors now depend on the attackers\&apos; value. The stronger the attacker, the more it gets slowed.\n\nVersion 1.38\n============\nNew features:\n- The attackers held in the internal register of MEM and ACC are now released when selling the chip.\n\nBug fixes:\n- Game elements as well as hired heroes became active only when the stage was played a second time.\n- MEM and ACC chips are no longer emptied when resuming the app.\n\nMiscellaneous:\n- Removed the SELL option in stage 6\n\nVersion 1.37\n============\nBug fixes:\n- Fixed some bugs that occurred when re-entering the application.\n\nMiscellaneous:\n- Use of a custom font for chips and code fragments.\n\nVersion 1.36\n============\nNew functions:\n- New chip type: Resistors\n- Level 32 added\n- New heroes: Georg Ohm, Alessandro Volta\n\nBug fixes:\n- The level indicator on the welcome screen was limited to 99.\n\nVersion 1.35\n============\nBug fixes:\n- Fixed an occasional game crash when there were lots of attackers.\n- Leibniz is no longer affected by Sid Meier.\n- MEM chips are no longer sold instantly.\n\nVersion 1.34\n============\nIMPORTANT: The Endless level series now has its own CryptoCoins and a separate set of heroes. The existing coins have been distributed proportionally. Under certain circumstances, the heroes had to be reset; in this case, the coins have been credited to you and you will have to hire the heroes again.\nThe difficulty of the Endless levels has been drastically reduced in compensation.\n\nNew functions:\n- New hero: Gottfried Leibniz.\n\nBug fixes:\n- There were no CryptoCoins for level 30.\n- ACC chips showed more than one slot, although they can only hold one value.\n\nMiscellaneous:\n- Tramiel is limited to level 5 now.\n- Upgrade of MEM chips is significantly more expensive and requires Leibniz.\n\nVersion 1.33\n============\n    Two more levels were added, introducing SPLT and DUP.\n    Heroes now can be downgraded individually.\n    MEM chips can be upgraded (up to level 4) to hold more than one value. An explanatory text was added to stage 14.\n\nMiscellaneous:\n    Chips now target cryptocoins first.\n\nVersion 1.32\n============\nNew Features:\n    New hero added: Margaret Hamilton\n\nBugfixes:\n    Level selection in endless series was limited.\n    Two MEM chips could swallow the same attacker simultaneously.\n\nVersion 1.31\n============\nNew Features:\n    Two more types of negative chips: DUP and SPLT\n    (an introductory level with explanation will be added later).\n\nBugfixes:\n    Number of negative chips in endless stages reduced.\n    Revised the calculation of stage difficulty in endless stages.\n    Isolated slots are avoided, paths have a minimum length.\n\nMiscellaneous:\n    Removal cost of negative chips depend on how many have already been removed.\n\nVersion 1.30\n============\nNew Features:\n- new hero: Claude Chappe\n- Clearer design for buying and selling chips\n- Chips now choose their target intelligently (with more than one attacker in range)\n- Added an easter egg.\n\nBugfixes:\n- No new endless stages were available in the level selector beyond level 28.\n- Heat generation and damage corrected and adjusted\n- Fixed yet another bug when resuming the game\n\nMiscellaneous:\n- Changes in endless stage generation. Difficulty of the stage layout increases with the level. Impossible configurations are avoided.\n- Changed the order of some levels in normal mode to make the difficulty progress more consistently.\n\nVersion 1.29\n============\nNew Features:\n- New design for welcome screen. Moved start new game to settings. Added Release Notes in info section.\n- Revised generation of levels in endless series and made these levels clearer. Multiple CPUs are now possible.\n\nBugfixes:\n- Attackers were accelerated too much in ACC chips\n- Correction of speed control button size\n- Scrolling hero list was too slow\n\nMiscellaneous:\n- IMPORTANT: MEM chips must now be cleared by hand (by tapping on them) before they can absorb next attackers.\n\nVersion 1.28\n============\nNew Features:\n- New endless level series\n- In the About screen, added links for accessing the game wiki and the license on the Internet.\n- Chips are not removed instantly after being sold. Instead, they complete their current cooldown.\n\nBugfixes:\n- The game crashed when trying to display kiB values\n\nMiscellaneous:\n- decreased overall attacker frequency\n- slightly increased Mandelbrot´s effect\n- Attackers now have their speed slightly altered by ACC chips\n- several adjustments to game play\n\nVersion 1.27\n============\nNew Features:\n- Chips can be bought and sold even when game is paused.\n- Introduction of heat. Overheating may result in loss of one life.\n- Temperature sensor added to score board.\n- New chip type: NOP\n- New hero: Jack Kilby\n\nBugfixes:\n- Passing coins do no longer activate MEM chips.\n- Chip type is shown on description of range-extending heroes.\n- Text on Hire button did not change on purchase or reset.\n- Score board layout improved.\n\nMiscellaneous:\n- Re-organization of preferences / saved games file\n- Changed the way how game speed is handled\n\nVersion 1.26\n============\nNew Features:\n- new settings and about dialog\n- hero biography is now scrollable\n- added button to lock scrolling of the game viewport\n\nBugfixes:\n- fixed a bug that led to loss of heroes in version 1.25.\n  Added correction code to refund coins lost due to this bug.\n- chip sell prices were not converted to B or kiB\n- SHR 9 (and higher) chips had no effect\n- attackers stopped appearing when pausing the game between two waves\n- corrected delay between waves in fast forward mode\n\nMiscellaneous:\n- stage 8 made easier\n- LEDs now go out instead of turning red\n\nVersion 1.25\n============\nNew Features:\n- Chips can be bought and sold even when game is paused.\n- Introduction of heat. Overheating may result in loss of one life.\n- Temperature sensor added to score board.\n- New chip type: NOP\n- New hero: Jack Kilby\n\nBugfixes:\n- Passing coins do no longer activate MEM chips.\n- Chip type is shown on description of range-extending heroes.\n- Text on Hire button did not change on purchase or reset.\n- Score board layout improved.\n\nMiscellaneous:\n- Re-organization of preferences / saved games file\n- Changed the way how game speed is handled\n\n\nVersion 1.24\n============\nNew Features:\n- new background pictures\n- hero costs are shown on the ´hire´ button\n- overall small graphical improvements\n\nBugfixes:\n- game stays in portrait mode, keeps the device awake\n- corrected coin count and size of attackers when resuming game\n\nMiscellaneous:\n- replaced Android system style dialogs by custom design\n\nVersion 1.22\n============\nNew Features:\n- Chips can be bought and sold even when game is paused.\n- Introduction of heat. Overheating may result in loss of one life.\n- Temperature sensor added to score board.\n- New chip type: NOP\n- New hero: Jack Kilby\n\nBugfixes:\n- Passing coins do no longer activate MEM chips.\n- Chip type is shown on description of range-extending heroes.\n- Text on Hire button did not change on purchase or reset.\n- Score board layout improved.\n\nMiscellaneous:\n- Re-organization of preferences / saved games file\n- Changed the way how game speed is handled&lt;/string>"
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="319"
+            line="322"
             column="13"/>
     </issue>
 
@@ -2483,7 +2406,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="320"
+            line="323"
             column="13"/>
     </issue>
 
@@ -2494,7 +2417,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="321"
+            line="324"
             column="13"/>
     </issue>
 
@@ -2505,7 +2428,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="322"
+            line="325"
             column="13"/>
     </issue>
 
@@ -2516,7 +2439,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="323"
+            line="326"
             column="13"/>
     </issue>
 
@@ -2527,7 +2450,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="324"
+            line="327"
             column="13"/>
     </issue>
 
@@ -2538,7 +2461,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="325"
+            line="328"
             column="13"/>
     </issue>
 
@@ -2549,7 +2472,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="326"
+            line="329"
             column="13"/>
     </issue>
 
@@ -2560,7 +2483,7 @@
         errorLine2="            ~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="327"
+            line="330"
             column="13"/>
     </issue>
 
@@ -2571,7 +2494,7 @@
         errorLine2="            ~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="328"
+            line="331"
             column="13"/>
     </issue>
 
@@ -2582,7 +2505,7 @@
         errorLine2="            ~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="329"
+            line="332"
             column="13"/>
     </issue>
 
@@ -2593,7 +2516,7 @@
         errorLine2="            ~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="330"
+            line="333"
             column="13"/>
     </issue>
 
@@ -2604,7 +2527,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="331"
+            line="334"
             column="13"/>
     </issue>
 
@@ -2615,7 +2538,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="332"
+            line="335"
             column="13"/>
     </issue>
 
@@ -2626,7 +2549,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="333"
+            line="336"
             column="13"/>
     </issue>
 
@@ -2637,7 +2560,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="334"
+            line="337"
             column="13"/>
     </issue>
 
@@ -2648,7 +2571,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="335"
+            line="338"
             column="13"/>
     </issue>
 
@@ -2659,7 +2582,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="336"
+            line="339"
             column="13"/>
     </issue>
 
@@ -2670,7 +2593,7 @@
         errorLine2="            ~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="337"
+            line="340"
             column="13"/>
     </issue>
 
@@ -2681,7 +2604,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="338"
+            line="341"
             column="13"/>
     </issue>
 
@@ -2692,7 +2615,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="339"
+            line="342"
             column="13"/>
     </issue>
 
@@ -2703,7 +2626,7 @@
         errorLine2="            ~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="340"
+            line="343"
             column="13"/>
     </issue>
 
@@ -2714,7 +2637,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="341"
+            line="344"
             column="13"/>
     </issue>
 
@@ -2725,7 +2648,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="342"
+            line="345"
             column="13"/>
     </issue>
 
@@ -2736,7 +2659,7 @@
         errorLine2="            ~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="343"
+            line="346"
             column="13"/>
     </issue>
 
@@ -2747,7 +2670,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="344"
+            line="347"
             column="13"/>
     </issue>
 
@@ -2758,7 +2681,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="345"
+            line="348"
             column="13"/>
     </issue>
 
@@ -2769,7 +2692,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="346"
+            line="349"
             column="13"/>
     </issue>
 
@@ -2780,7 +2703,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="347"
+            line="350"
             column="13"/>
     </issue>
 
@@ -2791,7 +2714,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="348"
+            line="351"
             column="13"/>
     </issue>
 
@@ -2802,7 +2725,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="349"
+            line="352"
             column="13"/>
     </issue>
 
@@ -2813,7 +2736,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="350"
+            line="353"
             column="13"/>
     </issue>
 
@@ -2824,7 +2747,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="351"
+            line="354"
             column="13"/>
     </issue>
 
@@ -2835,7 +2758,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="352"
+            line="355"
             column="13"/>
     </issue>
 
@@ -2846,7 +2769,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="353"
+            line="356"
             column="13"/>
     </issue>
 
@@ -2857,7 +2780,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="354"
+            line="357"
             column="13"/>
     </issue>
 
@@ -2868,7 +2791,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="355"
+            line="358"
             column="13"/>
     </issue>
 
@@ -2879,7 +2802,7 @@
         errorLine2="            ~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="356"
+            line="359"
             column="13"/>
     </issue>
 
@@ -2890,7 +2813,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="357"
+            line="360"
             column="13"/>
     </issue>
 
@@ -2901,7 +2824,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="358"
+            line="361"
             column="13"/>
     </issue>
 
@@ -2912,7 +2835,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="359"
+            line="362"
             column="13"/>
     </issue>
 
@@ -2923,7 +2846,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="360"
+            line="363"
             column="13"/>
     </issue>
 
@@ -2934,7 +2857,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="361"
+            line="364"
             column="13"/>
     </issue>
 
@@ -2945,7 +2868,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="362"
+            line="365"
             column="13"/>
     </issue>
 
@@ -2956,7 +2879,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="363"
+            line="366"
             column="13"/>
     </issue>
 
@@ -2967,7 +2890,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="364"
+            line="367"
             column="13"/>
     </issue>
 
@@ -2978,7 +2901,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="365"
+            line="368"
             column="13"/>
     </issue>
 
@@ -2989,7 +2912,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="366"
+            line="369"
             column="13"/>
     </issue>
 
@@ -3000,7 +2923,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="367"
+            line="370"
             column="13"/>
     </issue>
 
@@ -3011,7 +2934,7 @@
         errorLine2="            ~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="368"
+            line="371"
             column="13"/>
     </issue>
 
@@ -3022,7 +2945,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="369"
+            line="372"
             column="13"/>
     </issue>
 
@@ -3033,7 +2956,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="370"
+            line="373"
             column="13"/>
     </issue>
 
@@ -3044,7 +2967,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="371"
+            line="374"
             column="13"/>
     </issue>
 
@@ -3055,7 +2978,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="372"
+            line="375"
             column="13"/>
     </issue>
 
@@ -3066,7 +2989,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="373"
+            line="376"
             column="13"/>
     </issue>
 
@@ -3077,7 +3000,18 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="374"
+            line="377"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;instr_2_98&quot; is not translated in &quot;en&quot; (English)"
+        errorLine1="    &lt;string name=&quot;instr_2_98&quot;>The heroes will soon be extending their holidays. They will then be unavailable for two or even more stages.\n&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="378"
             column="13"/>
     </issue>
 
@@ -3478,28 +3412,6 @@
     </issue>
 
     <issue
-        id="Untranslatable"
-        message="The resource string &quot;app_name&quot; has been marked as translatable=&quot;false&quot; elsewhere (usually in the `values` folder), but is translated to &quot;de&quot; (German) here"
-        errorLine1="    &lt;string name=&quot;app_name&quot;>ChipDefense&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values-de/strings.xml"
-            line="3"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="Untranslatable"
-        message="The resource string &quot;app_name&quot; has been marked as translatable=&quot;false&quot; elsewhere (usually in the `values` folder), but is translated to &quot;fr&quot; (French) here"
-        errorLine1="    &lt;string name=&quot;app_name&quot;>ChipDefense&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values-fr/strings.xml"
-            line="3"
-            column="13"/>
-    </issue>
-
-    <issue
         id="PluralsCandidate"
         message="Formatting %d followed by words (&quot;coins&quot;): This should probably be a plural rather than a string"
         errorLine1="    &lt;string name=&quot;button_purchase_plural&quot;>Hire [%d coins]&lt;/string>"
@@ -3528,7 +3440,7 @@
         errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="322"
+            line="325"
             column="5"/>
     </issue>
 
@@ -3539,7 +3451,7 @@
         errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="334"
+            line="337"
             column="5"/>
     </issue>
 
@@ -3550,7 +3462,7 @@
         errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="341"
+            line="344"
             column="5"/>
     </issue>
 
@@ -3561,7 +3473,7 @@
         errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="342"
+            line="345"
             column="5"/>
     </issue>
 
@@ -3572,7 +3484,7 @@
         errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="374"
+            line="377"
             column="5"/>
     </issue>
 
@@ -3953,7 +3865,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="326"
+            line="329"
             column="13"/>
     </issue>
 
@@ -3964,7 +3876,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="346"
+            line="349"
             column="13"/>
     </issue>
 
@@ -3975,7 +3887,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="347"
+            line="350"
             column="13"/>
     </issue>
 
@@ -3986,7 +3898,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="348"
+            line="351"
             column="13"/>
     </issue>
 
@@ -3997,7 +3909,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="349"
+            line="352"
             column="13"/>
     </issue>
 
@@ -4008,7 +3920,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="350"
+            line="353"
             column="13"/>
     </issue>
 
@@ -4019,7 +3931,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="351"
+            line="354"
             column="13"/>
     </issue>
 
@@ -4030,7 +3942,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="352"
+            line="355"
             column="13"/>
     </issue>
 
@@ -4041,7 +3953,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="353"
+            line="356"
             column="13"/>
     </issue>
 
@@ -4052,7 +3964,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="354"
+            line="357"
             column="13"/>
     </issue>
 
@@ -4063,7 +3975,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="355"
+            line="358"
             column="13"/>
     </issue>
 
@@ -4074,7 +3986,7 @@
         errorLine2="            ~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="356"
+            line="359"
             column="13"/>
     </issue>
 
@@ -4085,7 +3997,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="357"
+            line="360"
             column="13"/>
     </issue>
 
@@ -4096,7 +4008,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="358"
+            line="361"
             column="13"/>
     </issue>
 
@@ -4107,7 +4019,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="359"
+            line="362"
             column="13"/>
     </issue>
 
@@ -4118,7 +4030,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="360"
+            line="363"
             column="13"/>
     </issue>
 
@@ -4129,7 +4041,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="361"
+            line="364"
             column="13"/>
     </issue>
 
@@ -4140,7 +4052,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="362"
+            line="365"
             column="13"/>
     </issue>
 
@@ -4151,7 +4063,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="363"
+            line="366"
             column="13"/>
     </issue>
 
@@ -4162,7 +4074,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="364"
+            line="367"
             column="13"/>
     </issue>
 
@@ -4173,7 +4085,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="365"
+            line="368"
             column="13"/>
     </issue>
 
@@ -4184,7 +4096,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="366"
+            line="369"
             column="13"/>
     </issue>
 
@@ -4195,7 +4107,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="367"
+            line="370"
             column="13"/>
     </issue>
 
@@ -4206,7 +4118,7 @@
         errorLine2="            ~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="368"
+            line="371"
             column="13"/>
     </issue>
 
@@ -4217,7 +4129,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="369"
+            line="372"
             column="13"/>
     </issue>
 
@@ -4228,7 +4140,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="370"
+            line="373"
             column="13"/>
     </issue>
 
@@ -4239,7 +4151,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="371"
+            line="374"
             column="13"/>
     </issue>
 
@@ -4250,7 +4162,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="372"
+            line="375"
             column="13"/>
     </issue>
 
@@ -5084,7 +4996,7 @@
         errorLine2="                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/com/example/cpudefense/gameElements/Cryptocoin.kt"
-            line="22"
+            line="23"
             column="36"/>
     </issue>
 
@@ -5095,7 +5007,7 @@
         errorLine2="                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/com/example/cpudefense/effects/Flipper.kt"
-            line="24"
+            line="25"
             column="32"/>
     </issue>
 
@@ -5476,7 +5388,7 @@
     <issue
         id="ClickableViewAccessibility"
         message="Custom view `GameView` overrides `onTouchEvent` but not `performClick`"
-        errorLine1="    override fun onTouchEvent(event: MotionEvent?): Boolean {"
+        errorLine1="    override fun onTouchEvent(event: MotionEvent): Boolean {"
         errorLine2="                 ~~~~~~~~~~~~">
         <location
             file="src/main/java/com/example/cpudefense/GameView.kt"

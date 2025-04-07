@@ -3,6 +3,7 @@
 package com.example.cpudefense.networkmap
 
 import android.graphics.*
+import android.graphics.Bitmap.Config.ARGB_8888
 import android.view.MotionEvent
 import com.example.cpudefense.EndlessStageCreator
 import com.example.cpudefense.GameMechanics
@@ -153,7 +154,7 @@ class Network(val gameMechanics: GameMechanics, val gameView: GameView, x: Int, 
         validateViewport()
         gameView.background.setBackgroundDimensions(gameView.width, gameView.height, newBackground)
         gameView.background.basicBackground?.let{
-            networkImage = it.copy(it.config, true)
+            networkImage = it.copy(it.config ?: ARGB_8888, true)
             val canvas = Canvas(networkImage)
             for (obj in links.values)
                 obj.display(canvas, gameView.viewport)
