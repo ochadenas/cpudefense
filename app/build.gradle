@@ -4,14 +4,14 @@ plugins {
 }
 
 android {
-    compileSdk 34
+    compileSdk = 34
 
     defaultConfig {
         applicationId 'de.chadenas.cpudefense'
-        minSdk 21
-        targetSdk 34
-        versionCode 55
-        versionName "1.55"
+        minSdk = 21
+        targetSdk = 34
+        versionCode = 55
+        versionName = "1." + versionCode.toString()
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         dependenciesInfo {
@@ -24,18 +24,18 @@ android {
     }
 
     androidResources {
-        generateLocaleConfig true
+        generateLocaleConfig = true
     }
 
     buildTypes {
         release {
-            minifyEnabled false
-            vcsInfo.include false
+            minifyEnabled = false
+            vcsInfo.include = false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.debug
+            signingConfig = signingConfigs.debug
         }
         debug {
-            signingConfig signingConfigs.debug
+            signingConfig = signingConfigs.debug
         }
     }
     compileOptions {
@@ -45,7 +45,13 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
-    namespace 'com.example.cpudefense'
+    buildFeatures {
+        buildConfig = true
+    }
+    lint {
+        baseline = file("lint-baseline.xml")
+    }
+    namespace = 'com.example.cpudefense'
 }
 
 dependencies {
