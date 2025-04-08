@@ -240,7 +240,7 @@ class GameView(context: Context):
 
     }
 
-    override fun onTouchEvent(event: MotionEvent?): Boolean {
+    override fun onTouchEvent(event: MotionEvent): Boolean {
         this.gestureDetector.onTouchEvent(event)
         return true
     }
