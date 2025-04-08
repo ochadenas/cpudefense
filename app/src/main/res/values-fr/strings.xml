@@ -21,7 +21,7 @@
     <string name="button_nextlevel">Niveau suivant</string>
     <string name="failed">Niveau échoué.</string>
     <string name="selectLevel">Choix de niveau</string>
-    <string name="play_selected_level">Jouer le niveau choisi</string>
+    <string name="play_selected_level">Jouer ce niveau</string>
     <string name="button_marketplace">Recrutement</string>
     <string name="level_entry">Niveau %s</string>
     <string name="level_selector">Sélection de niveau</string>
@@ -36,13 +36,13 @@
     <string name="choice_3">Non, garder la progression.</string>
     <string name="close">Fermer</string>
     <string name="instr_1">Votre ordinateur est envahi par un virus. Des fragments de code maléfique - représentés par des uns et des zéros - tentent d\'atteindre le processeur.\n\nTapez sur l\'emplacement vide pour ajouter une puce comme défense contre l\'attaque, puis tapez à nouveau pour confirmer votre choix.\n\nLa puce la plus basique est \'SUB 1\' qui soustrait 1 à la valeur de l\'attaquant : les 1 deviennent des 0, et les 0 disparaissent et ne constituent plus une menace.</string>
-    <string name="instr_2">Vous pouvez appuyer sur un attaquant. Cela inversera sa valeur : 1 devient 0 et 0 devient 1.\n\nInverser un 0 rendra en fait l\'attaquant plus dangereux, alors faites attention de ne pas taper sur tout ce que vous voyez.</string>
+    <string name="instr_2">Vous pouvez taper sur un attaquant. Cela inversera sa valeur : 1 devient 0 et 0 devient 1.\n\nInverser un 0 rendra en fait l\'attaquant plus dangereux, alors faites attention de ne pas taper sur tout ce que vous voyez.</string>
     <string name="instr_3">La monnaie dans ce jeu est l\'information. Elle est affichée en bas à gauche.\n\nDétruisez les attaquants pour obtenir de l\'information sur le virus. Utilisez-la pour acheter des puces supplémentaires ou pour améliorer celles existantes.</string>
     <string name="instr_4">Voici quelques conseils : \n  \nEn binaire, \n 10 est égal à 2, \n 11 est égal à 3, \n100 est égal à 4, et ainsi de suite. #\n  \nEssayez d\'appuyer sur des chiffres commençant par 1. Cela réduit les valeurs des attaquants et rend le niveau beaucoup plus facile. \n  \nTout attaquant qui parvient à accéder au processeur coûtera une vie, quel que soit sa valeur. Vous devez disposer d\'au moins une puce SUB pour vous en débarrasser.</string>
     <string name="instr_5">Dans le niveau suivant, un nouveau type de puce est disponible. Il est étiqueté « SHR 1 », ce qui signifie « shift right by 1 ».\n\nTous les chiffres sont déplacés d\'une position vers la droite. Le chiffre le plus à gauche est remplacé par 0. Par exemple, 0110 devient 0011. \n\nCette opération est équivalente à diviser la valeur par 2.</string>
     <string name="instr_6">Pour des niveaux réussis, vous gagnez de précieux écus : des crypto-coins. Cela vous permet de recruter des héroïnes et des héros de l\'ère de l\'information qui vous donneront des avantages significatifs dans le jeu.\n\nPour chaque niveau il y a un nombre maximum d\'écus, indiqué dans la barre d\'état. Chaque vie perdue réduit le nombre de crypto-coins.\n\nSi tous les écus ne sont pas gagnés dès le premier tour, le niveau peut être répété à volonté. Cependant, si le maximum est atteint, vous ne recevrez plus d\'écus pour ce niveau.</string>
     <string name="instr_7">Parfois, on voit un écu se déplacer avec les attaquants. Vous pouvez le ramasser en le détruisant, même plusieurs fois lorsque vous rejouez le niveau.\n\nMais attention, l\'écu mouvant est plus puissant que les attaquants ordinaires, et si il atteint le processeur, cela vous coûtera une vie.</string>
-    <string name="instr_7a">Le saviez-vous ?</string>
+    <string name="instr_7a">Les puces doivent refroidir entre les opérations. Engagez des héros pour réduire le risque que des attaquants groupés submergent une puce.\n\n\nSi vous êtes bloqué, vous pouvez rejouer un niveau inférieur en essayant d\'attraper un écu ambulant.\n</string>
     <string name="instr_8">"Vous pouvez vendre des puces et réutiliser leurs emplacements. La plupart de l'information sera remboursée.\n \n Notez qu'une puce activée terminera son cycle de refroidissement avant de disparaître définitivement."</string>
     <string name="instr_9">Nous introduisons une nouvelle puce, la MEM (pour memory). Celle-ci prend un nombre et le stocke en toute sécurité dans la mémoire de l\'ordinateur. Un petit indicateur blanc indique qu\'une valeur se trouve à l\'intérieur.\n\nLa puce MEM doit être « lue » (en tapant dessus). Une fois que vous avez tapé sur la puce, son cycle de refroidissement commence, et ce n\'est qu\'après cela que l\'emplacement de mémoire redevient disponible. Un cadre blanc épais indique si vous devez taper sur la puce.\n\nPour l\'instant, la puce MEM ne peut contenir qu\'une seule valeur. Plus tard dans le jeu, vous pourrez acheter des améliorations, créant ainsi des emplacements supplémentaires.\n\nLes puces MEM sont puissantes car elles peuvent éliminer n\'importe quel attaquant, mais elles requièrent votre attention et sont assez lentes.</string>
     <string name="instr_10">La puce accumulateur (ACC) est un peu plus complexe que les autres, mais elle peut être très efficace contre un grand nombre d’attaquants. Elle prend deux valeurs et les combine en un seul résultat.\n\nDans sa variante de base, elle additionne les deux valeurs. Après la première amélioration, elle fera une opération « ou binaire », après une deuxième amélioration « et binaire ».\n\nExemple : Si les nombres 0110 (soit 6) et 0011 (soit 3) entrent dans la puce ACC, le résultat sera\n1001 (soit 9) lors d\'une addition [ACC +]\n0111 (soit 7) en utilisant  « ou » [ACC v]\n0010 (soit 2) en utilisant « et » [ACC &amp;].\n\nL’avantage de l’ACC est qu’elle est vraiment rapide.</string>
@@ -138,7 +138,7 @@
     <string name="button_purchase_plural">"Recruter [%d écus] "</string>
     <string name="button_back">Fermer</string>
     <string name="button_info">Info</string>
-    <string name="button_releasenotes">Release Notes</string>
+    <string name="button_releasenotes">Notes de version</string>
     <string name="text_about">A propos de…</string>
     <string name="instr_endless">Vous avez réussi tous les niveaux et gagné le jeu !\n\nSi vous le souhaitez, vous pouvez continuer en mode « endless » (sans fin), avec des circuits générés aléatoirement et de plus en plus difficiles. Vous commencerez cette série sans héros, et vous ne pourrez pas utiliser les écus collectées jusqu\'à présent. \n\nJusqu\'où irez-vous ?</string>
     <string name="message_endless_unavailable">Disponible après avoir terminé tous les niveaux précédents.</string>
@@ -229,7 +229,6 @@
     <string name="version">Version</string>
     <string name="settings_language_selection_title">Choix de langue</string>
     <string name="settings_language_selection_text">"Pour changer la langue du jeu, ouvrez le dialogue « Paramètres » de l'appareil et naviguez sur « Langues de l'application »."</string>
-    <string name="app_name_last">Defense</string>
     <string name="deco">Deco</string>
     <string name="coins_got">%1$d écu reçu sur %2$d</string>
     <string name="coins_got_plural">%1$d écus reçus sur %2$d</string>
