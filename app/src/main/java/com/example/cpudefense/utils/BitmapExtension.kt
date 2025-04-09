@@ -4,6 +4,7 @@ package com.example.cpudefense.utils
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.Bitmap.Config.ARGB_8888
 import android.graphics.Color
 import android.graphics.Matrix
 import android.renderscript.Allocation
@@ -18,7 +19,7 @@ fun Bitmap.blur(context: Context, radius: Float = 10F): Bitmap?
  * from https://www.android--code.com/2020/06/android-kotlin-bitmap-blur-effect.html
  * */
 {
-    val bitmap = copy(config,true)
+    val bitmap = copy(config ?: ARGB_8888,true)
 
     RenderScript.create(context).apply {
         val input = Allocation.createFromBitmap(this,this@blur)

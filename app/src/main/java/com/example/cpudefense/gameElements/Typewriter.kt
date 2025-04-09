@@ -29,7 +29,7 @@ class Typewriter(val gameView: GameView, myArea: Rect, private var lines: CopyOn
             callback?.let { it() }  // call callback function, if defined.
             return false
         }
-        textBoxes.add(TextBox(gameView, lines.removeFirst(), pos, {  showNextLine() } ))
+        textBoxes.add(TextBox(gameView, lines.removeAt(0), pos, {  showNextLine() } ))
         return true
     }
 
