@@ -255,10 +255,7 @@ The programming language Pascal is named after him."</string>
     <string name="stage_reached">Stage reached: %1$s %2$d</string>
     <string name="series_completed_message_2">You may replay all levels</string>
     <string name="series_completed_message_3">in “turbo” mode now.</string>
-    <string name="instr_2_1">
-"In turbo mode, the attackers are stronger, faster and more numerous.
-
-Furthermore, some slots are already taken by unwanted chips you´ll have to deal with."</string>
+    <string name="instr_2_1">" In turbo mode, the attackers are stronger, faster and more numerous.  Furthermore, some slots are already taken by unwanted chips you´ll have to deal with."</string>
     <string name="settings_disable_background">Disable background</string>
     <string name="settings_show_atts_in_range">Show attackers in range</string>
     <string name="series_completed_message_1">" "</string>

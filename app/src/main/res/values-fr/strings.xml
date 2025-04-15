@@ -140,7 +140,7 @@
     <string name="button_info">Info</string>
     <string name="button_releasenotes">Notes de version</string>
     <string name="text_about">A propos de…</string>
-    <string name="instr_endless">Vous avez réussi tous les niveaux et gagné le jeu !\n\nSi vous le souhaitez, vous pouvez continuer en mode « endless » (sans fin), avec des circuits générés aléatoirement et de plus en plus difficiles. Vous commencerez cette série sans héros, et vous ne pourrez pas utiliser les écus collectées jusqu\'à présent. \n\nJusqu\'où irez-vous ?</string>
+    <string name="instr_endless">Vous avez réussi tous les niveaux et gagné le jeu !\n\nSi vous le souhaitez, vous pouvez continuer en mode « endless » (sans fin), avec des circuits générés aléatoirement et de plus en plus difficiles. Vous commencerez cette série sans héros, et vous ne pourrez pas utiliser les écus collectés jusqu\'à présent. \n\nJusqu\'où irez-vous ?</string>
     <string name="message_endless_unavailable">Disponible après avoir terminé tous les niveaux précédents.</string>
     <string name="instr_did_you_know">Le saviez-vous ?</string>
     <string-array name="fun_fact">

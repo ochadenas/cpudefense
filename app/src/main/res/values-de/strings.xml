@@ -169,7 +169,7 @@ Das Verschieben ist gleichbedeutend mit einer Division durch 2."
     <string name="button_releasenotes">Versionshinweise</string>
     <string name="text_about">Über …</string>
     <string name="instr_16">Der NOP Chip (für „no operation“) tut gar nichts, belegt allerdings einen wertvollen Steckplatz.\n\nEin NOP 2 Chip tut ebenfalls nicht, und das gleich zwei Mal.</string>
-    <string name="instr_endless">Du hast alle Level geschafft und das Spiel gewonnen!\n\nWenn du willst, kannst du nun im „Endlos“-Modus weitermachen, mit zufällig generierten Leveln, die immer schwieriger werden. Du beginnst diese neue Serie ohne Helden, und du kannst die bisher gesammelten Münzen nicht verwenden. \n\nWie weit kommst du?</string>
+    <string name="instr_endless">Du hast alle Level geschafft und das Spiel gewonnen!\n\nWenn du willst, kannst du nun im „Endlos“-Modus weitermachen, mit zufällig generierten Leveln, die immer schwieriger werden. Du beginnst diese neue Serie ohne Helden, und du kannst die bisher gesammelten CryptoCoins nicht verwenden. \n\nWie weit kommst du?</string>
     <string name="message_endless_unavailable">Verfügbar nach Abschluss aller vorherigen Level.</string>
     <string-array name="fun_fact">
         <item>Bis 1999 war ein <i>Kilobyte</i> (kB) noch 1024 Bytes „wert”. Aus Gründen der Konsistenz mit anderen SI-Einheiten wurde die Bedeutung zu „1000 Bytes“ geändert.\n\nGleichzeitig wurde das <i>Kibibyte</i> (KiB) erfunden. Es gilt: 1 KiB = 1024 B.</item>
@@ -251,7 +251,7 @@ Das Verschieben ist gleichbedeutend mit einer Division durch 2."
     <string name="toast_enter_stage">Level %s</string>
     <string name="conway">John Horton Conway ist in erster Linie für die Erfindung von Conway\'s Game of Life bekannt, einem zellulären Automaten, der komplexe lebende Muster auf einem Computerbildschirm erzeugt. \n\nConway interessierte sich für mathematische Spiele mit und ohne Computer und veröffentlichte einen der ersten Algorithmen zur Lösung des Zauberwürfels. Er leistete aber auch viele Beiträge zur „ernsthaften“ Mathematik.</string>
     <string name="query_purchase_life">Willst du %s ausgeben, um ein Leben zurückzuerhalten?</string>
-    <string name="annotation_purchase_life">Dieser Dialog kann unter „Einstellungen“ deaktviert werden. Auch durch Tippen auf die CPU lassen sich zusätzliche Leben „kaufen“.</string>
+    <string name="annotation_purchase_life">Dieser Dialog kann unter „Einstellungen“ deaktiviert werden. Auch durch Tippen auf die CPU lassen sich zusätzliche Leben „kaufen“.</string>
     <string name="coins_singular">einen Coin</string>
     <string name="coins_plural">%d Coins</string>
     <string name="coins_none">keinen Coin</string>
