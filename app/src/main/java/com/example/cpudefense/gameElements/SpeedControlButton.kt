@@ -6,6 +6,7 @@ import com.example.cpudefense.GameMechanics
 import com.example.cpudefense.GameView
 import com.example.cpudefense.effects.Fadable
 import com.example.cpudefense.effects.Fader
+import androidx.core.graphics.scale
 
 class SpeedControlButton(val gameView: GameView, val gameMechanics: GameMechanics, var type: Type = Type.PAUSE, private val panel: SpeedControl): Fadable
 {
@@ -19,13 +20,13 @@ class SpeedControlButton(val gameView: GameView, val gameMechanics: GameMechanic
     fun setSize(size: Int)
     {
         area = Rect(0, 0, size, size)
-        bitmapOfType[Type.PAUSE] = Bitmap.createScaledBitmap(gameView.pauseIcon, size, size, true)
-        bitmapOfType[Type.NORMAL] = Bitmap.createScaledBitmap(gameView.playIcon, size, size, true)
-        bitmapOfType[Type.FAST] = Bitmap.createScaledBitmap(gameView.fastIcon, size, size, true)
-        bitmapOfType[Type.FASTEST] = Bitmap.createScaledBitmap(gameView.fastestIcon, size, size, true)
-        bitmapOfType[Type.RETURN] = Bitmap.createScaledBitmap(gameView.returnIcon, size, size, true)
-        bitmapOfType[Type.LOCK] = Bitmap.createScaledBitmap(gameView.moveLockIcon, size, size, true)
-        bitmapOfType[Type.UNLOCK] = Bitmap.createScaledBitmap(gameView.moveUnlockIcon, size, size, true)
+        bitmapOfType[Type.PAUSE] = gameView.pauseIcon.scale(size, size)
+        bitmapOfType[Type.NORMAL] = gameView.playIcon.scale(size, size)
+        bitmapOfType[Type.FAST] = gameView.fastIcon.scale(size, size)
+        bitmapOfType[Type.FASTEST] = gameView.fastestIcon.scale(size, size)
+        bitmapOfType[Type.RETURN] = gameView.returnIcon.scale(size, size)
+        bitmapOfType[Type.LOCK] = gameView.moveLockIcon.scale(size, size)
+        bitmapOfType[Type.UNLOCK] = gameView.moveUnlockIcon.scale(size, size)
     }
 
     override fun fadeDone(type: Fader.Type) {

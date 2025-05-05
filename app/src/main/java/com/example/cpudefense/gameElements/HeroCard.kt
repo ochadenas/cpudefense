@@ -4,7 +4,6 @@ package com.example.cpudefense.gameElements
 
 import android.content.res.Resources
 import android.graphics.*
-import com.example.cpudefense.GameMechanics
 import com.example.cpudefense.GameView
 import com.example.cpudefense.Hero
 import com.example.cpudefense.R

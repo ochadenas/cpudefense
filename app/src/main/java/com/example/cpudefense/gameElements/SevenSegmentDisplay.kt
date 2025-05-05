@@ -10,6 +10,7 @@ import android.graphics.Rect
 import com.example.cpudefense.R
 import com.example.cpudefense.networkmap.Viewport
 import com.example.cpudefense.utils.setTopLeft
+import androidx.core.graphics.createBitmap
 
 class SevenSegmentDisplay(private val numberOfDigits: Int, val size: Int, activity: Activity): GameElement()
 {
@@ -57,7 +58,7 @@ class SevenSegmentDisplay(private val numberOfDigits: Int, val size: Int, activi
 
     fun getDisplayBitmap(number: Int, ledColor: LedColors, isLit: Boolean = true, radix: Int = 10): Bitmap
     {
-        val bitmap = Bitmap.createBitmap(numberOfDigits*sizeX+2*margin, sizeY+2*margin, Bitmap.Config.ARGB_8888)
+        val bitmap = createBitmap(numberOfDigits * sizeX + 2 * margin, sizeY + 2 * margin)
         if ((radix <= 0) || (radix > 16))
             return bitmap // value not allowed. In fact, only 10 or 16 are reasonable bases
         val canvas = Canvas(bitmap)

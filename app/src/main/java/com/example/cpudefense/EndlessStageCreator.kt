@@ -137,7 +137,7 @@ class EndlessStageCreator(val stage: Stage)
         // stage.network.nodes.entries.removeIf { it.value.connectedLinks.size == 0 }  // preferred solution, but requires API24
 
         // solution by copying the whole hash map:
-        val nodesWithConnectors: Map<Int, Node> = stage.network.nodes.filter { it.value.connectedLinks.size > 0 }
+        val nodesWithConnectors: Map<Int, Node> = stage.network.nodes.filter { it.value.connectedLinks.isNotEmpty() }
         stage.network.nodes = nodesWithConnectors as HashMap<Int, Node>
         stage.chips = nodesWithConnectors as HashMap<Int, Chip>
 
@@ -378,8 +378,8 @@ class EndlessStageCreator(val stage: Stage)
 
         inner class Model(val number: Int) {
             var createNodes: (Stage, Rect) -> Unit
-            private var possibleEntries = Direction.values()
-            private var possibleExits = Direction.values()
+            private var possibleEntries = Direction.entries.toTypedArray()
+            private var possibleExits = Direction.entries.toTypedArray()
 
             init {
                 when (number) {

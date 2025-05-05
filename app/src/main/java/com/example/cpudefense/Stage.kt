@@ -10,6 +10,7 @@ import com.example.cpudefense.networkmap.Viewport
 import com.example.cpudefense.utils.blur
 import java.util.concurrent.CopyOnWriteArrayList
 import kotlin.random.Random
+import androidx.core.graphics.scale
 
 class Stage(var gameMechanics: GameMechanics, var gameView: GameView)
 {
@@ -250,7 +251,7 @@ class Stage(var gameMechanics: GameMechanics, var gameView: GameView)
             val strength = Random.nextFloat()*(maxNumber+1) * gameMechanics.heroModifier(Hero.Type.DECREASE_ATT_STRENGTH)
             Attacker(network, representation, strength.toULong(), actualSpeed)
         }
-        if (tracks.size > 0) {
+        if (tracks.isNotEmpty()) {
             network.addVehicle(attacker)
             attacker.setOntoTrack(tracks[Random.nextInt(tracks.size)])
             attacker.makeNumber()
@@ -259,7 +260,7 @@ class Stage(var gameMechanics: GameMechanics, var gameView: GameView)
     }
 
     fun chipCount(type: Chip.ChipType): Int
-    /** @return the number of [chip]s of this [type] in the network */
+    /** @return the number of [Chip]s of this [type] in the network */
     {
         return chips.values.filter { it.chipData.type == type }.size
     }
@@ -280,7 +281,7 @@ class Stage(var gameMechanics: GameMechanics, var gameView: GameView)
             GameMechanics.GamePhase.INTERMEZZO -> return null
             GameMechanics.GamePhase.MARKETPLACE -> return null
             else -> {
-                if (waves.size == 0)
+                if (waves.isEmpty())
                 {
                     gameView.gameActivity.onEndOfStage()
                     return null
@@ -420,7 +421,7 @@ class Stage(var gameMechanics: GameMechanics, var gameView: GameView)
             data.ident.number>200 -> 5
             else -> 4
         }
-        if (minLength<requiredLength || tracks.size == 0) {
+        if (minLength<requiredLength || tracks.isEmpty()) {
             data.difficulty = 999.0  // too difficult
             return
         }
@@ -452,7 +453,7 @@ class Stage(var gameMechanics: GameMechanics, var gameView: GameView)
             network.makeSnapshot(Canvas(bigSnapshot), p)
             // blur the image
             bigSnapshot = bigSnapshot.blur(gameView.gameActivity, 3f) ?: bigSnapshot
-            return Bitmap.createScaledBitmap(bigSnapshot, size, size, true)
+            return bigSnapshot.scale(size, size)
         }
         else
             return null

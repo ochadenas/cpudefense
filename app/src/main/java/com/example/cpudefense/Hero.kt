@@ -420,7 +420,6 @@ class Hero(var gameActivity: GameActivity, type: Type)
                 Type.CONVERT_HEAT -> return level * 3f
                 Type.DOUBLE_HIT_SUB -> return if (level < 10) level * 10f else 100f
                 Type.DOUBLE_HIT_SHR -> return if (level < 10) level * 10f else 100f
-                else -> return level.toFloat()
             }
         }
     }

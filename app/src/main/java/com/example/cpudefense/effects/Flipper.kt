@@ -10,6 +10,7 @@ import com.example.cpudefense.utils.clear
 import com.example.cpudefense.utils.flipHorizontally
 import com.example.cpudefense.utils.flipVertically
 import kotlin.math.cos
+import androidx.core.graphics.createBitmap
 
 class Flipper(val gameView: GameView, private val thing: Flippable,
               var type: Type = Type.HORIZONTAL, private val speed: Speed = Speed.MEDIUM)
@@ -22,7 +23,7 @@ class Flipper(val gameView: GameView, private val thing: Flippable,
     private var bitmapVerso: Bitmap
     private var width = bitmapRecto.width
     private var height = bitmapRecto.height
-    private var actualBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+    private var actualBitmap = createBitmap(width, height)
     private var paint = Paint()
 
     enum class Type { HORIZONTAL, VERTICAL, NONE }

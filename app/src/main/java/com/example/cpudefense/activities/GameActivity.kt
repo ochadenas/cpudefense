@@ -329,12 +329,12 @@ class GameActivity : Activity() {
             GamePhase.START -> {
                 setGameActivityStatus(GameActivityStatus.BETWEEN_LEVELS)
                 gameMechanics.currentlyActiveStage?.let {
-                    gameMechanics.currentlyActiveWave = if (it.waves.size > 0) it.waves[0]
+                    gameMechanics.currentlyActiveWave = if (it.waves.isNotEmpty()) it.waves[0]
                     else it.nextWave() }
             }
             else -> {
                 gameMechanics.currentlyActiveStage?.let {
-                    gameMechanics.currentlyActiveWave = if (it.waves.size > 0) it.waves[0]
+                    gameMechanics.currentlyActiveWave = if (it.waves.isNotEmpty()) it.waves[0]
                     else it.nextWave()
                 }
             }

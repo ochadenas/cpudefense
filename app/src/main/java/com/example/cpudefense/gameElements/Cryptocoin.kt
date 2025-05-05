@@ -14,13 +14,14 @@ import com.example.cpudefense.effects.Flippable
 import com.example.cpudefense.effects.Flipper
 import com.example.cpudefense.networkmap.Viewport
 import com.example.cpudefense.utils.setCenter
+import androidx.core.graphics.createBitmap
 
 class Cryptocoin(network: com.example.cpudefense.networkmap.Network, number: ULong = 1u, speed: Float = 1.0f):
     Attacker(network, Representation.BINARY, number, speed), Flippable
 {
     var paint = Paint()
     private var isCurrentlyFlipping = false
-    private var myBitmap: Bitmap = Bitmap.createBitmap(32, 32, Bitmap.Config.ARGB_8888)
+    private var myBitmap: Bitmap = createBitmap(32, 32)
 
     init {
         this.attackerData.isCoin = true

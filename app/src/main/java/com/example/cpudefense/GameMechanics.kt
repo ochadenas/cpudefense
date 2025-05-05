@@ -443,7 +443,7 @@ class GameMechanics {
          available amount. In this case, reset the heroes and refund the coins.
          */
         val coinsActuallySpentOnHeroes = heroes.values.sumOf { it.data.coinsSpent }
-        for (mode in LevelMode.values()) // do this for basic and endless
+        for (mode in LevelMode.entries) // do this for basic and endless
         {
             purseOfCoins[mode]?.let {
                 it.calculateInitialContents()

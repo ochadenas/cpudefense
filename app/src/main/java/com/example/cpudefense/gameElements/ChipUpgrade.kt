@@ -7,6 +7,7 @@ import android.view.MotionEvent
 import com.example.cpudefense.*
 import com.example.cpudefense.effects.Movable
 import com.example.cpudefense.utils.*
+import androidx.core.graphics.createBitmap
 
 class ChipUpgrade(
     private val chipToUpgrade: Chip, val type: Chip.ChipUpgrades,
@@ -144,7 +145,7 @@ class ChipUpgrade(
             Chip.ChipUpgrades.CLK -> "CLK"
             Chip.ChipUpgrades.RES -> "R"
         }
-        val bitmap = Bitmap.createBitmap(actualRect.width(), actualRect.height(), Bitmap.Config.ARGB_8888)
+        val bitmap = createBitmap(actualRect.width(), actualRect.height())
         val rect = Rect(0, 0, bitmap.width, bitmap.height)
 
         paintFrame.color = if (type== Chip.ChipUpgrades.SELL) Color.RED else color

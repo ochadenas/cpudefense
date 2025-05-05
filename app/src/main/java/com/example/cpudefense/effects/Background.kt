@@ -15,6 +15,8 @@ import com.example.cpudefense.Stage
 import com.example.cpudefense.utils.setTopLeft
 import kotlin.math.max
 import kotlin.random.Random
+import androidx.core.graphics.createBitmap
+import androidx.core.graphics.scale
 
 class Background(val gameView: GameView)
 /** The background shown during the game, showing a picture of real circuits.
@@ -134,14 +136,14 @@ class Background(val gameView: GameView)
         var useSpecialBackground = GameMechanics.specialLevel(stageIdent)
         if (useSpecialBackground == GameMechanics.Params.Season.CHRISTMAS)
             gameView.effects?.addSnow()
-        val n = stageIdent.number ?: 0
+        val n = stageIdent.number
         wholeBackground = loadWholeBitmap(n % maxBackgroundNumber + 1, useSpecialBackground)
     }
 
     private fun createBlankBackground(destRect: Rect): Bitmap
     /** @return an empty bitmap with the dimensions of the given rectangle */
     {
-        val bitmap = basicBackground ?: Bitmap.createBitmap(destRect.width(), destRect.height(), Bitmap.Config.ARGB_8888)
+        val bitmap = basicBackground ?: createBitmap(destRect.width(), destRect.height())
         basicBackground = bitmap
         val canvas = Canvas(bitmap)
         canvas.drawColor(gameView.resources.getColor(R.color.network_background))
@@ -162,7 +164,7 @@ class Background(val gameView: GameView)
         val scaleY: Float = (destRect.height() / sourceY.toFloat())
         val scale = max(scaleX, scaleY)
         val largeBitmap = if (scale > 1.0f)
-            Bitmap.createScaledBitmap(sourceBitmap, (sourceX*scale).toInt(), (sourceY*scale).toInt(), false)
+            sourceBitmap.scale((sourceX * scale).toInt(), (sourceY * scale).toInt(), false)
         else sourceBitmap
 
         // here, largeBitmap is at least as big as the destination rectangle (in both dimensions)

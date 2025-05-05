@@ -2,7 +2,6 @@ package com.example.cpudefense.activities
 
 import android.content.Intent
 import android.graphics.*
-import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.view.Gravity
 import android.view.View
@@ -17,8 +16,9 @@ import com.example.cpudefense.Persistency
 import com.example.cpudefense.R
 import com.example.cpudefense.Settings
 import com.example.cpudefense.Stage
-import com.example.cpudefense.gameElements.Attacker
 import com.google.android.material.tabs.TabLayout
+import androidx.core.graphics.createBitmap
+import androidx.core.graphics.drawable.toDrawable
 
 @Suppress("DEPRECATION")
 class LevelSelectActivity : AppCompatActivity() {
@@ -227,13 +227,13 @@ class LevelSelectActivity : AppCompatActivity() {
         // add bitmap to text view
         val iconPadding = 10
         val iconSize = GameView.levelSnapshotIconSize + iconPadding
-        val bitmap = Bitmap.createBitmap(iconSize, iconSize, Bitmap.Config.ARGB_8888)
+        val bitmap = createBitmap(iconSize, iconSize)
         icon?.let {
             val canvas = Canvas(bitmap)
             val paint = Paint()
             canvas.drawBitmap(it, null, Rect(iconPadding,iconPadding, iconSize-iconPadding, iconSize-iconPadding), paint)
         }
-        view.setCompoundDrawablesWithIntrinsicBounds(BitmapDrawable(resources, bitmap), null, null, null)
+        view.setCompoundDrawablesWithIntrinsicBounds(bitmap.toDrawable(resources), null, null, null)
     }
 
     private fun onLevelSelect(v: View, level: Int)
