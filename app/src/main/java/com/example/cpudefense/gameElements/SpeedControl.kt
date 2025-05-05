@@ -10,6 +10,7 @@ import com.example.cpudefense.GameView
 import com.example.cpudefense.R
 import com.example.cpudefense.utils.setCenter
 import com.example.cpudefense.utils.setLeft
+import androidx.core.graphics.createBitmap
 
 class SpeedControl(var gameView: GameView)
 /** set of buttons that control the game speed, but also provide additional interaction such
@@ -76,7 +77,7 @@ class SpeedControl(var gameView: GameView)
         paint.textAlign = Paint.Align.LEFT
         val bounds = Rect()
         paint.getTextBounds(stageInfoText, 0, stageInfoText.length, bounds)
-        statusInfoBitmap = Bitmap.createBitmap(bounds.width(), bounds.height(), Bitmap.Config.ARGB_8888)
+        statusInfoBitmap = createBitmap(bounds.width(), bounds.height())
         statusInfoBitmap?.let {
             val canvas = Canvas(it)
             canvas.drawText(stageInfoText, 0f, (it.height-bounds.bottom).toFloat(), paint)

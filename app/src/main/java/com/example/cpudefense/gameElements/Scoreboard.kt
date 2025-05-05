@@ -6,6 +6,7 @@ import android.graphics.*
 import com.example.cpudefense.*
 import com.example.cpudefense.networkmap.Viewport
 import com.example.cpudefense.utils.*
+import androidx.core.graphics.createBitmap
 
 class ScoreBoard(val gameView: GameView): GameElement() 
 {
@@ -150,7 +151,7 @@ class ScoreBoard(val gameView: GameView): GameElement()
                   */
         {
             this.area = Rect(area.left, area.top, (area.width()*fractionOfScoreBoardUsedForInf).toInt(), area.bottom)
-            bitmap = Bitmap.createBitmap(this.area.width(), this.area.height(), Bitmap.Config.ARGB_8888)
+            bitmap = createBitmap(this.area.width(), this.area.height())
             this.divider = divider
             return Rect(this.area.right, area.top, area.right, area.bottom)
         }
@@ -169,7 +170,7 @@ class ScoreBoard(val gameView: GameView): GameElement()
 
         fun recreateBitmap()
         {
-            bitmap = Bitmap.createBitmap(area.width(), area.height(), Bitmap.Config.ARGB_8888)
+            bitmap = createBitmap(area.width(), area.height())
             val canvas = Canvas(bitmap)
             val rect = Rect(0, divider, area.width(), area.height())
             val text = informationToString(gameView.gameMechanics.state.cash)
@@ -193,7 +194,7 @@ class ScoreBoard(val gameView: GameView): GameElement()
         fun setSize(area: Rect, divider: Int): Rect
         {
             this.area = Rect(area.left, area.top, (area.left+area.width()*0.25).toInt(), area.bottom)
-            bitmap = Bitmap.createBitmap(this.area.width(), this.area.height(), Bitmap.Config.ARGB_8888)
+            bitmap = createBitmap(this.area.width(), this.area.height())
             this.divider = divider
             return Rect(this.area.right, area.top, area.right, area.bottom)
         }
@@ -211,7 +212,7 @@ class ScoreBoard(val gameView: GameView): GameElement()
         }
 
         fun recreateBitmap() {
-            bitmap = Bitmap.createBitmap(area.width(), area.height(), Bitmap.Config.ARGB_8888)
+            bitmap = createBitmap(area.width(), area.height())
             val canvas = Canvas(bitmap)
             displayHeader(canvas, Rect(0,0, area.width(), area.height()), resources.getString(R.string.scoreboard_waves), centered = false)
             val rect = Rect(0, divider, area.width(), area.height())
@@ -251,7 +252,7 @@ class ScoreBoard(val gameView: GameView): GameElement()
         fun setSize(area: Rect, divider: Int): Rect
         {
             this.area = Rect(area.left, area.top, (area.left+area.width()*0.7f).toInt(), area.bottom)
-            bitmap = Bitmap.createBitmap(this.area.width(), this.area.height(), Bitmap.Config.ARGB_8888)
+            bitmap = createBitmap(this.area.width(), this.area.height())
             this.divider = divider
             calculateLedSize()
             return Rect(this.area.right, area.top, area.right, area.bottom)
@@ -284,7 +285,7 @@ class ScoreBoard(val gameView: GameView): GameElement()
         fun recreateBitmap()
         {
             val state = gameView.gameMechanics.state
-            bitmap = Bitmap.createBitmap(area.width(), area.height(), Bitmap.Config.ARGB_8888)
+            bitmap = createBitmap(area.width(), area.height())
             val canvas = Canvas(bitmap)
             ledAreaHeight = (area.height()-divider) - 2*margin
             // ledAreaWidth = (game.state.currentMaxLives + 1) * deltaX
@@ -347,8 +348,7 @@ class ScoreBoard(val gameView: GameView): GameElement()
         {
             actualSize = (GameView.coinSizeOnScoreboard * gameView.scaleFactor).toInt()
             this.area = Rect(area.left, area.top, (area.left+area.width()*0.36).toInt(), area.bottom)
-            bitmap =
-                Bitmap.createBitmap(this.area.width(), this.area.height(), Bitmap.Config.ARGB_8888)
+            bitmap = createBitmap(this.area.width(), this.area.height())
             this.divider = divider
             return Rect(this.area.right, area.top, area.right, area.bottom)
         }
@@ -371,7 +371,7 @@ class ScoreBoard(val gameView: GameView): GameElement()
         }
 
         fun recreateBitmap() {
-            bitmap = Bitmap.createBitmap(area.width(), area.height(), Bitmap.Config.ARGB_8888)
+            bitmap = createBitmap(area.width(), area.height())
             val canvas = Canvas(bitmap)
 
             val y = (divider + area.height()) / 2
@@ -425,7 +425,7 @@ class ScoreBoard(val gameView: GameView): GameElement()
         }
 
         fun recreateBitmap() {
-            bitmap = Bitmap.createBitmap(area.width(), area.height(), Bitmap.Config.ARGB_8888)
+            bitmap = createBitmap(area.width(), area.height())
             val canvas = Canvas(bitmap)
             sevenSegmentDisplay?.let {
                 val displayRect = Rect(0, divider, area.width(), area.height())
@@ -469,7 +469,7 @@ class ScoreBoard(val gameView: GameView): GameElement()
 
         private fun recreateBitmap() {
             if (area.width() >0 && area.height() > 0)
-                bitmap = Bitmap.createBitmap(area.width(), area.height(), Bitmap.Config.ARGB_8888)
+                bitmap = createBitmap(area.width(), area.height())
             // var textToDisplay = "Level %d, difficulty %.2f".format(game.currentStage.number, game.currentlyActiveStage?.data?.difficulty)
             val textToDisplay = "time per frame: %.2f ms.".format(gameView.gameMechanics.timeBetweenFrames)
             // var textToDisplay = "time per frame: %.2f ms. Ticks %d, frames %d.".format(game.timeBetweenFrames, game.ticksCount, game.frameCount)

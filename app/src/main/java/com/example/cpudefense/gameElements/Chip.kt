@@ -473,7 +473,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int):
     fun displayUpgrades(canvas: Canvas)
     /** if applicable, show the different upgrade possibilities */
     {
-        if (upgradePossibilities.size == 0)
+        if (upgradePossibilities.isEmpty())
             return
         val upgradesArea = Rect(0,0,0,0)  // start with empty rect
         /* create a rectangle that contains all update boxes including their labels */

@@ -13,7 +13,6 @@ import com.example.cpudefense.activities.GameActivity
 import com.example.cpudefense.effects.Explosion
 import com.example.cpudefense.effects.Fadable
 import com.example.cpudefense.effects.Fader
-import com.example.cpudefense.gameElements.Attacker
 import com.example.cpudefense.gameElements.Button
 import com.example.cpudefense.gameElements.GameElement
 import com.example.cpudefense.gameElements.Typewriter

@@ -3,12 +3,20 @@ package com.example.cpudefense
 import android.app.Dialog
 import android.content.Intent
 import android.content.res.Resources
-import android.graphics.*
-import android.net.Uri
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
+import android.graphics.Rect
 import android.view.MotionEvent
 import android.view.ViewGroup
 import android.widget.Toast
-import com.example.cpudefense.effects.*
+import androidx.core.graphics.createBitmap
+import androidx.core.net.toUri
+import com.example.cpudefense.effects.Fadable
+import com.example.cpudefense.effects.Fader
+import com.example.cpudefense.effects.Flippable
+import com.example.cpudefense.effects.Flipper
 import com.example.cpudefense.gameElements.Button
 import com.example.cpudefense.gameElements.GameElement
 import com.example.cpudefense.networkmap.Viewport
@@ -67,7 +75,7 @@ class Marketplace(val gameView: GameView): GameElement()
         val newUpgrades = mutableListOf<Hero>()
         val heroes = gameMechanics.currentHeroes(level)
         purse = gameMechanics.currentPurse()
-        for (type in Hero.Type.values())
+        for (type in Hero.Type.entries)
         {
             /* if upgrade already exists (because it has been bought earlier),
             get it from the game data. Otherwise, create an empty card.
@@ -231,7 +239,7 @@ class Marketplace(val gameView: GameView): GameElement()
     {
         if (currentWiki != selected) {
             val browserIntent =
-                Intent(Intent.ACTION_VIEW, Uri.parse(selected?.person?.url))
+                Intent(Intent.ACTION_VIEW, selected?.person?.url?.toUri())
             try {
                 gameView.gameActivity.startActivity(browserIntent)
                 currentWiki = selected
@@ -438,7 +446,7 @@ class Marketplace(val gameView: GameView): GameElement()
     {
         val paint = Paint()
         val myArea = Rect(0,0,size,size)
-        private var myBitmap: Bitmap = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888)
+        private var myBitmap: Bitmap = createBitmap(size, size)
         private val myCanvas = Canvas(myBitmap)
         var isCurrentlyFlipping = false
 
