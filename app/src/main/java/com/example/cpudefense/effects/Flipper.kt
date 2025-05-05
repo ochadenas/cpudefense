@@ -1,6 +1,7 @@
 package com.example.cpudefense.effects
 
 import android.graphics.Bitmap
+import android.graphics.Bitmap.Config.ARGB_8888
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Rect
@@ -33,7 +34,7 @@ class Flipper(val gameView: GameView, private val thing: Flippable,
         when (type) {
             Type.HORIZONTAL -> { bitmapVerso = bitmapRecto.flipHorizontally() }
             Type.VERTICAL -> { bitmapVerso = bitmapRecto.flipVertically() }
-            else -> { bitmapVerso = bitmapRecto.copy(bitmapRecto.config, true) }
+            else -> { bitmapVerso = bitmapRecto.copy(bitmapRecto.config?: ARGB_8888, true) }
         }
         gameView.flippers.add(this) // make sure we are in the list so that we can be called during update
         thing.flipStart()
@@ -66,14 +67,14 @@ class Flipper(val gameView: GameView, private val thing: Flippable,
             val targetRect = Rect((width - dimX) / 2, 0, (width + dimX) / 2, height)
             canvas.drawBitmap(bitmapRecto, null, targetRect, paint)
         }
-        thing.setBitmap(actualBitmap.copy(actualBitmap.config, true))
+        thing.setBitmap(actualBitmap.copy(bitmapRecto.config?: ARGB_8888, true))
         return
     }
 
     private fun flipDone()
     {
         type = Type.NONE
-        actualBitmap = bitmapRecto.copy(bitmapRecto.config, true)
+        actualBitmap = bitmapRecto.copy(bitmapRecto.config?: ARGB_8888, true)
         thing.setBitmap(actualBitmap)
         thing.flipDone()
     }

@@ -287,7 +287,7 @@ class Stage(var gameMechanics: GameMechanics, var gameView: GameView)
                 }
                 else {
                     data.wavesCount++
-                    return waves.removeFirst()
+                    return waves.removeAt(0)
                 }
             }
         }

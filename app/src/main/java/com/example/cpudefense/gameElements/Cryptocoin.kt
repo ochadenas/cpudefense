@@ -3,6 +3,7 @@
 package com.example.cpudefense.gameElements
 
 import android.graphics.Bitmap
+import android.graphics.Bitmap.Config.ARGB_8888
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Rect
@@ -62,7 +63,7 @@ class Cryptocoin(network: com.example.cpudefense.networkmap.Network, number: ULo
     }
 
     override fun makeNumber() {
-        myBitmap = this.network.gameView.currentCoinBitmap().copy(this.network.gameView.currentCoinBitmap().config, true)
+        myBitmap = this.network.gameView.currentCoinBitmap().copy(this.network.gameView.currentCoinBitmap().config ?: ARGB_8888, true)
     }
 
     override fun setBitmap(bitmap: Bitmap) {
@@ -71,7 +72,7 @@ class Cryptocoin(network: com.example.cpudefense.networkmap.Network, number: ULo
 
     override fun provideBitmap(): Bitmap {
         val bitmap = network.gameView.currentCoinBitmap()
-        return bitmap.copy(bitmap.config, true)
+        return bitmap.copy(bitmap.config ?: ARGB_8888, true)
     }
 
     override fun flipStart() {
