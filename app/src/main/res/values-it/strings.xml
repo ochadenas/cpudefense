@@ -217,7 +217,7 @@
     <string name="series_completed_message_3">tutti i livelli</string>
     <string name="overheat">danno alla CPU per surriscaldamento</string>
     <string name="ZZ_message_of_the_day">There have been major changes to game play, especially on the “Endless” levels. Check out the Release Notes in the INFO screen.</string>
-    <string name="ZZ_release_notes">Note di versione</string>
+    <string name="ZZ_release_notes">Note di versione\n\nVersion 1.55\n============\nNuove funzionalità:\n- Aggiunta la traduzione in italiano\n\nCorrezioni di bug:\nnessuna\n\nVarie:\n- Aggiornamento dell\'ambiente di compilazione, modernizzazione delle API\n</string>
     <string name="message_cannot_fire">Usa \"%s\" per licenziare questo eroe.</string>
     <string name="message_is_on_leave">%s è attualmente in vacanza.</string>
     <string name="instr_leave">Devi concedere una vacanza di %d livelli a uno di questi eroi. Durante questo periodo, lui o lei non sarà disponibile.</string>

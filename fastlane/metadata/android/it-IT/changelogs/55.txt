@@ -1,0 +1,8 @@
+Nuove funzionalità:
+- Aggiunta la traduzione in italiano
+
+Correzioni di bug:
+nessuna
+
+Varie:
+- Aggiornamento dell'ambiente di compilazione, modernizzazione delle API

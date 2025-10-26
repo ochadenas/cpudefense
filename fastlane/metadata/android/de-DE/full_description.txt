@@ -7,4 +7,4 @@ Die Angreifer in diesem Spiel werden als Bits und Bytes dargestellt. Um die CPU 
 Eine wichtige Rolle im Spiel spielen die „Heldinnen und Helden des Informationszeitalters“: Personen, die großen Einfluss auf die Entwicklung der modernen Computer hatten. Sie kommen mit einer kurzen Biografie und bieten globale Boni, die das Spiel erheblich erleichtern.
 
 
-Derzeit gibt es mehr als 25 Helden und Heldinnen. Das Spiel verfügt über 32 vordefinierte Levels, aber auch über einen „Endlos“-Modus mit zufällig generierten Levels. Unterstützte Sprachen sind Englisch, Französisch und Deutsch.
+Derzeit gibt es mehr als 25 Helden und Heldinnen. Das Spiel verfügt über 32 vordefinierte Levels, aber auch über einen „Endlos“-Modus mit zufällig generierten Levels. Unterstützte Sprachen sind Englisch, Französisch, Italienisch und Deutsch.

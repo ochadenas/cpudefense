@@ -1,0 +1,9 @@
+New features:
+- Italian translation added
+
+Bug fixes:
+none
+
+Miscellaneous:
+- build environment updated, API modernisations
+

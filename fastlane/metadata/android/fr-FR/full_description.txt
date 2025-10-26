@@ -7,4 +7,4 @@ Dans ce jeu, les attaquants sont représentés par des bits et des octets. Pour 
 Le jeu présente des « héros et héroïnes de l´ère de l´information » : des personnes qui ont eu une grande influence sur le développement des ordinateurs modernes. Ils sont accompagnés d´une courte biographie et fournissent des bonus globaux qui facilitent considérablement le jeu.
 
 
-Il existe actuellement plus de 25 héros et héroïnes. Le jeu comprend 32 niveaux prédéfinis, mais il dispose également d´un mode « sans fin » avec des niveaux générés de manière aléatoire. Les langues supportées sont l´anglais, le français et l´allemand.
+Il existe actuellement plus de 25 héros et héroïnes. Le jeu comprend 32 niveaux prédéfinis, mais il dispose également d´un mode « sans fin » avec des niveaux générés de manière aléatoire. Les langues supportées sont l´anglais, le français, l'italien et l´allemand.

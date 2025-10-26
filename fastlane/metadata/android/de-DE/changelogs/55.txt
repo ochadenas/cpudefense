@@ -1,0 +1,8 @@
+Neue Funktionen:
+- Italienische Übersetzung hinzugefügt
+
+Fehlerbehebungen:
+keine
+
+Sonstiges:
+- Aktualisierung der Build-Umgebung, API-Modernisierungen

@@ -1,5 +1,3 @@
-Version 1.54
-============
 Nouvelles fonctionnalités :
 - Ajout d'un texte explicatif au niveau 98. Résout le problème #214.
 
