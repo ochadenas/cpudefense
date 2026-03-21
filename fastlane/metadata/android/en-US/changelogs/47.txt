@@ -1,5 +1,5 @@
 New features:
-- "Endless" series can be reset independently from the basic series.
+- "Endless" series can be reset independently of the basic series.
 
 Bug fixes:
 - Background image no longer changes when switching between apps.
