@@ -94,7 +94,8 @@ class Stage(var gameMechanics: GameMechanics, var gameView: GameView)
     )
     lateinit var summary: Summary
 
-    var rewardCoins = 0  // number of coins that can be obtained by completing the level
+    /** number of coins that can be obtained by completing the level */
+    var rewardCoins = 0
 
     fun getLevel(): Int {return data.ident.number}
 
@@ -155,6 +156,7 @@ class Stage(var gameMechanics: GameMechanics, var gameView: GameView)
         { data.waves.add(it.data) }
         return data
     }
+
     fun provideData(): Data
     /** serialize all objects that belong to this stage
      * and return the data object
@@ -212,10 +214,16 @@ class Stage(var gameMechanics: GameMechanics, var gameView: GameView)
                 track.data.ident = id  // correction code for a bug in versions <= 1.36
                 stage.tracks[id] = track
             }
+            // set mask for the graphical representations of the links
+            stage.calculateUsageCount()
+            for (link in stage.network.links.values) {
+                link.chooseMask()
+            }
+
             // set summary and available coins
             var stageSummary = stage.gameMechanics.getSummaryOfStage(stage.data.ident)
             if (stageSummary == null)
-                stageSummary = Stage.Summary(coinsMaxAvailable = GameMechanics.defaultRewardCoins)
+                stageSummary = Summary(coinsMaxAvailable = GameMechanics.defaultRewardCoins)
             stageSummary.let {
                 stage.summary = it
                 stage.rewardCoins = it.coinsMaxAvailable
@@ -399,6 +407,14 @@ class Stage(var gameMechanics: GameMechanics, var gameView: GameView)
         chips.values.forEach()
         { sumOfObstacles += it.obstacleDifficulty() }
         return sumOfObstacles
+    }
+
+    fun calculateUsageCount()
+    /** calculates the number of times that each link is used within a track */
+    {
+        tracks.forEach { (_, track) ->
+            track.links.forEach { it.usageCount++ }
+        }
     }
 
     fun calculateDifficulty()

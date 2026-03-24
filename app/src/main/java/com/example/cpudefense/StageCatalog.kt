@@ -1815,7 +1815,7 @@ class StageCatalog
                     // can pass through the same node more than once using different links.
                     //
                     // An arbitrary number of tracks can be defined, and they must have idents
-                    // 0, 1, 2, ... in continuous order. An attacker will chose one of the tracks with
+                    // 0, 1, 2, ... in continuous order. An attacker will choose one of the tracks with
                     // equal probability. If you want a higher probability for one of the tracks, just
                     // copy it multiple times.
                     createTrack(listOf(1, 2, 3), 0)

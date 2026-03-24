@@ -142,9 +142,8 @@ class EndlessStageCreator(val stage: Stage)
         stage.chips = nodesWithConnectors as HashMap<Int, Chip>
 
         // set mask for the graphical representations of the links
-        for (link in stage.network.links.values)
-            setMask(link)
-
+        stage.calculateUsageCount()
+        stage.network.links.values.forEach { it.chooseMask() }
         createWaves()
         return
     }
@@ -202,19 +201,6 @@ class EndlessStageCreator(val stage: Stage)
     /** returns a random value for the link mask */
     {
         return 0x06
-    }
-
-    private fun setMask(link: Link?)
-    {
-        link?.let {
-            when (link.usageCount) {
-                0 -> it.mask = 0x08 // should not happen
-                1 -> it.mask = 0x01
-                2 -> it.mask = 0x06
-                3 -> it.mask = 0x07
-                else -> it.mask = 0x0F
-            }
-        }
     }
 
     private fun getByCoordinate(coord: SectorCoord): Sector?
@@ -336,7 +322,7 @@ class EndlessStageCreator(val stage: Stage)
 
     inner class Sector(val ident: SectorCoord, val area: Rect)
     /** representing a (virtual) part of the stage that may contain one or several nodes.
-     * @param ident: Pair numbering the sectors. NOT the grid position. For instance,
+     * @param ident Pair numbering the sectors. NOT the grid position. For instance,
      * if there are 3x3 sectors, _ident_ runs from (0, 0) to (2, 2).
      * @param area The size of the sector, in grid coordinates.
      */

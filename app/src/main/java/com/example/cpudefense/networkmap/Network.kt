@@ -94,7 +94,7 @@ class Network(val gameMechanics: GameMechanics, val gameView: GameView, x: Int, 
     fun validateViewport(): Boolean
     /** The viewport needs the size of the game surface (GameView) to calculate positions on the screen.
      * However, it is not easy to know when GameView actually receives its dimensions.
-     * Therefore we keep track whether the scaling factors are valid, and if not, we recalculate them.
+     * Therefor we keep track whether the scaling factors are valid, and if not, we recalculate them.
      *
      * @return false if the viewport is not valid, i.e. screen dimensions are not known
      */
@@ -194,7 +194,6 @@ class Network(val gameMechanics: GameMechanics, val gameView: GameView, x: Int, 
         linkIdents.forEach {id ->
             links[id]?.let {
                 track.links.add(it)
-                it.usageCount += 1
             }
         }
         return track

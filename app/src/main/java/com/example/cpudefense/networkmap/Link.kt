@@ -66,6 +66,17 @@ class Link(theNetwork: Network, var node1: Node, var node2: Node, var ident: Int
         paintLineBackground = Paint(paintBackground)
     }
 
+    fun chooseMask()
+    {
+        when (usageCount) {
+            0 -> mask = 0x08 // should not happen
+            1 -> mask = 0x01
+            2 -> mask = 0x06
+            3 -> mask = 0x07
+            else -> mask = 0x0F
+        }
+    }
+
     private fun calculateIntermediatePointPosition()
     {
         val distHorizontal = endPointOnGrid.x - startPointOnGrid.x

@@ -74,7 +74,7 @@ class Hero(var gameActivity: GameActivity, type: Type)
     var effect: String = ""
     var vitae: String = ""
 
-    /** hero cannot upgraded beyond this level. This value can be modified for certain heroes,
+    /** hero cannot be upgraded beyond this level. This value can be modified for certain heroes,
      * or by the effect of Sid Meier
       */
     private var maxLevel = 7
