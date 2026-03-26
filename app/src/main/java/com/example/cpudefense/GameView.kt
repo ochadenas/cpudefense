@@ -55,7 +55,7 @@ class GameView(context: Context):
         const val coinsAmountTextSize = 24f
 
         const val coinSizeOnScoreboard = 48
-        const val coinSizeOnScreen = 16
+        const val coinSizeOnScreen = 32
         const val cardWidth = 220
         const val cardHeight = cardWidth * 1.41
         const val cardPictureSize = cardWidth * 2 / 3
@@ -113,7 +113,7 @@ class GameView(context: Context):
 
     /** text scale factor, based on ScaledDensity */
     var textScaleFactor = 1.0f
-    /** general scale factor, based on ScaledDensity */
+    /** general scale factor, based on Density */
     var scaleFactor = 1.0f
 
     fun isInitialized(): Boolean
@@ -222,7 +222,7 @@ class GameView(context: Context):
     {
         // adjust text sizes and scaling factor
         textScaleFactor = 0.70f * resources.displayMetrics.scaledDensity
-        scaleFactor = 0.50f * resources.displayMetrics.scaledDensity
+        scaleFactor = 0.50f * resources.displayMetrics.density
         saveGraphicalState()
         // determine dimensions of the different game areas
         val viewportHeight = viewportHeight(h)

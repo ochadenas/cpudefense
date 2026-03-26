@@ -94,7 +94,7 @@ class HeroCard(val gameView: GameView, val hero: Hero): GameElement(), Fadable
         paintInactive.color = inactiveColor
         paintText.color = Color.WHITE
         paintText.style = Paint.Style.FILL
-        shortDescRect.top = shortDescRect.bottom - (50 * resources.displayMetrics.scaledDensity).toInt()
+        shortDescRect.top = shortDescRect.bottom - (100 * gameView.scaleFactor).toInt()
         heroOpacity = when (hero.data.level) { 0 -> 0f else -> 1f}
     }
 
@@ -113,7 +113,7 @@ class HeroCard(val gameView: GameView, val hero: Hero): GameElement(), Fadable
                 paintRect.strokeWidth = 2f + hero.data.level / 2
             }
         }
-        paintRect.strokeWidth *= resources.displayMetrics.scaledDensity
+        paintRect.strokeWidth *= 2f * gameView.scaleFactor
         myBitmap?.let { canvas.drawBitmap(it, null, cardAreaOnScreen, paintRect) }
 
         // display hero picture
@@ -138,7 +138,7 @@ class HeroCard(val gameView: GameView, val hero: Hero): GameElement(), Fadable
                 var thickness = transition
                 if (transition > 0.5)
                     thickness = 1.0f - transition
-                paintRect.strokeWidth = (2f + 10 * thickness)*resources.displayMetrics.scaledDensity
+                paintRect.strokeWidth = (4f + 20 * thickness)*gameView.scaleFactor
                 canvas.drawRect(cardAreaOnScreen, paintRect)
             }
             GraphicalState.TRANSIENT_LEVEL_0 -> {
@@ -162,10 +162,10 @@ class HeroCard(val gameView: GameView, val hero: Hero): GameElement(), Fadable
             val originalThickness = strokeWidth
             val originalAlpha = alpha
             alpha = 60
-            strokeWidth = originalThickness + 12 * resources.displayMetrics.scaledDensity
+            strokeWidth = originalThickness + 24 * gameView.scaleFactor
             canvas.drawRect(cardAreaOnScreen, this)
             alpha = 60
-            strokeWidth = originalThickness + 6 * resources.displayMetrics.scaledDensity
+            strokeWidth = originalThickness + 12 * gameView.scaleFactor
             canvas.drawRect(cardAreaOnScreen, this)
             // restore original values
             strokeWidth = originalThickness
@@ -233,8 +233,8 @@ class HeroCard(val gameView: GameView, val hero: Hero): GameElement(), Fadable
         val canvas = Canvas(bitmap)
 
         // render text used to indicate the effect of the upgrade, and calculate its position
-        val marginHorizontal = 10f*resources.displayMetrics.scaledDensity
-        val marginVertical = 10f*resources.displayMetrics.scaledDensity
+        val marginHorizontal = 20f*gameView.scaleFactor
+        val marginVertical = 20f*gameView.scaleFactor
         val baseline = bitmap.height-marginVertical
         val paintUpdate = Paint(paintText)
         canvas.drawText(hero.strengthDesc, marginHorizontal, baseline, paintText)
@@ -245,7 +245,7 @@ class HeroCard(val gameView: GameView, val hero: Hero): GameElement(), Fadable
             paintUpdate.color = resources.getColor(R.color.upgrade_inactive)
             canvas.drawText(hero.upgradeDesc, bounds.right + marginHorizontal, baseline, paintUpdate)
         }
-        val margin = (10*resources.displayMetrics.scaledDensity).toInt()
+        val margin = (20*gameView.scaleFactor).toInt()
         val heroPaintText = Paint(paintText)
         heroPaintText.textSize = GameView.heroCardNameSize * gameView.textScaleFactor
         heroPaintText.color = if (hero.data.level == 0) inactiveColor else activeColor

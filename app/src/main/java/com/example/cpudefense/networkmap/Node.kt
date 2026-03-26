@@ -33,7 +33,7 @@ open class Node(val theNetwork: Network, x: Float, y: Float): GameElement()
     var connectedLinks = CopyOnWriteArrayList<Link>() // used during level setup
 
     open var actualRect: Rect? = null
-    /** hack: limit list cleanup to improve performance */
+    /** hack: limit list clean-up to improve performance */
     private var ticks = 100
 
     /** keep track of the current distance to the vehicles in range */
@@ -120,29 +120,6 @@ open class Node(val theNetwork: Network, x: Float, y: Float): GameElement()
 
     fun vehiclesInRange(range: Float): List<Vehicle>
     {
-        /*
-        // first, clean up our list and remove all vehicles that are no longer considered
-        val vehiclesDefinitelyGone = distanceToVehicle.keys.filter { distanceToVehicle[it]?.direction == VehicleDirection.GONE }
-        vehiclesDefinitelyGone.forEach { distanceToVehicle.remove(it) }
-        // check the distance and return a list of the vehicles in range
-        val vehiclesInRange = distanceToVehicle.keys.filter {
-            distanceTo(it)?.let { it <= range } ?: false }
-        return vehiclesInRange
-
-         */
-        /*
-        vehiclesDefinitelyGone.clear()
-        vehiclesInRange.clear()
-        distanceToVehicle.entries.forEach { (vehicle, dist: Distance) ->
-            if (dist.direction == VehicleDirection.GONE)
-                vehiclesDefinitelyGone.add(vehicle)
-            else if (dist.distance <= range )
-                vehiclesInRange.add(vehicle)
-        }
-        vehiclesDefinitelyGone.forEach { distanceToVehicle.remove(it) }
-        return vehiclesInRange
-
-         */
         return distanceToVehicle.keys.filter { vehicle ->
             distanceToVehicle[vehicle]?.let {
                 it.direction != VehicleDirection.GONE &&

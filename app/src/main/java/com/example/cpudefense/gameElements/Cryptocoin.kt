@@ -28,7 +28,7 @@ class Cryptocoin(network: com.example.cpudefense.networkmap.Network, number: ULo
         this.animationCount *= 2
     }
     override fun display(canvas: Canvas, viewport: Viewport) {
-        val size =  (GameView.coinSizeOnScreen * network.gameView.resources.displayMetrics.scaledDensity).toInt()
+        val size =  (GameView.coinSizeOnScreen * network.gameView.scaleFactor).toInt()
         actualRect = Rect(0, 0, size, size)
         actualRect.setCenter(getPositionOnScreen())
         actualRect.offset(displacement.first, displacement.second)

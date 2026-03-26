@@ -21,6 +21,7 @@ import com.example.cpudefense.R
 import com.example.cpudefense.Settings
 import com.example.cpudefense.Stage
 import com.example.cpudefense.gameElements.SevenSegmentDisplay
+import androidx.core.content.edit
 
 
 class WelcomeActivity : AppCompatActivity() {
@@ -60,7 +61,7 @@ class WelcomeActivity : AppCompatActivity() {
         // display as graphics:
         var displayLit = true
         val display =
-            SevenSegmentDisplay(4, (80 * resources.displayMetrics.scaledDensity).toInt(), this)
+            SevenSegmentDisplay(4, (80 * resources.displayMetrics.density).toInt(), this)
         val imageView = findViewById<ImageView>(R.id.sevenSegmentDisplay)
         val radix = if (settings.showLevelsInHex) 16 else 10
         if (maxLevel.number == 0)
@@ -225,9 +226,8 @@ class WelcomeActivity : AppCompatActivity() {
             val messageDisplayed = prefs.getString("VERSIONMESSAGE_SEEN", "")
             if (messageDisplayed != it.versionName) {
                 showMessageOfTheDay()
-                with(prefs.edit()) {
-                    putString("VERSIONMESSAGE_SEEN", it.versionName)
-                    commit()
+                prefs.edit(commit = true) {
+                        putString("VERSIONMESSAGE_SEEN", it.versionName)
                 }
             }
         }
