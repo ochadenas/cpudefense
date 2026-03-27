@@ -28,7 +28,7 @@ class Viewport(var number: Int)
     var isValid = false
 
     /** default grid size that fits on screen without scrolling */
-    private val standardGridSize: Coord = Coord(40, 60)
+    private val standardGridSize: Coord = Coord(46, 60)
 
     fun determineScreenSize(width: Int, height: Int)
     /** sets the size in screen coordinates */

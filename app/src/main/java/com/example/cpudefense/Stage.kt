@@ -218,9 +218,8 @@ class Stage(var gameMechanics: GameMechanics, var gameView: GameView)
             }
             // set mask for the graphical representations of the links
             stage.calculateUsageCount()
-            for (link in stage.network.links.values) {
-                link.chooseMask()
-            }
+            if (stage.getSeries() >= GameMechanics.SERIES_ENDLESS)
+                stage.network.links.values.forEach { it.chooseMask() }
 
             // set summary and available coins
             var stageSummary = stage.gameMechanics.getSummaryOfStage(stage.data.ident)
