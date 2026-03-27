@@ -312,7 +312,7 @@ class GameActivity : Activity() {
         }
         gameMechanics.currentlyActiveStage?.let {
             it.network.validateViewport()
-            gameView.viewport.setGridSize(it.sizeX, it.sizeY)
+            gameView.viewport.determineGridSize(it.size)
             gameView.background.prepareAtStartOfStage(it.data.ident)
             gameView.speedControlPanel.setInfoLine(gameView.resources.getString(R.string.stage_number)
                                                        .format(it.numberAsString()))

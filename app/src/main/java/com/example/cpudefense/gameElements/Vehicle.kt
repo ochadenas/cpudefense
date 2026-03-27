@@ -109,7 +109,7 @@ open class Vehicle(val network: Network): GameElement()
     {
         posOnGrid?.let {
             val actualRect = Rect(0, 0, 20, 20)
-            actualRect.setCenter(viewport.gridToViewport(it))
+            actualRect.setCenter(viewport.gridToScreen(it))
             val paint = Paint()
             paint.color = Color.RED
             paint.style = Paint.Style.FILL

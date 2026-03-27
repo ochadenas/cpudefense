@@ -246,7 +246,7 @@ open class Attacker(network: Network, representation: Representation = Represent
      * or (0, 0) if the viewport is undefined or invalid.
      */
     {
-        posOnGrid?.let { return network.gameView.viewport.gridToViewport(it) }
+        posOnGrid?.let { return network.gameView.viewport.gridToScreen(it) }
         /* else, if posOnGrid == null: */
         return Pair(0, 0)
     }

@@ -92,6 +92,8 @@ open class Chip(val network: Network, gridX: Int, gridY: Int):
     private var paintOverlay = Paint()
     private var paintUpgradesBackground = Paint()
     private var outlineWidth = 2f
+    /** multiplier for the thickness of the border width for activated MEM and ACC */
+    private var outlineWidthActivated = 3
     private val paintBackground = Paint()
     private var paintLines = Paint()
     private var defaultBackgroundColor = Color.BLACK // will be set later
@@ -396,7 +398,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int):
             actualRect = Rect(0, 0, widthOnScreen, heightOnScreen)
         }
         outlineWidth = 4f * theNetwork.gameView.scaleFactor
-        actualRect?.setCenter(viewport.gridToViewport(posOnGrid))
+        actualRect?.setCenter(viewport.gridToScreen(posOnGrid))
         actualRect?.let { displayChip(canvas, it) }
         if (theNetwork.gameView.gameActivity.settings.configShowAttackersInRange && chipData.type != ChipType.EMPTY)
             actualRect?.let { displayLineToAttacker(canvas, attackersInRange(), it) }
@@ -466,7 +468,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int):
     {
         paintOutline.strokeWidth =
             if (chipData.type == ChipType.MEM && isActivated() && !isInCooldown())
-                4f * outlineWidth
+                outlineWidthActivated * outlineWidth
             else
                 outlineWidth
         canvas.drawRect(rect, paintOutline)

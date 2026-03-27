@@ -53,8 +53,8 @@ class Network(val gameMechanics: GameMechanics, val gameView: GameView, x: Int, 
         if (gridPointDistance != null)
             return gridPointDistance // no need to recalculate
         if (validateViewport()) {
-            val point0 = gameView.viewport.gridToViewport(Coord(0, 0))
-            val point1 = gameView.viewport.gridToViewport(Coord(1, 1))
+            val point0 = gameView.viewport.gridToScreen(Coord(0, 0))
+            val point1 = gameView.viewport.gridToScreen(Coord(1, 1))
             gridPointDistance = Pair(point1.first - point0.first, point1.second - point0.second)
         }
         else
@@ -101,7 +101,7 @@ class Network(val gameMechanics: GameMechanics, val gameView: GameView, x: Int, 
     {
         if (gameView.isInitialized())
         {
-            gameView.viewport.setScreenSize(gameView.width, gameView.height)
+            gameView.viewport.determineScreenSize(gameView.width, gameView.height)
             return true
         }
         else

@@ -440,7 +440,7 @@ class Intermezzo(var gameView: GameView): GameElement(), Fadable {
             canvas.restore()
 
             // put hero cards
-            val viewport = Viewport()
+            val viewport = Viewport(1)
             determineCardPositions(textLayout.height, margin.toInt())
             heroesAskingToTakeLeave.forEach()
             {

@@ -11,6 +11,7 @@ import com.example.cpudefense.utils.blur
 import java.util.concurrent.CopyOnWriteArrayList
 import kotlin.random.Random
 import androidx.core.graphics.scale
+import com.example.cpudefense.networkmap.Coord
 
 class Stage(var gameMechanics: GameMechanics, var gameView: GameView)
 {
@@ -56,8 +57,8 @@ class Stage(var gameMechanics: GameMechanics, var gameView: GameView)
     }
 
     lateinit var network: Network
-    var sizeX = 0
-    var sizeY = 0
+    /** size of the network in grid coords */
+    var size = Coord(0, 0)
 
     var chips = hashMapOf<Int, Chip>()
     var tracks = hashMapOf<Int, Track>()
@@ -193,9 +194,10 @@ class Stage(var gameMechanics: GameMechanics, var gameView: GameView)
             if (stageData.gridSizeX <= 1 || stageData.gridSizeY <= 1)
                 return
             stage.data = stageData
-            stage.sizeX = stage.data.gridSizeX
-            stage.sizeY = stage.data.gridSizeY
-            stage.network = Network(stage.gameMechanics, stage.gameView, stage.sizeX, stage.sizeY)
+            stage.size.x = stage.data.gridSizeX.toFloat()
+            stage.size.y = stage.data.gridSizeY.toFloat()
+            stage.network = Network(stage.gameMechanics, stage.gameView,
+                                    stage.size.x.toInt(), stage.size.y.toInt())
             for ((id, chipData) in stage.data.chips)
             {
                 val chip = Chip.createFromData(stage.network, chipData)
@@ -307,10 +309,9 @@ class Stage(var gameMechanics: GameMechanics, var gameView: GameView)
     fun initializeNetwork(dimX: Int, dimY: Int)
     /** creates an empty [Network] with the given grid dimensions [dimX], [dimY] */
     {
-        sizeX = dimX
-        sizeY = dimY
-        network = Network(gameMechanics, gameView, sizeX, sizeY)
-        gameView.viewport.setGridSize(sizeX, sizeY)
+        size = Coord(dimX, dimY)
+        network = Network(gameMechanics, gameView, size.x.toInt(), size.y.toInt())
+        gameView.viewport.determineGridSize(size)
     }
 
     fun createChip(gridX: Int, gridY: Int, ident: Int = -1, type: Chip.ChipType = Chip.ChipType.EMPTY): Chip

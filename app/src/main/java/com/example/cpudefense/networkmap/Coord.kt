@@ -2,7 +2,12 @@ package com.example.cpudefense.networkmap
 
 import kotlin.math.sqrt
 
-class Coord(var x: Float = 0.0f, var y: Float = 0.0f) {
+class Coord(var x: Float = 0.0f, var y: Float = 0.0f)
+/** class that is used for grid coordinates,
+ * i.e. relative to the (virtual) game grid.
+ * Coords must be mapped to actual screen coordinates through the [Viewport] class.
+ */
+{
     constructor(xInt: Int = 0, yInt: Int = 0): this (xInt.toFloat(), yInt.toFloat())
     constructor(pos: Pair<Float, Float>): this (pos.first, pos.second)
 
@@ -45,6 +50,7 @@ class Coord(var x: Float = 0.0f, var y: Float = 0.0f) {
     }
 
     private fun distanceToSquared(other: Coord?): Float
+    /** calculates the square of the distance between two coords */
     {
         if (other == null)
             return 0f
@@ -56,6 +62,7 @@ class Coord(var x: Float = 0.0f, var y: Float = 0.0f) {
     { return sqrt(distanceToSquared(other))}
 
     fun direction(other: Coord?): Network.Dir
+    /** determines the relative direction to the other point */
     {
         if (other == null)
             return Network.Dir.UNDEFINED
@@ -74,7 +81,4 @@ class Coord(var x: Float = 0.0f, var y: Float = 0.0f) {
         else
             return Network.Dir.UNDEFINED
     }
-
-
-
 }

@@ -570,7 +570,7 @@ class EndlessStageCreator(val stage: Stage)
                 for (y in 0 until numberSectorsY)
                 {
                     val sector = Rect(x*data.sectorSizeX, y*data.sectorSizeY, (x+1)*data.sectorSizeX, (y+1)*data.sectorSizeY)
-                    canvas.drawRect(viewport.rectToViewport(sector), paint)
+                    canvas.drawRect(viewport.rectToScreen(sector), paint)
                 }
         }
     }

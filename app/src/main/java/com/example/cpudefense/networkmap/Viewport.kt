@@ -3,30 +3,35 @@ package com.example.cpudefense.networkmap
 import android.graphics.Rect
 import com.example.cpudefense.GameView
 
-class Viewport
-/** class that is responsible for mapping internal grid coordinates to screen coordinates */
+class Viewport(var number: Int)
+/** class that is responsible for mapping internal grid [Coord] to screen coordinates */
 {
     data class Data(
         var gridSize: Rect = Rect(0, 0, 100, 100)
     )
 
+    /** width of the viewport in screen coordinates */
     var viewportWidth: Int = 0
+    /** height of the viewport in screen coordinates */
     var viewportHeight: Int = 0
     var screen = Rect()
-    private var gridSizeX: Int = 0
-    private var gridSizeY: Int = 0
+    /** size of the complete game board, in grid coordinates */
+    private var gridSize = Coord(0, 0)
+    /** vertical size of the complete game board, in grid coordinates */
     private var scaleX = 1.0f
     private var scaleY = 1.0f
+    /** offset to the origin when moving the viewport around, in screen coordinates */
     private var offsetX = 0
     private var offsetY = 0
-    private var userScale = 1.0f // zoom factor chosen by the player
+    /** zoom factor chosen by the player */
+    private var userScale = 1.0f
     var isValid = false
 
-    /* default grid size that fits on screen without scrolling */
-    private val standardGridSizeX = 50
-    private val standardGridSizeY = 60
+    /** default grid size that fits on screen without scrolling */
+    private val standardGridSize: Coord = Coord(40, 60)
 
-    fun setScreenSize(width: Int, height: Int)
+    fun determineScreenSize(width: Int, height: Int)
+    /** sets the size in screen coordinates */
     {
         if (width == 0 || height == 0)
             isValid = false
@@ -46,29 +51,35 @@ class Viewport
         userScale = 1.0f
     }
 
-    fun setGridSize(gridSizeX: Int, gridSizeY: Int)
+    fun determineGridSize(gridSize: Coord)
+    /** sets the size in grid coordinates */
     {
-        this.gridSizeX = gridSizeX
-        this.gridSizeY = gridSizeY
+        this.gridSize = gridSize
         calculateScale()
     }
 
     private fun calculateScale()
+            /** given the viewport width and height, calculates the x and y scale factors.
+             * To be called whenever the size of the screen changes.
+             */
     {
-        val width = viewportWidth.toFloat()
+        val width = viewportWidth.toFloat() // screen coords
         val height = viewportHeight.toFloat()
-        if (width == 0f || height == 0f)
-            isValid = false
-        else {
-            scaleX = viewportWidth.toFloat() / standardGridSizeX
-            scaleY = viewportHeight.toFloat() / standardGridSizeY
+        if (width >= 0f && height >= 0f) {
+            scaleX = viewportWidth.toFloat() / standardGridSize.x
+            scaleY = viewportHeight.toFloat() / standardGridSize.y
+            if (scaleX > scaleY * 1.4f) scaleX = scaleY * 1.2f
+            if (scaleY > scaleX * 1.4f) scaleY = scaleX * 1.2f
             scaleX *= userScale
             scaleY *= userScale
             isValid = true
         }
+        else
+            isValid = false
     }
 
     fun addOffset(deltaX: Float, deltaY: Float)
+    /** add an offset to move the viewport around */
     {
         val maxX = viewportWidth / 2
         offsetX += deltaX.toInt()
@@ -84,21 +95,23 @@ class Viewport
             offsetY = - maxY
     }
 
-    fun gridToViewport(gridPos: Coord): Pair<Int, Int>
+    fun gridToScreen(gridPos: Coord): Pair<Int, Int>
     {
         val posX = gridPos.x * scaleX + GameView.viewportMargin + offsetX
         val posY = gridPos.y * scaleY + GameView.viewportMargin + offsetY
         return Pair(posX.toInt(), posY.toInt())
     }
 
-    fun rectToViewport(rectInGridCoord: Rect): Rect
+    fun rectToScreen(rectInGridCoord: Rect): Rect
+    /** converts a rectangle given in grid coordinates */
     {
-        val upperLeft = gridToViewport(Coord(rectInGridCoord.left, rectInGridCoord.top))
-        val lowerRight = gridToViewport(Coord(rectInGridCoord.right, rectInGridCoord.bottom))
+        val upperLeft = gridToScreen(Coord(rectInGridCoord.left, rectInGridCoord.top))
+        val lowerRight = gridToScreen(Coord(rectInGridCoord.right, rectInGridCoord.bottom))
         return Rect(upperLeft.first, upperLeft.second, lowerRight.first, lowerRight.second)
     }
 
     fun isInRightHalfOfViewport(posX: Int): Boolean
+            /** determines which half of the viewport the point is in. */
     {
         return posX > viewportWidth / 2
     }

@@ -234,8 +234,8 @@ class Link(theNetwork: Network, var node1: Node, var node2: Node, var ident: Int
     private fun displayLine(canvas: Canvas, viewport: Viewport, startGridPoint: Coord, endGridPoint: Coord)
             /** draws one single line from start point to end point, in grid coordinates */
     {
-        val startPoint = viewport.gridToViewport(startGridPoint)
-        val endPoint = viewport.gridToViewport(endGridPoint)
+        val startPoint = viewport.gridToScreen(startGridPoint)
+        val endPoint = viewport.gridToScreen(endGridPoint)
         /*
         paintLineBackground.strokeWidth = 4 * connectorWidth
          canvas.drawLine(startPoint.first.toFloat(), startPoint.second.toFloat(),
@@ -248,7 +248,7 @@ class Link(theNetwork: Network, var node1: Node, var node2: Node, var ident: Int
 
     private fun displayConnectorCircle(canvas: Canvas, viewport: Viewport, gridPoint: Coord)
     {
-        val point = viewport.gridToViewport(gridPoint)
+        val point = viewport.gridToScreen(gridPoint)
         val radius = connectorRadius
         canvas.drawCircle(point.first.toFloat(), point.second.toFloat(), radius, paintBackground)
         canvas.drawCircle(point.first.toFloat(), point.second.toFloat(), radius, paintEntry)

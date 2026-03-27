@@ -61,7 +61,7 @@ class Cpu(network: Network, gridX: Int, gridY: Int): Chip(network, gridX, gridY)
         if (bitmap == null)
             bitmap = createBitmap()
         actualRect?.let { rect ->
-            rect.setCenter(viewport.gridToViewport(posOnGrid))
+            rect.setCenter(viewport.gridToScreen(posOnGrid))
             val paint = Paint()
             bitmap?.let()
             { canvas.drawBitmap(it, null, rect, paint) }

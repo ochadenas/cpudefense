@@ -54,7 +54,7 @@ open class Node(val theNetwork: Network, x: Float, y: Float): GameElement()
 
     override fun display(canvas: Canvas, viewport: Viewport) {
         actualRect = calculateActualRect()?.makeSquare()
-        actualRect?.setCenter(viewport.gridToViewport(posOnGrid))
+        actualRect?.setCenter(viewport.gridToScreen(posOnGrid))
         actualRect?.let { rect ->
             val paint = Paint()
             paint.color = resources.getColor(R.color.network_background)
