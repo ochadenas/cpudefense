@@ -5,6 +5,7 @@ package com.example.cpudefense.networkmap
 import android.graphics.*
 import android.graphics.Bitmap.Config.ARGB_8888
 import android.view.MotionEvent
+import android.view.View
 import com.example.cpudefense.EndlessStageCreator
 import com.example.cpudefense.GameMechanics
 import com.example.cpudefense.GameView
@@ -42,7 +43,7 @@ class Network(val gameMechanics: GameMechanics, val gameView: GameView, x: Int, 
         const val minVehicleSpeed = GameMechanics.minAttackerSpeed
     }
 
-    fun distanceBetweenGridPoints(): Pair<Int, Int>?
+    fun distanceBetweenGridPoints(viewport: Viewport): Pair<Int, Int>?
             /**
              * Calculate the distance on the screen between two grid points. (This is a property of the
              * network under a given viewport and does not depend on the actual network elements.)
@@ -50,11 +51,9 @@ class Network(val gameMechanics: GameMechanics, val gameView: GameView, x: Int, 
              * @return 2-dimensional distance vector (x,y), or null if the distance cannot be determined.
              */
     {
-        if (gridPointDistance != null)
-            return gridPointDistance // no need to recalculate
-        if (validateViewport()) {
-            val point0 = gameView.viewport.gridToScreen(Coord(0, 0))
-            val point1 = gameView.viewport.gridToScreen(Coord(1, 1))
+        if (validateViewport(viewport)) {
+            val point0 = viewport.gridToScreen(Coord(0, 0))
+            val point1 = viewport.gridToScreen(Coord(1, 1))
             gridPointDistance = Pair(point1.first - point0.first, point1.second - point0.second)
         }
         else
@@ -91,7 +90,7 @@ class Network(val gameMechanics: GameMechanics, val gameView: GameView, x: Int, 
         vehicles.removeAll { it.data.state == State.GONE }
     }
 
-    fun validateViewport(): Boolean
+    fun validateViewport(viewport: Viewport): Boolean
     /** The viewport needs the size of the game surface (GameView) to calculate positions on the screen.
      * However, it is not easy to know when GameView actually receives its dimensions.
      * Therefor we keep track whether the scaling factors are valid, and if not, we recalculate them.
@@ -101,7 +100,7 @@ class Network(val gameMechanics: GameMechanics, val gameView: GameView, x: Int, 
     {
         if (gameView.isInitialized())
         {
-            gameView.viewport.determineScreenSize(gameView.width, gameView.height)
+            viewport.determineScreenSize(gameView.width, gameView.height)
             return true
         }
         else
@@ -111,8 +110,10 @@ class Network(val gameMechanics: GameMechanics, val gameView: GameView, x: Int, 
     override fun display(canvas: Canvas, viewport: Viewport)
     {
         // if viewport is not valid, try to validate it
-        if (!viewport.isValid && !validateViewport())
-            return
+        if (!viewport.isValid) {
+            validateViewport(viewport) || return
+        }
+        applyScale(viewport)
         displayNetwork(canvas, viewport)
         for (obj in nodes.values)
             obj.display(canvas, viewport)
@@ -135,6 +136,19 @@ class Network(val gameMechanics: GameMechanics, val gameView: GameView, x: Int, 
         }
     }
 
+    fun applyScale(viewport: Viewport)
+            /** if scale has changed after last call of this method,
+             * calculate the size of all nodes and recreate their bitmaps.
+             */
+    {
+        if (viewport.scaleHasChanged)
+        {
+            for (obj in nodes.values)
+                obj.applyScale(viewport)
+            viewport.scaleHasChanged = false
+        }
+    }
+
     private fun displayNetwork(canvas: Canvas, viewport: Viewport)
     /** draws all 'fixed' elements, i.e. the background image and the links */
     {
@@ -151,7 +165,7 @@ class Network(val gameMechanics: GameMechanics, val gameView: GameView, x: Int, 
      * and places the network elements on it
      * @param newBackground true if a new background image must be created */
     {
-        validateViewport()
+        validateViewport(gameView.viewport)
         gameView.background.setBackgroundDimensions(gameView.width, gameView.height, newBackground)
         gameView.background.basicBackground?.let{
             networkImage = it.copy(it.config ?: ARGB_8888, true)

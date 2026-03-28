@@ -39,6 +39,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import androidx.core.content.edit
 
 class GameActivity : Activity() {
     var logger: Logger? = null
@@ -311,7 +312,7 @@ class GameActivity : Activity() {
                 Stage.createStageFromData(gameMechanics, gameView, it)
         }
         gameMechanics.currentlyActiveStage?.let {
-            it.network.validateViewport()
+            it.network.validateViewport(gameView.viewport)
             gameView.viewport.determineGridSize(it.size)
             gameView.background.prepareAtStartOfStage(it.data.ident)
             gameView.speedControlPanel.setInfoLine(gameView.resources.getString(R.string.stage_number)
@@ -350,6 +351,7 @@ class GameActivity : Activity() {
         nextStage.calculateDifficulty()
         if (!nextStage.isInitialized())
             return  // something went wrong, possibly trying to create a level that doesn't exist
+        nextStage.network.applyScale(gameView.viewport)  // calculate scaling factors and set chip size
         nextStage.network.recreateNetworkImage(true)
         setGameActivityStatus(GameActivityStatus.PLAYING)
         with (gameMechanics) {
@@ -534,7 +536,7 @@ class GameActivity : Activity() {
                     toast.show()
                 }
             }
-            catch (ex: CpuReached)
+            catch (_: CpuReached)
             {
                 removeOneLife()
             }
@@ -607,12 +609,12 @@ class GameActivity : Activity() {
 
     fun setGameActivityStatus(status: GameActivityStatus) {
         val prefs = getSharedPreferences(Persistency.filename_state, MODE_PRIVATE)
-        val editor = prefs.edit()
-        when (status) {
-            GameActivityStatus.PLAYING -> editor.putString("STATUS", "running")
-            GameActivityStatus.BETWEEN_LEVELS -> editor.putString("STATUS", "complete")
+        prefs.edit {
+            when (status) {
+                GameActivityStatus.PLAYING -> putString("STATUS", "running")
+                GameActivityStatus.BETWEEN_LEVELS -> putString("STATUS", "complete")
+            }
         }
-        editor.apply()
         logger?.log("Activity status set to %s".format(status.toString()))
     }
 

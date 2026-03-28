@@ -171,85 +171,6 @@ class Stage(var gameMechanics: GameMechanics, var gameView: GameView)
         return data
     }
 
-    companion object {
-
-        fun numberToString(number: Int, useHexadecimal: Boolean = false): String
-        /** returns the number in the desired representation.
-         * Only works with numbers up to xFFFF.
-         */
-        {
-            if (useHexadecimal) {
-                return if (number < 256) "x" + number.toString(radix = 16).uppercase()
-                    .padStart(2, '0')
-                else "x" + number.toString(radix = 16).uppercase().padStart(4, '0')
-            }
-            else return number.toString()
-        }
-
-        fun fillEmptyStageWithData(stage: Stage, stageData: Data)
-        /** restores the fixed part of a stage: Nodes, Links, Tracks.
-         * @param stage The empty stage that must be filled
-         * @param stageData the data structure used to create the stage */
-        {
-            if (stageData.gridSizeX <= 1 || stageData.gridSizeY <= 1)
-                return
-            stage.data = stageData
-            stage.size.x = stage.data.gridSizeX.toFloat()
-            stage.size.y = stage.data.gridSizeY.toFloat()
-            stage.network = Network(stage.gameMechanics, stage.gameView,
-                                    stage.size.x.toInt(), stage.size.y.toInt())
-            for ((id, chipData) in stage.data.chips)
-            {
-                val chip = Chip.createFromData(stage.network, chipData)
-                chip.data.ident = id
-                stage.network.addNode(chip, id)
-                stage.chips[id] = chip
-            }
-            for ((id, linkData) in stage.data.links)
-            {
-                val link = Link.createFromData(stage.network, linkData)
-                stage.network.addLink(link, id)
-            }
-            for ((id, trackData) in stage.data.tracks)
-            {
-                val track = Track.createFromData(stage, trackData)
-                track.data.ident = id  // correction code for a bug in versions <= 1.36
-                stage.tracks[id] = track
-            }
-            // set mask for the graphical representations of the links
-            stage.calculateUsageCount()
-            if (stage.getSeries() >= GameMechanics.SERIES_ENDLESS)
-                stage.network.links.values.forEach { it.chooseMask() }
-
-            // set summary and available coins
-            var stageSummary = stage.gameMechanics.getSummaryOfStage(stage.data.ident)
-            if (stageSummary == null)
-                stageSummary = Summary(coinsMaxAvailable = GameMechanics.defaultRewardCoins)
-            stageSummary.let {
-                stage.summary = it
-                stage.rewardCoins = it.coinsMaxAvailable
-                // stage.theGame.state.coinsInLevel = it.coinsAvailable ?: 0
-            }
-        }
-        fun createStageFromData(gameMechanics: GameMechanics, gameView: GameView, stageData: Data): Stage
-        {
-            val stage = Stage(gameMechanics, gameView)
-            stage.data.ident = stageData.ident
-            fillEmptyStageWithData(stage, stageData)
-            for (waveData in stage.data.waves)
-            {
-                val wave = Wave.createFromData(gameMechanics, waveData)
-                stage.waves.add(wave)
-            }
-            for (attackerData in stage.data.attackers)
-            {
-                val attacker = Attacker.createFromData(stage, attackerData)
-                stage.network.addVehicle(attacker)
-            }
-            return stage
-        }
-    }
-
     fun createNewAttacker(maxNumber: Int, speed: Float, isCoin: Boolean = false,
                           representation: Attacker.Representation = Attacker.Representation.BINARY)
     {
@@ -473,5 +394,84 @@ class Stage(var gameMechanics: GameMechanics, var gameView: GameView)
         }
         else
             return null
+    }
+
+    companion object {
+
+        fun numberToString(number: Int, useHexadecimal: Boolean = false): String
+                /** returns the number in the desired representation.
+                 * Only works with numbers up to xFFFF.
+                 */
+        {
+            if (useHexadecimal) {
+                return if (number < 256) "x" + number.toString(radix = 16).uppercase()
+                    .padStart(2, '0')
+                else "x" + number.toString(radix = 16).uppercase().padStart(4, '0')
+            }
+            else return number.toString()
+        }
+
+        fun fillEmptyStageWithData(stage: Stage, stageData: Data)
+                /** restores the fixed part of a stage: Nodes, Links, Tracks.
+                 * @param stage The empty stage that must be filled
+                 * @param stageData the data structure used to create the stage */
+        {
+            if (stageData.gridSizeX <= 1 || stageData.gridSizeY <= 1)
+                return
+            stage.data = stageData
+            stage.size.x = stage.data.gridSizeX.toFloat()
+            stage.size.y = stage.data.gridSizeY.toFloat()
+            stage.network = Network(stage.gameMechanics, stage.gameView,
+                                    stage.size.x.toInt(), stage.size.y.toInt())
+            for ((id, chipData) in stage.data.chips)
+            {
+                val chip = Chip.createFromData(stage.network, chipData)
+                chip.data.ident = id
+                stage.network.addNode(chip, id)
+                stage.chips[id] = chip
+            }
+            for ((id, linkData) in stage.data.links)
+            {
+                val link = Link.createFromData(stage.network, linkData)
+                stage.network.addLink(link, id)
+            }
+            for ((id, trackData) in stage.data.tracks)
+            {
+                val track = Track.createFromData(stage, trackData)
+                track.data.ident = id  // correction code for a bug in versions <= 1.36
+                stage.tracks[id] = track
+            }
+            // set mask for the graphical representations of the links
+            stage.calculateUsageCount()
+            if (stage.getSeries() >= GameMechanics.SERIES_ENDLESS)
+                stage.network.links.values.forEach { it.chooseMask() }
+
+            // set summary and available coins
+            var stageSummary = stage.gameMechanics.getSummaryOfStage(stage.data.ident)
+            if (stageSummary == null)
+                stageSummary = Summary(coinsMaxAvailable = GameMechanics.defaultRewardCoins)
+            stageSummary.let {
+                stage.summary = it
+                stage.rewardCoins = it.coinsMaxAvailable
+                // stage.theGame.state.coinsInLevel = it.coinsAvailable ?: 0
+            }
+        }
+        fun createStageFromData(gameMechanics: GameMechanics, gameView: GameView, stageData: Data): Stage
+        {
+            val stage = Stage(gameMechanics, gameView)
+            stage.data.ident = stageData.ident
+            fillEmptyStageWithData(stage, stageData)
+            for (waveData in stage.data.waves)
+            {
+                val wave = Wave.createFromData(gameMechanics, waveData)
+                stage.waves.add(wave)
+            }
+            for (attackerData in stage.data.attackers)
+            {
+                val attacker = Attacker.createFromData(stage, attackerData)
+                stage.network.addVehicle(attacker)
+            }
+            return stage
+        }
     }
 }

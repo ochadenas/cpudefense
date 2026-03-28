@@ -48,10 +48,10 @@ class Cpu(network: Network, gridX: Int, gridY: Int): Chip(network, gridX, gridY)
         }
     }
 
-    private fun createBitmap(): Bitmap?
+    private fun createBitmap(viewport: Viewport): Bitmap?
     {
         var bitmap: Bitmap? = null
-        actualRect = calculateActualRect()?.makeSquare()?.scale(2.5f)
+        actualRect = calculateActualRect(viewport)?.makeSquare()?.scale(2.5f)
         actualRect?.let {bitmap = Bitmap.createScaledBitmap(network.gameView.cpuImage, it.width(), it.height(), true) }
         return bitmap
     }
@@ -59,7 +59,7 @@ class Cpu(network: Network, gridX: Int, gridY: Int): Chip(network, gridX, gridY)
     override fun display(canvas: Canvas, viewport: Viewport)
     {
         if (bitmap == null)
-            bitmap = createBitmap()
+            bitmap = createBitmap(viewport)
         actualRect?.let { rect ->
             rect.setCenter(viewport.gridToScreen(posOnGrid))
             val paint = Paint()

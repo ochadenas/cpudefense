@@ -135,7 +135,6 @@ class EndlessStageCreator(val stage: Stage)
 
         // remove isolated chips
         // stage.network.nodes.entries.removeIf { it.value.connectedLinks.size == 0 }  // preferred solution, but requires API24
-
         // solution by copying the whole hash map:
         val nodesWithConnectors: Map<Int, Node> = stage.network.nodes.filter { it.value.connectedLinks.isNotEmpty() }
         stage.network.nodes = nodesWithConnectors as HashMap<Int, Node>

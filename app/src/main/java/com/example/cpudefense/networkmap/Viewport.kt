@@ -14,7 +14,10 @@ class Viewport(var number: Int)
     var viewportWidth: Int = 0
     /** height of the viewport in screen coordinates */
     var viewportHeight: Int = 0
+    /** visible portion of the screen, in screen coordinates */
     var screen = Rect()
+    /** used to keep track whether the network elements must be recalculated after scale changes */
+    var scaleHasChanged = true
     /** size of the complete game board, in grid coordinates */
     private var gridSize = Coord(0, 0)
     /** vertical size of the complete game board, in grid coordinates */
@@ -49,6 +52,7 @@ class Viewport(var number: Int)
         offsetX = 0
         offsetY = 20
         userScale = 1.0f
+        scaleHasChanged = true
     }
 
     fun determineGridSize(gridSize: Coord)
@@ -73,6 +77,7 @@ class Viewport(var number: Int)
             scaleX *= userScale
             scaleY *= userScale
             isValid = true
+            scaleHasChanged = true
         }
         else
             isValid = false
@@ -93,6 +98,19 @@ class Viewport(var number: Int)
             offsetY = maxY
         else if (offsetY < -maxY)
             offsetY = - maxY
+    }
+
+    fun scale(factor: Float)
+    {
+        // avoid scaling too small or too big
+        var newScale = userScale * factor
+        if (newScale !in 0.25..3.2)
+            return
+        userScale = newScale
+        calculateScale()
+        // re-center the viewport
+        offsetX -= (screen.width() * (factor-1)).toInt() / 2
+        offsetY -= (screen.height() * (factor-1)).toInt() / 2
     }
 
     fun gridToScreen(gridPos: Coord): Pair<Int, Int>

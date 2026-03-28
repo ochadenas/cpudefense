@@ -64,8 +64,6 @@ open class Chip(val network: Network, gridX: Int, gridY: Int):
 
     open var bitmap: Bitmap? = null
     private var bitmapActivated: Bitmap? = null
-    private var widthOnScreen: Int = 0
-    private var heightOnScreen = 0
     private val resistorColour = arrayOf(
         resources.getColor(R.color.resistor_0),
         resources.getColor(R.color.resistor_1),
@@ -386,18 +384,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int):
     override fun display(canvas: Canvas, viewport: Viewport) {
         if (chipData.type == ChipType.ENTRY)
             return super.display(canvas, viewport)
-
-        /* calculate size */
-        /* this is put here because the viewport / zoom factor may change.
-        However, it may be possible to remove this from display()
-         */
-        val sizeOnScreen = theNetwork.distanceBetweenGridPoints()
-        sizeOnScreen?.let {
-            widthOnScreen = it.first * GameView.chipSize.x.toInt()
-            heightOnScreen = it.second * GameView.chipSize.y.toInt()
-            actualRect = Rect(0, 0, widthOnScreen, heightOnScreen)
-        }
-        outlineWidth = 4f * theNetwork.gameView.scaleFactor
+        outlineWidth = GameView.chipOutlineWidth * theNetwork.gameView.scaleFactor
         actualRect?.setCenter(viewport.gridToScreen(posOnGrid))
         actualRect?.let { displayChip(canvas, it) }
         if (theNetwork.gameView.gameActivity.settings.configShowAttackersInRange && chipData.type != ChipType.EMPTY)
@@ -433,6 +420,12 @@ open class Chip(val network: Network, gridX: Int, gridY: Int):
             createChipBitmap(it)
             bitmapActivated = createActivatedBackground(it)
         }
+    }
+
+    override fun applyScale(viewport: Viewport)
+    {
+        super.applyScale(viewport)
+        recreateChipBitmap()
     }
 
     private fun createChipBitmap(rect: Rect)

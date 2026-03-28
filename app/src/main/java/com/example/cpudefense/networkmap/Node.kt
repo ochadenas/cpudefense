@@ -33,6 +33,7 @@ open class Node(val theNetwork: Network, x: Float, y: Float): GameElement()
     var connectedLinks = CopyOnWriteArrayList<Link>() // used during level setup
 
     open var actualRect: Rect? = null
+
     /** hack: limit list clean-up to improve performance */
     private var ticks = 100
 
@@ -53,7 +54,7 @@ open class Node(val theNetwork: Network, x: Float, y: Float): GameElement()
     }
 
     override fun display(canvas: Canvas, viewport: Viewport) {
-        actualRect = calculateActualRect()?.makeSquare()
+        actualRect = calculateActualRect(viewport)?.makeSquare()
         actualRect?.setCenter(viewport.gridToScreen(posOnGrid))
         actualRect?.let { rect ->
             val paint = Paint()
@@ -67,19 +68,30 @@ open class Node(val theNetwork: Network, x: Float, y: Float): GameElement()
         }
     }
 
+    open fun applyScale(viewport: Viewport)
+    /** triggers recalculation of node size */
+    {
+        val sizeOnScreen = theNetwork.distanceBetweenGridPoints(viewport)
+        sizeOnScreen?.let {
+            val widthOnScreen = it.first * GameView.chipSize.x.toInt()
+            val heightOnScreen = it.second * GameView.chipSize.y.toInt()
+            actualRect = Rect(0, 0, widthOnScreen, heightOnScreen)
+        }
+    }
+
     open fun drawConnectorsOnLinks(): Boolean
             /** whether the ends of connectors are shown.
              * @return false if the node itself supersedes the link ends.
              */
     { return true }
 
-    fun calculateActualRect(): Rect?
+    fun calculateActualRect(viewport: Viewport): Rect?
             /** determines the size of this node on the screen based on the grid points.
              * @return the actual size of a node, or null if size cannot be determined
              */
     {
         val factor = 3.0f
-        val dist = theNetwork.distanceBetweenGridPoints()
+        val dist = theNetwork.distanceBetweenGridPoints(viewport)
         return dist?.let {
             if (it.first>0 && it.second>0) {
                 val distX = it.first * factor
