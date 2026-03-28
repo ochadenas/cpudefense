@@ -103,8 +103,8 @@ class Viewport(var number: Int)
     fun scale(factor: Float)
     {
         // avoid scaling too small or too big
-        var newScale = userScale * factor
-        if (newScale !in 0.25..3.2)
+        val newScale = userScale * factor
+        if (newScale !in 0.25 ..3.2)
             return
         userScale = newScale
         calculateScale()

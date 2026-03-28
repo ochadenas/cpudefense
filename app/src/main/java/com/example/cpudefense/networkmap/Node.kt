@@ -73,8 +73,10 @@ open class Node(val theNetwork: Network, x: Float, y: Float): GameElement()
     {
         val sizeOnScreen = theNetwork.distanceBetweenGridPoints(viewport)
         sizeOnScreen?.let {
-            val widthOnScreen = it.first * GameView.chipSize.x.toInt()
-            val heightOnScreen = it.second * GameView.chipSize.y.toInt()
+            var widthOnScreen = it.first * GameView.chipSize.x.toInt()
+            var heightOnScreen = it.second * GameView.chipSize.y.toInt()
+            if (widthOnScreen < 2) { widthOnScreen = 2 }  // safety catch
+            if (heightOnScreen < 2) { heightOnScreen = 2 }
             actualRect = Rect(0, 0, widthOnScreen, heightOnScreen)
         }
     }
