@@ -48,7 +48,6 @@ class GameView(context: Context):
         const val scoreTextSize = 36f
         const val scoreHeaderSize = 18f
         const val chipTextSize = 20f
-        const val chipOutlineWidth = 4f
         const val computerTextSize = 26f
         const val notificationTextSize = 22f
         const val instructionTextSize = 25f
@@ -58,7 +57,15 @@ class GameView(context: Context):
         const val purchaseButtonTextSize = 20f
         const val coinsAmountTextSize = 24f
 
+        /** base width for chip outlines */
+        const val chipOutlineWidth = 4f
+        /** base width for lines between chips */
+        const val connectorWidth = 6f
+        /** base size of the little circles at the connectors' end */
+        const val connectorRadius = 8f
+        /** size of the cryptocoin icon on the score board */
         const val coinSizeOnScoreboard = 48
+        /** base size of running cryptocoins */
         const val coinSizeOnScreen = 32
         const val cardWidth = 220
         const val cardHeight = cardWidth * 1.41

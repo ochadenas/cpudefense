@@ -37,8 +37,6 @@ class Link(theNetwork: Network, var node1: Node, var node2: Node, var ident: Int
 
     var lengthOnGrid: Float = 0f
     var usageCount: Int = 0 // number of times this link is in a track. Used during creation.
-    private var connectorWidth = 6f
-    private var connectorRadius = 8f
     private val paintConnector = Paint()
     private val paintEntry = Paint()
     private val paintBackground = Paint()
@@ -55,13 +53,11 @@ class Link(theNetwork: Network, var node1: Node, var node2: Node, var ident: Int
         {
             color = resources.getColor(R.color.connectors)
             style = Paint.Style.STROKE
-            strokeWidth = connectorWidth
         }
         with (paintEntry)
         {
             color = resources.getColor(R.color.entrypoints)
             style = Paint.Style.STROKE
-            strokeWidth = connectorWidth
         }
         paintLineBackground = Paint(paintBackground)
     }
@@ -236,12 +232,7 @@ class Link(theNetwork: Network, var node1: Node, var node2: Node, var ident: Int
     {
         val startPoint = viewport.gridToScreen(startGridPoint)
         val endPoint = viewport.gridToScreen(endGridPoint)
-        /*
-        paintLineBackground.strokeWidth = 4 * connectorWidth
-         canvas.drawLine(startPoint.first.toFloat(), startPoint.second.toFloat(),
-            endPoint.first.toFloat(), endPoint.second.toFloat(), paintLineBackground)
-
-         */
+        paintConnector.strokeWidth = GameView.connectorWidth * viewport.userScale
         canvas.drawLine(startPoint.first.toFloat(), startPoint.second.toFloat(),
             endPoint.first.toFloat(), endPoint.second.toFloat(), paintConnector)
     }
@@ -249,7 +240,8 @@ class Link(theNetwork: Network, var node1: Node, var node2: Node, var ident: Int
     private fun displayConnectorCircle(canvas: Canvas, viewport: Viewport, gridPoint: Coord)
     {
         val point = viewport.gridToScreen(gridPoint)
-        val radius = connectorRadius
+        val radius = GameView.connectorRadius * viewport.userScale
+        paintEntry.strokeWidth = GameView.connectorWidth * viewport.userScale
         canvas.drawCircle(point.first.toFloat(), point.second.toFloat(), radius, paintBackground)
         canvas.drawCircle(point.first.toFloat(), point.second.toFloat(), radius, paintEntry)
     }
