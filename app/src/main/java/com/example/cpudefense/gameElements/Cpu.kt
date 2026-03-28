@@ -30,13 +30,6 @@ class Cpu(network: Network, gridX: Int, gridY: Int): Chip(network, gridX, gridY)
         actualRect = Rect(0, 0, 100, 100)
     }
 
-    /*
-    fun attackersInRange(): List<Attacker> {
-        return distanceToVehicle.keys.filter { attackerInRange(it as Attacker) }
-            .map { it as Attacker }
-    }
-    */
-
     override fun update() {
         super.update()
         val attackers = attackersInRange()
@@ -46,6 +39,11 @@ class Cpu(network: Network, gridX: Int, gridY: Int): Chip(network, gridX, gridY)
             attackers[0].remove()
             scoreHit()
         }
+    }
+
+    override fun applyScale(viewport: Viewport) {
+        super.applyScale(viewport)
+        bitmap = createBitmap(viewport)
     }
 
     private fun createBitmap(viewport: Viewport): Bitmap?
