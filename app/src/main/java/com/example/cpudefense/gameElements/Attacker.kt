@@ -55,7 +55,8 @@ open class Attacker(network: Network, representation: Representation = Represent
     private var numberFontSize = baseNumberFontSize  // must be scaled
     var displacement = Pair(Random.nextInt(5)-1, Random.nextInt(7)-2) // small shift in display to avoid over-crowding on the screen
     private val paintBitmap = Paint()
-    private var scale: Float = 1.0f
+    /** additional text scale used for shrinking effect */
+    private var shrinkingSize: Float = 1.0f
 
     init {
         this.data.speed = speed
@@ -71,7 +72,7 @@ open class Attacker(network: Network, representation: Representation = Represent
         newAttacker.attackerData = attackerData.copy()
         newAttacker.onTrack = onTrack
         newAttacker.actualRect = Rect(actualRect)
-        newAttacker.scale = scale
+        newAttacker.shrinkingSize = shrinkingSize
         newAttacker.posOnGrid = posOnGrid
         newAttacker.onLink = onLink
         newAttacker.startNode = startNode
@@ -191,7 +192,7 @@ open class Attacker(network: Network, representation: Representation = Represent
 
 
     open fun onShot(type: Chip.ChipType, power: Int): Boolean
-    /** function that gets called when a the attacker gets "hit".
+    /** function that gets called when the attacker gets "hit".
      * @param type the chip's type that effectuates the attack
      * @param power strength (amount) of the shot
      * @return true if the attacker gets destroyed, false otherwise
@@ -286,7 +287,7 @@ open class Attacker(network: Network, representation: Representation = Represent
      */
     {
         createBitmap(numberAsString())
-        scale = 1.0f  // reset any shrinking effects
+        shrinkingSize = 1.0f  // reset any shrinking effects
     }
 
     fun createBitmap(text: String)
@@ -371,7 +372,7 @@ open class Attacker(network: Network, representation: Representation = Represent
         if (posOnGrid == null)
             return
         actualRect = Rect(0, 0, numberBitmap.width, numberBitmap.height)
-        actualRect.scaleAndSetCenter(getPositionOnScreen(), scale)
+        actualRect.scaleAndSetCenter(getPositionOnScreen(), shrinkingSize * viewport.userScale)
         actualRect.offset(displacement.first, displacement.second)
 
         if (animationCount>0)
@@ -379,9 +380,9 @@ open class Attacker(network: Network, representation: Representation = Represent
                 val divider = numberBitmap.height * animationCount / animationCountMax
                 val newSource = Rect(0, 0, numberBitmap.width, numberBitmap.height-divider)
                 val oldSource = Rect(0, numberBitmap.height-divider, numberBitmap.width, numberBitmap.height)
-                val newTarget =  Rect(0, divider, numberBitmap.width, numberBitmap.height)
+                val newTarget =  Rect(0, divider, numberBitmap.width, numberBitmap.height).scale(viewport.userScale)
                 newTarget.offsetTo(actualRect.left, actualRect.top+divider)
-                val oldTarget = Rect(0, 0, numberBitmap.width, divider)
+                val oldTarget = Rect(0, 0, numberBitmap.width, divider).scale(viewport.userScale)
                 oldTarget.offsetTo(actualRect.left, actualRect.top)
                 canvas.drawBitmap(numberBitmap, newSource, newTarget, paintBitmap)
                 canvas.drawBitmap(it, oldSource, oldTarget, paintBitmap)
@@ -394,13 +395,13 @@ open class Attacker(network: Network, representation: Representation = Represent
         if (data.state == State.ACTIVE)
             // this may happen if an attacker is released during its fade animation. In that case,
             // fading must be cancelled. See issue #212
-            scale = 1.0f
+            shrinkingSize = 1.0f
         else
-            scale = 0.0f
+            shrinkingSize = 0.0f
     }
 
     override fun setOpacity(opacity: Float) {
-        scale = opacity
+        shrinkingSize = opacity
     }
 
     fun jitterSpeed()

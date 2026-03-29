@@ -101,8 +101,9 @@ class Viewport(var number: Int)
             offsetY = - maxY
     }
 
-    fun scale(factor: Float)
+    fun scale(param: Float)
     {
+        val factor = 1f + (param-1f) * 0.8f
         // avoid scaling too small or too big
         val newScale = userScale * factor
         if (newScale !in 0.25 ..3.2)

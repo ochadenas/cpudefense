@@ -89,9 +89,6 @@ open class Chip(val network: Network, gridX: Int, gridY: Int):
     private var paintIndicator = Paint()
     private var paintOverlay = Paint()
     private var paintUpgradesBackground = Paint()
-    private var outlineWidth = 2f
-    /** multiplier for the thickness of the border width for activated MEM and ACC */
-    private var outlineWidthActivated = 3
     private val paintBackground = Paint()
     private var paintLines = Paint()
     private var defaultBackgroundColor = Color.BLACK // will be set later
@@ -384,7 +381,6 @@ open class Chip(val network: Network, gridX: Int, gridY: Int):
     override fun display(canvas: Canvas, viewport: Viewport) {
         if (chipData.type == ChipType.ENTRY)
             return super.display(canvas, viewport)
-        outlineWidth = GameView.chipOutlineWidth * theNetwork.gameView.scaleFactor
         actualRect?.setCenter(viewport.gridToScreen(posOnGrid))
         actualRect?.let { displayChip(canvas, it) }
         if (theNetwork.gameView.gameActivity.settings.configShowAttackersInRange && chipData.type != ChipType.EMPTY)
@@ -459,12 +455,16 @@ open class Chip(val network: Network, gridX: Int, gridY: Int):
 
     private fun drawOutline(canvas: Canvas, rect: Rect)
     {
-        paintOutline.strokeWidth =
-            if (chipData.type == ChipType.MEM && isActivated() && !isInCooldown())
-                outlineWidthActivated * outlineWidth
-            else
-                outlineWidth
+        paintOutline.strokeWidth = outlineWidth(
+                rect.width(),chipData.type == ChipType.MEM && isActivated() && !isInCooldown())
         canvas.drawRect(rect, paintOutline)
+    }
+
+    private fun outlineWidth(length: Int, activated: Boolean = false): Float
+    /** yields the thickness of the desired outline for a rectangle with width [length] */
+    {
+        val outlineWidth = length * GameView.relativeOutlineWidth
+        return if (activated) outlineWidth * GameView.relativeOutlineWidthActivated else outlineWidth
     }
 
     fun displayUpgrades(canvas: Canvas)
@@ -759,11 +759,12 @@ open class Chip(val network: Network, gridX: Int, gridY: Int):
     {
         val bitmap: Bitmap? = actualRect?.let {
             val bitmap = Bitmap.createBitmap(it.width(), it.height(), Bitmap.Config.ARGB_8888)
-            val rect = Rect(0, 0, bitmap.width-2*outlineWidth.toInt(), bitmap.height)
+            val rect = Rect(0, 0,
+                            (bitmap.width-2*outlineWidth(bitmap.width, false)).toInt(), bitmap.height)
             val canvas = Canvas(bitmap)
             val paint = Paint()
 
-            paint.textSize = (GameView.chipTextSize * network.gameView.textScaleFactor) *
+            paint.textSize = (GameView.chipTextSize * network.gameView.textScaleFactor * network.gameView.viewport.userScale) *
                     if (theNetwork.gameView.gameActivity.settings.configUseLargeButtons) 1.0f else 0.96f // multiple sizes possible
             paint.alpha = 255
             paint.typeface = theNetwork.gameView.boldTypeface

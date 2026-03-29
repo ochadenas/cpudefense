@@ -57,8 +57,10 @@ class GameView(context: Context):
         const val purchaseButtonTextSize = 20f
         const val coinsAmountTextSize = 24f
 
-        /** base width for chip outlines */
-        const val chipOutlineWidth = 4f
+        /** width for chip outlines as fraction of the chip's width */
+        const val relativeOutlineWidth = 0.025f
+        /** multiplier for the thickness of the border width for activated MEM and ACC */
+        const val relativeOutlineWidthActivated = 5
         /** base width for lines between chips */
         const val connectorWidth = 6f
         /** base size of the little circles at the connectors' end */
