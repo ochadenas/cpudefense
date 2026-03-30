@@ -14,12 +14,16 @@ class Viewport(var number: Int)
     var viewportWidth: Int = 0
     /** height of the viewport in screen coordinates */
     var viewportHeight: Int = 0
+    /** safety margin in order to avoid the grid get shifted out of the screen */
+    var viewportSafetyMargin: Int = 0
     /** visible portion of the screen, in screen coordinates */
     var screen = Rect()
     /** used to keep track whether the network elements must be recalculated after scale changes */
     var scaleHasChanged = true
     /** size of the complete game board, in grid coordinates */
     private var gridSize = Coord(0, 0)
+    /** zero grid coordinate */
+    private var gridOrigin = Coord(0, 0)
     /** vertical size of the complete game board, in grid coordinates */
     private var scaleX = 1.0f
     private var scaleY = 1.0f
@@ -42,8 +46,9 @@ class Viewport(var number: Int)
         else
         {
             screen = Rect(0, 0, width, height)
-            this.viewportWidth = width - 2 * GameView.viewportMargin
-            this.viewportHeight = height - 2 * GameView.viewportMargin
+            viewportWidth = width - 2 * GameView.viewportMargin
+            viewportHeight = height - 2 * GameView.viewportMargin
+            viewportSafetyMargin = ((width+height) * 0.2f).toInt()
             calculateScale()
         }
     }
@@ -87,18 +92,15 @@ class Viewport(var number: Int)
     fun addOffset(deltaX: Float, deltaY: Float)
     /** add an offset to move the viewport around */
     {
-        val maxX = viewportWidth / 2
+        // keep previous offsets. If the viewport gets shifted off the screen, revert the offset
+        val prevOffsetX = offsetX
+        val prevOffsetY = offsetY
         offsetX += deltaX.toInt()
-        if (offsetX > maxX)
-            offsetX = maxX
-        else if (offsetX < -maxX)
-            offsetX = -maxX
-        val maxY = viewportHeight / 2
+        if (deltaX<0 && gridToScreen(gridSize).first <= viewportSafetyMargin ) { offsetX = prevOffsetX }
+        if (deltaX>0 && gridToScreen(gridOrigin).first >= viewportWidth-viewportSafetyMargin ) { offsetX = prevOffsetX }
         offsetY += deltaY.toInt()
-        if (offsetY > maxY)
-            offsetY = maxY
-        else if (offsetY < -maxY)
-            offsetY = - maxY
+        if (deltaY<0 && gridToScreen(gridSize).second <= viewportSafetyMargin ) { offsetY = prevOffsetY }
+        if (deltaY>0 && gridToScreen(gridOrigin).second >= viewportHeight-viewportSafetyMargin ) { offsetY = prevOffsetY }
     }
 
     fun scale(param: Float)
