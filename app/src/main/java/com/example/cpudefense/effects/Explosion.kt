@@ -52,13 +52,14 @@ class Explosion(posOnScreen: Pair<Int, Int>,
         }
     }
 
+
     fun update() {
-        sparks.map { it.update() }
+        sparks.forEach { it.update() }
         sparks.removeAll { x: Spark -> x.expired() } // remove sparks after their lifetime
     }
 
     fun display(canvas: Canvas) {
-        sparks.map { it.display(canvas) }
+        sparks.forEach { it.display(canvas) }
     }
 
     fun expired(): Boolean
