@@ -1168,12 +1168,14 @@ class StageCatalog
                         createWave(20, 2, .300f, 2.1f)
                         createWave(20, 2, .340f, 2.2f)
 
-                        data.chipsAllowed =
-                            setOf(
-                                    Chip.ChipUpgrades.SUB,
-                                    Chip.ChipUpgrades.POWERUP,
-                                    Chip.ChipUpgrades.SHR
-                            )
+                        data.chipsAllowed = setOf(
+                                Chip.ChipUpgrades.SUB,
+                                Chip.ChipUpgrades.POWERUP,
+                                Chip.ChipUpgrades.SELL,
+                                Chip.ChipUpgrades.SHR,
+                                Chip.ChipUpgrades.MEM,
+                                Chip.ChipUpgrades.ACC
+                        )
                         rewardCoins = 3
                     }
 
