@@ -356,6 +356,7 @@ class GameActivity : Activity() {
         setGameActivityStatus(GameActivityStatus.PLAYING)
         with (gameMechanics) {
             currentStageIdent = ident
+            currentHeroes(ident).values.forEach { hero -> hero.isOnLeave = hero.isOnLeave(ident) }
             calculateLives()
             calculateStartingCash()
             calculateCoins(nextStage)
