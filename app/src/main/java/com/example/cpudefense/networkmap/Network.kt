@@ -5,7 +5,6 @@ package com.example.cpudefense.networkmap
 import android.graphics.*
 import android.graphics.Bitmap.Config.ARGB_8888
 import android.view.MotionEvent
-import android.view.View
 import com.example.cpudefense.EndlessStageCreator
 import com.example.cpudefense.GameMechanics
 import com.example.cpudefense.GameView
@@ -42,8 +41,6 @@ class Network(val gameMechanics: GameMechanics, val gameView: GameView, x: Int, 
     companion object {
         const val minVehicleSpeed = GameMechanics.minAttackerSpeed
     }
-
-    private val lock = Any()
 
     fun distanceBetweenGridPoints(viewport: Viewport): Pair<Int, Int>?
             /**
@@ -158,7 +155,7 @@ class Network(val gameMechanics: GameMechanics, val gameView: GameView, x: Int, 
         if (!this::networkImage.isInitialized)
             recreateNetworkImage(false)
         if (this::networkImage.isInitialized)
-            synchronized(lock) { canvas.drawBitmap(this.networkImage, null, viewport.screen, paint) }
+            canvas.drawBitmap(this.networkImage, null, viewport.screen, paint)
     }
 
     fun recreateNetworkImage(newBackground: Boolean)

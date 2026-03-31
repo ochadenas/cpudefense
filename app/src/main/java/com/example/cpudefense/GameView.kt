@@ -372,6 +372,10 @@ class GameView(context: Context):
 
     override fun onScaleBegin(p0: ScaleGestureDetector): Boolean {
         viewState = ViewState.CHANGING_SIZE
+        // clear upgrade boxes, they mess up scaling
+        gameMechanics.currentlyActiveStage?.let {
+            it.chips.forEach { (_, chip) -> chip.upgradePossibilities.clear() }
+        }
         return true
     }
 
