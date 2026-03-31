@@ -1747,9 +1747,8 @@ class StageCatalog
                         createTrack(listOf(13, 16, 14, 9, 4, 2), 5)
 
                         createWave(16, 4, .12f, 1.2f)
-                        /** TODO
                         createWave(16, 8, .11f, 1.4f)
-                        createWave(16, 9, .12f, 1.5f)
+                        createWave(16, 9, .12f, 1.5f, coins = 1)
                         createWave(16, 12, .10f, 1.6f)
                         createWave(16, 16, .12f, 1.6f)
                         createWave(16, 32, .14f, 1.8f)
@@ -1757,7 +1756,7 @@ class StageCatalog
                         createWave(16, 128, .14f, 2.4f)
                         createWave(16, 200, .12f, 2.6f)
                         createWave(16, 240, .14f, 2.6f, coins = 1)
-*/
+
                         data.chipsAllowed = setOf(
                                 Chip.ChipUpgrades.SUB,
                                 Chip.ChipUpgrades.POWERUP,
