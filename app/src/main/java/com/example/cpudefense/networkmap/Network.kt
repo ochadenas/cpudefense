@@ -43,6 +43,8 @@ class Network(val gameMechanics: GameMechanics, val gameView: GameView, x: Int, 
         const val minVehicleSpeed = GameMechanics.minAttackerSpeed
     }
 
+    private val lock = Any()
+
     fun distanceBetweenGridPoints(viewport: Viewport): Pair<Int, Int>?
             /**
              * Calculate the distance on the screen between two grid points. (This is a property of the
@@ -156,7 +158,7 @@ class Network(val gameMechanics: GameMechanics, val gameView: GameView, x: Int, 
         if (!this::networkImage.isInitialized)
             recreateNetworkImage(false)
         if (this::networkImage.isInitialized)
-            canvas.drawBitmap(this.networkImage, null, viewport.screen, paint)
+            synchronized(lock) { canvas.drawBitmap(this.networkImage, null, viewport.screen, paint) }
     }
 
     fun recreateNetworkImage(newBackground: Boolean)

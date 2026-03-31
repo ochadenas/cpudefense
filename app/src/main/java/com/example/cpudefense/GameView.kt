@@ -90,6 +90,13 @@ class GameView(context: Context):
     var effects: Effects? = null
     /** whether the viewport can be moved by scrolling or scaled by pinching */
     var scrollAllowed = true
+
+    enum class ViewState { NORMAL, CHANGING_SIZE }
+    /** state used to block movement when the user changes the viewport size */
+    private var viewState = GameView.ViewState.NORMAL
+    /** lock used to synchronize drawing */
+    private var displayLock = Any()
+
     private var backgroundColour = Color.BLACK
     private val gestureDetector = GestureDetectorCompat(context, this)
     private val scaleGestureDetector: ScaleGestureDetector = ScaleGestureDetector(context, this)
@@ -208,6 +215,7 @@ class GameView(context: Context):
             it.applyScale(viewport)
             it.recreateNetworkImage(false)
         }
+        viewState = ViewState.NORMAL
         speedControlPanel.setInfoLine(resources.getString(R.string.stage_number).format(gameMechanics.currentlyActiveStage?.numberAsString()))
     }
 
@@ -251,11 +259,6 @@ class GameView(context: Context):
         marketplace.setSize(Rect(0, 0, w, h))
         notification.setPositionOnScreen(w/2, h/2)
         effects?.setSize(Rect(0, 0, w, viewportHeight))
-
-        /* increase attacker size on larger screens */
-        // theGame.globalResolutionFactorX = (w / )
-        // gameMechanics.resources.displayMetrics.scaledDensity = (h / 1024f) * resources.displayMetrics
-
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
@@ -274,14 +277,16 @@ class GameView(context: Context):
         when (gameMechanics.state.phase)
         {
             GamePhase.RUNNING -> {
-                if (speedControlPanel.onDown(motionEvent))
-                    return true
-                gameMechanics.currentlyActiveStage?.network?.let {
-                    if (processClickOnNodes(it, motionEvent))
+                synchronized(displayLock) {
+                    if (speedControlPanel.onDown(motionEvent))
                         return true
-                    for (obj in it.vehicles)
-                        if ((obj as Attacker).onDown(motionEvent))
+                    gameMechanics.currentlyActiveStage?.network?.let {
+                        if (processClickOnNodes(it, motionEvent))
                             return true
+                        for (obj in it.vehicles)
+                            if ((obj as Attacker).onDown(motionEvent))
+                                return true
+                    }
                 }
                 return false
             }
@@ -335,12 +340,13 @@ class GameView(context: Context):
             GamePhase.INTERMEZZO -> intermezzo.onScroll(p0, p1, dx, dy)
             else ->
             {
-                if (scrollAllowed) {
+                if (scrollAllowed) synchronized(displayLock) {
                     viewport.addOffset(-dx, -dy)
                     gameMechanics.currentlyActiveStage?.network?.recreateNetworkImage(false)
                 }
             }
         }
+        viewState = ViewState.NORMAL
         return false
     }
 
@@ -354,8 +360,7 @@ class GameView(context: Context):
     /** event handler for 'pinch' gestures */
     override fun onScale(p0: ScaleGestureDetector): Boolean {
         val scaleFactor = p0.scaleFactor
-        if (scrollAllowed)
-        {
+        if (scrollAllowed) synchronized(displayLock) {
             viewport.scale(scaleFactor)
             gameMechanics.currentlyActiveStage?.network?.let {
                 it.applyScale(viewport)
@@ -366,10 +371,12 @@ class GameView(context: Context):
     }
 
     override fun onScaleBegin(p0: ScaleGestureDetector): Boolean {
+        viewState = ViewState.CHANGING_SIZE
         return true
     }
 
     override fun onScaleEnd(p0: ScaleGestureDetector) {
+        viewState = ViewState.NORMAL
     }
 
     fun updateEffects()
@@ -401,24 +408,28 @@ class GameView(context: Context):
             effects?.snow?.updateGraphicalEffects()
     }
 
-    @Synchronized fun display()
+    fun display()
     {
         if (!isInitialized())
             return
         val state = gameMechanics.state
-        holder.lockCanvas()?.let()
-        {
-            if (state.phase == GamePhase.RUNNING || state.phase == GamePhase.PAUSED)
-                displayNetwork(it)
-            if (showAdditionalEffects())
-                effects?.snow?.display(it)
-            if (state.phase == GamePhase.PAUSED)
-                displayPauseIndicator(it)
-            intermezzo.display(it, viewport)
-            marketplace.display(it, viewport)
-            notification.display(it)
-            effects?.displayGraphicalEffects(it)
-            holder.unlockCanvasAndPost(it)
+        if (viewState == ViewState.CHANGING_SIZE)
+            return
+        synchronized(displayLock) {
+            holder.lockCanvas()?.let()
+            {
+                if (state.phase == GamePhase.RUNNING || state.phase == GamePhase.PAUSED)
+                    displayNetwork(it)
+                if (showAdditionalEffects())
+                    effects?.snow?.display(it)
+                if (state.phase == GamePhase.PAUSED)
+                    displayPauseIndicator(it)
+                intermezzo.display(it, viewport)
+                marketplace.display(it, viewport)
+                notification.display(it)
+                effects?.displayGraphicalEffects(it)
+                holder.unlockCanvasAndPost(it)
+            }
         }
     }
 

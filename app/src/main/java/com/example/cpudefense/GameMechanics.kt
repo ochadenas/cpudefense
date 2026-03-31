@@ -81,7 +81,7 @@ class GameMechanics {
         enum class Season { DEFAULT, EASTER, CHRISTMAS }
 
         fun specialSeason(): Season
-                /** for "easter egg" purposes. Determine whether - at the time of playing - we are in
+                /** for "Easter egg" purposes. Determine whether - at the time of playing - we are in
                  * a special season.
                  */
         {

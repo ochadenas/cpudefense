@@ -30,10 +30,17 @@ class Viewport(var number: Int)
     /** offset to the origin when moving the viewport around, in screen coordinates */
     private var offsetX = 0
     private var offsetY = 0
+
+    private var _userScale = 1.0f
     /** zoom factor chosen by the player */
-    var userScale = 1.0f
+    var userScale: Float
+        get() = synchronized(viewportChangelock) { _userScale }
+        set(value) = synchronized(viewportChangelock) { _userScale = value }
     /** whether the viewport has been initialized with width and height */
     var isValid = false
+
+    /** synchronize the control flow when changing size or moving the viewport */
+    private val viewportChangelock = Any()
 
     /** default grid size that fits on screen without scrolling */
     private val standardGridSize: Coord = Coord(46, 60)
@@ -68,39 +75,52 @@ class Viewport(var number: Int)
         calculateScale()
     }
 
-    private fun calculateScale()
+    private fun calculateScale(newScale: Float? = null)
             /** given the viewport width and height, calculates the x and y scale factors.
              * To be called whenever the size of the screen changes.
              */
     {
-        val width = viewportWidth.toFloat() // screen coords
-        val height = viewportHeight.toFloat()
-        if (width >= 0f && height >= 0f) {
-            scaleX = viewportWidth.toFloat() / standardGridSize.x
-            scaleY = viewportHeight.toFloat() / standardGridSize.y
-            if (scaleX > scaleY * 1.4f) scaleX = scaleY * 1.2f
-            if (scaleY > scaleX * 1.4f) scaleY = scaleX * 1.2f
-            scaleX *= userScale
-            scaleY *= userScale
-            isValid = true
-            scaleHasChanged = true
+        synchronized(viewportChangelock) {
+            val width = viewportWidth.toFloat() // screen coords
+            val height = viewportHeight.toFloat()
+            if (width >= 0f && height >= 0f) {
+                scaleX = viewportWidth.toFloat() / standardGridSize.x
+                scaleY = viewportHeight.toFloat() / standardGridSize.y
+                if (scaleX > scaleY * 1.4f) scaleX = scaleY * 1.2f
+                if (scaleY > scaleX * 1.4f) scaleY = scaleX * 1.2f
+                newScale?.let { _userScale = it }
+                scaleX *= _userScale
+                scaleY *= _userScale
+                isValid = true
+                scaleHasChanged = true
+            }
+            else
+                isValid = false
         }
-        else
-            isValid = false
     }
 
     fun addOffset(deltaX: Float, deltaY: Float)
     /** add an offset to move the viewport around */
     {
-        // keep previous offsets. If the viewport gets shifted off the screen, revert the offset
-        val prevOffsetX = offsetX
-        val prevOffsetY = offsetY
-        offsetX += deltaX.toInt()
-        if (deltaX<0 && gridToScreen(gridSize).first <= viewportSafetyMargin ) { offsetX = prevOffsetX }
-        if (deltaX>0 && gridToScreen(gridOrigin).first >= viewportWidth-viewportSafetyMargin ) { offsetX = prevOffsetX }
-        offsetY += deltaY.toInt()
-        if (deltaY<0 && gridToScreen(gridSize).second <= viewportSafetyMargin ) { offsetY = prevOffsetY }
-        if (deltaY>0 && gridToScreen(gridOrigin).second >= viewportHeight-viewportSafetyMargin ) { offsetY = prevOffsetY }
+        synchronized(viewportChangelock) {
+            // keep previous offsets. If the viewport gets shifted off the screen, revert the offset
+            val prevOffsetX = offsetX
+            val prevOffsetY = offsetY
+            offsetX += deltaX.toInt()
+            if (deltaX < 0 && gridToScreen(gridSize).first <= viewportSafetyMargin) {
+                offsetX = prevOffsetX
+            }
+            if (deltaX > 0 && gridToScreen(gridOrigin).first >= viewportWidth - viewportSafetyMargin) {
+                offsetX = prevOffsetX
+            }
+            offsetY += deltaY.toInt()
+            if (deltaY < 0 && gridToScreen(gridSize).second <= viewportSafetyMargin) {
+                offsetY = prevOffsetY
+            }
+            if (deltaY > 0 && gridToScreen(gridOrigin).second >= viewportHeight - viewportSafetyMargin) {
+                offsetY = prevOffsetY
+            }
+        }
     }
 
     fun scale(param: Float)
@@ -110,11 +130,10 @@ class Viewport(var number: Int)
         val newScale = userScale * factor
         if (newScale !in 0.25 ..3.2)
             return
-        userScale = newScale
-        calculateScale()
+        calculateScale(newScale)
         // re-center the viewport
-        offsetX -= (screen.width() * (factor-1)).toInt() / 2
-        offsetY -= (screen.height() * (factor-1)).toInt() / 2
+        addOffset(-(screen.width() * (factor-1)).toInt() / 2f,
+                  - (screen.height() * (factor-1)).toInt() / 2f)
     }
 
     fun gridToScreen(gridPos: Coord): Pair<Int, Int>
