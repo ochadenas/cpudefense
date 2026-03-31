@@ -387,7 +387,7 @@ class Intermezzo(var gameView: GameView): GameElement(), Fadable {
 
     private fun oneHeroMustGoOnLeave(ident: Stage.Identifier): Boolean
     {
-        return (isLevelWhereHeroGoesOnLeave(ident) && (ident.number !in gameView.gameMechanics.holidays))
+        return isLevelWhereHeroGoesOnLeave(ident)
     }
 
     inner class HeroSelection
