@@ -1,0 +1,11 @@
+New features:
+- The game view can be scaled using the "pinch" gesture.
+
+Bug fixes:
+- Corrected available chip types and number of waves for stages 22 and 32
+- Made the outline around active MEM chips more recognizable (issue #233).
+- Graphical stage layout tended to be rather elongated on large devices.
+
+Miscellaneous:
+- Heroes to go on holiday must be re-selected each time a leave level is entered (issue #210).
+

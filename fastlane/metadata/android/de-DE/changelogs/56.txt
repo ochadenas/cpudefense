@@ -1,0 +1,10 @@
+Neue Funktionen:
+- Die Spielansicht kann durch die „Zweifingergeste“ skaliert werden.
+
+Fehlerbehebungen:
+- Die verfügbaren Chip-Typen und die Anzahl der Wellen für die Level 22 und 32 wurden korrigiert.
+- Der Umriss um aktive MEM-Chips wurde besser erkennbar gemacht (issue #233).
+- Das grafische Level-Layout ist nicht mehr so in die Länge gezogen, vor allem auf großen Bildschirmen.
+
+Sonstiges:
+- Helden, die in den Urlaub gehen, müssen jedes Mal neu ausgewählt werden, wenn ein Urlaubslevel erneut betreten wird (issue #210).

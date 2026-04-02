@@ -1,0 +1,10 @@
+Nuove funzionalità:
+- È possibile ridimensionare la visualizzazione del gioco con il gesto di “pizzicare”.
+
+Correzioni di bug:
+- Corretti i tipi di chip disponibili e il numero di ondate per i livelli 22 e 32
+- Reso più riconoscibile il contorno attorno ai chip MEM attivi (issue #233).
+- Il layout grafico dei livelli tendeva a risultare piuttosto allungato sui dispositivi di grandi dimensioni.
+
+Varie:
+- Gli eroi in vacanze devono essere riselezionati ogni volta che si accede a un livello di congedo (issue #210).

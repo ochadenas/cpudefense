@@ -1,0 +1,10 @@
+Nouvelles fonctionnalités :
+- L'affichage du jeu peut être redimensionné à l'aide du geste de « pincement ».
+
+Corrections de bugs :
+- Correction des types de puces disponibles et du nombre de vagues pour les niveaux 22 et 32
+- Amélioration de la visibilité du contour autour des puces MEM actives (issue #233).
+- La disposition graphique des niveaux avait tendance à être plutôt allongée sur les appareils de grande taille.
+
+Divers :
+- Les héros partant en vacances doivent être resélectionnés à chaque fois qu'un niveau de congé est sélectionné (issue #210).
