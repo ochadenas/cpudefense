@@ -4,12 +4,12 @@ plugins {
 }
 
 android {
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId 'de.chadenas.cpudefense'
         minSdk = 21
-        targetSdk = 34
+        targetSdk = 36
         versionCode = 57
         versionName = "1." + versionCode.toString()
 
