@@ -8,11 +8,76 @@
     android:background="@drawable/shape_border_yellow"
     tools:context=".activities.SettingsActivity">
 
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/actions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        >
+
+        <TextView
+            android:id="@+id/actions_title_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:text="@string/actions_title"
+            android:textColor="#FFFFFF"
+            android:textSize="24sp"
+            />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/startNewGameButton"
+            android:layout_width="194dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="24dp"
+            android:background="@drawable/hp_key"
+            android:clickable="true"
+            android:focusable="true"
+            android:onClick="startNewGame"
+            android:text="@string/button_reset_progress"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/exportGameButton"
+            android:layout_width="194dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="24dp"
+            android:background="@drawable/hp_key"
+            android:clickable="true"
+            android:focusable="true"
+            android:onClick="exportGame"
+            android:text="@string/button_export"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/restoreGameButton"
+            android:layout_width="194dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="24dp"
+            android:background="@drawable/hp_key"
+            android:clickable="true"
+            android:focusable="true"
+            android:onClick="restoreGame"
+            android:text="@string/button_restore"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            />
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
     <TextView
         android:id="@+id/settings_title_view"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="8dp"
         android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp"
         android:paddingTop="8dp"
@@ -21,25 +86,8 @@
         android:textColor="#FFFFFF"
         android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/startNewGameButton"
+        app:layout_constraintTop_toBottomOf="@id/actions"
         app:layout_constraintEnd_toEndOf="parent"
-        />
-
-
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/startNewGameButton"
-        android:layout_width="194dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="24dp"
-        android:background="@drawable/hp_key"
-        android:clickable="true"
-        android:focusable="true"
-        android:onClick="startNewGame"
-        android:text="@string/button_reset_progress"
-        android:textColor="@color/white"
-        android:textStyle="bold"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="@id/button_back"
         />
 
     <ScrollView
@@ -161,9 +209,6 @@
             android:textColor="@color/white"
             />
     </LinearLayout>
-
-
-
     </ScrollView>
 
     <ImageView
@@ -177,7 +222,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/deko_border_horizontal" />
+        app:srcCompat="@drawable/deko_border_horizontal"
+        tools:ignore="ContentDescription" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/button_back"
@@ -189,7 +235,5 @@
         app:layout_constraintEnd_toEndOf="@+id/deko"
         app:layout_constraintBottom_toTopOf="@+id/deko"
         />
-
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
