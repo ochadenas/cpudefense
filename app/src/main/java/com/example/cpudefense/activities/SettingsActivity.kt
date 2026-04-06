@@ -143,6 +143,9 @@ class SettingsActivity : AppCompatActivity() {
 
 
     fun restoreGame(@Suppress("UNUSED_PARAMETER") v: View) {
+        Toast.makeText(this, "Not implemented yet.", Toast.LENGTH_SHORT).show()
+        return
+
         val dialog = Dialog(this)
         dialog.setContentView(R.layout.layout_dialog_reset_progress)
         dialog.window?.setLayout(
@@ -176,6 +179,10 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     fun exportGame(@Suppress("UNUSED_PARAMETER") v: View) {
+        Toast.makeText(this, "Not implemented yet.", Toast.LENGTH_SHORT).show()
+        return
+
+
         val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
         val currentDate = dateFormat.format(Date())
         val fileName = "chipdefense_export_$currentDate.xml"
