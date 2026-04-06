@@ -121,7 +121,7 @@ class GameView(context: Context):
 
     /* game elements */
 
-    val viewport = Viewport(2)
+    val viewport = Viewport()
     var background = Background(this)
     var intermezzo = Intermezzo(this)
     var marketplace = Marketplace(this)

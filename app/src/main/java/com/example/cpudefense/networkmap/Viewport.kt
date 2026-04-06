@@ -3,7 +3,7 @@ package com.example.cpudefense.networkmap
 import android.graphics.Rect
 import com.example.cpudefense.GameView
 
-class Viewport(var number: Int)
+class Viewport()
 /** class that is responsible for mapping internal grid [Coord] to screen coordinates */
 {
     data class Data(
