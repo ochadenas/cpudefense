@@ -1,0 +1,8 @@
+Nouvelles fonctionnalités :
+- Aucune.
+
+Corrections de bogues :
+- Optimisation du code désactivée afin d'éviter le plantage de l'application
+
+Divers :
+- Utilisation du SDK cible 36

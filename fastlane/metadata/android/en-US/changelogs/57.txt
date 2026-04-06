@@ -1,0 +1,9 @@
+New features:
+- None.
+
+Bug fixes:
+- Disabled code optimization in order to avoid the app crashing
+
+Miscellaneous:
+- Use of target SDK 36
+

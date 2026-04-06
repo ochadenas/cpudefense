@@ -1,0 +1,8 @@
+Neue Funktionen:
+- Keine.
+
+Fehlerbehebungen:
+- Code-Optimierung deaktiviert, um App-Abstürze zu vermeiden
+
+Sonstiges:
+- Kompilierung für Target-SDK 36
