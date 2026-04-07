@@ -36,7 +36,7 @@ class Instructions(val gameView: GameView, var stage: Stage.Identifier, var show
 
     fun setTextArea(rect: Rect)
     {
-        myArea = Rect(rect.left+margin, 0+margin, rect.right-margin, rect.bottom-margin)
+        myArea = Rect(rect.left+margin, rect.top, rect.right-margin, rect.bottom)
     }
 
     private fun instructionText(level: Int): String

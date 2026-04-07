@@ -71,6 +71,7 @@ class Intermezzo(var gameView: GameView): GameElement(), Fadable {
     override fun fadeDone(type: Fader.Type) {
         alpha = 255
         instructions = Instructions(gameView, level, showLeaveDialogue) { displayTypewriterText() }
+        resetScroll()
         heroSelection?.prepareScreen()
     }
 
@@ -217,7 +218,7 @@ class Intermezzo(var gameView: GameView): GameElement(), Fadable {
         paint.color = Color.BLACK
         paint.alpha = 255 // alpha
         canvas.drawRect(myArea, paint)
-        instructions?.setTextArea(Rect(myArea.left,0,myArea.right,heightOfConsoleLine()))
+        instructions?.setTextArea(Rect(myArea.left,myArea.top, myArea.right, heightOfConsoleLine()))
         instructions?.display(canvas)
         typewriter?.display(canvas)
         buttonContinue?.display(canvas)
@@ -250,14 +251,19 @@ class Intermezzo(var gameView: GameView): GameElement(), Fadable {
             return false  // only vertical movements are considered here
         event1?.let {
             val max = maxVerticalDisplacement()
+            val min = minVerticalDisplacement()
             vertOffset += dY * scrollFactor
             if (vertOffset > max)
                 vertOffset = max
-            if (vertOffset < 0f)
-                vertOffset = 0f
+            if (vertOffset < min)
+                vertOffset = min
             instructions?.vertOffset = vertOffset
         }
         return true
+    }
+    private fun minVerticalDisplacement(): Float
+    {
+        return -gameView.topMargin.toFloat()
     }
 
     private fun maxVerticalDisplacement(): Float
@@ -274,7 +280,11 @@ class Intermezzo(var gameView: GameView): GameElement(), Fadable {
             max = 0
         return max.toFloat()
     }
-
+    fun resetScroll()
+    {
+        vertOffset = minVerticalDisplacement()
+        instructions?.vertOffset = vertOffset
+    }
 
     fun prepareLevel(nextLevel: Stage.Identifier, isStartingLevel: Boolean)
     {

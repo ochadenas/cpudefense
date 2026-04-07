@@ -97,7 +97,7 @@ class Network(val gameMechanics: GameMechanics, val gameView: GameView, x: Int, 
      * @return false if the viewport is not valid, i.e. screen dimensions are not known
      */
     {
-        if (gameView.isInitialized())
+        if (gameView.hasDefinedSize())
         {
             viewport.determineScreenSize(gameView.width, gameView.height)
             return true

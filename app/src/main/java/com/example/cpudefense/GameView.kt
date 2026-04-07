@@ -16,8 +16,11 @@ import android.view.MotionEvent
 import android.view.ScaleGestureDetector
 import android.view.SurfaceHolder
 import android.view.SurfaceView
+import android.view.ViewGroup
+import androidx.core.content.edit
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.GestureDetectorCompat
+import androidx.core.view.updateLayoutParams
 import com.example.cpudefense.GameMechanics.GamePhase
 import com.example.cpudefense.GameMechanics.LevelMode
 import com.example.cpudefense.activities.GameActivity
@@ -35,7 +38,6 @@ import com.example.cpudefense.networkmap.Network
 import com.example.cpudefense.networkmap.Viewport
 import com.example.cpudefense.utils.displayTextCenteredInRect
 import java.util.concurrent.CopyOnWriteArrayList
-import androidx.core.content.edit
 
 @Suppress("RedundantOverride")
 class GameView(context: Context):
@@ -93,7 +95,7 @@ class GameView(context: Context):
 
     enum class ViewState { NORMAL, CHANGING_SIZE }
     /** state used to block movement when the user changes the viewport size */
-    private var viewState = GameView.ViewState.NORMAL
+    private var viewState = ViewState.NORMAL
     /** lock used to synchronize drawing */
     private var displayLock = Any()
 
@@ -139,8 +141,10 @@ class GameView(context: Context):
     var textScaleFactor = 1.0f
     /** general scale factor, based on Density */
     var scaleFactor = 1.0f
+    /** space taken up by the top system bar */
+    var topMargin = 0
 
-    fun isInitialized(): Boolean
+    fun hasDefinedSize(): Boolean
     /** whether the game view and all its components know their size and can be used */
     {
         return (width > 0) && (height > 0)
@@ -183,6 +187,7 @@ class GameView(context: Context):
 
     override fun surfaceDestroyed(p0: SurfaceHolder) {
     }
+
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
@@ -255,8 +260,10 @@ class GameView(context: Context):
         viewport.determineScreenSize(w, viewportHeight)
         scoreBoard.setSize(Rect(0, viewportHeight, w, viewportHeight+scoreBoardHeight(h)))
         speedControlPanel.setSize(Rect(0, 0, w, viewportHeight))
-        intermezzo.setSize(Rect(0, 0, w, h))
-        marketplace.setSize(Rect(0, 0, w, h))
+        intermezzo.let {
+            it.setSize(Rect(0, 0, w, h))
+        }
+        marketplace.setSize(Rect(0, topMargin, w, h))
         notification.setPositionOnScreen(w/2, h/2)
         effects?.setSize(Rect(0, 0, w, viewportHeight))
     }
@@ -414,7 +421,7 @@ class GameView(context: Context):
 
     fun display()
     {
-        if (!isInitialized())
+        if (!hasDefinedSize())
             return
         val state = gameMechanics.state
         if (viewState == ViewState.CHANGING_SIZE)

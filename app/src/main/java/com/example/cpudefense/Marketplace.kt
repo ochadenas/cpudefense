@@ -62,9 +62,9 @@ class Marketplace(val gameView: GameView): GameElement()
     {
         myArea = Rect(area)
         val margin = (120 * gameView.scaleFactor).toInt()
-        cardsArea = Rect(margin, margin, ((GameView.cardWidth + 20)*gameView.scaleFactor).toInt(), myArea.bottom)
+        cardsArea = Rect(myArea.left+margin, myArea.top+margin, ((GameView.cardWidth + 20)*gameView.scaleFactor).toInt(), myArea.bottom)
         coinSize = 80 * margin / 100
-        rightPanelArea= Rect(cardsArea.right+biographyAreaMargin, margin, myArea.right-biographyAreaMargin, myArea.bottom-biographyAreaMargin)
+        rightPanelArea= Rect(cardsArea.right+biographyAreaMargin, cardsArea.top, myArea.right-biographyAreaMargin, myArea.bottom-biographyAreaMargin)
         createButton()
         biographyArea = Rect(rightPanelArea).apply { bottom = buttonPurchase?.area?.top ?: rightPanelArea.bottom }
     }
@@ -348,7 +348,7 @@ class Marketplace(val gameView: GameView): GameElement()
             val width = gameView.gameActivity.gameView.width
             val height = gameView.gameActivity.gameView.height
             if (width > 0 && height > 0) {
-                setSize(Rect(0, 0, width, height))
+                setSize(Rect(0, gameView.topMargin, width, height))
                 fillMarket(nextGameLevel)
             }
             else

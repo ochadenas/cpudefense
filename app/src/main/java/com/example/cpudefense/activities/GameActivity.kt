@@ -8,6 +8,8 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.os.SystemClock
+import android.view.View
+import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.view.Window
@@ -40,6 +42,10 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import androidx.core.content.edit
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updateLayoutParams
 
 class GameActivity : Activity() {
     var logger: Logger? = null
@@ -91,6 +97,7 @@ class GameActivity : Activity() {
     {
         super.onCreate(savedInstanceState)
         /* here, the size of the surfaces might not be known */
+        WindowCompat.enableEdgeToEdge(window)
         requestWindowFeature(Window.FEATURE_NO_TITLE) // method of Activity
         setContentView(R.layout.activity_main_game)
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
@@ -177,6 +184,23 @@ class GameActivity : Activity() {
         super.onDestroy()
     }
 
+    fun handleInsets(view: View, windowInsets: WindowInsetsCompat): WindowInsetsCompat
+    /** handles the width of the system status bar (top and bottom) and applies
+     * margins in order to avoid overlapping of game elements
+     */
+    {
+        val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+        view.updateLayoutParams<ViewGroup.MarginLayoutParams>
+        {
+            topMargin = 0
+            leftMargin = insets.left
+            bottomMargin = insets.bottom
+            rightMargin = insets.right
+        }
+        (view as GameView).topMargin = insets.top + 2 // remember this value
+        return WindowInsetsCompat.CONSUMED
+    }
+
     private fun setupGameView()
     /** creates the game view including all game components */
     {
@@ -184,6 +208,7 @@ class GameActivity : Activity() {
         {
             val parentView: FrameLayout? = findViewById(R.id.gameFrameLayout)
             parentView?.addView(gameView)
+            ViewCompat.setOnApplyWindowInsetsListener(gameView, ::handleInsets)
         }
         gameView.setupView()
     }
@@ -610,10 +635,12 @@ class GameActivity : Activity() {
 
     fun setGameActivityStatus(status: GameActivityStatus) {
         val prefs = getSharedPreferences(Persistency.filename_state, MODE_PRIVATE)
-        prefs.edit {
-            when (status) {
-                GameActivityStatus.PLAYING -> putString("STATUS", "running")
-                GameActivityStatus.BETWEEN_LEVELS -> putString("STATUS", "complete")
+        when (status) {
+            GameActivityStatus.PLAYING -> {
+                prefs.edit { putString("STATUS", "running") }
+            }
+            GameActivityStatus.BETWEEN_LEVELS -> {
+                prefs.edit { putString("STATUS", "complete") }
             }
         }
         logger?.log("Activity status set to %s".format(status.toString()))
