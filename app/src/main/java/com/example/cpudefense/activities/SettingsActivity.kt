@@ -179,10 +179,6 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     fun exportGame(@Suppress("UNUSED_PARAMETER") v: View) {
-        Toast.makeText(this, "Not implemented yet.", Toast.LENGTH_SHORT).show()
-        return
-
-
         val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
         val currentDate = dateFormat.format(Date())
         val fileName = "chipdefense_export_$currentDate.xml"
@@ -193,15 +189,14 @@ class SettingsActivity : AppCompatActivity() {
                 ViewGroup.LayoutParams.WRAP_CONTENT
         )
         dialog.setCancelable(true)
-        dialog.findViewById<TextView>(R.id.button_cancel)?.let {
-            it.text = resources.getText(R.string.choice_1)
-            it.setOnClickListener {
-                dialog.dismiss()
-                dismiss(v)
-            }
+        dialog.findViewById<TextView>(R.id.question)?.let {
+            it.text = getString(R.string.text_exportgame_question, fileName)
+            // it.text = resources.getText(R.string.text_exportgame_question).toString().format(fileName)
         }
-        dialog.findViewById<TextView>(R.id.button_selectpath)?.let {
-            it.text = resources.getText(R.string.choice_2)
+        dialog.findViewById<TextView>(R.id.button2)?.let {
+            it.setOnClickListener { dialog.dismiss() }
+        }
+        dialog.findViewById<TextView>(R.id.button1)?.let {
             it.setOnClickListener {
                 val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
                     addCategory(Intent.CATEGORY_OPENABLE)

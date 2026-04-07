@@ -384,7 +384,7 @@ The programming language Pascal is named after him."</string>
     <string name="choice_restore_1">Yes, import the game data.</string>
     <string name="choice_restore_2">No, keep my current game.</string>
     <string name="query_export_game">Export game state</string>
-    <string name="text_exportgame_question">Choose a location on your device where the game data will be exported.</string>
+    <string name="text_exportgame_question">Choose a location for the game data. The file will be named %s.</string>
     <string name="text_exportgame_option1">Open path selector</string>
     <string name="text_exportgame_option2">Cancel</string>
 </resources>

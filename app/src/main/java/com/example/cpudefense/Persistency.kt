@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.cpudefense.activities.GameActivity
 import com.google.gson.Gson
 import java.io.ByteArrayOutputStream
+import androidx.core.content.edit
 
 class Persistency(private val activity: Activity)
 {
@@ -83,10 +84,10 @@ class Persistency(private val activity: Activity)
              * position of attackers, etc., and also their waves.
              */
     {
-        val editor = prefsSaves.edit()
-        val json = Gson().toJson(gameMechanics.currentlyActiveStage?.provideData())
-        editor.putString("currentstage", json)
-        editor.apply()
+        prefsSaves.edit {
+            val json = Gson().toJson(gameMechanics.currentlyActiveStage?.provideData())
+            putString("currentstage", json)
+        }
     }
 
     fun saveGeneralState(gameMechanics: GameMechanics)
@@ -94,10 +95,10 @@ class Persistency(private val activity: Activity)
      * This includes current lives, speed control settings, game phase.
      */
     {
-        val editor = prefsState.edit()
-        val json = Gson().toJson(gameMechanics.state)
-        editor.putString("GENERAL", json)
-        editor.apply()
+        prefsState.edit {
+            val json = Gson().toJson(gameMechanics.state)
+            putString("GENERAL", json)
+        }
     }
 
     fun saveCoins(gameMechanics: GameMechanics)
@@ -106,7 +107,7 @@ class Persistency(private val activity: Activity)
         val purseData = SerializablePurseContents(basic = emptyContents, endless = emptyContents)
         gameMechanics.purseOfCoins[GameMechanics.LevelMode.BASIC]?.contents?.let { purse -> purseData.basic = purse }
         gameMechanics.purseOfCoins[GameMechanics.LevelMode.ENDLESS]?.contents?.let { purse -> purseData.endless = purse }
-        prefsSaves.edit().putString("coins", Gson().toJson(purseData)).apply()
+        prefsSaves.edit { putString("coins", Gson().toJson(purseData)) }
     }
 
     private fun saveCompleteState(gameMechanics: GameMechanics?)
@@ -141,7 +142,7 @@ class Persistency(private val activity: Activity)
             val purseData = SerializablePurseContents(basic = emptyContents, endless = emptyContents)
             gameMechanics.purseOfCoins[GameMechanics.LevelMode.BASIC]?.contents?.let { purse -> purseData.basic = purse }
             gameMechanics.purseOfCoins[GameMechanics.LevelMode.ENDLESS]?.contents?.let { purse -> purseData.endless = purse }
-            prefsSaves.edit().putString("coins", Gson().toJson(purseData)).commit()
+            prefsSaves.edit(commit = true) { putString("coins", Gson().toJson(purseData)) }
         }
     }
 
@@ -199,25 +200,23 @@ class Persistency(private val activity: Activity)
     fun saveHeroes(gameMechanics: GameMechanics)
     {
         // remove deprecated hero saves (prior to 1.34)
-        var editor = prefsLegacy.edit()
-        editor.remove("upgrades")
-        editor.apply()
-
-        editor = prefsSaves.edit()
-        val heroData = SerializableHeroDataPerMode()
-        gameMechanics.heroesByMode[GameMechanics.LevelMode.BASIC]?.values?.forEach { hero -> heroData.basic.add(hero.data) }
-        gameMechanics.heroesByMode[GameMechanics.LevelMode.ENDLESS]?.values?.forEach { hero -> heroData.endless.add(hero.data) }
-        editor.putString("heroes", Gson().toJson(heroData))
-        editor.apply()
+        prefsLegacy.edit {
+            remove("upgrades")
+        }
+        prefsSaves.edit {
+            val heroData = SerializableHeroDataPerMode()
+            gameMechanics.heroesByMode[GameMechanics.LevelMode.BASIC]?.values?.forEach { hero -> heroData.basic.add(hero.data) }
+            gameMechanics.heroesByMode[GameMechanics.LevelMode.ENDLESS]?.values?.forEach { hero -> heroData.endless.add(hero.data) }
+            putString("heroes", Gson().toJson(heroData))
+        }
     }
 
-    fun saveHolidays(gameMechanics: GameMechanics)
-    {
-        val editor = prefsSaves.edit()
-        val data = SerializableHolidays(gameMechanics.holidays)
-        val json = Gson().toJson(data)
-        editor.putString("holidays", json)
-        editor.apply()
+    fun saveHolidays(gameMechanics: GameMechanics) {
+        prefsSaves.edit {
+            val data = SerializableHolidays(gameMechanics.holidays)
+            val json = Gson().toJson(data)
+            putString("holidays", json)
+        }
     }
 
     fun loadState(gameMechanics: GameMechanics?)
@@ -273,7 +272,7 @@ class Persistency(private val activity: Activity)
             gameMechanics.stageData =
                 Gson().fromJson(json, Stage.Data::class.java)
         }
-        prefsLegacy.edit().let { it.remove(key); it.apply() }
+        prefsLegacy.edit { remove(key); }
     }
 
     fun loadGeneralState(gameMechanics: GameMechanics)
@@ -287,7 +286,7 @@ class Persistency(private val activity: Activity)
             gameMechanics.state =
                 Gson().fromJson(json, GameMechanics.StateData::class.java)
         }
-        prefsLegacy.edit().let { it.remove(key); it.apply() }
+        prefsLegacy.edit { remove(key);  }
     }
 
     fun loadStageSummaries(series: Int): HashMap<Int, Stage.Summary>
@@ -309,7 +308,7 @@ class Persistency(private val activity: Activity)
                 Gson().fromJson(json, SerializableLevelSummary::class.java)
             return data.level
         }
-        catch (e: Exception)
+        catch (_: Exception)
         {
             return hashMapOf()
         }
@@ -333,14 +332,9 @@ class Persistency(private val activity: Activity)
         if (encodedString != "")
         {
             // migrate into new thumbnails file
-            val editorOfNewFile = prefsThumbnails.edit()
-            editorOfNewFile.putString(key, encodedString)
-            editorOfNewFile.apply()
-            val editorOfOldFile = prefsLegacy.edit()
-            editorOfOldFile.remove(key)
-            editorOfOldFile.apply()
-        }
-        else
+            prefsThumbnails.edit { putString(key, encodedString) }
+            prefsLegacy.edit { remove(key) }
+        } else
             encodedString = prefsThumbnails.getString(key, "")
 
         // reconstruct bitmap from string saved in preferences
@@ -349,7 +343,7 @@ class Persistency(private val activity: Activity)
             val decodedBytes: ByteArray = Base64.decode(encodedString, Base64.DEFAULT)
             snapshot = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.size)
         }
-        catch(e: Exception)
+        catch(_: Exception)
         {
             // unable to get a level snapshot, for whatever reason
             snapshot = null
@@ -385,13 +379,13 @@ class Persistency(private val activity: Activity)
             for (heroData in listOfHeroData) {
                 try {
                     heroMap[heroData.type] = Hero.createFromData(activity as GameActivity, heroData)
-                } catch (ex: NullPointerException) {
+                } catch (_: NullPointerException) {
                     /* may happen if a previously existing hero type is definitely removed from the game */
                 }
             }
             loadHolidays(gameMechanics)
         }
-        catch (ex: Exception) {
+        catch (_: Exception) {
             // save file has not the expected structure
             activity.runOnUiThread {
                 Toast.makeText(activity, "Save file corrupted.", Toast.LENGTH_LONG).show()
@@ -412,7 +406,7 @@ class Persistency(private val activity: Activity)
                 gameMechanics.purseOfCoins[GameMechanics.LevelMode.ENDLESS]?.let { purse -> purse.contents = data.endless; purse.initialized = true }
             }
         }
-        catch (ex: Exception) {
+        catch (_: Exception) {
             // save file has not the expected structure
             activity.runOnUiThread {
                 Toast.makeText(activity, "Save file (coins info) corrupted.", Toast.LENGTH_LONG).show()
@@ -435,11 +429,11 @@ class Persistency(private val activity: Activity)
             /** saves the structure data for all 'endless' levels to structure.xml.
              */
     {
-        val editor = prefsStructure.edit()
-        val levelData = SerializableLevelData(data)
-        val json = Gson().toJson(levelData)
-        editor.putString("series_%d".format(series), json)
-        editor.apply()
+        prefsStructure.edit {
+            val levelData = SerializableLevelData(data)
+            val json = Gson().toJson(levelData)
+            putString("series_%d".format(series), json)
+        }
     }
     fun loadLevelStructure(series: Int): HashMap<Int, Stage.Data>
     {
@@ -451,7 +445,7 @@ class Persistency(private val activity: Activity)
                 Gson().fromJson(json, SerializableLevelData::class.java)
             return data.level
         }
-        catch (e: Exception)
+        catch (_: Exception)
         {
             return hashMapOf()
         }
