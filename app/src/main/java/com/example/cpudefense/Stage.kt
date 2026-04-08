@@ -334,7 +334,7 @@ class Stage(var gameMechanics: GameMechanics, var gameView: GameView)
     /** calculates the number of times that each link is used within a track */
     {
         tracks.forEach { (_, track) ->
-            track.links.forEach { it.usageCount++ }
+            track.links.forEach { it?.usageCount++ }
         }
     }
 
