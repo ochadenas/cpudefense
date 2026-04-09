@@ -160,7 +160,7 @@ class Marketplace(val gameView: GameView): GameElement()
         }
         if (buttonRefund?.area?.contains(event.x.toInt(), event.y.toInt()) == true)
         {
-            // if a hero card is selected, then only sell this one; otherwise, go into the "reset all" dialog
+            // if a hero card is selected, then only sell this one; otherwise, go into the "reset all" dialogue
             selected?.let {
                 if (it.data.level > 0)
                 {

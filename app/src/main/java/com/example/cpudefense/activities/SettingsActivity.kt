@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.Dialog
 import android.content.Intent
 import android.graphics.Color
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.view.View.VISIBLE
@@ -12,36 +13,53 @@ import android.view.Window
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updateLayoutParams
 import com.example.cpudefense.GameMechanics
+import com.example.cpudefense.GameView
 import com.example.cpudefense.Persistency
 import com.example.cpudefense.R
 import com.example.cpudefense.Settings
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
-import kotlin.text.format
 
 
 class SettingsActivity : AppCompatActivity() {
     var settings = Settings()
     private var isEndlessAvailable = false
-
-    // Vorbereitung für den Export des Spielstands
-    private val createFileLauncher =
+    private var createExportLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult(), ::doExport)
-
-
+    private var createImportLauncher =
+        registerForActivityResult(ActivityResultContracts.OpenDocument(), ::doImport)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE)  // method of AppCompatActivity
+        WindowCompat.enableEdgeToEdge(window)
         if (intent.getIntExtra("MAXSERIES", 1) >= GameMechanics.SERIES_ENDLESS)
             isEndlessAvailable = true
         setContentView(R.layout.activity_settings)
+        findViewById<View>(android.R.id.content).let {
+            ViewCompat.setOnApplyWindowInsetsListener(it, ::handleInsets)
+        }
         loadPrefs()
+    }
+    fun handleInsets(view: View, windowInsets: WindowInsetsCompat): WindowInsetsCompat
+            /** handles the width of the system status bar (top and bottom) and applies
+             * margins in order to avoid overlapping of game elements
+             */
+    {
+        val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+        findViewById<TextView>(R.id.actions_title_view)
+            .updateLayoutParams<ViewGroup.MarginLayoutParams> { topMargin = insets.top }
+        return WindowInsetsCompat.CONSUMED
     }
 
     private fun loadPrefs() {
@@ -142,40 +160,50 @@ class SettingsActivity : AppCompatActivity() {
     }
 
 
-    fun restoreGame(@Suppress("UNUSED_PARAMETER") v: View) {
-        Toast.makeText(this, "Not implemented yet.", Toast.LENGTH_SHORT).show()
-        return
-
+    fun importGame(@Suppress("UNUSED_PARAMETER") v: View) {
         val dialog = Dialog(this)
-        dialog.setContentView(R.layout.layout_dialog_reset_progress)
+        dialog.setContentView(R.layout.layout_dialog_exportgame)
         dialog.window?.setLayout(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT
         )
         dialog.setCancelable(true)
-        dialog.findViewById<TextView>(R.id.question).text =
-            resources.getText(R.string.query_restore_game)
-        dialog.findViewById<TextView>(R.id.button1)?.let {
-            it.text = resources.getText(R.string.choice_restore_1)
-            it.setOnClickListener {
-                val intent = Intent(this, GameActivity::class.java)
-                intent.putExtra("RESET_PROGRESS", true)
-                intent.putExtra("CONTINUE_GAME", false)
-                startActivity(intent)
-                dialog.dismiss()
-                dismiss(v)
-            }
+        dialog.findViewById<TextView>(R.id.question)?.let {
+            it.text = getString(R.string.text_importgame_question)
         }
         dialog.findViewById<TextView>(R.id.button2)?.let {
-            it.setTextColor(Color.BLACK)
+            it.text = getString(R.string.text_importgame_option2)
+            it.setOnClickListener { dialog.dismiss() }
         }
-        dialog.findViewById<TextView>(R.id.button3)?.let {
-            it.text = resources.getText(R.string.choice_restore_2)
+        dialog.findViewById<TextView>(R.id.button1)?.let {
+            it.text = getString(R.string.text_importgame_option1)
             it.setOnClickListener {
+                createImportLauncher.launch(arrayOf("text/json", "application/json", "text/plain", "*/*"))
                 dialog.dismiss()
+                // dismiss(v)
             }
         }
         dialog.show()
+    }
+
+    fun doImport(uri: Uri?) {
+        uri?.let { uri ->
+            try {
+                contentResolver.openInputStream(uri)?.use { inputStream ->
+                    // Hier den InputStream verarbeiten (z. B. JSON einlesen)
+                    val jsonString = inputStream.bufferedReader().use { it.readText() }
+                    // Weiterverarbeitung...
+                }
+            } catch (e: Exception) {
+                Toast.makeText(
+                        this,
+                        "Fehler beim Import: ${e.message}",
+                        Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+        Toast.makeText(this, "Cancelled", Toast.LENGTH_SHORT).show()
+        return
     }
 
     fun exportGame(@Suppress("UNUSED_PARAMETER") v: View) {
@@ -199,11 +227,11 @@ class SettingsActivity : AppCompatActivity() {
         dialog.findViewById<TextView>(R.id.button1)?.let {
             it.setOnClickListener {
                 val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
-                    addCategory(Intent.CATEGORY_OPENABLE)
-                    type = "application/xml"
+                    // addCategory(Intent.CATEGORY_OPENABLE)
+                    type = "text/json"
                     putExtra(Intent.EXTRA_TITLE, fileName)
                 }
-                createFileLauncher.launch(intent)
+                createExportLauncher.launch(intent)
                 dialog.dismiss()
                 dismiss(v)
             }
@@ -211,25 +239,17 @@ class SettingsActivity : AppCompatActivity() {
         dialog.show()
     }
 
-    private fun doExport(result: ActivityResult) {
+    fun doExport(result: ActivityResult) {
         if (result.resultCode == Activity.RESULT_OK) {
             result.data?.data?.let { uri ->
-                // 2. XML-Inhalt als String vorbereiten
-                val xmlContent = """
-                <?xml version="1.0" encoding="UTF-8"?>
-                <game>
-                    <name>Chip Defense</name>
-                    <level>5</level>
-                </game>
-            """.trimIndent()
-                // 3. Datei beschreiben
+                val fileContent = Persistency(this).prepareGameExport()
                 try {
                     contentResolver.openOutputStream(uri)?.use { outputStream ->
-                        outputStream.write(xmlContent.toByteArray())
+                        outputStream.write(fileContent.toByteArray())
                     }
                     Toast.makeText(this, "Export erfolgreich!", Toast.LENGTH_SHORT).show()
                 } catch (e: Exception) {
-                    Toast.makeText(this, "Fehler beim Export: ${e.message}", Toast.LENGTH_SHORT)
+                    Toast.makeText(this, "Fehler beim Export: ${e.message}", Toast.LENGTH_LONG)
                         .show()
                 }
             }

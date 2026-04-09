@@ -11,6 +11,11 @@ import com.example.cpudefense.activities.GameActivity
 import com.google.gson.Gson
 import java.io.ByteArrayOutputStream
 import androidx.core.content.edit
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
+import java.util.TimeZone
+
 
 class Persistency(private val activity: Activity)
 {
@@ -449,5 +454,26 @@ class Persistency(private val activity: Activity)
         {
             return hashMapOf()
         }
+    }
+
+    data class SerializableGameExportData(
+            val gameVersion: String,
+            val gameId: String,
+            val fileVersion: Int,
+            val exportDate: String,
+   )
+
+    fun prepareGameExport(): String
+    {
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ", Locale.getDefault())
+        dateFormat.timeZone = TimeZone.getTimeZone("UTC") // Zeitzone anpassen
+
+        val gameData = SerializableGameExportData(
+                gameVersion = BuildConfig.VERSION_NAME,
+                gameId = BuildConfig.APPLICATION_ID,
+                fileVersion = 1,
+                exportDate = dateFormat.format(Date())
+        )
+        return Gson().toJson(gameData)
     }
 }

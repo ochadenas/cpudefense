@@ -4,7 +4,6 @@ package com.example.cpudefense.activities
 
 import android.app.Activity
 import android.app.Dialog
-import android.content.Context
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.os.SystemClock
@@ -137,8 +136,8 @@ class GameActivity : Activity() {
         val restartEndless = intent.getBooleanExtra("RESET_ENDLESS", false)
         val startOnLevel = when
         {
-            restartGame -> Stage.Identifier.startOfNewGame
-            restartEndless -> Stage.Identifier.startOfEndless
+            restartGame -> Identifier.startOfNewGame
+            restartEndless -> Identifier.startOfEndless
             else -> Identifier(
                     series = intent.getIntExtra("START_ON_SERIES", SERIES_NORMAL),
                     number = intent.getIntExtra("START_ON_STAGE", 1)
@@ -225,12 +224,10 @@ class GameActivity : Activity() {
      * @param identifier number of the level successfully completed */
     {
         logger?.log("Setting last played stage to series %d / level %d.".format(identifier.series, identifier.number))
-        val prefs = getSharedPreferences(Persistency.filename_state, Context.MODE_PRIVATE)
-        with (prefs.edit())
-        {
+        val prefs = getSharedPreferences(Persistency.filename_state, MODE_PRIVATE)
+        prefs.edit(commit = true) {
             putInt("LASTSTAGE", identifier.number)
             putInt("LASTSERIES", identifier.series)
-            commit()
         }
     }
 
@@ -240,17 +237,17 @@ class GameActivity : Activity() {
              * @param forceReset If true, forces resetting the max stage to the given currentStage
              * */
     {
-        val prefs = getSharedPreferences(Persistency.filename_state, Context.MODE_PRIVATE)
+        val prefs = getSharedPreferences(Persistency.filename_state, MODE_PRIVATE)
         val previousMaxStage =
             Identifier(prefs.getInt("MAXSERIES", 1), prefs.getInt("MAXSTAGE", 0))
         val newMaxStage = if (identifier.isGreaterThan(previousMaxStage) || forceReset) identifier else previousMaxStage
         logger?.log("Setting max stage to series %d / level %d.".format(newMaxStage.series, newMaxStage.number))
-        with (prefs.edit())
-        {
+        prefs.edit {
             putInt("MAXSTAGE", newMaxStage.number)
             putInt("MAXSERIES", newMaxStage.series)
             // make next series available if last level is completed, otherwise remove access
-            val completedLastStageOfSeries: Boolean = (identifier.number == GameMechanics.maxLevelAvailable)
+            val completedLastStageOfSeries: Boolean =
+                (identifier.number == GameMechanics.maxLevelAvailable)
             when (newMaxStage.series) {
                 SERIES_NORMAL -> {
                     putBoolean("TURBO_AVAILABLE", completedLastStageOfSeries)
@@ -265,7 +262,6 @@ class GameActivity : Activity() {
                     putBoolean("ENDLESS_AVAILABLE", true)
                 }
             }
-            apply()
         }
     }
 
@@ -508,7 +504,7 @@ class GameActivity : Activity() {
     }
 
     fun showPurchaseLifeDialog(showHint: Boolean = true)
-            /** @param showHint Whether to display the text how to disable this dialog
+            /** @param showHint Whether to display the text how to disable this dialogue
              */
     {
         val price = gameMechanics.costOfLife()
@@ -554,7 +550,7 @@ class GameActivity : Activity() {
             try {
                 gameMechanics.update()
             }
-            catch (ex: TemperatureDamageException)
+            catch (_: TemperatureDamageException)
             {
                 removeOneLife()
                 runOnUiThread {
