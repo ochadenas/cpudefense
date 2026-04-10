@@ -97,7 +97,7 @@ class GameActivity : Activity() {
         super.onCreate(savedInstanceState)
         /* here, the size of the surfaces might not be known */
         WindowCompat.enableEdgeToEdge(window)
-        requestWindowFeature(Window.FEATURE_NO_TITLE) // method of Activity
+        requestWindowFeature(Window.FEATURE_NO_TITLE)
         setContentView(R.layout.activity_main_game)
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         if (intent.getBooleanExtra("ACTIVATE_LOGGING", false) && GameMechanics.enableLogging)

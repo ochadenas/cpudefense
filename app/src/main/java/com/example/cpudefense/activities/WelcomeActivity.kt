@@ -10,6 +10,7 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
@@ -22,29 +23,38 @@ import com.example.cpudefense.Settings
 import com.example.cpudefense.Stage
 import com.example.cpudefense.gameElements.SevenSegmentDisplay
 import androidx.core.content.edit
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updateLayoutParams
+import com.example.cpudefense.GameView
 
 
 class WelcomeActivity : AppCompatActivity() {
     private var info: PackageInfo? = null
     private var settings = Settings()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        // supportRequestWindowFeature(Window.FEATURE_NO_TITLE)  // method of AppCompatActivity
-        setContentView(R.layout.activity_welcome)
-        info = packageManager.getPackageInfo(this.packageName, PackageManager.GET_ACTIVITIES)
-
-        // migrate preferences files, if needed
-        val prefsLegacy = getSharedPreferences(Persistency.filename_legacy, MODE_PRIVATE)
-        val prefsSettings = getSharedPreferences(Persistency.filename_settings, MODE_PRIVATE)
-        settings.migrateSettings(prefsLegacy, prefsSettings)
-    }
-
     private var gameState: String? = null
     private var nextLevelToPlay = Stage.Identifier()
     private var maxLevel = Stage.Identifier()
     private var turboSeriesAvailable = false
     private var endlessSeriesAvailable = false
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        WindowCompat.enableEdgeToEdge(window)
+        requestWindowFeature(Window.FEATURE_NO_TITLE)
+        supportActionBar?.hide() // Versteckt die ActionBar (falls vorhanden)
+        setContentView(R.layout.activity_welcome)
+        findViewById<View>(android.R.id.content)?.let { rootView ->
+            ViewCompat.setOnApplyWindowInsetsListener(rootView, ::handleInsets)
+        }
+        info = packageManager.getPackageInfo(this.packageName, PackageManager.GET_ACTIVITIES)
+        // migrate preferences files, if needed
+        val prefsLegacy = getSharedPreferences(Persistency.filename_legacy, MODE_PRIVATE)
+        val prefsSettings = getSharedPreferences(Persistency.filename_settings, MODE_PRIVATE)
+        settings.migrateSettings(prefsLegacy, prefsSettings)
+    }
 
     private fun determineLevels(prefs: SharedPreferences) {
         maxLevel.series = prefs.getInt("MAXSERIES", 1)
@@ -53,6 +63,24 @@ class WelcomeActivity : AppCompatActivity() {
         nextLevelToPlay.number = prefs.getInt("LASTSTAGE", 0)
         turboSeriesAvailable = prefs.getBoolean("TURBO_AVAILABLE", false)
         endlessSeriesAvailable = prefs.getBoolean("ENDLESS_AVAILABLE", false)
+    }
+
+
+    fun handleInsets(view: View, windowInsets: WindowInsetsCompat): WindowInsetsCompat
+    /** handles the width of the system status bar (top and bottom) and applies
+     * margins in order to avoid overlapping of game elements
+     */
+    {
+        val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+        findViewById<View>(R.id.game_title)?.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+            topMargin = insets.top
+            leftMargin = insets.left
+            rightMargin = insets.right
+        }
+        findViewById<View>(R.id.quitButton)?.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+            bottomMargin = insets.bottom
+        }
+        return WindowInsetsCompat.CONSUMED
     }
 
     private fun showLevelReached()

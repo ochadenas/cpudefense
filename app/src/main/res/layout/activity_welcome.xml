@@ -145,7 +145,6 @@
         android:contentDescription="@string/deco"
         />
 
-    <!--
     <ImageView
         android:id="@+id/gameTitle"
         android:layout_width="0dp"
@@ -159,7 +158,6 @@
         app:layout_constraintVertical_bias="0.40"
         app:srcCompat="@drawable/game_title"
         />
-        -->
 
     <ImageView
         android:id="@+id/sevenSegmentDisplay"
@@ -170,7 +168,7 @@
         app:layout_constraintBottom_toTopOf="@+id/continueGameButton"
         app:layout_constraintEnd_toEndOf="@+id/continueGameButton"
 
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/gameTitle"
         app:layout_constraintVertical_bias="0.6"
         app:srcCompat="@drawable/mask"
         tools:ignore="SpeakableTextPresentCheck" />

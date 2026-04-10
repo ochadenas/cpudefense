@@ -190,7 +190,6 @@ class SettingsActivity : AppCompatActivity() {
         uri?.let { uri ->
             try {
                 contentResolver.openInputStream(uri)?.use { inputStream ->
-                    // Hier den InputStream verarbeiten (z. B. JSON einlesen)
                     val jsonString = inputStream.bufferedReader().use { it.readText() }
                     // Weiterverarbeitung...
                 }
@@ -198,7 +197,7 @@ class SettingsActivity : AppCompatActivity() {
                 Toast.makeText(
                         this,
                         "Fehler beim Import: ${e.message}",
-                        Toast.LENGTH_SHORT
+                        Toast.LENGTH_LONG
                 ).show()
             }
         }
