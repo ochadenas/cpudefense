@@ -300,6 +300,17 @@ open class Chip(val network: Network, gridX: Int, gridY: Int):
     /** starts the cooldown phase */
     {
         chipData.cooldownTimer = getCooldownTime()
+        // special treatment, because things are a bit more complicated
+        // when there are several slots in the MEM chip
+        recreateChipBitmap()
+    }
+
+    private fun onEndCooldown()
+    /** callback function when cooldownTimer gets below 0. MEM chips must recreate their bitmap */
+    {
+        chipData.cooldownTimer = 0f
+        if (chipData.type == ChipType.MEM) recreateChipBitmap() // see above
+
     }
 
     override fun update() {
@@ -309,6 +320,8 @@ open class Chip(val network: Network, gridX: Int, gridY: Int):
             return  //  no need to calculate for empty slots
         if (isInCooldown()) {
             chipData.cooldownTimer -= gameMechanics.globalSpeedFactor()
+            if (chipData.cooldownTimer <= 0f)
+                onEndCooldown()
             if (chipData.type != ChipType.MEM)  // MEM is the only type that may act during cooldown
                 return
         }
@@ -1074,6 +1087,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int):
                         paintIndicator.style = Paint.Style.FILL
                         canvas.drawRect(indicatorRect, paintIndicator)
                     }
+                    // special treatment for the last (rightmost) indicator
                     indicatorsLit -> {
                         if (isInCooldown())
                         {
