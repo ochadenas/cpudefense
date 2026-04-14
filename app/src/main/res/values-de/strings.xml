@@ -29,6 +29,7 @@
     <string name="choice_1">Ja, noch einmal ganz von vorn beginnen.</string>
     <string name="choice_2">Nur die Levels der „Endlos“-Serie zurücksetzen.</string>
     <string name="choice_3">Nein, Fortschritt beibehalten.</string>
+    <string name="import_choice_no">Nein, aktuelles Spiel beibehalten.</string>
     <string name="close">Schließen</string>
     <string name="instr_1">
 "Dein Computer ist von einem üblen Virus befallen. Stücke von Schadcode — dargestellt als Einsen und Nullen — versuchen, zur CPU zu gelangen.
@@ -304,4 +305,17 @@ Das Verschieben ist gleichbedeutend mit einer Division durch 2."
     <string name="coins_received_as_gift">Du hast %d Coins geschenkt bekommen.</string>
     <string name="settings_use_hex">Nummern der Level hexadezimal anzeigen</string>
     <string name="instr_2_98">Demnächst werden die Helden ihren Urlaub ausdehnen. Sie stehen dann für zwei oder sogar noch mehr Level nicht zur Verfügung.</string>
+    <string name="import_choice_yes">Ja, aktuelles Spiel überschreiben.</string>
+    <string name="actions_title">Aktionen</string>
+    <string name="button_export">Spiel exportieren</string>
+    <string name="button_restore">Spiel einlesen</string>
+    <string name="query_restore_game">Möchtest du ein früher exportiertes Spiel einlesen? Dadurch wird dein aktueller Spielverlauf gelöscht.</string>
+    <string name="choice_restore_1">Ja, Spieldaten importieren.</string>
+    <string name="choice_restore_2">Nein, mein aktuelles Spiel beibehalten.</string>
+    <string name="query_export_game">Spielstand exportieren</string>
+    <string name="text_exportgame_question">Wähle einen Speicherort für die Spieldaten. Die Datei wird „%s“ heißen.</string>
+    <string name="text_exportgame_option1">Auswahldialog öffnen</string>
+    <string name="text_importgame_question">Diese Option ermöglicht dir, einen zuvor exportierten Spielstand einzulesen.</string>
+    <string name="text_importgame_option1">Datei wählen</string>
+    <string name="button_cancel">Abbruch</string>
 </resources>

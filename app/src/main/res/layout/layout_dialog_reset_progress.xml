@@ -70,7 +70,7 @@
             tools:ignore="HardcodedText" />
 
         <TextView
-            android:id="@+id/button2"
+            android:id="@+id/option_cancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingEnd="16dp"
@@ -105,7 +105,7 @@
             app:backgroundTint="@null"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="@id/question"
-            app:layout_constraintTop_toBottomOf="@id/button2"
+            app:layout_constraintTop_toBottomOf="@id/option_cancel"
             tools:ignore="HardcodedText" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

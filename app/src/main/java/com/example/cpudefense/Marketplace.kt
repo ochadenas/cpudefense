@@ -177,7 +177,7 @@ class Marketplace(val gameView: GameView): GameElement()
             dialog.setCancelable(true)
             dialog.findViewById<android.widget.TextView>(R.id.question).text = resources.getText(R.string.query_reset)
             val button1 = dialog.findViewById<android.widget.Button>(R.id.button1)
-            val button2 = dialog.findViewById<android.widget.Button>(R.id.button2)
+            val button2 = dialog.findViewById<android.widget.Button>(R.id.option_cancel)
             button2?.text = resources.getText(R.string.yes)
             button1?.text = resources.getText(R.string.no)
             button2?.setOnClickListener { dialog.dismiss(); refundAll() }

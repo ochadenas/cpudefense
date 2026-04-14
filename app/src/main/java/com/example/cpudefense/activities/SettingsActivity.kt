@@ -139,7 +139,7 @@ class SettingsActivity : AppCompatActivity() {
                 dismiss(v)
             }
         }
-        dialog.findViewById<TextView>(R.id.button2)?.let {
+        dialog.findViewById<TextView>(R.id.option_cancel)?.let {
             it.text = resources.getText(R.string.choice_2)
             if (isEndlessAvailable) {
                 it.setOnClickListener {
@@ -175,8 +175,8 @@ class SettingsActivity : AppCompatActivity() {
         dialog.findViewById<TextView>(R.id.question)?.let {
             it.text = getString(R.string.text_importgame_question)
         }
-        dialog.findViewById<TextView>(R.id.button2)?.let {
-            it.text = getString(R.string.text_importgame_option2)
+        dialog.findViewById<TextView>(R.id.option_cancel)?.let {
+            it.text = getString(R.string.button_cancel)
             it.setOnClickListener { dialog.dismiss() }
         }
         dialog.findViewById<TextView>(R.id.button1)?.let {
@@ -227,7 +227,7 @@ class SettingsActivity : AppCompatActivity() {
                             finish()
                         }
                     }
-                    dialog.findViewById<TextView>(R.id.button2)?.let {
+                    dialog.findViewById<TextView>(R.id.option_cancel)?.let {
                         it.text = resources.getText(R.string.import_choice_no)
                         it.setOnClickListener { dialog.dismiss() }
                     }
@@ -264,7 +264,7 @@ class SettingsActivity : AppCompatActivity() {
         /** this is the format used in our save files. We also assume that the time stamp is in UTC */
         val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault())
         inputFormat.timeZone = TimeZone.getTimeZone("UTC")
-        var timeInfoString: String = ""
+        var timeInfoString = ""
         var timestamp: Date? = null
         try { gameInfo?.let { timestamp = inputFormat.parse((it.exportDate)) } ?: throw(IllegalArgumentException())}
         catch (_: Exception ) { timeInfoString = "I don't know when the game was exported." }
@@ -301,7 +301,7 @@ class SettingsActivity : AppCompatActivity() {
             it.text = getString(R.string.text_exportgame_question, fileName)
             // it.text = resources.getText(R.string.text_exportgame_question).toString().format(fileName)
         }
-        dialog.findViewById<TextView>(R.id.button2)?.let {
+        dialog.findViewById<TextView>(R.id.option_cancel)?.let {
             it.setOnClickListener { dialog.dismiss() }
         }
         dialog.findViewById<TextView>(R.id.button1)?.let {

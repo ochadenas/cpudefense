@@ -71,7 +71,7 @@
             tools:ignore="HardcodedText" />
 
         <TextView
-            android:id="@+id/button2"
+            android:id="@+id/option_cancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingStart="0dp"
@@ -80,7 +80,7 @@
             android:paddingTop="8dp"
             android:paddingBottom="16dp"
             android:background="@color/black"
-            android:text="@string/text_exportgame_option2"
+            android:text="@string/button_cancel"
             android:textAlignment="viewStart"
             android:textAllCaps="false"
             android:textColor="@color/choice_2"

@@ -36,6 +36,7 @@
     <string name="choice_1">Sì, ricominciare da capo.</string>
     <string name="choice_2">Azzerare solo i livelli della serie “Infinita”.</string>
     <string name="choice_3">No, mantenere il progresso.</string>
+    <string name="import_choice_no">No, tieni la partita corrente.</string>
     <string name="close">Chiudere</string>
     <string name="instr_1">Il tuo computer è stato infettato da un virus maligno. Frammenti di codice dannoso — rappresentati da uno e zeri — cercano di raggiungere la CPU.\n\nTocca lo slot vuoto per inserire un chip di difesa contro l’attacco, e tocca di nuovo per confermare.\n\nIl chip più semplice è “SUB 1”. Sottrae 1 dal valore dell’attaccante: 1 diventa 0, e 0 scompare, non rappresentando più una minaccia.\n\n</string>
     <string name="kilby">Jack St. Clair Kilby ebbe l’idea di raggruppare elementi semiconduttori – come transistor o diodi – in un circuito integrato (IC), anziché collegare i singoli componenti su una scheda a circuiti stampati. Questo costituì la base per i microchip e i processori, rendendo possibile tutta l’elettronica moderna con la sua miniaturizzazione.\n\nJack Kilby è considerato anche co-inventore della calcolatrice e della stampante termica.\n</string>
@@ -274,4 +275,17 @@
         <item>Nel 1981 è stato pubblicato il libro di Tracy Kidder “The Soul of a New Machine”. Racconta la storia vera del team che negli anni ’70 ha guidato lo sviluppo di un computer rivoluzionario alla Data General, la “nuova macchina”.\n\nIl libro è considerato un classico della letteratura tecnica. Non solo descrive in modo avvincente le grandi sfide tecniche affrontate con tempi ristretti e risorse limitate, ma mostra soprattutto la passione, lo stress e i conflitti interpersonali vissuti dai protagonisti.</item>
         <item>Questa sequenza di chip distrugge tutti gli attaccanti (tranne le coin):\n\n==[SPLT]==[ACC &amp;]==[SUB 1]==\n\nSai perché?</item>
     </string-array>
+    <string name="import_choice_yes">Sì, sostituire la partita attuale</string>
+    <string name="actions_title">Azioni</string>
+    <string name="button_export">Esporta la partita</string>
+    <string name="button_restore">Ripristina a partita</string>
+    <string name="query_restore_game">Vuoi importare uno stato di partita esportato? Questo cancellerà il tuo progresso attuale.</string>
+    <string name="choice_restore_1">Sì, importa i dati della partita.</string>
+    <string name="choice_restore_2">No, tieni la mia partita.</string>
+    <string name="query_export_game">Esporta la partita</string>
+    <string name="text_exportgame_question">Scegli una posizione per i dati della partita. Il file si chiamerà “%s”.</string>
+    <string name="text_exportgame_option1">Apri il selezionatore del percorso</string>
+    <string name="text_importgame_question">"Questa opzione ti consente di importare una partita precedentemente esportata.   "</string>
+    <string name="text_importgame_option1">Scegli il file dei dati</string>
+    <string name="button_cancel">Annulla</string>
 </resources>

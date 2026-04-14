@@ -34,6 +34,7 @@
     <string name="choice_1">Oui, commencer à nouveau dès le début.</string>
     <string name="choice_2">Seulement remettre à zéro les niveaux de la série « sans fin »</string>
     <string name="choice_3">Non, garder la progression.</string>
+    <string name="import_choice_no">Non, garder la partie actuelle.</string>
     <string name="close">Fermer</string>
     <string name="instr_1">Votre ordinateur est envahi par un virus. Des fragments de code maléfique - représentés par des uns et des zéros - tentent d’atteindre le processeur.\n\nTapez sur l’emplacement vide pour ajouter une puce comme défense contre l’attaque, puis tapez à nouveau pour confirmer votre choix.\n\nLa puce la plus basique est ’SUB 1’ qui soustrait 1 à la valeur de l’attaquant : les 1 deviennent des 0, et les 0 disparaissent et ne constituent plus une menace.</string>
     <string name="instr_2">Vous pouvez taper sur un attaquant. Cela inversera sa valeur : 1 devient 0 et 0 devient 1.\n\nInverser un 0 rendra en fait l’attaquant plus dangereux, alors faites attention de ne pas taper sur tout ce que vous voyez.</string>
@@ -274,4 +275,17 @@
     <string name="coins_received_as_gift">Vous avez reçu un cadeau de %d écus.</string>
     <string name="settings_use_hex">Numéros de niveau en hexadécimal</string>
     <string name="instr_2_98">Prochainement, les héros prolongeront leurs vacances. Ils seront alors indisponibles pendant deux niveaux, voire plus.</string>
+    <string name="import_choice_yes">Oui, remplacer la partie actuelle.</string>
+    <string name="actions_title">Actions</string>
+    <string name="button_export">Exporter la partie</string>
+    <string name="button_restore">Restaurer la partie</string>
+    <string name="query_restore_game">Voulez-vous importer un état de partie exporté ? Cela effacera votre progression actuelle.</string>
+    <string name="choice_restore_1">Oui, importe les données de la partie.</string>
+    <string name="choice_restore_2">Non, garder ma partie actuelle.</string>
+    <string name="query_export_game">Exporter la partie</string>
+    <string name="text_exportgame_question">Choisissez un emplacement pour les données de la partie. Le fichier s’appellera « %s\ ».</string>
+    <string name="text_exportgame_option1">Ouvrir le sélecteur de chemin d´accès</string>
+    <string name="text_importgame_question">Cette option vous permet d’importer une partie précédemment exportée.</string>
+    <string name="text_importgame_option1">Choisir le fichier de données</string>
+    <string name="button_cancel">Annuler</string>
 </resources>
