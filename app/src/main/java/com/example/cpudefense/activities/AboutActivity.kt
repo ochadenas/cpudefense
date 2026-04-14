@@ -7,11 +7,17 @@ import android.net.Uri
 import android.os.Bundle
 import android.text.method.LinkMovementMethod
 import android.text.method.ScrollingMovementMethod
+import android.util.Log
 import android.view.View
+import android.view.ViewGroup
 import android.view.Window
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.setPadding
+import androidx.core.view.updateLayoutParams
 import com.example.cpudefense.R
 
 
@@ -19,14 +25,24 @@ class AboutActivity : AppCompatActivity()
 {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        supportRequestWindowFeature(Window.FEATURE_NO_TITLE)  // method of AppCompatActivity
+        WindowCompat.enableEdgeToEdge(window)
+        supportActionBar?.hide()
         setContentView(R.layout.activity_about)
+        findViewById<View>(android.R.id.content)?.let { rootView ->
+            ViewCompat.setOnApplyWindowInsetsListener(rootView, ::handleInsets)
+        }
         val textView = findViewById<TextView>(R.id.about_text_view)
         textView.movementMethod = ScrollingMovementMethod()
         textView.movementMethod = LinkMovementMethod.getInstance()
         val info = packageManager.getPackageInfo(this.packageName, PackageManager.GET_ACTIVITIES)
         val versionView: TextView = findViewById(R.id.about_version)
         versionView.text = getString(R.string.about_version).format(info.versionName)
+    }
+
+    fun handleInsets(view: View, windowInsets: WindowInsetsCompat): WindowInsetsCompat
+    {
+        val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+        return windowInsets
     }
 
     fun dismiss(@Suppress("UNUSED_PARAMETER") v: View)

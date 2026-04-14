@@ -1,8 +1,9 @@
 package com.example.cpudefense.activities
 
-import android.app.Activity
 import android.app.Dialog
 import android.content.Intent
+import android.content.pm.PackageInfo
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
@@ -13,22 +14,23 @@ import android.view.Window
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
-import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
+import androidx.core.content.edit
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updateLayoutParams
 import com.example.cpudefense.GameMechanics
-import com.example.cpudefense.GameView
 import com.example.cpudefense.Persistency
 import com.example.cpudefense.R
 import com.example.cpudefense.Settings
+import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import java.util.TimeZone
 
 
 class SettingsActivity : AppCompatActivity() {
@@ -37,7 +39,8 @@ class SettingsActivity : AppCompatActivity() {
     private var createExportLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult(), ::doExport)
     private var createImportLauncher =
-        registerForActivityResult(ActivityResultContracts.OpenDocument(), ::doImport)
+        registerForActivityResult(ActivityResultContracts.OpenDocument(), ::parseImportFile)
+    var packageInfo: PackageInfo? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,6 +52,7 @@ class SettingsActivity : AppCompatActivity() {
         findViewById<View>(android.R.id.content).let {
             ViewCompat.setOnApplyWindowInsetsListener(it, ::handleInsets)
         }
+        packageInfo = packageManager?.getPackageInfo(this.packageName, PackageManager.GET_ACTIVITIES)
         loadPrefs()
     }
     fun handleInsets(view: View, windowInsets: WindowInsetsCompat): WindowInsetsCompat
@@ -186,29 +190,106 @@ class SettingsActivity : AppCompatActivity() {
         dialog.show()
     }
 
-    fun doImport(uri: Uri?) {
+    fun parseImportFile(uri: Uri?) {
         uri?.let { uri ->
             try {
                 contentResolver.openInputStream(uri)?.use { inputStream ->
+                    val persistency = Persistency(this)
                     val jsonString = inputStream.bufferedReader().use { it.readText() }
-                    // Weiterverarbeitung...
-                }
-            } catch (e: Exception) {
+                    if (jsonString.isEmpty() or jsonString.isBlank())
+                    {
+                        Toast.makeText(this, "This file does not contain any data.",Toast.LENGTH_LONG).show()
+                        return
+                    }
+                    val infoString = buildInfoString(persistency.parseGameImport(jsonString))
+
+                    val dialog = Dialog(this)
+                    dialog.setContentView(R.layout.layout_dialog_exportgame)
+                    dialog.window?.setLayout(
+                            ViewGroup.LayoutParams.MATCH_PARENT,
+                            ViewGroup.LayoutParams.WRAP_CONTENT
+                    )
+                    dialog.setCancelable(true)
+                    dialog.findViewById<TextView>(R.id.question).text = infoString
+                    dialog.findViewById<TextView>(R.id.button1)?.let {
+                        it.text = resources.getText(R.string.import_choice_yes)
+                        it.setOnClickListener {
+                            // pass the file name to the game activity
+                            getSharedPreferences(Persistency.filename_settings, MODE_PRIVATE).edit {
+                                putString("IMPORTFILE", uri.toString())
+                            }
+                            val intent = Intent(this, GameActivity::class.java)
+                            intent.putExtra("LOAD_PROGRESS", true)
+                            intent.putExtra("CONTINUE_GAME", false)
+                            startActivity(intent)
+                            Toast.makeText(this, getString(R.string.toast_loading), Toast.LENGTH_LONG).show()
+                            dialog.dismiss()
+                            finish()
+                        }
+                    }
+                    dialog.findViewById<TextView>(R.id.button2)?.let {
+                        it.text = resources.getText(R.string.import_choice_no)
+                        it.setOnClickListener { dialog.dismiss() }
+                    }
+                    dialog.show()
+                    }
+                } catch (e: Exception) {
                 Toast.makeText(
                         this,
-                        "Fehler beim Import: ${e.message}",
+                        "Fehler beim Öffnen der Datei: ${e.message}",
                         Toast.LENGTH_LONG
                 ).show()
             }
         }
-        Toast.makeText(this, "Cancelled", Toast.LENGTH_SHORT).show()
         return
+    }
+
+    fun buildInfoString(gameInfo: Persistency.SaveFileInfo?): String
+    {
+        // get version info
+        var versionInfoString = "The selected file contains data from an unknown game version."
+        var versionMatch = false // pessimistic assumption
+        gameInfo?.let { gameInfo -> gameInfo.gameVersion.let  { version ->
+            if (version != packageInfo?.versionName)
+                versionInfoString = "The selected file contains data from version %s, which is different from the current game version %s.".format(gameInfo.gameVersion, version)
+            else {
+                versionMatch = true
+                versionInfoString = "The selected file contains data from version %s.".format(gameInfo.gameVersion)
+                }
+            }
+        }
+        // convert timestamp into readable form.
+        // This uses JDK functions from API 23, however timestamp handling is quite a mess
+        // in Java. Could be changed and modernized using Kotlin, in later versions.
+        /** this is the format used in our save files. We also assume that the time stamp is in UTC */
+        val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault())
+        inputFormat.timeZone = TimeZone.getTimeZone("UTC")
+        var timeInfoString: String = ""
+        var timestamp: Date? = null
+        try { gameInfo?.let { timestamp = inputFormat.parse((it.exportDate)) } ?: throw(IllegalArgumentException())}
+        catch (_: Exception ) { timeInfoString = "I don't know when the game was exported." }
+        timestamp?.let {
+            val readableDate = DateFormat.getDateInstance(DateFormat.LONG, resources.configuration.locale)
+                .format(it)
+            val readableTime = DateFormat.getTimeInstance(DateFormat.SHORT, resources.configuration.locale)
+                .format(it)
+            timeInfoString = "It was exported on %s at %s.".format(readableDate, readableTime)
+        }
+        // extract info about max level
+        var maxProgressString = ""
+        gameInfo?.let { gameInfo ->
+            if (gameInfo.maxSeries>0)
+                maxProgressString = "The progress is at stage %d in series %d.".format(gameInfo.maxStage, gameInfo.maxSeries)
+        }
+
+        // assemble the info string
+        return "%s %s %s\nDo you want to import this game state?".format(versionInfoString, timeInfoString, maxProgressString)
     }
 
     fun exportGame(@Suppress("UNUSED_PARAMETER") v: View) {
         val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
         val currentDate = dateFormat.format(Date())
-        val fileName = "chipdefense_export_$currentDate.xml"
+        val fileName = "chipdefense_export_$currentDate.txt"
         val dialog = Dialog(this)
         dialog.setContentView(R.layout.layout_dialog_exportgame)
         dialog.window?.setLayout(
@@ -226,27 +307,25 @@ class SettingsActivity : AppCompatActivity() {
         dialog.findViewById<TextView>(R.id.button1)?.let {
             it.setOnClickListener {
                 val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
-                    // addCategory(Intent.CATEGORY_OPENABLE)
                     type = "text/json"
                     putExtra(Intent.EXTRA_TITLE, fileName)
                 }
                 createExportLauncher.launch(intent)
                 dialog.dismiss()
-                dismiss(v)
             }
         }
         dialog.show()
     }
 
     fun doExport(result: ActivityResult) {
-        if (result.resultCode == Activity.RESULT_OK) {
+        if (result.resultCode == RESULT_OK) {
             result.data?.data?.let { uri ->
                 val fileContent = Persistency(this).prepareGameExport()
                 try {
                     contentResolver.openOutputStream(uri)?.use { outputStream ->
                         outputStream.write(fileContent.toByteArray())
                     }
-                    Toast.makeText(this, "Export erfolgreich!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Export erfolgreich!", Toast.LENGTH_LONG).show()
                 } catch (e: Exception) {
                     Toast.makeText(this, "Fehler beim Export: ${e.message}", Toast.LENGTH_LONG)
                         .show()

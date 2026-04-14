@@ -23,6 +23,12 @@ class Stage(var gameMechanics: GameMechanics, var gameView: GameView)
             val startOfEndless = Identifier(GameMechanics.SERIES_ENDLESS, 1)
         }
 
+        override fun toString(): String
+        /** for debugging and logging purposes */
+        {
+            return "series %d / stage %d".format(series, number)
+        }
+
         fun next(): Identifier
         /** returns an identifier of the next level */
         {

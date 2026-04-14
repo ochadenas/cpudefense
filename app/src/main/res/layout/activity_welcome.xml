@@ -150,7 +150,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:contentDescription="@string/app_name"
-        android:paddingTop="0dp"
+        android:paddingTop="16dp"
         android:paddingBottom="0dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"

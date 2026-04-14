@@ -44,7 +44,7 @@ class WelcomeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         WindowCompat.enableEdgeToEdge(window)
         requestWindowFeature(Window.FEATURE_NO_TITLE)
-        supportActionBar?.hide() // Versteckt die ActionBar (falls vorhanden)
+        supportActionBar?.hide()
         setContentView(R.layout.activity_welcome)
         findViewById<View>(android.R.id.content)?.let { rootView ->
             ViewCompat.setOnApplyWindowInsetsListener(rootView, ::handleInsets)
@@ -64,7 +64,6 @@ class WelcomeActivity : AppCompatActivity() {
         turboSeriesAvailable = prefs.getBoolean("TURBO_AVAILABLE", false)
         endlessSeriesAvailable = prefs.getBoolean("ENDLESS_AVAILABLE", false)
     }
-
 
     fun handleInsets(view: View, windowInsets: WindowInsetsCompat): WindowInsetsCompat
     /** handles the width of the system status bar (top and bottom) and applies

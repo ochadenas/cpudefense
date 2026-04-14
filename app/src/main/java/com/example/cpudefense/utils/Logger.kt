@@ -8,7 +8,7 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-class Logger(activity: GameActivity, val logLevel: Level = Level.MESSAGE)
+class Logger(val activity: GameActivity, val logLevel: Level = Level.MESSAGE)
 {
     private val logfileName = "log.txt"
     enum class Level { DEBUG, MESSAGE, WARN, ERROR }
@@ -23,7 +23,7 @@ class Logger(activity: GameActivity, val logLevel: Level = Level.MESSAGE)
     {
         fileOutputStream = FileOutputStream(logfile, false)
         outputStreamWriter = OutputStreamWriter(fileOutputStream)
-        val logString = "Start of log. Current time is "+timeFormatLong.format(Date())
+        val logString = "Start of log for %s. Current time is "+timeFormatLong.format(Date()).format(activity.title)
         log(logString)
     }
 
@@ -35,7 +35,8 @@ class Logger(activity: GameActivity, val logLevel: Level = Level.MESSAGE)
                 timeFormatShort.format(Date()),
                 leveltext[messagelevel],
                 " ".repeat(indent),
-                text)
+                text,
+                )
         outputStreamWriter?.write(logString)
         outputStreamWriter?.flush()
         if (messagelevel != Level.DEBUG)

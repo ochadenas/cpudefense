@@ -5,6 +5,7 @@ import android.graphics.*
 import android.os.Bundle
 import android.view.Gravity
 import android.view.View
+import android.view.ViewGroup
 import android.view.Window
 import android.widget.Button
 import android.widget.LinearLayout
@@ -19,6 +20,10 @@ import com.example.cpudefense.Stage
 import com.google.android.material.tabs.TabLayout
 import androidx.core.graphics.createBitmap
 import androidx.core.graphics.drawable.toDrawable
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updateLayoutParams
 
 @Suppress("DEPRECATION")
 class LevelSelectActivity : AppCompatActivity() {
@@ -33,11 +38,24 @@ class LevelSelectActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        supportRequestWindowFeature(Window.FEATURE_NO_TITLE)  // method of AppCompatActivity
+        WindowCompat.enableEdgeToEdge(window)
+        requestWindowFeature(Window.FEATURE_NO_TITLE)
+        supportActionBar?.hide()
+        setContentView(R.layout.activity_level)
+        findViewById<View>(android.R.id.content)?.let { rootView ->
+            ViewCompat.setOnApplyWindowInsetsListener(rootView, ::handleInsets)
+        }
         isTurboAvailable = intent.getBooleanExtra("TURBO_AVAILABLE", false)
         isEndlessAvailable = intent.getBooleanExtra("ENDLESS_AVAILABLE", false)
-        setContentView(R.layout.activity_level)
         setupSelector()
+    }
+
+    fun handleInsets(view: View, windowInsets: WindowInsetsCompat): WindowInsetsCompat
+    {
+        val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+        // findViewById<View>(R.id.title)?.updateLayoutParams<ViewGroup.MarginLayoutParams> {  topMargin = 0 }
+        findViewById<View>(R.id.playLevelButton)?.updateLayoutParams<ViewGroup.MarginLayoutParams> { bottomMargin = insets.bottom }
+        return WindowInsetsCompat.CONSUMED
     }
 
     override fun onActivityReenter(resultCode: Int, data: Intent?)

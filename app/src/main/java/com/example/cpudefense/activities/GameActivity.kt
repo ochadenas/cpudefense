@@ -41,10 +41,12 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import androidx.core.content.edit
+import androidx.core.net.toUri
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updateLayoutParams
+import com.example.cpudefense.Persistency.SaveFileInfo
 
 class GameActivity : Activity() {
     var logger: Logger? = null
@@ -106,6 +108,7 @@ class GameActivity : Activity() {
         resumeGame = false
         gameMechanics = GameMechanics()
         gameView = GameView(this)
+        // after this, onResume() is called by the system
     }
 
     override fun onPause()
@@ -132,27 +135,69 @@ class GameActivity : Activity() {
         logger?.log("Entering game activity, game state is %s".format(gameMechanics.state.toString()))
 
         // determine what to do: resume, restart, or play next level
-        val restartGame = intent.getBooleanExtra("RESET_PROGRESS", false)
-        val restartEndless = intent.getBooleanExtra("RESET_ENDLESS", false)
-        val startOnLevel = when
+        var restartGame = intent.getBooleanExtra("RESET_PROGRESS", false)
+        var restartEndless = intent.getBooleanExtra("RESET_ENDLESS", false)
+        val restoreGame = intent.getBooleanExtra("LOAD_PROGRESS", false)
+
+        var startOnLevel = when
         {
             restartGame -> Identifier.startOfNewGame
+            restoreGame -> Identifier.startOfNewGame // this will be overwritten later
             restartEndless -> Identifier.startOfEndless
             else -> Identifier(
                     series = intent.getIntExtra("START_ON_SERIES", SERIES_NORMAL),
                     number = intent.getIntExtra("START_ON_STAGE", 1)
             )
         }
-        if (!resumeGame)
+
+        // loading and restoring a previously saved game has the highest priority
+        // in this case ignore all other flags
+        if (restoreGame)
+        {
+            val persistency = Persistency(this)
+            var jsonString = ""
+            logger?.log("Restoring game from previous save file.")
+            restartGame = false
+            restartEndless = false
+            resumeGame = false
+            getSharedPreferences(Persistency.filename_settings, MODE_PRIVATE)
+                .getString("IMPORTFILE", "")?.toUri()?.let { uri ->
+                    try {
+                        contentResolver.openInputStream(uri)?.use { inputStream ->
+                            jsonString = inputStream.bufferedReader().use { it.readText() }
+                        }
+                    } catch (e: Exception) {
+                        Toast.makeText(this,
+                                       "Fehler beim Öffsnen der Datei: ${e.message}", Toast.LENGTH_LONG).show()
+                        logger?.err("Error opening file: ".format(e.message))
+                    }
+                    val gameInfo = persistency.performGameImport(jsonString, gameMechanics)
+                    // determine the max and the starting level
+                    gameInfo?.let {
+                        startOnLevel = Identifier(series=it.maxSeries, number=it.maxStage)
+                        val summary = gameMechanics.getSummaryOfStage(startOnLevel)
+                        if (summary?.won==true)
+                            startOnLevel = startOnLevel.next()
+                    }
+                    logger?.log("Max stage found in file is %s.".format(startOnLevel))
+                    setLastPlayedStage(startOnLevel)
+                    setMaxPlayedStage(startOnLevel, forceReset=true)
+                }
+        }
+        if (!resumeGame && !restoreGame)
             resumeGame = intent.getBooleanExtra("RESUME_GAME", false)
+        if (resumeGame)
+            logger?.log("Trying to resume a running game.")
+        else
+            logger?.log("Starting a new level (not resuming a running game).")
 
         when (gameMechanics.state.phase)
         {
             GamePhase.START -> {
-                beginGame(resumeGame = resumeGame, resetProgress = restartGame, resetEndless = restartEndless, startingLevel = startOnLevel)
+                beginGame(resumeGame = resumeGame, resetProgress = restartGame, resetEndless = restartEndless, startingLevel = startOnLevel, restoreGame = restoreGame)
             }
             GamePhase.RUNNING -> {
-                beginGame(resumeGame = resumeGame, resetProgress = restartGame, resetEndless = restartEndless, startingLevel = startOnLevel)
+                beginGame(resumeGame = resumeGame, resetProgress = restartGame, resetEndless = restartEndless, startingLevel = startOnLevel, restoreGame = false)
                 if (resumeGame)
                     showStageMessage(gameMechanics.currentlyActiveStage)
             }
@@ -223,7 +268,7 @@ class GameActivity : Activity() {
     /** when completing a level, record the current number in the SharedPrefs.
      * @param identifier number of the level successfully completed */
     {
-        logger?.log("Setting last played stage to series %d / level %d.".format(identifier.series, identifier.number))
+        logger?.log("Setting last played stage to %s.".format(identifier))
         val prefs = getSharedPreferences(Persistency.filename_state, MODE_PRIVATE)
         prefs.edit(commit = true) {
             putInt("LASTSTAGE", identifier.number)
@@ -268,6 +313,7 @@ class GameActivity : Activity() {
     private fun beginGame(resetProgress: Boolean = false,
                           resetEndless: Boolean = false,
                           resumeGame: Boolean = false,
+                          restoreGame: Boolean = false,
                           startingLevel: Identifier = Identifier()
     )
     /** Begins the current game on a chosen level. Also called when starting a completely
@@ -276,15 +322,26 @@ class GameActivity : Activity() {
      * all coins and heroes are cleared. Otherwise, start on the level given in the saved state.
      * @param resetEndless same as resetProgress, but only for the 'endless' series.
      * @param resumeGame Continue the game within a level, at exactly the point where it has been left.
+     * @param restoreGame The game is read from a previously exported file. This overwrites all the other mechanisms.
      */
     {
+        val persistency = Persistency(this)
         loadSettings()
-        Persistency(this).let {
-            it.loadAllStageSummaries(gameMechanics)
-            it.loadAllHeroes(gameMechanics)
-            it.loadGeneralState(gameMechanics)
-            it.loadCoins(gameMechanics)
-        }
+        if (restoreGame)
+            persistency.apply {
+                saveHeroes(gameMechanics)
+                saveCoins(gameMechanics)
+                saveStageSummaries(gameMechanics, SERIES_NORMAL)
+                saveStageSummaries(gameMechanics, SERIES_TURBO)
+                saveStageSummaries(gameMechanics, SERIES_ENDLESS)
+            }
+        else
+            persistency.let {
+                it.loadAllStageSummaries(gameMechanics)
+                it.loadAllHeroes(gameMechanics)
+                it.loadGeneralState(gameMechanics)
+                it.loadCoins(gameMechanics)
+            }
 
         var level = startingLevel
         val resetRequested = (resetEndless || resetProgress)
@@ -303,7 +360,7 @@ class GameActivity : Activity() {
             setLastPlayedStage(level)
             setMaxPlayedStage(level, forceReset=true)
             prepareLevelAtStartOfGame(level)
-            Persistency(this).apply {
+            persistency.apply {
                 saveHeroes(gameMechanics)
                 saveCoins(gameMechanics)
                 saveStageSummaries(gameMechanics, SERIES_NORMAL)
@@ -319,6 +376,7 @@ class GameActivity : Activity() {
             resumeGame()
         else {
             gameMechanics.currentStageIdent = level
+            logger?.log("Starting game at %s.".format(level))
             prepareLevelAtStartOfGame(level)
         }
     }

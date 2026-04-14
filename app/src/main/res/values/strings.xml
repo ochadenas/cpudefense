@@ -37,6 +37,8 @@
     <string name="choice_1">Yes, start a fresh game from the beginning.</string>
     <string name="choice_2">Only reset the “endless” levels.</string>
     <string name="choice_3">No, keep my progress.</string>
+    <string name="import_choice_yes">Yes, overwrite current state.</string>
+    <string name="import_choice_no">No, keep the current game.</string>
     <string name="close">Close</string>
 
     <string name="instr_1">
