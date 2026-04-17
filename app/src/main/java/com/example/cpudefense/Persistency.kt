@@ -12,6 +12,8 @@ import com.google.gson.Gson
 import com.google.gson.JsonParser
 import java.io.ByteArrayOutputStream
 import androidx.core.content.edit
+import com.google.gson.JsonObject
+import com.google.gson.JsonPrimitive
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -419,6 +421,23 @@ class Persistency(private val activity: Activity)
         return gson.toJson(exportData)
     }
 
+    fun gameInfoForForeignVersions(jsonObject: JsonObject): SaveFileInfo?
+    /** method save files that do not provide the "info" structure,
+     * e.g. from forked game versions */
+    {
+        return SaveFileInfo(
+                gameVersion = "",
+                gameId = "",
+                fileVersion = 0,
+                exportDate = "",
+                maxStage = 0,
+                maxSeries = 0,
+                status = "complete",
+                turboAvailable = false,
+                endlessAvailable = false,
+        )
+    }
+
     fun parseGameImport(jsonString: String): SaveFileInfo?
     {
         var gameInfo: SaveFileInfo? = null
@@ -436,6 +455,13 @@ class Persistency(private val activity: Activity)
         return gameInfo
     }
 
+    private fun jsonAsString(element: Any?): String?
+    /** This is a kind of 'safe cast' to a string which works for both JsonObjects and JsonPrimitives. */
+    {
+        return element?.let { element ->
+            (element as? JsonPrimitive)?.asString ?: (element as? JsonObject)?.toString() }
+    }
+
     fun performGameImport(jsonString: String, gameMechanics: GameMechanics): SaveFileInfo?
             /** reads the data from the file and replaces the respective data in gameMechanics.
              * The information on the current level is discarded.
@@ -449,22 +475,28 @@ class Persistency(private val activity: Activity)
         jsonObject.get("state")?.let {
             // data on the current level is not read (the "GENERAL" part).
         }
-        jsonObject.get("saves")?.let {
-            gameMechanics.summaryPerNormalLevel = loadStageSummaries(
-                    GameMechanics.SERIES_NORMAL, it.asJsonObject.get(seriesKey[GameMechanics.SERIES_NORMAL])?.asString)
-            gameMechanics.summaryPerTurboLevel = loadStageSummaries(
-                    GameMechanics.SERIES_TURBO, it.asJsonObject.get(seriesKey[GameMechanics.SERIES_TURBO])?.asString)
-            gameMechanics.summaryPerEndlessLevel = loadStageSummaries(
-                    GameMechanics.SERIES_ENDLESS, it.asJsonObject.get(seriesKey[GameMechanics.SERIES_ENDLESS])?.asString)
-            gameMechanics.heroesByMode[GameMechanics.LevelMode.BASIC] = loadHeroes(
-                    gameMechanics, GameMechanics.LevelMode.BASIC, it.asJsonObject.get("heroes")?.asString)
-            gameMechanics.heroesByMode[GameMechanics.LevelMode.ENDLESS] = loadHeroes(
-                    gameMechanics, GameMechanics.LevelMode.ENDLESS, it.asJsonObject.get("heroes")?.asString)
-            loadCoins(gameMechanics, it.asJsonObject.get("coins")?.asString)
-            loadHolidays(gameMechanics, it.asJsonObject.get("holidays")?.asString)
-        }
-        jsonObject.get("structure")?.let {
-            loadLevelStructure(GameMechanics.SERIES_NORMAL, it.asJsonObject?.get(seriesKey[GameMechanics.SERIES_ENDLESS])?.asString)
+        try {
+            jsonObject.get("saves")?.let {
+                jsonAsString(it.asJsonObject.get(seriesKey[GameMechanics.SERIES_NORMAL]))?.let { jsonString ->
+                    gameMechanics.summaryPerNormalLevel = loadStageSummaries(GameMechanics.SERIES_NORMAL, jsonString) }
+                jsonAsString(it.asJsonObject.get(seriesKey[GameMechanics.SERIES_TURBO]))?.let { jsonString ->
+                    gameMechanics.summaryPerTurboLevel = loadStageSummaries(GameMechanics.SERIES_TURBO, jsonString) }
+                jsonAsString(it.asJsonObject.get(seriesKey[GameMechanics.SERIES_ENDLESS]))?.let { jsonString ->
+                    gameMechanics.summaryPerEndlessLevel = loadStageSummaries(GameMechanics.SERIES_ENDLESS, jsonString)}
+                jsonAsString(it.asJsonObject.get("heroes"))?.let { jsonString ->
+                    gameMechanics.heroesByMode[GameMechanics.LevelMode.BASIC] = loadHeroes(gameMechanics, GameMechanics.LevelMode.BASIC, jsonString)
+                    gameMechanics.heroesByMode[GameMechanics.LevelMode.ENDLESS] = loadHeroes(gameMechanics, GameMechanics.LevelMode.ENDLESS, jsonString) }
+                jsonAsString(it.asJsonObject.get("coins"))?.let { jsonString ->
+                    loadCoins(gameMechanics, jsonString) }
+                jsonAsString(it.asJsonObject.get("holidays"))?.let { jsonString ->
+                    loadHolidays(gameMechanics, jsonString) }
+            }
+            jsonObject.get("structure")?.let {
+                loadLevelStructure(GameMechanics.SERIES_NORMAL, it.asJsonObject?.get(seriesKey[GameMechanics.SERIES_ENDLESS])?.asString)
+            }
+        } catch (e: Exception) {
+            Toast.makeText(activity, activity.getString(R.string.error_reading_file).format(e.message), Toast.LENGTH_LONG).show()
+            (activity as? GameActivity)?.logger?.log(activity.getString(R.string.error_reading_file).format(e.message))
         }
         return gameInfo
     }

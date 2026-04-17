@@ -392,4 +392,6 @@ The programming language Pascal is named after him."</string>
     <string name="text_importgame_question">This option lets you import a previously exported game.</string>
     <string name="text_importgame_option1">Choose data file</string>
     <string name="button_cancel">Cancel</string>
+    <string name="error_opening_file">Fehler beim Öffnen der Datei: %s.</string>
+    <string name="error_reading_file">Fehler beim Einlesen oder Interpretieren der Datei: %s.</string>
 </resources>

@@ -270,6 +270,15 @@ class GameMechanics {
             }
         }
     }
+
+    fun highestStage(): Stage.Identifier
+    /** returns the identifier of the highest stage played so far */
+    {
+        summaryPerEndlessLevel.keys.maxOrNull()?.let { return Stage.Identifier(SERIES_ENDLESS, it)}
+        summaryPerTurboLevel.keys.maxOrNull()?.let { return Stage.Identifier(SERIES_TURBO, it)}
+        summaryPerNormalLevel.keys.maxOrNull()?.let { return Stage.Identifier(SERIES_NORMAL, it)}
+        return Stage.Identifier.startOfNewGame
+    }
     
     private fun startNextWave()
     {

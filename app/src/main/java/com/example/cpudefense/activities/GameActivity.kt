@@ -168,17 +168,11 @@ class GameActivity : Activity() {
                         }
                     } catch (e: Exception) {
                         Toast.makeText(this,
-                                       "Fehler beim Öffsnen der Datei: ${e.message}", Toast.LENGTH_LONG).show()
-                        logger?.err("Error opening file: ".format(e.message))
+                                       getString(R.string.error_opening_file).format(e.message), Toast.LENGTH_LONG).show()
+                        logger?.err(getString(R.string.error_opening_file).format(e.message))
                     }
-                    val gameInfo = persistency.performGameImport(jsonString, gameMechanics)
-                    // determine the max and the starting level
-                    gameInfo?.let {
-                        startOnLevel = Identifier(series=it.maxSeries, number=it.maxStage)
-                        val summary = gameMechanics.getSummaryOfStage(startOnLevel)
-                        if (summary?.won==true)
-                            startOnLevel = startOnLevel.next()
-                    }
+                    persistency.performGameImport(jsonString, gameMechanics)
+                    startOnLevel = gameMechanics.highestStage()
                     logger?.log("Max stage found in file is %s.".format(startOnLevel))
                     setLastPlayedStage(startOnLevel)
                     setMaxPlayedStage(startOnLevel, forceReset=true)
