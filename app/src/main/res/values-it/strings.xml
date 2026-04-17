@@ -288,4 +288,18 @@
     <string name="text_importgame_question">"Questa opzione ti consente di importare una partita precedentemente esportata.   "</string>
     <string name="text_importgame_option1">Scegli il file dei dati</string>
     <string name="button_cancel">Annulla</string>
+    <string name="error_opening_file">" Errore durante l’apertura del file: %s"</string>
+    <string name="message_export_successful">Esportazione riuscita!</string>
+    <string name="message_export_error">Errore durante l\'esportatzione : %1$s</string>
+    <string name="error_reading_file">"Errore durante la lettura o l’interpretazione del file: %s   "</string>
+    <string name="message_version">Il file selezionato contiene dati della versione %s.</string>
+    <string name="warning_no_timestamp">Non so quando il gioco è stato esportato.</string>
+    <string name="message_timestamp">È stato esportato il %s alle %s.</string>
+    <string name="message_progress">Livello massimo raggiunto è %d nella serie %d.</string>
+    <string name="question_import_confirmation">Vuoi importare questo stato di gioco?</string>
+    <string name="error_empty_file">Questo file non contiene dati.</string>
+    <string name="warning_unknown_version">Il file selezionato contiene dati di una versione sconosciuta.</string>
+    <string name="warning_version_mismatch">Il file selezionato contiene dati della versione %s, diversa dalla versione attuale del gioco %s.</string>
+    <string name="shithappens_1">Allora …</string>
+    <string name="shithappens_2">Dai, su ...!</string>
 </resources>

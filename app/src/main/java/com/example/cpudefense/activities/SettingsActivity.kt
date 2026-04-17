@@ -184,7 +184,6 @@ class SettingsActivity : AppCompatActivity() {
             it.setOnClickListener {
                 createImportLauncher.launch(arrayOf("text/json", "application/json", "text/plain", "*/*"))
                 dialog.dismiss()
-                // dismiss(v)
             }
         }
         dialog.show()
@@ -198,7 +197,7 @@ class SettingsActivity : AppCompatActivity() {
                     val jsonString = inputStream.bufferedReader().use { it.readText() }
                     if (jsonString.isEmpty() or jsonString.isBlank())
                     {
-                        Toast.makeText(this, "This file does not contain any data.",Toast.LENGTH_LONG).show()
+                        Toast.makeText(this, getString(R.string.error_empty_file), Toast.LENGTH_LONG).show()
                         return
                     }
                     val infoString = buildInfoString(persistency.parseGameImport(jsonString))
@@ -234,11 +233,8 @@ class SettingsActivity : AppCompatActivity() {
                     dialog.show()
                     }
                 } catch (e: Exception) {
-                Toast.makeText(
-                        this,
-                        "Fehler beim Öffnen der Datei: ${e.message}",
-                        Toast.LENGTH_LONG
-                ).show()
+                Toast.makeText(this, resources.getString(R.string.error_reading_file).format(e.message), Toast.LENGTH_LONG).show()
+                displayError(e.message)
             }
         }
         return
@@ -247,14 +243,14 @@ class SettingsActivity : AppCompatActivity() {
     fun buildInfoString(gameInfo: Persistency.SaveFileInfo?): String
     {
         // get version info
-        var versionInfoString = "The selected file contains data from an unknown game version."
+        var versionInfoString = getString(R.string.warning_unknown_version)
         var versionMatch = false // pessimistic assumption
         gameInfo?.let { gameInfo -> gameInfo.gameVersion.let  { version ->
             if (version != packageInfo?.versionName)
-                versionInfoString = "The selected file contains data from version %s, which is different from the current game version %s.".format(gameInfo.gameVersion, version)
+                versionInfoString = getString(R.string.warning_version_mismatch).format(gameInfo.gameVersion, version)
             else {
                 versionMatch = true
-                versionInfoString = "The selected file contains data from version %s.".format(gameInfo.gameVersion)
+                versionInfoString = getString(R.string.message_version).format(gameInfo.gameVersion)
                 }
             }
         }
@@ -267,29 +263,47 @@ class SettingsActivity : AppCompatActivity() {
         var timeInfoString = ""
         var timestamp: Date? = null
         try { gameInfo?.let { timestamp = inputFormat.parse((it.exportDate)) } ?: throw(IllegalArgumentException())}
-        catch (_: Exception ) { timeInfoString = "I don't know when the game was exported." }
+        catch (_: Exception ) { timeInfoString = getString(R.string.warning_no_timestamp) }
         timestamp?.let {
             val readableDate = DateFormat.getDateInstance(DateFormat.LONG, resources.configuration.locale)
                 .format(it)
             val readableTime = DateFormat.getTimeInstance(DateFormat.SHORT, resources.configuration.locale)
                 .format(it)
-            timeInfoString = "It was exported on %s at %s.".format(readableDate, readableTime)
+            timeInfoString = getString(R.string.message_timestamp).format(readableDate, readableTime)
         }
         // extract info about max level
         var maxProgressString = ""
         gameInfo?.let { gameInfo ->
             if (gameInfo.maxSeries>0)
-                maxProgressString = "The progress is at stage %d in series %d.".format(gameInfo.maxStage, gameInfo.maxSeries)
+                maxProgressString = getString(R.string.message_progress).format(gameInfo.maxStage, gameInfo.maxSeries)
         }
-
         // assemble the info string
-        return "%s %s %s\nDo you want to import this game state?".format(versionInfoString, timeInfoString, maxProgressString)
+        return getString(R.string.question_import_confirmation).format(versionInfoString, timeInfoString, maxProgressString)
+    }
+
+    fun displayError(message: String?) {
+        val dialog = Dialog(this)
+        dialog.setContentView(R.layout.layout_dialog_exportgame)
+        dialog.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT )
+        dialog.setCancelable(true)
+        dialog.findViewById<TextView>(R.id.question)?.let {
+            it.text = getString(R.string.error_reading_file).format(message ?: "")
+        }
+        dialog.findViewById<TextView>(R.id.option_cancel)?.let {
+            it.text = getString(R.string.shithappens_1)
+            it.setOnClickListener { dialog.dismiss() }
+        }
+        dialog.findViewById<TextView>(R.id.button1)?.let {
+            it.text = getString(R.string.shithappens_2)
+            it.setOnClickListener { dialog.dismiss() }
+        }
+        dialog.show()
     }
 
     fun exportGame(@Suppress("UNUSED_PARAMETER") v: View) {
         val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
         val currentDate = dateFormat.format(Date())
-        val fileName = "chipdefense_export_$currentDate.txt"
+        val fileName = getString(R.string.default_export_filename).format(currentDate)
         val dialog = Dialog(this)
         dialog.setContentView(R.layout.layout_dialog_exportgame)
         dialog.window?.setLayout(
@@ -299,7 +313,6 @@ class SettingsActivity : AppCompatActivity() {
         dialog.setCancelable(true)
         dialog.findViewById<TextView>(R.id.question)?.let {
             it.text = getString(R.string.text_exportgame_question, fileName)
-            // it.text = resources.getText(R.string.text_exportgame_question).toString().format(fileName)
         }
         dialog.findViewById<TextView>(R.id.option_cancel)?.let {
             it.setOnClickListener { dialog.dismiss() }
@@ -325,9 +338,9 @@ class SettingsActivity : AppCompatActivity() {
                     contentResolver.openOutputStream(uri)?.use { outputStream ->
                         outputStream.write(fileContent.toByteArray())
                     }
-                    Toast.makeText(this, "Export erfolgreich!", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this, getString(R.string.message_export_successful), Toast.LENGTH_LONG).show()
                 } catch (e: Exception) {
-                    Toast.makeText(this, "Fehler beim Export: ${e.message}", Toast.LENGTH_LONG)
+                    Toast.makeText(this, getString(R.string.message_export_error, e.message), Toast.LENGTH_LONG)
                         .show()
                 }
             }

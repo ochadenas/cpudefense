@@ -318,4 +318,18 @@ Das Verschieben ist gleichbedeutend mit einer Division durch 2."
     <string name="text_importgame_question">Diese Option ermöglicht dir, einen zuvor exportierten Spielstand einzulesen.</string>
     <string name="text_importgame_option1">Datei wählen</string>
     <string name="button_cancel">Abbruch</string>
+    <string name="error_opening_file">Fehler beim Öffnen der Datei: %s.</string>
+    <string name="message_export_successful">Export erfolgreich!</string>
+    <string name="message_export_error">Fehler beim Export: %1$s</string>
+    <string name="error_reading_file">Fehler beim Einlesen oder Interpretieren der Datei: %s</string>
+    <string name="message_version">Die ausgewählte Datei enthält Daten von Version %s.</string>
+    <string name="warning_no_timestamp">Ich weiß nicht, wann das Spiel exportiert wurde.</string>
+    <string name="message_timestamp">Der Export war am %s um %s.</string>
+    <string name="message_progress">Höchste erreichte Stufe ist %d in Serie %d.</string>
+    <string name="question_import_confirmation">%s %s %s Diesen Spielstand importieren?</string>
+    <string name="error_empty_file">Diese Datei enthält keine Daten.</string>
+    <string name="warning_unknown_version">Die ausgewählte Datei enthält Daten einer unbekannten Version.</string>
+    <string name="warning_version_mismatch">Die ausgewählte Datei enthält Daten von Version %s, die sich von der aktuellen Spielversion %s unterscheidet.</string>
+    <string name="shithappens_1">Machste nix …</string>
+    <string name="shithappens_2">Also wirklich …</string>
 </resources>

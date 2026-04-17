@@ -288,4 +288,18 @@
     <string name="text_importgame_question">Cette option vous permet d’importer une partie précédemment exportée.</string>
     <string name="text_importgame_option1">Choisir le fichier de données</string>
     <string name="button_cancel">Annuler</string>
+    <string name="error_opening_file">Error opening file: %s</string>
+    <string name="message_export_successful">Export réussi !</string>
+    <string name="message_export_error">Erreur lors de l\'export : %1$s</string>
+    <string name="error_reading_file">Erreur lors de la lecture ou de l’interprétation du fichier : %s</string>
+    <string name="message_version">Le fichier sélectionné contient des données de la version %s.</string>
+    <string name="warning_no_timestamp">Je ne sais pas quand le jeu a été exporté.</string>
+    <string name="message_timestamp">Il a été exporté le %s à %s.</string>
+    <string name="message_progress">Niveau maximal atteint est %d dans la série %d.</string>
+    <string name="question_import_confirmation">%s %s %s Souhaitez-vous importer cet état de jeu ?</string>
+    <string name="error_empty_file">Ce fichier ne contient aucune donnée.</string>
+    <string name="warning_unknown_version">Le fichier sélectionné contient des données d\'une version inconnue.</string>
+    <string name="warning_version_mismatch">Le fichier sélectionné contient des données de la version %s, différente de la version actuelle du jeu %s.</string>
+    <string name="shithappens_1">Rien à faire …</string>
+    <string name="shithappens_2">Ben alors …</string>
 </resources>

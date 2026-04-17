@@ -17,6 +17,12 @@ import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.edit
+import androidx.core.net.toUri
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updateLayoutParams
 import com.example.cpudefense.CpuReached
 import com.example.cpudefense.GameMechanics
 import com.example.cpudefense.GameMechanics.GamePhase
@@ -40,13 +46,6 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import androidx.core.content.edit
-import androidx.core.net.toUri
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.updateLayoutParams
-import com.example.cpudefense.Persistency.SaveFileInfo
 
 class GameActivity : Activity() {
     var logger: Logger? = null

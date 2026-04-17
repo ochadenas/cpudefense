@@ -392,6 +392,19 @@ The programming language Pascal is named after him."</string>
     <string name="text_importgame_question">This option lets you import a previously exported game.</string>
     <string name="text_importgame_option1">Choose data file</string>
     <string name="button_cancel">Cancel</string>
-    <string name="error_opening_file">Fehler beim Öffnen der Datei: %s.</string>
-    <string name="error_reading_file">Fehler beim Einlesen oder Interpretieren der Datei: %s.</string>
+    <string name="error_opening_file">Error opening file: %s.</string>
+    <string name="error_empty_file">This file does not contain any data.</string>
+    <string name="warning_unknown_version">The selected file contains data from an unknown game version.</string>
+    <string name="warning_version_mismatch">The selected file contains data from version %s, which is different from the current game version %s.</string>
+    <string name="message_version">The selected file contains data from version %s.</string>
+    <string name="warning_no_timestamp">I don\'t know when the game was exported.</string>
+    <string name="message_timestamp">It was exported on %s at %s.</string>
+    <string name="message_progress">Max stage reached is %d in series %d.</string>
+    <string name="question_import_confirmation">%s %s %s Do you want to import this game state?</string>
+    <string name="default_export_filename" translatable="false">chipdefense_export_%s.txt</string>
+    <string name="message_export_successful">Export successful!</string>
+    <string name="message_export_error">Error during export: %1$s</string>
+    <string name="error_reading_file">Error reading or parsing file: %s</string>
+    <string name="shithappens_1">Okay …</string>
+    <string name="shithappens_2">Well …</string>
 </resources>

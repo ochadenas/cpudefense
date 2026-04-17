@@ -54,11 +54,6 @@ class Persistency(private val activity: Activity)
     /** file for the state within the current level, such as attacker and chip positions, number of waves, etc. */
     private val prefsState: SharedPreferences = activity.getSharedPreferences(filename_state, AppCompatActivity.MODE_PRIVATE)
 
-    data class SerializableStateData (
-        val general: GameMechanics.StateData,
-        val stage: Stage.Data?
-            )
-
     // designators of the level data in the prefs
     private val seriesKey = hashMapOf(
             GameMechanics.SERIES_NORMAL to "levels",
@@ -138,15 +133,6 @@ class Persistency(private val activity: Activity)
             val json = gson.toJson(it)
             editor.putString(seriesKey[series], json)
             editor.apply()
-        }
-    }
-
-    private fun saveAllStageSummaries(gameMechanics: GameMechanics?)
-    {
-        gameMechanics?.let {
-            saveStageSummaries(it, GameMechanics.SERIES_NORMAL)
-            saveStageSummaries(it, GameMechanics.SERIES_TURBO)
-            saveStageSummaries(it, GameMechanics.SERIES_ENDLESS)
         }
     }
 
@@ -419,23 +405,6 @@ class Persistency(private val activity: Activity)
         exportData["saves"] = prefsSaves.all
         exportData["structure"] = prefsStructure.all
         return gson.toJson(exportData)
-    }
-
-    fun gameInfoForForeignVersions(jsonObject: JsonObject): SaveFileInfo?
-    /** method save files that do not provide the "info" structure,
-     * e.g. from forked game versions */
-    {
-        return SaveFileInfo(
-                gameVersion = "",
-                gameId = "",
-                fileVersion = 0,
-                exportDate = "",
-                maxStage = 0,
-                maxSeries = 0,
-                status = "complete",
-                turboAvailable = false,
-                endlessAvailable = false,
-        )
     }
 
     fun parseGameImport(jsonString: String): SaveFileInfo?
