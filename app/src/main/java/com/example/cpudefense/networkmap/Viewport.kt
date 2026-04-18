@@ -7,8 +7,10 @@ class Viewport()
 /** class that is responsible for mapping internal grid [Coord] to screen coordinates */
 {
     data class Data(
-        var gridSize: Rect = Rect(0, 0, 100, 100)
+        /** size of the complete game board, in grid coordinates */
+        var gridSize: Pair<Float, Float> = Pair(0f, 0f)
     )
+    var viewportData = Data()
 
     /** width of the viewport in screen coordinates */
     var viewportWidth: Int = 0
@@ -18,10 +20,12 @@ class Viewport()
     var viewportSafetyMargin: Int = 0
     /** visible portion of the screen, in screen coordinates */
     var screen = Rect()
+    /** width of the whole grid in screen coordinates (can extend the visible viewport) */
+    var gridWidth: Int = 0
+    /** height of the whole grid in screen coordinates (can extend the visible viewport) */
+    var gridHeight: Int = 0
     /** used to keep track whether the network elements must be recalculated after scale changes */
     var scaleHasChanged = true
-    /** size of the complete game board, in grid coordinates */
-    private var gridSize = Coord(0, 0)
     /** zero grid coordinate */
     private var gridOrigin = Coord(0, 0)
     /** vertical size of the complete game board, in grid coordinates */
@@ -65,7 +69,13 @@ class Viewport()
     fun determineGridSize(gridSize: Coord)
     /** sets the size in grid coordinates */
     {
-        this.gridSize = gridSize
+        viewportData.gridSize = gridSize.asPair()
+        calculateScale()
+    }
+    fun determineGridSize(gridSizeX: Int, gridSizeY: Int)
+            /** sets the size in grid coordinates */
+    {
+        viewportData.gridSize = Pair(gridSizeX.toFloat(), gridSizeY.toFloat())
         calculateScale()
     }
 
@@ -86,6 +96,8 @@ class Viewport()
             scaleY *= userScale
             isValid = true
             scaleHasChanged = true
+            gridWidth = (viewportData.gridSize.first * scaleX).toInt()
+            gridHeight = (viewportData.gridSize.second * scaleY).toInt()
         }
         else
             isValid = false
@@ -96,11 +108,11 @@ class Viewport()
     {
         if (deltaX>0 && offsetX<viewportWidth-viewportSafetyMargin)
             offsetX += deltaX.toInt()
-        if (deltaX<0 && offsetX>-viewportWidth)
+        if (deltaX<0 && offsetX>-gridWidth+viewportSafetyMargin)
             offsetX += deltaX.toInt()
         if (deltaY>0 && offsetY<viewportHeight-viewportSafetyMargin)
             offsetY += deltaY.toInt()
-        if (deltaY<0 && offsetY>-viewportHeight)
+        if (deltaY<0 && offsetY>-gridHeight+viewportSafetyMargin)
             offsetY += deltaY.toInt()
     }
 

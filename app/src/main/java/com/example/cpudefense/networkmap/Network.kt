@@ -142,6 +142,7 @@ class Network(val gameMechanics: GameMechanics, val gameView: GameView, x: Int, 
     {
         if (viewport.scaleHasChanged)
         {
+            viewport.determineGridSize(data.gridSizeX, data.gridSizeY)
             for (obj in nodes.values)
                 obj.applyScale(viewport)
             viewport.scaleHasChanged = false

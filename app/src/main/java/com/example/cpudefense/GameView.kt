@@ -217,6 +217,7 @@ class GameView(context: Context):
         viewport.reset()
         viewport.determineScreenSize(this.width, this.height)
         gameMechanics.currentlyActiveStage?.network?.let {
+            // viewport.determineGridSize(Coord(it.data.gridSizeX, it.data.gridSizeY))
             it.applyScale(viewport)
             it.recreateNetworkImage(false)
         }

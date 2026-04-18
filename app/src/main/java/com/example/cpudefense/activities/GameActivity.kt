@@ -423,6 +423,7 @@ class GameActivity : Activity() {
         nextStage.calculateDifficulty()
         if (!nextStage.isInitialized())
             return  // something went wrong, possibly trying to create a level that doesn't exist
+        // gameView.viewport.determineGridSize(nextStage.data.gridSizeX, nextStage.data.gridSizeY)
         nextStage.network.applyScale(gameView.viewport)  // calculate scaling factors and set chip size
         nextStage.network.recreateNetworkImage(true)
         setGameActivityStatus(GameActivityStatus.PLAYING)
