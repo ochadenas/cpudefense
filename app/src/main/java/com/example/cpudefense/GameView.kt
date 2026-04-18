@@ -284,7 +284,6 @@ class GameView(context: Context):
         when (gameMechanics.state.phase)
         {
             GamePhase.RUNNING -> {
-                synchronized(displayLock) {
                     if (speedControlPanel.onDown(motionEvent))
                         return true
                     gameMechanics.currentlyActiveStage?.network?.let {
@@ -293,7 +292,6 @@ class GameView(context: Context):
                         for (obj in it.vehicles)
                             if ((obj as Attacker).onDown(motionEvent))
                                 return true
-                    }
                 }
                 return false
             }

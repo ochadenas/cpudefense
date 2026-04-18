@@ -94,23 +94,14 @@ class Viewport()
     fun addOffset(deltaX: Float, deltaY: Float)
     /** add an offset to move the viewport around */
     {
-        // keep previous offsets. If the viewport gets shifted off the screen, revert the offset
-        val prevOffsetX = offsetX
-        val prevOffsetY = offsetY
-        offsetX += deltaX.toInt()
-        if (deltaX < 0 && gridToScreen(gridSize).first <= viewportSafetyMargin) {
-            offsetX = prevOffsetX
-        }
-        if (deltaX > 0 && gridToScreen(gridOrigin).first >= viewportWidth - viewportSafetyMargin) {
-            offsetX = prevOffsetX
-        }
-        offsetY += deltaY.toInt()
-        if (deltaY < 0 && gridToScreen(gridSize).second <= viewportSafetyMargin) {
-            offsetY = prevOffsetY
-        }
-        if (deltaY > 0 && gridToScreen(gridOrigin).second >= viewportHeight - viewportSafetyMargin) {
-            offsetY = prevOffsetY
-        }
+        if (deltaX>0 && offsetX<viewportWidth-viewportSafetyMargin)
+            offsetX += deltaX.toInt()
+        if (deltaX<0 && offsetX>-viewportWidth)
+            offsetX += deltaX.toInt()
+        if (deltaY>0 && offsetY<viewportHeight-viewportSafetyMargin)
+            offsetY += deltaY.toInt()
+        if (deltaY<0 && offsetY>-viewportHeight)
+            offsetY += deltaY.toInt()
     }
 
     fun scale(param: Float)
