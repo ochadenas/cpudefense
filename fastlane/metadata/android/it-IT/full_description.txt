@@ -5,3 +5,5 @@ In questo gioco, gli attaccanti sono rappresentati da bit e byte. Per difendere 
 Il gioco presenta “eroi ed eroine dell'era dell'informazione”: persone che hanno avuto una grande influenza sullo sviluppo dei computer moderni. Sono accompagnati da una breve biografia e forniscono bonus globali che facilitano notevolmente il gioco.
 
 Attualmente ci sono più di 25 eroi ed eroine. Il gioco comprende 32 livelli predefiniti, ma dispone anche di una modalità “infinita” con livelli generati in modo casuale. Le lingue supportate sono inglese, francese, italiano e tedesco.
+
+Versioni del sistema operativo supportate: a partire dalla versione 1.58 è richiesto almeno Android 6. I dispositivi con Android 5 (ovvero con più di 10 anni) dovrebbero utilizzare la versione 1.57.

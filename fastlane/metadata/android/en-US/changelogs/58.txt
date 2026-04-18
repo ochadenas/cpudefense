@@ -1,0 +1,12 @@
+New features:
+- Game can be exported and restored in the “settings” dialogue
+- Game view can handle "edge-to-edge" (full screen) mode
+
+Bug fixes:
+- Fixed a problem with scrolling (issue #247)
+- Corrected display of MEM chips with several internal registers (issue #233)
+- Placing additional chips could result in an endless loop when creating a stage
+
+Miscellaneous:
+- Minimal SDK level changed from 21 to 23 (corresponding to Android 6)
+- Inclusion of newer versions of some system libs.

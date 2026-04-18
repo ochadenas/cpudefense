@@ -1,0 +1,12 @@
+Nuove funzionalità:
+- È possibile esportare e ripristinare la partita dalla finestra di dialogo "Impostazioni"
+- La visualizzazione del gioco supporta la modalità "edge-to-edge" (schermo intero)
+
+Correzioni di bug:
+- Risolto un problema relativo allo scorrimento (issue #247)
+- Corretta la visualizzazione dei chip MEM con diversi registri interni (issue #233)
+- L'inserimento di chip aggiuntivi poteva causare un loop infinito durante la creazione di un livello
+
+Varie:
+- Il livello minimo dell'SDK è stato modificato da 21 a 23 (corrispondente ad Android 6)
+- Inclusione di versioni più recenti di alcune librerie di sistema.

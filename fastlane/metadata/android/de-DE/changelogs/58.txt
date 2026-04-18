@@ -1,0 +1,12 @@
+Neue Funktionen:
+- Das Spiel kann im Dialogfeld „Einstellungen“ exportiert und wiederhergestellt werden
+- Die Spielansicht unterstützt nun den „Edge-to-Edge“-Modus (Vollbildmodus)
+
+Fehlerbehebungen:
+- Ein Problem beim Scrollen wurde behoben (Issue #247)
+- Die Darstellung von MEM-Chips mit mehreren internen Registern wurde korrigiert (Issue #233)
+- Das Platzieren zusätzlicher Chips konnte beim Erstellen einer Stufe zu einer Endlosschleife führen.
+
+Sonstiges:
+- Die Mindestanforderung an die SDK-Version wurde von 21 auf 23 (entspricht Android 6) geändert.
+- Einbindung neuerer Versionen einiger System-Bibliotheken.

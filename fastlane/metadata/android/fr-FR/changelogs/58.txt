@@ -1,0 +1,12 @@
+Nouvelles fonctionnalités :
+- La partie peut être exportée et restaurée dans la boîte de dialogue « Paramètres »
+- L'affichage du jeu prend désormais en charge le mode « edge to edge » (plein écran)
+
+Corrections de bugs :
+- Correction d'un problème de défilement (issue #247)
+- Correction de l'affichage des puces MEM comportant plusieurs registres internes (issue #233)
+- L'ajout de puces supplémentaires pouvait entraîner une boucle infinie lors de la création d'un niveau
+
+Divers :
+- Le niveau minimum du SDK est passé de 21 à 23 (correspondant à Android 6)
+- Intégration de versions plus récentes de certaines bibliothèques système.

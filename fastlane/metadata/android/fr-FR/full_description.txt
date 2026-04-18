@@ -8,3 +8,5 @@ Le jeu présente des « héros et héroïnes de l´ère de l´information » : d
 
 
 Il existe actuellement plus de 25 héros et héroïnes. Le jeu comprend 32 niveaux prédéfinis, mais il dispose également d´un mode « sans fin » avec des niveaux générés de manière aléatoire. Les langues supportées sont l´anglais, le français, l'italien et l´allemand.
+
+Versions du système d'exploitation : A partir de la version 1.58, Android 6 est requis. Les appareils fonctionnant sous Android 5 (c'est-à-dire datant de plus de 10 ans) doivent utiliser la version 1.57.

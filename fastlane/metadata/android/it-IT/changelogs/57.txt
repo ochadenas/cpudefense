@@ -5,4 +5,4 @@ Correzioni di bug:
 - Ottimizzazione del codice disabilitata per evitare il crash dell'app
 
 Varie:
-- Utilizzo “terget SDK” 36
+- Utilizzo “target SDK” 36
