@@ -14,5 +14,8 @@ Currently, there are more than 25 heroes and heroines. The game comes with 32 pr
 
 This game is free to play. Find it on F-Droid, or get the latest APK from the [Releases Section](https://github.com/ochadenas/cpudefense/releases/latest).
 
+### Supported operating system versions 
+
+From version 1.58 onwards, Android 6 or later is required. Devices running Android 5 (i.e. more than 10 years old) should use version 1.57.
      
 ![pcb_with_castle_small](https://github.com/user-attachments/assets/6a3aa810-f7db-47fa-974d-cc277c14e519)
