@@ -413,36 +413,6 @@ class GameMechanics {
         return convertedHeat.toInt()
     }
 
-    private fun correctNumberOfCoins()
-            /** the purpose of this method is to verify if the total number of coins spent
-             * corresponds to the coins got, and to correct this number if coins have been "lost"
-             * due to corrupt save files etc.
-             *
-             * Removed in version 1.44 due to new heroes / purseOfCoins structure.
-             */
-    {
-        var sumCoinsGot = 0
-        for (summary in summaryPerNormalLevel.values)
-            sumCoinsGot += summary.coinsGot
-        for (summary in summaryPerTurboLevel.values)
-            sumCoinsGot += summary.coinsGot
-        for (summary in summaryPerEndlessLevel.values)
-            sumCoinsGot += summary.coinsGot
-        var sumCoinsSpent = 0
-        for (hero in heroes.values)  // these are the 'old' heroes
-            sumCoinsSpent += hero.data.coinsSpent
-        var theoreticalAmountOfCoins = sumCoinsGot - sumCoinsSpent
-        if (theoreticalAmountOfCoins < 0)
-            theoreticalAmountOfCoins = 0  // more coins have been spent than earned, that is clearly a bug
-        if (global.coinsTotal < theoreticalAmountOfCoins)
-        /** we've got a problem here. Coins are missing.
-         * Unfortunately, we're unable to determine the exact number, because
-         * the extra coins are not taken into account.
-         * Let's assume that for every 4 coins got from stage rewards there is one extra coin gathered.
-         */
-         global.coinsTotal = theoreticalAmountOfCoins + sumCoinsGot / 4
-    }
-
     fun migrateHeroes()
             /** method to separate heroes and coins between the modes of playing (basic/endless).
              * Called when migrating from 1.33 to 1.34

@@ -68,7 +68,7 @@ class Background(val gameView: GameView)
             /**
              * Sets the size of the background and re-creates the image.
              *
-             * @param forceNewBackground If true, forcibly create a new image. Otherwise keep the old one
+             * @param forceNewBackground If true, forcibly create a new image. Otherwise, keep the old one
              * if the size has not changed.
              */
     {
@@ -133,7 +133,7 @@ class Background(val gameView: GameView)
              * @param stageIdent Series and number of the current stage
              */
     {
-        var useSpecialBackground = GameMechanics.specialLevel(stageIdent)
+        val useSpecialBackground = GameMechanics.specialLevel(stageIdent)
         if (useSpecialBackground == GameMechanics.Params.Season.CHRISTMAS)
             gameView.effects?.addSnow()
         val n = stageIdent.number

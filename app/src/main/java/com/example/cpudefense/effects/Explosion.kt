@@ -43,13 +43,13 @@ class Explosion(posOnScreen: Pair<Int, Int>,
 
     init {
         sparks.clear()
-        for (i in 0 .. 16)
-        {
-            val color = if (Random.nextFloat()>0.2) primaryColor else secondaryColor
-            sparks.add(Spark(posOnScreen.first.toFloat(),
-                posOnScreen.second.toFloat(),
-                Random.nextFloat()-0.5f, Random.nextFloat()-0.4f ,color) )
-        }
+        (0 .. 16)
+            .forEach { _ ->
+                val color = if (Random.nextFloat()>0.2) primaryColor else secondaryColor
+                sparks.add(Spark(posOnScreen.first.toFloat(),
+                                 posOnScreen.second.toFloat(),
+                                 Random.nextFloat()-0.5f, Random.nextFloat()-0.4f ,color) )
+            }
     }
 
 

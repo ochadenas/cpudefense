@@ -3,7 +3,7 @@ package com.example.cpudefense.networkmap
 import android.graphics.Rect
 import com.example.cpudefense.GameView
 
-class Viewport()
+class Viewport
 /** class that is responsible for mapping internal grid [Coord] to screen coordinates */
 {
     data class Data(
@@ -26,8 +26,6 @@ class Viewport()
     var gridHeight: Int = 0
     /** used to keep track whether the network elements must be recalculated after scale changes */
     var scaleHasChanged = true
-    /** zero grid coordinate */
-    private var gridOrigin = Coord(0, 0)
     /** vertical size of the complete game board, in grid coordinates */
     private var scaleX = 1.0f
     private var scaleY = 1.0f

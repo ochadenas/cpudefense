@@ -220,7 +220,7 @@ class LevelSelectActivity : AppCompatActivity() {
             addLevelIcon(levelEntryView, thumbnail)
 
             levelEntryView.setTextAppearance(this, R.style.TextAppearance_AppCompat_Medium)
-            // choose color of text:
+            // choose colour of text:
             @Suppress("SimplifyBooleanWithConstants") // no linter warning, please
             when
             {

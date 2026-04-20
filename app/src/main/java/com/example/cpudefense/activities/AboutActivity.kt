@@ -7,18 +7,15 @@ import android.net.Uri
 import android.os.Bundle
 import android.text.method.LinkMovementMethod
 import android.text.method.ScrollingMovementMethod
-import android.util.Log
 import android.view.View
-import android.view.ViewGroup
-import android.view.Window
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.setPadding
-import androidx.core.view.updateLayoutParams
 import com.example.cpudefense.R
+import androidx.core.net.toUri
 
 
 class AboutActivity : AppCompatActivity()
@@ -41,7 +38,7 @@ class AboutActivity : AppCompatActivity()
 
     fun handleInsets(view: View, windowInsets: WindowInsetsCompat): WindowInsetsCompat
     {
-        val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+        windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
         return windowInsets
     }
 
@@ -52,7 +49,7 @@ class AboutActivity : AppCompatActivity()
 
     fun wiki(@Suppress("UNUSED_PARAMETER") v: View)
     {
-        val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/ochadenas/cpudefense/wiki/Chip-Defense"))
+        val browserIntent = Intent(Intent.ACTION_VIEW, "https://github.com/ochadenas/cpudefense/wiki/Chip-Defense".toUri())
         try {
             startActivity(browserIntent)
         }
