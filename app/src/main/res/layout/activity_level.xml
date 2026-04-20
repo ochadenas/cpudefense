@@ -17,13 +17,12 @@
         />
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/title"
+        android:id="@+id/titleContainer"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="18dp"
         >
 
     <TextView
@@ -81,7 +80,7 @@
             app:layout_constraintBottom_toTopOf="@+id/scrollView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/title"
+            app:layout_constraintTop_toBottomOf="@+id/titleContainer"
             app:tabSelectedTextColor="@color/text_white"
             app:tabTextColor="@color/text_green">
 

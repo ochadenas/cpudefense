@@ -53,7 +53,7 @@ class LevelSelectActivity : AppCompatActivity() {
     fun handleInsets(view: View, windowInsets: WindowInsetsCompat): WindowInsetsCompat
     {
         val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
-        // findViewById<View>(R.id.title)?.updateLayoutParams<ViewGroup.MarginLayoutParams> {  topMargin = 0 }
+        findViewById<View>(R.id.titleContainer)?.updateLayoutParams<ViewGroup.MarginLayoutParams> {  topMargin = insets.top }
         findViewById<View>(R.id.playLevelButton)?.updateLayoutParams<ViewGroup.MarginLayoutParams> { bottomMargin = insets.bottom }
         return WindowInsetsCompat.CONSUMED
     }

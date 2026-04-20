@@ -444,7 +444,7 @@ class ScoreBoard(val gameView: GameView): GameElement()
 
     inner class DebugStatusLine
     /** this is an additional text displayed at every tick.
-     * It is meant to hold additional debug info, e. g. the current frame rate
+     * It is meant to hold additional debug info, e.g. the current frame rate
      */
     {
         private var area = Rect()
@@ -455,7 +455,7 @@ class ScoreBoard(val gameView: GameView): GameElement()
 
         fun setSize(area: Rect, divider: Int) {
             this.divider = divider
-            this.area = Rect(area.left, 0, area.right, divider)
+            this.area = Rect(area.left, 32, area.right, divider+32)
             paint.color = Color.YELLOW
             paint.style = Paint.Style.FILL
         }

@@ -16,17 +16,18 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.edit
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updateLayoutParams
+import androidx.core.view.updatePadding
 import com.example.cpudefense.GameMechanics
 import com.example.cpudefense.Persistency
 import com.example.cpudefense.R
 import com.example.cpudefense.Settings
 import com.example.cpudefense.Stage
 import com.example.cpudefense.gameElements.SevenSegmentDisplay
-import androidx.core.content.edit
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.updateLayoutParams
 
 
 class WelcomeActivity : AppCompatActivity() {
@@ -70,15 +71,12 @@ class WelcomeActivity : AppCompatActivity() {
      */
     {
         val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
-        findViewById<View>(R.id.game_title)?.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-            topMargin = insets.top
-            leftMargin = insets.left
-            rightMargin = insets.right
-        }
+        val insetTop = windowInsets.displayCutout?.safeInsetTop ?: insets.top
+        findViewById<View>(R.id.game_title)?.updatePadding(top = insetTop)
         findViewById<View>(R.id.quitButton)?.updateLayoutParams<ViewGroup.MarginLayoutParams> {
             bottomMargin = insets.bottom
         }
-        return WindowInsetsCompat.CONSUMED
+        return windowInsets
     }
 
     private fun showLevelReached()
