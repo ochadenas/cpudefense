@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.view.Window
 import android.widget.Button
 import android.widget.LinearLayout
+import android.widget.ScrollView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.cpudefense.GameMechanics
@@ -235,6 +236,9 @@ class LevelSelectActivity : AppCompatActivity() {
             if (!nextLevelPossible(level, series))
                 break
         }
+        // scroll to the highest levels
+        (listView.parent as? ScrollView)?.let {
+            it.post { it.fullScroll(View.FOCUS_DOWN) }}
     }
 
     private fun addLevelIcon(view: TextView, icon: Bitmap?)
