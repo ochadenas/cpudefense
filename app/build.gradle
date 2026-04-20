@@ -10,7 +10,7 @@ android {
         applicationId 'de.chadenas.cpudefense'
         minSdk = 23
         targetSdk = 36
-        versionCode = 58
+        versionCode = 59
         versionName = "1." + versionCode.toString()
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
