@@ -407,4 +407,5 @@ The programming language Pascal is named after him."</string>
     <string name="error_reading_file">Error reading or parsing file: %s</string>
     <string name="shithappens_1">Okay …</string>
     <string name="shithappens_2">Well …</string>
+    <string name="three_question_marks" translatable="false">\???</string>
 </resources>

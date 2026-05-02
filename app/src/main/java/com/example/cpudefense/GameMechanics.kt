@@ -135,7 +135,7 @@ class GameMechanics {
         speed = GameSpeed.NORMAL,
         maxLives = maxLivesPerStage,
         currentMaxLives = maxLivesPerStage,
-        lives = 0,
+        lives = maxLivesPerStage,
         cash = minimalAmountOfCash
     )
 
@@ -328,6 +328,7 @@ class GameMechanics {
         val extraLives = heroModifier(Hero.Type.ADDITIONAL_LIVES)
         state.currentMaxLives = state.maxLives + extraLives.toInt()
         state.lives = state.currentMaxLives
+        if (state.lives == 0) state.lives = maxLivesPerStage // this should not happen, but is a safety catch for issue #249
         state.livesRestored = 0
     }
 
