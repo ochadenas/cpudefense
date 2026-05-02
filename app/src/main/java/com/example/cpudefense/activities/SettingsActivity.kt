@@ -247,7 +247,7 @@ class SettingsActivity : AppCompatActivity() {
         var versionMatch = false // pessimistic assumption
         gameInfo?.let { gameInfo -> gameInfo.gameVersion.let  { version ->
             if (version != packageInfo?.versionName)
-                versionInfoString = getString(R.string.warning_version_mismatch).format(gameInfo.gameVersion, version)
+                versionInfoString = getString(R.string.warning_version_mismatch).format(version, packageInfo?.versionName ?: "???")
             else {
                 versionMatch = true
                 versionInfoString = getString(R.string.message_version).format(gameInfo.gameVersion)
