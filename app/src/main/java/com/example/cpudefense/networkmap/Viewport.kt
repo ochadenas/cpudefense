@@ -2,6 +2,9 @@ package com.example.cpudefense.networkmap
 
 import android.graphics.Rect
 import com.example.cpudefense.GameView
+import com.example.cpudefense.gameElements.Chip
+import kotlin.collections.component1
+import kotlin.collections.component2
 
 class Viewport
 /** class that is responsible for mapping internal grid [Coord] to screen coordinates */
@@ -125,6 +128,18 @@ class Viewport
         // re-center the viewport
         addOffset(-(screen.width() * (factor-1)).toInt() / 2f,
                   - (screen.height() * (factor-1)).toInt() / 2f)
+    }
+
+    fun scaleByStep(network: Network?, zoomIn: Boolean = true)
+    {
+        val factor = if (zoomIn) 1.2f else 0.8f
+        scale(factor)
+
+        network?.let {
+            it.nodes.forEach{ (_, chip) -> (chip as? Chip)?.upgradePossibilities?.clear() }  // clear upgrade boxes, they mess up scaling
+            it.applyScale(this)
+            it.recreateNetworkImage(false)
+        }
     }
 
     fun gridToScreen(gridPos: Coord): Pair<Int, Int>

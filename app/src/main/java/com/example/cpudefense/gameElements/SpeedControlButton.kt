@@ -10,7 +10,7 @@ import androidx.core.graphics.scale
 
 class SpeedControlButton(val gameView: GameView, val gameMechanics: GameMechanics, var type: Type = Type.PAUSE, private val panel: SpeedControl): Fadable
 {
-    enum class Type { PAUSE, FAST, FASTEST, NORMAL, RETURN, LOCK, UNLOCK }
+    enum class Type { PAUSE, FAST, FASTEST, NORMAL, RETURN, LOCK, UNLOCK, ZOOM_PLUS, ZOOM_MINUS }
 
     var area = Rect()
     var paint = Paint()
@@ -27,6 +27,8 @@ class SpeedControlButton(val gameView: GameView, val gameMechanics: GameMechanic
         bitmapOfType[Type.RETURN] = gameView.returnIcon.scale(size, size)
         bitmapOfType[Type.LOCK] = gameView.moveLockIcon.scale(size, size)
         bitmapOfType[Type.UNLOCK] = gameView.moveUnlockIcon.scale(size, size)
+        bitmapOfType[Type.ZOOM_PLUS] = gameView.zoomPlusIcon.scale(size, size)
+        bitmapOfType[Type.ZOOM_MINUS] = gameView.zoomMinusIcon.scale(size, size)
     }
 
     override fun fadeDone(type: Fader.Type) {
@@ -74,6 +76,12 @@ class SpeedControlButton(val gameView: GameView, val gameMechanics: GameMechanic
                 Type.UNLOCK -> {
                     gameView.scrollAllowed = false
                     type = Type.LOCK
+                }
+                Type.ZOOM_PLUS -> {
+                    gameView.viewport.scaleByStep(gameMechanics.currentlyActiveStage?.network, true)
+                }
+                Type.ZOOM_MINUS -> {
+                    gameView.viewport.scaleByStep(gameMechanics.currentlyActiveStage?.network, false)
                 }
             }
             return true

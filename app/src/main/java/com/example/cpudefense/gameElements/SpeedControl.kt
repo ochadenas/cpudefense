@@ -11,6 +11,7 @@ import com.example.cpudefense.R
 import com.example.cpudefense.utils.setCenter
 import com.example.cpudefense.utils.setLeft
 import androidx.core.graphics.createBitmap
+import com.example.cpudefense.utils.setTop
 
 class SpeedControl(var gameView: GameView)
 /** set of buttons that control the game speed, but also provide additional interaction such
@@ -23,11 +24,18 @@ class SpeedControl(var gameView: GameView)
     private var button3 = SpeedControlButton(gameView, gameMechanics, SpeedControlButton.Type.FASTEST, this)
     private var lockButton = SpeedControlButton(gameView, gameMechanics, SpeedControlButton.Type.UNLOCK, this)
     private var returnButton = SpeedControlButton(gameView, gameMechanics, SpeedControlButton.Type.RETURN, this)
-    private var buttons = mutableListOf( button1, button2, returnButton, lockButton )
+    private var zoomPlusButton = SpeedControlButton(gameView, gameMechanics, SpeedControlButton.Type.ZOOM_PLUS, this)
+    private var zoomMinusButton = SpeedControlButton(gameView, gameMechanics, SpeedControlButton.Type.ZOOM_MINUS, this)
+    private var buttons = mutableListOf( button1, button2, returnButton, lockButton, zoomMinusButton, zoomPlusButton )
+    /** area that holds the speed buttons */
     private var areaRight = Rect(0,0,0,0)
+    /** area containing the "return to menu" and "lock scrolling" button */
     private var areaLeft = Rect(0,0,0,0)
+    /** area that holds additional level info text */
     private var areaCenter = Rect(0,0,0,0)
-    
+    /** area that contains "zoom in" and "zoom out" buttons */
+    private var areaTop = Rect(0,0,0,0)
+
     private var stageInfoText = ""
     private var statusInfoBitmap: Bitmap? = null
     private var bitmapPaint = Paint()
@@ -38,7 +46,7 @@ class SpeedControl(var gameView: GameView)
             if (gameView.gameActivity.settings.configUseLargeButtons) 1.6f else 1.0f).toInt()
         val margin = actualButtonSize / 5   // space between the buttons
         if (gameView.gameActivity.settings.fastFastForward)
-            buttons.add(button3) // add a "fast fast forward" button
+            buttons.add(button3) // add a "fast fast-forward" button
         buttons.forEach {it.setSize(actualButtonSize)}
         areaRight.right = parentArea.right - margin
         areaRight.bottom = parentArea.bottom - margin
@@ -47,12 +55,15 @@ class SpeedControl(var gameView: GameView)
         button1.area.setCenter(areaRight.left + actualButtonSize / 2, areaRight.centerY())
         button2.area.setCenter(areaRight.right - actualButtonSize / 2, areaRight.centerY())
         button3.area.setCenter(areaRight.left - actualButtonSize / 2 - margin, areaRight.centerY())
-        // put the 'return' button on the other side
         areaLeft = Rect(areaRight)
         areaLeft.setLeft(margin)
-        areaCenter = Rect(areaLeft.left, areaLeft.top, areaRight.right, areaRight.bottom)
         returnButton.area.setCenter(areaLeft.left + actualButtonSize / 2, areaLeft.centerY())
         lockButton.area.setCenter(areaLeft.right - actualButtonSize / 2, areaLeft.centerY())
+        areaCenter = Rect(areaLeft.left, areaLeft.top, areaRight.right, areaRight.bottom)
+        areaTop = Rect(areaLeft)
+        areaTop.setTop(parentArea.top)
+        zoomPlusButton.area.setCenter(areaTop.left + actualButtonSize / 2, areaTop.centerY())
+        zoomMinusButton.area.setCenter(areaTop.right - actualButtonSize / 2, areaTop.centerY())
     }
     
     fun setInfoLine(newText: String)
