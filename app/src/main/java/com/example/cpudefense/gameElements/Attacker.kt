@@ -25,11 +25,15 @@ open class Attacker(network: Network, representation: Representation = Represent
         var representation: Representation,
         /** the attacker's actual value */
         var number: ULong,
+        /** number of digits in binary notation */
         var binaryDigits: Int,
+        /** number of digits in hexadecimal notation */
         var hexDigits: Int,
         /** information contents. Equal to the number of binary digits */
         var bits: Int,
+        /** indicator whether thos attacker is a cryptocoin */
         var isCoin: Boolean = false,
+        /** data of the underlying vehicle object */
         var vehicle: Vehicle.Data,
         /** flag that is set if destruction of this attacker must not yield cash */
         var hasNoValue: Boolean = false,

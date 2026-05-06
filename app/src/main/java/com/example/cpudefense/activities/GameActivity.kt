@@ -462,6 +462,7 @@ class GameActivity : Activity() {
                 GlobalScope.launch { delay(2000L); onEndOfStage() }
             else {
                 onStageCleared(it)
+                it.summary.cumulatedInfo += gameMechanics.state.cash
                 Persistency(this).saveGeneralState(gameMechanics)
                 Persistency(this).saveStageSummaries(gameMechanics, gameMechanics.currentStageIdent.series)
                 setGameActivityStatus(GameActivityStatus.BETWEEN_LEVELS)

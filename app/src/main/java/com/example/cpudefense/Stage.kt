@@ -94,10 +94,16 @@ class Stage(var gameMechanics: GameMechanics, var gameView: GameView)
     var data = Data()
 
     data class Summary(
+        /** current number of coins that can be earned in this stage. */
         var coinsAvailable: Int = 0,
+        /** coins that have been earned in this stage, including earlier runs */
         var coinsGot: Int = 0,
+        /** number of coins that can be earned in this level, before playing it for the first time */
         var coinsMaxAvailable: Int = 0,
+        /** whether the stage has already been won */
         var won: Boolean = false,
+        /** cumulated information gained in this level */
+        var cumulatedInfo: Int = 0,
     )
     lateinit var summary: Summary
 
