@@ -462,7 +462,6 @@ class GameActivity : Activity() {
                 GlobalScope.launch { delay(2000L); onEndOfStage() }
             else {
                 onStageCleared(it)
-                it.summary.cumulatedInfo += gameMechanics.state.cash
                 Persistency(this).saveGeneralState(gameMechanics)
                 Persistency(this).saveStageSummaries(gameMechanics, gameMechanics.currentStageIdent.series)
                 setGameActivityStatus(GameActivityStatus.BETWEEN_LEVELS)
@@ -479,7 +478,8 @@ class GameActivity : Activity() {
         val summaryOfCompletedStage = Stage.Summary(won = true,
                                                     coinsGot = stage.summary.coinsGot + gameMechanics.state.coinsInLevel,
                                                     coinsMaxAvailable = stage.summary.coinsMaxAvailable,
-                                                    coinsAvailable = stage.summary.coinsMaxAvailable - gameMechanics.state.coinsInLevel
+                                                    coinsAvailable = stage.summary.coinsMaxAvailable - gameMechanics.state.coinsInLevel,
+                                                    totalCash = stage.summary.totalCash + gameMechanics.state.cash,
         )
         val currentStageIdent = stage.data.ident
         gameMechanics.currentStageIdent = currentStageIdent

@@ -103,7 +103,7 @@ class Stage(var gameMechanics: GameMechanics, var gameView: GameView)
         /** whether the stage has already been won */
         var won: Boolean = false,
         /** cumulated information gained in this level */
-        var cumulatedInfo: Int = 0,
+        var totalCash: Int = 0,
     )
     lateinit var summary: Summary
 
