@@ -1,0 +1,9 @@
+Neue Funktionen:
+- Skalieren der Ansicht erfolgt über Buttons statt über den Zweifingergriff.
+- Die Levelauswahl scrollt automatisch ans Ende der Liste.
+
+Fehlerbehebungen:
+- Weitere Anpassungen für den „Edge-to-Edge“-Modus
+- Behebung von Issue #249 (hoffentlich)
+- Beim Import von Spielständen war die Nachricht über unterschiedliche Versionsstände unverständlich.
+

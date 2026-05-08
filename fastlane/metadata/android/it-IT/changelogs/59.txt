@@ -1,0 +1,9 @@
+Nuove funzionalità:
+- Il ridimensionamento della visualizzazione avviene tramite pulsanti anziché con il gesto di pizzicare.
+- La selezione dei livelli scorre automaticamente fino alla fine dell´elenco.
+
+Correzioni di bug:
+- Ulteriori modifiche per la modalità "Edge-to-Edge"
+- Risoluzione del problema #249 (si spera)
+- Durante l´importazione della partita, il messaggio relativo alle diverse versioni era incomprensibile.
+

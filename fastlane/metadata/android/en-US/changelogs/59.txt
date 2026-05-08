@@ -1,0 +1,8 @@
+New features:
+- The view is now scaled using buttons rather than the two-finger pinch gesture.
+- The level selection scrolls automatically to the end of the list.
+
+Bug fixes:
+- Further adjustments for ‘Edge-to-Edge’ mode
+- Fixed Issue #249 (hopefully)
+- When importing save files, the message regarding different version statuses was unclear.
