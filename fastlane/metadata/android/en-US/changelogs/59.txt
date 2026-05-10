@@ -5,4 +5,4 @@ New features:
 Bug fixes:
 - Further adjustments for ‘Edge-to-Edge’ mode
 - Fixed Issue #249 (hopefully)
-- When importing save files, the message regarding different version statuses was unclear.
+- When importing save files, the message regarding different versions was unclear.
