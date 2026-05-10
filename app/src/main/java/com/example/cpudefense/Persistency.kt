@@ -414,12 +414,12 @@ class Persistency(private val activity: Activity)
         jsonObject.get("info")?.let {
             gameInfo = gson.fromJson(it, SaveFileInfo::class.java)
         }
-        jsonObject.getAsJsonObject("state")?.let { jsonObject ->
-            jsonObject.get("MAXSERIES")?.let { v -> gameInfo?.maxSeries = v.asInt }
-            jsonObject.get("MAXSTAGE")?.let { v -> gameInfo?.maxStage = v.asInt }
-            jsonObject.get("STATUS")?.let { v -> gameInfo?.status = v.asString }
-            jsonObject.get("ENDLESS_AVAILABLE")?.let { v -> gameInfo?.endlessAvailable = v.asBoolean }
-            jsonObject.get("TURBO_AVAILABLE")?.let { v -> gameInfo?.turboAvailable = v.asBoolean }
+        jsonObject.getAsJsonObject("state")?.let { json ->
+            json.get("MAXSERIES")?.let { v -> gameInfo?.maxSeries = v.asInt }
+            json.get("MAXSTAGE")?.let { v -> gameInfo?.maxStage = v.asInt }
+            json.get("STATUS")?.let { v -> gameInfo?.status = v.asString }
+            json.get("ENDLESS_AVAILABLE")?.let { v -> gameInfo?.endlessAvailable = v.asBoolean }
+            json.get("TURBO_AVAILABLE")?.let { v -> gameInfo?.turboAvailable = v.asBoolean }
         }
         return gameInfo
     }
@@ -427,8 +427,7 @@ class Persistency(private val activity: Activity)
     private fun jsonAsString(element: Any?): String?
     /** This is a kind of 'safe cast' to a string which works for both JsonObjects and JsonPrimitives. */
     {
-        return element?.let { element ->
-            (element as? JsonPrimitive)?.asString ?: (element as? JsonObject)?.toString() }
+        return element?.let { (it as? JsonPrimitive)?.asString ?: (it as? JsonObject)?.toString() }
     }
 
     fun performGameImport(jsonString: String, gameMechanics: GameMechanics): SaveFileInfo?

@@ -3,19 +3,18 @@ package com.example.cpudefense.activities
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
-import android.net.Uri
 import android.os.Bundle
 import android.text.method.LinkMovementMethod
 import android.text.method.ScrollingMovementMethod
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.net.toUri
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.setPadding
 import com.example.cpudefense.R
-import androidx.core.net.toUri
 
 
 class AboutActivity : AppCompatActivity()

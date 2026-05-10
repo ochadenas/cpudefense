@@ -245,12 +245,12 @@ class SettingsActivity : AppCompatActivity() {
         // get version info
         var versionInfoString = getString(R.string.warning_unknown_version)
         var versionMatch = false // pessimistic assumption
-        gameInfo?.let { gameInfo -> gameInfo.gameVersion.let  { version ->
+        gameInfo?.let { info -> info.gameVersion.let  { version ->
             if (version != packageInfo?.versionName)
                 versionInfoString = getString(R.string.warning_version_mismatch).format(version, packageInfo?.versionName ?: getString(R.string.three_question_marks))
             else {
                 versionMatch = true
-                versionInfoString = getString(R.string.message_version).format(gameInfo.gameVersion)
+                versionInfoString = getString(R.string.message_version).format(info.gameVersion)
                 }
             }
         }
@@ -273,9 +273,9 @@ class SettingsActivity : AppCompatActivity() {
         }
         // extract info about max level
         var maxProgressString = ""
-        gameInfo?.let { gameInfo ->
-            if (gameInfo.maxSeries>0)
-                maxProgressString = getString(R.string.message_progress).format(gameInfo.maxStage, gameInfo.maxSeries)
+        gameInfo?.let { info ->
+            if (info.maxSeries>0)
+                maxProgressString = getString(R.string.message_progress).format(info.maxStage, info.maxSeries)
         }
         // assemble the info string
         return getString(R.string.question_import_confirmation).format(versionInfoString, timeInfoString, maxProgressString)

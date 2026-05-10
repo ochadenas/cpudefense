@@ -16,11 +16,9 @@ import android.view.MotionEvent
 import android.view.ScaleGestureDetector
 import android.view.SurfaceHolder
 import android.view.SurfaceView
-import android.view.ViewGroup
 import androidx.core.content.edit
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.GestureDetectorCompat
-import androidx.core.view.updateLayoutParams
 import com.example.cpudefense.GameMechanics.GamePhase
 import com.example.cpudefense.GameMechanics.LevelMode
 import com.example.cpudefense.activities.GameActivity

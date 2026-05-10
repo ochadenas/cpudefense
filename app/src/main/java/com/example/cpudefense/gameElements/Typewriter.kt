@@ -24,7 +24,7 @@ class Typewriter(val gameView: GameView, myArea: Rect, private var lines: CopyOn
     @Suppress("MoveLambdaOutsideParentheses")
     private fun showNextLine(): Boolean
     {
-        textBoxes.map { it.y -= lineSpacingY }
+        val map = textBoxes.mapIndexed { index, it -> it.y -= lineSpacingY }
         if (lines.isEmpty()) {
             callback?.let { it() }  // call callback function, if defined.
             return false
@@ -41,7 +41,7 @@ class Typewriter(val gameView: GameView, myArea: Rect, private var lines: CopyOn
     }
 
     fun display(canvas: Canvas) {
-        textBoxes.map { it.display(canvas) }
+        textBoxes.forEach { it.display(canvas) }
         paintLine.color = resources.getColor(R.color.text_green)
     }
 

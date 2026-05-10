@@ -39,13 +39,13 @@ class Effects(var gameView: GameView) {
 
     fun updateGraphicalEffects()
     {
-        faders.map { it.update() }
-        explosions.map { it.update() }
+        faders.forEach { it.update() }
+        explosions.forEach { it.update() }
         explosions.removeAll { it.expired() }
     }
 
     fun displayGraphicalEffects(canvas: Canvas)
     {
-        explosions.map { it.display(canvas) }
+        explosions.forEach { it.display(canvas) }
     }
 }
