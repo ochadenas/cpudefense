@@ -28,6 +28,7 @@ import com.example.cpudefense.R
 import com.example.cpudefense.Settings
 import com.example.cpudefense.Stage
 import com.example.cpudefense.gameElements.SevenSegmentDisplay
+import java.io.File
 
 
 class WelcomeActivity : AppCompatActivity() {
@@ -54,9 +55,12 @@ class WelcomeActivity : AppCompatActivity() {
         val prefsLegacy = getSharedPreferences(Persistency.filename_legacy, MODE_PRIVATE)
         val prefsSettings = getSharedPreferences(Persistency.filename_settings, MODE_PRIVATE)
         settings.migrateSettings(prefsLegacy, prefsSettings)
+        // permanently delete the legacy prefs file
+        with (File(applicationInfo.dataDir + "/shared_prefs/${Persistency.filename_legacy}.xml"))
+        { if (exists()) delete() }
     }
 
-    private fun determineLevels(prefs: SharedPreferences) {
+        private fun determineLevels(prefs: SharedPreferences) {
         maxLevel.series = prefs.getInt("MAXSERIES", 1)
         maxLevel.number = prefs.getInt("MAXSTAGE", 0)
         nextLevelToPlay.series = prefs.getInt("LASTSERIES", 1)
