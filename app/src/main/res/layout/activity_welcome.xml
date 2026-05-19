@@ -37,13 +37,13 @@
         android:text="@string/selectLevel"
         android:textColor="@color/white"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@id/startNewGameButton"
+        app:layout_constraintBottom_toTopOf="@id/infoButton"
         app:layout_constraintEnd_toEndOf="@+id/continueGameButton"
         app:layout_constraintStart_toStartOf="@+id/continueGameButton"
         />
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/startNewGameButton"
+        android:id="@+id/infoButton"
         android:layout_width="0dp"
         android:layout_height="48dp"
         android:layout_marginBottom="32dp"
@@ -138,9 +138,9 @@
         android:layout_height="0dp"
         android:layout_marginEnd="8dp"
         android:scaleType="fitEnd"
-        app:layout_constraintBottom_toBottomOf="@+id/startNewGameButton"
-        app:layout_constraintEnd_toStartOf="@+id/startNewGameButton"
-        app:layout_constraintTop_toTopOf="@+id/startNewGameButton"
+        app:layout_constraintBottom_toBottomOf="@+id/infoButton"
+        app:layout_constraintEnd_toStartOf="@+id/infoButton"
+        app:layout_constraintTop_toTopOf="@+id/infoButton"
         app:srcCompat="@drawable/deko"
         android:contentDescription="@string/deco"
         />

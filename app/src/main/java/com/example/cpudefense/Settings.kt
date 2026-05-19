@@ -1,6 +1,7 @@
 package com.example.cpudefense
 
 import android.content.SharedPreferences
+import androidx.core.content.edit
 
 class Settings {
     var configDisablePurchaseDialog: Boolean = false
@@ -53,18 +54,7 @@ class Settings {
             return // already migrated
         loadFromFile(oldPrefs)
         saveToFile(newPrefs)
-        // remove old keys
-        oldPrefs.edit().apply {
-            remove("DISABLE_PURCHASE_DIALOG")
-            remove("DISABLE_BACKGROUND")
-            remove("SHOW_ATTS_IN_RANGE")
-            remove("USE_LARGE_BUTTONS")
-            remove("SHOW_FRAMERATE")
-            remove("USE_FAST_FAST_FORWARD")
-            remove("KEEP_LEVELS")
-            remove("USE_PREFS_FILE")
-            apply()
-        }
+        oldPrefs.edit { clear() }  // delete all entries in the old pref file
     }
 
 }

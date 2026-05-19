@@ -408,4 +408,6 @@ The programming language Pascal is named after him."</string>
     <string name="shithappens_1">Okay …</string>
     <string name="shithappens_2">Well …</string>
     <string name="three_question_marks" translatable="false">\???</string>
+    <string name="extras_title">Extras</string>
+    <string name="level_editor_title">Circuit Editor</string>
 </resources>

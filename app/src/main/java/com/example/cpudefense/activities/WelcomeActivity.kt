@@ -69,7 +69,7 @@ class WelcomeActivity : AppCompatActivity() {
         endlessSeriesAvailable = prefs.getBoolean("ENDLESS_AVAILABLE", false)
     }
 
-    fun handleInsets(view: View, windowInsets: WindowInsetsCompat): WindowInsetsCompat
+    fun handleInsets(@Suppress("UNUSED_PARAMETER")view: View, windowInsets: WindowInsetsCompat): WindowInsetsCompat
     /** handles the width of the system status bar (top and bottom) and applies
      * margins in order to avoid overlapping of game elements
      */
@@ -175,6 +175,7 @@ class WelcomeActivity : AppCompatActivity() {
         if (maxLevel.series == 1 && maxLevel.number == 0)  // no level info, try other file
             migrateLevelInfo(prefsLegacy, prefsState)
         showLevelReached()
+        // change the title of the resume/play/new button accordingly
         val buttonResume = findViewById<Button>(R.id.continueGameButton)
         when {
             maxLevel.number == 0 -> buttonResume.text = getString(R.string.button_start_game)
@@ -183,6 +184,16 @@ class WelcomeActivity : AppCompatActivity() {
                 buttonResume.text = getString(R.string.play_level_x).format(Stage.numberToString(nextLevelToPlay.number, settings.showLevelsInHex))
             }
             else -> buttonResume.isEnabled = false
+
+        }
+        // set up the "extras" button if enabled
+        if (GameMechanics.showExtrasDialogue)
+        {
+            val buttonExtras: Button? = findViewById(R.id.infoButton)
+            buttonExtras?. let {
+                it.text = getString(R.string.extras_title)
+                it.setOnClickListener { displayExtrasDialog(it) }
+            }
         }
         // uncomment if there is a message to display
         // showVersionMessage()
@@ -242,6 +253,11 @@ class WelcomeActivity : AppCompatActivity() {
 
     fun displayAboutDialog(@Suppress("UNUSED_PARAMETER") v: View) {
         val intent = Intent(this, AboutActivity::class.java)
+        startActivity(intent)
+    }
+
+    fun displayExtrasDialog(@Suppress("UNUSED_PARAMETER") v: View) {
+        val intent = Intent(this, ExtrasActivity::class.java)
         startActivity(intent)
     }
 

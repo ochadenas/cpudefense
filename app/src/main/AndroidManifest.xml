@@ -35,7 +35,10 @@
             android:name=".activities.AboutActivity"
             android:screenOrientation="portrait"
             android:exported="false" />
-
+        <activity
+            android:name=".activities.ExtrasActivity"
+            android:screenOrientation="portrait"
+            android:exported="false" />
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
