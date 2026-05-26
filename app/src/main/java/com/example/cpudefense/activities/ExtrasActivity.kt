@@ -25,9 +25,11 @@ class ExtrasActivity : AppCompatActivity()
         WindowCompat.enableEdgeToEdge(window)
         supportActionBar?.hide()
         setContentView(R.layout.activity_extras)
+        /*
         findViewById<View>(android.R.id.content)?.let { rootView ->
             ViewCompat.setOnApplyWindowInsetsListener(rootView, ::handleInsets)
         }
+        */
         findViewById<ViewPager2>(R.id.viewPager).adapter = object : FragmentStateAdapter(this) {
             override fun getItemCount() = 3
             override fun createFragment(p: Int) = when (p) {
@@ -37,8 +39,16 @@ class ExtrasActivity : AppCompatActivity()
             }
         }
         val info = packageManager.getPackageInfo(this.packageName, PackageManager.GET_ACTIVITIES)
-        val versionView: TextView = findViewById(R.id.about_version)
-        versionView.text = getString(R.string.about_version).format(info.versionName)
+        //val versionView: TextView = findViewById(R.id.about_version)
+        //versionView.text = getString(R.string.about_version).format(info.versionName)
+
+        val dots = listOf(findViewById<View>(R.id.led1), findViewById(R.id.led2), findViewById(R.id.led3))
+        findViewById<ViewPager2>(R.id.viewPager).registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                dots.forEachIndexed { i, v -> v.setBackgroundColor(if (i == position) resources.getColor(R.color.led_green)
+                                                                   else resources.getColor(R.color.led_off)) }
+            }
+        })
     }
 
     fun handleInsets(view: View, windowInsets: WindowInsetsCompat): WindowInsetsCompat
@@ -55,15 +65,12 @@ class ExtrasActivity : AppCompatActivity()
 
     fun wiki(@Suppress("UNUSED_PARAMETER") v: View)
     {
-        val browserIntent = Intent(Intent.ACTION_VIEW, "https://github.com/ochadenas/cpudefense/wiki/Chip-Defense".toUri())
-        try {
-            startActivity(browserIntent)
-        }
-        catch (_: Exception) {}  // come here if no external app can handle the request
+        val intent = Intent(this, AboutActivity::class.java)
+        startActivity(intent)
     }
 
 
-    fun displayInfo(@Suppress("UNUSED_PARAMETER") v: View)
+    fun displayInfoDialog(@Suppress("UNUSED_PARAMETER") v: View)
     {
         val browserIntent = Intent(Intent.ACTION_VIEW, "https://github.com/ochadenas/cpudefense/wiki/Chip-Defense".toUri())
         try {
@@ -75,18 +82,17 @@ class ExtrasActivity : AppCompatActivity()
 
 }
 
-
 class Page1Fragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
         inflater.inflate(R.layout.page1, container, false)
 }
 
 class Page2Fragment : Fragment() {
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
         inflater.inflate(R.layout.page2, container, false)
 }
 
 class Page3Fragment : Fragment() {
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
         inflater.inflate(R.layout.page3, container, false)
 }
