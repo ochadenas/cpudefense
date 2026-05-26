@@ -121,5 +121,9 @@
         app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@drawable/deko_border_horizontal" />
 
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
