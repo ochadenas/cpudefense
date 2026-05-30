@@ -171,8 +171,6 @@
         app:layout_constraintVertical_bias="0.6"
         app:srcCompat="@drawable/mask"
         tools:ignore="SpeakableTextPresentCheck" />
-    <!-- app:layout_constraintTop_toBottomOf="@+id/gameTitle" -->
-
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/functionButton"

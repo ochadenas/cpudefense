@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/extras_fragment"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.ExtrasActivity">
+
+
+    <ImageView
+        android:id="@+id/seven_segment_clock"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="32dp"
+        android:layout_marginBottom="32dp"
+        app:srcCompat="@drawable/mask"
+        tools:ignore="SpeakableTextPresentCheck" />
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/button_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="24dp"
+        app:layout_constraintBottom_toTopOf="@id/swipe_text_view"
+        app:layout_constraintTop_toBottomOf="@id/seven_segment_clock"
+        app:layout_constraintVertical_bias="0.4"
+        >
+
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button_wiki"
+            android:layout_width="@dimen/hp_button_width_large"
+            android:layout_height="@dimen/hp_button_height"
+            android:background="@drawable/hp_key"
+            android:onClick="wiki"
+            android:text="@string/link_wiki"
+            android:textColor="@color/white"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button_releasenotes"
+            android:layout_width="@dimen/hp_button_width_large"
+            android:layout_height="@dimen/hp_button_height"
+            android:layout_marginTop="@dimen/hp_button_height_margin"
+            android:background="@drawable/hp_key"
+            android:onClick="releaseNotes"
+            android:text="@string/button_releasenotes"
+            android:textColor="@color/white"
+            app:layout_constraintStart_toStartOf="@id/button_wiki"
+            app:layout_constraintTop_toBottomOf="@id/button_wiki" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/swipe_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="16dp"
+        android:text="@string/extras_swipemessage"
+        android:textColor="@color/text_lightamber"
+        android:textSize="@dimen/dialog_text_size"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
