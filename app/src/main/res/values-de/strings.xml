@@ -332,4 +332,8 @@ Das Verschieben ist gleichbedeutend mit einer Division durch 2."
     <string name="warning_version_mismatch">Die ausgewählte Datei enthält Daten von Version %s, die sich von der aktuellen Spielversion %s unterscheidet.</string>
     <string name="shithappens_1">Machste nix …</string>
     <string name="shithappens_2">Also wirklich …</string>
+    <string name="extras_title">Extras</string>
+    <string name="level_editor_title">Schaltkreis-Editor</string>
+    <string name="url_releasenotes_localized">%5BDE%5D-Release-Notes</string>
+    <string name="message_open_in_browser">Zeige Seite im Browser</string>
 </resources>

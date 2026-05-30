@@ -62,7 +62,6 @@ open class SevenSegmentDisplay(
     override fun update() {
     }
 
-
     open fun getDisplayBitmap(number: Int, ledColor: LedColors, isLit: Boolean = true, radix: Int = 10): Bitmap
     {
         val bitmap = createBitmap(numberOfDigits * sizeX + 2 * margin, sizeY + 2 * margin)

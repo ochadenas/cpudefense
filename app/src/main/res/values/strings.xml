@@ -410,5 +410,8 @@ The programming language Pascal is named after him."</string>
     <string name="three_question_marks" translatable="false">\???</string>
     <string name="extras_title">Extras</string>
     <string name="level_editor_title">Circuit Editor</string>
-    <string name="extras_swipemessage">Swipe left and right</string>
+    <string name="extras_swipemessage" translatable="false">Swipe left and right</string>
+    <string name="url_releasenotes_base" translatable="false">https://github.com/ochadenas/cpudefense/wiki/%s</string>
+    <string name="url_releasenotes_localized">%5BEN%5D-Release-Notes</string>
+    <string name="message_open_in_browser">Showing page in browser …</string>
 </resources>

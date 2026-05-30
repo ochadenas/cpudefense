@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
 import androidx.core.view.ViewCompat
@@ -17,11 +18,15 @@ import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.setPadding
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.example.cpudefense.R
 import com.example.cpudefense.extras.SevenSegmentClock
-import com.example.cpudefense.gameElements.SevenSegmentDisplay
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 
 class ExtrasActivity : AppCompatActivity()
@@ -57,7 +62,7 @@ class ExtrasActivity : AppCompatActivity()
         })
     }
 
-    fun handleInsets(view: View, windowInsets: WindowInsetsCompat): WindowInsetsCompat
+    fun handleInsets(@Suppress("UNUSED_PARAMETER")view: View, windowInsets: WindowInsetsCompat): WindowInsetsCompat
     {
         windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
         return windowInsets
@@ -70,28 +75,25 @@ class ExtrasActivity : AppCompatActivity()
 
     fun wiki(@Suppress("UNUSED_PARAMETER") v: View)
     {
-        val intent = Intent(this, AboutActivity::class.java)
-        startActivity(intent)
+        val browserIntent = Intent(Intent.ACTION_VIEW, "https://github.com/ochadenas/cpudefense/wiki/Chip-Defense".toUri())
+        try {
+            Toast.makeText(this, resources.getString(R.string.message_open_in_browser), Toast.LENGTH_SHORT).show()
+            startActivity(browserIntent)
+        }
+        catch (_: Exception) {}  // come here if no external app can handle the request
     }
+
 
     fun releaseNotes(@Suppress("UNUSED_PARAMETER") v: View)
     {
+        val url = resources.getString(R.string.url_releasenotes_base).format(resources.getString(R.string.url_releasenotes_localized))
+        Toast.makeText(this, resources.getString(R.string.message_open_in_browser), Toast.LENGTH_SHORT).show()
+        val browserIntent = Intent(Intent.ACTION_VIEW, url.toUri())
         try {
-
-            val contentView = findViewById<androidx.constraintlayout.widget.ConstraintLayout>(R.id.extras_fragment)
-            contentView.removeAllViews()
-            val textView = TextView(this)
-            textView.text = getString(R.string.ZZ_release_notes)
-            textView.setPadding(8)
-            // textView.typeface = ResourcesCompat.getFont(this, R.font.ubuntu_mono_bold)
-            textView.setTextColor(Color.WHITE)
-            textView.textSize = 12f
-            textView.movementMethod = ScrollingMovementMethod()
-            contentView.addView(textView)
+            startActivity(browserIntent)
         }
-        catch (_: Exception) {}
+        catch (_: Exception) {}  // come here if no external app can handle the request
     }
-
 
     fun displayInfoDialog(@Suppress("UNUSED_PARAMETER") v: View)
     {
@@ -125,17 +127,40 @@ class AboutFragment : Fragment() {
 }
 
 class ExtrasBasicFragment : Fragment() {
+    lateinit var contentsView: View
     lateinit var clock: SevenSegmentClock
+    val isActive: Boolean = true
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?
     {
-        val view = inflater.inflate(R.layout.extras_basic, container, false)
+        contentsView = inflater.inflate(R.layout.extras_basic, container, false)
         clock = SevenSegmentClock(resources.getDimension(R.dimen.sevensegment_display_height).toInt(),
                             requireActivity() as ExtrasActivity)
-        with (view)
-        {
-            val clockView = findViewById<ImageView>(R.id.seven_segment_clock)
-            clockView.setImageBitmap(clock.getDisplayBitmap())
+        updateClock()
+        return contentsView
+    }
+
+    fun updateClock()
+    {
+        val clockView = contentsView.findViewById<ImageView>(R.id.seven_segment_clock)
+        clockView?.setImageBitmap(clock.getDisplayBitmap())
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val job = lifecycleScope.launch {
+            while (isActive) {
+                updateClock()
+                delay(900)
+            }
         }
-        return view
+
+        // stop clock when fragment gets destroyed */
+        viewLifecycleOwner.lifecycle.addObserver(LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_DESTROY) {
+                job.cancel()
+            }
+        })
     }
 }

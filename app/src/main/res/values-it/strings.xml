@@ -302,4 +302,8 @@
     <string name="warning_version_mismatch">Il file selezionato contiene dati della versione %s, diversa dalla versione attuale del gioco %s.</string>
     <string name="shithappens_1">Allora …</string>
     <string name="shithappens_2">Dai, su ...!</string>
+    <string name="extras_title">Extras</string>
+    <string name="level_editor_title">Editore dei circuiti</string>
+    <string name="url_releasenotes_localized">%5BIT%5D-Release-Notes</string>
+    <string name="message_open_in_browser">Mostro la pagina nel browser</string>
 </resources>
