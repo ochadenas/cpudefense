@@ -12,7 +12,14 @@ import com.example.cpudefense.networkmap.Viewport
 import com.example.cpudefense.utils.setTopLeft
 import androidx.core.graphics.createBitmap
 
-class SevenSegmentDisplay(private val numberOfDigits: Int, val size: Int, activity: Activity): GameElement()
+open class SevenSegmentDisplay(
+    /** the (fixed) number of decimal or hex digits in the display */
+    private val numberOfDigits: Int,
+    /** desired height in dp. Must include the display density */
+    val size: Int,
+    /** required to access resources */
+    activity: Activity)
+    : GameElement()
 {
     enum class LedColors { GREEN, RED, YELLOW, WHITE }
     private var resources: Resources = activity.resources
@@ -56,7 +63,7 @@ class SevenSegmentDisplay(private val numberOfDigits: Int, val size: Int, activi
     }
 
 
-    fun getDisplayBitmap(number: Int, ledColor: LedColors, isLit: Boolean = true, radix: Int = 10): Bitmap
+    open fun getDisplayBitmap(number: Int, ledColor: LedColors, isLit: Boolean = true, radix: Int = 10): Bitmap
     {
         val bitmap = createBitmap(numberOfDigits * sizeX + 2 * margin, sizeY + 2 * margin)
         if ((radix <= 0) || (radix > 16))

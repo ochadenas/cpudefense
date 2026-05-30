@@ -9,4 +9,5 @@
     <dimen name="hp_button_width_large">240dp</dimen>
     <dimen name="hp_button_height">48dp</dimen>
     <dimen name="hp_button_height_margin">@dimen/hp_button_height</dimen>
+    <dimen name="sevensegment_display_height">80dp</dimen>
 </resources>

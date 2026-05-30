@@ -8,6 +8,7 @@ import android.text.method.ScrollingMovementMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
@@ -19,6 +20,8 @@ import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.example.cpudefense.R
+import com.example.cpudefense.extras.SevenSegmentClock
+import com.example.cpudefense.gameElements.SevenSegmentDisplay
 
 
 class ExtrasActivity : AppCompatActivity()
@@ -122,6 +125,17 @@ class AboutFragment : Fragment() {
 }
 
 class ExtrasBasicFragment : Fragment() {
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
-        inflater.inflate(R.layout.extras_basic, container, false)
+    lateinit var clock: SevenSegmentClock
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?
+    {
+        val view = inflater.inflate(R.layout.extras_basic, container, false)
+        clock = SevenSegmentClock(resources.getDimension(R.dimen.sevensegment_display_height).toInt(),
+                            requireActivity() as ExtrasActivity)
+        with (view)
+        {
+            val clockView = findViewById<ImageView>(R.id.seven_segment_clock)
+            clockView.setImageBitmap(clock.getDisplayBitmap())
+        }
+        return view
+    }
 }

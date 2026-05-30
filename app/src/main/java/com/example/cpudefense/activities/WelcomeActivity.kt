@@ -89,7 +89,7 @@ class WelcomeActivity : AppCompatActivity() {
         // display as graphics:
         var displayLit = true
         val display =
-            SevenSegmentDisplay(4, (80 * resources.displayMetrics.density).toInt(), this)
+            SevenSegmentDisplay(4, resources.getDimension(R.dimen.sevensegment_display_height).toInt(), this)
         val imageView = findViewById<ImageView>(R.id.sevenSegmentDisplay)
         val radix = if (settings.showLevelsInHex) 16 else 10
         if (maxLevel.number == 0)
