@@ -10,7 +10,7 @@ import java.util.Locale
 class SevenSegmentClock(size: Int, activity: ExtrasActivity): SevenSegmentDisplay(6, size, activity) {
     fun getDisplayBitmap(): Bitmap
     {
-        return getDisplayBitmap(currentTimeString().toInt(), LedColors.RED, true, 10)
+        return getDisplayBitmap(currentTimeString().toInt(), LedColors.RED, true, 10, dotPosition = listOf(1, 3))
     }
 
     fun currentTimeString(): String

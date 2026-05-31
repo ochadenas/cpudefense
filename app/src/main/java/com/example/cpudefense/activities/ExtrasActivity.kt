@@ -2,9 +2,7 @@ package com.example.cpudefense.activities
 
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Color
 import android.os.Bundle
-import android.text.method.ScrollingMovementMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,7 +14,6 @@ import androidx.core.net.toUri
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.setPadding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
@@ -46,7 +43,7 @@ class ExtrasActivity : AppCompatActivity()
             it.adapter = object : FragmentStateAdapter(this) {
                 override fun getItemCount() = 3
                 override fun createFragment(p: Int) = when (p) {
-                    0 -> Page1Fragment()
+                    0 -> LevelStatisticsFragment()
                     2 -> aboutFragment
                     else -> basicFragment
                 }
@@ -107,9 +104,9 @@ class ExtrasActivity : AppCompatActivity()
 
 }
 
-class Page1Fragment : Fragment() {
+class LevelStatisticsFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
-        inflater.inflate(R.layout.page1, container, false)
+        inflater.inflate(R.layout.statistics, container, false)
 }
 
 class AboutFragment : Fragment() {

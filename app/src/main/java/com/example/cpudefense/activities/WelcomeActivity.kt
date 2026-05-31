@@ -86,10 +86,11 @@ class WelcomeActivity : AppCompatActivity() {
     private fun showLevelReached()
             /** displays the max level reached so far as graphical display */
     {
+        val numberOfDigits = 4
         // display as graphics:
         var displayLit = true
         val display =
-            SevenSegmentDisplay(4, resources.getDimension(R.dimen.sevensegment_display_height).toInt(), this)
+            SevenSegmentDisplay(numberOfDigits, resources.getDimension(R.dimen.sevensegment_display_height).toInt(), this)
         val imageView = findViewById<ImageView>(R.id.sevenSegmentDisplay)
         val radix = if (settings.showLevelsInHex) 16 else 10
         if (maxLevel.number == 0)
@@ -99,21 +100,21 @@ class WelcomeActivity : AppCompatActivity() {
                 display.getDisplayBitmap(
                         maxLevel.number,
                         SevenSegmentDisplay.LedColors.GREEN,
-                        displayLit, radix
+                        displayLit, radix, listOf(numberOfDigits-1)
                 )
             )
             GameMechanics.SERIES_TURBO -> imageView.setImageBitmap(
                 display.getDisplayBitmap(
                         maxLevel.number,
                         SevenSegmentDisplay.LedColors.YELLOW,
-                        displayLit, radix
+                        displayLit, radix, listOf(numberOfDigits-1)
                 )
             )
             else -> imageView.setImageBitmap(
                 display.getDisplayBitmap(
                         maxLevel.number,
                         SevenSegmentDisplay.LedColors.RED,
-                        displayLit, radix
+                        displayLit, radix, listOf(numberOfDigits-1)
                 )
             )
         }

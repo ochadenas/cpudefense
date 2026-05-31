@@ -7,6 +7,17 @@
     android:layout_height="match_parent"
     tools:context=".activities.ExtrasActivity">
 
+    <TextView
+        android:id="@+id/title_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:text="@string/extras_title"
+        android:textColor="@color/text_white"
+        android:textSize="@dimen/extras_heading_size"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 
     <ImageView
         android:id="@+id/seven_segment_clock"
@@ -14,7 +25,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/title_view"
         android:layout_marginTop="32dp"
         android:layout_marginBottom="32dp"
         app:srcCompat="@drawable/mask"

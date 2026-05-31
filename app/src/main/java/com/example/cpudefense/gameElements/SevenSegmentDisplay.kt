@@ -6,6 +6,8 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory.*
 import android.graphics.Canvas
 import android.graphics.Paint
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffXfermode
 import android.graphics.Rect
 import com.example.cpudefense.R
 import com.example.cpudefense.networkmap.Viewport
@@ -42,6 +44,15 @@ open class SevenSegmentDisplay(
         decodeResource(resources, R.drawable.digit_e),
         decodeResource(resources, R.drawable.digit_f)
     )
+    private val dotMask = decodeResource(resources, R.drawable.dot_mask)
+    /** a second array for all digit mask, but additionally with the dot cut out  */
+    private val digitMaskWithDot: List<Bitmap> = digitMask.map { bitmap ->
+        val resultBitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true)
+        val canvas = Canvas(resultBitmap)
+        val paintMask = Paint(Paint.ANTI_ALIAS_FLAG).apply { xfermode = PorterDuffXfermode(PorterDuff.Mode.DST_OUT) }
+        canvas.drawBitmap(dotMask, 0f, 0f, paintMask)
+        resultBitmap
+    }
     private val backgroundLight = hashMapOf<LedColors, Bitmap>(
         LedColors.GREEN  to decodeResource(resources, R.drawable.led_green),
         LedColors.YELLOW to decodeResource(resources, R.drawable.led_yellow),
@@ -62,7 +73,11 @@ open class SevenSegmentDisplay(
     override fun update() {
     }
 
-    open fun getDisplayBitmap(number: Int, ledColor: LedColors, isLit: Boolean = true, radix: Int = 10): Bitmap
+    open fun getDisplayBitmap(number: Int, ledColor: LedColors, isLit: Boolean = true, radix: Int = 10,
+                              dotPosition: List<Int> = listOf()): Bitmap
+            /** creates the display for the bitmap.
+             * @param dotPosition a list of positions that have decimal dots lit
+             */
     {
         val bitmap = createBitmap(numberOfDigits * sizeX + 2 * margin, sizeY + 2 * margin)
         if ((radix <= 0) || (radix > 16))
@@ -77,7 +92,10 @@ open class SevenSegmentDisplay(
             destRect.setTopLeft(margin+d*sizeX, margin)
             if (isLit) {
                 canvas.drawBitmap(backgroundLight[ledColor]!!, null, destRect, paint)
-                canvas.drawBitmap(digitMask[digit], null, destRect, paint)
+                if (d in dotPosition)
+                    canvas.drawBitmap(digitMaskWithDot[digit], null, destRect, paint)
+                else
+                    canvas.drawBitmap(digitMask[digit], null, destRect, paint)
             }
             canvas.drawBitmap(casingMask, null, destRect, paint)
         }
