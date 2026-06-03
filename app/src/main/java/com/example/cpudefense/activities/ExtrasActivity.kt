@@ -1,8 +1,12 @@
 package com.example.cpudefense.activities
 
+import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Rect
 import android.os.Bundle
+import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,6 +26,8 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.example.cpudefense.R
 import com.example.cpudefense.extras.SevenSegmentClock
+import com.example.cpudefense.extras.StatisticsMapView
+import com.example.cpudefense.gameElements.ScoreBoard
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -30,6 +36,7 @@ class ExtrasActivity : AppCompatActivity()
 {
     val aboutFragment = AboutFragment()
     val basicFragment = ExtrasBasicFragment()
+    val statisticsFragment = LevelStatisticsFragment()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,7 +50,7 @@ class ExtrasActivity : AppCompatActivity()
             it.adapter = object : FragmentStateAdapter(this) {
                 override fun getItemCount() = 3
                 override fun createFragment(p: Int) = when (p) {
-                    0 -> LevelStatisticsFragment()
+                    0 -> statisticsFragment
                     2 -> aboutFragment
                     else -> basicFragment
                 }
@@ -53,7 +60,7 @@ class ExtrasActivity : AppCompatActivity()
         val dots = listOf(findViewById<View>(R.id.led1), findViewById(R.id.led2), findViewById(R.id.led3))
         findViewById<ViewPager2>(R.id.viewPager).registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
-                dots.forEachIndexed { i, v -> v.setBackgroundColor(if (i == position) resources.getColor(R.color.led_green)
+                dots.forEachIndexed { i, v -> v.setBackgroundColor(if (i == position) resources.getColor(R.color.led_red_glow)
                                                                    else resources.getColor(R.color.led_off)) }
             }
         })
@@ -105,8 +112,25 @@ class ExtrasActivity : AppCompatActivity()
 }
 
 class LevelStatisticsFragment : Fragment() {
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
-        inflater.inflate(R.layout.statistics, container, false)
+    var statisticsMapView: StatisticsMapView? = null
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?
+    {
+        val view = inflater.inflate(R.layout.statistics, container, false)
+        statisticsMapView = view.findViewById(R.id.statistics_map_view)
+        return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+    }
+
+    fun setCaption(cash: Int)
+    /** updates the information in the caption below the map */
+    {
+        val cashString = ScoreBoard.informationToString(cash)
+        view?.findViewById<TextView>(R.id.caption_view)?.text = "Total information gained: $cashString"
+    }
 }
 
 class AboutFragment : Fragment() {

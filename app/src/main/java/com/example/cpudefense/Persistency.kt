@@ -38,9 +38,7 @@ class Persistency(private val activity: Activity)
 
     // define preferences files
     /** file that holds all settings and preferences.
-     * For historical reasons, there are some more data in this file, such as:
-     *
-     */
+     * No longer used. */
     private val prefsLegacy: SharedPreferences = activity.getSharedPreferences(filename_legacy, AppCompatActivity.MODE_PRIVATE)
     /** file for the user's preferences and settings */
     @Suppress("unused")
@@ -218,12 +216,6 @@ class Persistency(private val activity: Activity)
         try {
             val key = seriesKey[series]
             var json = jsonString ?: prefsSaves.getString(key, "none")
-            if (json == "none")
-            {
-                // Migration hack: If the data is not in saves.xml, get it from the legacy file and then delete it there.
-                json = prefsLegacy.getString(seriesKey[series], "none")
-                // prefsLegacy.edit().let { it.remove(key); it.apply() } // TODO: activate this again in later versions
-            }
             val data: SerializableLevelSummary =
                 gson.fromJson(json, SerializableLevelSummary::class.java)
             return data.level

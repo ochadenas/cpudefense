@@ -5,6 +5,7 @@
     <dimen name="dialog_button_margin_horizontal">40dp</dimen>
     <dimen name="dialog_annotation_size">12sp</dimen>
     <dimen name="extras_heading_size">32sp</dimen>
+    <dimen name="statview_label_size">32sp</dimen>
     <dimen name="hp_button_width">160dp</dimen>
     <dimen name="hp_button_width_large">240dp</dimen>
     <dimen name="hp_button_height">48dp</dimen>

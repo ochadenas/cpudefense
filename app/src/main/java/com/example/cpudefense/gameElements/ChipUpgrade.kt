@@ -176,7 +176,7 @@ class ChipUpgrade(
         paintText.typeface = Typeface.create("sans-serif-condensed", Typeface.ITALIC)
         paintText.textSize = (GameView.chipTextSize - 0) * gameView.textScaleFactor * gameView.viewport.userScale
         paintText.color = if (canAfford()) paintFrame.color else Color.YELLOW
-        val priceText = gameView.scoreBoard.informationToString(price)
+        val priceText = ScoreBoard.informationToString(price)
         paintText.getTextBounds(priceText, 0, priceText.length, labelRect)
         //
         labelRect.setBottomLeft(actualRect.centerX(), actualRect.top+2)

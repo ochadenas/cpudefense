@@ -53,22 +53,6 @@ class ScoreBoard(val gameView: GameView): GameElement()
         recreateBitmap()
     }
 
-    fun informationToString(number: Int): String {
-        if (number < 512 && number > -512)
-            return "%d bit".format(number)
-        val bytes: Int = number/8
-        if (bytes < 800 && bytes > -800)
-            return "%d B".format(bytes)
-        val kiB: Float = bytes.toFloat()/1024.0f
-        if (kiB < 800 && kiB > -800)
-            return "%.1f KiB".format(kiB)
-        val mibiBytes: Float = kiB/1024.0f
-        if (mibiBytes < 800 && mibiBytes > -800)
-            return "%.1f MiB".format(mibiBytes)
-        val  gibiBytes: Float = mibiBytes/1024.0f
-        return "%.1f GiB".format(gibiBytes)
-    }
-
     override fun update() {
     }
 
@@ -478,6 +462,27 @@ class ScoreBoard(val gameView: GameView): GameElement()
                 displayHeader(canvas, Rect(0, 0, area.width(), area.height()), textToDisplay)
             }
             lastValue = gameView.gameMechanics.timeBetweenFrames
+        }
+    }
+
+    companion object {
+        fun informationToString(number: Int?): String {
+            number?.let { number ->
+                if (number < 512 && number > -512)
+                    return "%d bit".format(number)
+                val bytes: Int = number / 8
+                if (bytes < 800 && bytes > -800)
+                    return "%d B".format(bytes)
+                val kiB: Float = bytes.toFloat() / 1024.0f
+                if (kiB < 800 && kiB > -800)
+                    return "%.1f KiB".format(kiB)
+                val mibiBytes: Float = kiB / 1024.0f
+                if (mibiBytes < 800 && mibiBytes > -800)
+                    return "%.1f MiB".format(mibiBytes)
+                val gibiBytes: Float = mibiBytes / 1024.0f
+                return "%.1f GiB".format(gibiBytes)
+            }
+            return ""
         }
     }
 }
