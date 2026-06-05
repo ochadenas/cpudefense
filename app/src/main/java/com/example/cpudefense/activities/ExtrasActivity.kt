@@ -1,12 +1,8 @@
 package com.example.cpudefense.activities
 
-import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Rect
 import android.os.Bundle
-import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,6 +21,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.example.cpudefense.R
+import com.example.cpudefense.extras.MemoryMapView
 import com.example.cpudefense.extras.SevenSegmentClock
 import com.example.cpudefense.extras.StatisticsMapView
 import com.example.cpudefense.gameElements.ScoreBoard
@@ -112,12 +109,12 @@ class ExtrasActivity : AppCompatActivity()
 }
 
 class LevelStatisticsFragment : Fragment() {
-    var statisticsMapView: StatisticsMapView? = null
+    var memoryMapView: MemoryMapView? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?
     {
         val view = inflater.inflate(R.layout.statistics, container, false)
-        statisticsMapView = view.findViewById(R.id.statistics_map_view)
+        memoryMapView = view.findViewById(R.id.map_view)
         return view
     }
 

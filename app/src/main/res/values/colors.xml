@@ -77,6 +77,13 @@
     <color name="text_red">#D50000</color>
     <color name="text_lightred">#f04662</color>
 
+    <color name="series_normal">@color/text_green</color>
+    <color name="series_turbo">@color/text_amber</color>
+    <color name="series_endless">@color/text_red</color>
+    <color name="series_normal_2">@color/text_lightgreen</color>
+    <color name="series_turbo_2">@color/text_lightamber</color>
+    <color name="series_endless_2">@color/text_lightred</color>
+
     <color name="upgrade_inactive">#7C878C</color>
     <color name="upgrade_monochrome">#B9921C</color>
     <color name="upgrade_active_general">#79D5FF</color>

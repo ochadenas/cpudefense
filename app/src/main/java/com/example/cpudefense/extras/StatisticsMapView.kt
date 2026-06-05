@@ -1,6 +1,5 @@
 package com.example.cpudefense.extras
 
-import android.app.Activity
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
@@ -16,7 +15,9 @@ import com.example.cpudefense.R
 import com.example.cpudefense.Stage
 import com.example.cpudefense.activities.ExtrasActivity
 import com.example.cpudefense.utils.displayTextCenteredInRect
+import com.example.cpudefense.utils.setBottomRight
 import com.example.cpudefense.utils.setTopLeft
+import kotlin.random.Random
 
 class StatisticsMapView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
     AppCompatImageView(context, attrs, defStyleAttr)
@@ -31,8 +32,12 @@ class StatisticsMapView @JvmOverloads constructor(context: Context, attrs: Attri
     /** the amount of cash that is represented by one pixel */
     var scaleFactor = 1.0f
     val paint = Paint().apply {
-        isAntiAlias = true
+        isAntiAlias = false
         style = Paint.Style.FILL
+    }
+    val paintOutline = Paint().apply {
+        isAntiAlias = false
+        style = Paint.Style.STROKE
     }
     val paintText = Paint().apply {
         isAntiAlias = true
@@ -79,12 +84,49 @@ class StatisticsMapView @JvmOverloads constructor(context: Context, attrs: Attri
         var remainingArea = Rect(0, 0, width, height)
         stageDataList.sortedByDescending { it.amount }.takeWhile { it.amount > 1 }
             .forEach { summary ->
-                val color = (Math.random() * 16777215).toInt() or (0xFF shl 24)
-                val tile = MapTile(remainingArea, summary.amount.toFloat(), color, "%d:%d".format(summary.series, summary.number))
+                val color = colorOfStage(summary.series, summary.number)
+                val tile = MapTile(remainingArea, summary.amount.toFloat(),
+                                   color.first, color.second,
+                                   "%d:%d".format(summary.series, summary.number))
                 listOfTiles.add(tile)
                 remainingArea = tile.remainingArea
             }
     }
+
+    fun colorOfStage(series: Int, number: Int): Pair<Int, Int>
+            /** @return the pair of colour and border colour */
+    {
+        var baseColor = Color.WHITE
+        var borderColor = Color.WHITE
+        when (series)
+        {
+            GameMechanics.SERIES_NORMAL -> {
+                baseColor = resources.getColor(R.color.series_normal)
+                borderColor = resources.getColor(R.color.series_normal_2)
+            }
+            GameMechanics.SERIES_TURBO -> {
+                baseColor = resources.getColor(R.color.series_turbo)
+                borderColor = resources.getColor(R.color.series_turbo_2)
+            }
+            GameMechanics.SERIES_ENDLESS -> {
+                baseColor = resources.getColor(R.color.series_endless)
+                borderColor = resources.getColor(R.color.series_endless_2)
+            }
+            else -> {}
+        }
+        // vary colour depending on stage number
+        val red = Color.red(baseColor)
+        val green = Color.green(baseColor)
+        val blue = Color.blue(baseColor)
+        val hsv = FloatArray(3)
+        Color.RGBToHSV(red, green, blue, hsv)
+        hsv[0] += (number % 11 - 5) * 4f // hue
+        hsv[1] -= (number % 7) * 0.04f // saturation
+        hsv[2] -= (number % 3) * 0.04f // brightness
+        val varColor = Color.HSVToColor(hsv)
+        return Pair(varColor, borderColor)
+    }
+
 
     fun createBitmapFromTiles(): Bitmap? {
         if (width>0 && height>0) {
@@ -92,7 +134,9 @@ class StatisticsMapView @JvmOverloads constructor(context: Context, attrs: Attri
             val canvas = Canvas(bitmap)
             listOfTiles.forEach { tile ->
                 paint.color = tile.color
+                paintOutline.color = tile.borderColor
                 canvas.drawRect(tile.area, paint)
+                canvas.drawRect(tile.area, paintOutline)
                 tile.area.displayTextCenteredInRect(canvas, tile.text, paintText)
             }
             return bitmap
@@ -100,26 +144,35 @@ class StatisticsMapView @JvmOverloads constructor(context: Context, attrs: Attri
         return null
     }
 
-    inner class MapTile(val parentArea: Rect, val amount: Float, val color: Int, val text: String)
+    inner class MapTile(val parentArea: Rect, val amount: Float, val color: Int, val borderColor: Int, val text: String)
     {
         var area: Rect =
             let {
                 var newWidth = parentArea.width()
                 var newHeight = parentArea.height()
-                if (parentArea.width() > parentArea.height())  // area is streched horizontally
+                val stretchFactor: Float = parentArea.width() / parentArea.height().toFloat() // greater than 1.0 if tile is stretched horizontally
+                if (stretchFactor> Random.nextFloat()+0.5f)
                     newWidth = (amount / (this@StatisticsMapView.scaleFactor * parentArea.height())).toInt()
                 else // area is stretched vertically
                     newHeight = (amount / (this@StatisticsMapView.scaleFactor * parentArea.width())).toInt()
-                Rect(0, 0, newWidth, newHeight).setTopLeft(parentArea.left, parentArea.top)
+                var newRect = Rect(0, 0, newWidth, newHeight)
+                if (Random.nextBoolean())
+                    newRect.setTopLeft(parentArea.left, parentArea.top)
+                else
+                    // newRect.setTopLeft(parentArea.left, parentArea.top)
+                    newRect.setBottomRight(parentArea.right, parentArea.bottom)
             }
 
         var remainingArea: Rect =
             let {
                 var newRect = Rect(parentArea)
-                if (area.width() < parentArea.width())
-                    newRect.left = area.right
-                else if (area.height() < parentArea.height())
-                    newRect.top = area.bottom
+                when
+                {
+                    area.left > parentArea.left -> newRect.right = area.left
+                    area.right < parentArea.right -> newRect.left = area.right
+                    area.top > parentArea.top -> newRect.bottom = area.top
+                    area.bottom < parentArea.bottom -> newRect.top = area.bottom
+                }
                 newRect
             }
     }
