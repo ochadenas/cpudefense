@@ -1,0 +1,424 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name" translatable="false">ChipDefense</string>
+    <string name="app_name_last" translatable="false">Defense</string>
+
+    <string name="button_start_game">开始新游戏</string>
+    <string name="button_reset_progress">重置游戏进度</string>
+    <string name="quit">退出</string>
+    <string name="button_resume">继续游戏</string>
+    <string name="button_playlevel">开始本关</string>
+    <string name="button_nextlevel">进入下一关</string>
+    <string name="failed">本关未通过。</string>
+    <string name="success">全部关卡已通关！</string>
+    <string name="cleared">本关已通关。</string>
+    <string name="last_stage">上一关：%s</string>
+    <string name="win">你赢了。</string>
+    <string name="next_stage">下一关：%s</string>
+    <string name="coins_gathered">已获得加密币：%d。</string>
+    <string name="game_start">游戏开始。</string>
+    <string name="enter_game">进入</string>
+    <string name="scoreboard_inf">信息</string>
+    <string name="scoreboard_waves">波次</string>
+    <string name="scoreboard_status">状态</string>
+    <string name="scoreboard_coins">加密币</string>
+    <string name="selectLevel">选择关卡</string>
+    <string name="play_selected_level">开始所选关卡</string>
+    <string name="button_marketplace">英雄</string>
+    <string name="button_refund_all">全部重置</string>
+    <string name="button_refund_one">解雇</string>
+    <string name="button_purchase">雇佣 [1 加密币]</string>
+    <string name="button_purchase_plural">雇佣 [%d 加密币]</string>
+    <string name="cost_desc">[花费：%d]</string>
+    <string name="level_entry">第 %s 关</string>
+    <string name="level_selector">关卡选择</string>
+    <string name="query_reset">确定要重置所有英雄吗？</string>
+    <string name="query_restart_game">确定要重置当前所有进度吗？</string>
+    <string name="no">否</string>
+    <string name="yes">是</string>
+    <string name="choice_1">是，从头开始新游戏。</string>
+    <string name="choice_2">仅重置"无尽"模式关卡。</string>
+    <string name="choice_3">否，保留当前进度。</string>
+    <string name="import_choice_yes">是，覆盖当前状态。</string>
+    <string name="import_choice_no">否，保留当前游戏。</string>
+    <string name="close">关闭</string>
+
+    <string name="instr_1">
+"您的计算机正受到一种邪恶病毒的入侵。恶意代码片段——以 1 和 0 的形式呈现——试图突破防线进入 CPU。
+
+点击空插槽即可添加一枚芯片来抵御攻击，然后再次点击确认您的选择。
+
+最基本的芯片是“SUB 1”，它能从攻击者的数值中减去 1。它会把 1 变成 0，并让 0 消失。只有这样，它们才不再构成威胁。"
+    </string>
+    <string name="instr_2">
+"您也可以点击攻击者。这会将其数值反转：1 变成 0，0 变成 1。
+
+将 0 反转反而会让攻击者变得更加危险，所以请小心，不要看到什么就点什么。"
+    </string>
+    <string name="instr_3">
+"本游戏中的货币是“信息”。它显示在左下角。
+
+摧毁攻击代码，即可获取关于病毒的信息。用这些信息来购买更多芯片，或升级已有的芯片。"
+    </string>
+    <string name="instr_4">
+"一些小提示：
+
+记住，在二进制中，
+10 等于 2，
+11 等于 3，
+100 等于 4，
+以此类推。
+
+尽量优先点击以“1”开头的数字。这能显著降低攻击者的数值，让关卡轻松很多。
+
+任何到达 CPU 的攻击者，无论数值多少，都会消耗你一条命。你必须至少有一个 SUB 芯片才能消灭它们。"
+    </string>
+    <string name="instr_5">
+"下一关将解锁一种新芯片："SHR 1"，即"右移 1 位"。
+
+所有数字向右移动一位，最左边的位补 0。
+
+例如，0110 右移后变成 0011。这相当于将数值除以 2。"
+    </string>
+    <string name="instr_6">
+"通关关卡可以获得加密币。这些加密币很有价值——你可以用来雇佣信息时代的强力英雄，他们能给你带来巨大的游戏优势。
+
+底部显示本关可获得的加密币上限。每损失一条命，奖励就会相应减少。
+
+如果没有拿满加密币，可以随时重玩本关。不过一旦拿到了上限数量，本关就不会再提供更多了。"
+    </string>
+    <string name="instr_7">
+"有时您会看到加密币随攻击者一起移动。摧毁攻击者即可收集加密币，即使重玩本关也可以反复收集。
+
+但要小心：移动的加密币比普通攻击者更强，一旦到达 CPU，同样会消耗您一条命。"
+    </string>
+    <string name="instr_7a">芯片在两次操作之间需要冷却。雇佣英雄可以降低芯片被蜂拥而至的攻击者压垮的风险。\n\n如果卡关了，可以重玩较低关卡，试着抓住那些移动的加密币。</string>
+    <string name="instr_8">"\n您可以卖掉已有的芯片来腾出插槽。大部分（但不是全部）信息会退还。\n\n请注意，处于激活状态的芯片会在消失前完成当前的冷却周期。"</string>
+    <string name="instr_9">"\n来认识一种新芯片。MEM（存储器）芯片接收一个数字并将其安全存入内存。亮起的小白灯表示内存中存有数值。\n\nMEM 芯片需要被"读出"（点击它）。点击芯片后冷却周期开始，之后内存插槽才能再次使用。如果看到粗白框提示，说明您应该点击该芯片。\n\n目前 MEM 芯片只能容纳一个攻击者。之后您可以购买升级来增加插槽数。\n\nMEM 芯片非常强大，可以消除任何攻击者，但它需要您的关注，而且速度相当慢。"</string>
+    <string name="instr_10">
+"累加器芯片（ACC）比其他芯片稍复杂一些，但对付大量攻击者时极为有效。它接收两个数字，将它们合并为一个结果。
+
+基础版本将两个数字相加。升级一次后可对输入数字进行 OR（或）运算。升级两次则使用 AND（与）运算。
+
+示例：如果数字 0110（即 6）和 0011（即 3）进入 ACC 芯片，结果分别是：
+ 1001（即 9）使用加法 [ACC +]
+ 0111（即 7）使用 OR  [ACC ∨]
+ 0010（即 2）使用 AND [ACC &amp;]。
+
+ACC 的优势在于速度极快。"
+    </string>
+    <string name="instr_11">
+"较大的数字以十六进制显示，前面带有"x"前缀。
+
+十六进制中，数字从 0 到 9，然后是 A 到 F。例如十六进制数 x0F 等于 15，即二进制 1111。"
+    </string>
+    <string name="instr_12">
+"再介绍两种芯片：ADD 和 SHL。\n\n它们分别是 SUB 和 SHR 的反操作：给数字加 1，以及将位左移。\n\n当然，它们对防守非常不利。您可以"升级"这些芯片来降低它们的强度，或者直接让它们消失。"
+    </string>
+    <string name="instr_13">
+"请注意，加密币不受 ACC 和 MEM 芯片的影响。"
+    </string>
+    <string name="instr_14">又一种芯片解锁了！\n\nCLK（时钟）芯片本身不影响攻击者。它的作用是加速板上的其他芯片。CLK 每滴答一次，所有其他芯片的冷却计时器都会重置，它们便准备好再次行动。\n\n升级可提高 CLK 的频率。</string>
+    <string name="instr_15">CPU 超频可能带来危险：芯片工作越快，发热越严重。\n\n每次时钟重置一个芯片时都会产生少量热量。超过 %d 度会损坏 CPU，意味着您可能损失一条命。</string>
+    <string name="instr_16">NOP 芯片（空操作）什么也不做。但它占着一个插槽，您可能想把它移除。\n\nNOP 2 芯片也什么也不做，不过它会做两次。</string>
+    <string name="instr_17">还有两种不受欢迎的芯片，讲完就齐了。\n\nDUP 会复制一段攻击代码。您将面对两个数值相同的攻击者，而不是一个。\n\nSPLT（分裂）做的事情类似，但不是简单复制数值，而是将数字一分为二。例如，xA4 会变成 xA0 和 x04。这有点像 ACC 的反操作：如果两个结果数字通过逻辑 OR 合并，就会得到原始值。</string>
+    <string name="instr_18">当心！偷袭！</string>
+    <string name="instr_22">请记住，SHR 芯片虽然强大但不能直接消灭攻击者。它们能快速削减大数值，但面对成群的小数值攻击者，多个 SUB 芯片可能是更划算的防御方式。</string>
+    <string name="instr_23">并非所有电子元件都是逻辑芯片。还有一些重要的经典模拟元件，比如电容器 [C] 或电阻 [R]。\n\n在本游戏中，电阻的作用是在一段时间内减慢攻击者的速度。其强度用三色环标示。攻击者越强，减速效果越明显。1 位数字几乎不受影响，而 8 位数字遇到大阻值电阻时会变得极慢。\n\n电阻会产生热量。有位英雄（克劳德·香农）可以将其部分热量转化为信息。</string>
+    <string name="instr_endless">您已成功通关所有关卡，赢得了游戏！\n\n如果愿意，可以继续挑战"无尽"模式——随机生成的电路会越来越难。在"无尽"系列中，您将不带任何英雄出战，也不能使用之前收集的加密币。\n\n您能走多远？</string>
+
+
+    <string name="turing">艾伦·图灵是计算机科学史上最重要的人物之一。他为理论计算奠定了诸多基础，如图灵机和图灵测试，并在密码学领域取得了重大突破。在波兰密码局前期工作的基础上，他领导了二战期间破解恩尼格玛密码的团队。他对战争结局的影响怎样强调都不为过。\n\n因同性恋身份，他遭受了严重的歧视。他于 1954 年去世，极有可能是自杀。\n</string>
+    <string name="lovelace">
+"阿达·洛夫莱斯伯爵夫人，被公认为编程概念的发明者。
+
+她与查尔斯·巴贝奇合作研制他的机械计算器。她为伯努利数的计算编写了一套指令集，这很可能是历史上第一个正式的程序。
+
+洛夫莱斯认识到可编程机器的能力远不止算术运算。她也是第一个区分符号概念（软件）和物理部件（硬件）的人。
+
+她于 1852 年去世，年仅 36 岁。"
+    </string>
+    <string name="hollerith">
+"数据存储和处理的起点，始于赫尔曼·霍勒里斯引入的打孔卡。他开发并销售了一种打孔卡片制表机，用于收集、分类和汇总信息，曾被许多国家用于人口普查等领域。
+
+1896 年，霍勒里斯创立了制表机器公司，这家公司后来发展成为国际商业机器公司（IBM）。"
+    </string>
+    <string name="osborne">
+"1981 年，亚当·奥斯本制造了第一台便携式计算机。“奥斯本 1”并非我们今天所说的笔记本电脑，它更像一个重逾 11 公斤的大手提箱。但它在一个紧凑的外壳中集成了计算机所需的一切：电源、键盘、两个软盘驱动器、一台 CRT 显示器和大量软件。
+
+奥斯本同时也是一位作家和图书出版商。"
+    </string>
+    <string name="cernettes">
+"Les Horribles Cernettes（简称 LHC）是欧洲研究机构 CERN 的高能摇滚乐队。她们也是"万维网上第一支乐队"。
+
+伯纳斯-李发明万维网之后，便开始寻找内容来填充它。Silvano de Gennaro 提供了一张 1992 年 7 月拍摄的 Cernettes 照片，这张照片成为了全世界浏览器窗口中显示的第一张乐队照片。"
+    </string>
+    <string name="knuth">"高德纳（唐纳德·欧文·克努特）是一位计算机科学家和数学家，对理论计算机科学做出了无数贡献。他最广为人知的是鸿篇巨制《计算机程序设计艺术》，这个项目始于 1962 年，至今尚未完成。为此，他顺手创造了 TeX 排版系统，如今已成为全球科学出版物的标准。"</string>
+    <string name="zuse">
+"第一台现代计算机由康拉德·楚泽于 1941 年制造。Z1 是一台可编程的机电式机器，基于数字原理运行，实现了布尔逻辑，甚至使用了浮点数。
+
+楚泽还创造了第一种高级编程语言"Plankalkül"。"
+    </string>
+    <string name="franke">
+"赫伯特·W·弗兰克是一位物理学家，以科幻小说和纪实作品的作者身份而闻名。
+
+他是计算机艺术和计算机图形学领域的先驱，提出了"控制论美学"的概念——即由电子设备和数值算法创造的艺术。"
+    </string>
+    <string name="vaughan">
+"多萝西·沃恩是 NASA 的"人工计算机"之一。她能够比当时的电子或机械设备更快、更可靠地求解复杂数学方程。与其他女性一起，她极大地推动了美国太空计划的发展。
+
+后来，作为 NASA 的管理者，她通过自学并教会员工 FORTRAN 编程语言，为电子计算机的引入做好了准备。"
+    </string>
+    <string name="tramiel">
+"少年时期，伊德克·特拉米尔斯基从奥斯维辛集中营幸存下来。1947 年他移民美国，1954 年创立了 Commodore International——一家打字机制造公司。1982 年，Commodore 推出了 C64，世界上第一台真正的家用计算机。
+
+创下销量纪录的 C64 不仅拥有高达 64 KiB 的内存，还具备高分辨率图形、数字声音、内置 BASIC 解释器和两个摇杆接口。无数人在这台经典的 C64 上迈出了进入信息时代的第一步。"
+    </string>
+    <string name="wiener">"诺伯特·维纳被认为是控制论的创始人——研究机器控制与调节的学科，因此他也是人工智能的先驱之一。他创造的词根"cyber"（控制论）如今已无处不在。\n\n他在数学理论方面成就斐然，尤其在模式识别和图像处理领域，并证明了多项数学定理。\n\n由于二战中的经历，他采取了日益坚定的和平主义立场，拒绝发表可能被军国主义者滥用的作品。"</string>
+    <string name="pascal">
+"布莱兹·帕斯卡是横跨数学、哲学和物理学多个领域的博学家。对于后来的信息时代而言，他的计算器——"Pascaline"——是一位早期的先驱。
+
+编程语言 Pascal 即以他的名字命名。"
+    </string>
+    <string name="hopper">"\n格蕾丝·布鲁斯特·默里·赫柏提出，计算机程序可以用人类可读的语言来编写，而不是用一连串的 1 和 0。她设计了 FLOW-MATIC 编程语言，从而发明了第一个编译器。"</string>
+    <string name="mandelbrot">本华·曼德博是分形几何最重要的奠基人。分形几何不仅能精妙地描述自然界中的许多结构，还能在计算机上创造出奇妙的图形。\n\n曼德博集合的图形化呈现风靡全球，开创了计算机艺术的新纪元。</string>
+    <string name="shannon">克劳德·艾尔伍德·香农被认为是信息论的奠基人，也是信息时代之父之一。他的重要成就之一是将布尔代数的数学理论转移到实际电路中，从而使现代数字计算机成为可能。\n\n香农发展了消息中信息与熵的概念，对密码学做出了重要贡献，并在人工智能领域进行了研究。此外，他还描述了一个下国际象棋的程序，并构建了一只能自己走出迷宫的机械鼠。</string>
+    <string name="kilby">杰克·圣克莱尔·基尔比提出了将半导体元件（如晶体管或二极管）集成在集成电路（IC）中，而不是在电路板上逐一连接组件的构想。这奠定了微芯片和处理器的基础，使现代电子产品的小型化成为可能。\n\n\n杰克·基尔比也被认为是袖珍计算器和热敏打印机的共同发明人。</string>
+    <string name="hamilton">年轻时的玛格丽特·伊莱恩·汉密尔顿从事军事项目编程工作。20 世纪 60 年代中期，她加入了阿波罗登月项目，并迅速成为软件开发负责人。她和她的团队负责为航天器和登月舱上的制导计算机进行编程和测试，宇航员的生命完全取决于程序的绝对可靠性。\n\n汉密尔顿创造了"软件工程"这一术语。此外，她还被做成了乐高人偶。</string>
+    <string name="boole">小乔治·布尔的成就在于他将逻辑概念形式化，使其成为数学的一部分。布尔代数是所有现代计算机内部运行的基础。\n\n布尔是一位鞋匠之子，除小学外从未上过任何学校。他自学了数学、拉丁语和希腊语、法语和德语。</string>
+    <string name="schneier">"布鲁斯·施奈尔是密码学和信息安全领域的专家。他撰写了多部重要著作，其中最著名的是《应用密码学》，并设计了多种加密算法。\n\n他不惧批评政府或跨国公司，只要他认为它们的行为不利于安全或侵犯了隐私权。"</string>
+    <string name="meier">席德·梅尔创造了多款最具影响力的策略游戏，彻底革新了这一游戏类型。他的游戏用相对简单的规则惊人地模拟了现实的复杂性，而且总是在讲述一个故事：铁路时代的故事、美国独立战争的故事，或者——在他最著名的作品《文明》中——六千年人类历史的故事。</string>
+    <string name="diffie">贝利·惠特菲尔德·迪菲与马丁·赫尔曼共同开发了以两人命名的 DH 密钥交换协议，从而为互联网上的安全连接创造了关键前提。\n\n迪菲也关注密码学的社会议题，是隐私权的坚定倡导者。</string>
+    <string name="conway">约翰·霍顿·康威最出名的是发明了康威的"生命游戏"——一种能在计算机屏幕上生成复杂生命图案的细胞自动机。他对数学游戏充满兴趣（无论是否借助计算机），并发表了最早的魔方求解算法之一。不过，他在"严肃"数学领域同样做出了大量贡献。</string>
+    <string name="leibniz">与帕斯卡一样，戈特弗里德·威廉·莱布尼茨也是他所处时代的一位伟大博学家。他在众多截然不同的科学领域都做出了重要贡献，数量之多无法在此一一列举。\n\n他为信息时代所做的贡献在于建造了复杂的机械计算器，这些设备可视为现代计算机的先驱。但最重要的是，他认识到了二进制系统和二进制数字编码的重要性，而这正是今天所有数字设备的基础。</string>
+    <string name="chappe">克劳德·沙普与他的四位兄弟——伊尼亚斯、皮埃尔·弗朗索瓦、勒内和亚伯拉罕——共同开发了光学电报。他的"快速书写器"是第一个能够快速远距离传输信息的系统，因而成为所有现代通信的先驱。大约在 1830 年，沙普信号机系统已将巴黎与法国乃至欧洲的许多重要城市连接起来。</string>
+    <string name="ohm">格奥尔格·西蒙·欧姆是最早尝试用数学描述电学过程的人之一。他的工作起初几乎没有引起关注，被视为学术上的花哨玩意。直到查尔斯·惠斯通认识到其重要性，并请阿达·洛夫莱斯将欧姆的一些著作翻译成英文，情况才有所改变。\n\n如今，他的名字与电阻密不可分。欧姆定律和电阻单位均以他命名。</string>
+    <string name="volta">亚历山德罗·朱塞佩·安东尼奥·阿纳斯塔西奥·伏特是一位实验物理学家，他质疑并推翻了当时流行的一些理论和假设。他不仅发现了甲烷气体，还在新兴的电学领域做出了开创性发现。他描述了电压、电荷和容量之间的关系。但最重要的是，他发明了第一个可用的电池。\n\n电压的单位伏特便以他的名字命名。</string>
+
+    <string name="button_retry">重试</string>
+    <string name="shortdesc_SUB">SUB 芯片速度</string>
+    <string name="shortdesc_startinfo">初始信息量</string>
+    <string name="shortdesc_info_on_kill">额外信息</string>
+    <string name="shortdesc_SHR">SHR 芯片速度</string>
+    <string name="shortdesc_ACC">ACC 芯片速度</string>
+    <string name="shortdesc_MEM">MEM 芯片速度</string>
+    <string name="shortdesc_RES">电阻值</string>
+    <string name="shortdesc_duration">电阻效果持续时间</string>
+    <string name="shortdesc_heat">产生热量</string>
+    <string name="shortdesc_upgrade">芯片升级费用</string>
+    <string name="shortdesc_lives">额外生命</string>
+    <string name="shortdesc_frequency">攻击者出现频率</string>
+    <string name="shortdesc_att_speed">攻击者速度</string>
+    <string name="shortdesc_att_strength">攻击者强度</string>
+    <string name="shortdesc_coin_strength">加密币强度</string>
+    <string name="shortdesc_info_gain">信息获取量</string>
+    <string name="shortdesc_heat_conversion">热量转化</string>
+    <string name="shortdesc_double_chance">%s 双倍效果概率</string>
+    <string name="shortdesc_range">%s 芯片射程</string>
+    <string name="shortdesc_refund">出售芯片退款</string>
+    <string name="shortdesc_max_hero_upgrade">英雄最高等级</string>
+    <string name="shortdesc_limit_unwanted">不受欢迎芯片数量</string>
+    <string name="shortdesc_create_wanted">额外芯片数量</string>
+    <string name="shortdesc_reduce_removal">芯片移除费用</string>
+    <string name="shortdesc_enable_mem_upgrade">MEM 最高等级</string>
+    <string name="upgrade_format">%1$s [花费：%2$d]</string>
+    <string name="stage_number">第 %s 关</string>
+    <string name="toast_stage_cleared">本关已通关</string>
+    <string name="toast_enter_stage">正在进入第 %s 关</string>
+    <string name="HERO_EFFECT_CHIPSPEED">减少所有 %s 芯片的冷却时间</string>
+    <string name="HERO_EFFECT_HEAT">减少产生的热量</string>
+    <string name="HERO_EFFECT_STARTINFO">增加关卡开始时的信息量</string>
+    <string name="HERO_EFFECT_UPGRADECOST">降低所有芯片的升级成本</string>
+    <string name="HERO_EFFECT_LIVES">增加额外生命</string>
+    <string name="HERO_EFFECT_FREQUENCY">降低攻击者出现频率</string>
+    <string name="HERO_EFFECT_INFOOVERTIME">随时间自动获取额外信息</string>
+    <string name="HERO_EFFECT_ATTSPEED">降低攻击者速度</string>
+    <string name="HERO_EFFECT_COINSTRENGTH">降低加密币强度</string>
+    <string name="HERO_EFFECT_ATTSTRENGTH">降低攻击者强度</string>
+    <string name="HERO_EFFECT_MAXHEROUPGRADE">提高其他英雄的最高等级</string>
+    <string name="HERO_EFFECT_REFUNDPRICE">提高出售芯片时的退款比例</string>
+    <string name="HERO_EFFECT_GAININFO">提高摧毁攻击者获得的信息量</string>
+    <string name="HERO_EFFECT_RANGE">增加 %s 芯片的射程</string>
+    <string name="HERO_EFFECT_LIMITUNWANTED">减少不受欢迎芯片的数量</string>
+    <string name="HERO_CREATE_CHIPS">创建额外芯片</string>
+    <string name="HERO_EFFECT_DECREASEREMOVAL">降低移除不受欢迎芯片的成本</string>
+    <string name="HERO_EFFECT_ENABLEMEM">启用 MEM 芯片的升级</string>
+    <string name="HERO_EFFECT_RES_STRENGTH">增强电阻的强度</string>
+    <string name="HERO_EFFECT_RES_DURATION">延长电阻效果的持续时间</string>
+    <string name="HERO_EFFECT_CONVERT_HEAT">将部分电阻热量转化为信息</string>
+    <string name="HERO_EFFECT_CHANCE_DOUBLE">赋予 %s 芯片双倍效果的概率</string>
+    <string name="toast_loading">加载中…</string>
+    <string name="name_series_1">普通</string>
+    <string name="name_series_2">极速</string>
+    <string name="name_series_3">无尽</string>
+    <string name="message_series_unavailable">请先通关"普通"模式的所有关卡。</string>
+    <string name="message_endless_unavailable">通关前面所有关卡后可解锁。</string>
+    <string name="stage_reached">已到达关卡：%1$s %2$d</string>
+    <string name="series_completed_message_2">您现在可以</string>
+    <string name="series_completed_message_3">在"极速"模式下重玩所有关卡。</string>
+    <string name="instr_2_1">"在极速模式下，攻击者更强、更快、数量更多。此外，有些插槽已被不受欢迎的芯片占据，您必须对付它们。"</string>
+    <string name="settings_disable_background">禁用背景</string>
+    <string name="settings_show_atts_in_range">显示射程内的攻击者</string>
+    <string name="series_completed_message_1">" "</string>
+    <string name="series_completed_message_4">" "</string>
+    <string name="query_quit">确定要退出当前关卡吗？</string>
+    <string name="button_return_to_main_menu">返回主菜单</string>
+    <string name="continue_game">继续游戏</string>
+    <string name="buttton_replay">重玩本关</string>
+    <string name="settings_use_large_buttons">使用大尺寸控件</string>
+    <string name="settings_show_framerate">显示帧率</string>
+    <string name="button_back">关闭</string>
+    <string name="button_info">信息</string>
+    <string name="button_releasenotes">版本说明</string>
+    <string name="text_about">关于…</string>
+    <string name="instr_did_you_know">你知道吗？</string>
+    <string name="settings_keep_levels">保留"无尽"模式中创建的地图</string>
+    <string name="settings_use_hex">以十六进制显示关卡编号</string>
+    <string name="settings_activate_log">启用调试日志</string>
+    <string name="settings_fast_fast_forward">显示"极速快进"按钮</string>
+    <string name="query_purchase_life">是否要花费 %s 来恢复一条命？</string>
+    <string name="annotation_purchase_life">此对话框可在"设置"中禁用。你仍然可以通过点击 CPU 来购买生命。</string>
+    <string name="message_cannot_fire">使用"%s"来解雇此英雄。</string>
+    <string name="message_is_on_leave">%s 目前正在休假。</string>
+    <string name="instr_leave">部分英雄要求休假。你必须批准其中一位，他将在 %d 关后归来。</string>
+    <string name="instr_leave_1">部分英雄要求休假。你必须批准其中一位，他将在下一关后归来。</string>
+    <string name="heroes_on_leave_0">没有英雄在休假。</string>
+    <string name="heroes_on_leave_1">休假中的英雄：</string>
+    <string name="heroes_on_leave_2">休假中的英雄：</string>
+    <string name="ZZ_message_of_the_day">游戏玩法有重大变更，特别是在"无尽"关卡中。请查看信息界面中的版本说明。</string>
+    <string name="game_paused">游戏暂停</string>
+    <string name="overheat">CPU 因过热而受损</string>
+    <string-array name="fun_fact">
+        <item>直到 1999 年，1024 B 被称为<i>千字节</i>（kB）。为了与其他国际单位制（SI）保持一致，千字节的定义改为 1 kB = 1000 B。为了保留原来的含义，引入了"kibibyte"（KiB），1 KiB = 1024 B。</item>
+        <item>1947 年，在哈佛 Mark II 计算机中真的发现了一只"电脑虫"。一只小昆虫钻进了继电器，导致程序出错。不过，"bug"一词在此之前就已经被用来指代计算机故障了——早在 19 世纪，机械设备中的小缺陷就被称为 bugs。</item>
+        <item>"面包箱"是 Commodore C64 的昵称，得名于它那独特而不太优雅的外形。</item>
+        <item>在 80 年代，打孔器是计算机用户的重要工具，因为它可以让软盘的存储容量翻倍。驱动器通过外壳上的缺口来判断软盘的可写面。如果在对侧小心地打一个孔，就可以把软盘翻过来使用背面。</item>
+        <item>想了解计算机到底是如何工作的吗？去看看优秀的网站 <b>NANDgame.com</b> 吧。在那里，你仅从电子继电器开始，就能逐步构建一台可编程机器。你会发现许多熟悉的组件，比如 ADD 或 SHR。</item>
+        <item>世界上第一款电脑冒险游戏"ADVENT"由威廉·克劳瑟开发，他同时也是一位狂热的洞穴探险家。游戏中的"巨洞"真实存在，不过遗憾的是里面没有龙、矮人或宝藏。</item>
+        <item>世界上有 10 种人：懂二进制的，和不懂的。\n\n\n（老程序员的笑话。）</item>
+        <item>在斯坦尼斯瓦夫·莱姆的《皮克斯飞行员故事集》中，飞船"Ariel"在接近火星时坠毁了。结果发现机载计算机患有一种强迫症——情况越危急，它在控制偏执中索取的信息就越多，直到无法再处理庞大的数据量。现实中，首次登月时也发生了类似情况。幸运的是，机载计算机由玛格丽特·汉密尔顿的团队编程，在压力下能自动放弃次要任务以保持运行，让"鹰号"安全降落在月球上。</item>
+        <item>存储容量在约 60 年间的增长令人惊叹：一张打孔卡（表面积约 156 cm²）的存储容量为 80 字节。如今一张标准 microSD 存储卡表面积约 1.65 cm²，厚度略大，容量却高达 256 GB。比例约为 1 : 3,000,000,000,000。不过，打孔卡背面可以记笔记或写购物清单——存储卡可做不到。</item>
+        <item>IBM 3270 终端的键盘异常坚固沉重，据说有人曾用它把愚蠢的用户打死。还有人声称他们真的这么干过。</item>
+        <item>我们今天所知的 ASCII 字符集（ISO-8859）中，仍保留着其作为电报码起源的痕迹。例如，ASCII 代码 07（"BEL"）用于在电传打字机上敲响小铃。</item>
+        <item>在触摸屏发明之前很久，就有了光笔。这种笔形设备通过电缆连接到计算机，可以确定它指向屏幕的哪个位置。它的笔尖内有一个光敏光电管。在 CRT 显示器中，电子束逐行扫描来创建图像。通过测量光笔感知到光闪的确切时间，就能确定电子束的当前位置，进而知道光笔的位置。光笔后来被鼠标取代而淘汰，而且其原理在今天的平板显示器上也行不通。</item>
+        <item>90 年代，"xsnow"程序在 Unix 计算机上非常流行。它让雪花轻轻飘落在桌面背景上，在程序窗口顶部堆积起来。偶尔雪花会被风吹起，有时还能看到圣诞老人驾着驯鹿雪橇飞过屏幕。-showrudolph 选项决定领头驯鹿的鼻子是不是红的。</item>
+        <item>零食要适量。\n\n\n（《文明 IV》中的每日提示）</item>
+        <item>要在二进制中减去一个数，你不需要会做减法。只需将数字取反，加 1，然后相加即可。为什么？如果你将数字取反——例如 0101 1110 (x5E) 变成 1010 0001 (xA1)——再把两者相加，总是得到 1111 1111（即 xFF）。加 1 并丢弃进位，就得到 0000 0000。因此可以将 xA2（即 xA1 加 1）理解为"减去 x5E"。示例：x7F - x5E = x21，而 x7F + xA2（截断为 8 位）也等于 x21。</item>
+        <item>"比萨盒"是一种方形扁平的计算机机箱。这个说法在 90 年代用来形容 Sun Microsystems 的 SPARC 工作站，其优雅的外形确实像比萨盒。</item>
+        <item>据说道格拉斯·恩格尔巴特发明了计算机鼠标。这虽然没错，但他并非第一人。几乎与恩格尔巴特的首次演示同时，德律风根公司推出了一款商业化的滚球鼠标。然而，其 1500 德国马克的售价使得它仅限于大学等少数专业用户使用。</item>
+        <item>有史以来最著名的芯片恐怕是德州仪器的 7400，它仅仅包含四个与非门。74xx 系列提供基本逻辑功能，不仅在爱好者中极受欢迎，在商业领域也被广泛使用。较新的 74xx 和 74xxx 芯片如今已包含高度复杂的电路，但最老的型号几乎原封不动地沿用至今。</item>
+        <item>历史上最早的黑客是路易·布朗和他的双胞胎兄弟弗朗索瓦，后者也是现代轮盘赌的开发者。布朗兄弟利用沙普电报传输巴黎证券交易所的信息，用于内幕交易，获利颇丰。他们巧妙地使用沙普电码中的一个特殊字符——意为"删除前一个字符"——将他们的信息隐藏在常规消息中。两人于 1836 年被定罪，但未被判刑，因为当时没有任何法律是他们的行为所触犯的。</item>
+        <item>让杰出的人才像奴隶一样在计算的劳动中耗费数小时，而这些工作如果使用机器，完全可以放心地交给任何人——这是有失身份的。\n\n——戈特弗里德·威廉·莱布尼茨，1685 年</item>
+        <item>"终极机器"的唯一目的就是关闭自己。它通常被做成一个盒子，上面有一个开关或拉杆用于启动机器。启动后，会有一只手臂从盒子里伸出来，把开关重新拨回去。\n\n最著名的终极机器创造者是克劳德·香农和他的学生马文·明斯基。其他"无用机器"在 20 世纪 30 年代就已由布鲁诺·穆纳里设计过。</item>
+        <item>惠普是最早推出可编程袖珍计算器的公司之一。它们使用"逆波兰表示法"，虽然一开始需要时间适应，但能实现快速而紧凑的计算指令。\n\nHP 计算器还以其坚固精良的做工而闻名。有些至今仍在使用，甚至 ChipDefense 的一些计算也是在 HP 11C（1985 年产）上完成的。</item>
+        <item>最早的袖珍可编程计算器本应用于严肃的工程计算，但也有人为它们开发了游戏。例如有一款"登月着陆"。\n\n计算器会显示登月舱的高度和垂直速度，玩家需要输入火箭的燃料燃烧量。用得太少，着陆器最终会坠毁在月面；用得太多，燃料耗尽同样坠毁。此时显示屏上会出现数字 3507——倒过来看就是 LOSE。</item>
+        <item>南美洲的印加人有着自己独特的数据存储和处理方式。他们的结绳记事（quipus）由一套复杂的绳线和各种绳结系统组成，可以用来记录数字，甚至进行算术运算。\n\n结绳记事主要用于记账，但也用作日历。</item>
+        <item>计算机不一定是电子设备。任何能够映射基本逻辑功能（如 NOT、OR、AND）的系统，至少在理论上都能完成计算机的所有任务。\n\n这可以是绳索和滑轮构成的机械结构，也可以是规则适当的纸牌游戏，或者 Minecraft 中的红石电路。甚至康威生命游戏中的细胞图案也能映射出一台数字计算机——只是您需要一张非常、非常大的棋盘。</item>
+        <item>"electronic"（电子）一词源自古希腊语"ēlektron"，意为琥珀。用猫毛摩擦琥珀棒会产生静电——这也许是第一个有记载的电子学实验。</item>
+        <item>"cyber"一词最初源自航海领域。"cybernator"（或"gubernator"，来自希腊语 κυβερνήτης）意为船舵手。在法语中，舵因此被称为"gouvernail"。"governor"（总督）一词也源自"gubernator"，因此与"cyber"同源。</item>
+        <item>在 INTERCAL 编程语言中，有一个名为 PLEASE 的指令——这只是它众多荒谬指令之一。它什么也不做，但如果您不经常使用它，编译器会感到恼怒并终止运行。\n\n然而，您也不能太频繁地写 PLEASE，因为那样编译器会认为您在取笑它，并返回 E099 PROGRAMMER IS OVERLY POLITE（程序员过于礼貌）错误。</item>
+        <item>本游戏中"不受欢迎的芯片"是如何放置的？其数量既不完全预设，也非完全随机。大致原理如下：为每个关卡确定一个目标难度值。每种芯片根据其烦人程度有一个评分——例如 NOP 为 0.5，DUP 为 2.0。此外，攻击者到达 CPU 的路径长度也会影响难度（路径短、插槽少的关卡被认为更难）。每个关卡会随机放置芯片，直到达到指定的难度值。目标难度自然会随关卡推进而增加。而杰克·基尔比每升一级会将难度降低 1，意味着平均能移除两个 NOP，或一个 ADD，或半个 DUP。</item>
+        <item>换一个灯泡需要多少程序员？\n\n零个。这是硬件问题。</item>
+        <item>"robot"一词源自捷克语的"robota"，意为"劳役"。它于 1920 年首次出现在卡雷尔·恰佩克的戏剧《罗素姆万能机器人》中。该词的实际创造者是卡雷尔的兄弟约瑟夫·恰佩克——一位重要的作家、画家、平面艺术家和摄影师。恰佩克兄弟对两次世界大战之间捷克斯洛伐克的文化和政治生活产生了深远影响。约瑟夫·恰佩克于 1939 年因批评纳粹主义被捕，1945 年在贝尔根-贝尔森集中营遇害。</item>
+        <item>在游戏设置中，您可以将关卡编号切换为十六进制显示。</item>
+        <item>在英美国家的服务器机房中，曾经有用伪德语写成的警告牌，意在幽默模仿。德语国家也有类似的牌子，当然是用伪英语写的。其中一个版本如下：\n\nACHTUNG!\n\nALLES TURISTEN UND NONTEKNISCHEN LOOKENSPEEPERS!\nDAS KOMPUTERMASCHINE IST NICHT FÜR DER GEFINGERPOKEN UND MITTENGRABEN! ODERWISE IST EASY TO SCHNAPPEN DER SPRINGENWERK, BLOWENFUSEN UND POPPENCORKEN MIT SPITZENSPARKEN. IST NICHT FÜR GEWERKEN BEI DUMMKOPFEN. DER RUBBERNECKEN SIGHTSEEREN KEEPEN DAS COTTONPICKEN HÄNDER IN DAS POCKETS MUSS. ZO RELAXEN UND WATSCHEN DER BLINKENLIGHTS.</item>
+        <item>第一台可编程台式计算机来自意大利的伊夫雷亚。在计算机还占据整个体育馆的时代，Olivetti 公司推出了"Programma 101"——即使按现代标准，它也是一台完整的计算机——尽管它看起来更像商用计算器。更早的还有 Mathatronics 公司的"Mathatron"。这台机器的外观有些拼凑感，也不清楚是否曾大量销售。它缺少 Programma 101 的一个重要功能：允许保存和加载程序的磁卡阅读器。这两台机器还有一个革命性意义：它们可以使用常规数学表达式来操作，不需要机器语言的专家知识。</item>
+        <item>第一台美国计算机 ENIAC 由一支六人高水准专家团队编程——全部是女性。她们的成就长期未获认可。直到最近，人们才开始关注这些女性对计算机科学发展的影响。她们的名字是：Frances Spence、Betty Holberton、Ruth Teitelbaum、Kathleen Antonelli、Marlyn Meltzer 和 Jean Bartik。</item>
+        <item>除了十六进制，计算机内部也可以使用"常规"十进制数字工作。一个 0 到 9 的十进制数字用四位编码，超出范围的六种组合（A 到 F）不被使用。这种表示法称为 BCD（二进制编码十进制），优点是可以用熟悉的数字系统阅读内存转储。然而，缺点远超优点：大约三分之一的内存空间被浪费，所有逻辑和算术运算变得复杂得多，需要更多电路。因此 BCD 表示法如今已基本不再使用。</item>
+        <item>MUMPS 是一种专为医院设计的编程语言。</item>
+        <item>六十年前，ELIZA 作为现代 AI 的早期前身出现了。它最初由约瑟夫·维森鲍姆构想为对某种心理治疗方法的讽刺，能模拟治疗师与患者之间的对话。尽管编程相对简单，ELIZA 的应答却出乎意料地逼真。人类将人格特征投射到计算机上的倾向在心理学中被称为"ELIZA 效应"。ELIZA 也被翻译成其他语言，但由于语法结构更复杂，效果通常不如英语。</item>
+        <item>如何判断一个计算机从业者的年龄？问他"PS2"是什么。对年轻一代来说，显然是 PlayStation 2。年纪大些的会记得键盘和鼠标上那可爱的绿色和紫色端口。而老前辈则会热泪盈眶地讲起他第一次坐在 PS/2 计算机前的故事——IBM 传奇的"Personal System / 2"……</item>
+        <item>特蕾西·基德的《新机器的灵魂》出版于 1981 年。它讲述了 70 年代 Data General 公司一个团队在幕后开发革命性计算机的真实故事——那台"新机器"。这本书被认为是技术写作的经典。它不仅以高度可读的方式呈现，还传达了一个至今仍然正确的信息：真正推动项目前进的，是团队中每个人的人格魅力与才干，而不是管理层。</item>
+        <item>这个配置可以消灭所有攻击者（加密币除外）：\n\n==[SPLT]==[ACC &amp;]==[SUB 1]==\n\n您能想出为什么吗？</item>
+    </string-array>
+
+    <string name="coins_singular">1 枚加密币</string>
+    <string name="coins_plural">%d 枚加密币</string>
+    <string name="coins_none">无加密币</string>
+    <string name="settings_disable_purchase_dialog">禁用购买生命的对话框</string>
+    <string name="version">版本</string>
+    <string name="settings_language_selection_title">语言选择</string>
+    <string name="settings_language_selection_text">要更改游戏语言，请前往设备的系统"设置"，进入"应用语言"进行调整。</string>
+    <string name="deco">装饰</string>
+    <string name="coins_got">获得 %1$d / %2$d 枚加密币</string>
+    <string name="coins_got_plural">获得 %1$d / %2$d 枚加密币</string>
+    <string name="neumann">"所有现代计算机内部都采用冯·诺依曼架构。这种将内存、运算单元和程序控制相结合以创建可自由编程机器的方式，主要由约翰·冯·诺依曼开发，他被认为是计算机科学的奠基人之一。他是一位杰出的数学家，为量子力学奠定了数学基础，也决定性地推进了博弈论。他还是一位极其聪明、机智幽默的人，是真正的派对达人。\n\n冯·诺依曼人生的阴暗面在于他对军事研究以及大规模杀伤性武器开发与使用的贡献。"</string>
+    <string name="button_wiki">"维基百科"</string>
+    <string name="url_wikipedia_fallback">https://en.wikipedia.org/wiki/Main_Page</string>
+    <string name="url_turing">https://en.wikipedia.org/wiki/Alan_Turing</string>
+    <string name="url_lovelace">https://en.wikipedia.org/wiki/Ada_Lovelace</string>
+    <string name="url_hollerith">https://en.wikipedia.org/wiki/Herman_Hollerith</string>
+    <string name="url_franke">https://en.wikipedia.org/wiki/Herbert_W._Franke</string>
+    <string name="url_osborne">https://en.wikipedia.org/wiki/Adam_Osborne</string>
+    <string name="url_tramiel">https://en.wikipedia.org/wiki/Jack_Tramiel</string>
+    <string name="url_mandelbrot">https://en.wikipedia.org/wiki/Benoit_Mandelbrot</string>
+    <string name="url_hamilton">https://en.wikipedia.org/wiki/Margaret_Hamilton_(software_engineer)</string>
+    <string name="url_pascal">https://en.wikipedia.org/wiki/Blaise_Pascal</string>
+    <string name="url_conway">https://en.wikipedia.org/wiki/John_Horton_Conway</string>
+    <string name="url_lhc">https://en.wikipedia.org/wiki/Les_Horribles_Cernettes</string>
+    <string name="url_vaughan">https://en.wikipedia.org/wiki/Dorothy_Vaughan</string>
+    <string name="url_schneier">https://en.wikipedia.org/wiki/Bruce_Schneier</string>
+    <string name="url_diffie">https://en.wikipedia.org/wiki/Whitfield_Diffie</string>
+    <string name="url_zuse">https://en.wikipedia.org/wiki/Konrad_Zuse</string>
+    <string name="url_meier">https://en.wikipedia.org/wiki/Sid_Meier</string>
+    <string name="url_kilby">https://en.wikipedia.org/wiki/Jack_Kilby</string>
+    <string name="url_neumann">https://en.wikipedia.org/wiki/John_von_Neumann</string>
+    <string name="url_knuth">https://en.wikipedia.org/wiki/Donald_Knuth</string>
+    <string name="url_hopper">https://en.wikipedia.org/wiki/Grace_Hopper</string>
+    <string name="url_leibniz">https://en.wikipedia.org/wiki/Gottfried_Wilhelm_Leibniz</string>
+    <string name="url_chappe">https://en.wikipedia.org/wiki/Claude_Chappe</string>
+    <string name="url_ohm">https://en.wikipedia.org/wiki/Georg_Ohm</string>
+    <string name="url_volta">https://en.wikipedia.org/wiki/Alessandro_Volta</string>
+    <string name="url_shannon">https://en.wikipedia.org/wiki/Claude_Shannon</string>
+    <string name="url_wiener">https://en.wikipedia.org/wiki/Norbert_Wiener</string>
+    <string name="url_boole">https://en.wikipedia.org/wiki/George_Boole</string>
+    <string name="coins_available">可用加密币：%d</string>
+    <string name="coins_received_as_gift">您收到了 %d 枚加密币作为礼物。</string>
+    <string name="instr_2_98">英雄们即将延长休假。届时他们将有两关甚至更多关无法出场。\n</string>
+    <string name="actions_title">操作</string>
+    <string name="button_export">导出游戏存档</string>
+    <string name="button_restore">恢复游戏</string>
+    <string name="query_restore_game">是否要导入已导出的游戏存档？这将覆盖您当前的游戏进度。</string>
+    <string name="choice_restore_1">是，导入游戏数据。</string>
+    <string name="choice_restore_2">否，保留当前游戏。</string>
+    <string name="query_export_game">导出游戏存档</string>
+    <string name="text_exportgame_question">请选择游戏数据的保存位置。文件名为 %s。</string>
+    <string name="text_exportgame_option1">打开路径选择器</string>
+    <string name="text_importgame_question">此选项可让您导入之前导出的游戏。</string>
+    <string name="text_importgame_option1">选择数据文件</string>
+    <string name="button_cancel">取消</string>
+    <string name="error_opening_file">打开文件时出错：%s。</string>
+    <string name="error_empty_file">此文件不包含任何数据。</string>
+    <string name="warning_unknown_version">所选文件包含未知游戏版本的数据。</string>
+    <string name="warning_version_mismatch">所选文件包含来自版本 %s 的数据，与当前游戏版本 %s 不匹配。</string>
+    <string name="message_version">所选文件包含来自版本 %s 的数据。</string>
+    <string name="warning_no_timestamp">无法确定游戏的导出时间。</string>
+    <string name="message_timestamp">导出时间：%s %s</string>
+    <string name="message_progress">最高到达关卡：系列 %2$d 第 %1$d 关</string>
+    <string name="question_import_confirmation">%s %s %s 是否要导入此游戏状态？</string>
+    <string name="default_export_filename" translatable="false">chipdefense_export_%s.txt</string>
+    <string name="message_export_successful">导出成功！</string>
+    <string name="message_export_error">导出时出错：%1$s</string>
+    <string name="error_reading_file">读取或解析文件时出错：%s</string>
+    <string name="shithappens_1">好吧…</string>
+    <string name="shithappens_2">嗯…</string>
+    <string name="three_question_marks" translatable="false">\???</string>
+    <string name="extras_title">附加内容</string>
+    <string name="level_editor_title">电路编辑器</string>
+    <string name="extras_swipemessage" translatable="false">Swipe left and right</string>
+    <string name="url_releasenotes_base" translatable="false">https://github.com/ochadenas/cpudefense/wiki/%s</string>
+    <string name="url_releasenotes_localized">%5BEN%5D-Release-Notes</string>
+    <string name="message_open_in_browser">正在浏览器中打开页面…</string>
+    <string name="level_statistics_title">统计</string>
+    <string name="level_statistics_caption">每关获取的信息量</string>
+    <string name="settings_title">设置</string>
+    <string name="about_title">关于本游戏</string>
+    <string name="about_version">版本 %s。</string>
+    <string name="about_license">"本游戏为开源软件。访问 <a href="https://github.com/ochadenas/cpudefense#MIT-1-ov-file">github.com/ochadenas/cpudefense</a> 了解更多信息。\n\n信息时代英雄的肖像大多源自公共领域作品。\n\n原始照片：\n  Alex Handy (CC BY-SA 2.0)\n  Jacob Appelbaum (CC BY-SA 2.5)\n  Konrad Jacobs (CC BY-SA 2.0 de)\n  Rama (CC BY-SA 2.0 fr)\n  Shervinafshar (CC BY-SA 3.0)\n  Tony Bove (CC BY 3.0)\n  Wolfgang Hunscher (CC BY-SA 3.0)\n  Silvano de Gennaro (courtesy of the author)\n  Clermont Auvergne Métropole (CC BY-SA 4.0)\n  Jean-Frédéric (CC BY 2.0)\n  Tekniska Museet (CC BY 2.0)\n  The Royal Society (CC BY-SA 4.0)\n  Konrad Jacobs (CC BY-SA 2.0 de)\n  \nComputer boards:\n  Autopilot (CC BY-SA 4.0)\n  Bill Bertram (CC-BY 2.0)\n  Oliver Chadenas (CC BY-SA 3.0)\n  Smial (FAL)\n\nAll other artwork:\n  Oliver Chadenas (CC BY-SA 3.0)"</string>
+    <string name="about_info_title">信息</string>
+    <string name="about_info_text">如需更多游戏玩法信息与提示，请访问游戏维基页面。</string>
+    <string name="button_exit">退出</string>
+    <string name="link_wiki">游戏维基</string>
+    <string name="play_level_x">开始第 %s 关</string>
+    <string name="ZZ_release_notes">Release Notes\n\nVersion 1.59\n============\nNew features:\n- The view is now scaled using buttons rather than the two-finger pinch gesture.\n- The level selection scrolls automatically to the end of the list.\n\nBug fixes:\n- Further adjustments for ‘Edge-to-Edge’ mode\n- Fixed Issue #249 (hopefully)\n- When importing save files, the message regarding different version statuses was unclear.\n\nVersion 1.58\n============\nNew features:\n- Game can be exported and restored in the “settings” dialogue\n- Game view can handle \"edge-to-edge\" (full screen) mode\n\nBug fixes:\n- Fixed a problem with scrolling (issue #247)\n- Corrected display of MEM chips with several internal registers (issue #233)\n- Placing additional chips could result in an endless loop when creating a stage\n\nMiscellaneous:\n- Minimal SDK level changed from 21 to 23 (corresponding to Android 6)\n- Inclusion of newer versions of some system libs.\n\nVersion 1.57\n============\nNew features:\n- None.\n\nBug fixes:\n- Disabled code optimization in order to avoid the app crashing\n\nMiscellaneous:\n- Use of target SDK 36\n\n\nVersion 1.56\n============\nNew features:\n- The game view can be scaled using the “pinch” gesture.\n\nBug fixes:\n- Corrected available chip types and number of waves for stages 22 and 32\n- Made the outline around active MEM chips more recognizable (issue #233).\n- Graphical stage layout tended to be rather elongated on large devices.\n\nMiscellaneous:\n- Heroes to go on holiday must be re-selected each time a leave level is entered (issue #210).\n\nVersion 1.55\n============\nNew features:\n- Italian translation added\n\nBug fixes:\nnone\n\nMiscellaneous:\n- build environment updated, API modernisations\n\n\nVersion 1.54\n============\nNew features:\n- Explanatory text added to level 98. Fixes issue #214.\n\nBug fixes:\n- Selling chips created by von Neumann could yield absurdly high amounts of information. These chips now sell only for 8 bits max. Fixes issue #211.\n- Chips created by von Neumann are limited to level 10. Fixes issue #207.\n\nVersion 1.53\n============\nNew Features:\n- Added a “really fast forward” button (must be enabled in the settings)\n\nBug fixes:\n- level number was not shown in hex when failing a level\n\nMiscellaneous:\n- Made “fast forward” mode slightly slower\n- New \"did you know\" entry\n\nVersion 1.52\n============\nNew Features:\n- Stage numbers are optionally shown in hex (must be activated in Settings)\n\nBug fixes:\n- When leaving the hero screen, the current hero is de-selected. Fixes issue #206.\n- Coins in the hero screen are no longer shown separately if there are too many of them. Fixes issue #208.\n- If an attacker becomes released from ACC or MEM during its fade-out animation, it no longer disappears. Fixes issue #212.\n\nVersion 1.51\n============\nNew features:\n- When playing for the first time in endless, 4 coins are granted for free to help get things going.\n\nBug fixes:\n- If a stage in endless mode cannot be loaded, a new stage layout is generated.\n- Chips created by von Neumann with level 2 or higher now have the correct value. When selling these chips, the refund is halved.\n- Heroes that are active are always visible now, even if their prerequisites are no longer met.\n- The number of available coins were not saved if a stage was not finished.\n- Chips with level 0 are removed at the beginning of a stage.\n\nMiscellaneous:\n- The additional chips created by the game (both helpful and unwanted) are recreated every time the level is played.\n- Turing\'s biography now mentions that the Enigma was initially broken by the Polish Cipher Bureau.\n\nVersion 1.50\n============\nNew features:\n- Link to Wikipedia articles added for heroes and heroines\n\nBug fixes:\n- Fixed a bug when changing between apps in the hero screen\n\nVersion 1.49\n============\nNew features:\n- New hero: John von Neumann\n- Some more did you know text\n\nBug fixes:\n- Attackers stored in MEM or ACC sometimes remained visible on the screen.\n- The text on the chips is scaled down if it does not fit into the rectangle.\n\nMiscellaneous:\n- Small changes in the hero dependency tree. For the current tree, see the game\'s wiki.\n- Ameliorations to the Level Select and the Info screen\n- Reduced cost of resistor chips\n\nVersion 1.48\n============\nBug fixes:\n- No reward coins were awarded in Endless series after a game reset.\n\nMiscellaneous:\n- Heroes are no longer automatically available in TURBO and ENDLESS. The hero tree applies for all series.\n\nVersion 1.47\n============\nNew features:\n- Endless series can be reset independently from the basic series.\n\nBug fixes:\n- Background image no longer changes when switching between apps.\n- Attackers held in MEM chips kept this state even after being released.\n\nVersion 1.46\n============\nNew features:\n- added a special Christmas level\n- The game\'s language can be changed via the device Settings dialogue.\n\nBug fixes:\n- added a safety catch for trapped attackers\n- corrected a migration problem\n\nVersion 1.45\n============\nNew features:\n- The mission briefing text is now scrollable. This should avoid the text overlapping if it doesn\'t fit on the screen.\n\nBug fixes:\n- Corrected portrait image for John Conway\n\nVersion 1.44\n============\nNew features:\n- New hero: John Conway\n- Some more Did you know texts.\n\nBug fixes:\n- Some fixes to the purchase lives dialogue\n\nMiscellaneous:\n- Major re-organisation of save files. This should result in faster loading, and generally\n  less laggy behaviour of the app.\n\nVersion 1.43\n============\nNew features:\n- In “endless” mode, lost lives can be recovered for coins by tapping on the CPU.\n\nBug fixes:\n- Some text size and other layout corrections\n- The “quit level” dialogue now freezes the game.\n\nVersion 1.42\n============\nNew features:\n- Stage number is displayed on the game screen\n\nBug fixes:\n- Fixed some problems when selecting heroes for leave\n- Fixed heat to cash conversion calculation for resistors\n\nMiscellaneous:\n- The required shortest path length in endless mode has been raised for stage numbers > 200\n\nVersion 1.41\n============\nBug fixes:\n- Fixed some problems when returning after switching apps\n- Better loading and scaling of background images\n- Margaret Hamilton must not appear before stage 24.\n- Some text corrections\n\nMiscellaneous:\n- Massively reduced the number of waves for higher stages in Endless mode\n- Resistors now act simultaneously on all targets in range.\n- Slightly changed the screen size of several game element\n\nVersion 1.40\n============\nNew features:\n- New heroes: Claude Shannon, George Boole, Whit Diffie\n- Resistors now produce heat, which can be converted into information if Shannon is available.\n- Some more Did you know messages.\n\nBug fixes:\n- Avoid a situation where the player must choose a hero, but none is displayed.\n- Heroes always went on leave for three levels, regardless of what the text said.\n- The game uses a default system font if the desired font is not available. This had led to crashes on some devices.\n\nVersion 1.39\n============\nNew features:\n- Starting with endless stage 16, heroes may go on holiday. The player must choose one of several proposed heroes and grant leave to one of them.\n\nBug fixes:\n- Attackers that were slowed down by resistors behaved weird in ACC and MEM chips.\n\nMiscellaneous:\n- The slowing effect of resistors now depend on the attackers\' value. The stronger the attacker, the more it gets slowed.\n\nVersion 1.38\n============\nNew features:\n- The attackers held in the internal register of MEM and ACC are now released when selling the chip.\n\nBug fixes:\n- Game elements as well as hired heroes became active only when the stage was played a second time.\n- MEM and ACC chips are no longer emptied when resuming the app.\n\nMiscellaneous:\n- Removed the SELL option in stage 6\n\nVersion 1.37\n============\nBug fixes:\n- Fixed some bugs that occurred when re-entering the application.\n\nMiscellaneous:\n- Use of a custom font for chips and code fragments.\n\nVersion 1.36\n============\nNew functions:\n- New chip type: Resistors\n- Level 32 added\n- New heroes: Georg Ohm, Alessandro Volta\n\nBug fixes:\n- The level indicator on the welcome screen was limited to 99.\n\nVersion 1.35\n============\nBug fixes:\n- Fixed an occasional game crash when there were lots of attackers.\n- Leibniz is no longer affected by Sid Meier.\n- MEM chips are no longer sold instantly.\n\nVersion 1.34\n============\nIMPORTANT: The Endless level series now has its own CryptoCoins and a separate set of heroes. The existing coins have been distributed proportionally. Under certain circumstances, the heroes had to be reset; in this case, the coins have been credited to you and you will have to hire the heroes again.\nThe difficulty of the Endless levels has been drastically reduced in compensation.\n\nNew functions:\n- New hero: Gottfried Leibniz.\n\nBug fixes:\n- There were no CryptoCoins for level 30.\n- ACC chips showed more than one slot, although they can only hold one value.\n\nMiscellaneous:\n- Tramiel is limited to level 5 now.\n- Upgrade of MEM chips is significantly more expensive and requires Leibniz.\n\nVersion 1.33\n============\n    Two more levels were added, introducing SPLT and DUP.\n    Heroes now can be downgraded individually.\n    MEM chips can be upgraded (up to level 4) to hold more than one value. An explanatory text was added to stage 14.\n\nMiscellaneous:\n    Chips now target cryptocoins first.\n\nVersion 1.32\n============\nNew Features:\n    New hero added: Margaret Hamilton\n\nBugfixes:\n    Level selection in endless series was limited.\n    Two MEM chips could swallow the same attacker simultaneously.\n\nVersion 1.31\n============\nNew Features:\n    Two more types of negative chips: DUP and SPLT\n    (an introductory level with explanation will be added later).\n\nBugfixes:\n    Number of negative chips in endless stages reduced.\n    Revised the calculation of stage difficulty in endless stages.\n    Isolated slots are avoided, paths have a minimum length.\n\nMiscellaneous:\n    Removal cost of negative chips depend on how many have already been removed.\n\nVersion 1.30\n============\nNew Features:\n- new hero: Claude Chappe\n- Clearer design for buying and selling chips\n- Chips now choose their target intelligently (with more than one attacker in range)\n- Added an easter egg.\n\nBugfixes:\n- No new endless stages were available in the level selector beyond level 28.\n- Heat generation and damage corrected and adjusted\n- Fixed yet another bug when resuming the game\n\nMiscellaneous:\n- Changes in endless stage generation. Difficulty of the stage layout increases with the level. Impossible configurations are avoided.\n- Changed the order of some levels in normal mode to make the difficulty progress more consistently.\n\nVersion 1.29\n============\nNew Features:\n- New design for welcome screen. Moved start new game to settings. Added Release Notes in info section.\n- Revised generation of levels in endless series and made these levels clearer. Multiple CPUs are now possible.\n\nBugfixes:\n- Attackers were accelerated too much in ACC chips\n- Correction of speed control button size\n- Scrolling hero list was too slow\n\nMiscellaneous:\n- IMPORTANT: MEM chips must now be cleared by hand (by tapping on them) before they can absorb next attackers.\n\nVersion 1.28\n============\nNew Features:\n- New endless level series\n- In the About screen, added links for accessing the game wiki and the license on the Internet.\n- Chips are not removed instantly after being sold. Instead, they complete their current cooldown.\n\nBugfixes:\n- The game crashed when trying to display kiB values\n\nMiscellaneous:\n- decreased overall attacker frequency\n- slightly increased Mandelbrot´s effect\n- Attackers now have their speed slightly altered by ACC chips\n- several adjustments to game play\n\nVersion 1.27\n============\nNew Features:\n- Chips can be bought and sold even when game is paused.\n- Introduction of heat. Overheating may result in loss of one life.\n- Temperature sensor added to score board.\n- New chip type: NOP\n- New hero: Jack Kilby\n\nBugfixes:\n- Passing coins do no longer activate MEM chips.\n- Chip type is shown on description of range-extending heroes.\n- Text on Hire button did not change on purchase or reset.\n- Score board layout improved.\n\nMiscellaneous:\n- Re-organization of preferences / saved games file\n- Changed the way how game speed is handled\n\nVersion 1.26\n============\nNew Features:\n- new settings and about dialog\n- hero biography is now scrollable\n- added button to lock scrolling of the game viewport\n\nBugfixes:\n- fixed a bug that led to loss of heroes in version 1.25.\n  Added correction code to refund coins lost due to this bug.\n- chip sell prices were not converted to B or kiB\n- SHR 9 (and higher) chips had no effect\n- attackers stopped appearing when pausing the game between two waves\n- corrected delay between waves in fast forward mode\n\nMiscellaneous:\n- stage 8 made easier\n- LEDs now go out instead of turning red\n\nVersion 1.25\n============\nNew Features:\n- Chips can be bought and sold even when game is paused.\n- Introduction of heat. Overheating may result in loss of one life.\n- Temperature sensor added to score board.\n- New chip type: NOP\n- New hero: Jack Kilby\n\nBugfixes:\n- Passing coins do no longer activate MEM chips.\n- Chip type is shown on description of range-extending heroes.\n- Text on Hire button did not change on purchase or reset.\n- Score board layout improved.\n\nMiscellaneous:\n- Re-organization of preferences / saved games file\n- Changed the way how game speed is handled\n\n\nVersion 1.24\n============\nNew Features:\n- new background pictures\n- hero costs are shown on the ´hire´ button\n- overall small graphical improvements\n\nBugfixes:\n- game stays in portrait mode, keeps the device awake\n- corrected coin count and size of attackers when resuming game\n\nMiscellaneous:\n- replaced Android system style dialogs by custom design\n\nVersion 1.22\n============\nNew Features:\n- Chips can be bought and sold even when game is paused.\n- Introduction of heat. Overheating may result in loss of one life.\n- Temperature sensor added to score board.\n- New chip type: NOP\n- New hero: Jack Kilby\n\nBugfixes:\n- Passing coins do no longer activate MEM chips.\n- Chip type is shown on description of range-extending heroes.\n- Text on Hire button did not change on purchase or reset.\n- Score board layout improved.\n\nMiscellaneous:\n- Re-organization of preferences / saved games file\n- Changed the way how game speed is handled</string>
+</resources>
