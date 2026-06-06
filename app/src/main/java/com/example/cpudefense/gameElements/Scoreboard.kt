@@ -466,7 +466,11 @@ class ScoreBoard(val gameView: GameView): GameElement()
     }
 
     companion object {
-        fun informationToString(number: Int?): String {
+        fun informationToString(number: Int?): String
+                /** makes a readable string out of a big number.
+                 * @param number Information in bits
+                 */
+        {
             number?.let { number ->
                 if (number < 512 && number > -512)
                     return "%d bit".format(number)

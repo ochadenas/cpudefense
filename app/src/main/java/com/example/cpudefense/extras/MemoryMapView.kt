@@ -14,6 +14,10 @@ import com.example.cpudefense.Persistency
 import com.example.cpudefense.R
 import com.example.cpudefense.Stage
 import com.example.cpudefense.activities.ExtrasActivity
+import com.example.cpudefense.gameElements.ScoreBoard
+import com.example.cpudefense.utils.displayTextCenteredInRect
+import com.example.cpudefense.utils.setLeft
+import com.example.cpudefense.utils.shrink
 
 class MemoryMapView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
     AppCompatImageView(context, attrs, defStyleAttr)
@@ -28,7 +32,7 @@ class MemoryMapView @JvmOverloads constructor(context: Context, attrs: Attribute
     var summaryPerTurboLevel  = HashMap<Int, Stage.Summary>()
     var summaryPerEndlessLevel = HashMap<Int, Stage.Summary>()
     var stageDataList: List<StageData> = listOf()
-    var memoryBankList: List<MemoryBank> = listOf()
+    var memoryBankList: MutableList<MemoryBank> = mutableListOf()
     /** total amount of cash, represented by the whole map */
     var totalCashSum = 0
     /** the amount of cash that is represented by one pixel */
@@ -82,12 +86,43 @@ class MemoryMapView @JvmOverloads constructor(context: Context, attrs: Attribute
 
     fun createBanks()
     {
-        memoryBankList = listOf( MemoryBank(Rect(0,0,width,height), totalCashSum/8) )
-        memoryBankList[0].createMemTilesInBank()
+        // determine appriopriate number and size of the banks to hold the info
+        val maxNumberOfBanks = 4
+        val infoInBytes = totalCashSum/8
+        val requestedBytesPerBank = infoInBytes / maxNumberOfBanks
+        val actualSizeOfBanks =  allowedSizes.firstOrNull { it >= requestedBytesPerBank } ?: allowedSizes.last()
+        var actualNumberOfBanks = infoInBytes / actualSizeOfBanks + 1
+        if (actualNumberOfBanks == 3) actualNumberOfBanks = 4 // avoid "ugly" numbers
+        if (actualNumberOfBanks in (5..7)) actualNumberOfBanks = 8 // avoid "ugly" numbers
+        val bankWidth = width/actualNumberOfBanks
+        val bankRect = Rect(0, 0, bankWidth, height)
+        repeat (actualNumberOfBanks) {index ->
+            bankRect.setLeft(index*bankWidth)
+            val memoryBank = MemoryBank(bankRect, actualSizeOfBanks)
+            memoryBankList.add(memoryBank)
+        }
+        createMemTiles()
     }
 
+    fun createMemTiles()
+    {
+        try {
+            var index = 0
+            memoryBankList[index].listOfTiles.clear()
+            stageDataList.forEach {
+                val color = colorOfStage(it.series, it.number)
+                val remaining = memoryBankList[index].createMemTile(it.amount/8, color)
+                if (remaining>0) {
+                    index++
+                    memoryBankList[index].createMemTile(remaining, color)
+                }
+            }
+        } catch (ex: IndexOutOfBoundsException) {}
+    }
+
+    /** Chooses a colour based on the stage identifier.
+     * @return the pair of colour and border colour */
     fun colorOfStage(series: Int, number: Int): Pair<Int, Int>
-    /** @return the pair of colour and border colour */
     {
         var baseColor = Color.WHITE
         var borderColor = Color.WHITE
@@ -124,69 +159,82 @@ class MemoryMapView @JvmOverloads constructor(context: Context, attrs: Attribute
         if (width>0 && height>0) {
             val bitmap = createBitmap(width, height)
             val canvas = Canvas(bitmap)
-            memoryBankList[0].display(canvas)
+            memoryBankList.forEach { it.display(canvas) }
             return bitmap
         }
         return null
     }
 
-    inner class MemoryBank(val parentArea: Rect, val desiredMemSize: Int)
+    /** represents a memory storage of a fixed size.
+     * Shown on the screen as rectangle filled with coloured tiles.
+     * @property area the area on the screen that the bank image takes
+     * @property memSize number of bytes available in the bank */
+    inner class MemoryBank(rect: Rect, val memSize: Int)
     {
-        /** size in virtual 'bytes' of the memory bank */
-        val memSize = allowedSizes.firstOrNull { it >= desiredMemSize } ?: allowedSizes.last()
+        var area = Rect(rect).shrink(10)
         /** number of "memory words" (lines) in the bank */
-        val bankSize = 256
+        var bankSize = 64
         /** size of one line ('word') in bytes */
-        val wordSize = memSize / bankSize
-        /** the area of this bank on the screen */
-        val area = Rect(parentArea.left, parentArea.top, parentArea.left+parentArea.width()/3, parentArea.bottom)
-
+        var wordSize = memSize / bankSize
         var listOfTiles: MutableList<MemTile> = mutableListOf()
 
-
-        fun createMemTilesInBank()
+        /** the current "address" (that ist, the number of the line where new tiles go) */
+        var address = 0
+        /** how many bytes will still fit into the last word */
+        var freeBytesRemainingInWord: Int = 0
+        
+        fun remainingWordsInBank(): Int
         {
-            listOfTiles.clear()
-            /** how many bytes will still fit into the last word */
-            var infoRemainingInWord: Int = 0
-            /** the "address" (that ist, the number of the line), counted from the bottom */
-            var address = 0
-            stageDataList.forEach {
-                val color = colorOfStage(it.series, it.number)
-                val bytes = it.amount / 8
-                var infoRemaining = bytes
-                if (infoRemainingInWord>0)  // first, fill up the word already begun
-                    if (infoRemaining <= infoRemainingInWord)
-                    {
-                        listOfTiles.add(MemTile(this, bytes, color.first, color.second, address,
-                                                wordSize-infoRemainingInWord, wordSize-infoRemainingInWord+infoRemaining))
-                        infoRemainingInWord -= infoRemaining
-                        infoRemaining = 0
-                    }
-                    else
-                    {
-                        listOfTiles.add(MemTile(this, bytes, color.first, color.second, address,
-                                                wordSize-infoRemainingInWord, wordSize))
-                        infoRemaining -= infoRemainingInWord
-                        address += 1
-                        infoRemainingInWord = 0
-                    }
-                // then, create entire lines
-                repeat (infoRemaining/wordSize) {
-                    listOfTiles.add(MemTile(this, bytes, color.first, color.second, address,
-                                            0, wordSize))
+            return bankSize-address
+        }
+        
+        fun isFull(): Boolean
+        { return remainingWordsInBank()<=0 }
+
+        /** tries to put the desired amount of info into the bank (until it is full).
+         * @param amount info in bytes
+         * @param color pair of colours to be used for the tile
+         * @return the number of bytes that must overflow into the next bank
+         * if the memory bank is full
+         */
+        fun createMemTile(amount: Int, color: Pair<Int, Int>): Int
+        {
+            var bytes = amount
+            var infoRemaining = bytes
+            if (freeBytesRemainingInWord>0)  // first, fill up the word already begun
+                if (infoRemaining <= freeBytesRemainingInWord) {
+                    listOfTiles.add(MemTile(this, amount, color, address,
+                                            wordSize-freeBytesRemainingInWord, wordSize-freeBytesRemainingInWord+infoRemaining))
+                    freeBytesRemainingInWord -= infoRemaining
+                    infoRemaining = 0
+                }
+                else
+                {
+                    listOfTiles.add(MemTile(this, bytes, color, address,
+                                            wordSize-freeBytesRemainingInWord, wordSize))
+                    infoRemaining -= freeBytesRemainingInWord
                     address += 1
+                    freeBytesRemainingInWord = 0
                 }
-                // finally, start a new "word" if there is a fraction left
-                infoRemaining %= wordSize
-                if (infoRemaining>0) {
-                    listOfTiles.add(MemTile(this, bytes, color.first, color.second, address,
-                                            0, infoRemaining))
-                    infoRemainingInWord = wordSize - infoRemaining
-                    if (infoRemainingInWord==0)
-                        address += 1
-                }
+            // then, create entire lines
+            repeat (infoRemaining/wordSize) {
+                if (isFull())
+                    return infoRemaining
+                listOfTiles.add(MemTile(this, bytes, color, address,
+                                        0, wordSize))
+                address += 1
+                infoRemaining -= wordSize
             }
+            // finally, start a new "word" if there is a fraction left
+            if (infoRemaining>0) {
+                listOfTiles.add(MemTile(this, bytes, color, address,
+                                        0, infoRemaining))
+                freeBytesRemainingInWord = wordSize - infoRemaining
+                infoRemaining = 0
+                if (freeBytesRemainingInWord==0)
+                    address += 1
+            }
+            return infoRemaining
         }
 
         fun display(canvas: Canvas)
@@ -198,19 +246,19 @@ class MemoryMapView @JvmOverloads constructor(context: Context, attrs: Attribute
             paintOutline.color = Color.WHITE
             canvas.drawRect(area, paintOutline)
             listOfTiles.forEach { tile ->
-                paint.color = tile.color
-                paintOutline.color = tile.borderColor
+                paint.color = tile.color.first
+                paintOutline.color = tile.color.second
                 val rect = tile.getRect(scaleFactorWidth, scaleFactorHeight)
                 canvas.drawRect(rect, paint)
                 // canvas.drawRect(rect, paintOutline)
             }
+            area.displayTextCenteredInRect(canvas, ScoreBoard.informationToString(memSize*8), paintText)
         }
     }
 
     inner class MemTile(val memoryBank: MemoryBank,
                         val amountInBytes: Int,
-                        val color: Int,
-                        val borderColor: Int,
+                        val color: Pair<Int, Int>,
                         val address: Int,
                         val startByte: Int,
                         val endByte: Int)
@@ -228,11 +276,13 @@ class MemoryMapView @JvmOverloads constructor(context: Context, attrs: Attribute
             return Rect(left.toInt(), top.toInt(), right.toInt(), bottom.toInt())
         }
     }
+
     data class StageData
     /** a short form of the relevant stage data, including the identifier (series/number) */
     (
             var series: Int = 1,
             var number: Int = 1,
+            /** info gained in this stage (in bits) */
             var amount: Int = 0,
     )
 
