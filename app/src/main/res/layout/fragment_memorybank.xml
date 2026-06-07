@@ -30,11 +30,23 @@
         app:layout_constraintStart_toStartOf="parent"
         />
 
+    <TextView
+        android:id="@+id/caption_above"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:text="@string/level_statistics_caption"
+        android:textColor="@color/text_white"
+        android:textSize="@dimen/dialog_text_size"
+        app:layout_constraintTop_toBottomOf="@+id/title_view"
+        app:layout_constraintStart_toStartOf="parent"
+        />
+
     <com.example.cpudefense.extras.MemoryMapView
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:id="@+id/map_view"
-        app:layout_constraintTop_toBottomOf="@id/title_view"
+        app:layout_constraintTop_toBottomOf="@id/caption_above"
         app:layout_constraintBottom_toTopOf="@id/caption_view"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

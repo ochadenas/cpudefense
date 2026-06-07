@@ -244,15 +244,14 @@ class MemoryMapView @JvmOverloads constructor(context: Context, attrs: Attribute
             /** width of one byte in pixels */
             val scaleFactorWidth: Float = area.width() / wordSize.toFloat()
             paintOutline.color = Color.WHITE
-            canvas.drawRect(area, paintOutline)
             listOfTiles.forEach { tile ->
                 paint.color = tile.color.first
-                paintOutline.color = tile.color.second
                 val rect = tile.getRect(scaleFactorWidth, scaleFactorHeight)
                 canvas.drawRect(rect, paint)
-                // canvas.drawRect(rect, paintOutline)
             }
-            area.displayTextCenteredInRect(canvas, ScoreBoard.informationToString(memSize*8), paintText)
+            canvas.drawRect(area, paintOutline)
+            val textArea = Rect(area.left, area.top, area.right, area.top + area.height()/10)
+            textArea.displayTextCenteredInRect(canvas, ScoreBoard.informationToString(memSize*8), paintText)
         }
     }
 

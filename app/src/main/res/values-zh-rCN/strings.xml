@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name" translatable="false">ChipDefense</string>
-    <string name="app_name_last" translatable="false">Defense</string>
 
     <string name="button_start_game">开始新游戏</string>
     <string name="button_reset_progress">重置游戏进度</string>
@@ -396,20 +394,17 @@ ACC 的优势在于速度极快。"
     <string name="message_timestamp">导出时间：%s %s</string>
     <string name="message_progress">最高到达关卡：系列 %2$d 第 %1$d 关</string>
     <string name="question_import_confirmation">%s %s %s 是否要导入此游戏状态？</string>
-    <string name="default_export_filename" translatable="false">chipdefense_export_%s.txt</string>
     <string name="message_export_successful">导出成功！</string>
     <string name="message_export_error">导出时出错：%1$s</string>
     <string name="error_reading_file">读取或解析文件时出错：%s</string>
     <string name="shithappens_1">好吧…</string>
     <string name="shithappens_2">嗯…</string>
-    <string name="three_question_marks" translatable="false">\???</string>
     <string name="extras_title">附加内容</string>
     <string name="level_editor_title">电路编辑器</string>
     <string name="extras_swipemessage" translatable="false">Swipe left and right</string>
-    <string name="url_releasenotes_base" translatable="false">https://github.com/ochadenas/cpudefense/wiki/%s</string>
     <string name="url_releasenotes_localized">%5BEN%5D-Release-Notes</string>
     <string name="message_open_in_browser">正在浏览器中打开页面…</string>
-    <string name="level_statistics_title">统计</string>
+    <string name="level_statistics_title">存储库</string>
     <string name="level_statistics_caption">每关获取的信息量</string>
     <string name="settings_title">设置</string>
     <string name="about_title">关于本游戏</string>

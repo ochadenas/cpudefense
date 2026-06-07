@@ -306,4 +306,8 @@
     <string name="level_editor_title">Editeur de circuits</string>
     <string name="url_releasenotes_localized">%5BFR%5D-Release-Notes</string>
     <string name="message_open_in_browser">Affiche la page dans le navigateur</string>
+    <string name="level_statistics_title">Barrettes de mémoire</string>
+    <string name="level_statistics_caption">Informations obtenues par niveau</string>
+    <string name="total_information_gained">Information totale : %1$s</string>
+    <string name="extras_swipemessage">Faites glisser vers la gauche et la droite</string>
 </resources>

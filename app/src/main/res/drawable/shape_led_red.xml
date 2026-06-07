@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape>
+            <solid android:color="@color/led_red" />
+        </shape>
+    </item>
+    <item>
+        <shape>
+            <stroke android:width="2dp" android:color="@color/led_red_glow" />
+            <padding android:left="2dp" android:top="2dp" android:right="2dp" android:bottom="2dp" />
+        </shape>
+    </item>
+</layer-list>

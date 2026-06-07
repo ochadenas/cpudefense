@@ -50,8 +50,9 @@
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:orientation="horizontal"
+        android:background="@drawable/shape_socket"
         android:layout_gravity="bottom|center_horizontal"
-        android:layout_margin="16dp"
+        android:padding="2dp"
         app:layout_constraintTop_toTopOf="@id/button_back"
         app:layout_constraintBottom_toBottomOf="@id/button_back"
         app:layout_constraintEnd_toEndOf="@id/button_back"
@@ -70,6 +71,12 @@
             android:background="@android:color/black"
             />
         <View android:id="@+id/led3"
+            android:layout_width="12dp"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="4dp"
+            android:background="@android:color/black"
+            />
+        <View android:id="@+id/led4"
             android:layout_width="12dp"
             android:layout_height="match_parent"
             android:layout_marginHorizontal="4dp"

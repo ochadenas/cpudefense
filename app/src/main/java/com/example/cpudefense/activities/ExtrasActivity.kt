@@ -23,7 +23,6 @@ import androidx.viewpager2.widget.ViewPager2
 import com.example.cpudefense.R
 import com.example.cpudefense.extras.MemoryMapView
 import com.example.cpudefense.extras.SevenSegmentClock
-import com.example.cpudefense.extras.StatisticsMapView
 import com.example.cpudefense.gameElements.ScoreBoard
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -57,8 +56,13 @@ class ExtrasActivity : AppCompatActivity()
         val dots = listOf(findViewById<View>(R.id.led1), findViewById(R.id.led2), findViewById(R.id.led3))
         findViewById<ViewPager2>(R.id.viewPager).registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
-                dots.forEachIndexed { i, v -> v.setBackgroundColor(if (i == position) resources.getColor(R.color.led_red_glow)
-                                                                   else resources.getColor(R.color.led_off)) }
+                dots.forEachIndexed { i, view ->
+                    if (i == position) {
+                        view.background = resources.getDrawable(R.drawable.shape_led_red)
+                    } else {
+                        view.background = resources.getDrawable(R.drawable.shape_led_off)
+                    }
+                }
             }
         })
     }
@@ -104,8 +108,6 @@ class ExtrasActivity : AppCompatActivity()
         }
         catch (_: Exception) {}  // come here if no external app can handle the request
     }
-
-
 }
 
 class LevelStatisticsFragment : Fragment() {
@@ -113,7 +115,7 @@ class LevelStatisticsFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?
     {
-        val view = inflater.inflate(R.layout.statistics, container, false)
+        val view = inflater.inflate(R.layout.fragment_memorybank, container, false)
         memoryMapView = view.findViewById(R.id.map_view)
         return view
     }
@@ -126,7 +128,8 @@ class LevelStatisticsFragment : Fragment() {
     /** updates the information in the caption below the map */
     {
         val cashString = ScoreBoard.informationToString(cash)
-        view?.findViewById<TextView>(R.id.caption_view)?.text = "Total information gained: $cashString"
+        view?.findViewById<TextView>(R.id.caption_view)?.text =
+            getString(R.string.total_information_gained, cashString)
     }
 }
 

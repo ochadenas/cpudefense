@@ -306,4 +306,8 @@
     <string name="level_editor_title">Editore dei circuiti</string>
     <string name="url_releasenotes_localized">%5BIT%5D-Release-Notes</string>
     <string name="message_open_in_browser">Mostro la pagina nel browser</string>
+    <string name="extras_swipemessage">Scorri a sinistra e a destra</string>
+    <string name="level_statistics_title">Moduli di memoria</string>
+    <string name="level_statistics_caption">Informazioni ottenute per fase</string>
+    <string name="total_information_gained">Informazioni totali: %1$s</string>
 </resources>

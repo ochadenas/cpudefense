@@ -336,4 +336,8 @@ Das Verschieben ist gleichbedeutend mit einer Division durch 2."
     <string name="level_editor_title">Schaltkreis-Editor</string>
     <string name="url_releasenotes_localized">%5BDE%5D-Release-Notes</string>
     <string name="message_open_in_browser">Zeige Seite im Browser</string>
+    <string name="extras_swipemessage">Wischen nach links und rechts …</string>
+    <string name="level_statistics_title">Speicherbänke</string>
+    <string name="level_statistics_caption">Erhaltene Information pro Level</string>
+    <string name="total_information_gained">Gesamte Information: %1$s</string>
 </resources>
