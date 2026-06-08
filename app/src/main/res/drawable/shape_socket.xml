@@ -7,7 +7,7 @@
     </item>
     <item>
         <shape>
-            <stroke android:width="2dp" android:color="@color/white" />
+            <stroke android:width="2dp" android:color="@color/text_gray" />
             <padding android:left="2dp" android:top="2dp" android:right="0dp" android:bottom="0dp" />
         </shape>
     </item>

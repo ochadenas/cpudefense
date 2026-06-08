@@ -401,7 +401,6 @@ ACC 的优势在于速度极快。"
     <string name="shithappens_2">嗯…</string>
     <string name="extras_title">附加内容</string>
     <string name="level_editor_title">电路编辑器</string>
-    <string name="extras_swipemessage" translatable="false">Swipe left and right</string>
     <string name="url_releasenotes_localized">%5BEN%5D-Release-Notes</string>
     <string name="message_open_in_browser">正在浏览器中打开页面…</string>
     <string name="level_statistics_title">存储库</string>
@@ -409,7 +408,9 @@ ACC 的优势在于速度极快。"
     <string name="settings_title">设置</string>
     <string name="about_title">关于本游戏</string>
     <string name="about_version">版本 %s。</string>
-    <string name="about_license">"本游戏为开源软件。访问 <a href="https://github.com/ochadenas/cpudefense#MIT-1-ov-file">github.com/ochadenas/cpudefense</a> 了解更多信息。\n\n信息时代英雄的肖像大多源自公共领域作品。\n\n原始照片：\n  Alex Handy (CC BY-SA 2.0)\n  Jacob Appelbaum (CC BY-SA 2.5)\n  Konrad Jacobs (CC BY-SA 2.0 de)\n  Rama (CC BY-SA 2.0 fr)\n  Shervinafshar (CC BY-SA 3.0)\n  Tony Bove (CC BY 3.0)\n  Wolfgang Hunscher (CC BY-SA 3.0)\n  Silvano de Gennaro (courtesy of the author)\n  Clermont Auvergne Métropole (CC BY-SA 4.0)\n  Jean-Frédéric (CC BY 2.0)\n  Tekniska Museet (CC BY 2.0)\n  The Royal Society (CC BY-SA 4.0)\n  Konrad Jacobs (CC BY-SA 2.0 de)\n  \nComputer boards:\n  Autopilot (CC BY-SA 4.0)\n  Bill Bertram (CC-BY 2.0)\n  Oliver Chadenas (CC BY-SA 3.0)\n  Smial (FAL)\n\nAll other artwork:\n  Oliver Chadenas (CC BY-SA 3.0)"</string>
+    <string name="about_text">此游戏是开源的。访问 github.com/ochadenas/cpudefense 了解更多信息。\n\n概念与开发：\nOliver Chadenas (ochadenas)\n\n中文翻译：\nlalala-233\n\n其他翻译：\nochadenas\n</string>
+    <string name="about_license_header">许可证</string>
+    <string name="about_license">此软件在 <a href="https://github.com/ochadenas/cpudefense#MIT-1-ov-file">MIT</a> 许可证 下发布。\n\n信息时代英雄的肖像大多源自公共领域作品。\n\n原始照片：\n  Alex Handy (CC BY-SA 2.0)\n  Jacob Appelbaum (CC BY-SA 2.5)\n  Konrad Jacobs (CC BY-SA 2.0 de)\n  Rama (CC BY-SA 2.0 fr)\n  Shervinafshar (CC BY-SA 3.0)\n  Tony Bove (CC BY 3.0)\n  Wolfgang Hunscher (CC BY-SA 3.0)\n  Silvano de Gennaro (courtesy of the author)\n  Clermont Auvergne Métropole (CC BY-SA 4.0)\n  Jean-Frédéric (CC BY 2.0)\n  Tekniska Museet (CC BY 2.0)\n  The Royal Society (CC BY-SA 4.0)\n  Konrad Jacobs (CC BY-SA 2.0 de)\n  \nComputer boards:\n  Autopilot (CC BY-SA 4.0)\n  Bill Bertram (CC-BY 2.0)\n  Oliver Chadenas (CC BY-SA 3.0)\n  Smial (FAL)\n\nAll other artwork:\n  Oliver Chadenas (CC BY-SA 3.0)</string>
     <string name="about_info_title">信息</string>
     <string name="about_info_text">如需更多游戏玩法信息与提示，请访问游戏维基页面。</string>
     <string name="button_exit">退出</string>
