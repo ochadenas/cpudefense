@@ -90,10 +90,10 @@ class GameActivity : Activity() {
      * The other possibility to make it "true" is to use the button "Resume Game". */
     private var resumeGame = true
 
-    override fun onCreate(savedInstanceState: Bundle?)
-    /** this function gets called when the app was started, but not when the user returns
+    /** function that gets called when the app was started, but not when the user returns
      * here from another app.
      */
+    override fun onCreate(savedInstanceState: Bundle?)
     {
         super.onCreate(savedInstanceState)
         /* here, the size of the surfaces might not be known */
@@ -110,10 +110,10 @@ class GameActivity : Activity() {
         // after this, onResume() is called by the system
     }
 
-    override fun onPause()
-    /** this method get executed when the user presses the system's "back" button,
-     *  but also when she navigates to another app
+    /** method executed when the user presses the system's "back" button,
+     *  but also when they navigate to another app
      */
+    override fun onPause()
     {
         logger?.log("Pausing Game Activity")
         Persistency(this).saveGeneralState(gameMechanics)
@@ -122,10 +122,10 @@ class GameActivity : Activity() {
         super.onPause()
     }
 
-    override fun onResume()
-    /** this function gets called in any case, regardless of whether
+    /** function that gets called in any case, regardless of whether
      * a new game is started or the user just navigates back to the app.
      */
+    override fun onResume()
     {
         super.onResume()
         Toast.makeText(this, resources.getString(R.string.toast_loading), Toast.LENGTH_SHORT).show()
@@ -221,10 +221,10 @@ class GameActivity : Activity() {
         super.onDestroy()
     }
 
-    fun handleInsets(view: View, windowInsets: WindowInsetsCompat): WindowInsetsCompat
     /** handles the width of the system status bar (top and bottom) and applies
      * margins in order to avoid overlapping of game elements
      */
+    fun handleInsets(view: View, windowInsets: WindowInsetsCompat): WindowInsetsCompat
     {
         val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
         view.updateLayoutParams<ViewGroup.MarginLayoutParams>

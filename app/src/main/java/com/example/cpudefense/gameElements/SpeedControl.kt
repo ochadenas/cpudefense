@@ -26,7 +26,7 @@ class SpeedControl(var gameView: GameView)
     private var returnButton = SpeedControlButton(gameView, gameMechanics, SpeedControlButton.Type.RETURN, this)
     private var zoomPlusButton = SpeedControlButton(gameView, gameMechanics, SpeedControlButton.Type.ZOOM_PLUS, this)
     private var zoomMinusButton = SpeedControlButton(gameView, gameMechanics, SpeedControlButton.Type.ZOOM_MINUS, this)
-    private var buttons = mutableListOf( button1, button2, returnButton, lockButton, zoomMinusButton, zoomPlusButton )
+    private var buttons = mutableListOf( button1, button2, returnButton, lockButton)
     /** area that holds the speed buttons */
     private var areaRight = Rect(0,0,0,0)
     /** area containing the "return to menu" and "lock scrolling" button */
@@ -35,6 +35,8 @@ class SpeedControl(var gameView: GameView)
     private var areaCenter = Rect(0,0,0,0)
     /** area that contains "zoom in" and "zoom out" buttons */
     private var areaTop = Rect(0,0,0,0)
+    /** the size of the control buttons in pixels, with density factor applied */
+    var actualButtonSize: Int = 0
 
     private var stageInfoText = ""
     private var statusInfoBitmap: Bitmap? = null
@@ -42,11 +44,15 @@ class SpeedControl(var gameView: GameView)
 
     fun setSize(parentArea: Rect)
     {
-        val actualButtonSize = (GameView.speedControlButtonSize * gameView.resources.displayMetrics.density.toInt() *
+        actualButtonSize = (GameView.speedControlButtonSize * gameView.resources.displayMetrics.density.toInt() *
             if (gameView.gameActivity.settings.configUseLargeButtons) 1.6f else 1.0f).toInt()
         val margin = actualButtonSize / 5   // space between the buttons
         if (gameView.gameActivity.settings.fastFastForward)
             buttons.add(button3) // add a "fast fast-forward" button
+        if (gameView.gameActivity.settings.zoom) {
+            buttons.add(zoomPlusButton)
+            buttons.add(zoomMinusButton)
+        }
         buttons.forEach {it.setSize(actualButtonSize)}
         areaRight.right = parentArea.right - margin
         areaRight.bottom = parentArea.bottom - margin

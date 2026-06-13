@@ -29,61 +29,70 @@ class Viewport
     var gridHeight: Int = 0
     /** used to keep track whether the network elements must be recalculated after scale changes */
     var scaleHasChanged = true
-    /** vertical size of the complete game board, in grid coordinates */
+    /** horizontal scale factor applied */
     private var scaleX = 1.0f
+    /** vertical scale factor applied */
     private var scaleY = 1.0f
-    /** offset to the origin when moving the viewport around, in screen coordinates */
+    /** horizontal offset to the origin when moving the viewport around, in screen coordinates. Positive values mean that the network is shifted towards the right. */
     private var offsetX = 0
+    /** vertical offset to the origin when moving the viewport around, in screen coordinates. Positive values mean that the network is shifted towards the bottom. */
     private var offsetY = 0
 
     /** zoom factor chosen by the player */
     var userScale = 1.0f
+    /** general screen scale factor, based on Density */
+    var scaleFactor = 1.0f
     /** whether the viewport has been initialized with width and height */
     var isValid = false
 
     /** default grid size that fits on screen without scrolling */
     private val standardGridSize: Coord = Coord(46, 60)
 
-    fun determineScreenSize(width: Int, height: Int)
     /** sets the size in screen coordinates */
+    fun determineScreenSize(width: Int, height: Int, scaleFactor: Float)
     {
         if (width == 0 || height == 0)
             isValid = false
         else
         {
+            this.scaleFactor = scaleFactor
             screen = Rect(0, 0, width, height)
-            viewportWidth = width - 2 * GameView.viewportMargin
-            viewportHeight = height - 2 * GameView.viewportMargin
+            viewportWidth = width - (2 * GameView.viewportMargin*scaleFactor).toInt()
+            viewportHeight = height - (2 * GameView.viewportMargin*scaleFactor).toInt()
             viewportSafetyMargin = ((width+height) * 0.2f).toInt()
             calculateScale()
         }
     }
 
+    /** resets the viewport zoom and displacement, e.g. at the start of a new stage.
+     * Optional offsets can be given in screen coordinates.
+     */
     fun reset()
     {
         offsetX = 0
-        offsetY = 20
+        offsetY = 0
         userScale = 1.0f
         scaleHasChanged = true
     }
 
-    fun determineGridSize(gridSize: Coord)
     /** sets the size in grid coordinates */
+    fun determineGridSize(gridSize: Coord)
     {
         viewportData.gridSize = gridSize.asPair()
         calculateScale()
     }
+    /** sets the size in grid coordinates */
     fun determineGridSize(gridSizeX: Int, gridSizeY: Int)
-            /** sets the size in grid coordinates */
     {
         viewportData.gridSize = Pair(gridSizeX.toFloat(), gridSizeY.toFloat())
         calculateScale()
     }
 
+    /** given the viewport width and height, calculates the x and y scale factors.
+     * To be called whenever the size of the screen changes.
+     * @param newScale the additional scale factor set by the user
+     */
     private fun calculateScale(newScale: Float? = null)
-            /** given the viewport width and height, calculates the x and y scale factors.
-             * To be called whenever the size of the screen changes.
-             */
     {
         val width = viewportWidth.toFloat() // screen coords
         val height = viewportHeight.toFloat()
@@ -104,8 +113,9 @@ class Viewport
             isValid = false
     }
 
+    /** add an offset to move the viewport around.
+     * Positive values move the network to the left and down. */
     fun addOffset(deltaX: Float, deltaY: Float)
-    /** add an offset to move the viewport around */
     {
         if (deltaX>0 && offsetX<viewportWidth-viewportSafetyMargin)
             offsetX += deltaX.toInt()
@@ -117,6 +127,7 @@ class Viewport
             offsetY += deltaY.toInt()
     }
 
+    /** set a new scale factor */
     fun scale(param: Float)
     {
         val factor = 1f + (param-1f) * 0.8f
@@ -130,6 +141,7 @@ class Viewport
                   - (screen.height() * (factor-1)).toInt() / 2f)
     }
 
+    /** scale up or down in discrete steps */
     fun scaleByStep(network: Network?, zoomIn: Boolean = true)
     {
         val factor = if (zoomIn) 1.2f else 0.8f
@@ -142,6 +154,7 @@ class Viewport
         }
     }
 
+    /** converts a point in grid coordinates into screen coordinates */
     fun gridToScreen(gridPos: Coord): Pair<Int, Int>
     {
         val posX = gridPos.x * scaleX + GameView.viewportMargin + offsetX
@@ -149,16 +162,16 @@ class Viewport
         return Pair(posX.toInt(), posY.toInt())
     }
 
-    fun rectToScreen(rectInGridCoord: Rect): Rect
     /** converts a rectangle given in grid coordinates */
+    fun rectToScreen(rectInGridCoord: Rect): Rect
     {
         val upperLeft = gridToScreen(Coord(rectInGridCoord.left, rectInGridCoord.top))
         val lowerRight = gridToScreen(Coord(rectInGridCoord.right, rectInGridCoord.bottom))
         return Rect(upperLeft.first, upperLeft.second, lowerRight.first, lowerRight.second)
     }
 
+    /** determines which half of the viewport the point is in. */
     fun isInRightHalfOfViewport(posX: Int): Boolean
-            /** determines which half of the viewport the point is in. */
     {
         return posX > viewportWidth / 2
     }

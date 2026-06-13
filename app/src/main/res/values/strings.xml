@@ -419,4 +419,5 @@ The programming language Pascal is named after him."</string>
     <string name="level_statistics_title">Memory Banks</string>
     <string name="level_statistics_caption">Information gained per stage</string>
     <string name="total_information_gained">Total information: %1$s\n</string>
+    <string name="settings_zoom">Show zoom buttons</string>
 </resources>

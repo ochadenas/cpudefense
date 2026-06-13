@@ -51,10 +51,6 @@ class WelcomeActivity : AppCompatActivity() {
             ViewCompat.setOnApplyWindowInsetsListener(rootView, ::handleInsets)
         }
         info = packageManager.getPackageInfo(this.packageName, PackageManager.GET_ACTIVITIES)
-        // migrate preferences files, if needed
-        val prefsLegacy = getSharedPreferences(Persistency.filename_legacy, MODE_PRIVATE)
-        val prefsSettings = getSharedPreferences(Persistency.filename_settings, MODE_PRIVATE)
-        settings.migrateSettings(prefsLegacy, prefsSettings)
         // permanently delete the legacy prefs file
         with (File(applicationInfo.dataDir + "/shared_prefs/${Persistency.filename_legacy}.xml"))
         { if (exists()) delete() }

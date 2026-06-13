@@ -127,15 +127,6 @@
             android:textColor="#FFFFFF" />
 
         <androidx.appcompat.widget.SwitchCompat
-            android:id="@+id/switch_show_atts_in_range"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:minHeight="36dp"
-            android:onClick="savePrefs"
-            android:text="@string/settings_show_atts_in_range"
-            android:textColor="#FFFFFF" />
-
-        <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/switch_use_large_buttons"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -145,22 +136,21 @@
             android:textColor="#FFFFFF" />
 
         <androidx.appcompat.widget.SwitchCompat
-            android:id="@+id/switch_show_framerate"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:minHeight="36dp"
-            android:onClick="savePrefs"
-            android:text="@string/settings_show_framerate"
-            android:textColor="#FFFFFF" />
-
-
-        <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/switch_fast_fast_forward"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:minHeight="36dp"
             android:onClick="savePrefs"
             android:text="@string/settings_fast_fast_forward"
+            android:textColor="#FFFFFF" />
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/switch_zoom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="36dp"
+            android:onClick="savePrefs"
+            android:text="@string/settings_zoom"
             android:textColor="#FFFFFF" />
 
         <androidx.appcompat.widget.SwitchCompat
@@ -179,6 +169,24 @@
             android:minHeight="36dp"
             android:onClick="savePrefs"
             android:text="@string/settings_use_hex"
+            android:textColor="#FFFFFF" />
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/switch_show_framerate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="36dp"
+            android:onClick="savePrefs"
+            android:text="@string/settings_show_framerate"
+            android:textColor="#FFFFFF" />
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/switch_show_atts_in_range"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="36dp"
+            android:onClick="savePrefs"
+            android:text="@string/settings_show_atts_in_range"
             android:textColor="#FFFFFF" />
 
         <androidx.appcompat.widget.SwitchCompat

@@ -10,6 +10,7 @@ class Settings {
     var configUseLargeButtons: Boolean = false
     var showFrameRate: Boolean = false
     var fastFastForward: Boolean = false
+    var zoom: Boolean = false
     var keepLevels: Boolean = true
     var showLevelsInHex: Boolean = false
     var activateLogging: Boolean = false
@@ -22,6 +23,7 @@ class Settings {
         configUseLargeButtons = prefs.getBoolean("USE_LARGE_BUTTONS", false)
         showFrameRate = prefs.getBoolean("SHOW_FRAMERATE", false)
         fastFastForward = prefs.getBoolean("USE_FAST_FAST_FORWARD", false)
+        zoom = prefs.getBoolean("USE_ZOOM", false)
         keepLevels = prefs.getBoolean("KEEP_LEVELS", true)
         showLevelsInHex = prefs.getBoolean("USE_HEX", false)
         activateLogging = prefs.getBoolean("LOGGING_ACTIVE", false)
@@ -37,6 +39,7 @@ class Settings {
             putBoolean("USE_LARGE_BUTTONS", configUseLargeButtons)
             putBoolean("SHOW_FRAMERATE", showFrameRate)
             putBoolean("USE_FAST_FAST_FORWARD", fastFastForward)
+            putBoolean("USE_ZOOM", zoom)
             putBoolean("KEEP_LEVELS", keepLevels)
             putBoolean("USE_HEX", showLevelsInHex)
             putBoolean("LOGGING_ACTIVE", activateLogging)
@@ -44,17 +47,4 @@ class Settings {
             apply()
         }
     }
-
-    fun migrateSettings(oldPrefs: SharedPreferences, newPrefs: SharedPreferences)
-    /** try to load the settings either from the "old" or the "new" preferences files.
-     * In any case, the object contains the current settings afterwards.
-     */
-    {
-        if (loadFromFile(newPrefs))
-            return // already migrated
-        loadFromFile(oldPrefs)
-        saveToFile(newPrefs)
-        oldPrefs.edit { clear() }  // delete all entries in the old pref file
-    }
-
 }

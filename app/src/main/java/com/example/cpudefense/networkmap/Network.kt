@@ -99,7 +99,7 @@ class Network(val gameMechanics: GameMechanics, val gameView: GameView, x: Int, 
     {
         if (gameView.hasDefinedSize())
         {
-            viewport.determineScreenSize(gameView.width, gameView.height)
+            viewport.determineScreenSize(gameView.width, gameView.height, gameView.scaleFactor)
             return true
         }
         else

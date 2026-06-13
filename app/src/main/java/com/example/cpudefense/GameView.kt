@@ -76,8 +76,10 @@ class GameView(context: Context):
         const val preferredSizeOfLED = 20
 
         val chipSize = Coord(6,3)
-        /** initial space around the grid, with unshifted viewport */
-        const val viewportMargin = 2
+        /** initial space in screen coordinates around the grid, with unshifted viewport */
+        const val viewportMargin = 4
+        /** additional margin where the viewport can not be scrolled, to avoid being moved off the screen */
+        const val viewportSafetyMargin = 2
         const val minScoreBoardHeight = 100
         const val maxScoreBoardHeight = 320
         const val speedControlButtonSize = 48
@@ -96,6 +98,7 @@ class GameView(context: Context):
     private var viewState = ViewState.NORMAL
     /** lock used to synchronize drawing */
     private var displayLock = Any()
+    private var scrollLock = Any()
 
     private var backgroundColour = Color.BLACK
     private val gestureDetector = GestureDetectorCompat(context, this)
@@ -215,7 +218,7 @@ class GameView(context: Context):
         scoreBoard.Lives()
         scoreBoard.recreateBitmap()
         viewport.reset()
-        viewport.determineScreenSize(this.width, this.height)
+        viewport.determineScreenSize(this.width, this.height, scaleFactor)
         gameMechanics.currentlyActiveStage?.network?.let {
             // viewport.determineGridSize(Coord(it.data.gridSizeX, it.data.gridSizeY))
             it.applyScale(viewport)
@@ -258,7 +261,7 @@ class GameView(context: Context):
         saveGraphicalState()
         // determine dimensions of the different game areas
         val viewportHeight = viewportHeight(h)
-        viewport.determineScreenSize(w, viewportHeight)
+        viewport.determineScreenSize(w, viewportHeight, scaleFactor)
         scoreBoard.setSize(Rect(0, viewportHeight, w, viewportHeight+scoreBoardHeight(h)))
         speedControlPanel.setSize(Rect(0, topMargin, w, viewportHeight))
         intermezzo.setSize(Rect(0, 0, w, h))
@@ -344,7 +347,7 @@ class GameView(context: Context):
             GamePhase.INTERMEZZO -> intermezzo.onScroll(p0, p1, dx, dy)
             else ->
             {
-                if (scrollAllowed) synchronized(displayLock) {
+                if (scrollAllowed) synchronized(scrollLock) {
                     viewport.addOffset(-dx, -dy)
                     gameMechanics.currentlyActiveStage?.network?.recreateNetworkImage(false)
                 }

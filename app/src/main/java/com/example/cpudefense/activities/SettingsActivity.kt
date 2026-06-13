@@ -69,17 +69,13 @@ class SettingsActivity : AppCompatActivity() {
     private fun loadPrefs() {
         val prefs = getSharedPreferences(Persistency.filename_settings, MODE_PRIVATE)
         settings.loadFromFile(prefs)
-        findViewById<SwitchCompat>(R.id.switch_disable_purchase_dialog)?.isChecked =
-            settings.configDisablePurchaseDialog
-        findViewById<SwitchCompat>(R.id.switch_disable_background)?.isChecked =
-            settings.configDisableBackground
-        findViewById<SwitchCompat>(R.id.switch_show_atts_in_range)?.isChecked =
-            settings.configShowAttackersInRange
-        findViewById<SwitchCompat>(R.id.switch_use_large_buttons)?.isChecked =
-            settings.configUseLargeButtons
+        findViewById<SwitchCompat>(R.id.switch_disable_purchase_dialog)?.isChecked = settings.configDisablePurchaseDialog
+        findViewById<SwitchCompat>(R.id.switch_disable_background)?.isChecked = settings.configDisableBackground
+        findViewById<SwitchCompat>(R.id.switch_show_atts_in_range)?.isChecked = settings.configShowAttackersInRange
+        findViewById<SwitchCompat>(R.id.switch_use_large_buttons)?.isChecked = settings.configUseLargeButtons
         findViewById<SwitchCompat>(R.id.switch_show_framerate)?.isChecked = settings.showFrameRate
-        findViewById<SwitchCompat>(R.id.switch_fast_fast_forward)?.isChecked =
-            settings.fastFastForward
+        findViewById<SwitchCompat>(R.id.switch_fast_fast_forward)?.isChecked = settings.fastFastForward
+        findViewById<SwitchCompat>(R.id.switch_zoom)?.isChecked = settings.zoom
         findViewById<SwitchCompat>(R.id.switch_keep_levels)?.isChecked = settings.keepLevels
         findViewById<SwitchCompat>(R.id.switch_use_hex)?.isChecked = settings.showLevelsInHex
         findViewById<SwitchCompat>(R.id.switch_activate_log)?.let {
@@ -105,6 +101,8 @@ class SettingsActivity : AppCompatActivity() {
             findViewById<SwitchCompat>(R.id.switch_show_framerate)?.isChecked ?: false
         settings.fastFastForward =
             findViewById<SwitchCompat>(R.id.switch_fast_fast_forward)?.isChecked ?: false
+        settings.zoom =
+            findViewById<SwitchCompat>(R.id.switch_zoom)?.isChecked ?: false
         settings.keepLevels = findViewById<SwitchCompat>(R.id.switch_keep_levels)?.isChecked ?: true
         settings.showLevelsInHex =
             findViewById<SwitchCompat>(R.id.switch_use_hex)?.isChecked ?: false
@@ -244,12 +242,10 @@ class SettingsActivity : AppCompatActivity() {
     {
         // get version info
         var versionInfoString = getString(R.string.warning_unknown_version)
-        var versionMatch = false // pessimistic assumption
         gameInfo?.let { info -> info.gameVersion.let  { version ->
             if (version != packageInfo?.versionName)
                 versionInfoString = getString(R.string.warning_version_mismatch).format(version, packageInfo?.versionName ?: getString(R.string.three_question_marks))
             else {
-                versionMatch = true
                 versionInfoString = getString(R.string.message_version).format(info.gameVersion)
                 }
             }
