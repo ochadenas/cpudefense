@@ -1,0 +1,16 @@
+Neue Funktionen:
+- Die Zoom-Buttons können im Einstellungen-Dialog deaktiviert werden.
+- Der „Über dieses Spiel“-Dialog wurde durch eine neue „Extras“-Aktivität ersetzt, die durch Wischen nach links und rechts navigierbar ist und mehr Platz für zusätzliche Elemente bietet.
+- Eine Uhr mit Sieben-Segment-Anzeige wurde zur „Extras“-Aktivität hinzugefügt.
+- Eine Darstellung „Speicherbänke“-Visualisierung wurde hinzugefügt, um die im Spiel gesammelten Informationen darzustellen. Dies ist rein kosmetisch und hat keine Spiel-Funktionalität. Hinweis: Informationen werden erst ab Version 1.59 registriert.
+- Der „Release Notes“-Abschnitt wurde entfernt. Stattdessen wird die Browser-App aufgerufen, um die Release Notes im Web anzuzeigen.
+- Die Sieben-Segment-Anzeige hat nun einen Dezimalpunkt.
+- Chinesische Übersetzung hinzugefügt (dank lalala_233).
+
+Fehlerbehebungen:
+- Das Scrollen reagiert schneller.
+- Die CPU verschwand nach dem Verlust eines Lebens.
+
+Sonstiges:
+- Die veraltete Speicherdatei „prefs.xml.xml“ wird gelöscht.
+

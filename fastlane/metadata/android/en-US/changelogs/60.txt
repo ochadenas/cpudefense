@@ -1,0 +1,15 @@
+New features:
+- The Zoom in / Zoom out buttons can be disabled in the Settings dialogue.
+- The “About” dialogue has been replaced by a new “Extras” activity that can be swiped left and right and provides more space for additional elements.
+- A seven-segment display clock has been added to the Extras activity.
+- A “memory bank” visualization has been added to visualize the infomation gained in the game. This is just cosmetic, there is no game funtionality for this. NB: Info gained is registered only from version 1.59 onwards.
+- The Release Notes section has been removed. Instead, the browser app is called to show the release notes on the web.
+- The seven-segment display now has a decimal point.
+- Chinese translation added (thanks to lalala_233)
+
+Bug fixes:
+- Scrolling has been made less smooth but more responsive.
+- Fixed a bug that made the CPU image disappear after losing a life
+
+Miscellaneous:
+- The obsolete legacy save file "prefs.xml.xml" is permanently deleted.

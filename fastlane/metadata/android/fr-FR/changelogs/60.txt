@@ -1,0 +1,15 @@
+Nouvelles fonctionnalités :
+- Les boutons Zoom avant / Zoom arrière peuvent être désactivés dans la fenêtre Paramètres.
+- La fenêtre „À propos“ a été remplacée par une nouvelle activité „Extras“ que l’on peut faire défiler vers la gauche et la droite, offrant plus d’espace pour des éléments supplémentaires.
+- Une horloge à affichage 7 segments a été ajoutée à l’activité „Extras“.
+- Une visualisation „barettes de mémoire“ a été ajoutée pour représenter les informations collectées dans le jeu. Cela est purement cosmétique et n’a aucune fonctionnalité de jeu. Remarque : Les informations ne sont enregistrées qu’à partir de la version 1.59.
+- La section „Notes de version“ a été supprimée. À la place, l’application du navigateur est appelée pour afficher les notes de version sur le web.
+- L’affichage 7 segments dispose désormais d’un point décimal.
+- Traduction chinoise ajoutée (merci à lalala_233).
+
+Corrections de bugs :
+- Le défilement a été rendu moins fluide mais plus réactif.
+- Correction d’un bug qui faisait disparaître l’image du CPU après la perte d’une vie.
+
+Divers :
+- Le fichier de sauvegarde obsolète „prefs.xml.xml“ est définitivement supprimé.

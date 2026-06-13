@@ -1,0 +1,15 @@
+Nuove funzionalità:
+- I pulsanti Zoom in / Zoom out possono essere disabilitati nella finestra delle Impostazioni.
+- La finestra „Informazioni“ è stata sostituita da una nuova attività „Extra“ che può essere sfogliata a sinistra e a destra e offre più spazio per elementi aggiuntivi.
+- Un orologio a display a 7 segmenti è stato aggiunto all’attività „Extra“.
+- È stata aggiunta una visualizzazione „Moduli di memoria“ per rappresentare le informazioni raccolte nel gioco. Questa è solo cosmetica e non ha alcuna funzionalità di gioco. Nota: Le informazioni vengono registrate solo a partire dalla versione 1.59.
+- La sezione „Note di rilascio“ è stata rimossa. Al suo posto, l’app del browser viene avviata per mostrare le note di rilascio sul web.
+- Il display a 7 segmenti ora include un punto decimale.
+- Traduzione in cinese aggiunta (grazie a lalala_233).
+
+Correzioni di bug:
+- Lo scorrimento è stato reso meno fluido ma più reattivo.
+- Risolto un bug che faceva sparire l’immagine della CPU dopo la perdita di una vita.
+
+Varie:
+- Il file di salvataggio obsoleto „prefs.xml.xml“ viene eliminato definitivamente.
