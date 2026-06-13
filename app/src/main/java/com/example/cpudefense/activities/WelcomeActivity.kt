@@ -183,14 +183,11 @@ class WelcomeActivity : AppCompatActivity() {
             else -> buttonResume.isEnabled = false
 
         }
-        // set up the "extras" button if enabled
-        if (GameMechanics.showExtrasDialogue)
-        {
-            val buttonExtras: Button? = findViewById(R.id.infoButton)
-            buttonExtras?. let {
-                it.text = getString(R.string.extras_title)
-                it.setOnClickListener { displayExtrasDialog(it) }
-            }
+        // set up the "extras" button
+        val buttonExtras: Button? = findViewById(R.id.infoButton)
+        buttonExtras?. let { button ->
+            button.text = getString(R.string.extras_title)
+            button.setOnClickListener { displayExtrasDialog(it) }
         }
         // uncomment if there is a message to display
         // showVersionMessage()

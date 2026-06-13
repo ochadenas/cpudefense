@@ -21,7 +21,7 @@ class Wave(var gameMechanics: GameMechanics, var data: Data)
         if (data.currentCount == 0)
             gameMechanics.onEndOfWave()
         else if (data.ticksUntilNextAttacker > 0)
-            data.ticksUntilNextAttacker -= gameMechanics.globalSpeedFactor()/gameMechanics.defaultSpeedFactor
+            data.ticksUntilNextAttacker -= gameMechanics.globalSpeedFactor()/GameMechanics.defaultSpeedFactor
         else {
             val frequency = data.attackerFrequency * gameMechanics.heroModifier(Hero.Type.DECREASE_ATT_FREQ)
             data.ticksUntilNextAttacker = 6.0 / frequency

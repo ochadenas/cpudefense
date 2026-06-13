@@ -422,7 +422,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int):
         }
     }
 
-    private fun recreateChipBitmap()
+    open fun recreateChipBitmap()
     /** recreates the image of this chip, using its current size */
     {
         actualRect?.let {

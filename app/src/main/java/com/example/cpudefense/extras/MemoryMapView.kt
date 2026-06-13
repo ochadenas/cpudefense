@@ -23,9 +23,12 @@ class MemoryMapView @JvmOverloads constructor(context: Context, attrs: Attribute
     AppCompatImageView(context, attrs, defStyleAttr)
 {
         companion object {
-        val oneKiB = 1024
-        val oneMiB = oneKiB*oneKiB
-        val allowedSizes = listOf( 256, oneKiB, 4*oneKiB, 16*oneKiB, 64*oneKiB, oneMiB, 16*oneMiB, 64*oneMiB)
+        const val ONE_KIB = 1024
+        const val ONE_MIB = ONE_KIB*ONE_KIB
+        const val ONE_GIB = ONE_MIB*ONE_KIB
+        val allowedSizes = listOf(256, ONE_KIB, 4*ONE_KIB, 16*ONE_KIB, 64*ONE_KIB, 256*ONE_KIB,
+                                  ONE_MIB, 4*ONE_MIB, 16*ONE_MIB, 64*ONE_MIB, 256*ONE_MIB,
+                                  ONE_GIB, 4*ONE_GIB, 16*ONE_GIB, 64*ONE_GIB, 256*ONE_GIB, 1024*ONE_GIB)
     }
 
     var summaryPerNormalLevel  = HashMap<Int, Stage.Summary>()
@@ -117,7 +120,7 @@ class MemoryMapView @JvmOverloads constructor(context: Context, attrs: Attribute
                     memoryBankList[index].createMemTile(remaining, color)
                 }
             }
-        } catch (ex: IndexOutOfBoundsException) {}
+        } catch (_: IndexOutOfBoundsException) {}
     }
 
     /** Chooses a colour based on the stage identifier.
@@ -199,8 +202,7 @@ class MemoryMapView @JvmOverloads constructor(context: Context, attrs: Attribute
          */
         fun createMemTile(amount: Int, color: Pair<Int, Int>): Int
         {
-            var bytes = amount
-            var infoRemaining = bytes
+            var infoRemaining = amount
             if (freeBytesRemainingInWord>0)  // first, fill up the word already begun
                 if (infoRemaining <= freeBytesRemainingInWord) {
                     listOfTiles.add(MemTile(this, amount, color, address,
@@ -210,7 +212,7 @@ class MemoryMapView @JvmOverloads constructor(context: Context, attrs: Attribute
                 }
                 else
                 {
-                    listOfTiles.add(MemTile(this, bytes, color, address,
+                    listOfTiles.add(MemTile(this, amount, color, address,
                                             wordSize-freeBytesRemainingInWord, wordSize))
                     infoRemaining -= freeBytesRemainingInWord
                     address += 1
@@ -220,14 +222,14 @@ class MemoryMapView @JvmOverloads constructor(context: Context, attrs: Attribute
             repeat (infoRemaining/wordSize) {
                 if (isFull())
                     return infoRemaining
-                listOfTiles.add(MemTile(this, bytes, color, address,
+                listOfTiles.add(MemTile(this, amount, color, address,
                                         0, wordSize))
                 address += 1
                 infoRemaining -= wordSize
             }
             // finally, start a new "word" if there is a fraction left
             if (infoRemaining>0) {
-                listOfTiles.add(MemTile(this, bytes, color, address,
+                listOfTiles.add(MemTile(this, amount, color, address,
                                         0, infoRemaining))
                 freeBytesRemainingInWord = wordSize - infoRemaining
                 infoRemaining = 0

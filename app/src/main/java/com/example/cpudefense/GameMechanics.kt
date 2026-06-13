@@ -8,8 +8,10 @@ import com.example.cpudefense.utils.Logger
 import java.util.Calendar
 import kotlin.random.Random
 
+/** exception to notify the calling method that the temperature excess has caused damage */
 class TemperatureDamageException: Exception("CPU damage by heat")
 
+/** exception to notify the calling method that a hit has been registered */
 class CpuReached: Exception("CPU got hit, removed one life point")
 
 @Suppress("ReplaceWithEnumMap", "ConstPropertyName")
@@ -28,8 +30,6 @@ class GameMechanics {
         /** for debugging purposes only. MUST BE SET TO FALSE */
         const val allowLivesPurchaseInAllStages = false
         /** for debugging purposes only. MUST BE SET TO FALSE */
-        const val showExtrasDialogue = true
-        /** for debugging purposes only. MUST BE SET TO FALSE */
         const val enableLogging = false
         // end of debug options
 
@@ -38,6 +38,8 @@ class GameMechanics {
 
         /** level that shows an Easter egg */
         const val specialLevelNumber = 8
+
+        const val defaultSpeedFactor = 0.512f
 
         // some adjustable game playing parameters
         const val minimalAmountOfCash = 8
@@ -82,10 +84,10 @@ class GameMechanics {
 
         enum class Season { DEFAULT, EASTER, CHRISTMAS }
 
+        /** for "Easter egg" purposes. Determine whether - at the time of playing - we are in
+         * a special season.
+         */
         fun specialSeason(): Season
-                /** for "Easter egg" purposes. Determine whether - at the time of playing - we are in
-                 * a special season.
-                 */
         {
             when (Calendar.getInstance().get(Calendar.MONTH))
             {
@@ -107,8 +109,6 @@ class GameMechanics {
         }
 
     }
-
-    var defaultSpeedFactor = 0.512f
 
     data class StateData(
         /** whether the game is running, paused or between levels */
@@ -142,7 +142,8 @@ class GameMechanics {
     )
 
     data class GlobalData(
-        var coinsTotal: Int = 0  // deprecated. Use PurseOfCoins instead
+        /**  deprecated. Use PurseOfCoins instead */
+        var coinsTotal: Int = 0
     )
 
     var global = GlobalData()
@@ -181,10 +182,10 @@ class GameMechanics {
     enum class GamePhase { START, RUNNING, INTERMEZZO, MARKETPLACE, PAUSED }
     enum class GameSpeed { NORMAL, FAST, MAX }
 
+    /** initializes the data structures for level summaries, heroes and coin purse with empty values.
+     * @param mode selects whether only the ENDLESS series gets deleted, or all series (including ENDLESS).
+     */
     fun deleteProgressOfSeries(mode: LevelMode)
-            /** initializes the data structures for level summaries, heroes and coin purse with empty values.
-             * @param mode selects whether only the ENDLESS series gets deleted, or all series (including ENDLESS).
-             */
     {
         // this gets deleted in any case:
         summaryPerEndlessLevel = HashMap()
@@ -199,16 +200,16 @@ class GameMechanics {
         }
     }
 
+    /** the global speed factor affects the speed of the attackers. Depending on this.
+     * also other delays must be adjusted:
+     * - cooldown of the chips
+     * - cash gain over time
+     * - frequency of attacker generation.
+     *
+     * Actually, this factor is no longer actively used to handle different speeds,
+     * and the function always returns the same value.
+     */
     inline fun globalSpeedFactor(): Float
-            /** the global speed factor affects the speed of the attackers. Depending on this.
-             * also other delays must be adjusted:
-             * - cooldown of the chips
-             * - cash gain over time
-             * - frequency of attacker generation.
-             *
-             * Actually, this factor is no longer actively used to handle different speeds,
-             * and the function always returns the same value.
-             */
     {
         if (state.speed == GameSpeed.FAST)
             return defaultSpeedFactor
@@ -216,26 +217,28 @@ class GameMechanics {
             return defaultSpeedFactor
     }
 
-    fun currentHeroes(stage: Stage.Identifier = currentStageIdent): HashMap<Hero.Type, Hero>
     /** @return the set of heroes for the current level, depending on the mode (BASIC or ENDLESS) */
+    fun currentHeroes(stage: Stage.Identifier = currentStageIdent): HashMap<Hero.Type, Hero>
     {
         val heroes = heroesByMode[stage.mode()]
         return heroes ?: HashMap()
     }
 
-    fun currentHeroesOnLeave(stage: Stage.Identifier, leaveStartsOnLevel: Boolean = false): HashMap<Hero.Type, Hero>
     /**
      * @param leaveStartsOnLevel whether only include the heroes that are starting their leave, or also those that have started before
      * @return all heroes that are on leave during the given stage */
+    fun currentHeroesOnLeave(stage: Stage.Identifier, leaveStartsOnLevel: Boolean = false): HashMap<Hero.Type, Hero>
     {
         return currentHeroes().filterValues { it.isOnLeave(stage, leaveStartsOnLevel) } as HashMap<Hero.Type, Hero>
     }
 
+    /** coin purse used for this stage, depending on the mode (BASIC or ENDLESS) */
     fun currentPurse(stage: Stage.Identifier = currentStageIdent): PurseOfCoins
     {
         return purseOfCoins[stage.mode()] ?: PurseOfCoins(this)
     }
 
+    /** main update function that performs all moves etc. */
     fun update()
     {
         if (state.phase == GamePhase.RUNNING)
@@ -247,6 +250,7 @@ class GameMechanics {
         }
     }
 
+    /** returns the Stage.Summary data of the stage given */
     fun getSummaryOfStage(stage: Stage.Identifier): Stage.Summary?
     {
         when (stage.series)
@@ -258,10 +262,10 @@ class GameMechanics {
         }
     }
 
-    fun setSummaryOfStage(stage: Stage.Identifier, summary: Stage.Summary?)
-    /** Puts the summary data of the stage given as argument into the appropriate hash map,
+    /** puts the summary data of the stage given as argument into the appropriate hash map,
      * depending on the series (normal, turbo, endless)
-      */
+     */
+    fun setSummaryOfStage(stage: Stage.Identifier, summary: Stage.Summary?)
     {
         summary?.let {
             when (stage.series) {
@@ -273,8 +277,8 @@ class GameMechanics {
         }
     }
 
-    fun highestStage(): Stage.Identifier
     /** returns the identifier of the highest stage played so far */
+    fun highestStage(): Stage.Identifier
     {
         summaryPerEndlessLevel.keys.maxOrNull()?.let { return Stage.Identifier(SERIES_ENDLESS, it)}
         summaryPerTurboLevel.keys.maxOrNull()?.let { return Stage.Identifier(SERIES_TURBO, it)}
@@ -290,15 +294,14 @@ class GameMechanics {
     fun onEndOfWave()
     {
         currentlyActiveWave = null
-        // GlobalScope.launch { startNextWave() }
         startNextWave()
     }
 
-    fun removeOneLife(): Int
     /**
      * Remove one of the player's lives.
      * @return the number of lives still left.
      */
+    fun removeOneLife(): Int
     {
         if (state.coinsInLevel > 0)
             state.coinsInLevel--
@@ -308,10 +311,10 @@ class GameMechanics {
         return state.lives
     }
 
-    fun restoreOneLife(): Int
     /** restores one of the lives, purchasing it with coins.
      * @return the new number of lives
-      */
+     */
+    fun restoreOneLife(): Int
     {
         val price = costOfLife()
         if (currentPurse().canAfford(price) && state.lives<state.currentMaxLives)
@@ -324,8 +327,8 @@ class GameMechanics {
     }
 
 
-    fun calculateLives()
     /** calculates the number of lives at the beginning of the stage */
+    fun calculateLives()
     {
         val extraLives = heroModifier(Hero.Type.ADDITIONAL_LIVES)
         state.currentMaxLives = state.maxLives + extraLives.toInt()
@@ -334,31 +337,31 @@ class GameMechanics {
         state.livesRestored = 0
     }
 
+    /** calculates the cost to restore one life lost in the game.
+     * @return Number of coins required
+     */
     fun costOfLife(): Int
-            /** Calculates the cost to restore one life lost in the game.
-             * @return Number of coins required
-             */
     {
         if (currentStageIdent.series != SERIES_ENDLESS && !allowLivesPurchaseInAllStages)
             return 0
         return 1 + state.livesRestored + (currentStageIdent.number / 32)
     }
 
-    fun calculateStartingCash()
     /** calculates the information available at the beginning of a stage */
+    fun calculateStartingCash()
     {
         state.cash = heroModifier(Hero.Type.INCREASE_STARTING_CASH).toInt()
     }
 
-    fun calculateCoins(nextStage: Stage)
     /** calculates the amount of coins available at the beginning of a stage */
+    fun calculateCoins(nextStage: Stage)
     {
         state.coinsInLevel = nextStage.calculateRewardCoins(getSummaryOfStage(nextStage.data.ident))
         state.coinsExtra = 0
     }
 
-    private fun gainAdditionalCash()
     /** increases the amount of cash in regular intervals */
+    private fun gainAdditionalCash()
     {
         val additionalCashDelay = heroModifier(Hero.Type.GAIN_CASH)
         if (additionalCashDelay.toInt() == 0)
@@ -370,9 +373,9 @@ class GameMechanics {
         }
     }
 
+    /** check for exceeding temperature. Create an exception if the heat damage is triggered */
     @Throws(TemperatureDamageException::class)
     private fun checkTemperature()
-    /** check for exceeding temperature. Create an exception if the heat damage is triggered */
     {
         if (state.heat == 0.0)
             return
@@ -385,15 +388,15 @@ class GameMechanics {
         }
     }
 
-    fun actualMaxInternalChipStorage(): Int
     /** @return the maximal number of internal slots in MEM chips, taking hero effects into account */
+    fun actualMaxInternalChipStorage(): Int
     {
         val maxStorage = heroModifier(Hero.Type.ENABLE_MEM_UPGRADE).toInt()
         return if (maxStorage > maxInternalChipStorage) maxInternalChipStorage else maxStorage
     }
 
-    fun heroModifier(type: Hero.Type): Float
     /** gives the hero modifier value for any given type, even if the hero is not present. */
+    fun heroModifier(type: Hero.Type): Float
     {
         val hero: Hero? = currentHeroes()[type]
         hero?.let {
@@ -403,11 +406,11 @@ class GameMechanics {
         return Hero.getStrengthOfType(type, 0) // hero has no effect, return the "level 0" strength
     }
 
-    fun generateHeat(amount: Float, percent: Int = 0): Int
     /** adds an amount of "heat" to the global game temperature, respecting possible modifiers
      * @param percent the part of the heat (in %) that is effectively not applied
      * @return the part of the generated heat that has not been applied
      */
+    fun generateHeat(amount: Float, percent: Int = 0): Int
     {
         val heat = amount * heatAdjustmentFactor  // heat in in-game units
         val convertedHeat = heat * percent / 100f // part that is converted into cash
@@ -416,10 +419,10 @@ class GameMechanics {
         return convertedHeat.toInt()
     }
 
+    /** method to separate heroes and coins between the modes of playing (basic/endless).
+     * Called when migrating from 1.33 to 1.34
+     */
     fun migrateHeroes()
-            /** method to separate heroes and coins between the modes of playing (basic/endless).
-             * Called when migrating from 1.33 to 1.34
-             */
     {
         /* check whether the sum of coins actually spent on heroes exceeds the theoretically
          available amount. In this case, reset the heroes and refund the coins.

@@ -4,7 +4,7 @@
         <shape android:shape="rectangle">
             <solid android:color="@color/led_red" />
         </shape>
-    </item>o
+    </item>
     <item android:padding="2dp">
         <shape android:shape="rectangle">
             <stroke

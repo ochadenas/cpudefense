@@ -13,7 +13,6 @@ import android.graphics.Rect
 import android.graphics.Typeface
 import android.view.GestureDetector
 import android.view.MotionEvent
-import android.view.ScaleGestureDetector
 import android.view.SurfaceHolder
 import android.view.SurfaceView
 import androidx.core.content.edit
@@ -69,17 +68,16 @@ class GameView(context: Context):
         const val coinSizeOnScoreboard = 48
         /** base size of running cryptocoins */
         const val coinSizeOnScreen = 32
+        /** base size of hero card in the marketplace */
         const val cardWidth = 220
         const val cardHeight = cardWidth * 1.41
         const val cardPictureSize = cardWidth * 2 / 3
-        /** horizontal size of LEDs, can be smaller if there is too little space */
+        /** horizontal size of LEDs, actual size can be smaller if there is too little space */
         const val preferredSizeOfLED = 20
 
         val chipSize = Coord(6,3)
         /** initial space in screen coordinates around the grid, with unshifted viewport */
         const val viewportMargin = 4
-        /** additional margin where the viewport can not be scrolled, to avoid being moved off the screen */
-        const val viewportSafetyMargin = 2
         const val minScoreBoardHeight = 100
         const val maxScoreBoardHeight = 320
         const val speedControlButtonSize = 48
@@ -98,11 +96,11 @@ class GameView(context: Context):
     private var viewState = ViewState.NORMAL
     /** lock used to synchronize drawing */
     private var displayLock = Any()
+    /** lock used to synchronize scrolling */
     private var scrollLock = Any()
 
     private var backgroundColour = Color.BLACK
     private val gestureDetector = GestureDetectorCompat(context, this)
-    // private val scaleGestureDetector: ScaleGestureDetector = ScaleGestureDetector(context, this)
 
     /** font for displaying "computer messages" */
     lateinit var monoTypeface: Typeface
@@ -153,11 +151,11 @@ class GameView(context: Context):
         return (width > 0) && (height > 0)
     }
 
-    fun setupView()
     /** called when the game view is created.
      * This is NOT the case when the user returns to the main menu
      *  and then continues the game.
      */
+    fun setupView()
     {
         this.visibility = VISIBLE
         this.holder.addCallback(this)
@@ -167,6 +165,7 @@ class GameView(context: Context):
         effects = Effects(this)
     }
 
+    /** use Ubunto Mono font, if available. Otherwise use standard system monospace font */
     private fun setComputerTypeface()
     {
         try
@@ -190,7 +189,6 @@ class GameView(context: Context):
 
     override fun surfaceDestroyed(p0: SurfaceHolder) {
     }
-
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
