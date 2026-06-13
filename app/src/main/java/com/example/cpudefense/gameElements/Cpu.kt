@@ -14,6 +14,7 @@ class Cpu(network: Network, gridX: Int, gridY: Int): Chip(network, gridX, gridY)
 {
     data class CpuData
     (
+        /** count of hits already scored on the CPU */
         var hits: Int
         )
 
@@ -54,6 +55,10 @@ class Cpu(network: Network, gridX: Int, gridY: Int): Chip(network, gridX, gridY)
         return bitmap
     }
 
+    override fun recreateChipBitmap() {
+        // do NOT call the parent's class function in this case
+    }
+
     override fun display(canvas: Canvas, viewport: Viewport)
     {
         if (bitmap == null)
@@ -76,9 +81,9 @@ class Cpu(network: Network, gridX: Int, gridY: Int): Chip(network, gridX, gridY)
         }
     }
 
-    private fun scoreHit()
     /** function that gets called when an attacker reaches the CPU
      */
+    private fun scoreHit()
     {
         cpuData.hits++
         throw CpuReached()
