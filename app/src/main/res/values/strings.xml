@@ -110,6 +110,7 @@ The advantage of ACC is that it is really fast."
 
 In hex, you have digits from 0 to 9 and then from A to F. The hex number x0F equals 15, or 1111 in binary."
     </string>
+    <string name="instr_24">You can zoom the network in and out using the [+] and [-] buttons. If you don\'t like them, they can be disabled in the “Settings” section.</string>
     <string name="instr_12">
 "Two more chip types: ADD and SHL.\n\nThese do the opposite of SUB and SHR, respectively: They add 1 to the number and shift the bits to the left.\n\nOf course, this is really undesired. You can “upgrade” these chips to reduce their strength or make them disappear."
     </string>

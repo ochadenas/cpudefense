@@ -31,7 +31,7 @@ class Instructions(val gameView: GameView, var stage: Stage.Identifier, var show
         resources.getString(R.string.instr_did_you_know) + "\n\n" +
         resources.getStringArray(R.array.fun_fact).random()
     else ""
-    var bitmap: Bitmap = createBitmap(instructionText(stage.number), gameView.width-2*margin)
+    var bitmap: Bitmap = createBitmap(instructionText(stage.number)+"\n", gameView.width-2*margin)
 
     fun setTextArea(rect: Rect)
     {
@@ -60,6 +60,7 @@ class Instructions(val gameView: GameView, var stage: Stage.Identifier, var show
                 23 -> resources.getString(R.string.instr_12)
                 24 -> resources.getString(R.string.instr_16)
                 10 -> resources.getString(R.string.instr_11)
+                15 -> resources.getString(R.string.instr_24)
                 21 -> resources.getString(R.string.instr_13)
                 27 -> resources.getString(R.string.instr_14)
                 28 -> resources.getString(R.string.instr_15).format(GameMechanics.temperatureLimit)

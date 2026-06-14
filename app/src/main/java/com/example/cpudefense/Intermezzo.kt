@@ -126,11 +126,14 @@ class Intermezzo(var gameView: GameView): GameElement(), Fadable {
         typewriter = Typewriter(gameView, myArea, lines) { onTypewriterDone() }
     }
 
-    private fun heightOfConsoleLine(): Int
-    /** @return the y position of the green line that separates the typewriter text */
+    /** gives the y position of the green line that separates the typewriter text
+     * @param whenEmpty if true, return the initial size, without any text.
+     * Otherwise, return the current height. */
+    private fun heightOfConsoleLine(whenEmpty: Boolean = false): Int
     {
         var y = myArea.bottom - Typewriter.heightOfEmptyTypewriterArea
-        typewriter?.let { y = it.topOfTypewriterArea() }
+        if (!whenEmpty)
+            typewriter?.let { y = it.topOfTypewriterArea() }
         return y
     }
 
@@ -140,6 +143,16 @@ class Intermezzo(var gameView: GameView): GameElement(), Fadable {
         paintLine.style = Paint.Style.FILL_AND_STROKE
         paintLine.color = resources.getColor(R.color.text_green)
         canvas.drawRect(Rect(0, y-widthOfConsoleLine, gameView.right, y), paintLine)
+    }
+
+    /** paints the faint shadow line to simulate a "burnt in" image */
+    private fun displayShadowLine(canvas: Canvas, y: Int)
+    {
+        paintLine.style = Paint.Style.FILL_AND_STROKE
+        paintLine.color = resources.getColor(R.color.text_green)
+        paintLine.alpha = 40
+        canvas.drawRect(Rect(0, y-widthOfConsoleLine, gameView.right, y), paintLine)
+        paintLine.alpha = 255
     }
 
     private fun heroesOnLeaveText(): List<String>
@@ -225,6 +238,7 @@ class Intermezzo(var gameView: GameView): GameElement(), Fadable {
         buttonPurchase?.display(canvas)
         heroSelection?.display(canvas)
         displayLine(canvas, heightOfConsoleLine())
+        displayShadowLine(canvas, heightOfConsoleLine(true))
     }
 
     fun onDown(event: MotionEvent): Boolean {

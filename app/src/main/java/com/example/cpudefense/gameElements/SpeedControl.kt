@@ -11,6 +11,7 @@ import com.example.cpudefense.R
 import com.example.cpudefense.utils.setCenter
 import com.example.cpudefense.utils.setLeft
 import androidx.core.graphics.createBitmap
+import com.example.cpudefense.Stage
 import com.example.cpudefense.utils.setTop
 
 class SpeedControl(var gameView: GameView)
@@ -38,6 +39,9 @@ class SpeedControl(var gameView: GameView)
     /** the size of the control buttons in pixels, with density factor applied */
     var actualButtonSize: Int = 0
 
+    /** the stage number (minus one) where the zoom buttons are shown for the first time */
+    private val showZoomOnStage = Stage.Identifier(1, 14)
+
     private var stageInfoText = ""
     private var statusInfoBitmap: Bitmap? = null
     private var bitmapPaint = Paint()
@@ -49,7 +53,8 @@ class SpeedControl(var gameView: GameView)
         val margin = actualButtonSize / 5   // space between the buttons
         if (gameView.gameActivity.settings.fastFastForward)
             buttons.add(button3) // add a "fast fast-forward" button
-        if (gameView.gameActivity.settings.zoom) {
+        if (gameView.gameActivity.settings.zoom && gameView.gameMechanics.currentStageIdent.isGreaterThan(showZoomOnStage))
+        {
             buttons.add(zoomPlusButton)
             buttons.add(zoomMinusButton)
         }

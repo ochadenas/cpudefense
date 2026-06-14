@@ -9,22 +9,27 @@ import com.example.cpudefense.GameView
 import com.example.cpudefense.R
 import com.example.cpudefense.effects.Fadable
 import com.example.cpudefense.effects.Fader
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
 import java.util.concurrent.CopyOnWriteArrayList
 
 class Typewriter(val gameView: GameView, myArea: Rect, private var lines: CopyOnWriteArrayList<String>, private var callback: (() -> Unit)?)
 {
     private var resources = gameView.resources
     private var textBoxes = CopyOnWriteArrayList<TextBox>()
+    /** top left coordinate of the next line to print */
     private val pos = Pair(myArea.left + 50, myArea.bottom - heightOfEmptyTypewriterArea)
     private val lineSpacingY = GameView.computerTextSize * gameView.textScaleFactor * 1.8f
     private var paintLine = Paint()
 
-    init { showNextLine() }
+    init {
+        runBlocking { delay(1000); showNextLine()  }
+    }
 
     @Suppress("MoveLambdaOutsideParentheses")
     private fun showNextLine(): Boolean
     {
-        val map = textBoxes.mapIndexed { index, it -> it.y -= lineSpacingY }
+        textBoxes.mapIndexed { index, it -> it.y -= lineSpacingY }
         if (lines.isEmpty()) {
             callback?.let { it() }  // call callback function, if defined.
             return false
@@ -33,6 +38,7 @@ class Typewriter(val gameView: GameView, myArea: Rect, private var lines: CopyOn
         return true
     }
 
+    /** returns the current top of the area, depending on how many text lines are displayed */
     fun topOfTypewriterArea(): Int
     {
         var y = pos.second
@@ -45,6 +51,7 @@ class Typewriter(val gameView: GameView, myArea: Rect, private var lines: CopyOn
         paintLine.color = resources.getColor(R.color.text_green)
     }
 
+    /** represents separate lines of text that are displayed one after the other on the screen */
     inner class TextBox(val gameView: GameView, var text: String, topLeft: Pair<Int, Int>, private var callback: (() -> Unit)?):
         Fadable
     {
@@ -81,7 +88,7 @@ class Typewriter(val gameView: GameView, myArea: Rect, private var lines: CopyOn
     }
 
     companion object {
-        const val heightOfEmptyTypewriterArea = 80
+        const val heightOfEmptyTypewriterArea = 160
     }
 
 }
