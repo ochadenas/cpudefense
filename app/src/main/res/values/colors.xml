@@ -108,6 +108,7 @@
     <color name="resistor_9">#ffffff</color>
     <color name="resistor_gold">#d3cb10</color>
     <color name="resistor_silver">#cfcfcf</color>
+    <color name="text_instructions">#AECBC3</color>
 
 
 </resources>

@@ -109,7 +109,7 @@ class Instructions(val gameView: GameView, var stage: Stage.Identifier, var show
         val textPaint = TextPaint()
         textPaint.textSize = GameView.instructionTextSize * gameView.textScaleFactor
         textPaint.typeface = Typeface.SANS_SERIF
-        textPaint.color = Color.WHITE
+        textPaint.color = resources.getColor(R.color.text_instructions)
         textPaint.alpha = 255
         val textLayout = StaticLayout(text, textPaint, width,
                                       Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false)
