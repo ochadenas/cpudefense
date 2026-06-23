@@ -66,6 +66,18 @@
             app:layout_constraintStart_toStartOf="@id/button_wiki"
             app:layout_constraintTop_toBottomOf="@id/button_wiki" />
 
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button_editor"
+            android:layout_width="@dimen/hp_button_width_large"
+            android:layout_height="@dimen/hp_button_height"
+            android:layout_marginTop="@dimen/hp_button_height_margin"
+            android:background="@drawable/hp_key"
+            android:onClick="startEditor"
+            android:text="@string/circuit_editor"
+            android:textColor="@color/white"
+            app:layout_constraintStart_toStartOf="@id/button_wiki"
+            app:layout_constraintTop_toBottomOf="@id/button_releasenotes" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView

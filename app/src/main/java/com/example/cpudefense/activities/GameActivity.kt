@@ -17,6 +17,7 @@ import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
 import androidx.core.net.toUri
 import androidx.core.view.ViewCompat
@@ -47,14 +48,17 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class GameActivity : Activity() {
+class GameActivity : AppCompatActivity() {
     var logger: Logger? = null
     lateinit var gameMechanics: GameMechanics
     lateinit var gameView: GameView
     /** flag used to keep the threads running. Set to false when leaving activity */
     private var gameThreadsRunning = true
 
-    companion object;
+    companion object
+    {
+        val effectsDelay: Long = 15
+    }
 
     enum class GameActivityStatus { PLAYING, BETWEEN_LEVELS }
 
@@ -65,7 +69,6 @@ class GameActivity : Activity() {
     private val fastForwardDelay = 8L
     private val fastFastForwardDelay = 3L
     private var updateDelay: Long = defaultDelay
-    private val effectsDelay: Long = 15
 
     // additional properties for displaying an average frame rate
     /** the moment when the last frame was displayed (in ms since last device reboot) */
@@ -102,7 +105,7 @@ class GameActivity : Activity() {
         setContentView(R.layout.activity_main_game)
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         if (intent.getBooleanExtra("ACTIVATE_LOGGING", false) && GameMechanics.enableLogging)
-            logger = Logger(this, GameMechanics.logLevel)
+            logger = Logger(this as AppCompatActivity, GameMechanics.logLevel)
         logger?.start()
         resumeGame = false
         gameMechanics = GameMechanics()

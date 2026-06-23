@@ -421,4 +421,5 @@ The programming language Pascal is named after him."</string>
     <string name="level_statistics_caption">Information gained per stage</string>
     <string name="total_information_gained">Total information: %1$s\n</string>
     <string name="settings_zoom">Show zoom buttons</string>
+    <string name="circuit_editor">Circuit Editor</string>
 </resources>

@@ -1,6 +1,6 @@
 package com.example.cpudefense.utils
 
-import com.example.cpudefense.activities.GameActivity
+import androidx.appcompat.app.AppCompatActivity
 import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStreamWriter
@@ -8,7 +8,7 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-class Logger(val activity: GameActivity, val logLevel: Level = Level.MESSAGE)
+class Logger(val activity: AppCompatActivity, val logLevel: Level = Level.MESSAGE)
 {
     private val logfileName = "log.txt"
     enum class Level { DEBUG, MESSAGE, WARN, ERROR }

@@ -7,9 +7,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.AppCompatButton
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.net.toUri
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
@@ -20,9 +23,11 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
+import com.example.cpudefense.GameMechanics
 import com.example.cpudefense.R
 import com.example.cpudefense.extras.MemoryMapView
 import com.example.cpudefense.extras.SevenSegmentClock
+import com.example.cpudefense.gameElements.Button
 import com.example.cpudefense.gameElements.ScoreBoard
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -88,7 +93,6 @@ class ExtrasActivity : AppCompatActivity()
         catch (_: Exception) {}  // come here if no external app can handle the request
     }
 
-
     fun releaseNotes(@Suppress("UNUSED_PARAMETER") v: View)
     {
         val url = resources.getString(R.string.url_releasenotes_base).format(resources.getString(R.string.url_releasenotes_localized))
@@ -100,13 +104,13 @@ class ExtrasActivity : AppCompatActivity()
         catch (_: Exception) {}  // come here if no external app can handle the request
     }
 
-    fun displayInfoDialog(@Suppress("UNUSED_PARAMETER") v: View)
+    fun startEditor(@Suppress("UNUSED_PARAMETER") v: View)
     {
-        val browserIntent = Intent(Intent.ACTION_VIEW, "https://github.com/ochadenas/cpudefense/wiki/Chip-Defense".toUri())
+        val intent = Intent(this, EditorActivity::class.java)
         try {
-            startActivity(browserIntent)
+            startActivity(intent)
         }
-        catch (_: Exception) {}  // come here if no external app can handle the request
+        catch (_: Exception) {}
     }
 }
 
@@ -137,10 +141,10 @@ class AboutFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?
     {
         val view = inflater.inflate(R.layout.fragment_about, container, false)
-        view?.let{
+        view?.let{ rootView ->
             val activity = requireActivity()
             val info = activity.packageManager.getPackageInfo(activity.packageName, PackageManager.GET_ACTIVITIES)
-            val versionView: TextView = it.findViewById(R.id.fragment_about_version)
+            val versionView: TextView = rootView.findViewById(R.id.fragment_about_version)
             versionView.text = getString(R.string.about_version).format(info.versionName)
         }
         return view
@@ -155,6 +159,10 @@ class ExtrasBasicFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?
     {
         contentsView = inflater.inflate(R.layout.extras_basic, container, false)
+        if (!GameMechanics.enableEditor)
+            contentsView.findViewById<ConstraintLayout>(R.id.button_container)?.let {
+                it.removeView(it.findViewById(R.id.button_editor))
+            }
         clock = SevenSegmentClock(resources.getDimension(R.dimen.sevensegment_display_height).toInt(),
                             requireActivity() as ExtrasActivity)
         updateClock()
