@@ -110,6 +110,7 @@ class MemoryMapView @JvmOverloads constructor(context: Context, attrs: Attribute
     fun createMemTiles()
     {
         try {
+            /** number of the memory bank, if there is more than one */
             var index = 0
             memoryBankList[index].listOfTiles.clear()
             stageDataList.forEach {
@@ -226,6 +227,8 @@ class MemoryMapView @JvmOverloads constructor(context: Context, attrs: Attribute
                                         0, wordSize))
                 address += 1
                 infoRemaining -= wordSize
+                if (address == this.bankSize)  // bank is full, start a new one
+                    return infoRemaining
             }
             // finally, start a new "word" if there is a fraction left
             if (infoRemaining>0) {
