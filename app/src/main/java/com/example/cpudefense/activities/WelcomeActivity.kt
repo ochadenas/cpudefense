@@ -44,7 +44,7 @@ class WelcomeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         WindowCompat.enableEdgeToEdge(window)
-        requestWindowFeature(Window.FEATURE_NO_TITLE)
+        // requestWindowFeature(Window.FEATURE_NO_TITLE)
         supportActionBar?.hide()
         setContentView(R.layout.activity_welcome)
         findViewById<View>(android.R.id.content)?.let { rootView ->

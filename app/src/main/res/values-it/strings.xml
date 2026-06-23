@@ -68,7 +68,7 @@
     <string name="series_completed_message_1">" "</string>
     <string name="series_completed_message_4">nella modalità “Turbo”.</string>
     <string name="query_quit">Annullare il livello attuale?</string>
-    <string name="button_return_to_main_menu">Ritorno al menu principale</string>
+    <string name="button_return_to_main_menu">Ritorno al menu</string>
     <string name="continue_game">Continua a giocare</string>
     <string name="buttton_replay">Giocare di nuovo il livello</string>
     <string name="settings_use_large_buttons">Utilizzare pulsanti di grandi dimensioni</string>

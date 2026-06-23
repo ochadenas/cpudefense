@@ -7,6 +7,7 @@ import android.app.Dialog
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.os.SystemClock
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
@@ -98,11 +99,12 @@ class GameActivity : AppCompatActivity() {
      */
     override fun onCreate(savedInstanceState: Bundle?)
     {
-        super.onCreate(savedInstanceState)
         /* here, the size of the surfaces might not be known */
-        WindowCompat.enableEdgeToEdge(window)
-        requestWindowFeature(Window.FEATURE_NO_TITLE)
+        // requestWindowFeature(Window.FEATURE_NO_TITLE)
+        supportActionBar?.hide()
+        super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main_game)
+        WindowCompat.enableEdgeToEdge(window)
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         if (intent.getBooleanExtra("ACTIVATE_LOGGING", false) && GameMechanics.enableLogging)
             logger = Logger(this as AppCompatActivity, GameMechanics.logLevel)

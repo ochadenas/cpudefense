@@ -44,7 +44,7 @@ class SettingsActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        supportRequestWindowFeature(Window.FEATURE_NO_TITLE)  // method of AppCompatActivity
+        // supportRequestWindowFeature(Window.FEATURE_NO_TITLE)  // method of AppCompatActivity
         WindowCompat.enableEdgeToEdge(window)
         if (intent.getIntExtra("MAXSERIES", 1) >= GameMechanics.SERIES_ENDLESS)
             isEndlessAvailable = true
