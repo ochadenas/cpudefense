@@ -52,6 +52,16 @@ class Stage(var gameMechanics: GameMechanics, var gameView: GameView)
             }
         }
 
+        fun isGreaterOrEqualThan(compare: Identifier): Boolean
+        /** used to establish a natural order of stage [Identifier]s */
+        {
+            return when {
+                compare.series > this.series -> false
+                compare.series < this.series -> true
+                else -> compare.number <= this.number
+            }
+        }
+
         fun mode(): GameMechanics.LevelMode
         /** check whether we are in 'endless' or 'basic' mode */
         {

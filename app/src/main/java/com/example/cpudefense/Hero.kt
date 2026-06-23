@@ -309,14 +309,15 @@ class Hero(var gameActivity: GameActivity, type: Type)
             Type.INCREASE_REFUND ->         upgradeLevel(Type.DECREASE_UPGRADE_COST) >= 3
             Type.DECREASE_UPGRADE_COST ->   upgradeLevel(Type.GAIN_CASH) >= 3
             Type.GAIN_CASH ->               upgradeLevel(Type.INCREASE_STARTING_CASH) >= 3
-            Type.DECREASE_REMOVAL_COST ->   upgradeLevel(Type.GAIN_CASH) >= 3 && stageIdentifier.number >= 24
+            Type.DECREASE_REMOVAL_COST ->   upgradeLevel(Type.GAIN_CASH) >= 3 &&
+                    stageIdentifier.isGreaterOrEqualThan(Stage.Identifier(GameMechanics.SERIES_NORMAL, 24))
             Type.REDUCE_HEAT ->             upgradeLevel(Type.INCREASE_CHIP_MEM_SPEED) >= 3
-            Type.INCREASE_CHIP_MEM_SPEED -> stageIdentifier.number >= 14
+            Type.INCREASE_CHIP_MEM_SPEED -> stageIdentifier.isGreaterOrEqualThan(Stage.Identifier(GameMechanics.SERIES_NORMAL, 14))
             Type.INCREASE_CHIP_SUB_RANGE -> upgradeLevel(Type.INCREASE_CHIP_SUB_SPEED) >= 5
             Type.INCREASE_CHIP_SHR_RANGE -> upgradeLevel(Type.INCREASE_CHIP_SHR_SPEED) >= 5
             Type.INCREASE_CHIP_MEM_RANGE -> upgradeLevel(Type.INCREASE_CHIP_MEM_SPEED) >= 5
             Type.ENABLE_MEM_UPGRADE ->      upgradeLevel(Type.INCREASE_CHIP_MEM_RANGE) >= 3
-            Type.INCREASE_CHIP_RES_STRENGTH -> stageIdentifier.number >= 32
+            Type.INCREASE_CHIP_RES_STRENGTH -> stageIdentifier.isGreaterOrEqualThan(Stage.Identifier(GameMechanics.SERIES_NORMAL, 32))
             Type.INCREASE_CHIP_RES_DURATION -> upgradeLevel(Type.INCREASE_CHIP_RES_STRENGTH) >= 3
             Type.CONVERT_HEAT           -> upgradeLevel(Type.INCREASE_CHIP_RES_DURATION) >= 3
             Type.DOUBLE_HIT_SUB          -> upgradeLevel(Type.INCREASE_CHIP_SUB_RANGE) >= 3
