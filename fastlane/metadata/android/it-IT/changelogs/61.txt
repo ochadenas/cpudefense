@@ -1,0 +1,10 @@
+Nuove funzionalità:
+- Una linea sottile simula un´immagine “bruciata” sul display del terminale.
+
+Correzioni di bug:
+- Risolti errori di layout, rimossa la barra del titolo
+- Nella vista dei moduli di memoria, la riga più in alto poteva estendersi oltre il rettangolo.
+- Le restrizioni di livello per eroi ed eroine non si applicano più alla serie Turbo. Risolve il problema n. 252.
+
+Varie:
+- Traduzioni aggiornate.

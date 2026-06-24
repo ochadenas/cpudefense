@@ -1,0 +1,10 @@
+New features:
+- A faint line simulates a "burnt in" image  in the terminal display.
+
+Bug fixes:
+- Layout errors fixed.
+- In the memory bank view, the topmost line could extend beyond the rectangle.
+- Hero stage restrictions no longer apply to turbo series. Fixes issue #252.
+
+Miscellaneous:
+- Translations updated.

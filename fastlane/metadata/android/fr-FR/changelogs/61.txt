@@ -1,0 +1,10 @@
+Nouvelles fonctionnalités :
+- Une faible ligne simule une image « gravée » sur l'écran du terminal.
+
+Corrections de bugs :
+- Correction d'erreurs de mise en page, suppression de la barre de titre.
+- Dans la vue « modules de mémoire », la ligne supérieure pouvait dépasser les limites du rectangle.
+- Les restrictions des niveaux pour les héros et héroïnes ne s'appliquent plus à la série « Turbo ». Correction du problème n° 252.
+
+Divers :
+- Mise à jour des traductions.

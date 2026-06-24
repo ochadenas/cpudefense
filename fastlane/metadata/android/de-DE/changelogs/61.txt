@@ -1,0 +1,10 @@
+Neue Funktionen:
+- Eine schwache Linie simuliert ein „eingebranntes“ Bild auf dem Terminal-Display.
+
+Fehlerbehebungen:
+- Layoutfehler behoben, Titelleiste entfernt
+- In der Speicherbank-Ansicht konnte die oberste Zeile über den Rahmen hinausragen.
+- Die Stufenbeschränkungen für Helden und Heldinnen gelten nicht mehr für die Turbo-Serie. Behebt Issue #252.
+
+Sonstiges:
+- Übersetzungen aktualisiert.
