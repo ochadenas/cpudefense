@@ -32,7 +32,7 @@ class GameMechanics {
         /** for debugging purposes only. MUST BE SET TO FALSE */
         const val enableLogging = false
         /** feature toggle */
-        const val enableEditor = true
+        const val enableEditor = false
         // end of debug options
 
         /** minimum log level (if logging is enabled) */

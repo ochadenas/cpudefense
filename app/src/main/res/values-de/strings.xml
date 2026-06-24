@@ -125,6 +125,7 @@ Das Verschieben ist gleichbedeutend mit einer Division durch 2."
     <string name="upgrade_format">%1$s  [Kosten: %2$d]</string>
     <string name="stage_number">Level %s</string>
     <string name="toast_stage_cleared">Level geschafft</string>
+    <string name="instr_24">Mit den Schaltflächen [+] und [-] lässt sich der Schaltkreis vergrößern und verkleinern. Wenn dich diese Knöpfe stören, lassen sie sich in den „Einstellungen“ deaktivieren.</string>
     <string name="instr_12">Zwei weitere Chiparten: ADD und SHL (für „shift left“).\n\nDiese tun das Gegenteil von SUB und SHR: Sie addieren 1 zu der Zahl bzw. schieben die Bits nach links.\n\nDas ist natürlich unerwünscht, denn es macht die Zahlen größer. Für diese Chips bedeutet „Verbesserung“, dass sie schwächer werden oder ganz verschwinden.</string>
     <string name="instr_13">"Beachte, dass CryptoCoins weder von ACC- noch von MEM-Chips beeinflusst werden."</string>
     <string name="HERO_EFFECT_CHIPSPEED">verringert die Abklingzeit aller %s Chips</string>
@@ -342,4 +343,6 @@ Das Verschieben ist gleichbedeutend mit einer Division durch 2."
     <string name="level_statistics_title">Speicherbänke</string>
     <string name="level_statistics_caption">Erhaltene Information pro Level</string>
     <string name="total_information_gained">Gesamte Information: %1$s</string>
+    <string name="settings_zoom">Zoom-Schaltflächen anzeigen</string>
+    <string name="circuit_editor">Schaltkreis-Editor</string>
 </resources>
