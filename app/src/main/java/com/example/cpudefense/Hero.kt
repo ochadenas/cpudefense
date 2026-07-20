@@ -13,6 +13,8 @@ import com.example.cpudefense.effects.Fader
 import com.example.cpudefense.gameElements.Button
 import com.example.cpudefense.gameElements.HeroCard
 import com.example.cpudefense.utils.setTopLeft
+import java.util.Locale
+import java.util.Locale.getDefault
 import kotlin.math.exp
 import kotlin.math.truncate
 
@@ -658,7 +660,7 @@ class Hero(var gameActivity: GameActivity, type: Type)
             // determine the wikipedia link
             try {
                 val resourceId =
-                    resources.getIdentifier("url_" + name.toLowerCase(), "string", gameActivity.packageName)
+                    resources.getIdentifier("url_" + name.lowercase(getDefault()), "string", gameActivity.packageName)
                 url = resources.getString(resourceId)
             }
             catch (_: Exception) {
