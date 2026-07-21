@@ -34,7 +34,7 @@ class Typewriter(val gameView: GameView, myArea: Rect, private var lines: CopyOn
     @Suppress("MoveLambdaOutsideParentheses")
     private fun showNextLine(): Boolean
     {
-        try { textBoxes.last?.createAfterglow()?.let { linesOfAfterglow.add(it) } }
+        try { textBoxes.lastOrNull()?.createAfterglow()?.let { linesOfAfterglow.add(it) } }
         catch (_: NoSuchElementException) {}
         textBoxes.mapIndexed { index, it -> it.y -= lineSpacingY }
         if (lines.isEmpty()) {
