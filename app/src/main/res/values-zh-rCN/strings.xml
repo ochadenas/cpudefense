@@ -371,6 +371,8 @@ ACC 的优势在于速度极快。"
     <string name="url_shannon">https://en.wikipedia.org/wiki/Claude_Shannon</string>
     <string name="url_wiener">https://en.wikipedia.org/wiki/Norbert_Wiener</string>
     <string name="url_boole">https://en.wikipedia.org/wiki/George_Boole</string>
+    <string name="url_baudot">https://en.wikipedia.org/wiki/%C3%89mile_Baudot</string>
+    <string name="url_spaerck">https://en.wikipedia.org/wiki/Karen_Sp%C3%A4rck_Jones</string>
     <string name="coins_available">可用加密币：%d</string>
     <string name="coins_received_as_gift">您收到了 %d 枚加密币作为礼物。</string>
     <string name="instr_2_98">英雄们即将延长休假。届时他们将有两关甚至更多关无法出场。\n</string>
@@ -406,12 +408,14 @@ ACC 的优势在于速度极快。"
     <string name="message_open_in_browser">正在浏览器中打开页面…</string>
     <string name="level_statistics_title">存储库</string>
     <string name="level_statistics_caption">每关获取的信息量</string>
+    <string name="baudot">Jean Maurice Émile Baudot was actually expected to become a farmer, like his father. Although he had only attended primary school, he joined the French telegraph service. He improved the equipment used and, most notably, developed the International Telegraph Alphabet No. 1. Unlike Morse code, the Baudot code allowed several messages to be transmitted simultaneously over the same line and decoded automatically by the receiving device.  The unit ‘baud’, used to measure signal transmission rates, is named after Émile Baudot.</string>
+    <string name="spaerck">Karen Spärck Jones entered computer science as self-taught pioneer after studying history and philosophy. Her research field was computational linguistics, specifically natural language processing. The concepts she developed are fundamental to all modern web search engines.\n\nAs a Cambridge professor, she was a strong advocate for women in computer science and worked to encourage girls to pursue degrees in the field. She is the origin of the quote: “Computing is too important to be left to men.”</string>
     <string name="settings_title">设置</string>
     <string name="about_title">关于本游戏</string>
     <string name="about_version">版本 %s。</string>
     <string name="about_text">此游戏是开源的。访问 github.com/ochadenas/cpudefense 了解更多信息。\n\n概念与开发：\nOliver Chadenas (ochadenas)\n\n中文翻译：\nlalala-233\n\n其他翻译：\nochadenas\n</string>
     <string name="about_license_header">许可证</string>
-    <string name="about_license">此软件在 <a href="https://github.com/ochadenas/cpudefense#MIT-1-ov-file">MIT</a> 许可证 下发布。\n\n信息时代英雄的肖像大多源自公共领域作品。\n\n原始照片：\n  Alex Handy (CC BY-SA 2.0)\n  Jacob Appelbaum (CC BY-SA 2.5)\n  Konrad Jacobs (CC BY-SA 2.0 de)\n  Rama (CC BY-SA 2.0 fr)\n  Shervinafshar (CC BY-SA 3.0)\n  Tony Bove (CC BY 3.0)\n  Wolfgang Hunscher (CC BY-SA 3.0)\n  Silvano de Gennaro (courtesy of the author)\n  Clermont Auvergne Métropole (CC BY-SA 4.0)\n  Jean-Frédéric (CC BY 2.0)\n  Tekniska Museet (CC BY 2.0)\n  The Royal Society (CC BY-SA 4.0)\n  Konrad Jacobs (CC BY-SA 2.0 de)\n  \nComputer boards:\n  Autopilot (CC BY-SA 4.0)\n  Bill Bertram (CC-BY 2.0)\n  Oliver Chadenas (CC BY-SA 3.0)\n  Smial (FAL)\n\nAll other artwork:\n  Oliver Chadenas (CC BY-SA 3.0)</string>
+    <string name="about_license">此软件在 <a href="https://github.com/ochadenas/cpudefense#MIT-1-ov-file">MIT</a> 许可证 下发布。\n\n信息时代英雄的肖像大多源自公共领域作品。\n\n原始照片：\n  Alex Handy (CC BY-SA 2.0)\n  Jacob Appelbaum (CC BY-SA 2.5)\n  Konrad Jacobs (CC BY-SA 2.0 de)\n  Rama (CC BY-SA 2.0 fr)\n  Shervinafshar (CC BY-SA 3.0)\n  Tony Bove (CC BY 3.0)\n  Wolfgang Hunscher (CC BY-SA 3.0)\n  Silvano de Gennaro (courtesy of the author)\n  Clermont Auvergne Métropole (CC BY-SA 4.0)\n  Jean-Frédéric (CC BY 2.0)\n   Tekniska Museet (CC BY 2.0)\n  The Royal Society (CC BY-SA 4.0)\n  Konrad Jacobs (CC BY-SA 2.0 de)\n  University of Cambridge (CC BY 2.5)\n  \nComputer boards:\n  Autopilot (CC BY-SA 4.0)\n  Bill Bertram (CC-BY 2.0)\n  Oliver Chadenas (CC BY-SA 3.0)\n  Smial (FAL)\n\nAll other artwork:\n  Oliver Chadenas (CC BY-SA 3.0)</string>
     <string name="about_info_title">信息</string>
     <string name="about_info_text">如需更多游戏玩法信息与提示，请访问游戏维基页面。</string>
     <string name="button_exit">退出</string>

@@ -188,12 +188,14 @@ The programming language Pascal is named after him."</string>
     <string name="leibniz">Like Pascal, Gottfried Wilhelm Leibniz was also a great polymath of his time. We owe to him important advances in numerous very different fields of science, which are far too numerous to list here.\n\nHis achievement for the information age is the construction of complex mechanical calculating machines, which can be seen as the forerunners of modern computers. Above all, however, he recognised the importance of the dual system and the binary number code, which all digital devices use today.</string>
     <string name="ohm">Georg Simon Ohm was one of the first to attempt to describe electrical processes mathematically. His work initially attracted little attention and was dismissed as an academic gimmick. It was not until Charles Wheatstone recognized their importance and asked Ada Lovelace to translate some of Ohm\’s works into English.\n\nToday, his name is inextricably linked with electrical resistance. Ohm’s law and the unit of resistance are named after him.</string>
     <string name="volta">Alessandro Giuseppe Antonio Anastasio Volta was an experimental physicist who questioned and refuted some of the theories and assumptions prevailing at the time. He not only discovered the gas methane, but also made groundbreaking discoveries in the new field of electricity. He described the relationship between voltage, charge and capacity. Above all, however, he developed the first functioning battery. \n\nThe unit of electrical voltage, the volt, is named after him.</string>
+    <string name="baudot">Jean Maurice Émile Baudot was actually expected to become a farmer, like his father. Although he had only attended primary school, he joined the French telegraph service. He improved the equipment used and, most notably, developed the International Telegraph Alphabet No. 1. Unlike Morse code, the Baudot code allowed several messages to be transmitted simultaneously over the same line and decoded automatically by the receiving device.  The unit ‘baud’, used to measure signal transmission rates, is named after Émile Baudot.</string>
+    <string name="spaerck">Karen Spärck Jones entered computer science as self-taught pioneer after studying history and philosophy. Her research field was computational linguistics, specifically natural language processing. The concepts she developed are fundamental to all modern web search engines.\n\nAs a Cambridge professor, she was a strong advocate for women in computer science and worked to encourage girls to pursue degrees in the field. She is the origin of the quote: “Computing is too important to be left to men.”</string>
     <string name="settings_title">Settings</string>
     <string name="about_title">About this game</string>
     <string name="about_version">Version %s.</string>
     <string name="about_text">"This game is open source. Visit <a href="https://github.com/ochadenas/cpudefense">github.com/ochadenas/cpudefense</a> for more information.\n\nConcept and development:\nOliver Chadenas (ochadenas)\n\nChinese translation:\nlalala-233\n\nOther translations:\nochadenas"</string>
     <string name="about_license_header">"Licenses</string>
-    <string name="about_license">This software is published under <a href="https://github.com/ochadenas/cpudefense?tab=MIT-1-ov-file">MIT license</a>.  The portraits of the Information Age Heroes are mostly derived from works of the public domain.  Original photos:   Alex Handy (CC BY-SA 2.0)   Jacob Appelbaum (CC BY-SA 2.5)   Konrad Jacobs (CC BY-SA 2.0 de)   Rama (CC BY-SA 2.0 fr)   Shervinafshar (CC BY-SA 3.0)   Tony Bove (CC BY 3.0)   Wolfgang Hunscher (CC BY-SA 3.0)   Silvano de Gennaro (courtesy of the author)   Clermont Auvergne Métropole (CC BY-SA 4.0)   Jean-Frédéric (CC BY 2.0)   Tekniska Museet (CC BY 2.0)   The Royal Society (CC BY-SA 4.0)   Konrad Jacobs (CC BY-SA 2.0 de)    Computer boards:   Autopilot (CC BY-SA 4.0)   Bill Bertram (CC-BY 2.0)   Oliver Chadenas (CC BY-SA 3.0)   Smial (FAL)  All other artwork:   Oliver Chadenas (CC BY-SA 3.0)</string>
+    <string name="about_license">This software is published under <a href="https://github.com/ochadenas/cpudefense?tab=MIT-1-ov-file">MIT license</a>.  \n\nThe portraits of the Information Age Heroes are mostly derived from works of the public domain.  \nOriginal photos:   \nAlex Handy (CC BY-SA 2.0)\nJacob Appelbaum (CC BY-SA 2.5)\nKonrad Jacobs (CC BY-SA 2.0 de)\nRama (CC BY-SA 2.0 fr)\nShervinafshar (CC BY-SA 3.0)\nTony Bove (CC BY 3.0)\nWolfgang Hunscher (CC BY-SA 3.0)\nSilvano de Gennaro (courtesy of the author)\nClermont Auvergne Métropole (CC BY-SA 4.0)\nJean-Frédéric (CC BY 2.0)\nTekniska Museet (CC BY 2.0)\nThe Royal Society (CC BY-SA 4.0)\nUniversity of Cambridge (CC BY 2.5)\nKonrad Jacobs (CC BY-SA 2.0 de)    \n\nComputer boards:   \nAutopilot (CC BY-SA 4.0)\nBill Bertram (CC-BY 2.0)\nOliver Chadenas (CC BY-SA 3.0)\nSmial (FAL)  \n\nAll other artwork:\nOliver Chadenas (CC BY-SA 3.0)\n</string>
     <string name="about_info_title">Info</string>
     <string name="about_info_text">For additional info and hints on game play visit the game’s wiki on the web.</string>
     <string name="play_level_x">Play level %s</string>
@@ -223,6 +225,7 @@ The programming language Pascal is named after him."</string>
     <string name="shortdesc_max_hero_upgrade">Max hero level</string>
     <string name="shortdesc_limit_unwanted">Unwanted chip count</string>
     <string name="shortdesc_create_wanted">Additional chip count</string>
+    <string name="shortdesc_track_freq">Track frequency</string>
     <string name="shortdesc_reduce_removal">Chip removal cost</string>
     <string name="shortdesc_enable_mem_upgrade">MEM max. level</string>
     <string name="upgrade_format">%1$s  [cost: %2$d]</string>
@@ -245,6 +248,7 @@ The programming language Pascal is named after him."</string>
     <string name="HERO_EFFECT_RANGE">Increases %s chip range</string>
     <string name="HERO_EFFECT_LIMITUNWANTED">Reduces the number of unwanted chips</string>
     <string name="HERO_CREATE_CHIPS">Creates additional chips</string>
+    <string name="HERO_CHANGE_TRACK_FREQ">Makes the attackers prefer the longest path</string>
     <string name="HERO_EFFECT_DECREASEREMOVAL">Reduces the cost of unwanted chip removal</string>
     <string name="HERO_EFFECT_ENABLEMEM">Enables upgrading of MEM chips</string>
     <string name="HERO_EFFECT_RES_STRENGTH">Increases the strength of resistors</string>
@@ -380,6 +384,8 @@ The programming language Pascal is named after him."</string>
     <string name="url_shannon">https://en.wikipedia.org/wiki/Claude_Shannon</string>
     <string name="url_wiener">https://en.wikipedia.org/wiki/Norbert_Wiener</string>
     <string name="url_boole">https://en.wikipedia.org/wiki/George_Boole</string>
+    <string name="url_baudot">https://en.wikipedia.org/wiki/%C3%89mile_Baudot</string>
+    <string name="url_spaerck">https://en.wikipedia.org/wiki/Karen_Sp%C3%A4rck_Jones</string>
     <string name="coins_available">Coins available: %d</string>
     <string name="coins_received_as_gift">You received %d coins as gift.</string>
     <string name="instr_2_98">The heroes will soon be extending their holidays. They will then be unavailable for two or even more stages.\n</string>

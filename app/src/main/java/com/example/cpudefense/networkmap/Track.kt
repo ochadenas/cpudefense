@@ -29,6 +29,17 @@ class Track(val network: Network) {
             return links[index+1]
     }
 
+    /** create a deep copy of the track. Optionally, use a new ident given as parameter */
+    fun copy(newIdent: Int? = null): Track
+    {
+        val target = Track(network)
+        target.data = data.copy()
+        target.links = CopyOnWriteArrayList(links)
+        newIdent?.let { data.ident = newIdent }
+        return target
+    }
+
+
     companion object {
         fun createFromData(stage: Stage, data: Data): Track
         {

@@ -311,6 +311,7 @@ class Stage(var gameMechanics: GameMechanics, var gameView: GameView)
     fun createTrack(linkIdents: List<Int>, ident: Int)
     /** adds a track of connected links
      * @param linkIdents List of the link idents in the track
+     * @param ident unique identifier for this track, must be given as argument
      * */
     {
         val track = network.createTrack(ident, linkIdents, false)
@@ -365,14 +366,8 @@ class Stage(var gameMechanics: GameMechanics, var gameView: GameView)
      * and stores it in [data]
      */
     {
-        var minLength = 999
-        var sumLength = 0
-        for (track in tracks.values)
-        {
-            sumLength += track.links.size
-            if (minLength>track.links.size)
-                minLength = track.links.size
-        }
+        val sumLength = tracks.values.sumOf { it.links.size }
+        val minLength = tracks.values.minOf { it.links.size }
         // the shortest path must have a minimum length, especially in later levels
         val requiredLength = when
         {
@@ -390,6 +385,17 @@ class Stage(var gameMechanics: GameMechanics, var gameView: GameView)
         difficulty -= minLength * 0.7 // shortest track
         difficulty +=  difficultyOfObstacles()
         data.difficulty = difficulty
+    }
+
+    fun changeTrackProbability(numberOfOperations: Int)
+    {
+        val longestTrack: Track = tracks.values.maxByOrNull { it.links.size } ?: return
+        val otherTracks = tracks.filterValues {it.data.linkIdents != longestTrack.data.linkIdents}
+        otherTracks.keys
+            .take(numberOfOperations)
+            .forEach { ident ->
+                tracks[ident] = longestTrack.copy(ident)  // Annahme: `Track` hat `ident` als Property
+            }
     }
 
     fun isValidStage(): Boolean

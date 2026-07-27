@@ -68,6 +68,8 @@ class StageCatalog
                             stage.calculateDifficulty() // avoid levels that are impossible to play
                         }
                     }
+                    // modify tracks according to hero level
+                    stage.changeTrackProbability(stage.gameMechanics.heroModifier(Hero.Type.CHANGE_TRACK_FREQ).toInt())
                     // create additional chips, both helpful and unwanted
                     createObstaclesForDifficulty(stage, targetDifficulty - stage.data.difficulty)
                     createAdditionalChips(stage)

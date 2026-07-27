@@ -30,11 +30,11 @@ class Hero(var gameActivity: GameActivity, type: Type)
     - Babbage?
     - Berners-Lee?
     - Torvalds
-    - Baudot
     - Auguste Kerckhoff?
     - Al Chwarizmi
     - Goldstine (he & she)
     - Hoare
+    - Jill Pym (Lady Hoare)
     - Holberton
     - Weizenbaum
      */
@@ -44,7 +44,7 @@ class Hero(var gameActivity: GameActivity, type: Type)
         INCREASE_CHIP_MEM_SPEED,  INCREASE_CHIP_MEM_RANGE, ENABLE_MEM_UPGRADE,
         INCREASE_CHIP_RES_STRENGTH, INCREASE_CHIP_RES_DURATION, CONVERT_HEAT,
         DECREASE_ATT_FREQ, DECREASE_ATT_SPEED, DECREASE_ATT_STRENGTH, DECREASE_COIN_STRENGTH, REDUCE_HEAT,
-        ADDITIONAL_LIVES, INCREASE_MAX_HERO_LEVEL, LIMIT_UNWANTED_CHIPS, CREATE_ADDITIONAL_CHIPS,
+        ADDITIONAL_LIVES, INCREASE_MAX_HERO_LEVEL, LIMIT_UNWANTED_CHIPS, CREATE_ADDITIONAL_CHIPS, CHANGE_TRACK_FREQ,
         INCREASE_STARTING_CASH, GAIN_CASH,
         DECREASE_UPGRADE_COST, INCREASE_REFUND, GAIN_CASH_ON_KILL, DECREASE_REMOVAL_COST}
 
@@ -183,6 +183,12 @@ class Hero(var gameActivity: GameActivity, type: Type)
                 strengthDesc = "+%d".format(strength.toInt())
                 upgradeDesc = " → +%d".format(next.toInt())
             }
+            Type.CHANGE_TRACK_FREQ ->
+            {
+                shortDesc = resources.getString(R.string.shortdesc_track_freq)
+                strengthDesc = "%d".format(strength.toInt())
+                upgradeDesc = " → %d".format(next.toInt())
+            }
             Type.ENABLE_MEM_UPGRADE ->
             {
                 shortDesc = resources.getString(R.string.shortdesc_enable_mem_upgrade)
@@ -301,6 +307,7 @@ class Hero(var gameActivity: GameActivity, type: Type)
         return when (data.type) {
             Type.LIMIT_UNWANTED_CHIPS ->    upgradeLevel(Type.INCREASE_MAX_HERO_LEVEL) >= 3
             Type.CREATE_ADDITIONAL_CHIPS -> upgradeLevel(Type.LIMIT_UNWANTED_CHIPS) >= 3
+            Type.CHANGE_TRACK_FREQ -> true // TODO CHANGE THIS
             Type.INCREASE_MAX_HERO_LEVEL -> upgradeLevel(Type.ADDITIONAL_LIVES) >= 3
             Type.DECREASE_COIN_STRENGTH ->  upgradeLevel(Type.DECREASE_ATT_STRENGTH) >= 3
             Type.DECREASE_ATT_STRENGTH ->   upgradeLevel(Type.DECREASE_ATT_SPEED) >= 3
@@ -412,6 +419,7 @@ class Hero(var gameActivity: GameActivity, type: Type)
                 Type.INCREASE_MAX_HERO_LEVEL -> return level.toFloat()
                 Type.LIMIT_UNWANTED_CHIPS -> return level.toFloat()
                 Type.CREATE_ADDITIONAL_CHIPS -> return level.toFloat()
+                Type.CHANGE_TRACK_FREQ -> return level.toFloat()
                 Type.ENABLE_MEM_UPGRADE -> return (level+1).toFloat()
                 Type.GAIN_CASH -> return if (level>0) (8f - level) * 9 else 0f
                 Type.GAIN_CASH_ON_KILL -> return truncate((level+1) * 0.5f)
@@ -513,6 +521,14 @@ class Hero(var gameActivity: GameActivity, type: Type)
                     effect = resources.getString(R.string.HERO_CREATE_CHIPS)
                     vitae = resources.getString(R.string.neumann)
                     picture = BitmapFactory.decodeResource(resources, R.drawable.neumann)
+                }
+                Type.CHANGE_TRACK_FREQ ->
+                {
+                    name = "Spärck Jones"
+                    fullName = "Karen Spärck Jones"
+                    effect = resources.getString(R.string.HERO_CHANGE_TRACK_FREQ)
+                    vitae = resources.getString(R.string.spaerck)
+                    picture = BitmapFactory.decodeResource(resources, R.drawable.spaerck)
                 }
                 Type.ENABLE_MEM_UPGRADE ->
                 {
@@ -659,9 +675,13 @@ class Hero(var gameActivity: GameActivity, type: Type)
 
             // determine the wikipedia link
             try {
-                val resourceId =
-                    resources.getIdentifier("url_" + name.lowercase(getDefault()), "string", gameActivity.packageName)
-                url = resources.getString(resourceId)
+                    url = when (name.lowercase()) {
+                        "spärck jones" -> resources.getString(R.string.url_spaerck) // name too complicated
+                        else -> { resources.getString(
+                                resources.getIdentifier("url_" + name.lowercase(getDefault()), "string", gameActivity.packageName)
+                            )
+                        }
+                    }
             }
             catch (_: Exception) {
                 url = resources.getString(R.string.url_wikipedia_fallback)  // resource doesn't exist
