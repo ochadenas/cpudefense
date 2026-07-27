@@ -78,9 +78,7 @@ class EditorActivity : AppCompatActivity()
      */
     override fun onPause()
     {
-        logger?.log("Pausing Game Activity")
-        Persistency(this).saveGeneralState(gameMechanics)
-        Persistency(this).saveCurrentLevelState(gameMechanics)
+        logger?.log("Pausing Editor Activity")
         super.onPause()
     }
 
@@ -114,12 +112,12 @@ class EditorActivity : AppCompatActivity()
     }
 
     override fun onStop() {
-        logger?.log("Stopping Game Activity")
+        logger?.log("Stopping Editor Activity")
         super.onStop()
     }
 
     override fun onDestroy() {
-        logger?.log("Ending Game Activity")
+        logger?.log("Ending Editor Activity")
         logger?.stop()
         super.onDestroy()
     }

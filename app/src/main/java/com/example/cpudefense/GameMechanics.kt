@@ -32,7 +32,7 @@ class GameMechanics {
         /** for debugging purposes only. MUST BE SET TO FALSE */
         const val enableLogging = false
         /** feature toggle */
-        const val enableEditor = false
+        const val enableEditor = true
         // end of debug options
 
         /** minimum log level (if logging is enabled) */
@@ -71,6 +71,7 @@ class GameMechanics {
         const val heatAdjustmentFactor = 1.6f
         /** temperature in degrees at the start of each level */
         const val baseTemperature = 17
+        /** conversion between internal and physical units */
         const val heatPerDegree = 200
         /** heat cool down rate (multiplied at each tick) */
         const val temperatureCooldownFactor = 0.99995
