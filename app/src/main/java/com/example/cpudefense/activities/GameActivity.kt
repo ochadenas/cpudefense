@@ -48,6 +48,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlin.time.Duration.Companion.milliseconds
 
 class GameActivity : AppCompatActivity() {
     var logger: Logger? = null
@@ -374,7 +375,7 @@ class GameActivity : AppCompatActivity() {
             resumeGame()
         else {
             gameMechanics.currentStageIdent = level
-            logger?.log("Starting game at %s.".format(level))
+            logger?.log("Starting game at %s.".format(level.toString()))
             prepareLevelAtStartOfGame(level)
         }
     }
@@ -423,7 +424,7 @@ class GameActivity : AppCompatActivity() {
     fun startNextStage(ident: Identifier)
     {
         val nextStage = Stage(gameMechanics, gameView)
-        logger?.log("Starting level %d of series %d".format(ident.number, ident.series))
+        logger?.log("Starting level ${ident.toString()}.")
         StageCatalog.createStage(nextStage, ident)
         nextStage.calculateDifficulty()
         if (!nextStage.isInitialized())
@@ -464,7 +465,7 @@ class GameActivity : AppCompatActivity() {
         gameMechanics.currentlyActiveStage?.let {
             if (it.attackerCount()>0)
             // still attackers left, wait until wave is really over
-                GlobalScope.launch { delay(2000L); onEndOfStage() }
+                GlobalScope.launch { delay(2000.milliseconds); onEndOfStage() }
             else {
                 onStageCleared(it)
                 Persistency(this).saveGeneralState(gameMechanics)

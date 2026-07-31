@@ -10,6 +10,7 @@ import com.example.cpudefense.networkmap.Link
 import com.example.cpudefense.networkmap.Network
 import com.example.cpudefense.networkmap.Node
 import com.example.cpudefense.networkmap.Viewport
+import com.example.cpudefense.utils.Logger
 import com.example.cpudefense.utils.setTopLeft
 import java.util.concurrent.CopyOnWriteArrayList
 import kotlin.math.sqrt
@@ -21,6 +22,8 @@ class EndlessStageCreator(val stage: Stage)
  * Like StageCatalog, it is not meant to be instantiated.
  */
 {
+    private var logger: Logger? = stage.gameView.gameActivity.logger
+
     private var sectorSizeX = 16
     private var sectorSizeY = 12
     private var dimX: Int = 0
@@ -50,6 +53,7 @@ class EndlessStageCreator(val stage: Stage)
          * @param level The identifier of the level to be created
          */
     {
+        logger?.log("Creating new stage for level ${level}.", indent = 1)
         stage.data.ident = level
         stage.waves.clear()
         stage.data.type = Stage.Type.REGULAR
@@ -70,13 +74,15 @@ class EndlessStageCreator(val stage: Stage)
         }
         numberOfSectorsX = numberOfSectors.first
         numberOfSectorsY = numberOfSectors.second
+        logger?.log("Number of sectors (x | y): %d | %d".format(numberOfSectorsX, numberOfSectorsY))
 
         val numberOfPaths = when (level.number)
         {
             in 0..3 -> 3
-            in 4 .. 10 -> level.number
-            else -> 10
+            in 4 .. 16 -> level.number
+            else -> 16
         }
+        logger?.log("Number of paths: %d.".format(numberOfPaths))
 
         dimX = numberOfSectorsX * sectorSizeX
         dimY = numberOfSectorsY * sectorSizeY
@@ -144,6 +150,7 @@ class EndlessStageCreator(val stage: Stage)
         stage.calculateUsageCount()
         stage.network.links.values.forEach { it.chooseMask() }
         createWaves()
+        logger?.log("Level created.", unIndent=1)
         return
     }
 
@@ -151,6 +158,7 @@ class EndlessStageCreator(val stage: Stage)
     {
         val levelNumber = stage.data.ident.number
         val waveCount = sqrt(2 * levelNumber.toDouble()).toInt() + 2
+        logger?.log("Creating %d attacker waves for stage %d.".format(waveCount, levelNumber))
         for (waveNumber in 1 .. waveCount) {
             val attackerCount = 16
             var strength = (waveNumber+levelNumber)/2 - 1

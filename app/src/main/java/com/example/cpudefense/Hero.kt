@@ -267,7 +267,6 @@ class Hero(var gameActivity: GameActivity, type: Type)
         }
     }
 
-
     fun getStrength(level: Int = data.level): Float
     /** determines the numerical effect ("strength") of the upgrade,
      * depending on its level

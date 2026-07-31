@@ -367,7 +367,7 @@ class Stage(var gameMechanics: GameMechanics, var gameView: GameView)
      */
     {
         val sumLength = tracks.values.sumOf { it.links.size }
-        val minLength = tracks.values.minOf { it.links.size }
+        val minLength = tracks.values.minOfOrNull { it.links.size } ?: 0
         // the shortest path must have a minimum length, especially in later levels
         val requiredLength = when
         {
@@ -389,12 +389,13 @@ class Stage(var gameMechanics: GameMechanics, var gameView: GameView)
 
     fun changeTrackProbability(numberOfOperations: Int)
     {
+        gameView.gameActivity.logger?.log("Changing %d tracks out of %d (hero effect).".format(numberOfOperations, tracks.size))
         val longestTrack: Track = tracks.values.maxByOrNull { it.links.size } ?: return
         val otherTracks = tracks.filterValues {it.data.linkIdents != longestTrack.data.linkIdents}
         otherTracks.keys
             .take(numberOfOperations)
             .forEach { ident ->
-                tracks[ident] = longestTrack.copy(ident)  // Annahme: `Track` hat `ident` als Property
+                tracks[ident] = longestTrack.copy(ident)
             }
     }
 

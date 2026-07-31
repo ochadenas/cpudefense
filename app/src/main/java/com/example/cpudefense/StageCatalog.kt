@@ -17,6 +17,7 @@ class StageCatalog
             setOf(Chip.ChipType.EMPTY, Chip.ChipType.SUB, Chip.ChipType.SHR, Chip.ChipType.RES, Chip.ChipType.MEM, Chip.ChipType.ACC)
 
         fun createStage(stage: Stage, level: Stage.Identifier) {
+            val logger = stage.gameView.gameActivity.logger
             when (level.series) {
                 GameMechanics.SERIES_NORMAL -> {
                     createStageWithoutObstacles(stage, level)
@@ -45,6 +46,7 @@ class StageCatalog
                     createAdditionalChips(stage)
                 }
                 GameMechanics.SERIES_ENDLESS -> {
+                    logger?.log("Creating ENDLESS level.", indent=1)
                     // if the stage is in the save file (from an earlier try on this level),
                     // restore the structure. Otherwise, create an empty level.
                     // Depending on the settings, always create a new random level.
@@ -68,14 +70,10 @@ class StageCatalog
                             stage.calculateDifficulty() // avoid levels that are impossible to play
                         }
                     }
-                    // modify tracks according to hero level
-                    stage.changeTrackProbability(stage.gameMechanics.heroModifier(Hero.Type.CHANGE_TRACK_FREQ).toInt())
+                    logger?.debug("Actual number of tracks: %d.".format(stage.tracks.size))
                     // create additional chips, both helpful and unwanted
                     createObstaclesForDifficulty(stage, targetDifficulty - stage.data.difficulty)
                     createAdditionalChips(stage)
-                    stage.provideStructureData()
-                    structure[level.number] = stage.data
-                    Persistency(stage.gameView.gameActivity).saveLevelStructure(GameMechanics.SERIES_ENDLESS, structure)
                     // safety catch:
                     // check whether there are chips with level 0. This should not happen,
                     // but if there are, remove them
@@ -83,7 +81,16 @@ class StageCatalog
                         if (it.isRegularSlot() && it.chipData.upgradeLevel < 1)
                             it.resetToEmptyChip()
                     }
+                    // save level
+                    logger?.log("Saving level structure.")
+                    stage.provideStructureData()
+                    structure[level.number] = stage.data
+                    Persistency(stage.gameView.gameActivity).saveLevelStructure(GameMechanics.SERIES_ENDLESS, structure)
+                    // modify tracks according to hero level
+                    stage.changeTrackProbability(stage.gameMechanics.heroModifier(Hero.Type.CHANGE_TRACK_FREQ).toInt())
+                    // provide coins
                     stage.rewardCoins = GameMechanics.defaultRewardCoins
+                    logger?.log("Level creation finished.", unIndent = 1)
                 }
             }
         }
@@ -97,12 +104,12 @@ class StageCatalog
             val logger = stage.gameView.gameActivity.logger
             val reduce = stage.gameMechanics.heroModifier(Hero.Type.LIMIT_UNWANTED_CHIPS)
             val targetDifficulty = difficulty - reduce
-            logger?.log("Creating obstacles for difficulty level %f (base %f reduced by %f)".format(targetDifficulty, difficulty, reduce))
+            logger?.log("Creating obstacles for difficulty level %f (base %f reduced by %f)".format(targetDifficulty, difficulty, reduce), indent = 1)
             var stageDifficulty = stage.difficultyOfObstacles()
             while (stageDifficulty < targetDifficulty) {
                 val possibleSlotsForObstacles =
                     stage.chips.values.filter { it.chipData.type in possibleChipTypesWhereObstaclesCanBePut }
-                logger?.log("Found %d possible slots for obstacles.".format(possibleSlotsForObstacles.size))
+                logger?.debug("Found %d possible slots for obstacles.".format(possibleSlotsForObstacles.size))
                 if (possibleSlotsForObstacles.isNotEmpty()) {
                     val obstacleSlot = possibleSlotsForObstacles.random()
                     when (obstacleSlot.chipData.type) {
@@ -115,14 +122,14 @@ class StageCatalog
                         else -> {}
                     }
                     stageDifficulty = stage.difficultyOfObstacles()
-                    logger?.log("Remaining difficulty is %f.".format(difficulty))
+                    logger?.debug("Remaining difficulty is %f.".format(difficulty))
                 } else
                 {
-                    logger?.log("No more obstacles can be placed")
+                    logger?.debug("No more obstacles can be placed")
                     return
                 }
             }
-            logger?.log("All obstacles are placed, target difficulty is reached.")
+            logger?.log("All obstacles are placed, target difficulty is reached.", unIndent = 1)
         }
 
         private fun createAdditionalChips(stage: Stage)
@@ -131,6 +138,7 @@ class StageCatalog
          */
         {
             val logger = stage.gameView.gameActivity.logger
+            logger?.log("Placing additional chips.", indent = 1)
             var additionalCount = stage.gameMechanics.heroModifier(Hero.Type.CREATE_ADDITIONAL_CHIPS).toDouble()
             while (additionalCount > 0) {
                 logger?.log("Creating additional chips for %f".format(additionalCount))
@@ -162,7 +170,7 @@ class StageCatalog
                     return
                 }
             }
-            logger?.log("All additional chips are placed.")
+            logger?.log("All additional chips are placed.", unIndent = 1)
         }
 
 
