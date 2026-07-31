@@ -18,42 +18,47 @@ class Logger(val activity: AppCompatActivity, val logLevel: Level = Level.MESSAG
     private var logfile = File(activity.filesDir, logfileName)
     private var fileOutputStream: FileOutputStream? = null
     private var outputStreamWriter: OutputStreamWriter? = null
+    private var currentIndent = 0
 
     fun start()
     {
         fileOutputStream = FileOutputStream(logfile, false)
         outputStreamWriter = OutputStreamWriter(fileOutputStream)
-        val logString = "Start of log for %s. Current time is "+timeFormatLong.format(Date()).format(activity.title)
+        currentIndent = 0
+        val logString = "Start of log for ${activity.title}. Current time is ${timeFormatLong.format(Date())}"
         log(logString)
     }
 
-    fun log(text: String, messagelevel: Level = Level.MESSAGE, indent: Int =0)
+    fun log(text: String, messagelevel: Level = Level.MESSAGE, indent: Int = 0, unIndent: Int = 0)
     {
         if (messagelevel == Level.DEBUG && logLevel != Level.DEBUG)
             return
+        currentIndent -= unIndent
         val logString = "%s [%-4.4s] %s%s\n".format(
                 timeFormatShort.format(Date()),
                 leveltext[messagelevel],
-                " ".repeat(indent),
+                " ".repeat(currentIndent),
                 text,
                 )
         outputStreamWriter?.write(logString)
         outputStreamWriter?.flush()
         if (messagelevel != Level.DEBUG)
             print(text)
+        currentIndent += indent
     }
 
-    fun debug(text: String, indent: Int =0)
-    { log(text, Level.DEBUG, indent) }
+    fun debug(text: String, indent: Int =0, unIndent: Int =0)
+    { log(text, Level.DEBUG, indent=indent, unIndent=unIndent) }
 
-    fun warn(text: String, indent: Int =0)
-    { log(text, Level.WARN, indent) }
+    fun warn(text: String, indent: Int =0, unIndent: Int =0)
+    { log(text, Level.WARN, indent=indent, unIndent=unIndent) }
 
-    fun err(text: String, indent: Int =0)
-    { log(text, Level.ERROR, indent) }
+    fun err(text: String, indent: Int =0, unIndent: Int =0)
+    { log(text, Level.ERROR, indent=indent, unIndent=unIndent) }
 
     fun stop()
     {
+        currentIndent = 0
         val logString = "End of log. Current time is "+timeFormatLong.format(Date())
         log(logString)
         outputStreamWriter?.close()
