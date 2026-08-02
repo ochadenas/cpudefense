@@ -24,6 +24,9 @@ class EndlessStageCreator(val stage: Stage)
 {
     private var logger: Logger? = stage.gameView.gameActivity.logger
 
+    private val minNumberOfPaths = 3
+    private val maxNumberOfPaths = 16
+
     private var sectorSizeX = 16
     private var sectorSizeY = 12
     private var dimX: Int = 0
@@ -76,13 +79,9 @@ class EndlessStageCreator(val stage: Stage)
         numberOfSectorsY = numberOfSectors.second
         logger?.log("Number of sectors (x | y): %d | %d".format(numberOfSectorsX, numberOfSectorsY))
 
-        val numberOfPaths = when (level.number)
-        {
-            in 0..3 -> 3
-            in 4 .. 16 -> level.number
-            else -> 16
-        }
-        logger?.log("Number of paths: %d.".format(numberOfPaths))
+        var numberOfPaths = sqrt(level.number.toDouble()).toInt() + minNumberOfPaths
+        numberOfPaths = numberOfPaths.coerceAtMost(maxNumberOfPaths)
+        logger?.log("Number of paths: $numberOfPaths.")
 
         dimX = numberOfSectorsX * sectorSizeX
         dimY = numberOfSectorsY * sectorSizeY
@@ -125,10 +124,12 @@ class EndlessStageCreator(val stage: Stage)
             exitSectors.add(getByCoordinate(it)) }
         exitSectors.forEach { it?.type = SectorType.EXIT }
 
-        for (count in 1 .. numberOfPaths)
+        repeat(numberOfPaths)
+        {
             entrySectors.random()?.let { sector ->
-                createPath(sector)?.let { path -> paths.add(path)}
-            }
+                    createPath(sector)?.let { path -> paths.add(path)}
+                }
+        }
 
         for (sector in sectors)
             sector.createNodes()
@@ -177,8 +178,10 @@ class EndlessStageCreator(val stage: Stage)
      * @param firstSector Start of path
      * @return list of sectors, or null if no path is found */
     {
-        for (count in 1 .. 10) // number of tries
+        val maxNumberOfTries = 10
+        repeat (maxNumberOfTries) {
             pathToExit(firstSector)?.let { return it}
+        }
         return null
     }
 
