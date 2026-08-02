@@ -229,7 +229,9 @@ Das Verschieben ist gleichbedeutend mit einer Division durch 2."
     <string name="ZZ_message_of_the_day">Es wurden Änderungen am Spiel vorgenommen, vor allem an den „Endlos“-Leveln. Lies am besten die Versionshinweise unter INFO.</string>
     <string name="instr_22">"Denke daran, dass SHR-Chips zwar stark sind, aber Angreifer nicht komplett ausschalten können. Sie schwächen diejenigen mit hohen Werten, aber gegen Horden schwacher Angreifer können mehrere SUB-Chips eine effektivere Verteidigung darstellen."</string>
     <string name="button_refund_one">Entlassen</string>
+    <string name="shortdesc_track_freq">Geänderte Wege</string>
     <string name="shortdesc_reduce_removal">Kostenreduktion</string>
+    <string name="HERO_CHANGE_TRACK_FREQ">Lässt Angreifer einen gemeinsamen Pfad benutzen.</string>
     <string name="HERO_EFFECT_DECREASEREMOVAL">verringert die Kosten für die Entfernung unerwünschter Chips</string>
     <string name="name_series_3">Endlos</string>
     <string name="overheat">CPU-Schaden durch Überhitzung</string>

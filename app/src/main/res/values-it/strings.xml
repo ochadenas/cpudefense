@@ -132,6 +132,7 @@
     <string name="shortdesc_max_hero_upgrade">Grado massimo degli eroi</string>
     <string name="shortdesc_limit_unwanted">Chip indesiderati</string>
     <string name="shortdesc_create_wanted">Numero di chip aggiuntivi</string>
+    <string name="shortdesc_track_freq">Percorsi cambiati</string>
     <string name="shortdesc_reduce_removal">Riduzione dei costi</string>
     <string name="shortdesc_enable_mem_upgrade">Grado massimo di MEM</string>
     <string name="upgrade_format">%1$s  [costo: %2$d]</string>
@@ -215,6 +216,7 @@
     <string name="HERO_EFFECT_RANGE">aumenta la portata dei chip %s</string>
     <string name="HERO_EFFECT_LIMITUNWANTED">riduce il numero di chip indesiderati</string>
     <string name="HERO_CREATE_CHIPS">posiziona chip aggiuntivi</string>
+    <string name="HERO_CHANGE_TRACK_FREQ">Costringe gli attaccanti a utilizzare un percorso comune.</string>
     <string name="HERO_EFFECT_DECREASEREMOVAL">riduce i costi di rimozione dei chip indesiderati</string>
     <string name="HERO_EFFECT_ENABLEMEM">permette il potenziamento dei chip MEM</string>
     <string name="HERO_EFFECT_RES_STRENGTH">aumenta tutte le resistenze</string>

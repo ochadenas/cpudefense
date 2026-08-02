@@ -202,7 +202,9 @@
     <string name="ZZ_message_of_the_day">Des changements majeurs ont été apportés au jeu, en particulier dans les niveaux « endless » (sans fin). Consultez les notes de version dans l’écran INFO.</string>
     <string name="instr_22">N’oubliez pas que les puces SHR sont puissantes mais qu’elles ne peuvent pas éliminer les attaquants. Elles réduisent rapidement les grandes valeurs, mais face à des hordes d’attaquants faibles, plusieurs puces SUB peuvent constituer une défense plus efficace.</string>
     <string name="button_refund_one">Licencier</string>
+    <string name="shortdesc_track_freq">Chemins changés</string>
     <string name="shortdesc_reduce_removal">Coût enlèvement</string>
+    <string name="HERO_CHANGE_TRACK_FREQ">Amène les attaquants à utiliser un chemin commun.</string>
     <string name="HERO_EFFECT_DECREASEREMOVAL">réduit le coût de l’enlèvement des puces indésirables</string>
     <string name="name_series_3">Sans fin</string>
     <string name="overheat">Unité centrale endommagée par surchauffe</string>

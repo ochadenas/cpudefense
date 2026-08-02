@@ -87,7 +87,7 @@ class StageCatalog
                     structure[level.number] = stage.data
                     Persistency(stage.gameView.gameActivity).saveLevelStructure(GameMechanics.SERIES_ENDLESS, structure)
                     // modify tracks according to hero level
-                    stage.changeTrackProbability(stage.gameMechanics.heroModifier(Hero.Type.CHANGE_TRACK_FREQ).toInt())
+                    stage.changeTrackProbability(stage.gameMechanics.heroModifier(Hero.Type.CHANGE_TRACKS).toInt())
                     // provide coins
                     stage.rewardCoins = GameMechanics.defaultRewardCoins
                     logger?.log("Level creation finished.", unIndent = 1)

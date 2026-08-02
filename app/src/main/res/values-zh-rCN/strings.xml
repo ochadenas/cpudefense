@@ -218,6 +218,7 @@ ACC 的优势在于速度极快。"
     <string name="shortdesc_max_hero_upgrade">英雄最高等级</string>
     <string name="shortdesc_limit_unwanted">不受欢迎芯片数量</string>
     <string name="shortdesc_create_wanted">额外芯片数量</string>
+    <string name="shortdesc_track_freq">Paths changed</string>
     <string name="shortdesc_reduce_removal">芯片移除费用</string>
     <string name="shortdesc_enable_mem_upgrade">MEM 最高等级</string>
     <string name="upgrade_format">%1$s [花费：%2$d]</string>
@@ -240,6 +241,7 @@ ACC 的优势在于速度极快。"
     <string name="HERO_EFFECT_RANGE">增加 %s 芯片的射程</string>
     <string name="HERO_EFFECT_LIMITUNWANTED">减少不受欢迎芯片的数量</string>
     <string name="HERO_CREATE_CHIPS">创建额外芯片</string>
+    <string name="HERO_CHANGE_TRACK_FREQ">Makes attackers use a common path</string>
     <string name="HERO_EFFECT_DECREASEREMOVAL">降低移除不受欢迎芯片的成本</string>
     <string name="HERO_EFFECT_ENABLEMEM">启用 MEM 芯片的升级</string>
     <string name="HERO_EFFECT_RES_STRENGTH">增强电阻的强度</string>

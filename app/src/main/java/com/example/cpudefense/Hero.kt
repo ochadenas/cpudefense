@@ -2,9 +2,14 @@
 
 package com.example.cpudefense
 
+import android.annotation.SuppressLint
 import android.content.res.Resources
-import android.graphics.*
+import android.graphics.Bitmap
 import android.graphics.Bitmap.createBitmap
+import android.graphics.BitmapFactory
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Rect
 import android.text.Layout
 import android.text.StaticLayout
 import android.text.TextPaint
@@ -13,7 +18,6 @@ import com.example.cpudefense.effects.Fader
 import com.example.cpudefense.gameElements.Button
 import com.example.cpudefense.gameElements.HeroCard
 import com.example.cpudefense.utils.setTopLeft
-import java.util.Locale
 import java.util.Locale.getDefault
 import kotlin.math.exp
 import kotlin.math.truncate
@@ -44,7 +48,7 @@ class Hero(var gameActivity: GameActivity, type: Type)
         INCREASE_CHIP_MEM_SPEED,  INCREASE_CHIP_MEM_RANGE, ENABLE_MEM_UPGRADE,
         INCREASE_CHIP_RES_STRENGTH, INCREASE_CHIP_RES_DURATION, CONVERT_HEAT,
         DECREASE_ATT_FREQ, DECREASE_ATT_SPEED, DECREASE_ATT_STRENGTH, DECREASE_COIN_STRENGTH, REDUCE_HEAT,
-        ADDITIONAL_LIVES, INCREASE_MAX_HERO_LEVEL, LIMIT_UNWANTED_CHIPS, CREATE_ADDITIONAL_CHIPS, CHANGE_TRACK_FREQ,
+        ADDITIONAL_LIVES, INCREASE_MAX_HERO_LEVEL, LIMIT_UNWANTED_CHIPS, CREATE_ADDITIONAL_CHIPS, CHANGE_TRACKS,
         INCREASE_STARTING_CASH, GAIN_CASH,
         DECREASE_UPGRADE_COST, INCREASE_REFUND, GAIN_CASH_ON_KILL, DECREASE_REMOVAL_COST}
 
@@ -93,6 +97,7 @@ class Hero(var gameActivity: GameActivity, type: Type)
 
     }
 
+    @SuppressLint("StringFormatTrivial")
     fun setDesc()
     /** sets the description string of this hero, depending
      * on the type and its upgrade level.
@@ -183,7 +188,7 @@ class Hero(var gameActivity: GameActivity, type: Type)
                 strengthDesc = "+%d".format(strength.toInt())
                 upgradeDesc = " → +%d".format(next.toInt())
             }
-            Type.CHANGE_TRACK_FREQ ->
+            Type.CHANGE_TRACKS ->
             {
                 shortDesc = resources.getString(R.string.shortdesc_track_freq)
                 strengthDesc = "%d".format(strength.toInt())
@@ -306,7 +311,8 @@ class Hero(var gameActivity: GameActivity, type: Type)
         return when (data.type) {
             Type.LIMIT_UNWANTED_CHIPS ->    upgradeLevel(Type.INCREASE_MAX_HERO_LEVEL) >= 3
             Type.CREATE_ADDITIONAL_CHIPS -> upgradeLevel(Type.LIMIT_UNWANTED_CHIPS) >= 3
-            Type.CHANGE_TRACK_FREQ -> true // TODO CHANGE THIS
+            Type.CHANGE_TRACKS -> (upgradeLevel(Type.CREATE_ADDITIONAL_CHIPS) >= 3) &&
+                    stageIdentifier.isGreaterOrEqualThan(Stage.Identifier(GameMechanics.SERIES_ENDLESS, 1))
             Type.INCREASE_MAX_HERO_LEVEL -> upgradeLevel(Type.ADDITIONAL_LIVES) >= 3
             Type.DECREASE_COIN_STRENGTH ->  upgradeLevel(Type.DECREASE_ATT_STRENGTH) >= 3
             Type.DECREASE_ATT_STRENGTH ->   upgradeLevel(Type.DECREASE_ATT_SPEED) >= 3
@@ -418,7 +424,7 @@ class Hero(var gameActivity: GameActivity, type: Type)
                 Type.INCREASE_MAX_HERO_LEVEL -> return level.toFloat()
                 Type.LIMIT_UNWANTED_CHIPS -> return level.toFloat()
                 Type.CREATE_ADDITIONAL_CHIPS -> return level.toFloat()
-                Type.CHANGE_TRACK_FREQ -> return level.toFloat()
+                Type.CHANGE_TRACKS -> return level.toFloat()
                 Type.ENABLE_MEM_UPGRADE -> return (level+1).toFloat()
                 Type.GAIN_CASH -> return if (level>0) (8f - level) * 9 else 0f
                 Type.GAIN_CASH_ON_KILL -> return truncate((level+1) * 0.5f)
@@ -445,6 +451,7 @@ class Hero(var gameActivity: GameActivity, type: Type)
         /** link to the hero's wikipedia article */
         var url = ""
 
+        @SuppressLint("StringFormatTrivial", "DiscouragedApi")
         fun setType()
         {
             when (type)
@@ -521,7 +528,7 @@ class Hero(var gameActivity: GameActivity, type: Type)
                     vitae = resources.getString(R.string.neumann)
                     picture = BitmapFactory.decodeResource(resources, R.drawable.neumann)
                 }
-                Type.CHANGE_TRACK_FREQ ->
+                Type.CHANGE_TRACKS ->
                 {
                     name = "Spärck Jones"
                     fullName = "Karen Spärck Jones"
