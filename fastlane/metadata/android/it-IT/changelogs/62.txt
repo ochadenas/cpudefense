@@ -1,0 +1,8 @@
+Nuove funzionalità:
+- Nuova eroina per la serie ENDLESS: Karen Spärck Jones. Questa eroina aumenta il numero di attaccanti che utilizzano lo stesso percorso, rendendo così più facile gestirli.
+
+Correzioni di bug:
+- Risolto un crash del gioco sui sistemi con versione Android inferiore a 15 (problema #354).
+
+Varie:
+- Traduzioni aggiornate.

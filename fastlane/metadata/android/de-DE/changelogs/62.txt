@@ -1,0 +1,8 @@
+Neue Funktionen:
+- Neue Heldin für die ENDLESS-Reihe: Karen Spärck Jones. Diese Heldin erhöht die Anzahl der Angreifer, die denselben Pfad nutzen, und erleichtert so die Abwehr.
+
+Fehlerbehebungen:
+- Behebung eines Absturzes beim Spielstart auf Systemen mit Android-Versionen kleiner als 15 (Problem #354).
+
+Verschiedenes:
+- Übersetzungen aktualisiert.

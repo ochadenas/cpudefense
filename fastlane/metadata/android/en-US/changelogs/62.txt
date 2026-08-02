@@ -1,0 +1,8 @@
+New features:
+- New heroine for the ENDLESS series: Karen Spärck Jones. This hero increases the number of attackers using the same path, and thus make it easier to deal with them.
+
+Bug fixes:
+- fixed a game crash on systems running Android version lowers than 15 (issue #354)
+
+Miscellaneous:
+- Translations updated.

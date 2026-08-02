@@ -1,0 +1,8 @@
+Nouvelles fonctionnalités :
+- Nouvelle héroïne pour la série ENDLESS : Karen Spärck Jones. Cette héroïne augmente le nombre d’attaquants utilisant le même chemin, ce qui facilite leur gestion.
+
+Corrections de bugs :
+- Correction d’un plantage du jeu sur les systèmes exécutant une version Android inférieure à 15 (problème n°354).
+
+Divers :
+- Mise à jour des traductions.
