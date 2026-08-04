@@ -23,6 +23,7 @@ import com.example.cpudefense.networkmap.Viewport
 import com.example.cpudefense.utils.displayTextLeftAlignedInRect
 import com.example.cpudefense.utils.setCenter
 
+/** the view where heroes can be hired and fired. Called 'hero vault' by some. */
 class Marketplace(val gameView: GameView): GameElement()
 {
     private val resources: Resources = gameView.resources
@@ -34,15 +35,19 @@ class Marketplace(val gameView: GameView): GameElement()
     /** area used for cards, without header */
     private var cardsArea = Rect()
     private var rightPanelArea = Rect()
+    /** the area intended for the hero biography text, including the wikipedia link */
     private var biographyArea = Rect()
     private var biographyAreaMargin = 20
     private var clearPaint = Paint()
     private var paint = Paint()
-    /** used for scrolling */
+    /** offset used for vertical scrolling */
     private var cardViewOffset = 0f  
 
-    private var upgrades = mutableListOf<Hero>()
+    /** list of the heroes that are displayed in the marketplace and can be hired or upgraded */
+    private var availableHeroes = mutableListOf<Hero>()
+    /** the object holding the coins to be spent */
     private var purse = gameMechanics.currentPurse()
+    /** refers to the hero if a hero card is selected, otherwise null */
     private var selected: Hero? = null
     private var coins = mutableListOf<Coin>()
     private var coinSize = (32 * gameView.scaleFactor).toInt()
@@ -69,10 +74,12 @@ class Marketplace(val gameView: GameView): GameElement()
         biographyArea = Rect(rightPanelArea).apply { bottom = buttonPurchase?.area?.top ?: rightPanelArea.bottom }
     }
 
+    /** creates the hero cards and puts them into the availableHero list.
+     * Also creates the row of coins. */
     fun fillMarket(level: Stage.Identifier)
     {
         nextGameLevel = level
-        val newUpgrades = mutableListOf<Hero>()
+        val newHeroes = mutableListOf<Hero>()
         val heroes = gameMechanics.currentHeroes(level)
         purse = gameMechanics.currentPurse()
         for (type in Hero.Type.entries)
@@ -86,14 +93,14 @@ class Marketplace(val gameView: GameView): GameElement()
                hero = Hero.createFromData(gameView.gameActivity, Hero.Data(type))
             if (hero.isAvailable(level) || hero.data.level > 0) {
                 hero.createBiography(biographyArea)
-                newUpgrades.add(hero)
+                newHeroes.add(hero)
             }
             hero.setDesc()
             hero.card.create(showNextUpdate = true)
             hero.isOnLeave = hero.isOnLeave(level)
         }
-        arrangeCards(newUpgrades, cardViewOffset)
-        upgrades = newUpgrades
+        arrangeCards(newHeroes, cardViewOffset)
+        availableHeroes = newHeroes
         if (level.mode() == GameMechanics.LevelMode.ENDLESS) // grant a gift at the beginning of 'Endless'
         {
             val gift = purse.addGift(GameMechanics.defaultGiftCoins)
@@ -106,9 +113,9 @@ class Marketplace(val gameView: GameView): GameElement()
         coins = MutableList(purse.availableCoins()) { Coin(gameMechanics, coinSize) }
     }
 
-    private fun arrangeCards(heroes: MutableList<Hero>, dY: Float = 0f)
-    /** calculate the positions of the cards' rectangles.
+    /** calculate the positions of the cards' rectangles on the screen.
      * @param dY Vertical offset used for scrolling */
+    private fun arrangeCards(heroes: MutableList<Hero>, dY: Float = 0f)
     {
         val space = 20
         // val offset = (GameMechanics.cardHeight*gameView.scaleFactor).toInt() + space
@@ -150,7 +157,6 @@ class Marketplace(val gameView: GameView): GameElement()
     }
 
     fun onDown(event: MotionEvent): Boolean {
-        /** test if a button has been pressed: */
         if (buttonFinish?.area?.contains(event.x.toInt(), event.y.toInt()) == true)
         {
             selected = null
@@ -169,7 +175,7 @@ class Marketplace(val gameView: GameView): GameElement()
                 }
             }
             val dialog = Dialog(gameView.gameActivity)
-            dialog.setContentView(R.layout.layout_dialog_heroes)
+            dialog.setContentView(R.layout.layout_dialog_question)
             dialog.window?.setLayout(
                 ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT
@@ -212,7 +218,7 @@ class Marketplace(val gameView: GameView): GameElement()
                     return true
                 }
             }
-        for (hero in upgrades)
+        for (hero in availableHeroes)
             if (hero.card.cardAreaOnScreen.contains(event.x.toInt(), event.y.toInt()))
                 hero.let {
                     selected = it
@@ -234,8 +240,8 @@ class Marketplace(val gameView: GameView): GameElement()
         return false
     }
 
-    private fun wikipedia()
     /** opens the system's default browser and points it to the hero's wikipedia article */
+    private fun wikipedia()
     {
         if (currentWiki != selected) {
             val browserIntent =
@@ -248,13 +254,13 @@ class Marketplace(val gameView: GameView): GameElement()
         }
     }
 
+    /** resets all heroes to level 0 that meet certain criteria,
+     * e.g. that are not on leave.
+     * Refunds the coins spent on the hero.
+     */
     private fun refundAll()
-            /** resets all heroes to level 0 that meet certain criteria,
-             * e.g. that are not on leave.
-             * Refunds the coins spent on the hero.
-             */
     {
-        for (card in upgrades.filter { it.data.level > 0 && !it.isOnLeave} ) {
+        for (card in availableHeroes.filter { it.data.level > 0 && !it.isOnLeave} ) {
             val refund =
                 if (card.data.coinsSpent > 0) card.data.coinsSpent else 0  // was: 4
             purse.spend(-refund)
@@ -265,6 +271,7 @@ class Marketplace(val gameView: GameView): GameElement()
         makeButtonText(null)
     }
 
+    /** 'fires' (i.e. downgrades) a hero or heroine */
     private fun refundOne(hero: Hero)
     {
         with (hero)
@@ -319,7 +326,7 @@ class Marketplace(val gameView: GameView): GameElement()
                     cardViewOffset -= dY * scrollFactor
                     if (cardViewOffset>0f)
                         cardViewOffset=0f
-                    arrangeCards(upgrades, cardViewOffset)
+                    arrangeCards(availableHeroes, cardViewOffset)
                 }
                 rightPanelArea.contains(posX, posY) -> {
                     selected?.biography?.scroll(dY)
@@ -357,7 +364,7 @@ class Marketplace(val gameView: GameView): GameElement()
         canvas.drawColor(Color.BLACK)
         // draw cards
         selected?.card?.displayHighlightFrame(canvas)
-        for (hero in upgrades)
+        for (hero in availableHeroes)
             hero.card.display(canvas, viewport)
 
         displayAvailableCoins(canvas, viewport, Rect(0, 0, myArea.right, cardsArea.top))
