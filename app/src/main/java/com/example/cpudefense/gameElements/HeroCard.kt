@@ -42,8 +42,11 @@ class HeroCard(val gameView: GameView, val hero: Hero): GameElement(), Fadable
     private var levelIndicator = mutableListOf<Rect>()
     private var indicatorSize = portraitArea.width() / 10
 
-    /** additional flags */
-    private var showNextUpdate = true
+    // additional flags
+    /** whether the upgrade possibility is shown on the card. This is the case in the marketplace,
+     * but not when selecting the heroes on leave. */
+    private var showNextUpgrade = true
+    /** whether the card border is coloured (in the marketplace) or not (elsewhere) */
     private var monochrome = false
 
     /* different paint objects */
@@ -53,8 +56,10 @@ class HeroCard(val gameView: GameView, val hero: Hero): GameElement(), Fadable
     private var paintText = Paint()
     private val paintHero = Paint()
 
+    /** common border colour for all inactive heroes. Also used outside of the marketplace. */
     var inactiveColor = resources.getColor(R.color.upgrade_inactive)
     private var monochromeColor = inactiveColor
+    /** the border colour according to the hero's type */
     var activeColor: Int = if (monochrome) monochromeColor
     else when(type)
     {
@@ -75,11 +80,11 @@ class HeroCard(val gameView: GameView, val hero: Hero): GameElement(), Fadable
         Hero.Type.DECREASE_ATT_SPEED -> resources.getColor(R.color.upgrade_active_general)
         Hero.Type.DECREASE_ATT_STRENGTH -> resources.getColor(R.color.upgrade_active_general)
         Hero.Type.DECREASE_COIN_STRENGTH -> resources.getColor(R.color.upgrade_active_general)
-        Hero.Type.ADDITIONAL_LIVES -> resources.getColor(R.color.upgrade_active_meta)
+        Hero.Type.ADDITIONAL_LIVES -> resources.getColor(R.color.upgrade_active_game)
         Hero.Type.INCREASE_MAX_HERO_LEVEL -> resources.getColor(R.color.upgrade_active_meta)
-        Hero.Type.LIMIT_UNWANTED_CHIPS -> resources.getColor(R.color.upgrade_active_meta)
-        Hero.Type.CREATE_ADDITIONAL_CHIPS -> resources.getColor(R.color.upgrade_active_meta)
-        Hero.Type.CHANGE_TRACKS -> resources.getColor(R.color.upgrade_active_meta)
+        Hero.Type.LIMIT_UNWANTED_CHIPS -> resources.getColor(R.color.upgrade_active_game)
+        Hero.Type.CREATE_ADDITIONAL_CHIPS -> resources.getColor(R.color.upgrade_active_game)
+        Hero.Type.CHANGE_TRACKS -> resources.getColor(R.color.upgrade_active_game)
         Hero.Type.INCREASE_STARTING_CASH -> resources.getColor(R.color.upgrade_active_eco)
         Hero.Type.GAIN_CASH -> resources.getColor(R.color.upgrade_active_eco)
         Hero.Type.GAIN_CASH_ON_KILL -> resources.getColor(R.color.upgrade_active_eco)
@@ -87,7 +92,6 @@ class HeroCard(val gameView: GameView, val hero: Hero): GameElement(), Fadable
         Hero.Type.DECREASE_UPGRADE_COST -> resources.getColor(R.color.upgrade_active_eco)
         Hero.Type.DECREASE_REMOVAL_COST -> resources.getColor(R.color.upgrade_active_eco)
     }
-
 
     init {
         paintRect.style = Paint.Style.STROKE
@@ -222,7 +226,7 @@ class HeroCard(val gameView: GameView, val hero: Hero): GameElement(), Fadable
         portraitArea = Rect(0, 0, (GameView.cardPictureSize*gameView.scaleFactor).toInt(), (GameView.cardPictureSize*gameView.scaleFactor).toInt())
         paintText.textSize = GameView.heroCardTextSize * gameView.textScaleFactor
         indicatorSize = portraitArea.width() / 10
-        this.showNextUpdate = showNextUpdate
+        this.showNextUpgrade = showNextUpdate
         this.monochrome = monochrome
         createBitmap()
     }
@@ -242,7 +246,7 @@ class HeroCard(val gameView: GameView, val hero: Hero): GameElement(), Fadable
         val bounds = Rect()
         paintText.getTextBounds(hero.strengthDesc, 0, hero.strengthDesc.length, bounds)
         canvas.drawText(hero.shortDesc, marginHorizontal, baseline - bounds.height() - marginVertical, paintText)
-        if (showNextUpdate) {
+        if (showNextUpgrade) {
             paintUpdate.color = resources.getColor(R.color.upgrade_inactive)
             canvas.drawText(hero.upgradeDesc, bounds.right + marginHorizontal, baseline, paintUpdate)
         }
