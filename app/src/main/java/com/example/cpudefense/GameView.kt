@@ -70,11 +70,14 @@ class GameView(context: Context):
         const val coinSizeOnScreen = 32
         /** base size of hero card in the marketplace */
         const val cardWidth = 220
+        /** size of hero card in the marketplace */
         const val cardHeight = cardWidth * 1.41
+        /** size of hero picture in the marketplace */
         const val cardPictureSize = cardWidth * 2 / 3
         /** horizontal size of LEDs, actual size can be smaller if there is too little space */
         const val preferredSizeOfLED = 20
 
+        /** size of a chip in grid coordinates (scales with the viewport) */
         val chipSize = Coord(6,3)
         /** initial space in screen coordinates around the grid, with unshifted viewport */
         const val viewportMargin = 4
@@ -232,12 +235,7 @@ class GameView(context: Context):
      */
     {
         val scoreBoardHeight = (h*0.1).toInt()
-        if (scoreBoardHeight < minScoreBoardHeight)
-            return minScoreBoardHeight
-        else if (scoreBoardHeight > maxScoreBoardHeight)
-            return maxScoreBoardHeight
-        else
-            return scoreBoardHeight
+        return scoreBoardHeight.coerceIn(GameView.minScoreBoardHeight, GameView.maxScoreBoardHeight)
     }
 
     private fun viewportHeight(h: Int): Int
@@ -362,38 +360,8 @@ class GameView(context: Context):
         return false
     }
 
-    /** event handler for 'pinch' gestures */
-    /*
-    override fun onScale(p0: ScaleGestureDetector): Boolean {
-        val scaleFactor = p0.scaleFactor
-        if (scrollAllowed) synchronized(displayLock) {
-            viewport.scale(scaleFactor)
-            gameMechanics.currentlyActiveStage?.let {
-                it.chips.forEach { (_, chip) -> chip.upgradePossibilities.clear() }                 // clear upgrade boxes, they mess up scaling
-                it.network.applyScale(viewport)
-                it.network.recreateNetworkImage(false)
-            }
-        }
-        return true
-    }
-
-    override fun onScaleBegin(p0: ScaleGestureDetector): Boolean {
-        viewState = ViewState.CHANGING_SIZE
-        // clear upgrade boxes, they mess up scaling
-        gameMechanics.currentlyActiveStage?.let {
-            it.chips.forEach { (_, chip) -> chip.upgradePossibilities.clear() }
-        }
-        return true
-    }
-
-    override fun onScaleEnd(p0: ScaleGestureDetector) {
-        viewState = ViewState.NORMAL
-    }
-
-
-     */
+    /**  execute all movers and faders */
     fun updateEffects()
-            /**  execute all movers and faders */
     {
         intermezzo.update()
         for (m in movers)
