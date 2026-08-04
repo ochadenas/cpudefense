@@ -323,7 +323,7 @@ class Hero(var gameActivity: GameActivity, type: Type)
             Type.INCREASE_REFUND ->         upgradeLevel(Type.DECREASE_UPGRADE_COST) >= 3
             Type.DECREASE_UPGRADE_COST ->   upgradeLevel(Type.GAIN_CASH) >= 3
             Type.GAIN_CASH ->               upgradeLevel(Type.INCREASE_STARTING_CASH) >= 3
-            Type.DECREASE_REMOVAL_COST ->   upgradeLevel(Type.GAIN_CASH) >= 3 &&
+            Type.DECREASE_REMOVAL_COST ->   upgradeLevel(Type.GAIN_CASH_ON_KILL) >= 3 &&
                     stageIdentifier.isGreaterOrEqualThan(Stage.Identifier(GameMechanics.SERIES_NORMAL, 24))
             Type.REDUCE_HEAT ->             upgradeLevel(Type.INCREASE_CHIP_MEM_SPEED) >= 3
             Type.INCREASE_CHIP_MEM_SPEED -> stageIdentifier.isGreaterOrEqualThan(Stage.Identifier(GameMechanics.SERIES_NORMAL, 14))
