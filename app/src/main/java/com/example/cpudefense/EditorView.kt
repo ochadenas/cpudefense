@@ -3,14 +3,18 @@
 package com.example.cpudefense
 
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Color
+import android.graphics.Rect
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.SurfaceHolder
 import android.view.SurfaceView
 import androidx.core.view.GestureDetectorCompat
 import com.example.cpudefense.activities.EditorActivity
+import com.example.cpudefense.editorElements.EditorPanel
 import com.example.cpudefense.effects.Effects
 import com.example.cpudefense.effects.Fader
 import com.example.cpudefense.effects.Flipper
@@ -39,6 +43,7 @@ class EditorView(context: Context):
     private val gestureDetector = GestureDetectorCompat(context, this)
 
     val viewport = Viewport()
+    val editorPanel = EditorPanel(this)
     /** list of all mover objects that are created for game elements */
     var movers = CopyOnWriteArrayList<Mover>()
     /** list of all fader objects that are created for game elements */
@@ -50,8 +55,13 @@ class EditorView(context: Context):
     var textScaleFactor = 1.0f
     /** general scale factor, based on Density */
     var scaleFactor = 1.0f
-    /** space taken up by the top system bar */
+    /** space taken up by the top system bar */    val cpuImage: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.cpu)
+
     var topMargin = 0
+
+    val menuIcon: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.buttons_menu)
+    val chipIcon: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.buttons_chip)
+    val moveIcon: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.buttons_move)
 
     fun hasDefinedSize(): Boolean
     /** whether the game view and all its components know their size and can be used */
@@ -126,6 +136,7 @@ class EditorView(context: Context):
         scaleFactor = 0.50f * resources.displayMetrics.density
         val viewportHeight = viewportHeight(h)
         viewport.determineScreenSize(w, viewportHeight, scaleFactor)
+        editorPanel.setSize(Rect(0, 0, w, h))
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
@@ -173,6 +184,7 @@ class EditorView(context: Context):
         synchronized(displayLock) {
             holder.lockCanvas()?.let()
             {
+                editorPanel.display(it)
                 holder.unlockCanvasAndPost(it)
             }
         }

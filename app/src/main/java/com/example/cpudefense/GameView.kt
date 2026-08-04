@@ -29,7 +29,7 @@ import com.example.cpudefense.effects.Mover
 import com.example.cpudefense.gameElements.Attacker
 import com.example.cpudefense.gameElements.Chip
 import com.example.cpudefense.gameElements.ScoreBoard
-import com.example.cpudefense.gameElements.SpeedControl
+import com.example.cpudefense.gameElements.ControlButtonPanel
 import com.example.cpudefense.networkmap.Coord
 import com.example.cpudefense.networkmap.Network
 import com.example.cpudefense.networkmap.Viewport
@@ -132,7 +132,7 @@ class GameView(context: Context):
     var intermezzo = Intermezzo(this)
     var marketplace = Marketplace(this)
     val scoreBoard = ScoreBoard(this)
-    val speedControlPanel = SpeedControl(this)
+    val controlButtonPanel = ControlButtonPanel(this)
     /** list of all mover objects that are created for game elements */
     var movers = CopyOnWriteArrayList<Mover>()
     /** list of all fader objects that are created for game elements */
@@ -215,7 +215,7 @@ class GameView(context: Context):
 
     fun resetAtStartOfStage()
     {
-        speedControlPanel.resetButtons()
+        controlButtonPanel.resetButtons()
         scoreBoard.Lives()
         scoreBoard.recreateBitmap()
         viewport.reset()
@@ -226,7 +226,7 @@ class GameView(context: Context):
             it.recreateNetworkImage(false)
         }
         viewState = ViewState.NORMAL
-        speedControlPanel.setInfoLine(resources.getString(R.string.stage_number).format(gameMechanics.currentlyActiveStage?.numberAsString()))
+        controlButtonPanel.setInfoLine(resources.getString(R.string.stage_number).format(gameMechanics.currentlyActiveStage?.numberAsString()))
     }
 
     private fun scoreBoardHeight(h: Int): Int
@@ -259,7 +259,7 @@ class GameView(context: Context):
         val viewportHeight = viewportHeight(h)
         viewport.determineScreenSize(w, viewportHeight, scaleFactor)
         scoreBoard.setSize(Rect(0, viewportHeight, w, viewportHeight+scoreBoardHeight(h)))
-        speedControlPanel.setSize(Rect(0, topMargin, w, viewportHeight))
+        controlButtonPanel.setSize(Rect(0, topMargin, w, viewportHeight))
         intermezzo.setSize(Rect(0, 0, w, h))
         marketplace.setSize(Rect(0, topMargin, w, h))
         notification.setPositionOnScreen(w/2, h/2)
@@ -282,7 +282,7 @@ class GameView(context: Context):
         when (gameMechanics.state.phase)
         {
             GamePhase.RUNNING -> {
-                    if (speedControlPanel.onDown(motionEvent))
+                    if (controlButtonPanel.onDown(motionEvent))
                         return true
                     gameMechanics.currentlyActiveStage?.network?.let {
                         if (processClickOnNodes(it, motionEvent))
@@ -296,7 +296,7 @@ class GameView(context: Context):
             GamePhase.INTERMEZZO -> return intermezzo.onDown(motionEvent)
             GamePhase.MARKETPLACE -> return marketplace.onDown(motionEvent)
             GamePhase.PAUSED -> {
-                if (speedControlPanel.onDown(motionEvent))
+                if (controlButtonPanel.onDown(motionEvent))
                     return true
                 gameMechanics.currentlyActiveStage?.network?.let {
                     if (processClickOnNodes(it, motionEvent))
@@ -419,7 +419,7 @@ class GameView(context: Context):
         canvas.let {
             gameMechanics.currentlyActiveStage?.network?.display(it, viewport)
             scoreBoard.display(it, viewport)
-            speedControlPanel.display(it)
+            controlButtonPanel.display(it)
         }
     }
 

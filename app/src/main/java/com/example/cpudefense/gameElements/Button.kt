@@ -7,7 +7,16 @@ import com.example.cpudefense.effects.Fader
 import com.example.cpudefense.utils.*
 import java.util.*
 
-class Button(var gameView: GameView, var text: String, val textSize: Float, var color: Int = Color.GREEN, val style: Style = Style.FILLED, val preferredWidth: Int = 0): Fadable
+/** generic button to be used within SarfaceViews. */
+class Button(var gameView: GameView,
+             /** the text to be displayed on the button */
+             var text: String,
+             val textSize: Float,
+             var color: Int = Color.GREEN,
+             /** style of the button, including special styles such as "HP style button". */
+             val style: Style = Style.FILLED,
+             val preferredWidth: Int = 0)
+    : Fadable
 {
     var alpha = 0
     var area = Rect()

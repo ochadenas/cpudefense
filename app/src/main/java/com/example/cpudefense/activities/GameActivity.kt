@@ -2,17 +2,14 @@
 
 package com.example.cpudefense.activities
 
-import android.app.Activity
 import android.app.Dialog
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.os.SystemClock
-import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
-import android.view.Window
 import android.view.WindowManager
 import android.widget.Button
 import android.widget.FrameLayout
@@ -393,7 +390,7 @@ class GameActivity : AppCompatActivity() {
             it.network.validateViewport(gameView.viewport)
             gameView.viewport.determineGridSize(it.size)
             gameView.background.prepareAtStartOfStage(it.data.ident)
-            gameView.speedControlPanel.setInfoLine(gameView.resources.getString(R.string.stage_number)
+            gameView.controlButtonPanel.setInfoLine(gameView.resources.getString(R.string.stage_number)
                                                        .format(it.numberAsString()))
         }
         when (gameMechanics.state.phase)
@@ -446,7 +443,7 @@ class GameActivity : AppCompatActivity() {
         Persistency(this).saveStageSummaries(gameMechanics, ident.series)
         logger?.log("Saving summary of series %d".format(ident.series))
         gameMechanics.currentlyActiveStage?.let {
-            gameView.speedControlPanel.setInfoLine(gameView.resources.getString(R.string.stage_number).format(it.numberAsString()))
+            gameView.controlButtonPanel.setInfoLine(gameView.resources.getString(R.string.stage_number).format(it.numberAsString()))
             showStageMessage(it)
         }
         setGameSpeed(GameSpeed.NORMAL)  // reset speed to normal when starting next stage

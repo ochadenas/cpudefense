@@ -8,7 +8,7 @@ import com.example.cpudefense.effects.Fadable
 import com.example.cpudefense.effects.Fader
 import androidx.core.graphics.scale
 
-class SpeedControlButton(val gameView: GameView, val gameMechanics: GameMechanics, var type: Type = Type.PAUSE, private val panel: SpeedControl): Fadable
+class GameControlButton(val gameView: GameView, val gameMechanics: GameMechanics, var type: Type = Type.PAUSE, private val panel: ControlButtonPanel): Fadable
 {
     enum class Type { PAUSE, FAST, FASTEST, NORMAL, RETURN, LOCK, UNLOCK, ZOOM_PLUS, ZOOM_MINUS }
 

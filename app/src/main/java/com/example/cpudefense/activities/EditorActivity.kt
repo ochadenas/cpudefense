@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.FrameLayout
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
@@ -15,12 +14,16 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updateLayoutParams
 import com.example.cpudefense.EditorView
 import com.example.cpudefense.GameMechanics
-import com.example.cpudefense.GameMechanics.Params.SERIES_NORMAL
 import com.example.cpudefense.Persistency
 import com.example.cpudefense.R
 import com.example.cpudefense.Settings
-import com.example.cpudefense.Stage.Identifier
 import com.example.cpudefense.utils.Logger
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlin.time.Duration.Companion.milliseconds
 
 class EditorActivity : AppCompatActivity()
 {
@@ -29,6 +32,8 @@ class EditorActivity : AppCompatActivity()
     lateinit var editorView: EditorView
 
     companion object;
+
+    private var displayJob: Job? = null
 
     val settings = Settings()
     override fun onCreate(savedInstanceState: Bundle?)
@@ -57,30 +62,15 @@ class EditorActivity : AppCompatActivity()
     /** function that gets called in any case, regardless of whether
      * a new game is started or the user just navigates back to the app.
      */
+    @OptIn(DelicateCoroutinesApi::class)
     override fun onResume()
     {
         super.onResume()
-        Toast.makeText(this, resources.getString(R.string.toast_loading), Toast.LENGTH_SHORT).show()
         loadSettings()
         setupEditorView()
-        logger?.log("Entering game activity, game state is %s".format(gameMechanics.state.toString()))
-
-        // determine what to do: resume, restart, or play next level
-        var restartGame = intent.getBooleanExtra("RESET_PROGRESS", false)
-        var restartEndless = intent.getBooleanExtra("RESET_ENDLESS", false)
-        val restoreGame = intent.getBooleanExtra("LOAD_PROGRESS", false)
-
-        var startOnLevel = when
-        {
-            restartGame -> Identifier.startOfNewGame
-            restoreGame -> Identifier.startOfNewGame // this will be overwritten later
-            restartEndless -> Identifier.startOfEndless
-            else -> Identifier(
-                    series = intent.getIntExtra("START_ON_SERIES", SERIES_NORMAL),
-                    number = intent.getIntExtra("START_ON_STAGE", 1)
-            )
-        }
-
+        logger?.log("Entering editor activity.")
+        if (displayJob?.isActive != true)  // (!= true) is not the same as (false) here!
+            displayJob = GlobalScope.launch { delay(GameActivity.effectsDelay.milliseconds); display(); }
     }
 
     override fun onStop() {
@@ -130,11 +120,13 @@ class EditorActivity : AppCompatActivity()
         settings.loadFromFile(prefs)
     }
 
+    @OptIn(DelicateCoroutinesApi::class)
     private fun display()
     /** Thread for refreshing the display on the screen.
      * The delay between two executions may vary. */
     {
         editorView.display()
+        displayJob = GlobalScope.launch { delay(GameActivity.effectsDelay.milliseconds); display() }
     }
 
 }

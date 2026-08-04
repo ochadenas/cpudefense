@@ -14,19 +14,19 @@ import androidx.core.graphics.createBitmap
 import com.example.cpudefense.Stage
 import com.example.cpudefense.utils.setTop
 
-class SpeedControl(var gameView: GameView)
+class ControlButtonPanel(var gameView: GameView)
 /** set of buttons that control the game speed, but also provide additional interaction such
  * as "lock scrolling" or "return to main menu". Also shows the level number.
  */
 {
     private val gameMechanics = gameView.gameMechanics
-    private var button1 = SpeedControlButton(gameView, gameMechanics, SpeedControlButton.Type.FAST, this)
-    private var button2 = SpeedControlButton(gameView, gameMechanics, SpeedControlButton.Type.PAUSE, this)
-    private var button3 = SpeedControlButton(gameView, gameMechanics, SpeedControlButton.Type.FASTEST, this)
-    private var lockButton = SpeedControlButton(gameView, gameMechanics, SpeedControlButton.Type.UNLOCK, this)
-    private var returnButton = SpeedControlButton(gameView, gameMechanics, SpeedControlButton.Type.RETURN, this)
-    private var zoomPlusButton = SpeedControlButton(gameView, gameMechanics, SpeedControlButton.Type.ZOOM_PLUS, this)
-    private var zoomMinusButton = SpeedControlButton(gameView, gameMechanics, SpeedControlButton.Type.ZOOM_MINUS, this)
+    private var button1 = GameControlButton(gameView, gameMechanics, GameControlButton.Type.FAST, this)
+    private var button2 = GameControlButton(gameView, gameMechanics, GameControlButton.Type.PAUSE, this)
+    private var button3 = GameControlButton(gameView, gameMechanics, GameControlButton.Type.FASTEST, this)
+    private var lockButton = GameControlButton(gameView, gameMechanics, GameControlButton.Type.UNLOCK, this)
+    private var returnButton = GameControlButton(gameView, gameMechanics, GameControlButton.Type.RETURN, this)
+    private var zoomPlusButton = GameControlButton(gameView, gameMechanics, GameControlButton.Type.ZOOM_PLUS, this)
+    private var zoomMinusButton = GameControlButton(gameView, gameMechanics, GameControlButton.Type.ZOOM_MINUS, this)
     private var buttons = mutableListOf( button1, button2, returnButton, lockButton)
     /** area that holds the speed buttons */
     private var areaRight = Rect(0,0,0,0)
@@ -108,9 +108,9 @@ class SpeedControl(var gameView: GameView)
 
     fun resetButtons()
     {
-        button1.type = SpeedControlButton.Type.FAST
-        button2.type = SpeedControlButton.Type.PAUSE
-        button3.type = SpeedControlButton.Type.FASTEST
+        button1.type = GameControlButton.Type.FAST
+        button2.type = GameControlButton.Type.PAUSE
+        button3.type = GameControlButton.Type.FASTEST
     }
 
     fun onDown(p0: MotionEvent): Boolean {
