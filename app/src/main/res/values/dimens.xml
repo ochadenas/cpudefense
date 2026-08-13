@@ -11,4 +11,6 @@
     <dimen name="hp_button_height">48dp</dimen>
     <dimen name="hp_button_height_margin">@dimen/hp_button_height</dimen>
     <dimen name="sevensegment_display_height">80dp</dimen>
+    <dimen name="button_vertical_spacing">8dp</dimen>
+    <dimen name="button_horizontal_margin">24dp</dimen>
 </resources>

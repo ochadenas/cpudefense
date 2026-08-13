@@ -200,7 +200,7 @@ class Intermezzo(var gameView: GameView): GameElement(), Fadable {
     {
         val bottomMargin = 40
         buttonContinue = Button(gameView, textOnContinueButton,
-                                textSize = GameView.computerTextSize * gameView.textScaleFactor,
+                                textSize = CommonView.computerTextSize * gameView.textScaleFactor,
                                 color = resources.getColor(R.color.text_green), style = Button.Style.FILLED)
         val buttonTop = myArea.bottom - (buttonContinue?.area?.height() ?: 20) - bottomMargin
         buttonContinue?.let {
@@ -211,7 +211,7 @@ class Intermezzo(var gameView: GameView): GameElement(), Fadable {
         if (level.number > 6 || level.series != GameMechanics.SERIES_NORMAL)  // level 6 in series 1 is the first one where coins may be present
         {
             buttonPurchase = Button(gameView, resources.getString(R.string.button_marketplace),
-                                    textSize = GameView.computerTextSize * gameView.textScaleFactor,
+                                    textSize = CommonView.computerTextSize * gameView.textScaleFactor,
                                     color = resources.getColor(R.color.text_blue), style = Button.Style.FILLED)
             buttonPurchase?.let {
                 Fader(gameView, it, Fader.Type.APPEAR, Fader.Speed.SLOW)
@@ -455,7 +455,7 @@ class Intermezzo(var gameView: GameView): GameElement(), Fadable {
                 else -> resources.getString(R.string.instr_leave).format(gameView.intermezzo.durationOfLeave)
             }
             val textPaint = TextPaint()
-            textPaint.textSize = GameView.computerTextSize * gameView.textScaleFactor
+            textPaint.textSize = CommonView.computerTextSize * gameView.textScaleFactor
             textPaint.typeface = Typeface.SANS_SERIF
             textPaint.color = resources.getColor(R.color.text_amber)
             textPaint.alpha = 255

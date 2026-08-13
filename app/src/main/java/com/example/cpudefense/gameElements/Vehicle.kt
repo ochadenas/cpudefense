@@ -55,7 +55,7 @@ open class Vehicle(val network: Network): GameElement()
         state = State.ACTIVE,
     )
 
-    private var logger: Logger? = network.gameView.gameActivity.logger
+    private var logger: Logger? = network.commonView.logger()
 
     var posOnGrid: Coord? = null
     var onLink: Link? = null

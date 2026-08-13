@@ -5,14 +5,14 @@ import android.graphics.Bitmap.Config.ARGB_8888
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Rect
-import com.example.cpudefense.GameView
+import com.example.cpudefense.CommonView
 import com.example.cpudefense.utils.clear
 import com.example.cpudefense.utils.flipHorizontally
 import com.example.cpudefense.utils.flipVertically
 import kotlin.math.cos
 import androidx.core.graphics.createBitmap
 
-class Flipper(val gameView: GameView, private val thing: Flippable,
+class Flipper(val gameView: CommonView, private val thing: Flippable,
               var type: Type = Type.HORIZONTAL, private val speed: Speed = Speed.MEDIUM)
 /**
  * Auxiliary object that handles turning (or 'flipping') of game elements,

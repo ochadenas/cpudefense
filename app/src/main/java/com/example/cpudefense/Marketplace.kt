@@ -67,7 +67,7 @@ class Marketplace(val gameView: GameView): GameElement()
     {
         myArea = Rect(area)
         val margin = (120 * gameView.scaleFactor).toInt()
-        cardsArea = Rect(myArea.left+margin, myArea.top+margin, ((GameView.cardWidth + 20)*gameView.scaleFactor).toInt(), myArea.bottom)
+        cardsArea = Rect(myArea.left+margin, myArea.top+margin, ((CommonView.cardWidth + 20)*gameView.scaleFactor).toInt(), myArea.bottom)
         coinSize = 80 * margin / 100
         rightPanelArea= Rect(cardsArea.right+biographyAreaMargin, cardsArea.top, myArea.right-biographyAreaMargin, myArea.bottom-biographyAreaMargin)
         createButton()
@@ -134,21 +134,21 @@ class Marketplace(val gameView: GameView): GameElement()
     {
         val bottomMargin = 40
         buttonFinish = Button(gameView, resources.getString(R.string.button_playlevel),
-                              textSize = GameView.purchaseButtonTextSize * gameView.textScaleFactor,
+                              textSize = CommonView.purchaseButtonTextSize * gameView.textScaleFactor,
                               style = Button.Style.HP_KEY, preferredWidth = rightPanelArea.width())
         buttonFinish?.let {
             Fader(gameView, it, Fader.Type.APPEAR, Fader.Speed.SLOW)
             it.alignRight(rightPanelArea.right, myArea.bottom - bottomMargin - it.area.height())
         }
         buttonRefund = Button(gameView, resources.getString(R.string.button_refund_all),
-                              textSize = GameView.purchaseButtonTextSize * gameView.textScaleFactor,
+                              textSize = CommonView.purchaseButtonTextSize * gameView.textScaleFactor,
                               style = Button.Style.HP_KEY, preferredWidth = rightPanelArea.width())
         buttonRefund?.let {
             Fader(gameView, it, Fader.Type.APPEAR, Fader.Speed.SLOW)
             it.alignRight(rightPanelArea.right, myArea.bottom - bottomMargin - 2*it.area.height())
         }
         buttonPurchase = Button(gameView, purchaseButtonText(null),
-                                textSize = GameView.purchaseButtonTextSize * gameView.textScaleFactor,
+                                textSize = CommonView.purchaseButtonTextSize * gameView.textScaleFactor,
                                 style = Button.Style.HP_KEY, preferredWidth = rightPanelArea.width())
         buttonPurchase?.let {
             Fader(gameView, it, Fader.Type.APPEAR, Fader.Speed.SLOW)
@@ -398,7 +398,7 @@ class Marketplace(val gameView: GameView): GameElement()
             deltaX = (myArea.width() - 2*coinLeftMargin) / coins.size
         val coinPosY = coinsArea.centerY()
         var coinPosX = coinLeftMargin
-        paint.textSize = gameView.textScaleFactor * GameView.coinsAmountTextSize
+        paint.textSize = gameView.textScaleFactor * CommonView.coinsAmountTextSize
         paint.style = Paint.Style.FILL
 
         // draw single coins if there are not too many

@@ -5,7 +5,6 @@ package com.example.cpudefense
 import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.Canvas
-import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Rect
 import android.graphics.Typeface
@@ -107,7 +106,7 @@ class Instructions(val gameView: GameView, var stage: Stage.Identifier, var show
     private fun createBitmap(text: String, width: Int): Bitmap
     {
         val textPaint = TextPaint()
-        textPaint.textSize = GameView.instructionTextSize * gameView.textScaleFactor
+        textPaint.textSize = CommonView.instructionTextSize * gameView.textScaleFactor
         textPaint.typeface = Typeface.SANS_SERIF
         textPaint.color = resources.getColor(R.color.text_instructions)
         textPaint.alpha = 255

@@ -4,6 +4,7 @@ import android.graphics.*
 import android.view.MotionEvent
 import com.example.cpudefense.CpuReached
 import com.example.cpudefense.GameMechanics
+import com.example.cpudefense.GameView
 import com.example.cpudefense.networkmap.Network
 import com.example.cpudefense.networkmap.Viewport
 import com.example.cpudefense.utils.makeSquare
@@ -51,7 +52,7 @@ class Cpu(network: Network, gridX: Int, gridY: Int): Chip(network, gridX, gridY)
     {
         var bitmap: Bitmap? = null
         actualRect = calculateActualRect(viewport)?.makeSquare()?.scale(2.5f)
-        actualRect?.let {bitmap = Bitmap.createScaledBitmap(network.gameView.cpuImage, it.width(), it.height(), true) }
+        actualRect?.let {bitmap = Bitmap.createScaledBitmap(network.commonView.cpuImage, it.width(), it.height(), true) }
         return bitmap
     }
 
@@ -89,13 +90,14 @@ class Cpu(network: Network, gridX: Int, gridY: Int): Chip(network, gridX, gridY)
         throw CpuReached()
     }
 
+    /** tapping on the CPU displays a "purchase lives" dialogue when not in editor activity */
     override fun onDown(event: MotionEvent): Boolean
     {
         if (actualRect?.contains(event.x.toInt(), event.y.toInt()) == false)
             return false
-        if (network.gameView.gameMechanics.currentStageIdent.mode() == GameMechanics.LevelMode.ENDLESS )
+        if (network.commonView.gameMechanics.currentStageIdent.mode() == GameMechanics.LevelMode.ENDLESS )
         {
-            network.gameView.gameActivity.showPurchaseLifeDialog(showHint = false)
+            (network.commonView as? GameView)?.gameActivity?.showPurchaseLifeDialog(showHint = false)
             return true
         }
         else

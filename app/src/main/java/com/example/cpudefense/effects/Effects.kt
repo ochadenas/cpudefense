@@ -4,11 +4,11 @@ package com.example.cpudefense.effects
 
 import android.graphics.Canvas
 import android.graphics.Rect
-import com.example.cpudefense.GameView
+import com.example.cpudefense.CommonView
 import com.example.cpudefense.R
 import java.util.concurrent.CopyOnWriteArrayList
 
-class Effects(var gameView: GameView) {
+class Effects(var gameView: CommonView) {
     var explosions = CopyOnWriteArrayList<Explosion>()
     private var faders = CopyOnWriteArrayList<Fader>()
     /** snow is used for the "christmas time easter egg" */

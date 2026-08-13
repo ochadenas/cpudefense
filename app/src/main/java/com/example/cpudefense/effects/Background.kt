@@ -9,7 +9,6 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Rect
 import com.example.cpudefense.GameMechanics
-import com.example.cpudefense.GameView
 import com.example.cpudefense.R
 import com.example.cpudefense.Stage
 import com.example.cpudefense.utils.setTopLeft
@@ -17,8 +16,10 @@ import kotlin.math.max
 import kotlin.random.Random
 import androidx.core.graphics.createBitmap
 import androidx.core.graphics.scale
+import com.example.cpudefense.CommonView
+import com.example.cpudefense.GameView
 
-class Background(val gameView: GameView)
+class Background(val commonView: CommonView)
 /** The background shown during the game, showing a picture of real circuits.
  * This object is created whenever a game is started or resumed.
  * The actual image is only a part of the larger image, cut out at random positions.
@@ -57,10 +58,10 @@ class Background(val gameView: GameView)
              * and crops or scales it to the required size.
              */
     {
-        enabled = !gameView.gameActivity.settings.configDisableBackground
+        enabled = !commonView.settings().configDisableBackground
         if (enabled) {
             loadWholeBitmapOfStage(stage)
-            setBackgroundDimensions(gameView.width, gameView.height)
+            setBackgroundDimensions(commonView.width, commonView.height)
         }
     }
 
@@ -101,7 +102,7 @@ class Background(val gameView: GameView)
     /** loads a large background image into memory
      * @param number the number of the background chosen. Must be between 1 and maxBackgroundNumber */
     {
-        val resources: Resources = gameView.resources
+        val resources: Resources = commonView.resources
         // since loading now happens in small chunks, there is no need to display the toast */
         /*
         gameView.gameMechanics.gameActivity.runOnUiThread {
@@ -135,7 +136,7 @@ class Background(val gameView: GameView)
     {
         val useSpecialBackground = GameMechanics.specialLevel(stageIdent)
         if (useSpecialBackground == GameMechanics.Params.Season.CHRISTMAS)
-            gameView.effects?.addSnow()
+            commonView.effects?.addSnow()
         val n = stageIdent.number
         wholeBackground = loadWholeBitmap(n % maxBackgroundNumber + 1, useSpecialBackground)
     }
@@ -146,7 +147,7 @@ class Background(val gameView: GameView)
         val bitmap = basicBackground ?: createBitmap(destRect.width(), destRect.height())
         basicBackground = bitmap
         val canvas = Canvas(bitmap)
-        canvas.drawColor(gameView.resources.getColor(R.color.network_background))
+        canvas.drawColor(commonView.resources.getColor(R.color.network_background))
         return bitmap
     }
 

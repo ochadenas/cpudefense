@@ -6,11 +6,12 @@ import android.graphics.Paint
 import android.graphics.Rect
 import android.graphics.Typeface
 import android.view.MotionEvent
-import com.example.cpudefense.GameView
+import com.example.cpudefense.CommonView
 import com.example.cpudefense.R
 import com.example.cpudefense.utils.setCenter
 import com.example.cpudefense.utils.setLeft
 import androidx.core.graphics.createBitmap
+import com.example.cpudefense.GameView
 import com.example.cpudefense.Stage
 import com.example.cpudefense.utils.setTop
 
@@ -48,7 +49,7 @@ class ControlButtonPanel(var gameView: GameView)
 
     fun setSize(parentArea: Rect)
     {
-        actualButtonSize = (GameView.speedControlButtonSize * gameView.resources.displayMetrics.density.toInt() *
+        actualButtonSize = (CommonView.speedControlButtonSize * gameView.resources.displayMetrics.density.toInt() *
             if (gameView.gameActivity.settings.configUseLargeButtons) 1.6f else 1.0f).toInt()
         val margin = actualButtonSize / 5   // space between the buttons
         if (gameView.gameActivity.settings.fastFastForward)
@@ -95,7 +96,7 @@ class ControlButtonPanel(var gameView: GameView)
         val paint = Paint()
         paint.color = gameView.resources.getColor(R.color.connectors)
         paint.typeface = Typeface.SANS_SERIF
-        paint.textSize = GameView.scoreHeaderSize * gameView.textScaleFactor
+        paint.textSize = CommonView.scoreHeaderSize * gameView.textScaleFactor
         paint.textAlign = Paint.Align.LEFT
         val bounds = Rect()
         paint.getTextBounds(stageInfoText, 0, stageInfoText.length, bounds)

@@ -8,7 +8,7 @@ import com.example.cpudefense.networkmap.Viewport
 import com.example.cpudefense.utils.*
 import androidx.core.graphics.createBitmap
 
-class ScoreBoard(val gameView: GameView): GameElement() 
+class ScoreBoard(val gameView: GameView): GameElement()
 {
     private var resources = gameView.resources
     
@@ -94,7 +94,7 @@ class ScoreBoard(val gameView: GameView): GameElement()
         val paint = Paint()
         paint.color = resources.getColor(R.color.scoreboard_text)
         paint.typeface = Typeface.create("sans-serif", Typeface.NORMAL)
-        paint.textSize = GameView.scoreHeaderSize * gameView.textScaleFactor
+        paint.textSize = CommonView.scoreHeaderSize * gameView.textScaleFactor
         paint.textAlign = Paint.Align.LEFT
         if (centered)
             rect.displayTextCenteredInRect(canvas, text, paint, baseline = divider-dividerMargin)
@@ -161,7 +161,7 @@ class ScoreBoard(val gameView: GameView): GameElement()
             val paint = Paint()
             paint.color = myColor
             paint.typeface = Typeface.create("sans-serif", Typeface.NORMAL)
-            paint.textSize = GameView.scoreTextSize * gameView.textScaleFactor
+            paint.textSize = CommonView.scoreTextSize * gameView.textScaleFactor
             rect.displayTextCenteredInRect(canvas, text, paint)
             displayHeader(canvas, Rect(0,0, area.width(), area.height()), resources.getString(R.string.scoreboard_inf))
         }
@@ -207,7 +207,7 @@ class ScoreBoard(val gameView: GameView): GameElement()
             paint.textAlign = Paint.Align.LEFT
             gameView.gameMechanics.currentlyActiveStage?.let {
                 val currentWave = "%d".format(it.data.wavesCount)
-                paint.textSize = GameView.scoreTextSize * gameView.textScaleFactor
+                paint.textSize = CommonView.scoreTextSize * gameView.textScaleFactor
                 paint.getTextBounds(currentWave, 0, currentWave.length, bounds)
                 val verticalMargin = (rect.height()-bounds.height())/2
                 val rectLeft = Rect(0, rect.top+verticalMargin, bounds.width(), rect.bottom-verticalMargin)
@@ -248,7 +248,7 @@ class ScoreBoard(val gameView: GameView): GameElement()
             // calculate size and spacing of LEDs
             sizeLedY = (area.height()-divider-2*margin)*74/100
             val maxPossibleDeltaX = area.width()/(maxLives + 1.0f)
-            preferredSizeLedX = (GameView.preferredSizeOfLED * gameView.scaleFactor).toInt()
+            preferredSizeLedX = (CommonView.preferredSizeOfLED * gameView.scaleFactor).toInt()
             deltaX = kotlin.math.min(preferredSizeLedX * 1.2f, maxPossibleDeltaX).toInt()
             ledAreaWidth = (maxLives + 1) * deltaX
             sizeLedX = kotlin.math.min(preferredSizeLedX.toFloat(), deltaX / 1.2f).toInt()
@@ -322,7 +322,7 @@ class ScoreBoard(val gameView: GameView): GameElement()
         private var area = Rect()
         private var divider = 0
         private var coins: Int = 0
-        private var actualSize = GameView.coinSizeOnScoreboard
+        private var actualSize = CommonView.coinSizeOnScoreboard
 
         private var lastValue = -1   // used to detect value changes
         lateinit var bitmap: Bitmap
@@ -330,7 +330,7 @@ class ScoreBoard(val gameView: GameView): GameElement()
 
         fun setSize(area: Rect, divider: Int): Rect
         {
-            actualSize = (GameView.coinSizeOnScoreboard * gameView.scaleFactor).toInt()
+            actualSize = (CommonView.coinSizeOnScoreboard * gameView.scaleFactor).toInt()
             this.area = Rect(area.left, area.top, (area.left+area.width()*0.36).toInt(), area.bottom)
             bitmap = createBitmap(this.area.width(), this.area.height())
             this.divider = divider
@@ -379,7 +379,7 @@ class ScoreBoard(val gameView: GameView): GameElement()
         private var divider = 0
         private var temperature: Int = GameMechanics.baseTemperature
         private var lastValue = -1   // used to detect value changes
-        private var actualSize = GameView.coinSizeOnScoreboard
+        private var actualSize = CommonView.coinSizeOnScoreboard
         private var sevenSegmentDisplay: SevenSegmentDisplay? = null
 
         lateinit var bitmap: Bitmap

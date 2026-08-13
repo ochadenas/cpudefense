@@ -71,6 +71,7 @@ class EditorActivity : AppCompatActivity()
         logger?.log("Entering editor activity.")
         if (displayJob?.isActive != true)  // (!= true) is not the same as (false) here!
             displayJob = GlobalScope.launch { delay(GameActivity.effectsDelay.milliseconds); display(); }
+        editorView.startNewCircuit()
     }
 
     override fun onStop() {

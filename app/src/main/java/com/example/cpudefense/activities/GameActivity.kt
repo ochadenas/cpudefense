@@ -31,6 +31,7 @@ import com.example.cpudefense.GameMechanics.Params.SERIES_ENDLESS
 import com.example.cpudefense.GameMechanics.Params.SERIES_NORMAL
 import com.example.cpudefense.GameMechanics.Params.SERIES_TURBO
 import com.example.cpudefense.GameMechanics.Params.forceHeroMigration
+import com.example.cpudefense.CommonView
 import com.example.cpudefense.GameView
 import com.example.cpudefense.Persistency
 import com.example.cpudefense.PurseOfCoins
@@ -237,7 +238,7 @@ class GameActivity : AppCompatActivity() {
             bottomMargin = insets.bottom
             rightMargin = insets.right
         }
-        (view as GameView).topMargin = insets.top + 2 // remember this value
+        (view as CommonView).topMargin = insets.top + 2 // remember this value
         return WindowInsetsCompat.CONSUMED
     }
 
@@ -448,7 +449,7 @@ class GameActivity : AppCompatActivity() {
         }
         setGameSpeed(GameSpeed.NORMAL)  // reset speed to normal when starting next stage
         changeToGamePhase(GamePhase.RUNNING)
-        nextStage.gameView.resetAtStartOfStage()
+        gameView.resetAtStartOfStage()
         gameMechanics.currentlyActiveWave = nextStage.nextWave()
         Persistency(this).saveCurrentLevelState(gameMechanics)
         Persistency(this).saveGeneralState(gameMechanics)
@@ -702,9 +703,9 @@ class GameActivity : AppCompatActivity() {
     {
         gameMechanics.currentlyActiveStage?.let {
             if (it.getSeries() == SERIES_ENDLESS)
-                levelThumbnailEndless[it.getLevel()] = it.takeSnapshot(GameView.levelSnapshotIconSize)
+                levelThumbnailEndless[it.getLevel()] = it.takeSnapshot(CommonView.levelSnapshotIconSize)
             else
-                levelThumbnail[it.getLevel()] = it.takeSnapshot(GameView.levelSnapshotIconSize)
+                levelThumbnail[it.getLevel()] = it.takeSnapshot(CommonView.levelSnapshotIconSize)
             Persistency(this).saveThumbnailOfLevel(this, it)
             logger?.log("Level snapshot taken.")
         }

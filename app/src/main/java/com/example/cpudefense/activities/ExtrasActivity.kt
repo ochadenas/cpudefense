@@ -7,11 +7,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.AppCompatButton
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.net.toUri
 import androidx.core.view.ViewCompat
@@ -27,7 +25,6 @@ import com.example.cpudefense.GameMechanics
 import com.example.cpudefense.R
 import com.example.cpudefense.extras.MemoryMapView
 import com.example.cpudefense.extras.SevenSegmentClock
-import com.example.cpudefense.gameElements.Button
 import com.example.cpudefense.gameElements.ScoreBoard
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch

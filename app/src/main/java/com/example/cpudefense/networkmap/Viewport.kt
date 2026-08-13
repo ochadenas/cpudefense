@@ -1,7 +1,7 @@
 package com.example.cpudefense.networkmap
 
 import android.graphics.Rect
-import com.example.cpudefense.GameView
+import com.example.cpudefense.CommonView
 import com.example.cpudefense.gameElements.Chip
 import kotlin.collections.component1
 import kotlin.collections.component2
@@ -57,8 +57,8 @@ class Viewport
         {
             this.scaleFactor = scaleFactor
             screen = Rect(0, 0, width, height)
-            viewportWidth = width - (2 * GameView.viewportMargin*scaleFactor).toInt()
-            viewportHeight = height - (2 * GameView.viewportMargin*scaleFactor).toInt()
+            viewportWidth = width - (2 * CommonView.viewportMargin*scaleFactor).toInt()
+            viewportHeight = height - (2 * CommonView.viewportMargin*scaleFactor).toInt()
             viewportSafetyMargin = ((width+height) * 0.2f).toInt()
             calculateScale()
         }
@@ -157,8 +157,8 @@ class Viewport
     /** converts a point in grid coordinates into screen coordinates */
     fun gridToScreen(gridPos: Coord): Pair<Int, Int>
     {
-        val posX = gridPos.x * scaleX + GameView.viewportMargin + offsetX
-        val posY = gridPos.y * scaleY + GameView.viewportMargin + offsetY
+        val posX = gridPos.x * scaleX + CommonView.viewportMargin + offsetX
+        val posY = gridPos.y * scaleY + CommonView.viewportMargin + offsetY
         return Pair(posX.toInt(), posY.toInt())
     }
 

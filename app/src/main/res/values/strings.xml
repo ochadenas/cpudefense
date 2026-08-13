@@ -428,4 +428,8 @@ The programming language Pascal is named after him."</string>
     <string name="total_information_gained">"Total information: %1$s "</string>
     <string name="settings_zoom">Show zoom buttons</string>
     <string name="circuit_editor">Circuit Editor</string>
+    <string name="editor_name_circuit">Choose Name</string>
+    <string name="editor_load">Load</string>
+    <string name="editor_help">Help</string>
+    <string name="editor_save">Save and Exit</string>
 </resources>

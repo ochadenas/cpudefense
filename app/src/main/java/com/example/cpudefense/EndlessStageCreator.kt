@@ -22,7 +22,7 @@ class EndlessStageCreator(val stage: Stage)
  * Like StageCatalog, it is not meant to be instantiated.
  */
 {
-    private var logger: Logger? = stage.gameView.gameActivity.logger
+    private var logger: Logger? = stage.stageView.logger()
 
     private val minNumberOfPaths = 3
     private val maxNumberOfPaths = 16

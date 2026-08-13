@@ -6,14 +6,13 @@ import android.os.Bundle
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
-import android.view.Window
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.cpudefense.GameMechanics
-import com.example.cpudefense.GameView
+import com.example.cpudefense.CommonView
 import com.example.cpudefense.Persistency
 import com.example.cpudefense.R
 import com.example.cpudefense.Settings
@@ -248,7 +247,7 @@ class LevelSelectActivity : AppCompatActivity() {
     {
         // add bitmap to text view
         val iconPadding = 10
-        val iconSize = GameView.levelSnapshotIconSize + iconPadding
+        val iconSize = CommonView.levelSnapshotIconSize + iconPadding
         val bitmap = createBitmap(iconSize, iconSize)
         icon?.let {
             val canvas = Canvas(bitmap)

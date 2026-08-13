@@ -3,10 +3,11 @@ package com.example.cpudefense.gameElements
 import android.graphics.*
 import android.view.MotionEvent
 import com.example.cpudefense.GameMechanics
-import com.example.cpudefense.GameView
+import com.example.cpudefense.CommonView
 import com.example.cpudefense.effects.Fadable
 import com.example.cpudefense.effects.Fader
 import androidx.core.graphics.scale
+import com.example.cpudefense.GameView
 
 class GameControlButton(val gameView: GameView, val gameMechanics: GameMechanics, var type: Type = Type.PAUSE, private val panel: ControlButtonPanel): Fadable
 {

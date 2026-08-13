@@ -7,14 +7,14 @@ import android.graphics.Bitmap.Config.ARGB_8888
 import android.view.MotionEvent
 import com.example.cpudefense.EndlessStageCreator
 import com.example.cpudefense.GameMechanics
-import com.example.cpudefense.GameView
+import com.example.cpudefense.CommonView
 import com.example.cpudefense.gameElements.Chip
 import com.example.cpudefense.gameElements.GameElement
 import com.example.cpudefense.gameElements.Vehicle
 import com.example.cpudefense.gameElements.Vehicle.State
 import java.util.concurrent.CopyOnWriteArrayList
 
-class Network(val gameMechanics: GameMechanics, val gameView: GameView, x: Int, y: Int): GameElement() {
+class Network(val gameMechanics: GameMechanics, val commonView: CommonView, x: Int, y: Int): GameElement() {
     data class Data(
         var gridSizeX: Int = 1,
         var gridSizeY: Int = 1,
@@ -97,9 +97,9 @@ class Network(val gameMechanics: GameMechanics, val gameView: GameView, x: Int, 
      * @return false if the viewport is not valid, i.e. screen dimensions are not known
      */
     {
-        if (gameView.hasDefinedSize())
+        if (commonView.hasDefinedSize())
         {
-            viewport.determineScreenSize(gameView.width, gameView.height, gameView.scaleFactor)
+            viewport.determineScreenSize(commonView.width, commonView.height, commonView.scaleFactor)
             return true
         }
         else
@@ -165,13 +165,13 @@ class Network(val gameMechanics: GameMechanics, val gameView: GameView, x: Int, 
      * and places the network elements on it
      * @param newBackground true if a new background image must be created */
     {
-        validateViewport(gameView.viewport)
-        gameView.background.setBackgroundDimensions(gameView.width, gameView.height, newBackground)
-        gameView.background.basicBackground?.let{
+        validateViewport(commonView.viewport)
+        commonView.background.setBackgroundDimensions(commonView.width, commonView.height, newBackground)
+        commonView.background.basicBackground?.let{
             networkImage = it.copy(it.config ?: ARGB_8888, true)
             val canvas = Canvas(networkImage)
             for (obj in links.values)
-                obj.display(canvas, gameView.viewport)
+                obj.display(canvas, commonView.viewport)
         }
     }
 

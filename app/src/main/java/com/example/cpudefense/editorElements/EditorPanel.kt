@@ -1,11 +1,10 @@
 package com.example.cpudefense.editorElements
 
 import android.graphics.Canvas
-import android.graphics.Paint
 import android.graphics.Rect
 import android.view.MotionEvent
 import com.example.cpudefense.EditorView
-import com.example.cpudefense.GameView
+import com.example.cpudefense.CommonView
 import com.example.cpudefense.editorElements.ControlButton.Type
 import com.example.cpudefense.utils.setCenter
 
@@ -22,11 +21,9 @@ class EditorPanel(var editorView: EditorView)
     /** the size of the control buttons in pixels, with density factor applied */
     var actualButtonSize: Int = 0
 
-    private var bitmapPaint = Paint()
-
     fun setSize(parentArea: Rect)
     {
-        actualButtonSize = GameView.speedControlButtonSize * editorView.resources.displayMetrics.density.toInt()
+        actualButtonSize = CommonView.speedControlButtonSize * editorView.resources.displayMetrics.density.toInt()
         val margin = actualButtonSize / 5   // space between the buttons
         buttons.forEach {it.setSize(actualButtonSize)}
         areaBottom.right = parentArea.right - margin

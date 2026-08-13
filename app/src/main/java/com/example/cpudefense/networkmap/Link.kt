@@ -10,7 +10,7 @@ import kotlin.math.abs
 
 class Link(theNetwork: Network, var node1: Node, var node2: Node, var ident: Int, var mask: Int = 0x0F, variant: Variant? = Variant.CONVEX): GameElement()
 {
-    val resources: Resources = theNetwork.gameView.resources
+    val resources: Resources = theNetwork.commonView.resources
 
     data class Data
         (
@@ -232,7 +232,7 @@ class Link(theNetwork: Network, var node1: Node, var node2: Node, var ident: Int
     {
         val startPoint = viewport.gridToScreen(startGridPoint)
         val endPoint = viewport.gridToScreen(endGridPoint)
-        paintConnector.strokeWidth = GameView.connectorWidth * viewport.userScale
+        paintConnector.strokeWidth = CommonView.connectorWidth * viewport.userScale
         canvas.drawLine(startPoint.first.toFloat(), startPoint.second.toFloat(),
             endPoint.first.toFloat(), endPoint.second.toFloat(), paintConnector)
     }
@@ -240,8 +240,8 @@ class Link(theNetwork: Network, var node1: Node, var node2: Node, var ident: Int
     private fun displayConnectorCircle(canvas: Canvas, viewport: Viewport, gridPoint: Coord)
     {
         val point = viewport.gridToScreen(gridPoint)
-        val radius = GameView.connectorRadius * viewport.userScale
-        paintEntry.strokeWidth = GameView.connectorWidth * viewport.userScale
+        val radius = CommonView.connectorRadius * viewport.userScale
+        paintEntry.strokeWidth = CommonView.connectorWidth * viewport.userScale
         canvas.drawCircle(point.first.toFloat(), point.second.toFloat(), radius, paintBackground)
         canvas.drawCircle(point.first.toFloat(), point.second.toFloat(), radius, paintEntry)
     }

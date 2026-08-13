@@ -707,8 +707,8 @@ class Hero(var gameActivity: GameActivity, type: Type)
         private var canvas = Canvas(bitmap)
         private var paintBiography = TextPaint()
         var wikiButton = Button(gameActivity.gameView, resources.getString(R.string.button_wiki),
-                                        textSize = GameView.purchaseButtonTextSize * gameActivity.gameView.textScaleFactor,
-                                        style = Button.Style.FRAME, preferredWidth = area.width()-4)
+                                textSize = CommonView.purchaseButtonTextSize * gameActivity.gameView.textScaleFactor,
+                                style = Button.Style.FRAME, preferredWidth = area.width()-4)
         var wikiButtonVisible = false
         /** whether clicking on the button triggers an action */
         var wikiButtonActive = false
@@ -733,7 +733,7 @@ class Hero(var gameActivity: GameActivity, type: Type)
                 wikiButtonVisible = false
             }
             canvas.drawColor(Color.BLACK)
-            paintBiography.textSize = GameView.biographyTextSize*gameActivity.gameView.textScaleFactor
+            paintBiography.textSize = CommonView.biographyTextSize*gameActivity.gameView.textScaleFactor
             paintBiography.alpha = 255
             val textLayout = StaticLayout(
                     text, paintBiography, screenArea.width(),

@@ -3,7 +3,6 @@ package com.example.cpudefense.editorElements
 import android.graphics.*
 import android.view.MotionEvent
 import com.example.cpudefense.GameMechanics
-import com.example.cpudefense.GameView
 import com.example.cpudefense.effects.Fadable
 import com.example.cpudefense.effects.Fader
 import androidx.core.graphics.scale
@@ -40,6 +39,12 @@ class ControlButton(val editorView: EditorView,
     fun onDown(p0: MotionEvent): Boolean {
         if (area.contains(p0.x.toInt(), p0.y.toInt()))
         {
+            when (type)
+            {
+                Type.MENU -> { editorView.showMenu() }
+                Type.NEW_CHIP -> {  editorView.addChip() }
+                Type.MOVE_CHIP -> {}
+            }
             return true
         }
         else

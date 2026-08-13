@@ -1,9 +1,9 @@
 package com.example.cpudefense.effects
 
-import com.example.cpudefense.GameView
+import com.example.cpudefense.CommonView
 
 class Fader(
-    gameView: GameView,
+    gameView: CommonView,
     private val thing: Fadable,
     var type: Type = Type.DISAPPEAR, speed: Speed = Speed.FAST, wait: Int = 0)
 /**

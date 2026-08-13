@@ -12,8 +12,9 @@ import java.util.concurrent.CopyOnWriteArrayList
 import kotlin.random.Random
 import androidx.core.graphics.scale
 import com.example.cpudefense.networkmap.Coord
+import com.example.cpudefense.utils.Logger
 
-class Stage(var gameMechanics: GameMechanics, var gameView: GameView)
+class Stage(var gameMechanics: GameMechanics, var stageView: CommonView)
 {
     class Identifier(var series: Int = GameMechanics.SERIES_NORMAL, var number: Int =0)
     /** A [Stage] is identified by the combination of [series] (1 to 3) and the level [number]. */
@@ -73,6 +74,9 @@ class Stage(var gameMechanics: GameMechanics, var gameView: GameView)
     }
 
     lateinit var network: Network
+
+    var logger: Logger? = stageView.logger()
+
     /** size of the network in grid coords */
     var size = Coord(0, 0)
 
@@ -83,7 +87,6 @@ class Stage(var gameMechanics: GameMechanics, var gameView: GameView)
     private var ticksUntilFirstAttacker: Long = 0
 
     enum class Type { REGULAR, FINAL }
-
 
     data class Data (
         var ident: Identifier = Identifier(series=GameMechanics.SERIES_NORMAL, number=0),
@@ -136,7 +139,7 @@ class Stage(var gameMechanics: GameMechanics, var gameView: GameView)
      */
     {
         val number = data.ident.number
-        return numberToString(number, gameView.gameActivity.settings.showLevelsInHex)
+        return numberToString(number, stageView.settings().showLevelsInHex)
     }
 
     fun isInitialized(): Boolean
@@ -235,7 +238,7 @@ class Stage(var gameMechanics: GameMechanics, var gameView: GameView)
             else -> {
                 if (waves.isEmpty())
                 {
-                    gameView.gameActivity.onEndOfStage()
+                    (stageView as? GameView)?.gameActivity?.onEndOfStage()
                     return null
                 }
                 else {
@@ -252,8 +255,8 @@ class Stage(var gameMechanics: GameMechanics, var gameView: GameView)
     /** creates an empty [Network] with the given grid dimensions [dimX], [dimY] */
     {
         size = Coord(dimX, dimY)
-        network = Network(gameMechanics, gameView, size.x.toInt(), size.y.toInt())
-        gameView.viewport.determineGridSize(size)
+        network = Network(gameMechanics, stageView, size.x.toInt(), size.y.toInt())
+        stageView.viewport.determineGridSize(size)
     }
 
     fun createChip(gridX: Int, gridY: Int, ident: Int = -1, type: Chip.ChipType = Chip.ChipType.EMPTY): Chip
@@ -389,7 +392,7 @@ class Stage(var gameMechanics: GameMechanics, var gameView: GameView)
 
     fun changeTrackProbability(numberOfOperations: Int)
     {
-        gameView.gameActivity.logger?.log("Changing %d tracks out of %d (hero effect).".format(numberOfOperations, tracks.size))
+        logger?.log("Changing %d tracks out of %d (hero effect).".format(numberOfOperations, tracks.size))
         val longestTrack: Track = tracks.values.maxByOrNull { it.links.size } ?: return
         val otherTracks = tracks.filterValues {it.data.linkIdents != longestTrack.data.linkIdents}
         otherTracks.keys
@@ -412,13 +415,13 @@ class Stage(var gameMechanics: GameMechanics, var gameView: GameView)
      * @return the bitmap that holds the snapshot
      */
     {
-        val p: Viewport = gameView.viewport
+        val p: Viewport = stageView.viewport
         if (p.viewportWidth > 0 && p.viewportHeight > 0)
         {
             var bigSnapshot = createBitmap(p.viewportWidth, p.viewportHeight)
             network.makeSnapshot(Canvas(bigSnapshot), p)
             // blur the image
-            bigSnapshot = bigSnapshot.blur(gameView.gameActivity, 3f) ?: bigSnapshot
+            bigSnapshot = bigSnapshot.blur(stageView.theActivity, 3f) ?: bigSnapshot
             return bigSnapshot.scale(size, size)
         }
         else
@@ -450,7 +453,7 @@ class Stage(var gameMechanics: GameMechanics, var gameView: GameView)
             stage.data = stageData
             stage.size.x = stage.data.gridSizeX.toFloat()
             stage.size.y = stage.data.gridSizeY.toFloat()
-            stage.network = Network(stage.gameMechanics, stage.gameView,
+            stage.network = Network(stage.gameMechanics, stage.stageView,
                                     stage.size.x.toInt(), stage.size.y.toInt())
             for ((id, chipData) in stage.data.chips)
             {

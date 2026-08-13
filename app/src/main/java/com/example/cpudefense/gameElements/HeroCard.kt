@@ -4,7 +4,7 @@ package com.example.cpudefense.gameElements
 
 import android.content.res.Resources
 import android.graphics.*
-import com.example.cpudefense.GameView
+import com.example.cpudefense.CommonView
 import com.example.cpudefense.Hero
 import com.example.cpudefense.R
 import com.example.cpudefense.effects.Fadable
@@ -15,7 +15,7 @@ import com.example.cpudefense.utils.displayTextCenteredInRect
 import com.example.cpudefense.utils.setCenter
 import com.example.cpudefense.utils.setTopLeft
 
-class HeroCard(val gameView: GameView, val hero: Hero): GameElement(), Fadable
+class HeroCard(val gameView: CommonView, val hero: Hero): GameElement(), Fadable
 /** graphical representation of a hero or a heroine */
 {
     val type = hero.data.type
@@ -199,7 +199,7 @@ class HeroCard(val gameView: GameView, val hero: Hero): GameElement(), Fadable
         val center = cardAreaOnScreen.center()
         portraitAreaOnScreen = Rect(portraitArea)
         portraitAreaOnScreen.setCenter(center)
-        paintText.textSize = GameView.heroCardTextSize * gameView.textScaleFactor
+        paintText.textSize = CommonView.heroCardTextSize * gameView.textScaleFactor
         indicatorSize = portraitArea.width() / 10
     }
 
@@ -222,9 +222,9 @@ class HeroCard(val gameView: GameView, val hero: Hero): GameElement(), Fadable
 
     fun create(showNextUpdate: Boolean = true, monochrome: Boolean = false)
     {
-        cardArea = Rect(0, 0, (GameView.cardWidth*gameView.scaleFactor).toInt(), (GameView.cardHeight*gameView.scaleFactor).toInt())
-        portraitArea = Rect(0, 0, (GameView.cardPictureSize*gameView.scaleFactor).toInt(), (GameView.cardPictureSize*gameView.scaleFactor).toInt())
-        paintText.textSize = GameView.heroCardTextSize * gameView.textScaleFactor
+        cardArea = Rect(0, 0, (CommonView.cardWidth*gameView.scaleFactor).toInt(), (CommonView.cardHeight*gameView.scaleFactor).toInt())
+        portraitArea = Rect(0, 0, (CommonView.cardPictureSize*gameView.scaleFactor).toInt(), (CommonView.cardPictureSize*gameView.scaleFactor).toInt())
+        paintText.textSize = CommonView.heroCardTextSize * gameView.textScaleFactor
         indicatorSize = portraitArea.width() / 10
         this.showNextUpgrade = showNextUpdate
         this.monochrome = monochrome
@@ -252,7 +252,7 @@ class HeroCard(val gameView: GameView, val hero: Hero): GameElement(), Fadable
         }
         val margin = (20*gameView.scaleFactor).toInt()
         val heroPaintText = Paint(paintText)
-        heroPaintText.textSize = GameView.heroCardNameSize * gameView.textScaleFactor
+        heroPaintText.textSize = CommonView.heroCardNameSize * gameView.textScaleFactor
         heroPaintText.color = if (hero.data.level == 0) inactiveColor else activeColor
         val heroTextRect = Rect(0, margin, cardArea.width(), margin+40)
         heroTextRect.displayTextCenteredInRect(canvas, hero.person.fullName, heroPaintText)

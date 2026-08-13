@@ -11,17 +11,12 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Rect
 import android.graphics.Typeface
-import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.SurfaceHolder
-import android.view.SurfaceView
 import androidx.core.content.edit
-import androidx.core.content.res.ResourcesCompat
-import androidx.core.view.GestureDetectorCompat
 import com.example.cpudefense.GameMechanics.GamePhase
 import com.example.cpudefense.GameMechanics.LevelMode
 import com.example.cpudefense.activities.GameActivity
-import com.example.cpudefense.effects.Background
 import com.example.cpudefense.effects.Effects
 import com.example.cpudefense.effects.Fader
 import com.example.cpudefense.effects.Flipper
@@ -30,88 +25,19 @@ import com.example.cpudefense.gameElements.Attacker
 import com.example.cpudefense.gameElements.Chip
 import com.example.cpudefense.gameElements.ScoreBoard
 import com.example.cpudefense.gameElements.ControlButtonPanel
-import com.example.cpudefense.networkmap.Coord
 import com.example.cpudefense.networkmap.Network
-import com.example.cpudefense.networkmap.Viewport
+import com.example.cpudefense.utils.Logger
 import com.example.cpudefense.utils.displayTextCenteredInRect
-import java.util.concurrent.CopyOnWriteArrayList
 
 @Suppress("RedundantOverride")
 class GameView(context: Context):
-    SurfaceView(context), SurfaceHolder.Callback,
-    GestureDetector.OnGestureListener
+    CommonView(context)
 {
-    @Suppress("ConstPropertyName")
-    companion object {
-        // default sizes for graphical game elements.
-        const val scoreTextSize = 36f
-        const val scoreHeaderSize = 18f
-        const val chipTextSize = 20f
-        const val computerTextSize = 26f
-        const val notificationTextSize = 22f
-        const val instructionTextSize = 25f
-        const val biographyTextSize = 20f
-        const val heroCardNameSize = 18f
-        const val heroCardTextSize = 14f
-        const val purchaseButtonTextSize = 20f
-        const val coinsAmountTextSize = 24f
-
-        /** width for chip outlines as fraction of the chip's width */
-        const val relativeOutlineWidth = 0.025f
-        /** multiplier for the thickness of the border width for activated MEM and ACC */
-        const val relativeOutlineWidthActivated = 5
-        /** base width for lines between chips */
-        const val connectorWidth = 6f
-        /** base size of the little circles at the connectors' end */
-        const val connectorRadius = 8f
-        /** size of the cryptocoin icon on the score board */
-        const val coinSizeOnScoreboard = 48
-        /** base size of running cryptocoins */
-        const val coinSizeOnScreen = 32
-        /** base size of hero card in the marketplace */
-        const val cardWidth = 220
-        /** size of hero card in the marketplace */
-        const val cardHeight = cardWidth * 1.41
-        /** size of hero picture in the marketplace */
-        const val cardPictureSize = cardWidth * 2 / 3
-        /** horizontal size of LEDs, actual size can be smaller if there is too little space */
-        const val preferredSizeOfLED = 20
-
-        /** size of a chip in grid coordinates (scales with the viewport) */
-        val chipSize = Coord(6,3)
-        /** initial space in screen coordinates around the grid, with unshifted viewport */
-        const val viewportMargin = 4
-        const val minScoreBoardHeight = 100
-        const val maxScoreBoardHeight = 320
-        const val speedControlButtonSize = 48
-        const val levelSnapshotIconSize = 120
-    }
-
     val gameActivity = context as GameActivity
-    val gameMechanics = gameActivity.gameMechanics
-    var canvas: Canvas? = null
-    var effects: Effects? = null
-    /** whether the viewport can be moved by scrolling or scaled by pinching */
-    var scrollAllowed = true
-
-    enum class ViewState { NORMAL, CHANGING_SIZE }
-    /** state used to block movement when the user changes the viewport size */
-    private var viewState = ViewState.NORMAL
-    /** lock used to synchronize drawing */
-    private var displayLock = Any()
-    /** lock used to synchronize scrolling */
-    private var scrollLock = Any()
-
-    private var backgroundColour = Color.BLACK
-    private val gestureDetector = GestureDetectorCompat(context, this)
-
-    /** font for displaying "computer messages" */
-    lateinit var monoTypeface: Typeface
-    lateinit var boldTypeface: Typeface
+    override val gameMechanics = gameActivity.gameMechanics
 
     private val coinIconBlue: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.cryptocoin)
     private val coinIconRed: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.cryptocoin_red)
-    val cpuImage: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.cpu)
     val playIcon: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.play_active)
     val pauseIcon: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.pause_active)
     val fastIcon: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.fast_active)
@@ -121,66 +47,26 @@ class GameView(context: Context):
     val moveUnlockIcon: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.move_unlock)
     val zoomPlusIcon: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.zoom_plus)
     val zoomMinusIcon: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.zoom_minus)
-    val hpBackgroundBitmap: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.hp_key)
-    val chipBitmap: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.chip_surface)
-    val chipAutogeneratedBitmap: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.chip_autogenerated_surface)
 
     /* game elements */
 
-    val viewport = Viewport()
-    var background = Background(this)
     var intermezzo = Intermezzo(this)
     var marketplace = Marketplace(this)
     val scoreBoard = ScoreBoard(this)
     val controlButtonPanel = ControlButtonPanel(this)
-    /** list of all mover objects that are created for game elements */
-    var movers = CopyOnWriteArrayList<Mover>()
-    /** list of all fader objects that are created for game elements */
-    var faders = CopyOnWriteArrayList<Fader>()
-    /** list of all flipper objects that are created for game elements */
-    var flippers = CopyOnWriteArrayList<Flipper>()
     private val notification = ProgressNotification(this)
 
-    /** text scale factor, based on ScaledDensity */
-    var textScaleFactor = 1.0f
-    /** general scale factor, based on Density */
-    var scaleFactor = 1.0f
-    /** space taken up by the top system bar */
-    var topMargin = 0
-
-    fun hasDefinedSize(): Boolean
-    /** whether the game view and all its components know their size and can be used */
-    {
-        return (width > 0) && (height > 0)
-    }
 
     /** called when the game view is created.
      * This is NOT the case when the user returns to the main menu
      *  and then continues the game.
      */
-    fun setupView()
+    override fun setupView()
     {
-        this.visibility = VISIBLE
-        this.holder.addCallback(this)
-        backgroundColour = context.resources.getColor(R.color.network_background)
+        super.setupView()
         loadGraphicalState()
         setComputerTypeface()
         effects = Effects(this)
-    }
-
-    /** use Ubunto Mono font, if available. Otherwise use standard system monospace font */
-    private fun setComputerTypeface()
-    {
-        try
-        {
-            monoTypeface = ResourcesCompat.getFont(context, R.font.ubuntu_mono) ?: Typeface.MONOSPACE
-            boldTypeface = ResourcesCompat.getFont(context, R.font.ubuntu_mono_bold) ?: Typeface.MONOSPACE
-        }
-        catch (_: Exception)
-        {
-            monoTypeface = Typeface.MONOSPACE
-            boldTypeface = Typeface.MONOSPACE
-        }
     }
 
     override fun surfaceCreated(p0: SurfaceHolder) {
@@ -199,18 +85,9 @@ class GameView(context: Context):
         background.setBackgroundDimensions(w, h, false)
     }
 
-    @Suppress("UNUSED_VARIABLE", "unused")
-    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int)
-    /** function that is called to calculate height and width of this view. */
+    override fun settings(): Settings
     {
-        val widthMode = MeasureSpec.getMode(widthMeasureSpec)
-        val widthSize = MeasureSpec.getSize(widthMeasureSpec)
-        val heightMode = MeasureSpec.getMode(heightMeasureSpec)
-        val heightSize = MeasureSpec.getSize(heightMeasureSpec)
-
-        val width: Int = widthSize
-        val height: Int = heightSize
-        setMeasuredDimension(width, height)
+        return gameActivity.settings
     }
 
     fun resetAtStartOfStage()
@@ -235,10 +112,10 @@ class GameView(context: Context):
      */
     {
         val scoreBoardHeight = (h*0.1).toInt()
-        return scoreBoardHeight.coerceIn(GameView.minScoreBoardHeight, GameView.maxScoreBoardHeight)
+        return scoreBoardHeight.coerceIn(CommonView.minScoreBoardHeight, CommonView.maxScoreBoardHeight)
     }
 
-    private fun viewportHeight(h: Int): Int
+    override fun viewportHeight(h: Int): Int
     /** calculate viewport size for a given screen size
     @param h total height of screen
      */
@@ -246,14 +123,12 @@ class GameView(context: Context):
         return h - scoreBoardHeight(h)
     }
 
-    private fun setComponentSize(w: Int, h: Int)
+    override fun setComponentSize(w: Int, h: Int)
     /** calculates and sets the size of the inner components of this view.
      * Also calculates the viewport dimensions.
      * Can be called multiple times. */
     {
-        // adjust text sizes and scaling factor
-        textScaleFactor = 0.70f * resources.displayMetrics.scaledDensity
-        scaleFactor = 0.50f * resources.displayMetrics.density
+        super.setComponentSize(w, h)
         saveGraphicalState()
         // determine dimensions of the different game areas
         val viewportHeight = viewportHeight(h)
@@ -306,6 +181,10 @@ class GameView(context: Context):
             else -> return false
         }
         return false
+    }
+
+    override fun logger(): Logger? {
+        return gameActivity.logger
     }
 
     private fun processClickOnNodes(network: Network, p0: MotionEvent): Boolean
@@ -361,7 +240,7 @@ class GameView(context: Context):
     }
 
     /**  execute all movers and faders */
-    fun updateEffects()
+    override fun updateEffects()
     {
         intermezzo.update()
         for (m in movers)
@@ -389,7 +268,7 @@ class GameView(context: Context):
             effects?.snow?.updateGraphicalEffects()
     }
 
-    fun display()
+    override fun display()
     {
         if (!hasDefinedSize())
             return
@@ -466,4 +345,5 @@ class GameView(context: Context):
         else
             return false
     }
+
 }

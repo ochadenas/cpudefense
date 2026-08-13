@@ -1,6 +1,7 @@
 package com.example.cpudefense.gameElements
 
 import android.graphics.*
+import com.example.cpudefense.CommonView
 import com.example.cpudefense.GameView
 import com.example.cpudefense.effects.Fadable
 import com.example.cpudefense.effects.Fader

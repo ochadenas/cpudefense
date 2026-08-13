@@ -44,9 +44,8 @@ open class Attacker(network: Network, representation: Representation = Represent
     var attackerData = Data( representation = representation, number = number, binaryDigits = 0, hexDigits = 0,
         bits = 0, vehicle = super.data
     )
-    private val resources = network.gameView.resources
-    private val activity = network.gameView.gameActivity
-    private val logger = activity.logger
+    private val resources = network.commonView.resources
+    private val logger = network.commonView.logger()
     private var numberBitmap: Bitmap = Bitmap.createBitmap(100, 32, Bitmap.Config.ARGB_8888)
     var actualRect = Rect()
     private var oldNumber: ULong = 0U
@@ -209,7 +208,7 @@ open class Attacker(network: Network, representation: Representation = Represent
                 val newNumber =  attackerData.number.toLong() - power
                 if (newNumber < 0)
                 {
-                    network.gameView.effects?.explode(this)
+                    network.commonView.effects?.explode(this)
                     gainCash()
                     return true
                 }
@@ -251,7 +250,7 @@ open class Attacker(network: Network, representation: Representation = Represent
      * or (0, 0) if the viewport is undefined or invalid.
      */
     {
-        posOnGrid?.let { return network.gameView.viewport.gridToScreen(it) }
+        posOnGrid?.let { return network.commonView.viewport.gridToScreen(it) }
         /* else, if posOnGrid == null: */
         return Pair(0, 0)
     }
@@ -297,8 +296,8 @@ open class Attacker(network: Network, representation: Representation = Represent
     fun createBitmap(text: String)
     {
         // determine size
-        numberFontSize = baseNumberFontSize * network.gameView.textScaleFactor *
-                if (activity.settings.configUseLargeButtons) 1.5f else 0.8f
+        numberFontSize = baseNumberFontSize * network.commonView.textScaleFactor *
+                if (network.commonView.settings().configUseLargeButtons) 1.5f else 0.8f
         // define colours
         val textPaint = Paint()
         val blurPaint = Paint()
@@ -322,7 +321,7 @@ open class Attacker(network: Network, representation: Representation = Represent
 
         textPaint.textSize = numberFontSize
         textPaint.alpha = 255
-        textPaint.typeface = network.gameView.boldTypeface
+        textPaint.typeface = network.commonView.boldTypeface
         textPaint.textAlign = Paint.Align.CENTER
         val bounds = Rect()
         textPaint.getTextBounds(text, 0, text.length, bounds)
