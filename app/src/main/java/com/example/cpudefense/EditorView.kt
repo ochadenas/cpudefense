@@ -14,6 +14,8 @@ import android.view.ViewGroup
 import com.example.cpudefense.activities.EditorActivity
 import com.example.cpudefense.editorElements.EditorPanel
 import com.example.cpudefense.gameElements.Chip
+import com.example.cpudefense.gameElements.CommonButtonPanel
+import com.example.cpudefense.gameElements.CommonControlButton
 import com.example.cpudefense.networkmap.Network
 import com.example.cpudefense.utils.Logger
 
@@ -22,6 +24,7 @@ class EditorView(context: Context):
 {
     val editorActivity = context as EditorActivity
     override val gameMechanics = editorActivity.gameMechanics
+    val commonButtonPanel = CommonButtonPanel(this)
     val editorPanel = EditorPanel(this)
 
     val menuIcon: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.buttons_menu)
@@ -56,7 +59,10 @@ class EditorView(context: Context):
     {
         super.setComponentSize(w, h)
         setComputerTypeface()
-        editorPanel.setSize(Rect(0, 0, w, h))
+        Rect(0, topMargin, w, h).let {
+            editorPanel.setSize(it)
+            commonButtonPanel.setSize(it)
+        }
     }
 
     override fun performClick(): Boolean {
@@ -65,11 +71,20 @@ class EditorView(context: Context):
 
     override fun onDown(motionEvent: MotionEvent): Boolean {
         editorPanel.onDown(motionEvent)
+        if (commonButtonPanel.onDown(motionEvent))
+            background.prepareForEditor()
         gameMechanics.currentlyActiveStage?.network?.let {
             if (processClickOnNodes(it, motionEvent))
                 return true
             return true
         }
+        return false
+    }
+
+    override fun onScroll(p0: MotionEvent?, p1: MotionEvent, dx: Float, dy: Float): Boolean {
+        viewport.addOffset(-dx, -dy)
+        gameMechanics.currentlyActiveStage?.network?.recreateNetworkImage(false)
+        background.prepareForEditor()
         return false
     }
 
@@ -83,6 +98,7 @@ class EditorView(context: Context):
             {
                 gameMechanics.currentlyActiveStage?.network?.display(it, viewport)
                 editorPanel.display(it)
+                commonButtonPanel.display(it)
                 holder.unlockCanvasAndPost(it)
             }
         }

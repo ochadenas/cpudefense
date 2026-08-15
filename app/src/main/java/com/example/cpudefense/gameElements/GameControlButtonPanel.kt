@@ -15,19 +15,17 @@ import com.example.cpudefense.GameView
 import com.example.cpudefense.Stage
 import com.example.cpudefense.utils.setTop
 
-class ControlButtonPanel(var gameView: GameView)
+class GameControlButtonPanel(var gameView: GameView)
 /** set of buttons that control the game speed, but also provide additional interaction such
  * as "lock scrolling" or "return to main menu". Also shows the level number.
  */
 {
     private val gameMechanics = gameView.gameMechanics
-    private var button1 = GameControlButton(gameView, gameMechanics, GameControlButton.Type.FAST, this)
-    private var button2 = GameControlButton(gameView, gameMechanics, GameControlButton.Type.PAUSE, this)
-    private var button3 = GameControlButton(gameView, gameMechanics, GameControlButton.Type.FASTEST, this)
-    private var lockButton = GameControlButton(gameView, gameMechanics, GameControlButton.Type.UNLOCK, this)
-    private var returnButton = GameControlButton(gameView, gameMechanics, GameControlButton.Type.RETURN, this)
-    private var zoomPlusButton = GameControlButton(gameView, gameMechanics, GameControlButton.Type.ZOOM_PLUS, this)
-    private var zoomMinusButton = GameControlButton(gameView, gameMechanics, GameControlButton.Type.ZOOM_MINUS, this)
+    private var button1 = GameControlButton(gameView, gameMechanics, CommonControlButton.Type.FAST, this)
+    private var button2 = GameControlButton(gameView, gameMechanics, CommonControlButton.Type.PAUSE, this)
+    private var button3 = GameControlButton(gameView, gameMechanics, CommonControlButton.Type.FASTEST, this)
+    private var lockButton = GameControlButton(gameView, gameMechanics, CommonControlButton.Type.UNLOCK, this)
+    private var returnButton = GameControlButton(gameView, gameMechanics, CommonControlButton.Type.RETURN, this)
     private var buttons = mutableListOf( button1, button2, returnButton, lockButton)
     /** area that holds the speed buttons */
     private var areaRight = Rect(0,0,0,0)
@@ -54,11 +52,6 @@ class ControlButtonPanel(var gameView: GameView)
         val margin = actualButtonSize / 5   // space between the buttons
         if (gameView.gameActivity.settings.fastFastForward)
             buttons.add(button3) // add a "fast fast-forward" button
-        if (gameView.gameActivity.settings.zoom && gameView.gameMechanics.currentStageIdent.isGreaterThan(showZoomOnStage))
-        {
-            buttons.add(zoomPlusButton)
-            buttons.add(zoomMinusButton)
-        }
         buttons.forEach {it.setSize(actualButtonSize)}
         areaRight.right = parentArea.right - margin
         areaRight.bottom = parentArea.bottom - margin
@@ -74,8 +67,6 @@ class ControlButtonPanel(var gameView: GameView)
         areaCenter = Rect(areaLeft.left, areaLeft.top, areaRight.right, areaRight.bottom)
         areaTop = Rect(areaLeft)
         areaTop.setTop(parentArea.top)
-        zoomPlusButton.area.setCenter(areaTop.left + actualButtonSize / 2, areaTop.centerY())
-        zoomMinusButton.area.setCenter(areaTop.right - actualButtonSize / 2, areaTop.centerY())
     }
     
     fun setInfoLine(newText: String)
@@ -109,9 +100,9 @@ class ControlButtonPanel(var gameView: GameView)
 
     fun resetButtons()
     {
-        button1.type = GameControlButton.Type.FAST
-        button2.type = GameControlButton.Type.PAUSE
-        button3.type = GameControlButton.Type.FASTEST
+        button1.type = CommonControlButton.Type.FAST
+        button2.type = CommonControlButton.Type.PAUSE
+        button3.type = CommonControlButton.Type.FASTEST
     }
 
     fun onDown(p0: MotionEvent): Boolean {

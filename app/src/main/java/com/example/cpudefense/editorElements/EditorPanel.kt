@@ -5,16 +5,16 @@ import android.graphics.Rect
 import android.view.MotionEvent
 import com.example.cpudefense.EditorView
 import com.example.cpudefense.CommonView
-import com.example.cpudefense.editorElements.ControlButton.Type
+import com.example.cpudefense.editorElements.EditorControlButton.Type
 import com.example.cpudefense.utils.setCenter
 
 /** set of buttons that are used when editing */
 class EditorPanel(var editorView: EditorView)
 {
     private val gameMechanics = editorView.gameMechanics
-    private var buttonMenu = ControlButton(editorView, editorView.gameMechanics, Type.MENU, this)
-    private var buttonNewChip = ControlButton(editorView, editorView.gameMechanics, Type.NEW_CHIP, this)
-    private var buttonMoveChip = ControlButton(editorView, editorView.gameMechanics, Type.MOVE_CHIP, this)
+    private var buttonMenu = EditorControlButton(editorView, editorView.gameMechanics, Type.MENU, this)
+    private var buttonNewChip = EditorControlButton(editorView, editorView.gameMechanics, Type.NEW_CHIP, this)
+    private var buttonMoveChip = EditorControlButton(editorView, editorView.gameMechanics, Type.MOVE_CHIP, this)
     private var buttons = mutableListOf( buttonMenu, buttonNewChip, buttonMoveChip)
     /** area that holds the  buttons */
     private var areaBottom = Rect(0,0,0,0)

@@ -1,35 +1,18 @@
 package com.example.cpudefense.gameElements
 
-import android.graphics.*
 import android.view.MotionEvent
 import com.example.cpudefense.GameMechanics
-import com.example.cpudefense.CommonView
 import com.example.cpudefense.effects.Fadable
 import com.example.cpudefense.effects.Fader
-import androidx.core.graphics.scale
 import com.example.cpudefense.GameView
 
-class GameControlButton(val gameView: GameView, val gameMechanics: GameMechanics, var type: Type = Type.PAUSE, private val panel: ControlButtonPanel): Fadable
+class GameControlButton(val gameView: GameView, gameMechanics: GameMechanics,
+                        type: Type = Type.PAUSE, private val panel: GameControlButtonPanel)
+    : CommonControlButton(gameView, gameMechanics, type), Fadable
 {
-    enum class Type { PAUSE, FAST, FASTEST, NORMAL, RETURN, LOCK, UNLOCK, ZOOM_PLUS, ZOOM_MINUS }
-
-    var area = Rect()
-    var paint = Paint()
-    var alpha = 160
-    private var bitmapOfType = hashMapOf<Type, Bitmap>()
-
-    fun setSize(size: Int)
+    override fun setSize(size: Int)
     {
-        area = Rect(0, 0, size, size)
-        bitmapOfType[Type.PAUSE] = gameView.pauseIcon.scale(size, size)
-        bitmapOfType[Type.NORMAL] = gameView.playIcon.scale(size, size)
-        bitmapOfType[Type.FAST] = gameView.fastIcon.scale(size, size)
-        bitmapOfType[Type.FASTEST] = gameView.fastestIcon.scale(size, size)
-        bitmapOfType[Type.RETURN] = gameView.returnIcon.scale(size, size)
-        bitmapOfType[Type.LOCK] = gameView.moveLockIcon.scale(size, size)
-        bitmapOfType[Type.UNLOCK] = gameView.moveUnlockIcon.scale(size, size)
-        bitmapOfType[Type.ZOOM_PLUS] = gameView.zoomPlusIcon.scale(size, size)
-        bitmapOfType[Type.ZOOM_MINUS] = gameView.zoomMinusIcon.scale(size, size)
+        super.setSize(size)
     }
 
     override fun fadeDone(type: Fader.Type) {
@@ -39,7 +22,9 @@ class GameControlButton(val gameView: GameView, val gameMechanics: GameMechanics
         alpha = (opacity * 255).toInt()
     }
 
-    fun onDown(p0: MotionEvent): Boolean {
+    override fun onDown(p0: MotionEvent): Boolean {
+        if (super.onDown(p0))
+            return true
         if (area.contains(p0.x.toInt(), p0.y.toInt()))
         {
             when (type)
@@ -78,24 +63,12 @@ class GameControlButton(val gameView: GameView, val gameMechanics: GameMechanics
                     gameView.scrollAllowed = false
                     type = Type.LOCK
                 }
-                Type.ZOOM_PLUS -> {
-                    gameView.viewport.scaleByStep(gameMechanics.currentlyActiveStage?.network, true)
-                }
-                Type.ZOOM_MINUS -> {
-                    gameView.viewport.scaleByStep(gameMechanics.currentlyActiveStage?.network, false)
-                }
+                else -> { return false }
             }
             return true
         }
         else
             return false
-    }
-
-    fun display(canvas: Canvas) {
-        paint.color = Color.BLACK
-        paint.alpha = alpha
-        // canvas.drawRect(area, paint)
-        bitmapOfType[type]?.let {canvas.drawBitmap(it, null, area, paint) }
     }
 
 }

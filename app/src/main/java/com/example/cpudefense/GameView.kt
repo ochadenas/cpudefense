@@ -5,7 +5,6 @@ package com.example.cpudefense
 import android.app.Activity.MODE_PRIVATE
 import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
@@ -22,10 +21,9 @@ import com.example.cpudefense.effects.Fader
 import com.example.cpudefense.effects.Flipper
 import com.example.cpudefense.effects.Mover
 import com.example.cpudefense.gameElements.Attacker
-import com.example.cpudefense.gameElements.Chip
+import com.example.cpudefense.gameElements.CommonButtonPanel
 import com.example.cpudefense.gameElements.ScoreBoard
-import com.example.cpudefense.gameElements.ControlButtonPanel
-import com.example.cpudefense.networkmap.Network
+import com.example.cpudefense.gameElements.GameControlButtonPanel
 import com.example.cpudefense.utils.Logger
 import com.example.cpudefense.utils.displayTextCenteredInRect
 
@@ -36,24 +34,13 @@ class GameView(context: Context):
     val gameActivity = context as GameActivity
     override val gameMechanics = gameActivity.gameMechanics
 
-    private val coinIconBlue: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.cryptocoin)
-    private val coinIconRed: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.cryptocoin_red)
-    val playIcon: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.play_active)
-    val pauseIcon: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.pause_active)
-    val fastIcon: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.fast_active)
-    val fastestIcon: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.fastest_active)
-    val returnIcon: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.cancel_active)
-    val moveLockIcon: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.move_lock)
-    val moveUnlockIcon: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.move_unlock)
-    val zoomPlusIcon: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.zoom_plus)
-    val zoomMinusIcon: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.zoom_minus)
-
     /* game elements */
 
     var intermezzo = Intermezzo(this)
     var marketplace = Marketplace(this)
     val scoreBoard = ScoreBoard(this)
-    val controlButtonPanel = ControlButtonPanel(this)
+    val commonButtonPanel = CommonButtonPanel(this)
+    val gameControlButtonPanel = GameControlButtonPanel(this)
     private val notification = ProgressNotification(this)
 
 
@@ -86,7 +73,7 @@ class GameView(context: Context):
 
     fun resetAtStartOfStage()
     {
-        controlButtonPanel.resetButtons()
+        gameControlButtonPanel.resetButtons()
         scoreBoard.Lives()
         scoreBoard.recreateBitmap()
         viewport.reset()
@@ -97,7 +84,7 @@ class GameView(context: Context):
             it.recreateNetworkImage(false)
         }
         viewState = ViewState.NORMAL
-        controlButtonPanel.setInfoLine(resources.getString(R.string.stage_number).format(gameMechanics.currentlyActiveStage?.numberAsString()))
+        gameControlButtonPanel.setInfoLine(resources.getString(R.string.stage_number).format(gameMechanics.currentlyActiveStage?.numberAsString()))
     }
 
     private fun scoreBoardHeight(h: Int): Int
@@ -128,7 +115,10 @@ class GameView(context: Context):
         val viewportHeight = viewportHeight(h)
         viewport.determineScreenSize(w, viewportHeight, scaleFactor)
         scoreBoard.setSize(Rect(0, viewportHeight, w, viewportHeight+scoreBoardHeight(h)))
-        controlButtonPanel.setSize(Rect(0, topMargin, w, viewportHeight))
+        Rect(0, topMargin, w, viewportHeight).let{
+            gameControlButtonPanel.setSize(it)
+            commonButtonPanel.setSize(it)
+        }
         intermezzo.setSize(Rect(0, 0, w, h))
         marketplace.setSize(Rect(0, topMargin, w, h))
         notification.setPositionOnScreen(w/2, h/2)
@@ -151,7 +141,9 @@ class GameView(context: Context):
         when (gameMechanics.state.phase)
         {
             GamePhase.RUNNING -> {
-                    if (controlButtonPanel.onDown(motionEvent))
+                    if (gameControlButtonPanel.onDown(motionEvent))
+                        return true
+                    if (commonButtonPanel.onDown(motionEvent))
                         return true
                     gameMechanics.currentlyActiveStage?.network?.let {
                         if (processClickOnNodes(it, motionEvent))
@@ -165,7 +157,8 @@ class GameView(context: Context):
             GamePhase.INTERMEZZO -> return intermezzo.onDown(motionEvent)
             GamePhase.MARKETPLACE -> return marketplace.onDown(motionEvent)
             GamePhase.PAUSED -> {
-                if (controlButtonPanel.onDown(motionEvent))
+                if (gameControlButtonPanel.onDown(motionEvent) ||
+                    commonButtonPanel.onDown(motionEvent))
                     return true
                 gameMechanics.currentlyActiveStage?.network?.let {
                     if (processClickOnNodes(it, motionEvent))
@@ -271,7 +264,8 @@ class GameView(context: Context):
         canvas.let {
             gameMechanics.currentlyActiveStage?.network?.display(it, viewport)
             scoreBoard.display(it, viewport)
-            controlButtonPanel.display(it)
+            gameControlButtonPanel.display(it)
+            commonButtonPanel.display(it)
         }
     }
 

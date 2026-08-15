@@ -8,10 +8,10 @@ import com.example.cpudefense.effects.Fader
 import androidx.core.graphics.scale
 import com.example.cpudefense.EditorView
 
-class ControlButton(val editorView: EditorView,
-                    val gameMechanics: GameMechanics,
-                    var type: Type = Type.MENU,
-                    private val panel: EditorPanel)
+class EditorControlButton(val editorView: EditorView,
+                          val gameMechanics: GameMechanics,
+                          var type: Type = Type.MENU,
+                          private val panel: EditorPanel)
     : Fadable
 {
     enum class Type { MENU, NEW_CHIP, MOVE_CHIP }

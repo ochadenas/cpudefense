@@ -391,7 +391,7 @@ class GameActivity : AppCompatActivity() {
             it.network.validateViewport(gameView.viewport)
             gameView.viewport.determineGridSize(it.size)
             gameView.background.prepareAtStartOfStage(it.data.ident)
-            gameView.controlButtonPanel.setInfoLine(gameView.resources.getString(R.string.stage_number)
+            gameView.gameControlButtonPanel.setInfoLine(gameView.resources.getString(R.string.stage_number)
                                                        .format(it.numberAsString()))
         }
         when (gameMechanics.state.phase)
@@ -444,7 +444,7 @@ class GameActivity : AppCompatActivity() {
         Persistency(this).saveStageSummaries(gameMechanics, ident.series)
         logger?.log("Saving summary of series %d".format(ident.series))
         gameMechanics.currentlyActiveStage?.let {
-            gameView.controlButtonPanel.setInfoLine(gameView.resources.getString(R.string.stage_number).format(it.numberAsString()))
+            gameView.gameControlButtonPanel.setInfoLine(gameView.resources.getString(R.string.stage_number).format(it.numberAsString()))
             showStageMessage(it)
         }
         setGameSpeed(GameSpeed.NORMAL)  // reset speed to normal when starting next stage
