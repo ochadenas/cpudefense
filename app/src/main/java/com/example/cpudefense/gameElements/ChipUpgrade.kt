@@ -121,6 +121,8 @@ class ChipUpgrade(
             Chip.ChipUpgrades.MEM -> chipToUpgrade.setType(Chip.ChipType.MEM)
             Chip.ChipUpgrades.CLK -> chipToUpgrade.setType(Chip.ChipType.CLK)
             Chip.ChipUpgrades.RES -> chipToUpgrade.setType(Chip.ChipType.RES)
+            Chip.ChipUpgrades.POWERUP4 -> chipToUpgrade.addPower(1)
+            Chip.ChipUpgrades.SELL_ALL -> chipToUpgrade.markChipAsSold()
         }
         if (!doForFree) {
             gameMechanics.state.cash -= price
@@ -144,6 +146,8 @@ class ChipUpgrade(
             Chip.ChipUpgrades.MEM -> "MEM"
             Chip.ChipUpgrades.CLK -> "CLK"
             Chip.ChipUpgrades.RES -> "R"
+            Chip.ChipUpgrades.POWERUP4 -> "+4"
+            Chip.ChipUpgrades.SELL_ALL -> "ZERO"
         }
         val bitmap = createBitmap(actualRect.width(), actualRect.height())
         val rect = Rect(0, 0, bitmap.width, bitmap.height)
