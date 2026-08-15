@@ -79,12 +79,6 @@ class GameView(context: Context):
     override fun surfaceDestroyed(p0: SurfaceHolder) {
     }
 
-    override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
-        super.onSizeChanged(w, h, oldw, oldh)
-        setComponentSize(w, h)
-        background.setBackgroundDimensions(w, h, false)
-    }
-
     override fun settings(): Settings
     {
         return gameActivity.settings

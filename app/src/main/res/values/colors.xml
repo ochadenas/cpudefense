@@ -84,6 +84,10 @@
     <color name="series_normal_2">@color/text_lightgreen</color>
     <color name="series_turbo_2">@color/text_lightamber</color>
     <color name="series_endless_2">@color/text_lightred</color>
+    <color name="series_user">@color/text_blue</color>
+    <color name="series_user_2">@color/text_lightblue</color>
+
+    <color name="background_griddots">@color/text_amber</color>
 
     <color name="upgrade_inactive">#7C878C</color>
     <color name="upgrade_monochrome">#B9921C</color>

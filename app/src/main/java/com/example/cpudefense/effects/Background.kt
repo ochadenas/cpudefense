@@ -6,6 +6,7 @@ import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Canvas
+import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Rect
 import com.example.cpudefense.GameMechanics
@@ -17,7 +18,9 @@ import kotlin.random.Random
 import androidx.core.graphics.createBitmap
 import androidx.core.graphics.scale
 import com.example.cpudefense.CommonView
-import com.example.cpudefense.GameView
+import com.example.cpudefense.networkmap.Coord
+import com.example.cpudefense.networkmap.Viewport
+import com.example.cpudefense.utils.setCenter
 
 class Background(val commonView: CommonView)
 /** The background shown during the game, showing a picture of real circuits.
@@ -53,10 +56,10 @@ class Background(val commonView: CommonView)
     /** whether a background picture shall be used (by configuration) */
     private var enabled = true
 
+    /** called before starting a new stage. Gets a new background image
+     * and crops or scales it to the required size.
+     */
     fun prepareAtStartOfStage(stage: Stage.Identifier)
-            /** called before starting a new stage. Gets a new background image
-             * and crops or scales it to the required size.
-             */
     {
         enabled = !commonView.settings().configDisableBackground
         if (enabled) {
@@ -65,13 +68,20 @@ class Background(val commonView: CommonView)
         }
     }
 
+    /** creates the background for the editor view
+     */
+    fun prepareForEditor()
+    {
+        setBackgroundDimensions(commonView.width, commonView.height)
+        basicBackground = createBlankBackground(myArea)
+        createGridOnBackground(basicBackground, viewport = commonView.viewport, commonView.resources.getColor(R.color.background_griddots))
+    }
+
+    /** Sets the size of the background and re-creates the image.
+     * @param forceNewBackground If true, forcibly create a new image. Otherwise, keep the old one
+     * if the size has not changed.
+     */
     fun setBackgroundDimensions(width: Int, height: Int, forceNewBackground: Boolean = false)
-            /**
-             * Sets the size of the background and re-creates the image.
-             *
-             * @param forceNewBackground If true, forcibly create a new image. Otherwise, keep the old one
-             * if the size has not changed.
-             */
     {
         if (forceNewBackground || width!=myArea.width() || height!=myArea.height())
         {
@@ -80,6 +90,7 @@ class Background(val commonView: CommonView)
         }
     }
 
+    /** sets the background to the image */
     private fun setBasicBackground()
     {
         if (myArea.width()==0 || myArea.height()==0)
@@ -98,9 +109,9 @@ class Background(val commonView: CommonView)
         }
     }
 
-    private fun loadWholeBitmap(number: Int, useSpecial: GameMechanics.Params.Season = GameMechanics.Params.Season.DEFAULT): Bitmap
     /** loads a large background image into memory
      * @param number the number of the background chosen. Must be between 1 and maxBackgroundNumber */
+    private fun loadWholeBitmap(number: Int, useSpecial: GameMechanics.Params.Season = GameMechanics.Params.Season.DEFAULT): Bitmap
     {
         val resources: Resources = commonView.resources
         // since loading now happens in small chunks, there is no need to display the toast */
@@ -128,11 +139,11 @@ class Background(val commonView: CommonView)
         }
     }
 
+    /** chooses the background to use,
+     * and selects a random part of it as wholeBackground
+     * @param stageIdent Series and number of the current stage
+     */
     private fun loadWholeBitmapOfStage(stageIdent: Stage.Identifier)
-            /** chooses the background to use,
-             * and selects a random part of it as wholeBackground
-             * @param stageIdent Series and number of the current stage
-             */
     {
         val useSpecialBackground = GameMechanics.specialLevel(stageIdent)
         if (useSpecialBackground == GameMechanics.Params.Season.CHRISTMAS)
@@ -141,8 +152,8 @@ class Background(val commonView: CommonView)
         wholeBackground = loadWholeBitmap(n % maxBackgroundNumber + 1, useSpecialBackground)
     }
 
-    private fun createBlankBackground(destRect: Rect): Bitmap
     /** @return an empty bitmap with the dimensions of the given rectangle */
+    private fun createBlankBackground(destRect: Rect): Bitmap
     {
         val bitmap = basicBackground ?: createBitmap(destRect.width(), destRect.height())
         basicBackground = bitmap
@@ -151,12 +162,32 @@ class Background(val commonView: CommonView)
         return bitmap
     }
 
-    private fun bitmapCroppedToSize(destRect: Rect, sourceBitmap: Bitmap): Bitmap
-            /** returns a portion of wholeBackground in the given size.
-             * May be either a cropped part if wholeBackground is bigger than the rectangle,
-             * or a scaled image if it is smaller.
-             */
+    /** draws a grid (small points on all grid positions) */
+    fun createGridOnBackground(bitmap: Bitmap?, viewport: Viewport, gridColor: Int)
+    {
+        bitmap?.let { bitmap ->
+            val paint = Paint().also {
+                it.color = gridColor
+                it.style = Paint.Style.FILL
+            }
+            val canvas = Canvas(bitmap)
+            val rect = Rect(0, 0, 2, 2)
+            val gridSize = viewport.viewportData.gridSize
+            repeat(gridSize.first.toInt()) { x ->
+                repeat(gridSize.second.toInt()) { y ->
+                    val pos = viewport.gridToScreen(Coord(x, y))
+                    rect.setCenter(pos)
+                    canvas.drawRect(rect, paint)
+                }
+            }
+        }
+    }
 
+    /** returns a portion of wholeBackground in the given size.
+     * May be either a cropped part if wholeBackground is bigger than the rectangle,
+     * or a scaled image if it is smaller.
+     */
+    private fun bitmapCroppedToSize(destRect: Rect, sourceBitmap: Bitmap): Bitmap
     {
         // if the whole bitmap is smaller than the destination, scale it up, but keep the aspect ratio
         val sourceX = sourceBitmap.width

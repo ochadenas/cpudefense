@@ -32,7 +32,6 @@ class EditorView(context: Context):
     }
 
     override fun surfaceChanged(p0: SurfaceHolder, p1: Int, p2: Int, p3: Int) {
-        // setSize(p2, p3)
     }
 
     override fun surfaceDestroyed(p0: SurfaceHolder) {
@@ -40,7 +39,9 @@ class EditorView(context: Context):
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
+        viewport.determineScreenSize(this.width, this.height, scaleFactor)
         setComponentSize(w, h)
+        background.prepareForEditor()
     }
 
     override fun settings(): Settings
