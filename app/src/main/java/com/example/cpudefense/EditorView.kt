@@ -13,6 +13,8 @@ import android.view.SurfaceHolder
 import android.view.ViewGroup
 import com.example.cpudefense.activities.EditorActivity
 import com.example.cpudefense.editorElements.EditorPanel
+import com.example.cpudefense.gameElements.Chip
+import com.example.cpudefense.networkmap.Network
 import com.example.cpudefense.utils.Logger
 
 class EditorView(context: Context):
@@ -52,6 +54,7 @@ class EditorView(context: Context):
      * Can be called multiple times. */
     {
         super.setComponentSize(w, h)
+        setComputerTypeface()
         editorPanel.setSize(Rect(0, 0, w, h))
     }
 
@@ -59,10 +62,14 @@ class EditorView(context: Context):
         return super.performClick()
     }
 
-    override fun onDown(motionEvent: MotionEvent): Boolean
-    {
+    override fun onDown(motionEvent: MotionEvent): Boolean {
         editorPanel.onDown(motionEvent)
-        return true
+        gameMechanics.currentlyActiveStage?.network?.let {
+            if (processClickOnNodes(it, motionEvent))
+                return true
+            return true
+        }
+        return false
     }
 
     override fun display()
@@ -73,16 +80,10 @@ class EditorView(context: Context):
         synchronized(super.displayLock) {
             holder.lockCanvas()?.let()
             {
+                gameMechanics.currentlyActiveStage?.network?.display(it, viewport)
                 editorPanel.display(it)
                 holder.unlockCanvasAndPost(it)
             }
-        }
-    }
-
-    private fun displayNetwork(canvas: Canvas)
-    {
-        canvas.let {
-            gameMechanics.currentlyActiveStage?.network?.display(it, viewport)
         }
     }
 
@@ -100,8 +101,12 @@ class EditorView(context: Context):
 
     fun startNewCircuit()
     {
+        logger()?.log("Starting new circuit.")
         gameMechanics.currentlyActiveStage = Stage(gameMechanics, this)
-
+            .also{ it.initializeNetwork(50, 50)
+                it.data.ident = Stage.Identifier(GameMechanics.SERIES_USER, 1) // TODO: attribute a number
+                gameMechanics.currentStageIdent = it.data.ident
+            }
     }
 
     override fun logger(): Logger? {
@@ -110,6 +115,7 @@ class EditorView(context: Context):
 
     fun addChip()
     {
+        gameMechanics.currentlyActiveStage?.createChip(10, 10, 1)
 
     }
 

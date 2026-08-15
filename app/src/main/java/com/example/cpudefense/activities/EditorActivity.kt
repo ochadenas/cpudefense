@@ -36,15 +36,13 @@ class EditorActivity : AppCompatActivity()
     private var displayJob: Job? = null
 
     val settings = Settings()
+
     override fun onCreate(savedInstanceState: Bundle?)
     {
         super.onCreate(savedInstanceState)
         WindowCompat.enableEdgeToEdge(window)
         setContentView(R.layout.activity_main_game)
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        if (intent.getBooleanExtra("ACTIVATE_LOGGING", false) && GameMechanics.enableLogging)
-            logger = Logger(this, GameMechanics.logLevel)
-        logger?.start()
         gameMechanics = GameMechanics()
         editorView = EditorView(this)
         // after this, onResume() is called by the system
@@ -67,8 +65,11 @@ class EditorActivity : AppCompatActivity()
     {
         super.onResume()
         loadSettings()
-        setupEditorView()
+        if (settings.activateLogging && GameMechanics.enableLogging)
+            logger = Logger(this, GameMechanics.logLevel)
+        logger?.start()
         logger?.log("Entering editor activity.")
+        setupEditorView()
         if (displayJob?.isActive != true)  // (!= true) is not the same as (false) here!
             displayJob = GlobalScope.launch { delay(GameActivity.effectsDelay.milliseconds); display(); }
         editorView.startNewCircuit()

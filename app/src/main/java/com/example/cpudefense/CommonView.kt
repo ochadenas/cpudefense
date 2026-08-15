@@ -23,7 +23,9 @@ import com.example.cpudefense.effects.Effects
 import com.example.cpudefense.effects.Fader
 import com.example.cpudefense.effects.Flipper
 import com.example.cpudefense.effects.Mover
+import com.example.cpudefense.gameElements.Chip
 import com.example.cpudefense.networkmap.Coord
+import com.example.cpudefense.networkmap.Network
 import com.example.cpudefense.networkmap.Viewport
 import kotlinx.coroutines.withContext
 import java.util.concurrent.CopyOnWriteArrayList
@@ -279,5 +281,26 @@ abstract class CommonView(context: Context):
         else
             return false
     }
+    fun processClickOnNodes(network: Network, p0: MotionEvent): Boolean
+    {
+        // first, check if the click is inside one of the upgrade boxes of _any_ node
+        for (obj in network.nodes.values) {
+            val chip = obj as Chip
+            for (upgrade in chip.upgradePossibilities)
+                if (upgrade.onDown(p0)) {
+                    chip.upgradePossibilities.clear()
+                    return true
+                }
+            // if we come here, then the click was not on an update.
+            if (chip.actualRect?.contains(p0.x.toInt(), p0.y.toInt()) == false)
+                chip.upgradePossibilities.clear()  // clear update boxes of other chips
+        }
+        // check the nodes themselves
+        for (obj in network.nodes.values)
+            if (obj.onDown(p0))
+                return true
+        return false
+    }
+
 
 }

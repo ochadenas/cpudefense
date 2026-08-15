@@ -58,6 +58,7 @@ class GameMechanics {
         const val SERIES_NORMAL  = 1
         const val SERIES_TURBO   = 2
         const val SERIES_ENDLESS = 3
+        const val SERIES_USER    = 4
 
         /** price in bits for the purchase of the first level of a chip,
          * may be modified by heroes' effects. */

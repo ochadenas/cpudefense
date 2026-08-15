@@ -187,27 +187,6 @@ class GameView(context: Context):
         return gameActivity.logger
     }
 
-    private fun processClickOnNodes(network: Network, p0: MotionEvent): Boolean
-    {
-        // first, check if the click is inside one of the upgrade boxes of _any_ node
-        for (obj in network.nodes.values) {
-            val chip = obj as Chip
-            for (upgrade in chip.upgradePossibilities)
-                if (upgrade.onDown(p0)) {
-                    chip.upgradePossibilities.clear()
-                    return true
-                }
-            // if we come here, then the click was not on an update.
-            if (chip.actualRect?.contains(p0.x.toInt(), p0.y.toInt()) == false)
-                chip.upgradePossibilities.clear()  // clear update boxes of other chips
-        }
-        // check the nodes themselves
-        for (obj in network.nodes.values)
-            if (obj.onDown(p0))
-                return true
-        return false
-    }
-
     override fun onShowPress(p0: MotionEvent) {
     }
 
