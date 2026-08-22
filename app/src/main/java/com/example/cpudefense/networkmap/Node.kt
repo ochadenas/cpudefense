@@ -44,6 +44,14 @@ open class Node(val theNetwork: Network, x: Float, y: Float): GameElement()
     val vehiclesDefinitelyGone = mutableListOf<Vehicle>()
     val vehiclesInRange = mutableListOf<Vehicle>()
 
+    fun placeOnGrid(viewport: Viewport, x: Float, y: Float)
+    {
+        posOnGrid = Coord(x, y)
+        data.gridX = x
+        data.gridY = y
+        actualRect = calculateActualRect(viewport)
+    }
+
     override fun update() {
         ticks--
         if (ticks<0)
@@ -55,7 +63,6 @@ open class Node(val theNetwork: Network, x: Float, y: Float): GameElement()
 
     override fun display(canvas: Canvas, viewport: Viewport) {
         actualRect = calculateActualRect(viewport)?.makeSquare()
-        actualRect?.setCenter(viewport.gridToScreen(posOnGrid))
         actualRect?.let { rect ->
             val paint = Paint()
             paint.color = resources.getColor(R.color.network_background)
@@ -89,7 +96,8 @@ open class Node(val theNetwork: Network, x: Float, y: Float): GameElement()
 
     fun calculateActualRect(viewport: Viewport): Rect?
             /** determines the size of this node on the screen based on the grid points.
-             * @return the actual size of a node, or null if size cannot be determined
+             * @return the actual rectangle of the node with correct size and position,
+             * or null if size cannot be determined
              */
     {
         val factor = 3.0f
@@ -99,6 +107,7 @@ open class Node(val theNetwork: Network, x: Float, y: Float): GameElement()
                 val distX = it.first * factor
                 val distY = it.second * factor
                 Rect(0, 0, distX.toInt(), distY.toInt())
+                    .setCenter(viewport.gridToScreen(posOnGrid))
             }
             else
                 null

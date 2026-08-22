@@ -10,6 +10,7 @@ class Coord(var x: Float = 0.0f, var y: Float = 0.0f)
 {
     constructor(xInt: Int = 0, yInt: Int = 0): this (xInt.toFloat(), yInt.toFloat())
     constructor(pos: Pair<Float, Float>): this (pos.first, pos.second)
+    constructor(coord: Coord): this (coord.x, coord.y)
 
     fun asPair(): Pair<Float, Float>
     {

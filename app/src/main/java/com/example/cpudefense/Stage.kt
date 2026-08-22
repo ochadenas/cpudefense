@@ -488,6 +488,7 @@ class Stage(var gameMechanics: GameMechanics, var stageView: CommonView)
                 // stage.theGame.state.coinsInLevel = it.coinsAvailable ?: 0
             }
         }
+
         fun createStageFromData(gameMechanics: GameMechanics, gameView: GameView, stageData: Data): Stage
         {
             val stage = Stage(gameMechanics, gameView)

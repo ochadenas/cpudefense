@@ -3,6 +3,7 @@
 package com.example.cpudefense
 
 import android.app.Activity.MODE_PRIVATE
+import android.app.Dialog
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
@@ -12,6 +13,9 @@ import android.graphics.Rect
 import android.graphics.Typeface
 import android.view.MotionEvent
 import android.view.SurfaceHolder
+import android.view.ViewGroup.LayoutParams.MATCH_PARENT
+import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
+import android.widget.Button
 import androidx.core.content.edit
 import com.example.cpudefense.GameMechanics.GamePhase
 import com.example.cpudefense.GameMechanics.LevelMode
@@ -312,5 +316,26 @@ class GameView(context: Context):
         else
             return false
     }
+
+    override fun showReturnDialog() {
+        val dialog = Dialog(gameActivity)
+        dialog.setContentView(R.layout.layout_dialog_replay)
+        dialog.window?.setLayout(MATCH_PARENT, WRAP_CONTENT)
+        dialog.setCancelable(true)
+        with (gameActivity)
+        {
+            dialog.findViewById<Button>(R.id.button_return)
+                ?.setOnClickListener { dialog.dismiss(); returnToMainMenu() }
+            dialog.findViewById<Button>(R.id.button_replay)
+                ?.setOnClickListener { dialog.dismiss(); replayLevel() }
+            dialog.findViewById<Button>(R.id.button_cancel)
+                ?.setOnClickListener { dialog.dismiss() }
+            dialog.setOnDismissListener { gameThreadsRunning = true; startGameThreads() }
+            gameThreadsRunning = false
+        }
+        dialog.show()
+    }
+
+
 
 }

@@ -6,7 +6,6 @@ import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Canvas
-import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Rect
 import com.example.cpudefense.GameMechanics
@@ -53,6 +52,12 @@ class Background(val commonView: CommonView)
     /** bitmap with a background design of the screen's proportions */
     var basicBackground: Bitmap? = null
 
+    /** the grid, if any. The bitmap holds the whole grid and may extend the visible part of the screen */
+    var wholeGridBackground: Bitmap? = null
+
+    /** visiblie portion of the grid */
+    var gridBackground: Bitmap? = null
+
     /** whether a background picture shall be used (by configuration) */
     private var enabled = true
 
@@ -74,7 +79,7 @@ class Background(val commonView: CommonView)
     {
         setBackgroundDimensions(commonView.width, commonView.height)
         basicBackground = createBlankBackground(myArea)
-        createGridOnBackground(basicBackground, viewport = commonView.viewport, commonView.resources.getColor(R.color.background_griddots))
+        createGrid(viewport = commonView.viewport, commonView.resources.getColor(R.color.background_griddots))
     }
 
     /** Sets the size of the background and re-creates the image.
@@ -106,6 +111,19 @@ class Background(val commonView: CommonView)
         paint.alpha = (255 * opacity).toInt()
         basicBackground?.let {
             canvas.drawBitmap(it, null, myArea, paint)
+        }
+    }
+
+    fun displayGrid(canvas: Canvas)
+    {
+        paint.alpha = 255
+        wholeGridBackground?.let {
+            with (commonView.viewport)
+            {
+                val viewportRect = Rect(myArea)
+                    .setTopLeft(-(offsetX * userScale).toInt(), -(offsetY * userScale).toInt())
+                canvas.drawBitmap(it, viewportRect, myArea, paint)
+            }
         }
     }
 
@@ -163,21 +181,26 @@ class Background(val commonView: CommonView)
     }
 
     /** draws a grid (small points on all grid positions) */
-    fun createGridOnBackground(bitmap: Bitmap?, viewport: Viewport, gridColor: Int)
+    fun createGrid(viewport: Viewport, gridColor: Int)
     {
-        bitmap?.let { bitmap ->
+        if (!viewport.isValid)
+            return
+        wholeGridBackground = createBitmap(viewport.gridWidth, viewport.gridHeight, Bitmap.Config.ARGB_8888)
+        wholeGridBackground?.let { bitmap ->
             val paint = Paint().also {
                 it.color = gridColor
-                it.style = Paint.Style.FILL
+                it.style = Paint.Style.STROKE
+                it.strokeWidth = CommonView.gridBorderWidth
             }
             val canvas = Canvas(bitmap)
-            val rect = Rect(0, 0, 2, 2)
+            val rect = Rect(0, 0, bitmap.width, bitmap.height)
+            canvas.drawRect(rect, paint)
             val gridSize = viewport.viewportData.gridSize
             repeat(gridSize.first.toInt()) { x ->
                 repeat(gridSize.second.toInt()) { y ->
                     val pos = viewport.gridToScreen(Coord(x, y))
                     rect.setCenter(pos)
-                    canvas.drawRect(rect, paint)
+                    canvas.drawPoint(pos.first.toFloat(), pos.second.toFloat(), paint)
                 }
             }
         }
@@ -213,5 +236,4 @@ class Background(val commonView: CommonView)
         canvas.drawBitmap(largeBitmap, sourceRect, destRect, paint)
         return bitmap
     }
-
 }

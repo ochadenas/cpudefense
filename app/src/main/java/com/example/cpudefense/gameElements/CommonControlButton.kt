@@ -49,6 +49,17 @@ open class CommonControlButton(val commonView: CommonView, val gameMechanics: Ga
                 Type.ZOOM_MINUS -> {
                     commonView.viewport.scaleByStep(gameMechanics.currentlyActiveStage?.network, false)
                 }
+                Type.RETURN -> {
+                    commonView.showReturnDialog()
+                }
+                Type.LOCK -> {
+                    commonView.scrollAllowed = true
+                    type = Type.UNLOCK
+                }
+                Type.UNLOCK -> {
+                    commonView.scrollAllowed = false
+                    type = Type.LOCK
+                }
                 else -> return false
             }
             return true

@@ -17,7 +17,9 @@ import com.example.cpudefense.gameElements.Chip
 import com.example.cpudefense.gameElements.CommonButtonPanel
 import com.example.cpudefense.gameElements.CommonControlButton
 import com.example.cpudefense.networkmap.Network
+import com.example.cpudefense.networkmap.Node
 import com.example.cpudefense.utils.Logger
+import kotlin.random.Random
 
 class EditorView(context: Context):
     CommonView(context)
@@ -72,7 +74,7 @@ class EditorView(context: Context):
     override fun onDown(motionEvent: MotionEvent): Boolean {
         editorPanel.onDown(motionEvent)
         if (commonButtonPanel.onDown(motionEvent))
-            background.prepareForEditor()
+            background.prepareForEditor() // TODO
         gameMechanics.currentlyActiveStage?.network?.let {
             if (processClickOnNodes(it, motionEvent))
                 return true
@@ -82,9 +84,10 @@ class EditorView(context: Context):
     }
 
     override fun onScroll(p0: MotionEvent?, p1: MotionEvent, dx: Float, dy: Float): Boolean {
-        viewport.addOffset(-dx, -dy)
-        gameMechanics.currentlyActiveStage?.network?.recreateNetworkImage(false)
-        background.prepareForEditor()
+        if (scrollAllowed) synchronized(scrollLock) {
+            viewport.addOffset(-dx, -dy)
+            gameMechanics.currentlyActiveStage?.network?.recreateNetworkImage(false)
+        }
         return false
     }
 
@@ -92,6 +95,7 @@ class EditorView(context: Context):
     {
         if (!hasDefinedSize())
             return
+
 
         synchronized(super.displayLock) {
             holder.lockCanvas()?.let()
@@ -132,8 +136,25 @@ class EditorView(context: Context):
 
     fun addChip()
     {
-        gameMechanics.currentlyActiveStage?.createChip(10, 10, 1)
+        gameMechanics.currentlyActiveStage?.let {
+            logger()?.log("Trying to add a new chip")
+            var gridPosX = it.network.data.gridSizeX/2
+            var gridPosY = it.network.data.gridSizeY/2
+            val chip = it.createChip( gridPosX, gridPosY)
+            while (it.network.nodeTouches(chip as Node))
+            {
+                gridPosX += Random.nextInt(-10, 10)
+                gridPosY += Random.nextInt(-10, 10)
+                chip.placeOnGrid(viewport, gridPosX.toFloat(), gridPosY.toFloat())
+            }
+            it.network.recreateNetworkImage(false)
+        }
 
+    }
+
+    override fun showReturnDialog()
+    {
+        editorActivity.finish()
     }
 
 }

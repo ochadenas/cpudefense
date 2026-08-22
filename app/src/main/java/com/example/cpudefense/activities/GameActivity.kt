@@ -53,7 +53,7 @@ class GameActivity : AppCompatActivity() {
     lateinit var gameMechanics: GameMechanics
     lateinit var gameView: GameView
     /** flag used to keep the threads running. Set to false when leaving activity */
-    private var gameThreadsRunning = true
+    var gameThreadsRunning = true
 
     companion object
     {
@@ -506,7 +506,7 @@ class GameActivity : AppCompatActivity() {
         }
     }
 
-    private fun startGameThreads() {
+    fun startGameThreads() {
 
         if (updateJob?.isActive != true)  // (!= true) is not the same as (false) here!
             updateJob = GlobalScope.launch { delay(updateDelay); update(); }
@@ -534,29 +534,13 @@ class GameActivity : AppCompatActivity() {
         logger?.log("Game speed set to %s. Update delay is %s".format(speed.toString(), updateDelay.toString()))
     }
 
-    fun showReturnDialog() {
-        val dialog = Dialog(this)
-        dialog.setContentView(R.layout.layout_dialog_replay)
-        dialog.window?.setLayout(MATCH_PARENT, WRAP_CONTENT)
-        dialog.setCancelable(true)
-        dialog.findViewById<Button>(R.id.button_return)
-            ?.setOnClickListener { dialog.dismiss(); returnToMainMenu() }
-        dialog.findViewById<Button>(R.id.button_replay)
-            ?.setOnClickListener { dialog.dismiss(); replayLevel() }
-        dialog.findViewById<Button>(R.id.button_cancel)
-            ?.setOnClickListener { dialog.dismiss() }
-        dialog.setOnDismissListener { gameThreadsRunning = true; startGameThreads() }
-        gameThreadsRunning = false
-        dialog.show()
-    }
-
-    private fun returnToMainMenu() {
+    fun returnToMainMenu() {
         Persistency(this).saveGeneralState(gameMechanics)
         Persistency(this).saveCurrentLevelState(gameMechanics)
         finish()
     }
 
-    private fun replayLevel() {
+    fun replayLevel() {
         gameMechanics.currentlyActiveStage?.let { beginGame(startingLevel = it.data.ident) }
     }
 

@@ -170,6 +170,7 @@ class Network(val gameMechanics: GameMechanics, val commonView: CommonView, x: I
         commonView.background.basicBackground?.let{
             networkImage = it.copy(it.config ?: ARGB_8888, true)
             val canvas = Canvas(networkImage)
+            commonView.background.displayGrid(canvas)
             for (obj in links.values)
                 obj.display(canvas, commonView.viewport)
         }
@@ -221,5 +222,18 @@ class Network(val gameMechanics: GameMechanics, val commonView: CommonView, x: I
 
     @Suppress("UNUSED_PARAMETER")
     fun onLongPress(p0: MotionEvent?) {
+    }
+
+    fun nodeTouches(testNode: Node): Boolean
+    {
+        testNode.let { it.actualRect = it.calculateActualRect(commonView.viewport)}
+        testNode.actualRect?.let { testRec ->
+            nodes.values.forEach { node ->
+                if (node != testNode &&
+                    node.actualRect?.intersect(testRec) == true)
+                    return true
+            }
+        }
+        return false
     }
 }

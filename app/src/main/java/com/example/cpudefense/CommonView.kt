@@ -79,6 +79,9 @@ abstract class CommonView(context: Context):
         const val maxScoreBoardHeight = 320
         const val speedControlButtonSize = 48
         const val levelSnapshotIconSize = 120
+
+        const val gridPointSize = 2
+        const val gridBorderWidth = 2.0f
     }
     val theActivity = context as Activity
     abstract val gameMechanics: GameMechanics
@@ -208,6 +211,8 @@ abstract class CommonView(context: Context):
     abstract fun settings(): Settings
 
     abstract fun logger(): Logger?
+
+    abstract fun showReturnDialog()
 
     open fun setComponentSize(w: Int, h: Int)
     /** calculates and sets the size of the inner components of this view.

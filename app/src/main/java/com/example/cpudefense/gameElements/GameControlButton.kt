@@ -52,17 +52,6 @@ class GameControlButton(val gameView: GameView, gameMechanics: GameMechanics,
                     panel.resetButtons()
                     type = Type.NORMAL
                 }
-                Type.RETURN -> {
-                    gameView.gameActivity.showReturnDialog()
-                }
-                Type.LOCK -> {
-                    gameView.scrollAllowed = true
-                    type = Type.UNLOCK
-                }
-                Type.UNLOCK -> {
-                    gameView.scrollAllowed = false
-                    type = Type.LOCK
-                }
                 else -> { return false }
             }
             return true

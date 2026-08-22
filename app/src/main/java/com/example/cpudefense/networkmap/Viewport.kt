@@ -34,9 +34,9 @@ class Viewport
     /** vertical scale factor applied */
     private var scaleY = 1.0f
     /** horizontal offset to the origin when moving the viewport around, in screen coordinates. Positive values mean that the network is shifted towards the right. */
-    private var offsetX = 0
+    var offsetX = 0
     /** vertical offset to the origin when moving the viewport around, in screen coordinates. Positive values mean that the network is shifted towards the bottom. */
-    private var offsetY = 0
+    var offsetY = 0
 
     /** zoom factor chosen by the player */
     var userScale = 1.0f

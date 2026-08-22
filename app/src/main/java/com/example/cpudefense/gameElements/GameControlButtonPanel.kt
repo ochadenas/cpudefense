@@ -24,9 +24,7 @@ class GameControlButtonPanel(var gameView: GameView)
     private var button1 = GameControlButton(gameView, gameMechanics, CommonControlButton.Type.FAST, this)
     private var button2 = GameControlButton(gameView, gameMechanics, CommonControlButton.Type.PAUSE, this)
     private var button3 = GameControlButton(gameView, gameMechanics, CommonControlButton.Type.FASTEST, this)
-    private var lockButton = GameControlButton(gameView, gameMechanics, CommonControlButton.Type.UNLOCK, this)
-    private var returnButton = GameControlButton(gameView, gameMechanics, CommonControlButton.Type.RETURN, this)
-    private var buttons = mutableListOf( button1, button2, returnButton, lockButton)
+    private var buttons = mutableListOf( button1, button2)
     /** area that holds the speed buttons */
     private var areaRight = Rect(0,0,0,0)
     /** area containing the "return to menu" and "lock scrolling" button */
@@ -62,11 +60,7 @@ class GameControlButtonPanel(var gameView: GameView)
         button3.area.setCenter(areaRight.left - actualButtonSize / 2 - margin, areaRight.centerY())
         areaLeft = Rect(areaRight)
         areaLeft.setLeft(margin)
-        returnButton.area.setCenter(areaLeft.left + actualButtonSize / 2, areaLeft.centerY())
-        lockButton.area.setCenter(areaLeft.right - actualButtonSize / 2, areaLeft.centerY())
         areaCenter = Rect(areaLeft.left, areaLeft.top, areaRight.right, areaRight.bottom)
-        areaTop = Rect(areaLeft)
-        areaTop.setTop(parentArea.top)
     }
     
     fun setInfoLine(newText: String)

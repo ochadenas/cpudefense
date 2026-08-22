@@ -23,18 +23,18 @@ class CommonButtonPanel(var commonView: CommonView)
     private val gameMechanics = commonView.gameMechanics
     private var zoomPlusButton = CommonControlButton(commonView, gameMechanics, CommonControlButton.Type.ZOOM_PLUS)
     private var zoomMinusButton = CommonControlButton(commonView, gameMechanics, CommonControlButton.Type.ZOOM_MINUS)
-    private var buttons = mutableListOf( zoomPlusButton, zoomMinusButton)
+    private var lockButton = CommonControlButton(commonView, gameMechanics, CommonControlButton.Type.UNLOCK)
+    private var returnButton = CommonControlButton(commonView, gameMechanics, CommonControlButton.Type.RETURN)
+    private var buttons = mutableListOf( zoomPlusButton, zoomMinusButton, lockButton, returnButton)
     /** area that contains "zoom in" and "zoom out" buttons */
     private var areaTop = Rect()
+    /** area that contains "back" and "scroll lock" buttons */
+    private var areaBottom = Rect()
     /** the size of the control buttons in pixels, with density factor applied */
     var actualButtonSize: Int = 0
 
     /** the stage number (minus one) where the zoom buttons are shown for the first time */
     private val showZoomOnStage = Stage.Identifier(1, 14)
-
-    private var stageInfoText = ""
-    private var statusInfoBitmap: Bitmap? = null
-    private var bitmapPaint = Paint()
 
     fun setSize(parentArea: Rect)
     {
@@ -51,24 +51,10 @@ class CommonButtonPanel(var commonView: CommonView)
                        parentArea.top+actualButtonSize)
         zoomPlusButton.area.setCenter(areaTop.left + actualButtonSize / 2, areaTop.centerY())
         zoomMinusButton.area.setCenter(areaTop.right - actualButtonSize / 2, areaTop.centerY())
-    }
-
-    @Suppress("DEPRECATION")
-    private fun recreateBitmap()
-    {
-        bitmapPaint.alpha = 255
-        val paint = Paint()
-        paint.color = commonView.resources.getColor(R.color.connectors)
-        paint.typeface = Typeface.SANS_SERIF
-        paint.textSize = CommonView.scoreHeaderSize * commonView.textScaleFactor
-        paint.textAlign = Paint.Align.LEFT
-        val bounds = Rect()
-        paint.getTextBounds(stageInfoText, 0, stageInfoText.length, bounds)
-        statusInfoBitmap = createBitmap(bounds.width(), bounds.height())
-        statusInfoBitmap?.let {
-            val canvas = Canvas(it)
-            canvas.drawText(stageInfoText, 0f, (it.height-bounds.bottom).toFloat(), paint)
-        }
+        areaBottom = Rect(areaTop.left, parentArea.bottom-margin-actualButtonSize,
+                          areaTop.right, parentArea.bottom-margin)
+        returnButton.area.setCenter(areaBottom.left + actualButtonSize / 2, areaBottom.centerY())
+        lockButton.area.setCenter(areaBottom.right - actualButtonSize / 2, areaBottom.centerY())
     }
 
     fun onDown(p0: MotionEvent): Boolean {
