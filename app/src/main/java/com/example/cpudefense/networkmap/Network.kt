@@ -216,7 +216,7 @@ class Network(val gameMechanics: GameMechanics, val commonView: CommonView, x: I
 
     fun addVehicle(vehicle: Vehicle)
     /** adds an existing vehicle to the network */
-    {+4
+    {
         vehicles.add(vehicle)
     }
 
