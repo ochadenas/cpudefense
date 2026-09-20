@@ -24,10 +24,10 @@ class EditorPanel(var editorView: EditorView)
     fun setSize(parentArea: Rect)
     {
         actualButtonSize = CommonView.speedControlButtonSize * editorView.resources.displayMetrics.density.toInt()
-        val margin = actualButtonSize / 5   // space between the buttons
+        val margin = actualButtonSize / 5   // horizontal space between the buttons
         buttons.forEach {it.setSize(actualButtonSize)}
         areaBottom.right = parentArea.right - margin
-        areaBottom.bottom = parentArea.bottom - margin
+        areaBottom.bottom = parentArea.bottom - CommonView.controlPanelMargin
         areaBottom.left = areaBottom.right - (actualButtonSize + margin) * buttons.size
         areaBottom.top = areaBottom.bottom - actualButtonSize
         buttonMenu.area.setCenter(areaBottom.left + actualButtonSize / 2, areaBottom.centerY())

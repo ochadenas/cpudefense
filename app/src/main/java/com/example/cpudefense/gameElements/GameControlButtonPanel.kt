@@ -47,12 +47,12 @@ class GameControlButtonPanel(var gameView: GameView)
     {
         actualButtonSize = (CommonView.speedControlButtonSize * gameView.resources.displayMetrics.density.toInt() *
             if (gameView.gameActivity.settings.configUseLargeButtons) 1.6f else 1.0f).toInt()
-        val margin = actualButtonSize / 5   // space between the buttons
+        val margin = actualButtonSize / 5   // horizontal space between the buttons
         if (gameView.gameActivity.settings.fastFastForward)
             buttons.add(button3) // add a "fast fast-forward" button
         buttons.forEach {it.setSize(actualButtonSize)}
         areaRight.right = parentArea.right - margin
-        areaRight.bottom = parentArea.bottom - margin
+        areaRight.bottom = parentArea.bottom - CommonView.controlPanelMargin
         areaRight.left = areaRight.right - 2 * actualButtonSize - margin
         areaRight.top = areaRight.bottom - actualButtonSize
         button1.area.setCenter(areaRight.left + actualButtonSize / 2, areaRight.centerY())
