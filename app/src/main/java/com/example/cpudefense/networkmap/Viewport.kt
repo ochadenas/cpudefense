@@ -30,9 +30,9 @@ class Viewport
     /** used to keep track whether the network elements must be recalculated after scale changes */
     var scaleHasChanged = true
     /** horizontal scale factor applied */
-    private var scaleX = 1.0f
+    var scaleX = 1.0f
     /** vertical scale factor applied */
-    private var scaleY = 1.0f
+    var scaleY = 1.0f
     /** horizontal offset to the origin when moving the viewport around, in screen coordinates. Positive values mean that the network is shifted towards the right. */
     var offsetX = 0
     /** vertical offset to the origin when moving the viewport around, in screen coordinates. Positive values mean that the network is shifted towards the bottom. */
@@ -152,6 +152,14 @@ class Viewport
             it.applyScale(this)
             it.recreateNetworkImage(false)
         }
+    }
+
+    /** converts a point in screen coordinates into grid coordinates */
+    fun screenToGrid(screenPos: Pair<Int, Int>): Coord
+    {
+        val x = screenPos.first - CommonView.viewportMargin - offsetX
+        val y = screenPos.second - CommonView.viewportMargin - offsetY
+        return Coord(x/scaleX, y/scaleY)
     }
 
     /** converts a point in grid coordinates into screen coordinates */

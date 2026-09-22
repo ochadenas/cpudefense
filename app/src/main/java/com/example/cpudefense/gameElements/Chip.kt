@@ -399,8 +399,11 @@ open class Chip(val network: Network, gridX: Int, gridY: Int):
     override fun display(canvas: Canvas, viewport: Viewport) {
         if (chipData.type == ChipType.ENTRY)
             return super.display(canvas, viewport)
-        actualRect?.setCenter(viewport.gridToScreen(posOnGrid))
-        actualRect?.let { displayChip(canvas, it) }
+        actualRect?.let {
+            it.setCenter(viewport.gridToScreen(posOnGrid))
+            displayChip(canvas, it)
+        }
+        displayMoveIcon(canvas, viewport)
         if (theNetwork.commonView.settings().configShowAttackersInRange && chipData.type != ChipType.EMPTY)
             actualRect?.let { displayLineToAttacker(canvas, attackersInRange(), it) }
     }

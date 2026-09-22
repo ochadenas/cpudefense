@@ -89,7 +89,7 @@ abstract class CommonView(context: Context):
 
     var canvas: Canvas? = null
     var effects: Effects? = null
-    /** whether the viewport can be moved by scrolling or scaled by pinching */
+    /** whether the viewport can be moved by scrolling */
     var scrollAllowed = true
 
     enum class ViewState { NORMAL, CHANGING_SIZE }
@@ -120,6 +120,7 @@ abstract class CommonView(context: Context):
     val returnIcon: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.cancel_active)
     val moveLockIcon: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.move_lock)
     val moveUnlockIcon: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.move_unlock)
+    val moveActiveIcon: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.move_unlock)
 
     /** font for displaying "computer messages" */
     lateinit var monoTypeface: Typeface
@@ -314,10 +315,12 @@ abstract class CommonView(context: Context):
         }
         // check the nodes themselves
         for (obj in network.nodes.values)
-            if (obj.onDown(p0))
+            if (!obj.moveEnabled && obj.onDown(p0))
                 return true
         return false
     }
+
+
 
 
 }

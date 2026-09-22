@@ -36,10 +36,15 @@ open class Node(val theNetwork: Network, x: Float, y: Float): GameElement()
     /** used during level setup */
     var connectedLinks = CopyOnWriteArrayList<Link>()
 
+    /** enable or disable manual placement of the node */
+    var moveEnabled = false
+
     open var actualRect: Rect? = null
 
     /** hack: limit list cleanup to improve performance */
     private var ticks = 100
+
+    val paint = Paint()
 
     /** keep track of the current distance to the vehicles in range */
     enum class VehicleDirection { APPROACHING, LEAVING, GONE }
@@ -69,7 +74,6 @@ open class Node(val theNetwork: Network, x: Float, y: Float): GameElement()
     override fun display(canvas: Canvas, viewport: Viewport) {
         actualRect = calculateActualRect(viewport)?.makeSquare()
         actualRect?.let { rect ->
-            val paint = Paint()
             paint.color = resources.getColor(R.color.network_background)
             paint.style = Paint.Style.FILL
             canvas.drawRect(rect, paint)
@@ -78,6 +82,16 @@ open class Node(val theNetwork: Network, x: Float, y: Float): GameElement()
             paint.strokeWidth = 2f
             canvas.drawRect(rect, paint)
         }
+    }
+
+    /** displays the cross symbol on the node */
+    fun displayMoveIcon(canvas: Canvas, viewport: Viewport)
+    {
+        if (!moveEnabled)
+            return
+        paint.alpha = 255
+        calculateActualRect(viewport)?.makeSquare()?.let {
+            canvas.drawBitmap(theNetwork.commonView.moveActiveIcon, null, it, paint) }
     }
 
     /** triggers recalculation of node size */

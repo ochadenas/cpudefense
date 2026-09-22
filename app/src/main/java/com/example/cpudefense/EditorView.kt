@@ -6,19 +6,18 @@ import android.app.Dialog
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.graphics.Canvas
 import android.graphics.Rect
 import android.view.MotionEvent
 import android.view.SurfaceHolder
 import android.view.ViewGroup
 import com.example.cpudefense.activities.EditorActivity
 import com.example.cpudefense.editorElements.EditorPanel
-import com.example.cpudefense.gameElements.Chip
 import com.example.cpudefense.gameElements.CommonButtonPanel
-import com.example.cpudefense.gameElements.CommonControlButton
-import com.example.cpudefense.networkmap.Network
+import com.example.cpudefense.networkmap.Coord
 import com.example.cpudefense.networkmap.Node
 import com.example.cpudefense.utils.Logger
+import com.example.cpudefense.utils.contains
+import com.example.cpudefense.utils.scale
 import kotlin.random.Random
 
 class EditorView(context: Context):
@@ -46,6 +45,7 @@ class EditorView(context: Context):
         super.onSizeChanged(w, h, oldw, oldh)
         viewport.determineScreenSize(this.width, this.height, scaleFactor)
         setComponentSize(w, h)
+        scrollAllowed = false
         background.prepareForEditor()
     }
 
@@ -83,20 +83,44 @@ class EditorView(context: Context):
         return false
     }
 
-    override fun onScroll(p0: MotionEvent?, p1: MotionEvent, dx: Float, dy: Float): Boolean {
+    /** called when the user makes a scrolling gesture.
+     * @param p0 start position (first touch)
+     * @param p1 current position
+     * @param dx horizontal displacement
+     * @param dy vertical displacement
+     */
+    override fun onScroll(p0: MotionEvent?, p1: MotionEvent, dx: Float, dy: Float): Boolean
+    {
+        val touchPosition = Pair(p1.x.toInt(), p1.y.toInt())
+
+        // if a chip is active, move it
+        val nodeToMove =  gameMechanics.currentlyActiveStage?.network?.nodes?.values?.firstOrNull { it.moveEnabled }
+        nodeToMove?.let {
+            val nodeRect = Rect(it.actualRect).scale(2.0f) // touch area is bigger than actual node, to make moving easier
+            if (nodeRect.contains(touchPosition))
+            {
+                val displacement = Coord(dx / viewport.scaleX, dy / viewport.scaleY)
+                val newCoord = viewport.screenToGrid(touchPosition).minus(displacement)
+                it.placeOnGrid(viewport, newCoord.x, newCoord.y)
+                it.calculateActualRect(viewport)
+                it.theNetwork.recreateNetworkImage(false)
+                return true
+            }
+        }
+
+        // move the whole grid
         if (scrollAllowed) synchronized(scrollLock) {
             viewport.addOffset(-dx, -dy)
             gameMechanics.currentlyActiveStage?.network?.recreateNetworkImage(false)
         }
-        return false
+
+        return true
     }
 
     override fun display()
     {
         if (!hasDefinedSize())
             return
-
-
         synchronized(super.displayLock) {
             holder.lockCanvas()?.let()
             {
@@ -120,6 +144,22 @@ class EditorView(context: Context):
         dialog.show()
     }
 
+    fun disableMoveForAllNodes()
+    {
+        gameMechanics.currentlyActiveStage?.network?.let { network ->
+            network.nodes.values.firstOrNull { it.moveEnabled }?.let { node ->
+                node.moveEnabled = false
+                network.recreateNetworkImage(false)
+            }
+        }
+    }
+
+    fun enableMove(node: Node)
+    {
+        node.moveEnabled = false
+        node.theNetwork.recreateNetworkImage(false)
+    }
+
     fun startNewCircuit()
     {
         logger()?.log("Starting new circuit.")
@@ -141,6 +181,8 @@ class EditorView(context: Context):
             var gridPosX = it.network.data.gridSizeX/2
             var gridPosY = it.network.data.gridSizeY/2
             val chip = it.createChip( gridPosX, gridPosY)
+            disableMoveForAllNodes()
+            chip.moveEnabled = true
             while (it.network.nodeTouches(chip as Node))
             {
                 gridPosX += Random.nextInt(-10, 10)
