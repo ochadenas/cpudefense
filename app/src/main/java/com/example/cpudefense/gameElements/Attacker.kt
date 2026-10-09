@@ -217,8 +217,9 @@ open class Attacker(network: Network, representation: Representation = Represent
             }
             Chip.ChipType.SHR ->
             {
-                val factor: UInt = powerOfTwo[power] ?: 1u
-                changeNumberTo((attackerData.number / factor))
+                // val factor: UInt = powerOfTwo[power] ?: 1u
+                // changeNumberTo((attackerData.number / factor))
+                changeNumberTo(attackerData.number shr power)
             }
             Chip.ChipType.MEM ->
             {
@@ -231,9 +232,9 @@ open class Attacker(network: Network, representation: Representation = Represent
             }
             Chip.ChipType.SHL ->
             {
-                val factor: UInt = powerOfTwo[power] ?: 1u
-                changeNumberTo((attackerData.number * factor))
-
+                // val factor: UInt = powerOfTwo[power] ?: 1u
+                // changeNumberTo((attackerData.number * factor))
+                changeNumberTo(attackerData.number shl power)
             }
             Chip.ChipType.NOP ->
             {
