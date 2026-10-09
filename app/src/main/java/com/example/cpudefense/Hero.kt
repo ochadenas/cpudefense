@@ -313,7 +313,7 @@ class Hero(var gameActivity: GameActivity, type: Type)
             Type.CREATE_ADDITIONAL_CHIPS -> upgradeLevel(Type.LIMIT_UNWANTED_CHIPS) >= 3
             Type.CHANGE_TRACKS -> (upgradeLevel(Type.CREATE_ADDITIONAL_CHIPS) >= 3) &&
                     stageIdentifier.isGreaterOrEqualThan(Stage.Identifier(GameMechanics.SERIES_ENDLESS, 1))
-            Type.INCREASE_MAX_HERO_LEVEL -> upgradeLevel(Type.ADDITIONAL_LIVES) >= 5
+            Type.INCREASE_MAX_HERO_LEVEL -> upgradeLevel(Type.ADDITIONAL_LIVES) >= 3
             Type.DECREASE_COIN_STRENGTH ->  upgradeLevel(Type.DECREASE_ATT_STRENGTH) >= 3
             Type.DECREASE_ATT_STRENGTH ->   upgradeLevel(Type.DECREASE_ATT_SPEED) >= 3
             Type.DECREASE_ATT_SPEED ->      upgradeLevel(Type.DECREASE_ATT_FREQ) >= 3
