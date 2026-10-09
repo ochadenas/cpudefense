@@ -886,25 +886,29 @@ open class Chip(val network: Network, gridX: Int, gridY: Int):
             }
             ChipType.SUB -> {
                 alternatives.add(ChipUpgrades.POWERUP)
+                alternatives.add(ChipUpgrades.SELL)
                 if (network.gameMechanics.state.cash > 32) // arbitrarily chosen amount, just don't show up when there is no cash
                     alternatives.add(ChipUpgrades.MAXOUT)
-                alternatives.add(ChipUpgrades.SELL)
             }
             ChipType.SHR -> {
                 alternatives.add(ChipUpgrades.POWERUP)
+                alternatives.add(ChipUpgrades.SELL)
                 if (network.gameMechanics.state.cash > 64)
                     alternatives.add(ChipUpgrades.MAXOUT)
-                alternatives.add(ChipUpgrades.SELL)
             }
             ChipType.ACC -> {
                 if (chipData.upgradeLevel < 3)
                     alternatives.add(ChipUpgrades.POWERUP)
                 alternatives.add(ChipUpgrades.SELL)
+                if (chipData.upgradeLevel == 1) // for ACC, only level 1 --> 3 makes sense
+                    alternatives.add(ChipUpgrades.MAXOUT)
             }
             ChipType.MEM -> {
                 if (chipData.upgradeLevel < theNetwork.gameMechanics.actualMaxInternalChipStorage())
                     alternatives.add(ChipUpgrades.POWERUP)
                 alternatives.add(ChipUpgrades.SELL)
+                if (chipData.upgradeLevel < theNetwork.gameMechanics.actualMaxInternalChipStorage() - 1)
+                    alternatives.add(ChipUpgrades.MAXOUT)
             }
             ChipType.CLK -> {
                 alternatives.add(ChipUpgrades.POWERUP)

@@ -59,7 +59,13 @@ class ChipUpgrade(
         var updateCount = 1
         while (availableCash > powerupPrice(chipToUpgrade.chipData.value, updateCount))
             { updateCount++ }
-        return updateCount-1
+        updateCount -= 1
+        return when (chipToUpgrade.chipData.type)
+        {
+            Chip.ChipType.ACC -> updateCount.coerceAtMost(2)
+            Chip.ChipType.MEM -> updateCount.coerceAtMost(gameMechanics.actualMaxInternalChipStorage())
+            else -> updateCount
+        }
     }
 
     private fun calculatePrice(): Int
