@@ -28,7 +28,7 @@ import com.example.cpudefense.extras.SevenSegmentClock
 import com.example.cpudefense.gameElements.ScoreBoard
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-
+import androidx.core.content.ContextCompat
 
 class ExtrasActivity : AppCompatActivity()
 {
@@ -60,9 +60,9 @@ class ExtrasActivity : AppCompatActivity()
             override fun onPageSelected(position: Int) {
                 dots.forEachIndexed { i, view ->
                     if (i == position) {
-                        view.background = resources.getDrawable(R.drawable.shape_led_red)
+                        view.background = ContextCompat.getDrawable(this@ExtrasActivity, R.drawable.shape_led_red)
                     } else {
-                        view.background = resources.getDrawable(R.drawable.shape_led_off)
+                        view.background = ContextCompat.getDrawable(this@ExtrasActivity, R.drawable.shape_led_off)
                     }
                 }
             }
@@ -153,7 +153,7 @@ class ExtrasBasicFragment : Fragment() {
     lateinit var clock: SevenSegmentClock
     val isActive: Boolean = true
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View
     {
         contentsView = inflater.inflate(R.layout.extras_basic, container, false)
         if (!GameMechanics.enableEditor)

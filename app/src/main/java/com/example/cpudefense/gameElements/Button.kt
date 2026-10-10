@@ -1,12 +1,20 @@
 package com.example.cpudefense.gameElements
 
-import android.graphics.*
-import com.example.cpudefense.CommonView
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
+import android.graphics.Rect
+import android.graphics.Typeface
 import com.example.cpudefense.GameView
 import com.example.cpudefense.effects.Fadable
 import com.example.cpudefense.effects.Fader
-import com.example.cpudefense.utils.*
-import java.util.*
+import com.example.cpudefense.utils.center
+import com.example.cpudefense.utils.displayTextCenteredInRect
+import com.example.cpudefense.utils.inflate
+import com.example.cpudefense.utils.setCenter
+import com.example.cpudefense.utils.setTopLeft
+import java.util.Locale
 
 /** generic button to be used within SarfaceViews. */
 class Button(var gameView: GameView,

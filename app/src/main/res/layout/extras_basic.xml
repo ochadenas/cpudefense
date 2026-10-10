@@ -24,6 +24,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/shape_socket"
+        android:contentDescription="7 segment clock display"
         android:layout_marginTop="32dp"
         android:layout_marginBottom="32dp"
         app:layout_constraintEnd_toEndOf="parent"

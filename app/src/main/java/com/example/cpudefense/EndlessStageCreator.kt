@@ -145,6 +145,7 @@ class EndlessStageCreator(val stage: Stage)
         // solution by copying the whole hash map:
         val nodesWithConnectors: Map<Int, Node> = stage.network.nodes.filter { it.value.connectedLinks.isNotEmpty() }
         stage.network.nodes = nodesWithConnectors as HashMap<Int, Node>
+        @Suppress("UNCHECKED_CAST")
         stage.chips = nodesWithConnectors as HashMap<Int, Chip>
 
         // set mask for the graphical representations of the links

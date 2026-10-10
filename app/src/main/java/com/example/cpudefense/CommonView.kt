@@ -1,4 +1,4 @@
-@file:Suppress("DEPRECATION")
+@file:Suppress("DEPRECATION", "GrazieInspection")
 
 package com.example.cpudefense
 
@@ -17,7 +17,6 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.GestureDetectorCompat
 import com.example.cpudefense.GameMechanics.GamePhase
 import com.example.cpudefense.GameMechanics.LevelMode
-import com.example.cpudefense.utils.Logger
 import com.example.cpudefense.effects.Background
 import com.example.cpudefense.effects.Effects
 import com.example.cpudefense.effects.Fader
@@ -27,7 +26,7 @@ import com.example.cpudefense.gameElements.Chip
 import com.example.cpudefense.networkmap.Coord
 import com.example.cpudefense.networkmap.Network
 import com.example.cpudefense.networkmap.Viewport
-import kotlinx.coroutines.withContext
+import com.example.cpudefense.utils.Logger
 import java.util.concurrent.CopyOnWriteArrayList
 
 @Suppress("RedundantOverride")
@@ -157,7 +156,7 @@ abstract class CommonView(context: Context):
         backgroundColour = context.resources.getColor(R.color.network_background)
     }
 
-    /** use Ubunto Mono font, if available. Otherwise use standard system monospace font */
+    /** use Ubunto Mono font, if available. Otherwise, use standard system monospace font */
     fun setComputerTypeface()
     {
         try

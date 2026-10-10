@@ -1,19 +1,11 @@
 package com.example.cpudefense.gameElements
 
-import android.graphics.Bitmap
 import android.graphics.Canvas
-import android.graphics.Paint
 import android.graphics.Rect
-import android.graphics.Typeface
 import android.view.MotionEvent
 import com.example.cpudefense.CommonView
-import com.example.cpudefense.R
-import com.example.cpudefense.utils.setCenter
-import com.example.cpudefense.utils.setLeft
-import androidx.core.graphics.createBitmap
-import com.example.cpudefense.GameView
 import com.example.cpudefense.Stage
-import com.example.cpudefense.utils.setTop
+import com.example.cpudefense.utils.setCenter
 
 class CommonButtonPanel(var commonView: CommonView)
 /** set of buttons that control the game speed, but also provide additional interaction such

@@ -1,7 +1,6 @@
 package com.example.cpudefense
 
 import android.content.SharedPreferences
-import androidx.core.content.edit
 
 class Settings {
     var configDisablePurchaseDialog: Boolean = false

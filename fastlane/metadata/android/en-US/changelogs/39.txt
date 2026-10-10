@@ -5,7 +5,7 @@ Bug fixes:
 - Attackers that were slowed down by resistors behaved weird in ACC and MEM chips.
 
 Miscellaneous:
-- The slowing effect of resistors now depend on the attacker's value. The stronger the attacker, the more it gets slowed.
+- The slowing effect of resistors now depend on the attacker's value. The stronger the attacker is, the more it gets slowed.
 
 
 

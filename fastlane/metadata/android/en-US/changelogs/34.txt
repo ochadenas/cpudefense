@@ -1,4 +1,4 @@
-IMPORTANT: The "Endless" level series now has its own CryptoCoins and a separate set of heroes. The existing coins have been distributed proportionally. Under certain circumstances, the heroes had to be reset; in this case, the coins have been credited to you and you will have to hire the heroes again.
+IMPORTANT: The "Endless" level series now has its own CryptoCoins and a separate set of heroes. The existing coins have been distributed proportionally. Under certain circumstances, the heroes had to be reset; in this case, the coins have been credited to you, and you will have to hire the heroes again.
 The difficulty of the Endless levels has been drastically reduced in compensation.
 
 New functions:

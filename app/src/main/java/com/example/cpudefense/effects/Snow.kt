@@ -50,7 +50,7 @@ class Snow {
     private var delay = 2  // update only once in <delay> times
     private var flakes = CopyOnWriteArrayList<Flake>()
     private var count = delay
-    var frequency: Float = 0f // used to set the snow flake amount. 0 = none, 1 = max
+    var frequency: Float = 0f // used to set the snowflake amount. 0 = none, 1 = max
     var snowfallArea = Rect()
 
     fun updateGraphicalEffects()

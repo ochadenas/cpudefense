@@ -6,14 +6,13 @@ import android.graphics.Paint
 import android.graphics.Rect
 import android.graphics.Typeface
 import android.view.MotionEvent
+import androidx.core.graphics.createBitmap
 import com.example.cpudefense.CommonView
+import com.example.cpudefense.GameView
 import com.example.cpudefense.R
+import com.example.cpudefense.Stage
 import com.example.cpudefense.utils.setCenter
 import com.example.cpudefense.utils.setLeft
-import androidx.core.graphics.createBitmap
-import com.example.cpudefense.GameView
-import com.example.cpudefense.Stage
-import com.example.cpudefense.utils.setTop
 
 class GameControlButtonPanel(var gameView: GameView)
 /** set of buttons that control the game speed, but also provide additional interaction such

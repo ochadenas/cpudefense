@@ -15,11 +15,13 @@
         android:layout_marginStart="0dp"
         android:layout_marginEnd="0dp"
         android:adjustViewBounds="true"
+        android:contentDescription="CHIP DEFENSE"
         android:paddingTop="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/game_title" />
+        app:srcCompat="@drawable/game_title"
+        tools:ignore="HardcodedText" />
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewPager"

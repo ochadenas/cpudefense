@@ -215,7 +215,7 @@ class Persistency(private val activity: Activity)
     {
         try {
             val key = seriesKey[series]
-            var json = jsonString ?: prefsSaves.getString(key, "none")
+            val json = jsonString ?: prefsSaves.getString(key, "none")
             val data: SerializableLevelSummary =
                 gson.fromJson(json, SerializableLevelSummary::class.java)
             return data.level

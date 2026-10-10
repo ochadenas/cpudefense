@@ -1,8 +1,8 @@
 Nouvelles fonctionnalités :
-- Le zoom s´effectue désormais à l´aide de boutons plutôt qu´en pinçant avec deux doigts.
+- Le zoom s´effectue désormais à l'aide de boutons plutôt qu'en pinçant avec deux doigts.
 - La sélection des niveaux défile automatiquement jusqu´à la fin de la liste.
 
 Corrections de bugs :
 - Ajustements supplémentaires pour le mode « Edge-to-Edge »
 - Correction du bug #249 (espérons-le)
-- Lors de l´importation des sauvegardes, le message concernant les versions différentes était incompréhensible.
+- Lors de l'importation des sauvegardes, le message concernant les versions différentes était incompréhensible.

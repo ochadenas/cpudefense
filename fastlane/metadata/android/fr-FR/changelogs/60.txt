@@ -8,7 +8,7 @@ Nouvelles fonctionnalités :
 - Traduction chinoise ajoutée (merci à lalala_233).
 
 Corrections de bugs :
-- Le défilement a été rendu moins fluide mais plus réactif.
+- Le défilement a été rendu moins fluide, mais plus réactif.
 - Correction d’un bug qui faisait disparaître l’image du CPU après la perte d’une vie.
 
 Divers :
