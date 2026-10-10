@@ -917,10 +917,12 @@ open class Chip(val network: Network, gridX: Int, gridY: Int):
             ChipType.CLK -> {
                 alternatives.add(ChipUpgrades.POWERUP)
                 alternatives.add(ChipUpgrades.SELL)
+                alternatives.add(ChipUpgrades.MAXOUT)
             }
             ChipType.RES -> {
                 alternatives.add(ChipUpgrades.POWERUP)
                 alternatives.add(ChipUpgrades.SELL)
+                alternatives.add(ChipUpgrades.MAXOUT)
             }
             ChipType.SHL -> {
                 alternatives.add(ChipUpgrades.REDUCE)
