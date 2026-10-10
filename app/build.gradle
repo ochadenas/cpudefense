@@ -3,13 +3,13 @@ plugins {
 }
 
 android {
-    compileSdk = 36
+    compileSdk = 37
 
     defaultConfig {
         applicationId 'de.chadenas.cpudefense'
         minSdk = 23
-        targetSdk = 36
-        versionCode = 64
+        targetSdk = 37
+        versionCode = 65
         versionName = "1." + versionCode.toString()
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
