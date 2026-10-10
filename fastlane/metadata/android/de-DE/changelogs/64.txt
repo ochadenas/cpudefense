@@ -1,0 +1,12 @@
+Neue Funktionen:
+- Die Schaltfläche zum Kauf mehrerer Updates ist für alle Arten von Chips verfügbar (Issue #262)
+
+Fehlerbehebungen:
+- Die Bedingungen für Helden wurden korrigiert, sodass Sid Meier wieder verfügbar ist (behebt Issue #267)
+- SHR und SHL hatten oberhalb einer bestimmten Chip-Stärke nur eine begrenzte Wirkung (behebt Issue #265)
+- ACC-Chips werden nach Ablauf der Abklingzeit neu gezeichnet (behebt Issue #264)
+
+Sonstiges:
+- Die Positionen der Schaltflächen für Verkauf und Mehrfachkauf für Chip-Upgrades wurden getauscht (behebt Issue #263)
+- Die Schaltfläche „Scroll-Lock“ wurde an den oberen Bildschirmrand verschoben
+- Die 7-Segment-Anzeige hat ein leicht profiliertes Design bekommen und sieht dadurch etwas hübscher aus.

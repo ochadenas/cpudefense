@@ -1,0 +1,12 @@
+Nouvelles fonctionnalités :
+- Le bouton pour acheter plusieurs améliorations est disponible pour tous les types de puces (problème n°262).
+
+Corrections de bugs :
+- Les conditions requises pour les héros ont été corrigées, Sid Meier est à nouveau disponible (problème n°267).
+- SHR et SHL avaient un effet limité au-delà d'une certaine puissance de puce (problème n°265).
+- Les puces ACC sont redessinées après la fin du temps de recharge (problème n°264).
+
+Divers :
+- Les positions des boutons pour la vente et l'achat multiple pour les améliorations de puces ont été inversées (problème n°263).
+- Le bouton « verrouillage du défilement » a été déplacé en haut de l'écran.
+- L'affichage à 7 segments a désormais un contour profilé, ce qui le rend légèrement plus joli.

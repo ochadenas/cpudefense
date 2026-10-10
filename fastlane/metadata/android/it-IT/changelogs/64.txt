@@ -1,0 +1,12 @@
+Nuove funzionalità:
+- Il pulsante « acquista più potenziamenti » è disponibile per tutti i tipi di chip (problema n.262).
+
+Correzioni di bug:
+- I requisiti degli eroi sono stati corretti, così Sid Meier è di nuovo disponibile (risolve il problema n.267).
+- SHR e SHL avevano un effetto limitato oltre una certa potenza del chip (risolve il problema n.265).
+- I chip ACC vengono ridisegnati al termine del tempo di ricarica (risolve il problema n.264).
+
+Varie:
+- Le posizioni dei pulsanti per vendita e acquisto multiplo per i potenziamenti dei chip sono state scambiate (risolve il problema n.263)
+- Il pulsante « blocco scorrimento » è stato spostato nella parte superiore dello schermo.
+- Il display a 7 segmenti ora ha un contorno profilato, che lo rende un po' più bello.

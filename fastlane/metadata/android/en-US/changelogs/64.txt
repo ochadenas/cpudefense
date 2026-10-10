@@ -1,0 +1,13 @@
+New features:
+- The “buy multiple upgrades” button is available for all types of chips (issue #262)
+
+
+Bug fixes:
+- Hero requirements corrected to make Sid Meier available again (fixes issue #267)
+- SHR and SHL had limited effect above a certain chip strength (fixes issue #265)
+- ACC chips are redrawn after end of cooldown (fixes issue #264)
+
+Miscellaneous:
+- Swapped positions of the SELL and the multi-buy buttons for chip upgrades (fixes issue #263)
+- Moved the “scroll lock” button to the top of the screen
+- The 7 segment display now has a profiled outline, making it look slightly better.
