@@ -307,12 +307,16 @@ open class Chip(val network: Network, gridX: Int, gridY: Int):
         recreateChipBitmap()
     }
 
-    /** callback function when cooldownTimer gets below 0. MEM chips must recreate their bitmap */
+    /** callback function when cooldownTimer gets below 0. MEM and ACC chips must recreate their bitmap */
     private fun onEndCooldown()
     {
         chipData.cooldownTimer = 0f
-        if (chipData.type == ChipType.MEM) recreateChipBitmap() // see above
-
+        when (chipData.type)
+        {
+            ChipType.MEM -> recreateChipBitmap()
+            ChipType.ACC -> recreateChipBitmap()
+            else -> {}
+        }
     }
 
     /** update cycle method, called at regular intervals by the main activity loop.
