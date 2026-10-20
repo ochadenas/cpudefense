@@ -29,6 +29,7 @@ class TimeStamp(val resources: Resources, timeParam: Long? = null) {
     /** output parameter: Tiem as a string */
     var readableTime: String = ""
 
+    /** construct a TimeStamp based on a string like 2026-10-20'T'17:07:00 */
     constructor(resources: Resources, timeString: String) : this(resources) {
         timestamp = inputFormat.parse(timeString) ?: throw (IllegalArgumentException())
     }
@@ -39,5 +40,9 @@ class TimeStamp(val resources: Resources, timeParam: Long? = null) {
             .format(timestamp)
         readableTime = DateFormat.getTimeInstance(DateFormat.SHORT, resources.configuration.locale)
             .format(timestamp)
+    }
+
+    companion object {
+
     }
 }

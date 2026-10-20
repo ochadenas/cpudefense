@@ -16,6 +16,7 @@ import com.example.cpudefense.extras.Achievement
 import com.example.cpudefense.extras.Achievements
 import com.example.cpudefense.extras.ActivityWithAchievements
 import com.example.cpudefense.extras.PlayerAchievements
+import com.example.cpudefense.utils.TimeStamp
 import com.google.gson.JsonObject
 import com.google.gson.JsonPrimitive
 import java.text.SimpleDateFormat
@@ -401,8 +402,7 @@ class Persistency(private val activity: Activity)
 
     fun  prepareGameExport(): String
     {
-        val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ", Locale.getDefault())
-        dateFormat.timeZone = TimeZone.getTimeZone("UTC") // Zeitzone anpassen
+        val dateFormat = TimeStamp(activity.resources).inputFormat
 
         val gameData = SaveFileInfo(
                 gameVersion = BuildConfig.VERSION_NAME,

@@ -429,4 +429,8 @@ ACC 的优势在于速度极快。"
     <string name="settings_zoom">显示缩放按钮</string>
     <string name="circuit_editor">Circuit Editor</string>
     <string name="achievements_title">Achievements</string>
+    <string name="achievements_summary">Gained %d of %d achievements (%.1f%%)</string>
+    <string name="achievement_obtained_on">Obtained on %1$s at %2$s</string>
+    <string name="achievements_summary_1">Gained the first achievement out of %1$d.</string>
+    <string name="achievements_summary_0">There are %1$s.totalCount to gain.</string>
 </resources>

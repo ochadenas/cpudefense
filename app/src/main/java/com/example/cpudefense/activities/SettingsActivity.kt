@@ -25,6 +25,7 @@ import com.example.cpudefense.GameMechanics
 import com.example.cpudefense.Persistency
 import com.example.cpudefense.R
 import com.example.cpudefense.Settings
+import com.example.cpudefense.utils.TimeStamp
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -249,23 +250,14 @@ class SettingsActivity : AppCompatActivity() {
                 }
             }
         }
-        // convert timestamp into readable form.
-        // This uses JDK functions from API 23, however timestamp handling is quite a mess
-        // in Java. Could be changed and modernized using Kotlin, in later versions.
-        /** this is the format used in our save files. We also assume that the time stamp is in UTC */
-        val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault())
-        inputFormat.timeZone = TimeZone.getTimeZone("UTC")
+        // extract export date and time
         var timeInfoString = ""
-        var timestamp: Date? = null
-        try { gameInfo?.let { timestamp = inputFormat.parse((it.exportDate)) } ?: throw(IllegalArgumentException())}
+        try { gameInfo?.let {
+            val timestamp = TimeStamp(resources, it.exportDate).apply { convertToReadable() }
+            timeInfoString = getString(R.string.message_timestamp).format(timestamp.readableDate, timestamp.readableTime)
+        }}
         catch (_: Exception ) { timeInfoString = getString(R.string.warning_no_timestamp) }
-        timestamp?.let {
-            val readableDate = DateFormat.getDateInstance(DateFormat.LONG, resources.configuration.locale)
-                .format(it)
-            val readableTime = DateFormat.getTimeInstance(DateFormat.SHORT, resources.configuration.locale)
-                .format(it)
-            timeInfoString = getString(R.string.message_timestamp).format(readableDate, readableTime)
-        }
+
         // extract info about max level
         var maxProgressString = ""
         gameInfo?.let { info ->
