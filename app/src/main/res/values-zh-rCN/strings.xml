@@ -428,4 +428,5 @@ ACC 的优势在于速度极快。"
     <string name="total_information_gained">"Total information: %1$s "</string>
     <string name="settings_zoom">显示缩放按钮</string>
     <string name="circuit_editor">Circuit Editor</string>
+    <string name="achievements_title">Achievements</string>
 </resources>

@@ -13,6 +13,8 @@ import com.example.cpudefense.activities.GameActivity
 import com.example.cpudefense.effects.Explosion
 import com.example.cpudefense.effects.Fadable
 import com.example.cpudefense.effects.Fader
+import com.example.cpudefense.extras.AchievementType
+import com.example.cpudefense.extras.PlayerAchievements
 import com.example.cpudefense.gameElements.Button
 import com.example.cpudefense.gameElements.GameElement
 import com.example.cpudefense.gameElements.Typewriter
@@ -123,6 +125,19 @@ class Intermezzo(var gameView: GameView): GameElement(), Fadable {
                 gameView.gameActivity.setLastPlayedStage(level)
             }
         }
+        // add notification for new achievements, if any
+        val achievements = gameView.gameActivity.achievements.processPending(gameView.gameActivity)
+        when (achievements.size)
+        {
+            1 -> {lines.add("You gained an achievement:")}
+            2 -> {lines.add("You gained ${achievements.size} new achievements:")}
+            else -> {}
+        }
+        achievements.forEach {
+            lines.add(PlayerAchievements.getText(it.type))
+        }
+
+        // display everything that has been assembled so far
         typewriter = Typewriter(gameView, myArea, lines) { onTypewriterDone() }
     }
 
@@ -378,6 +393,7 @@ class Intermezzo(var gameView: GameView): GameElement(), Fadable {
         else {
             type = Type.GAME_LOST
             alpha = 255
+            gameView.gameActivity.achievements.grant(AchievementType.LEVEL_LOST)
             displayTypewriterText()
         }
         gameView.gameActivity.setGameActivityStatus(GameActivity.GameActivityStatus.BETWEEN_LEVELS)

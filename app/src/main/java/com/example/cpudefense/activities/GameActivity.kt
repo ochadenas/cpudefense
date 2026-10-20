@@ -22,7 +22,6 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updateLayoutParams
-import com.example.cpudefense.CpuReached
 import com.example.cpudefense.GameMechanics
 import com.example.cpudefense.GameMechanics.GamePhase
 import com.example.cpudefense.GameMechanics.GameSpeed
@@ -32,6 +31,7 @@ import com.example.cpudefense.GameMechanics.Params.SERIES_NORMAL
 import com.example.cpudefense.GameMechanics.Params.SERIES_TURBO
 import com.example.cpudefense.GameMechanics.Params.forceHeroMigration
 import com.example.cpudefense.CommonView
+import com.example.cpudefense.CpuReached
 import com.example.cpudefense.GameView
 import com.example.cpudefense.Persistency
 import com.example.cpudefense.PurseOfCoins
@@ -41,6 +41,8 @@ import com.example.cpudefense.Stage
 import com.example.cpudefense.Stage.Identifier
 import com.example.cpudefense.StageCatalog
 import com.example.cpudefense.TemperatureDamageException
+import com.example.cpudefense.extras.ActivityWithAchievements
+import com.example.cpudefense.extras.PlayerAchievements
 import com.example.cpudefense.utils.Logger
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
@@ -48,7 +50,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.milliseconds
 
-class GameActivity : AppCompatActivity() {
+class GameActivity : ActivityWithAchievements, AppCompatActivity() {
     var logger: Logger? = null
     lateinit var gameMechanics: GameMechanics
     lateinit var gameView: GameView
@@ -88,6 +90,8 @@ class GameActivity : AppCompatActivity() {
     var levelThumbnailEndless = HashMap<Int, Bitmap?>()
 
     val settings = Settings()
+
+    override var achievements = PlayerAchievements()
 
     /** if onCreate is _not_ called, this stays "true".
      * The other possibility to make it "true" is to use the button "Resume Game". */
@@ -141,6 +145,9 @@ class GameActivity : AppCompatActivity() {
         var restartGame = intent.getBooleanExtra("RESET_PROGRESS", false)
         var restartEndless = intent.getBooleanExtra("RESET_ENDLESS", false)
         val restoreGame = intent.getBooleanExtra("LOAD_PROGRESS", false)
+
+        // initialize the achievements
+        achievements // TODO
 
         var startOnLevel = when
         {

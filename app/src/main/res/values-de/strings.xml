@@ -352,4 +352,9 @@ Das Verschieben ist gleichbedeutend mit einer Division durch 2."
     <string name="total_information_gained">Gesamte Information: %1$s</string>
     <string name="settings_zoom">Zoom-Schaltflächen anzeigen</string>
     <string name="circuit_editor">Schaltkreis-Editor</string>
+    <string name="achievements_title">Erfolge</string>
+    <string name="achievements_summary">Insgesamt %d von %d Erfolgen erzielt (%.1f %%)</string>
+    <string name="achievement_obtained_on">"Erhalten am %1$s um %2$s  "</string>
+    <string name="achievements_summary_1">Ersten Erfolg von insgesamt %1$d erhalten.</string>
+    <string name="achievements_summary_0">Es gibt %1$d Erfolge zu erhalten.</string>
 </resources>

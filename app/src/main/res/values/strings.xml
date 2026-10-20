@@ -433,4 +433,9 @@ The programming language Pascal is named after him."</string>
     <string name="editor_load">Load</string>
     <string name="editor_help">Help</string>
     <string name="editor_save">Save and Exit</string>
+    <string name="achievements_title">Achievements</string>
+    <string name="achievements_summary">Gained %d of %d achievements (%.1f%%)</string>
+    <string name="achievement_obtained_on">Obtained on %1$s at %2$s</string>
+    <string name="achievements_summary_1">Gained the first achievement out of %1$d.</string>
+    <string name="achievements_summary_0">There are %1$s.totalCount to gain.</string>
 </resources>

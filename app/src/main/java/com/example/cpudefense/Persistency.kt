@@ -12,6 +12,10 @@ import com.google.gson.Gson
 import com.google.gson.JsonParser
 import java.io.ByteArrayOutputStream
 import androidx.core.content.edit
+import com.example.cpudefense.extras.Achievement
+import com.example.cpudefense.extras.Achievements
+import com.example.cpudefense.extras.ActivityWithAchievements
+import com.example.cpudefense.extras.PlayerAchievements
 import com.google.gson.JsonObject
 import com.google.gson.JsonPrimitive
 import java.text.SimpleDateFormat
@@ -34,6 +38,7 @@ class Persistency(private val activity: Activity)
         const val filename_thumbnails  = "thumbnails"
         const val filename_saves       = "saves"
         const val filename_state       = "state"
+        const val filename_achievements= "achievements"
     }
 
     // define preferences files
@@ -51,6 +56,8 @@ class Persistency(private val activity: Activity)
     private val prefsSaves: SharedPreferences = activity.getSharedPreferences(filename_saves, AppCompatActivity.MODE_PRIVATE)
     /** file for the state within the current level, such as attacker and chip positions, number of waves, etc. */
     private val prefsState: SharedPreferences = activity.getSharedPreferences(filename_state, AppCompatActivity.MODE_PRIVATE)
+    /** file for the player achievements. Kept separate from all the others */
+    private val prefsAchievements: SharedPreferences = activity.getSharedPreferences(filename_achievements, AppCompatActivity.MODE_PRIVATE)
 
     // designators of the level data in the prefs
     private val seriesKey = hashMapOf(
@@ -176,6 +183,14 @@ class Persistency(private val activity: Activity)
             val data = SerializableHolidays(gameMechanics.holidays)
             val json = gson.toJson(data)
             putString("holidays", json)
+        }
+    }
+
+    fun saveAchievements() {
+        prefsAchievements.edit {
+            val data = (activity as GameActivity).achievements.confirmed
+            val json = gson.toJson(data)
+            putString("achievements", json)
         }
     }
 
@@ -326,7 +341,6 @@ class Persistency(private val activity: Activity)
         }
     }
 
-
     private fun loadHolidays(gameMechanics: GameMechanics, jsonString: String? = null)
     {
         val json = jsonString ?: prefsSaves.getString("holidays", "none")
@@ -336,6 +350,16 @@ class Persistency(private val activity: Activity)
             gameMechanics.holidays = data.period
         }
     }
+
+    fun loadAchievements()
+    {
+        val json = prefsAchievements.getString("achievements", "none")
+        if (json != "none" ) {
+            val data = gson.fromJson(json, Achievements::class.java)
+            (activity as ActivityWithAchievements).achievements.confirmed = data
+        }
+    }
+
 
     fun saveLevelStructure(series: Int, data: HashMap<Int, Stage.Data>)
             /** saves the structure data for all 'endless' levels to structure.xml.

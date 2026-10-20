@@ -7,10 +7,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
@@ -22,19 +24,25 @@ import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.example.cpudefense.GameMechanics
+import com.example.cpudefense.Persistency
 import com.example.cpudefense.R
+import com.example.cpudefense.extras.ActivityWithAchievements
 import com.example.cpudefense.extras.MemoryMapView
+import com.example.cpudefense.extras.PlayerAchievements
 import com.example.cpudefense.extras.SevenSegmentClock
 import com.example.cpudefense.gameElements.ScoreBoard
+import com.example.cpudefense.utils.TimeStamp
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import androidx.core.content.ContextCompat
 
-class ExtrasActivity : AppCompatActivity()
+class ExtrasActivity : ActivityWithAchievements, AppCompatActivity()
 {
     val aboutFragment = AboutFragment()
     val basicFragment = ExtrasBasicFragment()
     val statisticsFragment = LevelStatisticsFragment()
+    val achievementsFragment = AchievementsFragment()
+
+    override var achievements = PlayerAchievements()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,16 +54,17 @@ class ExtrasActivity : AppCompatActivity()
         }
         findViewById<ViewPager2>(R.id.viewPager)?.let{
             it.adapter = object : FragmentStateAdapter(this) {
-                override fun getItemCount() = 3
+                override fun getItemCount() = 4
                 override fun createFragment(p: Int) = when (p) {
                     0 -> statisticsFragment
-                    2 -> aboutFragment
+                    3 -> aboutFragment
+                    1 -> achievementsFragment
                     else -> basicFragment
                 }
             }
-            it.setCurrentItem(1, false)
+            it.setCurrentItem(2, false)
         }
-        val dots = listOf(findViewById<View>(R.id.led1), findViewById(R.id.led2), findViewById(R.id.led3))
+        val dots = listOf(findViewById<View>(R.id.led1), findViewById(R.id.led2), findViewById(R.id.led3), findViewById(R.id.led4))
         findViewById<ViewPager2>(R.id.viewPager).registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 dots.forEachIndexed { i, view ->
@@ -143,6 +152,50 @@ class AboutFragment : Fragment() {
             val info = activity.packageManager.getPackageInfo(activity.packageName, PackageManager.GET_ACTIVITIES)
             val versionView: TextView = rootView.findViewById(R.id.fragment_about_version)
             versionView.text = getString(R.string.about_version).format(info.versionName)
+        }
+        return view
+    }
+}
+
+/** builds the page that lists all the achievements gained so far.
+ * Sets the summary information and fills a list with the achievements read from file.
+ */
+class AchievementsFragment : Fragment() {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?
+    {
+        val view = inflater.inflate(R.layout.fragment_achievements, container, false)
+        view?.let{ rootView ->
+            val activity = requireActivity()
+            // get the achievements data
+            Persistency(activity).loadAchievements()
+            val achievements = (activity as ActivityWithAchievements).achievements
+            rootView.findViewById<TextView>(R.id.achievements_summary)?.apply {
+                when (achievements.obtainedCount)
+                {
+                    0 -> text = context.getString(R.string.achievements_summary_0, achievements.totalCount)
+                    1 -> text = context.getString(R.string.achievements_summary_1, achievements.totalCount)
+                    else ->  text = activity.resources.getString(R.string.achievements_summary).format(
+                            achievements.obtainedCount, achievements.totalCount, achievements.obtainedPercentage)
+                }
+            }
+            rootView.findViewById<LinearLayout>(R.id.achievements_list)?.apply {
+                achievements.confirmed.achievements.values.forEach { entry ->
+                    TextView(context).apply {
+                        text = PlayerAchievements.getText(entry.type)
+                        setTextColor(resources.getColor(R.color.text_blue, null))
+                        textSize = (resources.getDimension(R.dimen.extras_text_size))
+                    }.also { addView(it) }
+                    TextView(context).apply {
+                        entry.granted?.let {
+                            val t = TimeStamp(resources, it).apply { convertToReadable() }
+                            text = context.getString(R.string.achievement_obtained_on, t.readableDate, t.readableTime)
+                        }
+                        setTextColor(resources.getColor(R.color.text_blue, null))
+                        textSize = (resources.getDimension(R.dimen.extras_details_size))
+                    }.also { addView(it) }
+                }
+            }
+
         }
         return view
     }
