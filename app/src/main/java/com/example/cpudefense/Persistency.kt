@@ -13,7 +13,7 @@ import com.google.gson.JsonParser
 import java.io.ByteArrayOutputStream
 import androidx.core.content.edit
 import com.example.cpudefense.extras.Achievement
-import com.example.cpudefense.extras.Achievements
+import com.example.cpudefense.extras.AchievementType
 import com.example.cpudefense.extras.ActivityWithAchievements
 import com.example.cpudefense.extras.PlayerAchievements
 import com.example.cpudefense.utils.TimeStamp
@@ -356,11 +356,11 @@ class Persistency(private val activity: Activity)
     {
         val json = prefsAchievements.getString("achievements", "none")
         if (json != "none" ) {
-            val data = gson.fromJson(json, Achievements::class.java)
+            val data: HashMap<AchievementType, Achievement> =
+                gson.fromJson(json, PlayerAchievements.listType)
             (activity as ActivityWithAchievements).achievements.confirmed = data
         }
     }
-
 
     fun saveLevelStructure(series: Int, data: HashMap<Int, Stage.Data>)
             /** saves the structure data for all 'endless' levels to structure.xml.
@@ -420,6 +420,7 @@ class Persistency(private val activity: Activity)
         exportData["state"] = prefsState.all
         exportData["saves"] = prefsSaves.all
         exportData["structure"] = prefsStructure.all
+        exportData["achievements"] = prefsAchievements.all
         return gson.toJson(exportData)
     }
 
