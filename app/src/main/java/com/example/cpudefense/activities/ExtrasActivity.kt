@@ -181,7 +181,7 @@ class AchievementsFragment : Fragment() {
             rootView.findViewById<LinearLayout>(R.id.achievements_list)?.apply {
                 achievements.confirmed.achievements.values.forEach { entry ->
                     TextView(context).apply {
-                        text = PlayerAchievements.getText(entry.type)
+                        text = PlayerAchievements.getText(this.resources, entry.type)
                         setTextColor(resources.getColor(R.color.text_blue, null))
                         textSize = (resources.getDimension(R.dimen.extras_text_size))
                     }.also { addView(it) }

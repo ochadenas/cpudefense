@@ -22,6 +22,8 @@ import com.example.cpudefense.effects.Effects
 import com.example.cpudefense.effects.Fader
 import com.example.cpudefense.effects.Flipper
 import com.example.cpudefense.effects.Mover
+import com.example.cpudefense.extras.ActivityWithAchievements
+import com.example.cpudefense.extras.PlayerAchievements
 import com.example.cpudefense.gameElements.Chip
 import com.example.cpudefense.networkmap.Coord
 import com.example.cpudefense.networkmap.Network
@@ -85,6 +87,7 @@ abstract class CommonView(context: Context):
     }
     val theActivity = context as Activity
     abstract val gameMechanics: GameMechanics
+    val achievements: PlayerAchievements? = (context as? ActivityWithAchievements)?.achievements
 
     var canvas: Canvas? = null
     var effects: Effects? = null

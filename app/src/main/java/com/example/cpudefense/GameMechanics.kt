@@ -2,6 +2,8 @@
 
 package com.example.cpudefense
 
+import com.example.cpudefense.extras.AchievementType
+import com.example.cpudefense.extras.PlayerAchievements
 import com.example.cpudefense.gameElements.Chip
 import com.example.cpudefense.gameElements.Wave
 import com.example.cpudefense.utils.Logger
@@ -33,8 +35,6 @@ class GameMechanics {
         const val enableLogging = true
         /** feature toggle */
         const val enableEditor = true
-        /** feature toggle */
-        const val enableAchievements = true
         // end of debug options
 
         /** minimum log level (if logging is enabled) */
@@ -113,7 +113,6 @@ class GameMechanics {
             else
                 return Season.DEFAULT
         }
-
     }
 
     data class StateData(
@@ -326,6 +325,7 @@ class GameMechanics {
         if (currentPurse().canAfford(price) && state.lives<state.currentMaxLives)
         {
             currentPurse().spend(price, PurseOfCoins.ExpenditureType.LIVES)
+            currentlyActiveStage?.stageView?.achievements?.grant(AchievementType.PURCHASE_LIFE)
             state.livesRestored++
             state.lives++
         }

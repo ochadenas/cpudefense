@@ -147,7 +147,7 @@ class GameActivity : ActivityWithAchievements, AppCompatActivity() {
         val restoreGame = intent.getBooleanExtra("LOAD_PROGRESS", false)
 
         // initialize the achievements
-        achievements // TODO
+        Persistency(this).loadAchievements()
 
         var startOnLevel = when
         {

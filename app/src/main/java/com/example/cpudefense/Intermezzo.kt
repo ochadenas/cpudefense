@@ -129,12 +129,12 @@ class Intermezzo(var gameView: GameView): GameElement(), Fadable {
         val achievements = gameView.gameActivity.achievements.processPending(gameView.gameActivity)
         when (achievements.size)
         {
-            1 -> {lines.add("You gained an achievement:")}
-            2 -> {lines.add("You gained ${achievements.size} new achievements:")}
+            1 -> {lines.add(resources.getString(R.string.achievement_gained))}
+            2 -> {lines.add(resources.getString(R.string.achievements_gained, achievements.size))}
             else -> {}
         }
         achievements.forEach {
-            lines.add(PlayerAchievements.getText(it.type))
+            lines.add(PlayerAchievements.getText(resources, it.type))
         }
 
         // display everything that has been assembled so far

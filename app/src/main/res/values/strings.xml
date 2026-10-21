@@ -438,4 +438,11 @@ The programming language Pascal is named after him."</string>
     <string name="achievement_obtained_on">Obtained on %1$s at %2$s</string>
     <string name="achievements_summary_1">Gained the first achievement out of %1$d.</string>
     <string name="achievements_summary_0">There are %1$s.totalCount to gain.</string>
+    <string name="achievement_gained">You gained an achievement:</string>
+    <string name="achievements_gained">You gained %1$d new achievements:</string>
+    <string name="achieve_"></string>
+    <string name="achieve_LEVEL_LOST">Lost your first level</string>
+    <string name="achieve_EASTER">Found an Easter egg</string>
+    <string name="achieve_CHRISTMAS">Played on a Christmas tree</string>
+    <string name="achieve_PURCHASE_LIFE">Purchased an additional life</string>
 </resources>

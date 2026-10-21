@@ -1,5 +1,7 @@
 package com.example.cpudefense
 
+import com.example.cpudefense.extras.AchievementType
+import com.example.cpudefense.extras.ActivityWithAchievements
 import com.example.cpudefense.gameElements.*
 import com.example.cpudefense.networkmap.Link
 import kotlin.math.sqrt
@@ -1904,6 +1906,7 @@ class StageCatalog
             {
                 when (special) {
                     GameMechanics.Params.Season.EASTER -> {
+                        stageView.achievements?.grant(AchievementType.EASTER)
                         initializeNetwork(50, 50)
 
                         createChip(23, 45, 0, type = Chip.ChipType.ENTRY)
@@ -1954,6 +1957,7 @@ class StageCatalog
                     }
 
                     GameMechanics.Params.Season.CHRISTMAS -> {
+                        stageView.achievements?.grant(AchievementType.CHRISTMAS)
                         initializeNetwork(50, 50)
 
                         createChip(25, 48, 0, type = Chip.ChipType.ENTRY)

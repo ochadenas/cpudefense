@@ -1,17 +1,12 @@
 package com.example.cpudefense.extras
 
+import android.content.res.Resources
 import com.example.cpudefense.Persistency
+import com.example.cpudefense.R
 import com.example.cpudefense.activities.GameActivity
-import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.descriptors.PrimitiveKind
-import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
-import kotlinx.serialization.encoding.Decoder
-import kotlinx.serialization.encoding.Encoder
-import java.lang.System.currentTimeMillis
-import java.time.Instant
 
-enum class AchievementType { UNDEFINED, LEVEL_WON, LEVEL_LOST }
+enum class AchievementType { UNDEFINED, LEVEL_LOST, EASTER, CHRISTMAS, PURCHASE_LIFE }
 
 @Serializable
 data class Achievement (
@@ -62,18 +57,24 @@ class PlayerAchievements
 
     /** total number of possible achievements */
     val totalCount = AchievementType.entries.size - 1 /* subtract 1 for UNDEFINED */
+    /** number of achievements gained */
     val obtainedCount: Int
         get() { return confirmed.achievements.values.filter { it.fraction >= 1f }.size }
+    /** fraction of obtained achievements (of all available) in percent */
     val obtainedPercentage: Float
         get() { return obtainedCount * 100f / totalCount }
 
     companion object {
-        fun getText(type: AchievementType): String
+        /** retrieves the description of the achievement of given type */
+        fun getText(res: Resources, type: AchievementType): String
         {
             return when (type)
             {
-                AchievementType.LEVEL_LOST -> "Lost your first level"
-                else -> ""
+                AchievementType.UNDEFINED -> "Undefined Achievement, should not happen"
+                AchievementType.LEVEL_LOST -> res.getString(R.string.achieve_LEVEL_LOST)
+                AchievementType.EASTER -> res.getString(R.string.achieve_EASTER)
+                AchievementType.CHRISTMAS -> res.getString(R.string.achieve_CHRISTMAS)
+                AchievementType.PURCHASE_LIFE -> res.getString(R.string.achieve_PURCHASE_LIFE)
             }
         }
     }
