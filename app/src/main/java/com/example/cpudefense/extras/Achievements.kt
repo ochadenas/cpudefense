@@ -7,7 +7,7 @@ import com.example.cpudefense.activities.GameActivity
 import com.google.gson.reflect.TypeToken
 import kotlinx.serialization.Serializable
 
-enum class AchievementType { UNDEFINED, LEVEL_LOST, EASTER, CHRISTMAS, PURCHASE_LIFE }
+enum class AchievementType { UNDEFINED, LEVEL_LOST, EASTER, CHRISTMAS, PURCHASE_LIFE, SPIN,  }
 
 @Serializable
 data class Achievement (
@@ -83,6 +83,7 @@ class PlayerAchievements
                 AchievementType.EASTER -> res.getString(R.string.achieve_EASTER)
                 AchievementType.CHRISTMAS -> res.getString(R.string.achieve_CHRISTMAS)
                 AchievementType.PURCHASE_LIFE -> res.getString(R.string.achieve_PURCHASE_LIFE)
+                AchievementType.SPIN -> "Made a coin flip"
             }
         }
     }

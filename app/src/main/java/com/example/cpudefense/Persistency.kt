@@ -188,7 +188,7 @@ class Persistency(private val activity: Activity)
     }
 
     fun saveAchievements() {
-        prefsAchievements.edit {
+        prefsSaves.edit {
             val data = (activity as GameActivity).achievements.confirmed
             val json = gson.toJson(data)
             putString("achievements", json)
@@ -352,14 +352,21 @@ class Persistency(private val activity: Activity)
         }
     }
 
-    fun loadAchievements()
+    /** gets the list of obtained achievements from the save file.
+     * This function is also called from ExtrasActivity, where gameMechanics is not available.
+     */
+    fun loadAchievements(jsonString: String? = null)
     {
-        val json = prefsAchievements.getString("achievements", "none")
+        val json = jsonString ?: prefsSaves.getString("achievements", "none")
         if (json != "none" ) {
             val data: HashMap<AchievementType, Achievement> =
                 gson.fromJson(json, PlayerAchievements.listType)
+            data.remove<AchievementType?, Achievement>(null) // should not happen, but better make sure
             (activity as ActivityWithAchievements).achievements.confirmed = data
         }
+        else
+            (activity as ActivityWithAchievements).achievements.confirmed = hashMapOf()  // empty the achievements list
+
     }
 
     fun saveLevelStructure(series: Int, data: HashMap<Int, Stage.Data>)
@@ -402,6 +409,7 @@ class Persistency(private val activity: Activity)
 
     fun  prepareGameExport(): String
     {
+        // use our "standard" date/time format
         val dateFormat = TimeStamp(activity.resources).inputFormat
 
         val gameData = SaveFileInfo(
@@ -420,7 +428,6 @@ class Persistency(private val activity: Activity)
         exportData["state"] = prefsState.all
         exportData["saves"] = prefsSaves.all
         exportData["structure"] = prefsStructure.all
-        exportData["achievements"] = prefsAchievements.all
         return gson.toJson(exportData)
     }
 
@@ -475,7 +482,8 @@ class Persistency(private val activity: Activity)
                     loadCoins(gameMechanics, jsonString) }
                 jsonAsString(it.asJsonObject.get("holidays"))?.let { jsonString ->
                     loadHolidays(gameMechanics, jsonString) }
-            }
+                jsonAsString(it.asJsonObject.get("achievements"))?.let { jsonString ->
+                    loadAchievements(jsonString) }            }
             jsonObject.get("structure")?.let {
                 loadLevelStructure(GameMechanics.SERIES_NORMAL, it.asJsonObject?.get(seriesKey[GameMechanics.SERIES_ENDLESS])?.asString)
             }

@@ -17,6 +17,8 @@ import com.example.cpudefense.effects.Fadable
 import com.example.cpudefense.effects.Fader
 import com.example.cpudefense.effects.Flippable
 import com.example.cpudefense.effects.Flipper
+import com.example.cpudefense.extras.AchievementType
+import com.example.cpudefense.extras.ActivityWithAchievements
 import com.example.cpudefense.gameElements.Button
 import com.example.cpudefense.gameElements.GameElement
 import com.example.cpudefense.networkmap.Viewport
@@ -213,8 +215,10 @@ class Marketplace(val gameView: GameView): GameElement()
             for (coin in coins)
             {
                 if (coin.myArea.contains(event.x.toInt(), event.y.toInt())) {
-                    if (!coin.isCurrentlyFlipping)
+                    if (!coin.isCurrentlyFlipping) {
                         Flipper(gameView, coin, Flipper.Type.HORIZONTAL)
+                        gameView.gameActivity.achievements.grant(AchievementType.SPIN)
+                    }
                     return true
                 }
             }
