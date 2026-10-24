@@ -132,10 +132,10 @@ class WelcomeActivity : AppCompatActivity() {
     {
         val ledView = findViewById<LinearLayout>(R.id.led_block)
         val led = listOf(
-            ledView.findViewById<View>(R.id.led4),
-            ledView.findViewById<View>(R.id.led3),
-            ledView.findViewById<View>(R.id.led2),
-            ledView.findViewById<View>(R.id.led1))
+                ledView.findViewById(R.id.led4),
+                ledView.findViewById(R.id.led3),
+                ledView.findViewById(R.id.led2),
+                ledView.findViewById<View>(R.id.led1))
         led.forEachIndexed { i, view ->
             if (i<numberOfLedsLit)
                 view.setBackgroundColor(ledColor)
@@ -214,7 +214,7 @@ class WelcomeActivity : AppCompatActivity() {
 
         }
         // set up the "extras" button
-        val buttonExtras: Button? = findViewById(R.id.infoButton)
+        val buttonExtras: Button? = findViewById(R.id.extrasButton)
         buttonExtras?. let { button ->
             button.text = getString(R.string.extras_title)
             button.setOnClickListener { displayExtrasDialog(it) }
@@ -273,11 +273,6 @@ class WelcomeActivity : AppCompatActivity() {
         intent.putExtra("MAXSERIES", maxLevel.series)
         startActivity(intent)
         setupButtons()
-    }
-
-    fun displayAboutDialog(@Suppress("UNUSED_PARAMETER") v: View) {
-        val intent = Intent(this, AboutActivity::class.java)
-        startActivity(intent)
     }
 
     fun displayExtrasDialog(@Suppress("UNUSED_PARAMETER") v: View) {

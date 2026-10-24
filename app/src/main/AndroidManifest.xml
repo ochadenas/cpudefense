@@ -32,10 +32,6 @@
             android:screenOrientation="portrait"
             android:exported="false" />
         <activity
-            android:name=".activities.AboutActivity"
-            android:screenOrientation="portrait"
-            android:exported="false" />
-        <activity
             android:name=".activities.ExtrasActivity"
             android:screenOrientation="portrait"
             android:exported="false" />
