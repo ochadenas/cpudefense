@@ -5,6 +5,7 @@ import android.view.MotionEvent
 import com.example.cpudefense.CpuReached
 import com.example.cpudefense.GameMechanics
 import com.example.cpudefense.GameView
+import com.example.cpudefense.extras.AchievementType
 import com.example.cpudefense.networkmap.Network
 import com.example.cpudefense.networkmap.Viewport
 import com.example.cpudefense.utils.makeSquare
@@ -38,6 +39,8 @@ class Cpu(network: Network, gridX: Int, gridY: Int): Chip(network, gridX, gridY)
         if (attackers.isNotEmpty())
         {
             animationCount = maxAnimationCount
+            if (attackers[0] is Cryptocoin) // obtain achievement, however
+                network.commonView.achievements?.grant(AchievementType.LOSE_BY_COIN)
             attackers[0].remove()
             scoreHit()
         }

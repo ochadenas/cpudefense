@@ -26,6 +26,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.example.cpudefense.GameMechanics
 import com.example.cpudefense.Persistency
 import com.example.cpudefense.R
+import com.example.cpudefense.extras.AchievementType
 import com.example.cpudefense.extras.ActivityWithAchievements
 import com.example.cpudefense.extras.MemoryMapView
 import com.example.cpudefense.extras.PlayerAchievements
@@ -37,11 +38,6 @@ import kotlinx.coroutines.launch
 
 class ExtrasActivity : ActivityWithAchievements, AppCompatActivity()
 {
-    val aboutFragment = AboutFragment()
-    val basicFragment = ExtrasBasicFragment()
-    val statisticsFragment = LevelStatisticsFragment()
-    val achievementsFragment = AchievementsFragment()
-
     override var achievements = PlayerAchievements()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,11 +51,13 @@ class ExtrasActivity : ActivityWithAchievements, AppCompatActivity()
         findViewById<ViewPager2>(R.id.viewPager)?.let{
             it.adapter = object : FragmentStateAdapter(this) {
                 override fun getItemCount() = 4
-                override fun createFragment(p: Int) = when (p) {
-                    0 -> statisticsFragment
-                    3 -> aboutFragment
-                    1 -> achievementsFragment
-                    else -> basicFragment
+                override fun createFragment(p: Int): Fragment {
+                    return when (p) {
+                        0 -> LevelStatisticsFragment()
+                        3 -> AboutFragment()
+                        1 -> AchievementsFragment()
+                        else -> ExtrasBasicFragment()
+                    }
                 }
             }
             it.setCurrentItem(2, false)
@@ -93,6 +91,7 @@ class ExtrasActivity : ActivityWithAchievements, AppCompatActivity()
     {
         val browserIntent = Intent(Intent.ACTION_VIEW, "https://github.com/ochadenas/cpudefense/wiki/Chip-Defense".toUri())
         try {
+            grantAchievement(AchievementType.WIKI)
             Toast.makeText(this, resources.getString(R.string.message_open_in_browser), Toast.LENGTH_SHORT).show()
             startActivity(browserIntent)
         }
@@ -101,6 +100,7 @@ class ExtrasActivity : ActivityWithAchievements, AppCompatActivity()
 
     fun releaseNotes(@Suppress("UNUSED_PARAMETER") v: View)
     {
+        grantAchievement(AchievementType.VERSIONINFO)
         val url = resources.getString(R.string.url_releasenotes_base).format(resources.getString(R.string.url_releasenotes_localized))
         Toast.makeText(this, resources.getString(R.string.message_open_in_browser), Toast.LENGTH_SHORT).show()
         val browserIntent = Intent(Intent.ACTION_VIEW, url.toUri())
@@ -118,6 +118,21 @@ class ExtrasActivity : ActivityWithAchievements, AppCompatActivity()
         }
         catch (_: Exception) {}
     }
+
+    fun grantAchievement(type: AchievementType)
+    {
+        achievements.let {
+            it.grant(type)
+            val newAchievements = it.processPending(this)
+            when (newAchievements.size)
+            {
+                1 -> { Toast.makeText(this, R.string.achievement_gained_toast, Toast.LENGTH_SHORT). show() }
+                2 -> { Toast.makeText(this, R.string.achievements_gained_toast, Toast.LENGTH_SHORT). show() }
+                else -> {}
+            }
+        }
+    }
+
 }
 
 class LevelStatisticsFragment : Fragment() {
@@ -132,6 +147,11 @@ class LevelStatisticsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        memoryMapView?.let { setCaption(it.totalCashSum.toInt()) }
     }
 
     fun setCaption(cash: Int)
@@ -161,44 +181,54 @@ class AboutFragment : Fragment() {
  * Sets the summary information and fills a list with the achievements read from file.
  */
 class AchievementsFragment : Fragment() {
+    var rootView: View? = null
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?
     {
-        val view = inflater.inflate(R.layout.fragment_achievements, container, false)
-        view?.let{ rootView ->
+        rootView = inflater.inflate(R.layout.fragment_achievements, container, false)
+        rootView?.let{ rootView ->
             val activity = requireActivity()
             // get the achievements data
             Persistency(activity).loadAchievements()
-            val achievements = (activity as ActivityWithAchievements).achievements
-            rootView.findViewById<TextView>(R.id.achievements_summary)?.apply {
-                when (achievements.obtainedCount)
-                {
-                    0 -> text = context.getString(R.string.achievements_summary_0, achievements.totalCount)
-                    1 -> text = context.getString(R.string.achievements_summary_1, achievements.totalCount)
-                    else ->  text = activity.resources.getString(R.string.achievements_summary).format(
-                            achievements.obtainedCount, achievements.totalCount, achievements.obtainedPercentage)
-                }
-            }
-            rootView.findViewById<LinearLayout>(R.id.achievements_list)?.apply {
-                achievements.confirmed.values.forEach { entry ->
-                    TextView(context).apply {
-                        text = PlayerAchievements.getText(this.resources, entry.type)
-                        setTextColor(resources.getColor(R.color.text_blue, null))
-                        textSize = (resources.getDimension(R.dimen.extras_text_size))
-                    }.also { addView(it) }
-                    TextView(context).apply {
-                        entry.granted?.let {
-                            val t = TimeStamp(resources, it).apply { convertToReadable() }
-                            text = context.getString(R.string.achievement_obtained_on, t.readableDate, t.readableTime)
-                        }
-                        setTextColor(resources.getColor(R.color.text_blue, null))
-                        textSize = (resources.getDimension(R.dimen.extras_details_size))
-                    }.also { addView(it) }
-                }
-            }
-
         }
-        return view
+        return rootView
     }
+
+    override fun onResume() {
+        super.onResume()
+        fillAchievementList()
+    }
+
+    fun fillAchievementList() {
+        val achievements = (activity as ActivityWithAchievements).achievements
+        rootView?.findViewById<TextView>(R.id.achievements_summary)?.apply {
+            when (achievements.obtainedCount)
+            {
+                0 -> text = context.getString(R.string.achievements_summary_0, achievements.totalCount)
+                1 -> text = context.getString(R.string.achievements_summary_1, achievements.totalCount)
+                else ->  text = requireActivity().resources.getString(R.string.achievements_summary).format(
+                        achievements.obtainedCount, achievements.totalCount, achievements.obtainedPercentage)
+            }
+        }
+        rootView?.findViewById<LinearLayout>(R.id.achievements_list)?.apply {
+            removeAllViews()
+            achievements.confirmed.values.sortedByDescending { it.granted }.forEach { entry ->
+                TextView(context).apply {
+                    text = PlayerAchievements.getText(this.resources, entry.type)
+                    setTextColor(resources.getColor(R.color.text_blue, null))
+                    textSize = (resources.getDimension(R.dimen.extras_text_size))
+                }.also { addView(it) }
+                TextView(context).apply {
+                    entry.granted?.let {
+                        val t = TimeStamp(resources, it).apply { convertToReadable() }
+                        text = context.getString(R.string.achievement_obtained_on, t.readableDate, t.readableTime)
+                    }
+                    setTextColor(resources.getColor(R.color.text_blue, null))
+                    textSize = (resources.getDimension(R.dimen.extras_details_size))
+                }.also { addView(it) }
+            }
+        }
+    }
+
 }
 
 class ExtrasBasicFragment : Fragment() {
@@ -231,7 +261,7 @@ class ExtrasBasicFragment : Fragment() {
         val job = lifecycleScope.launch {
             while (isActive) {
                 updateClock()
-                delay(900)
+                delay(450)
             }
         }
 

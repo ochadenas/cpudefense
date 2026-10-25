@@ -41,6 +41,7 @@ import com.example.cpudefense.Stage
 import com.example.cpudefense.Stage.Identifier
 import com.example.cpudefense.StageCatalog
 import com.example.cpudefense.TemperatureDamageException
+import com.example.cpudefense.extras.AchievementType
 import com.example.cpudefense.extras.ActivityWithAchievements
 import com.example.cpudefense.extras.PlayerAchievements
 import com.example.cpudefense.utils.Logger
@@ -492,6 +493,16 @@ class GameActivity : ActivityWithAchievements, AppCompatActivity() {
                                                     coinsAvailable = stage.summary.coinsMaxAvailable - gameMechanics.state.coinsInLevel,
                                                     totalCash = stage.summary.totalCash + gameMechanics.state.cash,
         )
+        /** bits in a byte */
+        val byte = 8
+        val kibyte = 1024 * byte
+        when {
+            gameMechanics.state.cash >= 8*byte -> { achievements.grant(AchievementType.INFO_8B)}
+            gameMechanics.state.cash >= 64*byte -> { achievements.grant(AchievementType.INFO_64B)}
+            gameMechanics.state.cash >= 1*kibyte -> { achievements.grant(AchievementType.INFO_1KIB)}
+            gameMechanics.state.cash >= 4*kibyte -> { achievements.grant(AchievementType.INFO_4KIB)}
+            gameMechanics.state.cash >= 1000*byte -> { achievements.grant(AchievementType.INFO_1KB)}
+        }
         val currentStageIdent = stage.data.ident
         gameMechanics.currentStageIdent = currentStageIdent
         val nextStage = currentStageIdent.next()
@@ -601,6 +612,7 @@ class GameActivity : ActivityWithAchievements, AppCompatActivity() {
             catch (_: TemperatureDamageException)
             {
                 removeOneLife()
+                achievements.grant(AchievementType.LOSE_BY_HEAT)
                 runOnUiThread {
                     val toast: Toast = Toast.makeText(this, resources.getString(R.string.overheat), Toast.LENGTH_SHORT)
                     toast.show()

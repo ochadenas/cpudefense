@@ -1,13 +1,17 @@
 package com.example.cpudefense.extras
 
 import android.content.res.Resources
+import androidx.appcompat.app.AppCompatActivity
 import com.example.cpudefense.Persistency
 import com.example.cpudefense.R
-import com.example.cpudefense.activities.GameActivity
 import com.google.gson.reflect.TypeToken
 import kotlinx.serialization.Serializable
 
-enum class AchievementType { UNDEFINED, LEVEL_LOST, EASTER, CHRISTMAS, PURCHASE_LIFE, SPIN,  }
+enum class AchievementType { UNDEFINED, LEVEL_LOST, LOSE_BY_COIN, LOSE_BY_HEAT,
+    EASTER, CHRISTMAS, PURCHASE_LIFE, SPIN, WIKI, VERSIONINFO,
+    INFO_8B, INFO_64B, INFO_1KB, INFO_1KIB, INFO_4KIB,
+    TOTAL_64KIB, TOTAL_1MB, TOTAL_1MIB, TOTAL_8MIB, TOTAL_32MIB, TOTAL_100MB, TOTAL_128MIB, TOTAL_1GB, TOTAL_1GIB,
+    BANK_0, BANK_4, BANK_8, BANK_MIB, BANK_GIB }
 
 @Serializable
 data class Achievement (
@@ -20,13 +24,6 @@ data class Achievement (
     var granted: Long? = null
 )
 
-/*
-data class Achievements (
-    val achievements: HashMap<AchievementType, Achievement> = hashMapOf()
-)
-
-
- */
 interface ActivityWithAchievements {
     var achievements: PlayerAchievements
 }
@@ -47,7 +44,7 @@ class PlayerAchievements
         }
     }
 
-    fun processPending(gameActivity: GameActivity): List<Achievement>
+    fun processPending(activity: AppCompatActivity): List<Achievement>
     {
         val processed = pending.values.filter { it.fraction >= 1.0f }
         processed.forEach {
@@ -55,7 +52,7 @@ class PlayerAchievements
             confirmed[it.type] = it
             pending.remove(it.type)
         }
-        Persistency(gameActivity).saveAchievements()
+        Persistency(activity).saveAchievements()
         return processed
     }
 
@@ -83,7 +80,30 @@ class PlayerAchievements
                 AchievementType.EASTER -> res.getString(R.string.achieve_EASTER)
                 AchievementType.CHRISTMAS -> res.getString(R.string.achieve_CHRISTMAS)
                 AchievementType.PURCHASE_LIFE -> res.getString(R.string.achieve_PURCHASE_LIFE)
-                AchievementType.SPIN -> "Made a coin flip"
+                AchievementType.SPIN -> res.getString(R.string.achieve_SPIN)
+                AchievementType.WIKI -> res.getString(R.string.achieve_WIKI)
+                AchievementType.VERSIONINFO -> res.getString(R.string.achieve_VERSIONINFO)
+                AchievementType.BANK_0 -> res.getString(R.string.achieve_BANK_0)
+                AchievementType.BANK_4 -> res.getString(R.string.achieve_BANK_4)
+                AchievementType.BANK_8 -> res.getString(R.string.achieve_BANK_8)
+                AchievementType.BANK_MIB -> res.getString(R.string.achieve_BANK_MIB)
+                AchievementType.BANK_GIB -> res.getString(R.string.achieve_BANK_GIB)
+                AchievementType.LOSE_BY_COIN -> res.getString(R.string.achieve_LOSE_BY_COIN)
+                AchievementType.LOSE_BY_HEAT -> res.getString(R.string.achieve_LOSE_BY_HEAT)
+                AchievementType.INFO_8B -> res.getString(R.string.achieve_INFO_8)
+                AchievementType.INFO_64B -> res.getString(R.string.achieve_INFO_64B)
+                AchievementType.INFO_1KIB -> res.getString(R.string.achieve_INFO_1KIB)
+                AchievementType.INFO_4KIB -> res.getString(R.string.achieve_INFO_4KIB)
+                AchievementType.INFO_1KB -> res.getString(R.string.achieve_INFO_1KB)
+                AchievementType.TOTAL_64KIB -> res.getString(R.string.achieve_TOTAL_64KIB)
+                AchievementType.TOTAL_1MB -> res.getString(R.string.achieve_TOTAL_1MB)
+                AchievementType.TOTAL_1MIB -> res.getString(R.string.achieve_TOTAL_1MIB)
+                AchievementType.TOTAL_8MIB -> res.getString(R.string.achieve_TOTAL_8MIB)
+                AchievementType.TOTAL_32MIB -> res.getString(R.string.achieve_TOTAL_32MIB)
+                AchievementType.TOTAL_100MB -> res.getString(R.string.achieve_TOTAL_100MB)
+                AchievementType.TOTAL_128MIB -> res.getString(R.string.achieve_TOTAL_128MIB)
+                AchievementType.TOTAL_1GB -> res.getString(R.string.achieve_TOTAL_1GB)
+                AchievementType.TOTAL_1GIB -> res.getString(R.string.achieve_TOTAL_1GIB)
             }
         }
     }

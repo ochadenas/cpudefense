@@ -68,14 +68,12 @@ class ScoreBoard(val gameView: GameView): GameElement()
         paint.strokeWidth = scoreboardBorderWidth
         // canvas.drawRect(area, paint)
         canvas.drawLine(area.left.toFloat(), area.top.toFloat(), area.right.toFloat(), area.top.toFloat(), paint)
-        if (currentStage.series > 1 || currentStage.number > 2)
+        if (currentStage.isGreaterThan(ShowInformationOnStageIdent))
             information.display(canvas)
         waves.display(canvas)
         lives.display(canvas)
         coins.display(canvas)
-        if (currentStage.series > 1 || currentStage.number > 27)
-            temperature.display(canvas)
-        if (currentStage.series > 1)
+        if (currentStage.isGreaterThan(ShowTemperautreOnStageIdent))
             temperature.display(canvas)
         debugStatusLine?.display(canvas)
     }
@@ -466,6 +464,11 @@ class ScoreBoard(val gameView: GameView): GameElement()
     }
 
     companion object {
+        /** first level where to show the temperature display */
+        val ShowTemperautreOnStageIdent = Stage.Identifier(1, 27)
+        /** first level where to show the information display */
+        val ShowInformationOnStageIdent = Stage.Identifier(1, 2)
+
         fun informationToString(number: Int?): String
                 /** makes a readable string out of a big number.
                  * @param number Information in bits

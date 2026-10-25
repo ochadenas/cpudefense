@@ -324,7 +324,7 @@
     <string name="circuit_editor">Éditeur de circuits</string>
     <string name="achievements_title">Succès</string>
     <string name="achievements_summary">\n\n%d succès obtenus sur %d (%.1f %%)\n</string>
-    <string name="achievement_obtained_on">Obtenu le %1$s à %2$s</string>
+    <string name="achievement_obtained_on">Obtenu le %1$s à %2$s.</string>
     <string name="achievements_summary_1">Premier succès obtenu sur un total de %1$d.</string>
     <string name="achievements_summary_0">"Il y en a %1$d à obtenir.  "</string>
 </resources>

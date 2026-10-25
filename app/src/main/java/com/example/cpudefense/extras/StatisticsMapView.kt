@@ -76,7 +76,7 @@ class StatisticsMapView @JvmOverloads constructor(context: Context, attrs: Attri
         totalCashSum = stageDataList.sumOf { it.amount }
         scaleFactor = totalCashSum / (width * height).toFloat()
         listOfTiles.clear()
-        activity.statisticsFragment.setCaption(totalCashSum)
+        // activity.statisticsFragment?.setCaption(totalCashSum)
     }
 
     fun createTiles()

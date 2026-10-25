@@ -324,7 +324,7 @@
     <string name="circuit_editor">Editor di circuiti</string>
     <string name="achievements_title">Obiettivi</string>
     <string name="achievements_summary">%d obiettivi ottenuti su %d (%.1f %%)</string>
-    <string name="achievement_obtained_on">Ottenuto il %1$s alle %2$s</string>
+    <string name="achievement_obtained_on">Ottenuto il %1$s alle %2$s.</string>
     <string name="achievements_summary_1">Primo obiettivo ottenuto su un totale di %1$d.</string>
     <string name="achievements_summary_0">Ce ne sono %1$d da ottenere.</string>
 </resources>

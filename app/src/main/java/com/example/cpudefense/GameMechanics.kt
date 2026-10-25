@@ -385,7 +385,7 @@ class GameMechanics {
     {
         if (state.heat == 0.0)
             return
-        state.heat *= temperatureCooldownFactor  // reduce heat. TODO: consider global speed factor
+        state.heat *= temperatureCooldownFactor  // reduce heat
         val overheat = state.heat - (temperatureLimit- baseTemperature)*heatPerDegree
         if ((overheat > 0) && (Random.nextDouble() < (overheat * 0.00001)))  // chance of damaging the CPU
         {

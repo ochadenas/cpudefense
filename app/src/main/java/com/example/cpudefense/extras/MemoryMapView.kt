@@ -23,12 +23,16 @@ class MemoryMapView @JvmOverloads constructor(context: Context, attrs: Attribute
     AppCompatImageView(context, attrs, defStyleAttr)
 {
         companion object {
-        const val ONE_KIB = 1024
-        const val ONE_MIB = ONE_KIB*ONE_KIB
-        const val ONE_GIB = ONE_MIB*ONE_KIB
-        val allowedSizes = listOf(256, ONE_KIB, 4*ONE_KIB, 16*ONE_KIB, 64*ONE_KIB, 256*ONE_KIB,
-                                  ONE_MIB, 4*ONE_MIB, 16*ONE_MIB, 64*ONE_MIB, 256*ONE_MIB,
-                                  ONE_GIB, 4*ONE_GIB, 16*ONE_GIB, 64*ONE_GIB, 256*ONE_GIB, 1024*ONE_GIB)
+            const val ONE_KIB = 1024
+            const val ONE_MIB = ONE_KIB*ONE_KIB
+            const val ONE_GIB = ONE_MIB*ONE_KIB
+            const val ONE_KB = 1000
+            const val ONE_MB = 1000 * ONE_KB
+            const val ONE_GB = 1000 * ONE_MB
+
+            val allowedSizes = listOf(256, ONE_KIB, 4*ONE_KIB, 16*ONE_KIB, 64*ONE_KIB, 256*ONE_KIB,
+                                      ONE_MIB, 4*ONE_MIB, 16*ONE_MIB, 64*ONE_MIB, 256*ONE_MIB,
+                                      ONE_GIB, 4*ONE_GIB, 16*ONE_GIB, 64*ONE_GIB, 256*ONE_GIB, 1024*ONE_GIB)
     }
 
     var summaryPerNormalLevel  = HashMap<Int, Stage.Summary>()
@@ -37,7 +41,7 @@ class MemoryMapView @JvmOverloads constructor(context: Context, attrs: Attribute
     var stageDataList: List<StageData> = listOf()
     var memoryBankList: MutableList<MemoryBank> = mutableListOf()
     /** total amount of cash, represented by the whole map */
-    var totalCashSum = 0
+    var totalCashSum: Long = 0
     /** the amount of cash that is represented by one pixel */
     var scaleFactor = 1.0f
     val paint = Paint().apply {
@@ -77,14 +81,24 @@ class MemoryMapView @JvmOverloads constructor(context: Context, attrs: Attribute
         summaryPerEndlessLevel = persistency.loadStageSummaries(GameMechanics.SERIES_ENDLESS)
         stageDataList =
             summaryPerNormalLevel.entries.map { (key, summary) ->
-                StageData(series = GameMechanics.SERIES_NORMAL, number = key, amount = summary.totalCash) } +
+                StageData(series = GameMechanics.SERIES_NORMAL, number = key, amount = summary.totalCash.toLong()) } +
             summaryPerTurboLevel.entries.map { (key, summary) ->
-                StageData(series = GameMechanics.SERIES_TURBO, number = key, amount = summary.totalCash) } +
+                StageData(series = GameMechanics.SERIES_TURBO, number = key, amount = summary.totalCash.toLong()) } +
             summaryPerEndlessLevel.entries.map { (key, summary) ->
-                    StageData(series = GameMechanics.SERIES_ENDLESS, number = key, amount = summary.totalCash) }
+                    StageData(series = GameMechanics.SERIES_ENDLESS, number = key, amount = summary.totalCash.toLong()) }
         totalCashSum = stageDataList.sumOf { it.amount }
         scaleFactor = totalCashSum / (width * height).toFloat()
-        activity.statisticsFragment.setCaption(totalCashSum)
+        when {  // order does matter here! Greater values first
+            totalCashSum >= ONE_GIB -> grantAchievement(AchievementType.TOTAL_1GIB)
+            totalCashSum >= ONE_GB -> grantAchievement(AchievementType.TOTAL_1GB)
+            totalCashSum >= 128*ONE_MIB -> grantAchievement(AchievementType.TOTAL_128MIB)
+            totalCashSum >= 100*ONE_MB -> grantAchievement(AchievementType.TOTAL_100MB)
+            totalCashSum >= 32*ONE_MIB -> grantAchievement(AchievementType.TOTAL_32MIB)
+            totalCashSum >= 8*ONE_MIB -> grantAchievement(AchievementType.TOTAL_8MIB)
+            totalCashSum >= ONE_MIB -> grantAchievement(AchievementType.TOTAL_1MIB)
+            totalCashSum >= ONE_MB -> grantAchievement(AchievementType.TOTAL_1MB)
+            totalCashSum >= 64*ONE_KIB -> grantAchievement(AchievementType.TOTAL_64KIB)
+        }
     }
 
     fun createBanks()
@@ -92,9 +106,9 @@ class MemoryMapView @JvmOverloads constructor(context: Context, attrs: Attribute
         // determine appriopriate number and size of the banks to hold the info
         val maxNumberOfBanks = 4
         val infoInBytes = totalCashSum/8
-        val requestedBytesPerBank = infoInBytes / maxNumberOfBanks
+        val requestedBytesPerBank = (infoInBytes / maxNumberOfBanks).toInt()
         val actualSizeOfBanks =  allowedSizes.firstOrNull { it >= requestedBytesPerBank } ?: allowedSizes.last()
-        var actualNumberOfBanks = infoInBytes / actualSizeOfBanks + 1
+        var actualNumberOfBanks = infoInBytes.toInt() / actualSizeOfBanks + 1
         if (actualNumberOfBanks == 3) actualNumberOfBanks = 4 // avoid "ugly" numbers
         if (actualNumberOfBanks in (5..7)) actualNumberOfBanks = 8 // avoid "ugly" numbers
         val bankWidth = width/actualNumberOfBanks
@@ -105,7 +119,16 @@ class MemoryMapView @JvmOverloads constructor(context: Context, attrs: Attribute
             memoryBankList.add(memoryBank)
         }
         createMemTiles()
+        // grant possible achievements
+        grantAchievement(AchievementType.BANK_0)
+        if (actualNumberOfBanks == 4) grantAchievement(AchievementType.BANK_4)
+        if (actualNumberOfBanks == 8) grantAchievement(AchievementType.BANK_8)
+        if (actualSizeOfBanks >= ONE_MIB) grantAchievement(AchievementType.BANK_MIB)
+        if (actualSizeOfBanks >= ONE_GIB) grantAchievement(AchievementType.BANK_GIB)
     }
+
+    private fun grantAchievement(type: AchievementType)
+    { (context as? ExtrasActivity)?.grantAchievement(type) }
 
     fun createMemTiles()
     {
@@ -115,7 +138,7 @@ class MemoryMapView @JvmOverloads constructor(context: Context, attrs: Attribute
             memoryBankList[index].listOfTiles.clear()
             stageDataList.forEach {
                 val color = colorOfStage(it.series, it.number)
-                val remaining = memoryBankList[index].createMemTile(it.amount/8, color)
+                val remaining = memoryBankList[index].createMemTile(it.amount.toInt()/8, color)
                 if (remaining>0) { // start a new bank
                     index++
                     memoryBankList[index].createMemTile(remaining, color)
@@ -291,7 +314,7 @@ class MemoryMapView @JvmOverloads constructor(context: Context, attrs: Attribute
             var series: Int = 1,
             var number: Int = 1,
             /** info gained in this stage (in bits) */
-            var amount: Int = 0,
+            var amount: Long = 0L,
     )
 
 }

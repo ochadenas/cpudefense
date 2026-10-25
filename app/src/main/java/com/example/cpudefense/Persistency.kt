@@ -189,7 +189,7 @@ class Persistency(private val activity: Activity)
 
     fun saveAchievements() {
         prefsSaves.edit {
-            val data = (activity as GameActivity).achievements.confirmed
+            val data = (activity as ActivityWithAchievements).achievements.confirmed
             val json = gson.toJson(data)
             putString("achievements", json)
         }
