@@ -50,7 +50,6 @@
         android:background="@drawable/hp_key"
         android:clickable="true"
         android:focusable="true"
-        android:onClick="displayAboutDialog"
         android:text="@string/button_info"
         android:textColor="@color/white"
         android:textStyle="bold"
