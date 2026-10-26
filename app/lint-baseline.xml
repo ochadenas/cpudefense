@@ -2,17 +2,6 @@
 <issues format="6" by="lint 9.4.0" type="baseline" client="gradle" dependencies="false" name="AGP (9.4.0)" variant="all" version="9.4.0">
 
     <issue
-        id="OnClick"
-        message="Corresponding method handler &apos;`public void displayAboutDialog(android.view.View)`&apos; not found"
-        errorLine1="        android:onClick=&quot;displayAboutDialog&quot;"
-        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/layout/activity_welcome.xml"
-            line="53"
-            column="9"/>
-    </issue>
-
-    <issue
         id="InconsistentArrays"
         message="Array `fun_fact` has an inconsistent number of items (41 in `values-zh-rCN/strings.xml`, 42 in `values-de/strings.xml`)"
         errorLine1="    &lt;string-array name=&quot;fun_fact&quot;>"
@@ -5168,17 +5157,6 @@
         <location
             file="src/main/res/values/strings.xml"
             line="445"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.achieve_EASTER` appears to be unused"
-        errorLine1="    &lt;string name=&quot;achieve_EASTER&quot;>Find an Easter egg&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="447"
             column="13"/>
     </issue>
 
