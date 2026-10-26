@@ -15,7 +15,6 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.SwitchCompat
 import androidx.core.content.edit
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
@@ -25,16 +24,17 @@ import com.example.cpudefense.GameMechanics
 import com.example.cpudefense.Persistency
 import com.example.cpudefense.R
 import com.example.cpudefense.Settings
+import com.example.cpudefense.databinding.ActivitySettingsBinding
+import com.example.cpudefense.databinding.LayoutDialogExportgameBinding
+import com.example.cpudefense.databinding.LayoutDialogResetProgressBinding
 import com.example.cpudefense.utils.TimeStamp
-import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
-import java.util.TimeZone
 
 
 class SettingsActivity : AppCompatActivity() {
-    var settings = Settings()
+    private var settings = Settings()
     private var isEndlessAvailable = false
     private var createExportLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult(), ::doExport)
@@ -42,13 +42,19 @@ class SettingsActivity : AppCompatActivity() {
         registerForActivityResult(ActivityResultContracts.OpenDocument(), ::parseImportFile)
     var packageInfo: PackageInfo? = null
 
+    private lateinit var settingsBinding: ActivitySettingsBinding
+    private lateinit var layoutDialogExportgameBinding: LayoutDialogExportgameBinding
+    private lateinit var layoutDialogResetProgressBinding: LayoutDialogResetProgressBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // supportRequestWindowFeature(Window.FEATURE_NO_TITLE)  // method of AppCompatActivity
         WindowCompat.enableEdgeToEdge(window)
         if (intent.getIntExtra("MAXSERIES", 1) >= GameMechanics.SERIES_ENDLESS)
             isEndlessAvailable = true
-        setContentView(R.layout.activity_settings)
+        settingsBinding = ActivitySettingsBinding.inflate(layoutInflater)
+        val view = settingsBinding.root
+        setContentView(view)
         findViewById<View>(android.R.id.content).let {
             ViewCompat.setOnApplyWindowInsetsListener(it, ::handleInsets)
         }
@@ -61,7 +67,7 @@ class SettingsActivity : AppCompatActivity() {
              */
     {
         val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
-        findViewById<TextView>(R.id.actions_title_view)
+        settingsBinding.actionsTitleView
             .updateLayoutParams<ViewGroup.MarginLayoutParams> { topMargin = insets.top }
         return WindowInsetsCompat.CONSUMED
     }
@@ -69,16 +75,16 @@ class SettingsActivity : AppCompatActivity() {
     private fun loadPrefs() {
         val prefs = getSharedPreferences(Persistency.filename_settings, MODE_PRIVATE)
         settings.loadFromFile(prefs)
-        findViewById<SwitchCompat>(R.id.switch_disable_purchase_dialog)?.isChecked = settings.configDisablePurchaseDialog
-        findViewById<SwitchCompat>(R.id.switch_disable_background)?.isChecked = settings.configDisableBackground
-        findViewById<SwitchCompat>(R.id.switch_show_atts_in_range)?.isChecked = settings.configShowAttackersInRange
-        findViewById<SwitchCompat>(R.id.switch_use_large_buttons)?.isChecked = settings.configUseLargeButtons
-        findViewById<SwitchCompat>(R.id.switch_show_framerate)?.isChecked = settings.showFrameRate
-        findViewById<SwitchCompat>(R.id.switch_fast_fast_forward)?.isChecked = settings.fastFastForward
-        findViewById<SwitchCompat>(R.id.switch_zoom)?.isChecked = settings.zoom
-        findViewById<SwitchCompat>(R.id.switch_keep_levels)?.isChecked = settings.keepLevels
-        findViewById<SwitchCompat>(R.id.switch_use_hex)?.isChecked = settings.showLevelsInHex
-        findViewById<SwitchCompat>(R.id.switch_activate_log)?.let {
+        settingsBinding.switchDisablePurchaseDialog.isChecked = settings.configDisablePurchaseDialog
+        settingsBinding.switchDisableBackground.isChecked = settings.configDisableBackground
+        settingsBinding.switchShowAttsInRange.isChecked = settings.configShowAttackersInRange
+        settingsBinding.switchUseLargeButtons.isChecked = settings.configUseLargeButtons
+        settingsBinding.switchShowFramerate.isChecked = settings.showFrameRate
+        settingsBinding.switchFastFastForward.isChecked = settings.fastFastForward
+        settingsBinding.switchZoom.isChecked = settings.zoom
+        settingsBinding.switchKeepLevels.isChecked = settings.keepLevels
+        settingsBinding.switchUseHex.isChecked = settings.showLevelsInHex
+        settingsBinding.switchActivateLog.let {
             it.isChecked = settings.activateLogging
             if (GameMechanics.enableLogging) {
                 it.visibility = VISIBLE
@@ -89,25 +95,16 @@ class SettingsActivity : AppCompatActivity() {
 
     @Suppress("UNUSED_PARAMETER")
     fun savePrefs(v: View) {
-        settings.configDisablePurchaseDialog =
-            findViewById<SwitchCompat>(R.id.switch_disable_purchase_dialog)?.isChecked ?: false
-        settings.configDisableBackground =
-            findViewById<SwitchCompat>(R.id.switch_disable_background)?.isChecked ?: false
-        settings.configShowAttackersInRange =
-            findViewById<SwitchCompat>(R.id.switch_show_atts_in_range)?.isChecked ?: false
-        settings.configUseLargeButtons =
-            findViewById<SwitchCompat>(R.id.switch_use_large_buttons)?.isChecked ?: false
-        settings.showFrameRate =
-            findViewById<SwitchCompat>(R.id.switch_show_framerate)?.isChecked ?: false
-        settings.fastFastForward =
-            findViewById<SwitchCompat>(R.id.switch_fast_fast_forward)?.isChecked ?: false
-        settings.zoom =
-            findViewById<SwitchCompat>(R.id.switch_zoom)?.isChecked ?: false
-        settings.keepLevels = findViewById<SwitchCompat>(R.id.switch_keep_levels)?.isChecked ?: true
-        settings.showLevelsInHex =
-            findViewById<SwitchCompat>(R.id.switch_use_hex)?.isChecked ?: false
-        settings.activateLogging =
-            findViewById<SwitchCompat>(R.id.switch_activate_log)?.isChecked ?: false
+        settings.configDisablePurchaseDialog = settingsBinding.switchDisablePurchaseDialog.isChecked
+        settings.configDisableBackground = settingsBinding.switchDisableBackground.isChecked
+        settings.configShowAttackersInRange = settingsBinding.switchShowAttsInRange.isChecked
+        settings.configUseLargeButtons = settingsBinding.switchUseLargeButtons.isChecked
+        settings.showFrameRate = settingsBinding.switchShowFramerate.isChecked
+        settings.fastFastForward = settingsBinding.switchFastFastForward.isChecked
+        settings.zoom = settingsBinding.switchZoom.isChecked
+        settings.keepLevels = settingsBinding.switchKeepLevels.isChecked
+        settings.showLevelsInHex = settingsBinding.switchUseHex.isChecked
+        settings.activateLogging = settingsBinding.switchActivateLog.isChecked
         val prefs = getSharedPreferences(Persistency.filename_settings, MODE_PRIVATE)
         settings.saveToFile(prefs)
     }
@@ -118,15 +115,16 @@ class SettingsActivity : AppCompatActivity() {
 
     fun startNewGame(@Suppress("UNUSED_PARAMETER") v: View) {
         val dialog = Dialog(this)
-        dialog.setContentView(R.layout.layout_dialog_reset_progress)
+        layoutDialogResetProgressBinding = LayoutDialogResetProgressBinding.inflate(layoutInflater)
+        dialog.setContentView(layoutDialogResetProgressBinding.root)
         dialog.window?.setLayout(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT
         )
         dialog.setCancelable(true)
-        dialog.findViewById<TextView>(R.id.question).text =
+        layoutDialogResetProgressBinding.question.text =
             resources.getText(R.string.query_restart_game)
-        dialog.findViewById<TextView>(R.id.button1)?.let {
+        layoutDialogResetProgressBinding.button1.let {
             it.text = resources.getText(R.string.choice_1)
             it.setOnClickListener {
                 val intent = Intent(this, GameActivity::class.java)
@@ -137,7 +135,7 @@ class SettingsActivity : AppCompatActivity() {
                 dismiss(v)
             }
         }
-        dialog.findViewById<TextView>(R.id.option_cancel)?.let {
+        layoutDialogResetProgressBinding.optionCancel.let {
             it.text = resources.getText(R.string.choice_2)
             if (isEndlessAvailable) {
                 it.setOnClickListener {
@@ -152,7 +150,7 @@ class SettingsActivity : AppCompatActivity() {
                 it.setTextColor(Color.BLACK)
             }
         }
-        dialog.findViewById<TextView>(R.id.button3)?.let {
+        layoutDialogResetProgressBinding.button3.let {
             it.text = resources.getText(R.string.choice_3)
             it.setOnClickListener {
                 dialog.dismiss()
@@ -164,20 +162,19 @@ class SettingsActivity : AppCompatActivity() {
 
     fun importGame(@Suppress("UNUSED_PARAMETER") v: View) {
         val dialog = Dialog(this)
-        dialog.setContentView(R.layout.layout_dialog_exportgame)
+        layoutDialogExportgameBinding = LayoutDialogExportgameBinding.inflate(layoutInflater)
+        dialog.setContentView(layoutDialogExportgameBinding.root)
         dialog.window?.setLayout(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT
         )
         dialog.setCancelable(true)
-        dialog.findViewById<TextView>(R.id.question)?.let {
-            it.text = getString(R.string.text_importgame_question)
-        }
-        dialog.findViewById<TextView>(R.id.option_cancel)?.let {
+        layoutDialogExportgameBinding.question.text = getString(R.string.text_importgame_question)
+        layoutDialogExportgameBinding.optionCancel.let {
             it.text = getString(R.string.button_cancel)
             it.setOnClickListener { dialog.dismiss() }
         }
-        dialog.findViewById<TextView>(R.id.button1)?.let {
+        layoutDialogExportgameBinding.button1.let {
             it.text = getString(R.string.text_importgame_option1)
             it.setOnClickListener {
                 createImportLauncher.launch(arrayOf("text/json", "application/json", "text/plain", "*/*"))
@@ -201,14 +198,15 @@ class SettingsActivity : AppCompatActivity() {
                     val infoString = buildInfoString(persistency.parseGameImport(jsonString))
 
                     val dialog = Dialog(this)
-                    dialog.setContentView(R.layout.layout_dialog_exportgame)
+                    layoutDialogExportgameBinding = LayoutDialogExportgameBinding.inflate(layoutInflater)
+                    dialog.setContentView(layoutDialogExportgameBinding.root)
                     dialog.window?.setLayout(
                             ViewGroup.LayoutParams.MATCH_PARENT,
                             ViewGroup.LayoutParams.WRAP_CONTENT
                     )
                     dialog.setCancelable(true)
-                    dialog.findViewById<TextView>(R.id.question).text = infoString
-                    dialog.findViewById<TextView>(R.id.button1)?.let {
+                    layoutDialogExportgameBinding.question.text = infoString
+                    layoutDialogExportgameBinding.button1.let {
                         it.text = resources.getText(R.string.import_choice_yes)
                         it.setOnClickListener {
                             // pass the file name to the game activity
@@ -270,17 +268,17 @@ class SettingsActivity : AppCompatActivity() {
 
     fun displayError(message: String?) {
         val dialog = Dialog(this)
-        dialog.setContentView(R.layout.layout_dialog_exportgame)
+        layoutDialogExportgameBinding = LayoutDialogExportgameBinding.inflate(layoutInflater)
+        dialog.setContentView(layoutDialogExportgameBinding.root)
         dialog.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT )
         dialog.setCancelable(true)
-        dialog.findViewById<TextView>(R.id.question)?.let {
-            it.text = getString(R.string.error_reading_file).format(message ?: "")
-        }
-        dialog.findViewById<TextView>(R.id.option_cancel)?.let {
+        layoutDialogExportgameBinding.question.text =
+            getString(R.string.error_reading_file).format(message ?: "")
+        layoutDialogExportgameBinding.optionCancel.let {
             it.text = getString(R.string.shithappens_1)
             it.setOnClickListener { dialog.dismiss() }
         }
-        dialog.findViewById<TextView>(R.id.button1)?.let {
+        layoutDialogExportgameBinding.button1.let {
             it.text = getString(R.string.shithappens_2)
             it.setOnClickListener { dialog.dismiss() }
         }
