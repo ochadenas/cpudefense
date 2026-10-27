@@ -153,7 +153,7 @@ class GameView(context: Context):
                         if (processClickOnNodes(it, motionEvent))
                             return true
                         for (obj in it.vehicles)
-                            if ((obj as Attacker).onDown(motionEvent))
+                            if ((obj as Attacker).onDown(motionEvent, this))
                                 return true
                 }
                 return false

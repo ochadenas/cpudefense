@@ -8,6 +8,7 @@ import com.example.cpudefense.*
 import com.example.cpudefense.effects.Explodable
 import com.example.cpudefense.effects.Fadable
 import com.example.cpudefense.effects.Fader
+import com.example.cpudefense.extras.AchievementType
 import com.example.cpudefense.networkmap.*
 import com.example.cpudefense.utils.*
 import kotlin.math.exp
@@ -18,6 +19,10 @@ import kotlin.random.Random
 open class Attacker(network: Network, representation: Representation = Representation.BINARY,
                     number: ULong = 1u, speed: Float = 1.0f):
     Vehicle(network), Explodable, Fadable {
+
+    /** modes of numerical representation of the attacker's number.
+     * Currently, only binary and hex are supported.
+     */
     enum class Representation { UNDEFINED, BINARY, HEX, DECIMAL, FLOAT }
 
     data class Data(
@@ -67,8 +72,8 @@ open class Attacker(network: Network, representation: Representation = Represent
             calculateNumberOfDigits()
     }
 
-    fun copy(): Attacker
     /** creates a deep copy of the attacker object */
+    fun copy(): Attacker
     {
         val newAttacker = Attacker(network = network, representation = attackerData.representation, number = attackerData.number, speed = data.speed )
         newAttacker.data = data.copy()
@@ -86,11 +91,10 @@ open class Attacker(network: Network, representation: Representation = Represent
         return newAttacker
     }
 
-
-    fun provideData(): Data
     /** copies some transient variables into the persistent attacker data.
      * Used in the stage's provideData function.
      * @return the data object */
+    fun provideData(): Data
     {
         attackerData.vehicle.gridPos = posOnGrid?.asPair() ?: Pair(0f, 0f)
         /* get the ident of the current link */
@@ -99,33 +103,27 @@ open class Attacker(network: Network, representation: Representation = Represent
         return attackerData
     }
 
-    private fun calculateNumberOfDigits()
     /** determine how many binary or hex digits the value must have,
      * given its number
      */
+    private fun calculateNumberOfDigits()
     {
         if (attackerData.representation == Representation.UNDEFINED)
             attackerData.representation = if (attackerData.number >= 32u) Representation.HEX else Representation.BINARY
         if (attackerData.representation == Representation.BINARY)
         {
-            attackerData.binaryDigits = log2(attackerData.number.toFloat()).toInt() + 1
-            if (attackerData.binaryDigits < 1)
-                attackerData.binaryDigits = 1
-            else if (attackerData.binaryDigits > 16)
-                attackerData.binaryDigits = 16
-            else while (!maskBinary.containsKey(attackerData.binaryDigits))
+            attackerData.binaryDigits = (log2(attackerData.number.toFloat()).toInt() + 1)
+                .coerceIn(1 .. 16)
+            while (!maskBinary.containsKey(attackerData.binaryDigits))
                 attackerData.binaryDigits++  // adjust 'digits' to nearest allowed value
             maskBinary[attackerData.binaryDigits]?.let { mask ->
                 attackerData.number = attackerData.number and mask }
         }
         else
         {
-            attackerData.hexDigits = log16(attackerData.number.toFloat()).toInt() + 1
-            if (attackerData.hexDigits < 2)
-                attackerData.hexDigits = 2
-            else if (attackerData.hexDigits > 8)
-                attackerData.hexDigits = 8
-            else while (!maskHex.containsKey(attackerData.hexDigits))
+            attackerData.hexDigits = (log16(attackerData.number.toFloat()).toInt() + 1)
+                .coerceIn(2 .. 8)
+            while (!maskHex.containsKey(attackerData.hexDigits))
                 attackerData.hexDigits++  // adjust 'digits' to nearest allowed value
             maskHex[attackerData.hexDigits]?.let { mask ->
                 attackerData.number = attackerData.number and mask }
@@ -133,10 +131,10 @@ open class Attacker(network: Network, representation: Representation = Represent
         attackerData.bits = attackerData.binaryDigits + 4 * attackerData.hexDigits
     }
 
-    fun changeNumberTo(newNumber: ULong)
     /** change the attacker's number to a new number,
      * displaying an animation.
      */
+    fun changeNumberTo(newNumber: ULong)
     {
         oldNumber = attackerData.number
         oldNumberBitmap = numberBitmap
@@ -150,13 +148,12 @@ open class Attacker(network: Network, representation: Representation = Represent
     private fun invertNumber()
     /** turns the number into its binary complement */
     {
-        var n: ULong = attackerData.number
-        n = n.inv()
+        var newNumber: ULong = attackerData.number.inv()
         if (attackerData.representation == Representation.BINARY)
-            maskBinary[attackerData.binaryDigits]?.let { mask -> n = n and mask }
+            maskBinary[attackerData.binaryDigits]?.let { mask -> newNumber = newNumber and mask }
         else
-            maskHex[attackerData.hexDigits]?.let { mask -> n = n and mask }
-        changeNumberTo(n)
+            maskHex[attackerData.hexDigits]?.let { mask -> newNumber = newNumber and mask }
+        changeNumberTo(newNumber)
     }
 
     private fun extraCash(): Int
@@ -415,21 +412,27 @@ open class Attacker(network: Network, representation: Representation = Represent
         data.speed += changeInSpeed
     }
 
-    fun onDown(event: MotionEvent): Boolean {
+    fun onDown(event: MotionEvent, gameView: GameView): Boolean {
         val boundingRect = Rect(actualRect)
         boundingRect.inflate(20).setCenter(actualRect.center())
         if (boundingRect.contains(event.x.toInt(), event.y.toInt()) // gesture is inside this object
             && data.state == State.ACTIVE)  // do not allow tapping on objects HELD or GONE
         {
             logger?.log("Tap on %s. Former value was %s".format(toString(), numberAsString()))
+            val former = attackerData.number.toInt()
             invertNumber()
             logState()
+            when { // grant achievements, if any
+                attackerData.number.toInt()>former -> gameView.achievements?.grant(AchievementType.TAP_INCREASE)
+                former == 42 -> gameView.achievements?.grant(AchievementType.TAP_42)
+            }
+
+
             return true
         }
         else
             return false
     }
-
 
     companion object
     {

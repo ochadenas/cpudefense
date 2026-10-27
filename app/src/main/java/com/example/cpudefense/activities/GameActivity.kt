@@ -60,7 +60,7 @@ class GameActivity : ActivityWithAchievements, AppCompatActivity() {
 
     companion object
     {
-        val effectsDelay: Long = 15
+        const val EFFECTS_DELAY: Long = 15L
     }
 
     enum class GameActivityStatus { PLAYING, BETWEEN_LEVELS }
@@ -70,7 +70,9 @@ class GameActivity : ActivityWithAchievements, AppCompatActivity() {
     private val defaultDelay = 40L
     /** delta T when accelerated */
     private val fastForwardDelay = 8L
+    /** delta T when accelerated by fast fast-forward */
     private val fastFastForwardDelay = 3L
+    /** delay in milliseconds between updates */
     private var updateDelay: Long = defaultDelay
 
     // additional properties for displaying an average frame rate
@@ -103,8 +105,7 @@ class GameActivity : ActivityWithAchievements, AppCompatActivity() {
      */
     override fun onCreate(savedInstanceState: Bundle?)
     {
-        /* here, the size of the surfaces might not be known */
-        // requestWindowFeature(Window.FEATURE_NO_TITLE)
+        // here, the size of the surfaces might not be known
         supportActionBar?.hide()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main_game)
@@ -268,10 +269,9 @@ class GameActivity : ActivityWithAchievements, AppCompatActivity() {
         logger?.log("Switching to game phase %s".format(phase.toString()))
     }
 
-
-    fun setLastPlayedStage(identifier: Identifier)
     /** when completing a level, record the current number in the SharedPrefs.
      * @param identifier number of the level successfully completed */
+    fun setLastPlayedStage(identifier: Identifier)
     {
         logger?.log("Setting last played stage to %s.".format(identifier))
         val prefs = getSharedPreferences(Persistency.filename_state, MODE_PRIVATE)
@@ -281,11 +281,11 @@ class GameActivity : ActivityWithAchievements, AppCompatActivity() {
         }
     }
 
+    /** when completing a level, record the level as highest completed, but only if the old max level is not higher.
+     * @param identifier number of the level successfully completed
+     * @param forceReset If true, forces resetting the max stage to the given currentStage
+     * */
     fun setMaxPlayedStage(identifier: Identifier, forceReset: Boolean = false)
-            /** when completing a level, record the level as highest completed, but only if the old max level is not higher.
-             * @param identifier number of the level successfully completed
-             * @param forceReset If true, forces resetting the max stage to the given currentStage
-             * */
     {
         val prefs = getSharedPreferences(Persistency.filename_state, MODE_PRIVATE)
         val previousMaxStage =
@@ -315,12 +315,6 @@ class GameActivity : ActivityWithAchievements, AppCompatActivity() {
         }
     }
 
-    private fun beginGame(resetProgress: Boolean = false,
-                          resetEndless: Boolean = false,
-                          resumeGame: Boolean = false,
-                          restoreGame: Boolean = false,
-                          startingLevel: Identifier = Identifier()
-    )
     /** Begins the current game on a chosen level. Also called when starting a completely
      * new game.
      * @param resetProgress If true, the whole game is started from the first level, and
@@ -329,6 +323,12 @@ class GameActivity : ActivityWithAchievements, AppCompatActivity() {
      * @param resumeGame Continue the game within a level, at exactly the point where it has been left.
      * @param restoreGame The game is read from a previously exported file. This overwrites all the other mechanisms.
      */
+    private fun beginGame(resetProgress: Boolean = false,
+                          resetEndless: Boolean = false,
+                          resumeGame: Boolean = false,
+                          restoreGame: Boolean = false,
+                          startingLevel: Identifier = Identifier()
+    )
     {
         val persistency = Persistency(this)
         loadSettings()
@@ -386,8 +386,8 @@ class GameActivity : ActivityWithAchievements, AppCompatActivity() {
         }
     }
 
-    private fun resumeGame()
     /** function to resume a running game at exactly the point where the app was left. */
+    private fun resumeGame()
     {
         Persistency(this).loadCurrentLevelState(gameMechanics)
         gameMechanics.stageData?.let {
@@ -427,15 +427,18 @@ class GameActivity : ActivityWithAchievements, AppCompatActivity() {
         changeToGamePhase(GamePhase.RUNNING)
     }
 
+    /** creates the stage with the given identifier.
+     * Builds up all game elements, saves the level structure, and
+     * swith to RUNNING state.
+     */
     fun startNextStage(ident: Identifier)
     {
         val nextStage = Stage(gameMechanics, gameView)
-        logger?.log("Starting level ${ident.toString()}.")
+        logger?.log("Starting level $ident.")
         StageCatalog.createStage(nextStage, ident)
         nextStage.calculateDifficulty()
         if (!nextStage.isInitialized())
             return  // something went wrong, possibly trying to create a level that doesn't exist
-        // gameView.viewport.determineGridSize(nextStage.data.gridSizeX, nextStage.data.gridSizeY)
         nextStage.network.applyScale(gameView.viewport)  // calculate scaling factors and set chip size
         nextStage.network.recreateNetworkImage(true)
         setGameActivityStatus(GameActivityStatus.PLAYING)
@@ -462,6 +465,8 @@ class GameActivity : ActivityWithAchievements, AppCompatActivity() {
         Persistency(this).saveCurrentLevelState(gameMechanics)
         Persistency(this).saveGeneralState(gameMechanics)
         takeLevelSnapshot()
+        if (settings.showLevelsInHex)
+            achievements.grant(AchievementType.SHOW_HEX)
     }
 
     fun onEndOfStage()
@@ -495,6 +500,7 @@ class GameActivity : ActivityWithAchievements, AppCompatActivity() {
         )
         /** bits in a byte */
         val byte = 8
+        /** bits in a kibibyte */
         val kibyte = 1024 * byte
         when {
             gameMechanics.state.cash >= 8*byte -> { achievements.grant(AchievementType.INFO_8B)}
@@ -527,10 +533,10 @@ class GameActivity : ActivityWithAchievements, AppCompatActivity() {
     fun startGameThreads() {
 
         if (updateJob?.isActive != true)  // (!= true) is not the same as (false) here!
-            updateJob = GlobalScope.launch { delay(updateDelay); update(); }
+            updateJob = GlobalScope.launch { delay(updateDelay.milliseconds); update(); }
 
         if (effectsJob?.isActive != true)
-            effectsJob = GlobalScope.launch { delay(effectsDelay); updateGraphicalEffects(); }
+            effectsJob = GlobalScope.launch { delay(EFFECTS_DELAY.milliseconds); updateGraphicalEffects(); }
     }
 
     private fun loadSettings()
@@ -547,7 +553,10 @@ class GameActivity : ActivityWithAchievements, AppCompatActivity() {
         {
             GameSpeed.NORMAL -> defaultDelay
             GameSpeed.FAST -> fastForwardDelay
-            GameSpeed.MAX -> fastFastForwardDelay
+            GameSpeed.MAX -> {
+                achievements.grant(AchievementType.USE_FFFORWARD)
+                fastFastForwardDelay
+            }
         }
         logger?.log("Game speed set to %s. Update delay is %s".format(speed.toString(), updateDelay.toString()))
     }
@@ -629,7 +638,7 @@ class GameActivity : ActivityWithAchievements, AppCompatActivity() {
             val elapsed = SystemClock.uptimeMillis() - timeAtStartOfCycle
             val wait: Long =
                 if (updateDelay > elapsed) updateDelay - elapsed - 1 else 0  // rest of time in this cycle
-            updateJob = GlobalScope.launch { delay(wait); update() }
+            updateJob = GlobalScope.launch { delay(wait.milliseconds); update() }
         }
     }
 
@@ -654,6 +663,7 @@ class GameActivity : ActivityWithAchievements, AppCompatActivity() {
     private fun restoreOneLife()
     {
         gameMechanics.restoreOneLife()
+        achievements.grant(AchievementType.PURCHASE_LIFE)
         Persistency(this).saveGeneralState(gameMechanics)
         Persistency(this).saveCoins(gameMechanics)
     }
@@ -685,7 +695,7 @@ class GameActivity : ActivityWithAchievements, AppCompatActivity() {
         if (gameThreadsRunning) {
             gameView.updateEffects()
             gameView.effects?.updateGraphicalEffects()
-            GlobalScope.launch { delay(effectsDelay); updateGraphicalEffects() }
+            GlobalScope.launch { delay(EFFECTS_DELAY.milliseconds); updateGraphicalEffects() }
         }
     }
 

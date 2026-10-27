@@ -377,17 +377,18 @@ class Intermezzo(var gameView: GameView): GameElement(), Fadable {
             return true
     }
 
+    /** called when the game is definitely over. Either because the player has completed all levels,
+     * or lost all lives.
+     * @param lastLevel The level that has been played
+     * @param hasWon False if all lives have been lost
+     */
     fun endOfGame(lastLevel: Stage.Identifier, hasWon: Boolean)
-            /** called when the game is definitely over. Either because the player has completed all levels,
-             * or lost all lives.
-             * @param lastLevel The level that has been played
-             * @param hasWon False if all lives have been lost
-             */
     {
         clear()
         this.level = lastLevel
         if (hasWon) {
             type = Type.GAME_WON
+            gameView.gameActivity.achievements.grant(AchievementType.GAME_WON)
             Fader(gameView, this, Fader.Type.APPEAR, Fader.Speed.SLOW)
         }
         else {

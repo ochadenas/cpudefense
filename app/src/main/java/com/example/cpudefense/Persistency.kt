@@ -7,23 +7,19 @@ import android.graphics.BitmapFactory
 import android.util.Base64
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.example.cpudefense.activities.GameActivity
-import com.google.gson.Gson
-import com.google.gson.JsonParser
-import java.io.ByteArrayOutputStream
 import androidx.core.content.edit
+import com.example.cpudefense.activities.GameActivity
 import com.example.cpudefense.extras.Achievement
 import com.example.cpudefense.extras.AchievementType
 import com.example.cpudefense.extras.ActivityWithAchievements
 import com.example.cpudefense.extras.PlayerAchievements
 import com.example.cpudefense.utils.TimeStamp
+import com.google.gson.Gson
 import com.google.gson.JsonObject
+import com.google.gson.JsonParser
 import com.google.gson.JsonPrimitive
-import java.text.SimpleDateFormat
+import java.io.ByteArrayOutputStream
 import java.util.Date
-import java.util.Locale
-import java.util.TimeZone
-import kotlin.collections.set
 
 
 class Persistency(private val activity: Activity)
@@ -57,8 +53,6 @@ class Persistency(private val activity: Activity)
     private val prefsSaves: SharedPreferences = activity.getSharedPreferences(filename_saves, AppCompatActivity.MODE_PRIVATE)
     /** file for the state within the current level, such as attacker and chip positions, number of waves, etc. */
     private val prefsState: SharedPreferences = activity.getSharedPreferences(filename_state, AppCompatActivity.MODE_PRIVATE)
-    /** file for the player achievements. Kept separate from all the others */
-    private val prefsAchievements: SharedPreferences = activity.getSharedPreferences(filename_achievements, AppCompatActivity.MODE_PRIVATE)
 
     // designators of the level data in the prefs
     private val seriesKey = hashMapOf(

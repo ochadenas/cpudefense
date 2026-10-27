@@ -421,7 +421,7 @@ class Stage(var gameMechanics: GameMechanics, var stageView: CommonView)
             var bigSnapshot = createBitmap(p.viewportWidth, p.viewportHeight)
             network.makeSnapshot(Canvas(bigSnapshot), p)
             // blur the image
-            bigSnapshot = bigSnapshot.blur(stageView.theActivity, 3f) ?: bigSnapshot
+            bigSnapshot = bigSnapshot.blur(stageView.activity, 3f) ?: bigSnapshot
             return bigSnapshot.scale(size, size)
         }
         else

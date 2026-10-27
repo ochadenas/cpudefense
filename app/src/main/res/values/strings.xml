@@ -473,5 +473,9 @@ The programming language Pascal is named after him."</string>
     <string name="achieve_TOTAL_128MIB">Collect 128 mibibyte of information</string>
     <string name="achieve_TOTAL_1GB">Collect one gigabyte of information</string>
     <string name="achieve_TOTAL_1GIB">Collect one gibibyte of information</string>
-
+    <string name="achievement_GAME_WON">Complete all normal levels</string>
+    <string name="achievement_USE_FFFORWARD">Use the fast fast forward mode</string>
+    <string name="achievement_SHOW_HEX">Read hex values</string>
+    <string name="achievement_TAP_INCREASE">Tap on an attacker and increase its value</string>
+    <string name="achievement_TAP_42">Tap on an attacker with value 42</string>
 </resources>

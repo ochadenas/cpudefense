@@ -85,7 +85,7 @@ abstract class CommonView(context: Context):
         const val gridPointSize = 2
         const val gridBorderWidth = 2.0f
     }
-    val theActivity = context as Activity
+    val activity = context as Activity
     abstract val gameMechanics: GameMechanics
     val achievements: PlayerAchievements? = (context as? ActivityWithAchievements)?.achievements
 

@@ -7,11 +7,14 @@ import com.example.cpudefense.R
 import com.google.gson.reflect.TypeToken
 import kotlinx.serialization.Serializable
 
-enum class AchievementType { UNDEFINED, LEVEL_LOST, LOSE_BY_COIN, LOSE_BY_HEAT,
-    EASTER, CHRISTMAS, PURCHASE_LIFE, SPIN, WIKI, VERSIONINFO,
+enum class AchievementType { UNDEFINED, LEVEL_LOST, LOSE_BY_COIN, LOSE_BY_HEAT, GAME_WON,
+    EASTER, CHRISTMAS, PURCHASE_LIFE, SPIN, WIKI, VERSIONINFO, USE_FFFORWARD, SHOW_HEX,
     INFO_8B, INFO_64B, INFO_1KB, INFO_1KIB, INFO_4KIB,
     TOTAL_64KIB, TOTAL_1MB, TOTAL_1MIB, TOTAL_8MIB, TOTAL_32MIB, TOTAL_100MB, TOTAL_128MIB, TOTAL_1GB, TOTAL_1GIB,
-    BANK_0, BANK_4, BANK_8, BANK_MIB, BANK_GIB }
+    BANK_0, BANK_4, BANK_8, BANK_MIB, BANK_GIB,
+    TAP_INCREASE, TAP_42,
+
+}
 
 @Serializable
 data class Achievement (
@@ -104,6 +107,11 @@ class PlayerAchievements
                 AchievementType.TOTAL_128MIB -> res.getString(R.string.achieve_TOTAL_128MIB)
                 AchievementType.TOTAL_1GB -> res.getString(R.string.achieve_TOTAL_1GB)
                 AchievementType.TOTAL_1GIB -> res.getString(R.string.achieve_TOTAL_1GIB)
+                AchievementType.GAME_WON -> res.getString(R.string.achievement_GAME_WON)
+                AchievementType.USE_FFFORWARD -> res.getString(R.string.achievement_USE_FFFORWARD)
+                AchievementType.SHOW_HEX -> res.getString(R.string.achievement_SHOW_HEX)
+                AchievementType.TAP_INCREASE -> res.getString(R.string.achievement_TAP_INCREASE)
+                AchievementType.TAP_42 -> res.getString(R.string.achievement_TAP_42)
             }
         }
     }

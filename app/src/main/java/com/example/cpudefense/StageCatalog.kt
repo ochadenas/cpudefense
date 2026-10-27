@@ -1,7 +1,6 @@
 package com.example.cpudefense
 
 import com.example.cpudefense.extras.AchievementType
-import com.example.cpudefense.extras.ActivityWithAchievements
 import com.example.cpudefense.gameElements.*
 import com.example.cpudefense.networkmap.Link
 import kotlin.math.sqrt
@@ -53,7 +52,7 @@ class StageCatalog
                     // restore the structure. Otherwise, create an empty level.
                     // Depending on the settings, always create a new random level.
                     val structure: HashMap<Int, Stage.Data> =
-                        Persistency(stage.stageView.theActivity).loadLevelStructure(GameMechanics.SERIES_ENDLESS)
+                        Persistency(stage.stageView.activity).loadLevelStructure(GameMechanics.SERIES_ENDLESS)
                     val targetDifficulty = 4 + 1.5 * sqrt(level.number.toDouble())
                     if (stage.stageView.settings().keepLevels)
                         structure[level.number]?.let {
@@ -87,7 +86,7 @@ class StageCatalog
                     logger?.log("Saving level structure.")
                     stage.provideStructureData()
                     structure[level.number] = stage.data
-                    Persistency(stage.stageView.theActivity).saveLevelStructure(GameMechanics.SERIES_ENDLESS, structure)
+                    Persistency(stage.stageView.activity).saveLevelStructure(GameMechanics.SERIES_ENDLESS, structure)
                     // modify tracks according to hero level
                     stage.changeTrackProbability(stage.gameMechanics.heroModifier(Hero.Type.CHANGE_TRACKS).toInt())
                     // provide coins

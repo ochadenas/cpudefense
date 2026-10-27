@@ -71,7 +71,7 @@ class EditorActivity : AppCompatActivity()
         logger?.log("Entering editor activity.")
         setupEditorView()
         if (displayJob?.isActive != true)  // (!= true) is not the same as (false) here!
-            displayJob = GlobalScope.launch { delay(GameActivity.effectsDelay.milliseconds); display(); }
+            displayJob = GlobalScope.launch { delay(GameActivity.EFFECTS_DELAY.milliseconds); display(); }
         editorView.startNewCircuit()
     }
 
@@ -128,7 +128,7 @@ class EditorActivity : AppCompatActivity()
      * The delay between two executions may vary. */
     {
         editorView.display()
-        displayJob = GlobalScope.launch { delay(GameActivity.effectsDelay.milliseconds); display() }
+        displayJob = GlobalScope.launch { delay(GameActivity.EFFECTS_DELAY.milliseconds); display() }
     }
 
 }

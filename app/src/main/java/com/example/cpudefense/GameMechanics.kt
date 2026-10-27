@@ -325,7 +325,6 @@ class GameMechanics {
         if (currentPurse().canAfford(price) && state.lives<state.currentMaxLives)
         {
             currentPurse().spend(price, PurseOfCoins.ExpenditureType.LIVES)
-            currentlyActiveStage?.stageView?.achievements?.grant(AchievementType.PURCHASE_LIFE)
             state.livesRestored++
             state.lives++
         }

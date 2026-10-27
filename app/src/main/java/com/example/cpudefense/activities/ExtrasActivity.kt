@@ -35,6 +35,7 @@ import com.example.cpudefense.gameElements.ScoreBoard
 import com.example.cpudefense.utils.TimeStamp
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlin.time.Duration.Companion.milliseconds
 
 class ExtrasActivity : ActivityWithAchievements, AppCompatActivity()
 {
@@ -145,10 +146,6 @@ class LevelStatisticsFragment : Fragment() {
         return view
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-    }
-
     override fun onResume() {
         super.onResume()
         memoryMapView?.let { setCaption(it.totalCashSum.toInt()) }
@@ -182,14 +179,14 @@ class AboutFragment : Fragment() {
  */
 class AchievementsFragment : Fragment() {
     var rootView: View? = null
+
+    /** prepares the view. The actual achievement list is done in onResume(),
+     * because achievements may change during the activity also.
+     */
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?
     {
         rootView = inflater.inflate(R.layout.fragment_achievements, container, false)
-        rootView?.let{ rootView ->
-            val activity = requireActivity()
-            // get the achievements data
-            Persistency(activity).loadAchievements()
-        }
+        Persistency(requireActivity()).loadAchievements()
         return rootView
     }
 
@@ -261,7 +258,7 @@ class ExtrasBasicFragment : Fragment() {
         val job = lifecycleScope.launch {
             while (isActive) {
                 updateClock()
-                delay(450)
+                delay(450.milliseconds)
             }
         }
 
