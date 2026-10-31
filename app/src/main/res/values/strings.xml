@@ -473,5 +473,6 @@ The programming language Pascal is named after him."</string>
     <string name="achieve_TOTAL_128MIB">Collect 128 mibibyte of information</string>
     <string name="achieve_TOTAL_1GB">Collect one gigabyte of information</string>
     <string name="achieve_TOTAL_1GIB">Collect one gibibyte of information</string>
+    <string name="seven_segment_clock_display">7 segment clock display</string>
 
 </resources>
