@@ -40,8 +40,12 @@ class MemoryMapView @JvmOverloads constructor(context: Context, attrs: Attribute
     var summaryPerEndlessLevel = HashMap<Int, Stage.Summary>()
     var stageDataList: List<StageData> = listOf()
     var memoryBankList: MutableList<MemoryBank> = mutableListOf()
-    /** total amount of cash, represented by the whole map */
+    /** total amount of cash in bits, represented by the whole map */
     var totalCashSum: Long = 0
+    /** total amount of cash in bytes */
+    val totalCashSumBytes: Int
+        get() { return (totalCashSum / 8).toInt() }
+
     /** the amount of cash that is represented by one pixel */
     var scaleFactor = 1.0f
     val paint = Paint().apply {
@@ -89,15 +93,15 @@ class MemoryMapView @JvmOverloads constructor(context: Context, attrs: Attribute
         totalCashSum = stageDataList.sumOf { it.amount }
         scaleFactor = totalCashSum / (width * height).toFloat()
         when {  // order does matter here! Greater values first
-            totalCashSum >= ONE_GIB -> grantAchievement(AchievementType.TOTAL_1GIB)
-            totalCashSum >= ONE_GB -> grantAchievement(AchievementType.TOTAL_1GB)
-            totalCashSum >= 128*ONE_MIB -> grantAchievement(AchievementType.TOTAL_128MIB)
-            totalCashSum >= 100*ONE_MB -> grantAchievement(AchievementType.TOTAL_100MB)
-            totalCashSum >= 32*ONE_MIB -> grantAchievement(AchievementType.TOTAL_32MIB)
-            totalCashSum >= 8*ONE_MIB -> grantAchievement(AchievementType.TOTAL_8MIB)
-            totalCashSum >= ONE_MIB -> grantAchievement(AchievementType.TOTAL_1MIB)
-            totalCashSum >= ONE_MB -> grantAchievement(AchievementType.TOTAL_1MB)
-            totalCashSum >= 64*ONE_KIB -> grantAchievement(AchievementType.TOTAL_64KIB)
+            totalCashSumBytes >= ONE_GIB -> grantAchievement(AchievementType.TOTAL_1GIB)
+            totalCashSumBytes >= ONE_GB -> grantAchievement(AchievementType.TOTAL_1GB)
+            totalCashSumBytes >= 128*ONE_MIB -> grantAchievement(AchievementType.TOTAL_128MIB)
+            totalCashSumBytes >= 100*ONE_MB -> grantAchievement(AchievementType.TOTAL_100MB)
+            totalCashSumBytes >= 32*ONE_MIB -> grantAchievement(AchievementType.TOTAL_32MIB)
+            totalCashSumBytes >= 8*ONE_MIB -> grantAchievement(AchievementType.TOTAL_8MIB)
+            totalCashSumBytes >= ONE_MIB -> grantAchievement(AchievementType.TOTAL_1MIB)
+            totalCashSumBytes >= ONE_MB -> grantAchievement(AchievementType.TOTAL_1MB)
+            totalCashSumBytes >= 64*ONE_KIB -> grantAchievement(AchievementType.TOTAL_64KIB)
         }
     }
 
@@ -105,10 +109,9 @@ class MemoryMapView @JvmOverloads constructor(context: Context, attrs: Attribute
     {
         // determine appriopriate number and size of the banks to hold the info
         val maxNumberOfBanks = 4
-        val infoInBytes = totalCashSum/8
-        val requestedBytesPerBank = (infoInBytes / maxNumberOfBanks).toInt()
+        val requestedBytesPerBank = totalCashSumBytes / maxNumberOfBanks
         val actualSizeOfBanks =  allowedSizes.firstOrNull { it >= requestedBytesPerBank } ?: allowedSizes.last()
-        var actualNumberOfBanks = infoInBytes.toInt() / actualSizeOfBanks + 1
+        var actualNumberOfBanks = totalCashSumBytes / actualSizeOfBanks + 1
         if (actualNumberOfBanks == 3) actualNumberOfBanks = 4 // avoid "ugly" numbers
         if (actualNumberOfBanks in (5..7)) actualNumberOfBanks = 8 // avoid "ugly" numbers
         val bankWidth = width/actualNumberOfBanks
