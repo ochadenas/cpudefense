@@ -12,14 +12,14 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updateLayoutParams
+import androidx.lifecycle.lifecycleScope
 import com.example.cpudefense.EditorView
 import com.example.cpudefense.GameMechanics
 import com.example.cpudefense.Persistency
 import com.example.cpudefense.R
 import com.example.cpudefense.Settings
 import com.example.cpudefense.utils.Logger
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -60,7 +60,6 @@ class EditorActivity : AppCompatActivity()
     /** function that gets called in any case, regardless of whether
      * a new game is started or the user just navigates back to the app.
      */
-    @OptIn(DelicateCoroutinesApi::class)
     override fun onResume()
     {
         super.onResume()
@@ -71,7 +70,7 @@ class EditorActivity : AppCompatActivity()
         logger?.log("Entering editor activity.")
         setupEditorView()
         if (displayJob?.isActive != true)  // (!= true) is not the same as (false) here!
-            displayJob = GlobalScope.launch { delay(GameActivity.EFFECTS_DELAY.milliseconds); display(); }
+            displayJob = lifecycleScope.launch(Dispatchers.Default) { delay(GameActivity.EFFECTS_DELAY.milliseconds); display(); }
         editorView.startNewCircuit()
     }
 
@@ -122,13 +121,12 @@ class EditorActivity : AppCompatActivity()
         settings.loadFromFile(prefs)
     }
 
-    @OptIn(DelicateCoroutinesApi::class)
     private fun display()
     /** Thread for refreshing the display on the screen.
      * The delay between two executions may vary. */
     {
         editorView.display()
-        displayJob = GlobalScope.launch { delay(GameActivity.EFFECTS_DELAY.milliseconds); display() }
+        displayJob = lifecycleScope.launch(Dispatchers.Default) { delay(GameActivity.EFFECTS_DELAY.milliseconds); display() }
     }
 
 }

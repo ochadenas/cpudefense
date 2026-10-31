@@ -22,6 +22,9 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updateLayoutParams
+import androidx.lifecycle.lifecycleScope
+import com.example.cpudefense.CommonView
+import com.example.cpudefense.CpuReached
 import com.example.cpudefense.GameMechanics
 import com.example.cpudefense.GameMechanics.GamePhase
 import com.example.cpudefense.GameMechanics.GameSpeed
@@ -30,8 +33,6 @@ import com.example.cpudefense.GameMechanics.Params.SERIES_ENDLESS
 import com.example.cpudefense.GameMechanics.Params.SERIES_NORMAL
 import com.example.cpudefense.GameMechanics.Params.SERIES_TURBO
 import com.example.cpudefense.GameMechanics.Params.forceHeroMigration
-import com.example.cpudefense.CommonView
-import com.example.cpudefense.CpuReached
 import com.example.cpudefense.GameView
 import com.example.cpudefense.Persistency
 import com.example.cpudefense.PurseOfCoins
@@ -45,7 +46,7 @@ import com.example.cpudefense.extras.AchievementType
 import com.example.cpudefense.extras.ActivityWithAchievements
 import com.example.cpudefense.extras.PlayerAchievements
 import com.example.cpudefense.utils.Logger
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -476,7 +477,7 @@ class GameActivity : ActivityWithAchievements, AppCompatActivity() {
         gameMechanics.currentlyActiveStage?.let {
             if (it.attackerCount()>0)
             // still attackers left, wait until wave is really over
-                GlobalScope.launch { delay(2000.milliseconds); onEndOfStage() }
+                lifecycleScope.launch(Dispatchers.Default) { delay(2000.milliseconds); onEndOfStage() }
             else {
                 onStageCleared(it)
                 Persistency(this).saveGeneralState(gameMechanics)
@@ -533,10 +534,10 @@ class GameActivity : ActivityWithAchievements, AppCompatActivity() {
     fun startGameThreads() {
 
         if (updateJob?.isActive != true)  // (!= true) is not the same as (false) here!
-            updateJob = GlobalScope.launch { delay(updateDelay.milliseconds); update(); }
+            updateJob = lifecycleScope.launch(Dispatchers.Default) { delay(updateDelay.milliseconds); update(); }
 
         if (effectsJob?.isActive != true)
-            effectsJob = GlobalScope.launch { delay(EFFECTS_DELAY.milliseconds); updateGraphicalEffects(); }
+            effectsJob = lifecycleScope.launch(Dispatchers.Default) { delay(EFFECTS_DELAY.milliseconds); updateGraphicalEffects(); }
     }
 
     private fun loadSettings()
@@ -634,11 +635,11 @@ class GameActivity : ActivityWithAchievements, AppCompatActivity() {
             gameView.scoreBoard.update()
             // determine whether to update the display
             if (timeAtStartOfCycle-timeOfLastFrame > 20 && displayJob?.isActive != true)
-                displayJob = GlobalScope.launch { display() }
+                displayJob = lifecycleScope.launch(Dispatchers.Default) { display() }
             val elapsed = SystemClock.uptimeMillis() - timeAtStartOfCycle
             val wait: Long =
                 if (updateDelay > elapsed) updateDelay - elapsed - 1 else 0  // rest of time in this cycle
-            updateJob = GlobalScope.launch { delay(wait.milliseconds); update() }
+            updateJob = lifecycleScope.launch(Dispatchers.Default) { delay(wait.milliseconds); update() }
         }
     }
 
@@ -695,7 +696,7 @@ class GameActivity : ActivityWithAchievements, AppCompatActivity() {
         if (gameThreadsRunning) {
             gameView.updateEffects()
             gameView.effects?.updateGraphicalEffects()
-            GlobalScope.launch { delay(EFFECTS_DELAY.milliseconds); updateGraphicalEffects() }
+            lifecycleScope.launch(Dispatchers.Default) { delay(EFFECTS_DELAY.milliseconds); updateGraphicalEffects() }
         }
     }
 

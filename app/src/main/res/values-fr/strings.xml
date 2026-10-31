@@ -322,9 +322,55 @@
     <string name="extras_swipemessage">Faites glisser vers la gauche et la droite</string>
     <string name="settings_zoom">Afficher les boutons « Zoom »</string>
     <string name="circuit_editor">Éditeur de circuits</string>
+    <string name="editor_name_circuit">Choisir un nom</string>
+    <string name="editor_load">Charger</string>
+    <string name="editor_help">Aide</string>
+    <string name="editor_save">Sauvegarder et quitter</string>
     <string name="achievements_title">Succès</string>
     <string name="achievements_summary">\n\n%d succès obtenus sur %d (%.1f %%)\n</string>
     <string name="achievement_obtained_on">Obtenu le %1$s à %2$s.</string>
     <string name="achievements_summary_1">Premier succès obtenu sur un total de %1$d.</string>
     <string name="achievements_summary_0">"Il y en a %1$d à obtenir.  "</string>
+    <string name="achievement_gained">Obtenu un succès :</string>
+    <string name="achievements_gained">%1$d nouveaux succès obtenus :</string>
+    <string name="achievement_gained_toast">Vous avez obtenu un succès !</string>
+    <string name="achievements_gained_toast">Vous avez obtenu de nouveaux succès !</string>
+    <string name="achieve_LEVEL_LOST">Perdre un niveau</string>
+    <string name="achieve_EASTER">Trouver un œuf de Pâques</string>
+    <string name="achieve_CHRISTMAS">Jouer sur un sapin de Noël</string>
+    <string name="achieve_PURCHASE_LIFE">Acheter une vie supplémentaire</string>
+    <string name="achieve_SPIN">Faire pivoter une pièce de monnaie</string>
+    <string name="achieve_WIKI">Lire le wiki du jeu</string>
+    <string name="achieve_VERSIONINFO">Consulter les informations de version</string>
+    <string name="achieve_BANK_0">Jeter un œil aux modules de mémoire</string>
+    <string name="achieve_BANK_4">Posséder quatre modules de mémoire</string>
+    <string name="achieve_BANK_8">Posséder huit modules de mémoire</string>
+    <string name="achieve_BANK_MIB">Posséder un module mémoire d\'un mébioctet</string>
+    <string name="achieve_BANK_GIB">Posséder un module mémoire d\'un gibioctet</string>
+    <string name="achieve_LOSE_BY_COIN">Perdre une vie à cause d\'un écu</string>
+    <string name="achieve_LOSE_BY_HEAT">Perdre une vie par surchauffe</string>
+    <string name="achieve_INFO_8">Avoir 8 octet d\'information à la fin d\'un niveau</string>
+    <string name="achieve_INFO_64B">Avoir 64 octet d\'information à la fin d\'un niveau</string>
+    <string name="achieve_INFO_1KIB">Avoir un kibioctet d\'information à la fin d\'un niveau</string>
+    <string name="achieve_INFO_4KIB">Avoir 4 kibioctet d\'information à la fin d\'un niveau</string>
+    <string name="achieve_INFO_1MIB">Avoir un mébioctet d\'information à la fin d\'un niveau</string>
+    <string name="achieve_INFO_4MIB">Avoir 4 mébioctet d\'information à la fin d\'un niveau</string>
+    <string name="achieve_INFO_1KB">Avoir un kilooctet d\'information à la fin d\'un niveau</string>
+    <string name="achieve_TOTAL_64KIB">Collecter 64 kibioctet d\'information</string>
+    <string name="achieve_TOTAL_1MB">Collecter un mégaoctet d\'information</string>
+
+    <string name="achieve_TOTAL_1MIB">Collecter un mébioctet d\'information</string>
+    <string name="achieve_TOTAL_8MIB">Collecter 8 mébioctet d\'information</string>
+    <string name="achieve_TOTAL_32MIB">Collecter 32 mébioctet d\'information</string>
+    <string name="achieve_TOTAL_100MB">Collecter 100 mégaoctets d\'information</string>
+    <string name="achieve_TOTAL_128MIB">Collecter 128 mébioctets d\'information</string>
+    <string name="achieve_TOTAL_1GB">Collecter un gigaoctet d\'information</string>
+    <string name="achieve_TOTAL_1GIB">Collecter un gibioctet d\'information</string>
+    <string name="achievement_GAME_WON">Terminer tous les niveaux normaux</string>
+    <string name="achievement_USE_FFFORWARD">Utiliser le mode avance rapidissime</string>
+    <string name="achievement_SHOW_HEX">Lire des valeurs hexadécimales</string>
+    <string name="achievement_TAP_INCREASE">Augmenter la valeur d\'un attaquant en le touchant</string>
+    <string name="achievement_TAP_42">Toucher un attaquant de valeur 42</string>
+
+
 </resources>

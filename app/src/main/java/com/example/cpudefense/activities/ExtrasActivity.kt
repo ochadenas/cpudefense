@@ -33,6 +33,7 @@ import com.example.cpudefense.extras.PlayerAchievements
 import com.example.cpudefense.extras.SevenSegmentClock
 import com.example.cpudefense.gameElements.ScoreBoard
 import com.example.cpudefense.utils.TimeStamp
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.milliseconds
@@ -255,7 +256,7 @@ class ExtrasBasicFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val job = lifecycleScope.launch {
+        val job = lifecycleScope.launch(Dispatchers.Default) {
             while (isActive) {
                 updateClock()
                 delay(450.milliseconds)
