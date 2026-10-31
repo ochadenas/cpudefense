@@ -8,7 +8,7 @@ import com.google.gson.reflect.TypeToken
 import kotlinx.serialization.Serializable
 
 enum class AchievementType { UNDEFINED, LEVEL_LOST, LOSE_BY_COIN, LOSE_BY_HEAT, GAME_WON,
-    EASTER, CHRISTMAS, PURCHASE_LIFE, SPIN, WIKI, VERSIONINFO, USE_FFFORWARD, SHOW_HEX,
+    /* EASTER, */ CHRISTMAS, PURCHASE_LIFE, SPIN, WIKI, VERSIONINFO, USE_FFFORWARD, SHOW_HEX,
     INFO_8B, INFO_64B, INFO_1KB, INFO_1KIB, INFO_4KIB,
     TOTAL_64KIB, TOTAL_1MB, TOTAL_1MIB, TOTAL_8MIB, TOTAL_32MIB, TOTAL_100MB, TOTAL_128MIB, TOTAL_1GB, TOTAL_1GIB,
     BANK_0, BANK_4, BANK_8, BANK_MIB, BANK_GIB,
@@ -80,7 +80,7 @@ class PlayerAchievements
             {
                 AchievementType.UNDEFINED -> "Undefined Achievement, should not happen"
                 AchievementType.LEVEL_LOST -> res.getString(R.string.achieve_LEVEL_LOST)
-                AchievementType.EASTER -> res.getString(R.string.achieve_EASTER)
+                // AchievementType.EASTER -> res.getString(R.string.achieve_EASTER)
                 AchievementType.CHRISTMAS -> res.getString(R.string.achieve_CHRISTMAS)
                 AchievementType.PURCHASE_LIFE -> res.getString(R.string.achieve_PURCHASE_LIFE)
                 AchievementType.SPIN -> res.getString(R.string.achieve_SPIN)

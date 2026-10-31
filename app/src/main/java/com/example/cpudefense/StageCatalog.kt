@@ -1905,7 +1905,7 @@ class StageCatalog
             {
                 when (special) {
                     GameMechanics.Params.Season.EASTER -> {
-                        stageView.achievements?.grant(AchievementType.EASTER)
+                        // TODO stageView.achievements?.grant(AchievementType.EASTER)
                         initializeNetwork(50, 50)
 
                         createChip(23, 45, 0, type = Chip.ChipType.ENTRY)
