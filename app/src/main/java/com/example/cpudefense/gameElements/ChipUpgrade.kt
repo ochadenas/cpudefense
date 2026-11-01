@@ -57,7 +57,8 @@ class ChipUpgrade(
     fun maxPowerUp(availableCash: Int): Int
     {
         var updateCount = 1
-        while (availableCash > powerupPrice(chipToUpgrade.chipData.value, updateCount))
+        while (availableCash > powerupPrice(chipToUpgrade.chipData.value, updateCount) &&
+            (updateCount+chipToUpgrade.chipData.upgradeLevel) <= GameMechanics.maxUpgradeLevelOfChips)
             { updateCount++ }
         updateCount -= 1
         return when (chipToUpgrade.chipData.type)
