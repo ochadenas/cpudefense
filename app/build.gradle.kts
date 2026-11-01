@@ -9,7 +9,7 @@ android {
         applicationId = "de.chadenas.cpudefense"
         minSdk = 23
         targetSdk = 37
-        versionCode = 65
+        versionCode = 66
         versionName = "1.$versionCode"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
