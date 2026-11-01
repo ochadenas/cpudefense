@@ -832,7 +832,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int):
         if (chipData.sold)
             return
         // call the activity-specific function
-        val alternatives = when (val view = theNetwork.commonView) {
+        val alternatives = when (theNetwork.commonView) {
             is GameView -> upgradesInGameView()
             is EditorView -> upgradesInEditorView()
             else -> CopyOnWriteArrayList<ChipUpgrades>()
@@ -891,14 +891,12 @@ open class Chip(val network: Network, gridX: Int, gridY: Int):
             ChipType.SUB -> {
                 alternatives.add(ChipUpgrades.POWERUP)
                 alternatives.add(ChipUpgrades.SELL)
-                if (network.gameMechanics.state.cash > 32) // arbitrarily chosen amount, just don't show up when there is no cash
-                    alternatives.add(ChipUpgrades.MAXOUT)
+                if (maxoutPossible()) alternatives.add(ChipUpgrades.MAXOUT)
             }
             ChipType.SHR -> {
                 alternatives.add(ChipUpgrades.POWERUP)
                 alternatives.add(ChipUpgrades.SELL)
-                if (network.gameMechanics.state.cash > 64)
-                    alternatives.add(ChipUpgrades.MAXOUT)
+                if (maxoutPossible()) alternatives.add(ChipUpgrades.MAXOUT)
             }
             ChipType.ACC -> {
                 if (chipData.upgradeLevel < 3)
@@ -915,14 +913,14 @@ open class Chip(val network: Network, gridX: Int, gridY: Int):
                     alternatives.add(ChipUpgrades.MAXOUT)
             }
             ChipType.CLK -> {
-                alternatives.add(ChipUpgrades.POWERUP)
+                if (maxoutPossible()) alternatives.add(ChipUpgrades.POWERUP)
                 alternatives.add(ChipUpgrades.SELL)
-                alternatives.add(ChipUpgrades.MAXOUT)
+                if(maxoutPossible()) alternatives.add(ChipUpgrades.MAXOUT)
             }
             ChipType.RES -> {
                 alternatives.add(ChipUpgrades.POWERUP)
                 alternatives.add(ChipUpgrades.SELL)
-                alternatives.add(ChipUpgrades.MAXOUT)
+                if (maxoutPossible()) alternatives.add(ChipUpgrades.MAXOUT)
             }
             ChipType.SHL -> {
                 alternatives.add(ChipUpgrades.REDUCE)
@@ -953,7 +951,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int):
                     alternatives.remove(a)
         }
         // discard the possibility for upgrade if the chip is already very high-powered
-        if (chipData.upgradeLevel >= 12)
+        if (chipData.upgradeLevel >= GameMechanics.maxUpgradeLevelOfChips)
         {
             alternatives.remove(ChipUpgrades.POWERUP)
             alternatives.remove(ChipUpgrades.MAXOUT)
@@ -972,6 +970,15 @@ open class Chip(val network: Network, gridX: Int, gridY: Int):
             alternatives.add(ChipUpgrades.RES)
         }
         return alternatives
+    }
+
+    private fun maxoutPossible(): Boolean
+    {
+        return when {
+            network.gameMechanics.state.cash < 32 -> false // arbitrarily chosen amount, just don't show up when there is no cash
+            chipData.upgradeLevel >= GameMechanics.maxUpgradeLevelOfChips - 2 -> false // if the chip is nearly max levelled, don't propose
+            else -> true
+        }
     }
 
     override fun onDown(event: MotionEvent): Boolean {
