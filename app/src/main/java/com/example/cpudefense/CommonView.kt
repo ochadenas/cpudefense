@@ -14,7 +14,6 @@ import android.view.MotionEvent
 import android.view.SurfaceHolder
 import android.view.SurfaceView
 import androidx.core.content.res.ResourcesCompat
-import androidx.core.view.GestureDetectorCompat
 import com.example.cpudefense.GameMechanics.GamePhase
 import com.example.cpudefense.GameMechanics.LevelMode
 import com.example.cpudefense.effects.Background
@@ -105,7 +104,7 @@ abstract class CommonView(context: Context):
     val viewport = Viewport()
     var background = Background(this)
     private var backgroundColour = Color.BLACK
-    val gestureDetector = GestureDetectorCompat(context, this)
+    val gestureDetector = GestureDetector(context, this)
 
     val cpuImage: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.cpu)
     val hpBackgroundBitmap: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.hp_key)
