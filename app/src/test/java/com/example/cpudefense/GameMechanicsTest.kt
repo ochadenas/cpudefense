@@ -9,6 +9,6 @@ class GameMechanicsTest {
 
     @Test
     fun globalSpeedFactor() {
-        assertEquals(gameMechanics.globalSpeedFactor(), 0.512f)
+        assertEquals(0.512f, gameMechanics.globalSpeedFactor())
     }
 }
