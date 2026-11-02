@@ -2,12 +2,11 @@
 
 package com.example.cpudefense
 
-import com.example.cpudefense.extras.AchievementType
-import com.example.cpudefense.extras.PlayerAchievements
 import com.example.cpudefense.gameElements.Chip
 import com.example.cpudefense.gameElements.Wave
 import com.example.cpudefense.utils.Logger
 import java.util.Calendar
+import java.util.EnumMap
 import kotlin.random.Random
 
 /** exception to notify the calling method that the temperature excess has caused damage */
@@ -16,7 +15,7 @@ class TemperatureDamageException: Exception("CPU damage by heat")
 /** exception to notify the calling method that a hit has been registered */
 class CpuReached: Exception("CPU got hit, removed one life point")
 
-@Suppress("ReplaceWithEnumMap", "ConstPropertyName")
+@Suppress("ConstPropertyName")
 class GameMechanics {
     companion object Params {
         /** how many stages there are in NORMAL and TURBO. Must be changed when adding new stages. */
@@ -160,9 +159,9 @@ class GameMechanics {
     var summaryPerTurboLevel  = HashMap<Int, Stage.Summary>()
     var summaryPerEndlessLevel = HashMap<Int, Stage.Summary>()
     var heroes = HashMap<Hero.Type, Hero>()
-    var heroesByMode = hashMapOf(
-            LevelMode.BASIC to HashMap(),
-            LevelMode.ENDLESS to HashMap<Hero.Type, Hero>(),
+    var heroesByMode: MutableMap<LevelMode, MutableMap<Hero.Type, Hero>> = hashMapOf(
+            LevelMode.BASIC to EnumMap(Hero.Type::class.java),
+            LevelMode.ENDLESS to EnumMap(Hero.Type::class.java),
     )
     var currentlyActiveWave: Wave? = null
     var holidays = HashMap<Int, Hero.Holiday>()
@@ -197,13 +196,13 @@ class GameMechanics {
     {
         // this gets deleted in any case:
         summaryPerEndlessLevel = HashMap()
-        heroesByMode[LevelMode.ENDLESS] = HashMap()
+        heroesByMode[LevelMode.ENDLESS] = EnumMap(Hero.Type::class.java)
         purseOfCoins[LevelMode.ENDLESS] = PurseOfCoins(this, LevelMode.ENDLESS)
         // additionally, the BASIC series if requested:
         if (mode==LevelMode.BASIC) {
             summaryPerTurboLevel = HashMap()
             summaryPerNormalLevel = HashMap()
-            heroesByMode[LevelMode.BASIC] = HashMap()
+            heroesByMode[LevelMode.BASIC] = EnumMap(Hero.Type::class.java)
             purseOfCoins[LevelMode.BASIC] = PurseOfCoins(this, LevelMode.BASIC)
         }
     }
@@ -226,10 +225,9 @@ class GameMechanics {
     }
 
     /** @return the set of heroes for the current level, depending on the mode (BASIC or ENDLESS) */
-    fun currentHeroes(stage: Stage.Identifier = currentStageIdent): HashMap<Hero.Type, Hero>
+    fun currentHeroes(stage: Stage.Identifier = currentStageIdent): MutableMap<Hero.Type, Hero>
     {
-        val heroes = heroesByMode[stage.mode()]
-        return heroes ?: HashMap()
+        return heroesByMode.getOrDefault(stage.mode(), EnumMap(Hero.Type::class.java))
     }
 
     /**
@@ -446,7 +444,7 @@ class GameMechanics {
                 }
                 else
                 {
-                    heroesByMode[mode] = hashMapOf() // no heroes
+                    heroesByMode[mode] = EnumMap(Hero.Type::class.java) // no heroes
                     it.contents.spentCoins = 0
                 }
             }

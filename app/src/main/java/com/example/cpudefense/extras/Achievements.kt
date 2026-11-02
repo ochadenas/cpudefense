@@ -6,6 +6,7 @@ import com.example.cpudefense.Persistency
 import com.example.cpudefense.R
 import com.google.gson.reflect.TypeToken
 import kotlinx.serialization.Serializable
+import java.util.EnumMap
 
 enum class AchievementType { UNDEFINED, LEVEL_LOST, LOSE_BY_COIN, LOSE_BY_HEAT, GAME_WON,
     EASTER, CHRISTMAS, PURCHASE_LIFE, SPIN, WIKI, VERSIONINFO, USE_FFFORWARD, SHOW_HEX,
@@ -33,10 +34,10 @@ interface ActivityWithAchievements {
 
 class PlayerAchievements
 {
-    var confirmed: HashMap<AchievementType, Achievement> = hashMapOf()
+    var confirmed: MutableMap<AchievementType, Achievement> = EnumMap(AchievementType::class.java)
 
     /** put the achievements here as long as the player has not been notfied. */
-    var pending: HashMap<AchievementType, Achievement> = hashMapOf()
+    var pending: MutableMap<AchievementType, Achievement> = EnumMap(AchievementType::class.java)
 
     fun grant(type: AchievementType)
     {

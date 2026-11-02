@@ -20,6 +20,7 @@ import com.google.gson.JsonParser
 import com.google.gson.JsonPrimitive
 import java.io.ByteArrayOutputStream
 import java.util.Date
+import java.util.EnumMap
 
 
 class Persistency(private val activity: Activity)
@@ -359,7 +360,8 @@ class Persistency(private val activity: Activity)
             (activity as ActivityWithAchievements).achievements.confirmed = data
         }
         else
-            (activity as ActivityWithAchievements).achievements.confirmed = hashMapOf()  // empty the achievements list
+            (activity as ActivityWithAchievements).achievements.confirmed =
+                EnumMap(AchievementType::class.java)  // empty the achievements list
 
     }
 
