@@ -1,5 +1,3 @@
-@file:Suppress("DEPRECATION")
-
 package com.example.cpudefense
 
 import android.app.Activity.MODE_PRIVATE
@@ -31,7 +29,6 @@ import com.example.cpudefense.gameElements.GameControlButtonPanel
 import com.example.cpudefense.utils.Logger
 import com.example.cpudefense.utils.displayTextCenteredInRect
 
-@Suppress("RedundantOverride")
 class GameView(context: Context):
     CommonView(context)
 {
@@ -322,7 +319,7 @@ class GameView(context: Context):
         dialog.setContentView(R.layout.layout_dialog_replay)
         dialog.window?.setLayout(MATCH_PARENT, WRAP_CONTENT)
         dialog.setCancelable(true)
-        with (gameActivity)
+        with(gameActivity)
         {
             dialog.findViewById<Button>(R.id.button_return)
                 ?.setOnClickListener { dialog.dismiss(); returnToMainMenu() }
@@ -335,7 +332,4 @@ class GameView(context: Context):
         }
         dialog.show()
     }
-
-
-
 }
