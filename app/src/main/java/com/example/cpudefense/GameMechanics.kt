@@ -2,6 +2,7 @@
 
 package com.example.cpudefense
 
+import android.util.Log
 import com.example.cpudefense.extras.AchievementType
 import com.example.cpudefense.extras.PlayerAchievements
 import com.example.cpudefense.gameElements.Chip
@@ -38,7 +39,7 @@ class GameMechanics {
         // end of debug options
 
         /** minimum log level (if logging is enabled) */
-        val logLevel = Logger.Level.MESSAGE
+        const val logLevel: Int = Log.INFO
 
         /** level that shows an Easter egg */
         const val specialLevelNumber = 8
