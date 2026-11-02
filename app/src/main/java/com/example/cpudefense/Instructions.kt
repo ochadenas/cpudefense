@@ -108,8 +108,17 @@ class Instructions(val gameView: GameView, var stage: Stage.Identifier, var show
         textPaint.typeface = Typeface.SANS_SERIF
         textPaint.color = resources.getColor(R.color.text_instructions, null)
         textPaint.alpha = 255
-        val textLayout = StaticLayout(text, textPaint, width,
-                                      Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false)
+        val textLayout = StaticLayout.Builder.obtain(
+                text,
+                0,
+                text.length,
+                textPaint,
+                width,
+        )
+            .setAlignment(Layout.Alignment.ALIGN_NORMAL)
+            .setLineSpacing(0.0f, 1.0f, )
+            .setIncludePad(false)
+            .build()
         val bitmap = Bitmap.createBitmap(textLayout.width, textLayout.height, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)
         textLayout.draw(canvas)
