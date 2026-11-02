@@ -1,4 +1,4 @@
-@file:Suppress("DEPRECATION", "SpellCheckingInspection")
+@file:Suppress("SpellCheckingInspection")
 
 package com.example.cpudefense.gameElements
 
@@ -90,7 +90,7 @@ class ScoreBoard(val gameView: GameView): GameElement()
         val rect = Rect(area)
         rect.bottom = divider
         val paint = Paint()
-        paint.color = resources.getColor(R.color.scoreboard_text)
+        paint.color = resources.getColor(R.color.scoreboard_text, null)
         paint.typeface = Typeface.create("sans-serif", Typeface.NORMAL)
         paint.textSize = CommonView.scoreHeaderSize * gameView.textScaleFactor
         paint.textAlign = Paint.Align.LEFT
@@ -281,7 +281,7 @@ class ScoreBoard(val gameView: GameView): GameElement()
                 return
             val paint = Paint()
             paint.style = Paint.Style.FILL
-            paint.color = resources.getColor(R.color.led_panel)
+            paint.color = resources.getColor(R.color.led_panel, null)
             val glowPaint = Paint(paint)
             canvas.drawRect(ledArea, paint)
             for (i in 1..state.currentMaxLives) {
@@ -292,22 +292,22 @@ class ScoreBoard(val gameView: GameView): GameElement()
                     when (gameView.gameMechanics.currentStageIdent.series)
                     {
                         GameMechanics.SERIES_NORMAL -> {
-                            paint.color = resources.getColor(R.color.led_green)
-                            glowPaint.color = resources.getColor(R.color.led_green)
+                            paint.color = resources.getColor(R.color.led_green, null)
+                            glowPaint.color = resources.getColor(R.color.led_green, null)
                         }
                         GameMechanics.SERIES_TURBO -> {
-                            paint.color = resources.getColor(R.color.led_turbo)
-                            glowPaint.color = resources.getColor(R.color.led_turbo_glow)
+                            paint.color = resources.getColor(R.color.led_turbo, null)
+                            glowPaint.color = resources.getColor(R.color.led_turbo_glow, null)
                         }
                         GameMechanics.SERIES_ENDLESS -> {
-                            paint.color = resources.getColor(R.color.led_red)
-                            glowPaint.color = resources.getColor(R.color.led_red_glow)
+                            paint.color = resources.getColor(R.color.led_red, null)
+                            glowPaint.color = resources.getColor(R.color.led_red_glow, null)
                         }
                     }
                 else // if (i > state.lives)
                 {
-                    paint.color = resources.getColor(R.color.led_off)
-                    glowPaint.color = resources.getColor(R.color.led_off_glow)
+                    paint.color = resources.getColor(R.color.led_off, null)
+                    glowPaint.color = resources.getColor(R.color.led_off_glow, null)
                 }
                 canvas.drawRect(glowRect, glowPaint)
                 canvas.drawRect(ledRect, paint)

@@ -1,5 +1,3 @@
-@file:Suppress("DEPRECATION")
-
 package com.example.cpudefense.effects
 
 import android.content.res.Resources
@@ -79,7 +77,7 @@ class Background(val commonView: CommonView)
     {
         setBackgroundDimensions(commonView.width, commonView.height)
         basicBackground = createBlankBackground(myArea)
-        createGrid(viewport = commonView.viewport, commonView.resources.getColor(R.color.background_griddots))
+        createGrid(viewport = commonView.viewport, commonView.resources.getColor(R.color.background_griddots, null))
     }
 
     /** Sets the size of the background and re-creates the image.
@@ -176,7 +174,7 @@ class Background(val commonView: CommonView)
         val bitmap = basicBackground ?: createBitmap(destRect.width(), destRect.height())
         basicBackground = bitmap
         val canvas = Canvas(bitmap)
-        canvas.drawColor(commonView.resources.getColor(R.color.network_background))
+        canvas.drawColor(commonView.resources.getColor(R.color.network_background, null))
         return bitmap
     }
 

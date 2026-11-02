@@ -1,5 +1,3 @@
-@file:Suppress("DEPRECATION")
-
 package com.example.cpudefense
 
 import android.content.res.Resources
@@ -108,7 +106,7 @@ class Instructions(val gameView: GameView, var stage: Stage.Identifier, var show
         val textPaint = TextPaint()
         textPaint.textSize = CommonView.instructionTextSize * gameView.textScaleFactor
         textPaint.typeface = Typeface.SANS_SERIF
-        textPaint.color = resources.getColor(R.color.text_instructions)
+        textPaint.color = resources.getColor(R.color.text_instructions, null)
         textPaint.alpha = 255
         val textLayout = StaticLayout(text, textPaint, width,
                                       Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false)

@@ -1,4 +1,4 @@
-@file:Suppress("DEPRECATION", "GrazieInspection")
+@file:Suppress("GrazieInspection")
 
 package com.example.cpudefense
 
@@ -156,7 +156,7 @@ abstract class CommonView(context: Context):
     {
         this.visibility = VISIBLE
         this.holder.addCallback(this)
-        backgroundColour = context.resources.getColor(R.color.network_background)
+        backgroundColour = context.resources.getColor(R.color.network_background, null)
     }
 
     /** use Ubunto Mono font, if available. Otherwise, use standard system monospace font */

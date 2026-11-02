@@ -1,5 +1,3 @@
-@file:Suppress("DEPRECATION")
-
 package com.example.cpudefense.networkmap
 
 import android.content.res.Resources
@@ -50,8 +48,6 @@ open class Node(val theNetwork: Network, x: Float, y: Float): GameElement()
     enum class VehicleDirection { APPROACHING, LEAVING, GONE }
     data class Distance ( var distance: Float, var direction: VehicleDirection )
     private var distanceToVehicle: ConcurrentHashMap<Vehicle, Distance> = ConcurrentHashMap()
-    val vehiclesDefinitelyGone = mutableListOf<Vehicle>()
-    val vehiclesInRange = mutableListOf<Vehicle>()
 
     /** sets the node on the given grid coordinates and re-calculates the rectangle on the screen */
     fun placeOnGrid(viewport: Viewport, x: Float, y: Float)
@@ -74,7 +70,7 @@ open class Node(val theNetwork: Network, x: Float, y: Float): GameElement()
     override fun display(canvas: Canvas, viewport: Viewport) {
         actualRect = calculateActualRect(viewport)?.makeSquare()
         actualRect?.let { rect ->
-            paint.color = resources.getColor(R.color.network_background)
+            paint.color = resources.getColor(R.color.network_background, null)
             paint.style = Paint.Style.FILL
             canvas.drawRect(rect, paint)
             paint.color = Color.WHITE

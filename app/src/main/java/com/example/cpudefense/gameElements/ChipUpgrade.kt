@@ -1,5 +1,3 @@
-@file:Suppress("DEPRECATION")
-
 package com.example.cpudefense.gameElements
 
 import android.graphics.*
@@ -213,7 +211,7 @@ class ChipUpgrade(
         rect.displayTextCenteredInRect(newCanvas, text, paintText)
         canvas.drawBitmap(bitmap, null, actualRect, paintText)
 
-        paintBackground.color = gameView.resources.getColor(R.color.network_background)
+        paintBackground.color = gameView.resources.getColor(R.color.network_background, null)
         paintBackground.alpha = 120
         paintBackground.style = Paint.Style.FILL
         canvas.drawRect(actualRect, paintBackground)

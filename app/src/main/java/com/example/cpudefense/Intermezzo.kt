@@ -1,5 +1,3 @@
-@file:Suppress("DEPRECATION")
-
 package com.example.cpudefense
 
 import android.content.res.Resources
@@ -156,7 +154,7 @@ class Intermezzo(var gameView: GameView): GameElement(), Fadable {
     /** paints the green line that separates the typewriter text */
     {
         paintLine.style = Paint.Style.FILL_AND_STROKE
-        paintLine.color = resources.getColor(R.color.text_green)
+        paintLine.color = resources.getColor(R.color.text_green, null)
         canvas.drawRect(Rect(0, y-widthOfConsoleLine, gameView.right, y), paintLine)
     }
 
@@ -164,7 +162,7 @@ class Intermezzo(var gameView: GameView): GameElement(), Fadable {
     private fun displayShadowLine(canvas: Canvas, y: Int)
     {
         paintLine.style = Paint.Style.FILL_AND_STROKE
-        paintLine.color = resources.getColor(R.color.text_green)
+        paintLine.color = resources.getColor(R.color.text_green, null)
         paintLine.alpha = 40
         canvas.drawRect(Rect(0, y-widthOfConsoleLine, gameView.right, y), paintLine)
         paintLine.alpha = 255
@@ -216,7 +214,7 @@ class Intermezzo(var gameView: GameView): GameElement(), Fadable {
         val bottomMargin = 40
         buttonContinue = Button(gameView, textOnContinueButton,
                                 textSize = CommonView.computerTextSize * gameView.textScaleFactor,
-                                color = resources.getColor(R.color.text_green), style = Button.Style.FILLED)
+                                color = resources.getColor(R.color.text_green, null), style = Button.Style.FILLED)
         val buttonTop = myArea.bottom - (buttonContinue?.area?.height() ?: 20) - bottomMargin
         buttonContinue?.let {
             Fader(gameView, it, Fader.Type.APPEAR, Fader.Speed.SLOW)
@@ -227,7 +225,7 @@ class Intermezzo(var gameView: GameView): GameElement(), Fadable {
         {
             buttonPurchase = Button(gameView, resources.getString(R.string.button_marketplace),
                                     textSize = CommonView.computerTextSize * gameView.textScaleFactor,
-                                    color = resources.getColor(R.color.text_blue), style = Button.Style.FILLED)
+                                    color = resources.getColor(R.color.text_blue, null), style = Button.Style.FILLED)
             buttonPurchase?.let {
                 Fader(gameView, it, Fader.Type.APPEAR, Fader.Speed.SLOW)
                 it.alignRight(myArea.right-bottomMargin, buttonTop)
@@ -461,7 +459,7 @@ class Intermezzo(var gameView: GameView): GameElement(), Fadable {
             // create empty bitmap
             val bitmap = Bitmap.createBitmap(area.width(), area.height(), Bitmap.Config.ARGB_8888)
             val canvas = Canvas(bitmap)
-            canvas.drawColor(resources.getColor(R.color.alternate_background))
+            canvas.drawColor(resources.getColor(R.color.alternate_background, null))
             // create text for bitmap
             val margin = 20 * gameView.scaleFactor
             canvas.save()
@@ -474,7 +472,7 @@ class Intermezzo(var gameView: GameView): GameElement(), Fadable {
             val textPaint = TextPaint()
             textPaint.textSize = CommonView.computerTextSize * gameView.textScaleFactor
             textPaint.typeface = Typeface.SANS_SERIF
-            textPaint.color = resources.getColor(R.color.text_amber)
+            textPaint.color = resources.getColor(R.color.text_amber, null)
             textPaint.alpha = 255
             val textLayout = StaticLayout(text, textPaint, area.width()-2*margin.toInt(), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false)
             textLayout.draw(canvas)
@@ -523,7 +521,7 @@ class Intermezzo(var gameView: GameView): GameElement(), Fadable {
         fun display(canvas: Canvas)
         {
             heroSelectionArea.bottom = heightOfConsoleLine()
-            paint.color = resources.getColor(R.color.text_amber)
+            paint.color = resources.getColor(R.color.text_amber, null)
             paint.style = Paint.Style.STROKE
             paint.strokeWidth = 6f
             paint.alpha = 255

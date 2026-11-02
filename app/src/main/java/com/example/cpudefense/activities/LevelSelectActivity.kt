@@ -25,7 +25,6 @@ import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updateLayoutParams
 
-@Suppress("DEPRECATION")
 class LevelSelectActivity : AppCompatActivity() {
     private var levels: HashMap<Int, Stage.Summary> = HashMap()
     private var selectedLevelView: Button? = null
@@ -124,16 +123,16 @@ class LevelSelectActivity : AppCompatActivity() {
             GameMechanics.SERIES_NORMAL -> {
                 levels = Persistency(this).loadStageSummaries(GameMechanics.SERIES_NORMAL)
                 populateStageList(
-                        listView, levels, GameMechanics.SERIES_NORMAL, resources.getColor(R.color.series_normal),
-                        resources.getColor(R.color.series_normal_2)
+                        listView, levels, GameMechanics.SERIES_NORMAL, resources.getColor(R.color.series_normal, null),
+                        resources.getColor(R.color.series_normal_2, null)
                 )
             }
             GameMechanics.SERIES_TURBO -> {
                 if (isTurboAvailable) {
                     levels = Persistency(this).loadStageSummaries(GameMechanics.SERIES_TURBO)
                     populateStageList(
-                            listView, levels, GameMechanics.SERIES_NORMAL, resources.getColor(R.color.series_turbo),
-                            resources.getColor(R.color.series_turbo_2)
+                            listView, levels, GameMechanics.SERIES_NORMAL, resources.getColor(R.color.series_turbo, null),
+                            resources.getColor(R.color.series_turbo_2, null)
                     )
                 }
                 else
@@ -144,7 +143,7 @@ class LevelSelectActivity : AppCompatActivity() {
                     textView.isAllCaps = false
                     textView.setPadding(20, 0, 0, 0)
                     textView.setBackgroundColor(Color.BLACK)
-                    textView.setTextColor(resources.getColor(R.color.text_white))
+                    textView.setTextColor(resources.getColor(R.color.text_white, null))
                     textView.gravity = Gravity.START
                     listView.addView(textView)
                 }
@@ -153,8 +152,8 @@ class LevelSelectActivity : AppCompatActivity() {
                 if (isEndlessAvailable) {
                     levels = Persistency(this).loadStageSummaries(GameMechanics.SERIES_ENDLESS)
                     populateStageList(
-                            listView, levels, GameMechanics.SERIES_ENDLESS, resources.getColor(R.color.series_endless),
-                            resources.getColor(R.color.series_endless_2)
+                            listView, levels, GameMechanics.SERIES_ENDLESS, resources.getColor(R.color.series_endless, null),
+                            resources.getColor(R.color.series_endless_2, null)
                     )
                 }
                 else
@@ -165,7 +164,7 @@ class LevelSelectActivity : AppCompatActivity() {
                     textView.isAllCaps = false
                     textView.setPadding(20, 0, 0, 0)
                     textView.setBackgroundColor(Color.BLACK)
-                    textView.setTextColor(resources.getColor(R.color.text_white))
+                    textView.setTextColor(resources.getColor(R.color.text_white, null))
                     textView.gravity = Gravity.START
                     listView.addView(textView)
                 }
@@ -227,7 +226,7 @@ class LevelSelectActivity : AppCompatActivity() {
                 (summary.won == true && (summary.coinsGot < summary.coinsMaxAvailable))
                 -> levelEntryView.setTextColor(colorUnfinished)
                 summary.won == true -> levelEntryView.setTextColor(colorFinished)
-                else -> levelEntryView.setTextColor(resources.getColor(R.color.text_white))
+                else -> levelEntryView.setTextColor(resources.getColor(R.color.text_white, null))
             }
             levelEntryView.isClickable = true
             levelEntryView.setOnClickListener { onLevelSelect(levelEntryView, level) }

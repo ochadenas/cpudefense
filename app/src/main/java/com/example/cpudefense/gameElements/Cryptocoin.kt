@@ -1,5 +1,3 @@
-@file:Suppress("DEPRECATION")
-
 package com.example.cpudefense.gameElements
 
 import android.graphics.Bitmap
@@ -8,17 +6,15 @@ import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Rect
-import com.example.cpudefense.GameMechanics
+import androidx.core.graphics.createBitmap
 import com.example.cpudefense.CommonView
+import com.example.cpudefense.GameMechanics
+import com.example.cpudefense.GameView
 import com.example.cpudefense.R
 import com.example.cpudefense.effects.Flippable
 import com.example.cpudefense.effects.Flipper
 import com.example.cpudefense.networkmap.Viewport
 import com.example.cpudefense.utils.setCenter
-import androidx.core.graphics.createBitmap
-import com.example.cpudefense.GameView
-import com.example.cpudefense.extras.AchievementType
-import com.example.cpudefense.extras.ActivityWithAchievements
 
 class Cryptocoin(network: com.example.cpudefense.networkmap.Network, number: ULong = 1u, speed: Float = 1.0f):
     Attacker(network, Representation.BINARY, number, speed), Flippable
@@ -40,8 +36,8 @@ class Cryptocoin(network: com.example.cpudefense.networkmap.Network, number: ULo
     }
 
     override val explosionColour: Int
-        get() = if (network.gameMechanics.currentStageIdent.series == GameMechanics.SERIES_ENDLESS) network.commonView.resources.getColor(R.color.attackers_glow_coin_endless)
-                else network.commonView.resources.getColor(R.color.attackers_glow_coin)
+        get() = if (network.gameMechanics.currentStageIdent.series == GameMechanics.SERIES_ENDLESS) network.commonView.resources.getColor(R.color.attackers_glow_coin_endless, null)
+                else network.commonView.resources.getColor(R.color.attackers_glow_coin, null)
 
     override fun onShot(type: Chip.ChipType, power: Int): Boolean
     {

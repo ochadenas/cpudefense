@@ -1,5 +1,3 @@
-@file:Suppress("DEPRECATION")
-
 package com.example.cpudefense.gameElements
 
 import android.content.res.Resources
@@ -57,40 +55,40 @@ class HeroCard(val gameView: CommonView, val hero: Hero): GameElement(), Fadable
     private val paintHero = Paint()
 
     /** common border colour for all inactive heroes. Also used outside of the marketplace. */
-    var inactiveColor = resources.getColor(R.color.upgrade_inactive)
+    var inactiveColor = resources.getColor(R.color.upgrade_inactive, null)
     private var monochromeColor = inactiveColor
     /** the border colour according to the hero's type */
     var activeColor: Int = if (monochrome) monochromeColor
     else when(type)
     {
-        Hero.Type.INCREASE_CHIP_SUB_SPEED -> resources.getColor(R.color.upgrade_active_chip_sub)
-        Hero.Type.INCREASE_CHIP_SUB_RANGE -> resources.getColor(R.color.upgrade_active_chip_sub)
-        Hero.Type.DOUBLE_HIT_SUB -> resources.getColor(R.color.upgrade_active_chip_sub)
-        Hero.Type.INCREASE_CHIP_SHR_SPEED -> resources.getColor(R.color.upgrade_active_chip_shr)
-        Hero.Type.INCREASE_CHIP_SHR_RANGE -> resources.getColor(R.color.upgrade_active_chip_shr)
-        Hero.Type.DOUBLE_HIT_SHR -> resources.getColor(R.color.upgrade_active_chip_shr)
-        Hero.Type.INCREASE_CHIP_MEM_SPEED -> resources.getColor(R.color.upgrade_active_chip_mem)
-        Hero.Type.INCREASE_CHIP_MEM_RANGE -> resources.getColor(R.color.upgrade_active_chip_mem)
-        Hero.Type.ENABLE_MEM_UPGRADE -> resources.getColor(R.color.upgrade_active_chip_mem)
-        Hero.Type.REDUCE_HEAT -> resources.getColor(R.color.upgrade_active_chip_clk)
-        Hero.Type.INCREASE_CHIP_RES_STRENGTH -> resources.getColor(R.color.upgrade_active_chip_res)
-        Hero.Type.INCREASE_CHIP_RES_DURATION -> resources.getColor(R.color.upgrade_active_chip_res)
-        Hero.Type.CONVERT_HEAT -> resources.getColor(R.color.upgrade_active_chip_res)
-        Hero.Type.DECREASE_ATT_FREQ -> resources.getColor(R.color.upgrade_active_general)
-        Hero.Type.DECREASE_ATT_SPEED -> resources.getColor(R.color.upgrade_active_general)
-        Hero.Type.DECREASE_ATT_STRENGTH -> resources.getColor(R.color.upgrade_active_general)
-        Hero.Type.DECREASE_COIN_STRENGTH -> resources.getColor(R.color.upgrade_active_general)
-        Hero.Type.ADDITIONAL_LIVES -> resources.getColor(R.color.upgrade_active_game)
-        Hero.Type.INCREASE_MAX_HERO_LEVEL -> resources.getColor(R.color.upgrade_active_meta)
-        Hero.Type.LIMIT_UNWANTED_CHIPS -> resources.getColor(R.color.upgrade_active_game)
-        Hero.Type.CREATE_ADDITIONAL_CHIPS -> resources.getColor(R.color.upgrade_active_game)
-        Hero.Type.CHANGE_TRACKS -> resources.getColor(R.color.upgrade_active_game)
-        Hero.Type.INCREASE_STARTING_CASH -> resources.getColor(R.color.upgrade_active_eco)
-        Hero.Type.GAIN_CASH -> resources.getColor(R.color.upgrade_active_eco)
-        Hero.Type.GAIN_CASH_ON_KILL -> resources.getColor(R.color.upgrade_active_eco)
-        Hero.Type.INCREASE_REFUND -> resources.getColor(R.color.upgrade_active_eco)
-        Hero.Type.DECREASE_UPGRADE_COST -> resources.getColor(R.color.upgrade_active_eco)
-        Hero.Type.DECREASE_REMOVAL_COST -> resources.getColor(R.color.upgrade_active_eco)
+        Hero.Type.INCREASE_CHIP_SUB_SPEED -> resources.getColor(R.color.upgrade_active_chip_sub, null)
+        Hero.Type.INCREASE_CHIP_SUB_RANGE -> resources.getColor(R.color.upgrade_active_chip_sub, null)
+        Hero.Type.DOUBLE_HIT_SUB -> resources.getColor(R.color.upgrade_active_chip_sub, null)
+        Hero.Type.INCREASE_CHIP_SHR_SPEED -> resources.getColor(R.color.upgrade_active_chip_shr, null)
+        Hero.Type.INCREASE_CHIP_SHR_RANGE -> resources.getColor(R.color.upgrade_active_chip_shr, null)
+        Hero.Type.DOUBLE_HIT_SHR -> resources.getColor(R.color.upgrade_active_chip_shr, null)
+        Hero.Type.INCREASE_CHIP_MEM_SPEED -> resources.getColor(R.color.upgrade_active_chip_mem, null)
+        Hero.Type.INCREASE_CHIP_MEM_RANGE -> resources.getColor(R.color.upgrade_active_chip_mem, null)
+        Hero.Type.ENABLE_MEM_UPGRADE -> resources.getColor(R.color.upgrade_active_chip_mem, null)
+        Hero.Type.REDUCE_HEAT -> resources.getColor(R.color.upgrade_active_chip_clk, null)
+        Hero.Type.INCREASE_CHIP_RES_STRENGTH -> resources.getColor(R.color.upgrade_active_chip_res, null)
+        Hero.Type.INCREASE_CHIP_RES_DURATION -> resources.getColor(R.color.upgrade_active_chip_res, null)
+        Hero.Type.CONVERT_HEAT -> resources.getColor(R.color.upgrade_active_chip_res, null)
+        Hero.Type.DECREASE_ATT_FREQ -> resources.getColor(R.color.upgrade_active_general, null)
+        Hero.Type.DECREASE_ATT_SPEED -> resources.getColor(R.color.upgrade_active_general, null)
+        Hero.Type.DECREASE_ATT_STRENGTH -> resources.getColor(R.color.upgrade_active_general, null)
+        Hero.Type.DECREASE_COIN_STRENGTH -> resources.getColor(R.color.upgrade_active_general, null)
+        Hero.Type.ADDITIONAL_LIVES -> resources.getColor(R.color.upgrade_active_game, null)
+        Hero.Type.INCREASE_MAX_HERO_LEVEL -> resources.getColor(R.color.upgrade_active_meta, null)
+        Hero.Type.LIMIT_UNWANTED_CHIPS -> resources.getColor(R.color.upgrade_active_game, null)
+        Hero.Type.CREATE_ADDITIONAL_CHIPS -> resources.getColor(R.color.upgrade_active_game, null)
+        Hero.Type.CHANGE_TRACKS -> resources.getColor(R.color.upgrade_active_game, null)
+        Hero.Type.INCREASE_STARTING_CASH -> resources.getColor(R.color.upgrade_active_eco, null)
+        Hero.Type.GAIN_CASH -> resources.getColor(R.color.upgrade_active_eco, null)
+        Hero.Type.GAIN_CASH_ON_KILL -> resources.getColor(R.color.upgrade_active_eco, null)
+        Hero.Type.INCREASE_REFUND -> resources.getColor(R.color.upgrade_active_eco, null)
+        Hero.Type.DECREASE_UPGRADE_COST -> resources.getColor(R.color.upgrade_active_eco, null)
+        Hero.Type.DECREASE_REMOVAL_COST -> resources.getColor(R.color.upgrade_active_eco, null)
     }
 
     init {
@@ -247,7 +245,7 @@ class HeroCard(val gameView: CommonView, val hero: Hero): GameElement(), Fadable
         paintText.getTextBounds(hero.strengthDesc, 0, hero.strengthDesc.length, bounds)
         canvas.drawText(hero.shortDesc, marginHorizontal, baseline - bounds.height() - marginVertical, paintText)
         if (showNextUpgrade) {
-            paintUpdate.color = resources.getColor(R.color.upgrade_inactive)
+            paintUpdate.color = resources.getColor(R.color.upgrade_inactive, null)
             canvas.drawText(hero.upgradeDesc, bounds.right + marginHorizontal, baseline, paintUpdate)
         }
         val margin = (20*gameView.scaleFactor).toInt()

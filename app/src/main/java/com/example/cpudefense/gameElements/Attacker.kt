@@ -1,5 +1,3 @@
-@file:Suppress("DEPRECATION")
-
 package com.example.cpudefense.gameElements
 
 import android.graphics.*
@@ -257,8 +255,8 @@ open class Attacker(network: Network, representation: Representation = Represent
         get() = when (attackerData.representation)
         {
             Representation.UNDEFINED -> null
-            Representation.BINARY -> resources.getColor(R.color.attackers_glow_bin)
-            Representation.HEX -> resources.getColor(R.color.attackers_glow_hex)
+            Representation.BINARY -> resources.getColor(R.color.attackers_glow_bin, null)
+            Representation.HEX -> resources.getColor(R.color.attackers_glow_hex, null)
             Representation.DECIMAL -> null
             Representation.FLOAT -> null
         }
@@ -303,17 +301,17 @@ open class Attacker(network: Network, representation: Representation = Represent
         when (attackerData.representation) {
             Representation.BINARY -> {
                 if (data.speedModificationTimer > 0)
-                    textPaint.color = resources.getColor(R.color.attackers_slowed_bin)
+                    textPaint.color = resources.getColor(R.color.attackers_slowed_bin, null)
                 else
-                    textPaint.color = resources.getColor(R.color.attackers_foreground_bin)
-                blurPaint.color = resources.getColor(R.color.attackers_glow_bin)
+                    textPaint.color = resources.getColor(R.color.attackers_foreground_bin, null)
+                blurPaint.color = resources.getColor(R.color.attackers_glow_bin, null)
             }
             else -> {
                 if (data.speedModificationTimer > 0)
-                    textPaint.color = resources.getColor(R.color.attackers_slowed_hex)
+                    textPaint.color = resources.getColor(R.color.attackers_slowed_hex, null)
                 else
-                    textPaint.color = resources.getColor(R.color.attackers_foreground_hex)
-                blurPaint.color = resources.getColor(R.color.attackers_glow_hex)
+                    textPaint.color = resources.getColor(R.color.attackers_foreground_hex, null)
+                blurPaint.color = resources.getColor(R.color.attackers_glow_hex, null)
             }
         }
 
@@ -334,7 +332,7 @@ open class Attacker(network: Network, representation: Representation = Represent
 
         /* create a transparent black background to have more contrast */
         val paint = Paint()
-        paint.color = resources.getColor(R.color.attackers_background)
+        paint.color = resources.getColor(R.color.attackers_background, null)
         // canvas.drawRect(rect, paint)
 
         /* use blurred image to create glow */
@@ -343,7 +341,7 @@ open class Attacker(network: Network, representation: Representation = Represent
         val blurCanvas = Canvas(numberBitmap)
         blurCanvas.drawBitmap(alpha, 0f, 0f, blurPaint)
 
-        textPaint.color = resources.getColor(R.color.attackers_foreground_bin)
+        textPaint.color = resources.getColor(R.color.attackers_foreground_bin, null)
         textPaint.maskFilter = null
     }
 

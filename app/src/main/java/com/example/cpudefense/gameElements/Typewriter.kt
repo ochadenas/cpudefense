@@ -56,7 +56,7 @@ class Typewriter(val gameView: CommonView, myArea: Rect, private var lines: Copy
     fun display(canvas: Canvas) {
         textBoxes.forEach { it.display(canvas) }
         linesOfAfterglow.forEach { it.display(canvas) }
-        paintLine.color = resources.getColor(R.color.text_green)
+        paintLine.color = resources.getColor(R.color.text_green, null)
     }
 
     /** represents separate lines of text that are displayed one after the other on the screen */
@@ -72,7 +72,7 @@ class Typewriter(val gameView: CommonView, myArea: Rect, private var lines: Copy
 
         init {
             Fader(gameView, this, Fader.Type.APPEAR, Fader.Speed.SLOW)
-            paintText.color = resources.getColor(R.color.text_green)
+            paintText.color = resources.getColor(R.color.text_green, null)
             paintText.typeface = gameView.monoTypeface
             paintText.textSize = textSize
         }
@@ -111,7 +111,7 @@ class Typewriter(val gameView: CommonView, myArea: Rect, private var lines: Copy
 
         init {
             Fader(gameView, this, Fader.Type.APPEAR, Fader.Speed.VERY_FAST)
-            paintText.color = resources.getColor(R.color.text_green)
+            paintText.color = resources.getColor(R.color.text_green, null)
             paintText.typeface = gameView.monoTypeface
             paintText.textSize = textSize
         }

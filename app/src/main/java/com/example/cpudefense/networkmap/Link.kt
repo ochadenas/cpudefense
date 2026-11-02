@@ -1,5 +1,3 @@
-@file:Suppress("DEPRECATION")
-
 package com.example.cpudefense.networkmap
 import android.content.res.Resources
 import android.graphics.Canvas
@@ -46,17 +44,17 @@ class Link(theNetwork: Network, var node1: Node, var node2: Node, var ident: Int
         calculateIntermediatePointPosition()
         with (paintBackground)
         {
-            color = resources.getColor(R.color.network_background)
+            color = resources.getColor(R.color.network_background, null)
             style = Paint.Style.FILL_AND_STROKE
         }
         with (paintConnector)
         {
-            color = resources.getColor(R.color.connectors)
+            color = resources.getColor(R.color.connectors, null)
             style = Paint.Style.STROKE
         }
         with (paintEntry)
         {
-            color = resources.getColor(R.color.entrypoints)
+            color = resources.getColor(R.color.entrypoints, null)
             style = Paint.Style.STROKE
         }
         paintLineBackground = Paint(paintBackground)

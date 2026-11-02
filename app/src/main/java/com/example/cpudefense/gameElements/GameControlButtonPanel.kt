@@ -73,12 +73,11 @@ class GameControlButtonPanel(var gameView: GameView)
         }
     }
 
-    @Suppress("DEPRECATION")
     private fun recreateBitmap()
     {
         bitmapPaint.alpha = 255
         val paint = Paint()
-        paint.color = gameView.resources.getColor(R.color.connectors)
+        paint.color = gameView.resources.getColor(R.color.connectors, null)
         paint.typeface = Typeface.SANS_SERIF
         paint.textSize = CommonView.scoreHeaderSize * gameView.textScaleFactor
         paint.textAlign = Paint.Align.LEFT

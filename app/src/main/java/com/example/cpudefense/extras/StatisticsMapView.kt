@@ -101,16 +101,16 @@ class StatisticsMapView @JvmOverloads constructor(context: Context, attrs: Attri
         when (series)
         {
             GameMechanics.SERIES_NORMAL -> {
-                baseColor = resources.getColor(R.color.series_normal)
-                borderColor = resources.getColor(R.color.series_normal_2)
+                baseColor = resources.getColor(R.color.series_normal, null)
+                borderColor = resources.getColor(R.color.series_normal_2, null)
             }
             GameMechanics.SERIES_TURBO -> {
-                baseColor = resources.getColor(R.color.series_turbo)
-                borderColor = resources.getColor(R.color.series_turbo_2)
+                baseColor = resources.getColor(R.color.series_turbo, null)
+                borderColor = resources.getColor(R.color.series_turbo_2, null)
             }
             GameMechanics.SERIES_ENDLESS -> {
-                baseColor = resources.getColor(R.color.series_endless)
-                borderColor = resources.getColor(R.color.series_endless_2)
+                baseColor = resources.getColor(R.color.series_endless, null)
+                borderColor = resources.getColor(R.color.series_endless_2, null)
             }
             else -> {}
         }

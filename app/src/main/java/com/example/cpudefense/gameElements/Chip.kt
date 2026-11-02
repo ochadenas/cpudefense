@@ -1,4 +1,4 @@
-@file:Suppress("DEPRECATION", "NOTHING_TO_INLINE")
+@file:Suppress("NOTHING_TO_INLINE")
 
 package com.example.cpudefense.gameElements
 
@@ -67,16 +67,16 @@ open class Chip(val network: Network, gridX: Int, gridY: Int):
     open var bitmap: Bitmap? = null
     private var bitmapActivated: Bitmap? = null
     private val resistorColour = arrayOf(
-        resources.getColor(R.color.resistor_0),
-        resources.getColor(R.color.resistor_1),
-        resources.getColor(R.color.resistor_2),
-        resources.getColor(R.color.resistor_3),
-        resources.getColor(R.color.resistor_4),
-        resources.getColor(R.color.resistor_5),
-        resources.getColor(R.color.resistor_6),
-        resources.getColor(R.color.resistor_7),
-        resources.getColor(R.color.resistor_8),
-        resources.getColor(R.color.resistor_9),
+        resources.getColor(R.color.resistor_0, null),
+        resources.getColor(R.color.resistor_1, null),
+        resources.getColor(R.color.resistor_2, null),
+        resources.getColor(R.color.resistor_3, null),
+        resources.getColor(R.color.resistor_4, null),
+        resources.getColor(R.color.resistor_5, null),
+        resources.getColor(R.color.resistor_6, null),
+        resources.getColor(R.color.resistor_7, null),
+        resources.getColor(R.color.resistor_8, null),
+        resources.getColor(R.color.resistor_9, null),
     )
 
     private val chipsThatDoNotAffectCoins = listOf(ChipType.ACC, ChipType.MEM, ChipType.CLK, ChipType.SPLT, ChipType.DUP)
@@ -127,8 +127,8 @@ open class Chip(val network: Network, gridX: Int, gridY: Int):
         {
             internalRegister.releaseAll() // if an attacker is held inside, release it. This is for MEM and ACC
             if (isInCooldown()) {
-                color = resources.getColor(R.color.chips_soldstate_foreground)
-                glowColor = resources.getColor(R.color.chips_soldstate_glow)
+                color = resources.getColor(R.color.chips_soldstate_foreground, null)
+                glowColor = resources.getColor(R.color.chips_soldstate_glow, null)
                 sold = true
                 recreateChipBitmap() // force re-draw of the chip, using new colours
             } else
@@ -167,78 +167,78 @@ open class Chip(val network: Network, gridX: Int, gridY: Int):
         {
             ChipType.SUB -> {
 
-                chipData.color = resources.getColor(R.color.chips_sub_foreground)
-                chipData.glowColor = resources.getColor(R.color.chips_sub_glow)
+                chipData.color = resources.getColor(R.color.chips_sub_foreground, null)
+                chipData.glowColor = resources.getColor(R.color.chips_sub_glow, null)
                 chipData.value = GameMechanics.basePrice[ChipUpgrades.SUB] ?: 99
                 chipData.cooldown = (20f / gameMechanics.heroModifier(Hero.Type.INCREASE_CHIP_SUB_SPEED)).toInt()
                 data.range = 2f * gameMechanics.heroModifier(Hero.Type.INCREASE_CHIP_SUB_RANGE)
             }
             ChipType.SHR -> {
-                chipData.color = resources.getColor(R.color.chips_shr_foreground)
-                chipData.glowColor = resources.getColor(R.color.chips_shr_glow)
+                chipData.color = resources.getColor(R.color.chips_shr_foreground, null)
+                chipData.glowColor = resources.getColor(R.color.chips_shr_glow, null)
                 chipData.value = GameMechanics.basePrice[ChipUpgrades.SHR] ?: 99
                 chipData.cooldown = (32f / gameMechanics.heroModifier(Hero.Type.INCREASE_CHIP_SHR_SPEED)).toInt()
                 data.range = 2f * gameMechanics.heroModifier(Hero.Type.INCREASE_CHIP_SHR_RANGE)
             }
             ChipType.MEM -> {
-                chipData.color = resources.getColor(R.color.chips_mem_foreground)
-                chipData.glowColor = resources.getColor(R.color.chips_mem_glow)
+                chipData.color = resources.getColor(R.color.chips_mem_foreground, null)
+                chipData.glowColor = resources.getColor(R.color.chips_mem_glow, null)
                 chipData.value = GameMechanics.basePrice[ChipUpgrades.MEM] ?: 99
                 chipData.cooldown = (72f / gameMechanics.heroModifier(Hero.Type.INCREASE_CHIP_MEM_SPEED)).toInt()
                 data.range = 2f * gameMechanics.heroModifier(Hero.Type.INCREASE_CHIP_MEM_RANGE)
             }
             ChipType.ACC -> {
-                chipData.color = resources.getColor(R.color.chips_acc_foreground)
-                chipData.glowColor = resources.getColor(R.color.chips_acc_glow)
+                chipData.color = resources.getColor(R.color.chips_acc_foreground, null)
+                chipData.glowColor = resources.getColor(R.color.chips_acc_glow, null)
                 chipData.value = GameMechanics.basePrice[ChipUpgrades.ACC] ?: 99
                 chipData.cooldown = 16 // fixed value
                 data.range = 2f
             }
             ChipType.RES -> {
-                chipData.color = resources.getColor(R.color.chips_resistor_foreground)
-                chipData.glowColor = resources.getColor(R.color.chips_resistor_glow)
+                chipData.color = resources.getColor(R.color.chips_resistor_foreground, null)
+                chipData.glowColor = resources.getColor(R.color.chips_resistor_glow, null)
                 chipData.value = GameMechanics.basePrice[ChipUpgrades.RES] ?: 99
                 chipData.cooldown = 4 // fixed value
                 data.range = 2f
             }
             ChipType.CLK -> {
-                chipData.color = resources.getColor(R.color.chips_clk_foreground)
-                chipData.glowColor = resources.getColor(R.color.chips_clk_glow)
+                chipData.color = resources.getColor(R.color.chips_clk_foreground, null)
+                chipData.glowColor = resources.getColor(R.color.chips_clk_glow, null)
                 chipData.value = GameMechanics.basePrice[ChipUpgrades.CLK] ?: 99
                 chipData.cooldown = 52f.toInt()
                 data.range = 0f
             }
             ChipType.SHL -> {
-                chipData.color = resources.getColor(R.color.chips_shl_foreground)
-                chipData.glowColor = resources.getColor(R.color.chips_shl_glow)
+                chipData.color = resources.getColor(R.color.chips_shl_foreground, null)
+                chipData.glowColor = resources.getColor(R.color.chips_shl_glow, null)
                 chipData.value = GameMechanics.basePrice[ChipUpgrades.REDUCE] ?: 99
                 val modifier = 1.2f
                 chipData.cooldown = (32f / modifier).toInt()
                 data.range = 2f
             }
             ChipType.ADD -> {
-                chipData.color = resources.getColor(R.color.chips_add_foreground)
-                chipData.glowColor = resources.getColor(R.color.chips_add_glow)
+                chipData.color = resources.getColor(R.color.chips_add_foreground, null)
+                chipData.glowColor = resources.getColor(R.color.chips_add_glow, null)
                 chipData.value = GameMechanics.basePrice[ChipUpgrades.REDUCE] ?: 99
                 val modifier = 1.2f
                 chipData.cooldown = (20f / modifier).toInt()
                 data.range = 2f
             }
             ChipType.NOP -> {
-                chipData.color = resources.getColor(R.color.chips_noop_foreground)
-                chipData.glowColor = resources.getColor(R.color.chips_noop_glow)
+                chipData.color = resources.getColor(R.color.chips_noop_foreground, null)
+                chipData.glowColor = resources.getColor(R.color.chips_noop_glow, null)
                 chipData.value = GameMechanics.basePrice[ChipUpgrades.REDUCE] ?: 99
             }
             ChipType.SPLT -> {
-                chipData.color = resources.getColor(R.color.chips_split_foreground)
-                chipData.glowColor = resources.getColor(R.color.chips_split_glow)
+                chipData.color = resources.getColor(R.color.chips_split_foreground, null)
+                chipData.glowColor = resources.getColor(R.color.chips_split_glow, null)
                 val modifier = 1.2f
                 chipData.cooldown = (24f / modifier).toInt()
                 chipData.value = GameMechanics.basePrice[ChipUpgrades.REDUCE] ?: 99
             }
             ChipType.DUP -> {
-                chipData.color = resources.getColor(R.color.chips_split_foreground)
-                chipData.glowColor = resources.getColor(R.color.chips_split_glow)
+                chipData.color = resources.getColor(R.color.chips_split_foreground, null)
+                chipData.glowColor = resources.getColor(R.color.chips_split_glow, null)
                 val modifier = 1.2f
                 chipData.cooldown = (32f / modifier).toInt()
                 chipData.value = GameMechanics.basePrice[ChipUpgrades.REDUCE] ?: 99
@@ -250,8 +250,8 @@ open class Chip(val network: Network, gridX: Int, gridY: Int):
         chipData.refund = chipData.value
         if (chipData.sold)
         {
-            chipData.color = resources.getColor(R.color.chips_soldstate_foreground)
-            chipData.glowColor = resources.getColor(R.color.chips_soldstate_glow)
+            chipData.color = resources.getColor(R.color.chips_soldstate_foreground, null)
+            chipData.glowColor = resources.getColor(R.color.chips_soldstate_glow, null)
         }
         recreateChipBitmap()
     }
