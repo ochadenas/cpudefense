@@ -12,6 +12,7 @@ import com.example.cpudefense.effects.Fader
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import java.util.concurrent.CopyOnWriteArrayList
+import kotlin.time.Duration.Companion.milliseconds
 
 class Typewriter(val gameView: CommonView, myArea: Rect, private var lines: CopyOnWriteArrayList<String>, private var callback: (() -> Unit)?)
 {
@@ -24,7 +25,7 @@ class Typewriter(val gameView: CommonView, myArea: Rect, private var lines: Copy
     private var paintLine = Paint()
 
     init {
-        runBlocking { delay(1000); showNextLine()  }
+        runBlocking { delay(1000.milliseconds); showNextLine()  }
     }
 
     /** takes the next entry from textBoxes and lets it appear on the screen.
