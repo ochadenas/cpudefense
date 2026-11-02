@@ -218,7 +218,7 @@ class LevelSelectActivity : AppCompatActivity() {
             val thumbnail = Persistency(this).loadThumbnailOfLevel(level, series)
             addLevelIcon(levelEntryView, thumbnail)
 
-            levelEntryView.setTextAppearance(this, R.style.TextAppearance_AppCompat_Medium)
+            levelEntryView.setTextAppearance(this, androidx.appcompat.R.style.TextAppearance_AppCompat_Medium)
             // choose colour of text:
             @Suppress("SimplifyBooleanWithConstants") // no linter warning, please
             when
