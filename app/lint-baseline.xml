@@ -5173,17 +5173,6 @@
 
     <issue
         id="UnusedResources"
-        message="The resource `R.string.achieve_EASTER` appears to be unused"
-        errorLine1="    &lt;string name=&quot;achieve_EASTER&quot;>Find an Easter egg&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="447"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
         message="The resource `R.string.achieve_INFO_1MIB` appears to be unused"
         errorLine1="    &lt;string name=&quot;achieve_INFO_1MIB&quot;>Have one mebibyte of information at the end of a stage&lt;/string>"
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~">

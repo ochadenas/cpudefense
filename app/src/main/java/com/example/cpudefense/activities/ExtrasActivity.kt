@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
@@ -26,6 +25,11 @@ import androidx.viewpager2.widget.ViewPager2
 import com.example.cpudefense.GameMechanics
 import com.example.cpudefense.Persistency
 import com.example.cpudefense.R
+import com.example.cpudefense.databinding.ActivityExtrasBinding
+import com.example.cpudefense.databinding.ExtrasBasicBinding
+import com.example.cpudefense.databinding.FragmentAboutBinding
+import com.example.cpudefense.databinding.FragmentAchievementsBinding
+import com.example.cpudefense.databinding.FragmentMemorybankBinding
 import com.example.cpudefense.extras.AchievementType
 import com.example.cpudefense.extras.ActivityWithAchievements
 import com.example.cpudefense.extras.MemoryMapView
@@ -46,11 +50,12 @@ class ExtrasActivity : ActivityWithAchievements, AppCompatActivity()
         super.onCreate(savedInstanceState)
         WindowCompat.enableEdgeToEdge(window)
         supportActionBar?.hide()
-        setContentView(R.layout.activity_extras)
-        findViewById<View>(R.id.extras_layout)?.let { rootView ->
+        val binding = ActivityExtrasBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        binding.extrasLayout.let { rootView ->
             ViewCompat.setOnApplyWindowInsetsListener(rootView, ::handleInsets)
         }
-        findViewById<ViewPager2>(R.id.viewPager)?.let{
+        binding.viewPager.let{
             it.adapter = object : FragmentStateAdapter(this) {
                 override fun getItemCount() = 4
                 override fun createFragment(p: Int): Fragment {
@@ -64,8 +69,8 @@ class ExtrasActivity : ActivityWithAchievements, AppCompatActivity()
             }
             it.setCurrentItem(2, false)
         }
-        val dots = listOf(findViewById<View>(R.id.led1), findViewById(R.id.led2), findViewById(R.id.led3), findViewById(R.id.led4))
-        findViewById<ViewPager2>(R.id.viewPager).registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+        val dots = listOf(binding.led1, binding.led2, binding.led3, binding.led4)
+        binding.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 dots.forEachIndexed { i, view ->
                     if (i == position) {
@@ -128,8 +133,8 @@ class ExtrasActivity : ActivityWithAchievements, AppCompatActivity()
             val newAchievements = it.processPending(this)
             when (newAchievements.size)
             {
-                1 -> { Toast.makeText(this, R.string.achievement_gained_toast, Toast.LENGTH_SHORT). show() }
-                2 -> { Toast.makeText(this, R.string.achievements_gained_toast, Toast.LENGTH_SHORT). show() }
+                1 -> { Toast.makeText(this, R.string.achievement_gained_toast, Toast.LENGTH_SHORT).show() }
+                2 -> { Toast.makeText(this, R.string.achievements_gained_toast, Toast.LENGTH_SHORT).show() }
                 else -> {}
             }
         }
@@ -138,39 +143,37 @@ class ExtrasActivity : ActivityWithAchievements, AppCompatActivity()
 }
 
 class LevelStatisticsFragment : Fragment() {
-    var memoryMapView: MemoryMapView? = null
+    private lateinit var memoryMapView: MemoryMapView
+    private lateinit var fragmentMemorybankBinding: FragmentMemorybankBinding
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?
     {
-        val view = inflater.inflate(R.layout.fragment_memorybank, container, false)
-        memoryMapView = view.findViewById(R.id.map_view)
-        return view
+        fragmentMemorybankBinding = FragmentMemorybankBinding.inflate(layoutInflater, container, false)
+        memoryMapView = fragmentMemorybankBinding.mapView
+        return fragmentMemorybankBinding.root
     }
 
     override fun onResume() {
         super.onResume()
-        memoryMapView?.let { setCaption(it.totalCashSum.toInt()) }
+        memoryMapView.let { setCaption(it.totalCashSum.toInt()) }
     }
 
-    fun setCaption(cash: Int)
     /** updates the information in the caption below the map */
+    private fun setCaption(cash: Int)
     {
         val cashString = ScoreBoard.informationToString(cash)
-        view?.findViewById<TextView>(R.id.caption_view)?.text =
+        fragmentMemorybankBinding.captionView.text =
             getString(R.string.total_information_gained, cashString)
     }
 }
 
 class AboutFragment : Fragment() {
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?
-    {
-        val view = inflater.inflate(R.layout.fragment_about, container, false)
-        view?.let{ rootView ->
-            val activity = requireActivity()
-            val info = activity.packageManager.getPackageInfo(activity.packageName, PackageManager.GET_ACTIVITIES)
-            val versionView: TextView = rootView.findViewById(R.id.fragment_about_version)
-            versionView.text = getString(R.string.about_version).format(info.versionName)
-        }
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val binding: FragmentAboutBinding = FragmentAboutBinding.inflate(layoutInflater, container, false)
+        val activity = requireActivity()
+        val info = activity.packageManager.getPackageInfo(activity.packageName, PackageManager.GET_ACTIVITIES)
+        val versionView: TextView = binding.fragmentAboutVersion
+        versionView.text = getString(R.string.about_version).format(info.versionName)
         return view
     }
 }
@@ -179,16 +182,16 @@ class AboutFragment : Fragment() {
  * Sets the summary information and fills a list with the achievements read from file.
  */
 class AchievementsFragment : Fragment() {
-    var rootView: View? = null
+    private lateinit var binding: FragmentAchievementsBinding
 
     /** prepares the view. The actual achievement list is done in onResume(),
      * because achievements may change during the activity also.
      */
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?
     {
-        rootView = inflater.inflate(R.layout.fragment_achievements, container, false)
+        binding = FragmentAchievementsBinding.inflate(layoutInflater, container, false)
         Persistency(requireActivity()).loadAchievements()
-        return rootView
+        return binding.root
     }
 
     override fun onResume() {
@@ -198,7 +201,7 @@ class AchievementsFragment : Fragment() {
 
     fun fillAchievementList() {
         val achievements = (activity as ActivityWithAchievements).achievements
-        rootView?.findViewById<TextView>(R.id.achievements_summary)?.apply {
+        binding.achievementsSummary.apply {
             when (achievements.obtainedCount)
             {
                 0 -> text = context.getString(R.string.achievements_summary_0, achievements.totalCount)
@@ -207,7 +210,7 @@ class AchievementsFragment : Fragment() {
                         achievements.obtainedCount, achievements.totalCount, achievements.obtainedPercentage)
             }
         }
-        rootView?.findViewById<LinearLayout>(R.id.achievements_list)?.apply {
+        binding.achievementsList.apply {
             removeAllViews()
             achievements.confirmed.values.sortedByDescending { it.granted }.forEach { entry ->
                 TextView(context).apply {
@@ -230,27 +233,25 @@ class AchievementsFragment : Fragment() {
 }
 
 class ExtrasBasicFragment : Fragment() {
-    lateinit var contentsView: View
-    lateinit var clock: SevenSegmentClock
-    val isActive: Boolean = true
+    private lateinit var binding: ExtrasBasicBinding
+    private lateinit var clock: SevenSegmentClock
+    private val isActive: Boolean = true
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View
     {
-        contentsView = inflater.inflate(R.layout.extras_basic, container, false)
+        binding = ExtrasBasicBinding.inflate(layoutInflater, container, false)
         if (!GameMechanics.enableEditor)
-            contentsView.findViewById<ConstraintLayout>(R.id.button_container)?.let {
-                it.removeView(it.findViewById(R.id.button_editor))
-            }
+            binding.buttonContainer.removeView(binding.buttonEditor)
         clock = SevenSegmentClock(resources.getDimension(R.dimen.sevensegment_display_height).toInt(),
                             requireActivity() as ExtrasActivity)
         updateClock()
-        return contentsView
+        return binding.root
     }
 
     fun updateClock()
     {
-        val clockView = contentsView.findViewById<ImageView>(R.id.seven_segment_clock)
-        clockView?.setImageBitmap(clock.getDisplayBitmap())
+        val clockView = binding.sevenSegmentClock
+        clockView.setImageBitmap(clock.getDisplayBitmap())
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
