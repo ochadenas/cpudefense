@@ -21,6 +21,7 @@ import com.example.cpudefense.utils.displayTextCenteredInRect
 import com.example.cpudefense.utils.inflate
 import com.example.cpudefense.utils.setBottomLeft
 import com.example.cpudefense.utils.setCenter
+import com.example.cpudefense.utils.Logger
 import java.util.concurrent.CopyOnWriteArrayList
 import kotlin.random.Random
 import androidx.core.graphics.withTranslation
@@ -536,7 +537,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int):
         if (chipData.type in chipsThatDoNotAffectCoins
             && attacker.attackerData.isCoin)
             return  // coins are unaffected by certain chip types
-        network.commonView.logger()?.debug("Chip %d (%s) shooting at %s (value %s)".format(data.ident, chipDescription(), attacker.toString(), attacker.numberAsString()))
+        Logger.debug("Chip %d (%s) shooting at %s (value %s)".format(data.ident, chipDescription(), attacker.toString(), attacker.numberAsString()))
         attacker.logState()
         when (chipData.type)
         {
@@ -1070,7 +1071,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int):
         fun store(attacker: Attacker)
         /** stores a value or a coin in the internal register, putting the attacker to HELD status */
         {
-            network.commonView.logger()?.log("Storing attacker %s (value %s) in %s".format(attacker.toString(), attacker.numberAsString(), chipDescription()))
+            Logger.debug("Storing attacker %s (value %s) in %s".format(attacker.toString(), attacker.numberAsString(), chipDescription()))
             attacker.logState()
             register.add(attacker)
             attacker.gainCash()
@@ -1089,7 +1090,7 @@ open class Chip(val network: Network, gridX: Int, gridY: Int):
             try {
                 val attacker = register.removeAt(0)
                 recreateChipBitmap()
-                network.commonView.logger()?.log("Retrieving attacker %s (value %s) from %s".format(attacker.toString(), attacker.numberAsString(), chipDescription()))
+                Logger.debug("Retrieving attacker %s (value %s) from %s".format(attacker.toString(), attacker.numberAsString(), chipDescription()))
                 attacker.logState()
                 return attacker
             }

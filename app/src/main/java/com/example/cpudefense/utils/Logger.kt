@@ -1,6 +1,8 @@
 package com.example.cpudefense.utils
 
-import androidx.appcompat.app.AppCompatActivity
+import android.util.Log
+import com.example.cpudefense.ChipDefense
+import com.example.cpudefense.GameMechanics
 import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStreamWriter
@@ -8,59 +10,102 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-class Logger(val activity: AppCompatActivity, val logLevel: Level = Level.MESSAGE)
+/** Logger object, implemented as singleton. It exists independently of the activity and is
+ * accessible from all fragments.
+ */
+object Logger
 {
-    private val logfileName = "log.txt"
-    enum class Level { DEBUG, MESSAGE, WARN, ERROR }
+    private const val LOGFILE_NAME = "log.txt"
+
+    /** tag for filtering in logcat */
+    private const val TAG = "Application"
+
+    /** whether a log is to be written */
+    private var loggingEnabled: Boolean = true
+
     private val timeFormatShort = SimpleDateFormat("HH:mm:ss.SSS", Locale.getDefault())
     private val timeFormatLong = SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS Z", Locale.getDefault())
-    private val leveltext = hashMapOf(Level.MESSAGE to "INFO", Level.WARN to "WARN", Level.DEBUG to "DBG", Level.ERROR to "ERR")
-    private var logfile = File(activity.filesDir, logfileName)
+    private val leveltext = hashMapOf(Log.INFO to "INFO", Log.WARN to "WARN", Log.DEBUG to "DBG", Log.ERROR to "ERR")
     private var fileOutputStream: FileOutputStream? = null
     private var outputStreamWriter: OutputStreamWriter? = null
+
+    /** used for special formatting */
     private var currentIndent = 0
 
     fun start()
     {
-        fileOutputStream = FileOutputStream(logfile, false)
-        outputStreamWriter = OutputStreamWriter(fileOutputStream)
-        currentIndent = 0
-        val logString = "Start of log for ${activity.title}. Current time is ${timeFormatLong.format(Date())}"
-        log(logString)
+        if (GameMechanics.enableLogging) {
+            val logfile = ChipDefense.instance.let { app ->
+                File(app.filesDir, LOGFILE_NAME).apply {
+                    if (!exists()) createNewFile()
+                }
+            }
+            fileOutputStream = FileOutputStream(logfile, false)
+            outputStreamWriter = OutputStreamWriter(fileOutputStream)
+            val logString = "Start of log. Current time is " + timeFormatLong.format(Date())
+            info(logString)
+        }
     }
 
-    fun log(text: String, messagelevel: Level = Level.MESSAGE, indent: Int = 0, unIndent: Int = 0)
+    fun disable()
     {
-        if (messagelevel == Level.DEBUG && logLevel != Level.DEBUG)
+        if (loggingEnabled)
+        {
+            info("Logging is disabled by settings.")
+            loggingEnabled = false
+        }
+    }
+
+    fun enable()
+    {
+        if (!loggingEnabled)
+        {
+            info("Re-enabling logging.")
+            loggingEnabled = true
+        }
+    }
+
+    fun log(text: String, messagelevel: Int = Log.INFO, indent: Int =0)
+    {
+        if (GameMechanics.enableLogging != true || !loggingEnabled)
             return
-        currentIndent -= unIndent
-        val logString = "%s [%-4.4s] %s%s\n".format(
-                timeFormatShort.format(Date()),
-                leveltext[messagelevel],
-                " ".repeat(currentIndent),
-                text,
-                )
+        if (indent<0) // un-indent
+            currentIndent = (currentIndent+indent).coerceAtLeast(0)
+        val logString = "%s [%-4.4s] %s%s\n".format(timeFormatShort.format(Date()), leveltext[messagelevel], " ".repeat(currentIndent), text)
         outputStreamWriter?.write(logString)
         outputStreamWriter?.flush()
-        if (messagelevel != Level.DEBUG)
-            print(text)
-        currentIndent += indent
+        if (indent>0) currentIndent += indent
     }
 
-    fun debug(text: String, indent: Int =0, unIndent: Int =0)
-    { log(text, Level.DEBUG, indent=indent, unIndent=unIndent) }
+    fun info(text: String, messagelevel: Int = Log.INFO, indent: Int =0)
+    {
+        log(text, Log.DEBUG, indent)
+        Log.i(TAG, text)
+    }
 
-    fun warn(text: String, indent: Int =0, unIndent: Int =0)
-    { log(text, Level.WARN, indent=indent, unIndent=unIndent) }
+    fun debug(text: String, indent: Int =0)
+    {
+        log(text, Log.DEBUG, indent)
+        Log.d(TAG, text)
+    }
 
-    fun err(text: String, indent: Int =0, unIndent: Int =0)
-    { log(text, Level.ERROR, indent=indent, unIndent=unIndent) }
+    fun warn(text: String, indent: Int =0)
+    {
+        log(text, Log.WARN, indent)
+        Log.w(TAG, text)
+    }
+
+    fun err(text: String, indent: Int =0)
+    {
+        log(text, Log.ERROR, indent)
+        Log.e(TAG, text)
+    }
 
     fun stop()
     {
         currentIndent = 0
         val logString = "End of log. Current time is "+timeFormatLong.format(Date())
-        log(logString)
+        info(logString)
         outputStreamWriter?.close()
         fileOutputStream?.close()
         outputStreamWriter = null

@@ -162,7 +162,7 @@ class EditorView(context: Context):
 
     fun startNewCircuit()
     {
-        logger()?.log("Starting new circuit.")
+        Logger.info("Starting new circuit.")
         gameMechanics.currentlyActiveStage = Stage(gameMechanics, this)
             .also{ it.initializeNetwork(50, 50)
                 it.data.ident = Stage.Identifier(GameMechanics.SERIES_USER, 1) // TODO: attribute a number
@@ -170,14 +170,10 @@ class EditorView(context: Context):
             }
     }
 
-    override fun logger(): Logger? {
-        return editorActivity.logger
-    }
-
     fun addChip()
     {
         gameMechanics.currentlyActiveStage?.let {
-            logger()?.log("Trying to add a new chip")
+            Logger.info("Trying to add a new chip")
             var gridPosX = it.network.data.gridSizeX/2
             var gridPosY = it.network.data.gridSizeY/2
             val chip = it.createChip( gridPosX, gridPosY)

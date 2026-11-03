@@ -22,8 +22,6 @@ class EndlessStageCreator(val stage: Stage)
  * Like StageCatalog, it is not meant to be instantiated.
  */
 {
-    private var logger: Logger? = stage.stageView.logger()
-
     private val minNumberOfPaths = 3
     private val maxNumberOfPaths = 16
 
@@ -56,7 +54,7 @@ class EndlessStageCreator(val stage: Stage)
          * @param level The identifier of the level to be created
          */
     {
-        logger?.log("Creating new stage for level ${level}.", indent = 1)
+        Logger.info("Creating new stage for level ${level}.", indent = 1)
         stage.data.ident = level
         stage.waves.clear()
         stage.data.type = Stage.Type.REGULAR
@@ -77,11 +75,11 @@ class EndlessStageCreator(val stage: Stage)
         }
         numberOfSectorsX = numberOfSectors.first
         numberOfSectorsY = numberOfSectors.second
-        logger?.log("Number of sectors (x | y): %d | %d".format(numberOfSectorsX, numberOfSectorsY))
+        Logger.info("Number of sectors (x | y): %d | %d".format(numberOfSectorsX, numberOfSectorsY))
 
         var numberOfPaths = sqrt(level.number.toDouble()).toInt() + minNumberOfPaths
         numberOfPaths = numberOfPaths.coerceAtMost(maxNumberOfPaths)
-        logger?.log("Number of paths: $numberOfPaths.")
+        Logger.info("Number of paths: $numberOfPaths.")
 
         dimX = numberOfSectorsX * sectorSizeX
         dimY = numberOfSectorsY * sectorSizeY
@@ -152,7 +150,7 @@ class EndlessStageCreator(val stage: Stage)
         stage.calculateUsageCount()
         stage.network.links.values.forEach { it.chooseMask() }
         createWaves()
-        logger?.log("Level created.", unIndent=1)
+        Logger.info("Level created.", indent=-1)
         return
     }
 
@@ -160,7 +158,7 @@ class EndlessStageCreator(val stage: Stage)
     {
         val levelNumber = stage.data.ident.number
         val waveCount = sqrt(2 * levelNumber.toDouble()).toInt() + 2
-        logger?.log("Creating %d attacker waves for stage %d.".format(waveCount, levelNumber))
+        Logger.info("Creating %d attacker waves for stage %d.".format(waveCount, levelNumber))
         for (waveNumber in 1 .. waveCount) {
             val attackerCount = 16
             var strength = (waveNumber+levelNumber)/2 - 1

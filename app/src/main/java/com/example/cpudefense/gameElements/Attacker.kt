@@ -48,7 +48,6 @@ open class Attacker(network: Network, representation: Representation = Represent
         bits = 0, vehicle = super.data
     )
     private val resources = network.commonView.resources
-    private val logger = network.commonView.logger()
     private var numberBitmap: Bitmap = Bitmap.createBitmap(100, 32, Bitmap.Config.ARGB_8888)
     var actualRect = Rect()
     private var oldNumber: ULong = 0U
@@ -264,7 +263,7 @@ open class Attacker(network: Network, representation: Representation = Represent
     override fun remove()
     /** removes this attacker from the network */
     {
-        logger?.debug("Removing %s".format(toString()))
+        Logger.debug("Removing %s".format(toString()))
         onLink?.let {
             it.node1.notify(this, direction = Node.VehicleDirection.GONE)
             it.node2.notify(this, direction = Node.VehicleDirection.GONE)
@@ -416,7 +415,7 @@ open class Attacker(network: Network, representation: Representation = Represent
         if (boundingRect.contains(event.x.toInt(), event.y.toInt()) // gesture is inside this object
             && data.state == State.ACTIVE)  // do not allow tapping on objects HELD or GONE
         {
-            logger?.log("Tap on %s. Former value was %s".format(toString(), numberAsString()))
+            Logger.info("Tap on %s. Former value was %s".format(toString(), numberAsString()))
             val former = attackerData.number.toInt()
             invertNumber()
             logState()
@@ -488,10 +487,10 @@ open class Attacker(network: Network, representation: Representation = Represent
     fun logState()
     {
         val stateText = data.state.toString()
-        logger?.debug("%s: Attacker [%s] on track %d, link %d, speed %f, going from %s to %s, distance travelled is %f, still %f to go. State is %s".format(
+        Logger.debug("%s: Attacker [%s] on track %d, link %d, speed %f, going from %s to %s, distance travelled is %f, still %f to go. State is %s".format(
                 this.hashCode().toString(radix=16), numberAsString(),
                 onTrack?.data?.ident ?: -1, onLink?.data?.ident ?: -1, data.speed, startNode?.data?.ident ?: -1, endNode?.data?.ident ?: -1,
                 distanceFromLastNode, distanceToNextNode, stateText),
-                                                    indent = 1)
+                                                    indent = 0)
     }
 }

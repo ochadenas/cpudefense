@@ -64,8 +64,6 @@ class EditorActivity : AppCompatActivity()
     {
         super.onResume()
         loadSettings()
-        if (settings.activateLogging && GameMechanics.enableLogging)
-            logger = Logger(this, GameMechanics.logLevel)
         logger?.start()
         logger?.log("Entering editor activity.")
         setupEditorView()

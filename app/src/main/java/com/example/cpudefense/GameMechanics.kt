@@ -2,6 +2,7 @@
 
 package com.example.cpudefense
 
+import android.util.Log
 import com.example.cpudefense.gameElements.Chip
 import com.example.cpudefense.gameElements.Wave
 import com.example.cpudefense.utils.Logger
@@ -31,13 +32,13 @@ class GameMechanics {
         /** for debugging purposes only. MUST BE SET TO FALSE */
         const val allowLivesPurchaseInAllStages = false
         /** for debugging purposes only. MUST BE SET TO FALSE */
-        const val enableLogging = false
+        const val enableLogging = true
         /** feature toggle */
         const val enableEditor = false
         // end of debug options
 
         /** minimum log level (if logging is enabled) */
-        val logLevel = Logger.Level.MESSAGE
+        val logLevel = Log.INFO
 
         /** stage that shows an Easter egg */
         const val specialStageNumber = 8

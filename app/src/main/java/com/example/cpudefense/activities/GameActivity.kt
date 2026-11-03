@@ -112,9 +112,7 @@ class GameActivity : ActivityWithAchievements, AppCompatActivity() {
         setContentView(R.layout.activity_main_game)
         WindowCompat.enableEdgeToEdge(window)
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        if (intent.getBooleanExtra("ACTIVATE_LOGGING", false) && GameMechanics.enableLogging)
-            logger = Logger(this as AppCompatActivity, GameMechanics.logLevel)
-        logger?.start()
+        Logger.start()
         resumeGame = false
         gameMechanics = GameMechanics()
         gameView = GameView(this)
@@ -126,7 +124,7 @@ class GameActivity : ActivityWithAchievements, AppCompatActivity() {
      */
     override fun onPause()
     {
-        logger?.log("Pausing Game Activity")
+        Logger.info("Pausing Game Activity")
         Persistency(this).saveGeneralState(gameMechanics)
         Persistency(this).saveCurrentLevelState(gameMechanics)
         gameThreadsRunning = false
@@ -142,7 +140,7 @@ class GameActivity : ActivityWithAchievements, AppCompatActivity() {
         Toast.makeText(this, resources.getString(R.string.toast_loading), Toast.LENGTH_SHORT).show()
         loadSettings()
         setupGameView()
-        logger?.log("Entering game activity, game state is %s".format(gameMechanics.state.toString()))
+        Logger.info("Entering game activity, game state is %s".format(gameMechanics.state.toString()))
 
         // determine what to do: resume, restart, or play next level
         var restartGame = intent.getBooleanExtra("RESET_PROGRESS", false)
@@ -169,7 +167,7 @@ class GameActivity : ActivityWithAchievements, AppCompatActivity() {
         {
             val persistency = Persistency(this)
             var jsonString = ""
-            logger?.log("Restoring game from previous save file.")
+            Logger.info("Restoring game from previous save file.")
             restartGame = false
             restartEndless = false
             resumeGame = false
@@ -186,7 +184,7 @@ class GameActivity : ActivityWithAchievements, AppCompatActivity() {
                     }
                     persistency.performGameImport(jsonString, gameMechanics)
                     startOnLevel = gameMechanics.highestStage()
-                    logger?.log("Max stage found in file is %s.".format(startOnLevel))
+                    Logger.info("Max stage found in file is %s.".format(startOnLevel))
                     setLastPlayedStage(startOnLevel)
                     setMaxPlayedStage(startOnLevel, forceReset=true)
                 }
@@ -194,9 +192,9 @@ class GameActivity : ActivityWithAchievements, AppCompatActivity() {
         if (!resumeGame && !restoreGame)
             resumeGame = intent.getBooleanExtra("RESUME_GAME", false)
         if (resumeGame)
-            logger?.log("Trying to resume a running game.")
+            Logger.info("Trying to resume a running game.")
         else
-            logger?.log("Starting a new level (not resuming a running game).")
+            Logger.info("Starting a new level (not resuming a running game).")
 
         when (gameMechanics.state.phase)
         {
@@ -225,12 +223,12 @@ class GameActivity : ActivityWithAchievements, AppCompatActivity() {
     }
 
     override fun onStop() {
-        logger?.log("Stopping Game Activity")
+        Logger.info("Stopping Game Activity")
         super.onStop()
     }
 
     override fun onDestroy() {
-        logger?.log("Ending Game Activity")
+        Logger.info("Ending Game Activity")
         logger?.stop()
         super.onDestroy()
     }
@@ -267,14 +265,14 @@ class GameActivity : ActivityWithAchievements, AppCompatActivity() {
     fun changeToGamePhase(phase: GamePhase)
     {
         gameMechanics.state.phase = phase
-        logger?.log("Switching to game phase %s".format(phase.toString()))
+        Logger.info("Switching to game phase %s".format(phase.toString()))
     }
 
     /** when completing a level, record the current number in the SharedPrefs.
      * @param identifier number of the level successfully completed */
     fun setLastPlayedStage(identifier: Identifier)
     {
-        logger?.log("Setting last played stage to %s.".format(identifier))
+        Logger.info("Setting last played stage to %s.".format(identifier))
         val prefs = getSharedPreferences(Persistency.filename_state, MODE_PRIVATE)
         prefs.edit(commit = true) {
             putInt("LASTSTAGE", identifier.number)
@@ -292,7 +290,7 @@ class GameActivity : ActivityWithAchievements, AppCompatActivity() {
         val previousMaxStage =
             Identifier(prefs.getInt("MAXSERIES", 1), prefs.getInt("MAXSTAGE", 0))
         val newMaxStage = if (identifier.isGreaterThan(previousMaxStage) || forceReset) identifier else previousMaxStage
-        logger?.log("Setting max stage to series %d / level %d.".format(newMaxStage.series, newMaxStage.number))
+        Logger.info("Setting max stage to series %d / level %d.".format(newMaxStage.series, newMaxStage.number))
         prefs.edit {
             putInt("MAXSTAGE", newMaxStage.number)
             putInt("MAXSERIES", newMaxStage.series)
@@ -382,7 +380,7 @@ class GameActivity : ActivityWithAchievements, AppCompatActivity() {
             resumeGame()
         else {
             gameMechanics.currentStageIdent = level
-            logger?.log("Starting game at %s.".format(level.toString()))
+            Logger.info("Starting game at %s.".format(level.toString()))
             prepareLevelAtStartOfGame(level)
         }
     }
@@ -435,7 +433,7 @@ class GameActivity : ActivityWithAchievements, AppCompatActivity() {
     fun startNextStage(ident: Identifier)
     {
         val nextStage = Stage(gameMechanics, gameView)
-        logger?.log("Starting level $ident.")
+        Logger.info("Starting level $ident.")
         StageCatalog.createStage(nextStage, ident)
         nextStage.calculateDifficulty()
         if (!nextStage.isInitialized())
@@ -454,7 +452,7 @@ class GameActivity : ActivityWithAchievements, AppCompatActivity() {
             currentlyActiveStage = nextStage
         }
         Persistency(this).saveStageSummaries(gameMechanics, ident.series)
-        logger?.log("Saving summary of series %d".format(ident.series))
+        Logger.info("Saving summary of series %d".format(ident.series))
         gameMechanics.currentlyActiveStage?.let {
             gameView.gameControlButtonPanel.setInfoLine(gameView.resources.getString(R.string.stage_number).format(it.numberAsString()))
             showStageMessage(it)
@@ -559,7 +557,7 @@ class GameActivity : ActivityWithAchievements, AppCompatActivity() {
                 fastFastForwardDelay
             }
         }
-        logger?.log("Game speed set to %s. Update delay is %s".format(speed.toString(), updateDelay.toString()))
+        Logger.info("Game speed set to %s. Update delay is %s".format(speed.toString(), updateDelay.toString()))
     }
 
     fun returnToMainMenu() {
@@ -604,7 +602,7 @@ class GameActivity : ActivityWithAchievements, AppCompatActivity() {
              * Does not get called when resuming a running game.
               */
     {
-        logger?.log("Preparing level %s".format(ident.toString()))
+        Logger.info("Preparing level %s".format(ident.toString()))
         gameView.resetAtStartOfStage()
         gameView.intermezzo.prepareLevel(ident, true)
     }
@@ -710,7 +708,7 @@ class GameActivity : ActivityWithAchievements, AppCompatActivity() {
                 prefs.edit { putString("STATUS", "complete") }
             }
         }
-        logger?.log("Activity status set to %s".format(status.toString()))
+        Logger.debug("Activity status set to %s".format(status.toString()))
     }
 
     private fun takeLevelSnapshot()
@@ -721,7 +719,7 @@ class GameActivity : ActivityWithAchievements, AppCompatActivity() {
             else
                 levelThumbnail[it.getLevel()] = it.takeSnapshot(CommonView.levelSnapshotIconSize)
             Persistency(this).saveThumbnailOfLevel(this, it)
-            logger?.log("Level snapshot taken.")
+            Logger.info("Level snapshot taken.")
         }
     }
 

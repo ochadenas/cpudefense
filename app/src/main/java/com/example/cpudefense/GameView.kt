@@ -171,10 +171,6 @@ class GameView(context: Context):
         return false
     }
 
-    override fun logger(): Logger? {
-        return gameActivity.logger
-    }
-
     override fun onShowPress(p0: MotionEvent) {
     }
 

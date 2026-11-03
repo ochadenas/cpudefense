@@ -55,8 +55,6 @@ open class Vehicle(val network: Network): GameElement()
         state = State.ACTIVE,
     )
 
-    private var logger: Logger? = network.commonView.logger()
-
     var posOnGrid: Coord? = null
     var onLink: Link? = null
     var onTrack: Track? = null
@@ -93,7 +91,7 @@ open class Vehicle(val network: Network): GameElement()
                 val nextLink = onTrack?.nextLink(it)
                 setOntoLink(nextLink, endNode) // get next link on track, if any
                 data.distanceTravelledOnLink = 0f // and start at the beginning of the link
-                logger?.debug("Vehicle %s changing link from %d to %d at node %d".format(this.hashCode().toString(radix=16), it.data.ident, nextLink?.data?.ident ?: -1, startNode.data.ident))
+                Logger.debug("Vehicle %s changing link from %d to %d at node %d".format(this.hashCode().toString(radix=16), it.data.ident, nextLink?.data?.ident ?: -1, startNode.data.ident))
             }
             setCurrentDistanceOnLink(it)
         }
@@ -138,7 +136,7 @@ open class Vehicle(val network: Network): GameElement()
         data.endNodeId = endNode?.data?.ident ?: -1
         onLink = link
         setCurrentDistanceOnLink(link)
-        logger?.debug("Vehicle %s set onto link %d, going from %d to %d".format(toString(), link.data.ident, data.startNodeId, data.endNodeId))
+        Logger.debug("Vehicle %s set onto link %d, going from %d to %d".format(toString(), link.data.ident, data.startNodeId, data.endNodeId))
     }
 
     fun setCurrentDistanceOnLink(link: Link)

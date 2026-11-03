@@ -75,8 +75,6 @@ class Stage(var gameMechanics: GameMechanics, var stageView: CommonView)
 
     lateinit var network: Network
 
-    var logger: Logger? = stageView.logger()
-
     /** size of the network in grid coords */
     var size = Coord(0, 0)
 
@@ -392,7 +390,7 @@ class Stage(var gameMechanics: GameMechanics, var stageView: CommonView)
 
     fun changeTrackProbability(numberOfOperations: Int)
     {
-        logger?.log("Changing %d tracks out of %d (hero effect).".format(numberOfOperations, tracks.size))
+        Logger.info("Changing %d tracks out of %d (hero effect).".format(numberOfOperations, tracks.size))
         val longestTrack: Track = tracks.values.maxByOrNull { it.links.size } ?: return
         val otherTracks = tracks.filterValues {it.data.linkIdents != longestTrack.data.linkIdents}
         otherTracks.keys

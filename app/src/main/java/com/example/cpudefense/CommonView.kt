@@ -28,7 +28,6 @@ import com.example.cpudefense.gameElements.Chip
 import com.example.cpudefense.networkmap.Coord
 import com.example.cpudefense.networkmap.Network
 import com.example.cpudefense.networkmap.Viewport
-import com.example.cpudefense.utils.Logger
 import java.util.concurrent.CopyOnWriteArrayList
 
 @Suppress("RedundantOverride")
@@ -213,8 +212,6 @@ abstract class CommonView(context: Context):
     }
 
     abstract fun settings(): Settings
-
-    abstract fun logger(): Logger?
 
     abstract fun showReturnDialog()
 
