@@ -56,6 +56,7 @@
     <color name="resistor_background">#303030</color>
     <color name="scoreboard_text">#FFFFFF</color>
     <color name="led_red">#FF5640</color>
+    <color name="led_red_display">#BC1313</color>
     <color name="led_red_glow">#E60D1C</color>
     <color name="led_red_darkglow">#521919</color>
     <color name="led_green">#1CFB3A</color>

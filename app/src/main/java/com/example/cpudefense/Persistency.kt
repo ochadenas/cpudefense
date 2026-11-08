@@ -13,6 +13,7 @@ import com.example.cpudefense.extras.Achievement
 import com.example.cpudefense.extras.AchievementType
 import com.example.cpudefense.extras.ActivityWithAchievements
 import com.example.cpudefense.extras.PlayerAchievements
+import com.example.cpudefense.utils.Logger
 import com.example.cpudefense.utils.TimeStamp
 import com.google.gson.Gson
 import com.google.gson.JsonObject
@@ -36,7 +37,6 @@ class Persistency(private val activity: Activity)
         const val filename_thumbnails  = "thumbnails"
         const val filename_saves       = "saves"
         const val filename_state       = "state"
-        const val filename_achievements= "achievements"
     }
 
     // define preferences files
@@ -187,6 +187,7 @@ class Persistency(private val activity: Activity)
             val data = (activity as ActivityWithAchievements).achievements.confirmed
             val json = gson.toJson(data)
             putString("achievements", json)
+            Logger.log("Saved ${data.size} achievements to $filename_saves")
         }
     }
 
@@ -358,10 +359,14 @@ class Persistency(private val activity: Activity)
                 gson.fromJson(json, PlayerAchievements.listType)
             data.remove<AchievementType?, Achievement>(null) // should not happen, but better make sure
             (activity as ActivityWithAchievements).achievements.confirmed = data
+            Logger.info("Loaded list of ${data.size} achievements.")
         }
         else
+        {
             (activity as ActivityWithAchievements).achievements.confirmed =
                 EnumMap(AchievementType::class.java)  // empty the achievements list
+            Logger.info("Prepared empty achievements list.")
+        }
 
     }
 

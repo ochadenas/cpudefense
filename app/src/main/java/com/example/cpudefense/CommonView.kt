@@ -292,10 +292,9 @@ abstract class CommonView(context: Context):
 
     private fun showAdditionalEffects(): Boolean
     {
-        if (gameMechanics.currentStageIdent.mode() == LevelMode.BASIC && gameMechanics.currentStageIdent.number == GameMechanics.specialStageNumber)
-            return (gameMechanics.state.phase == GamePhase.RUNNING || gameMechanics.state.phase == GamePhase.PAUSED)
-        else
-            return false
+        return gameMechanics.currentStageIdent.mode() == LevelMode.BASIC
+                && gameMechanics.currentStageIdent.number == GameMechanics.specialStageNumber
+                && (gameMechanics.state.phase == GamePhase.RUNNING || gameMechanics.state.phase == GamePhase.PAUSED)
     }
     fun processClickOnNodes(network: Network, p0: MotionEvent): Boolean
     {

@@ -23,6 +23,8 @@ object Logger
     /** whether a log is to be written */
     private var loggingEnabled: Boolean = true
 
+    private val minLoglevel = Log.INFO
+
     private val timeFormatShort = SimpleDateFormat("HH:mm:ss.SSS", Locale.getDefault())
     private val timeFormatLong = SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS Z", Locale.getDefault())
     private val leveltext = hashMapOf(Log.INFO to "INFO", Log.WARN to "WARN", Log.DEBUG to "DBG", Log.ERROR to "ERR")
@@ -69,6 +71,8 @@ object Logger
     {
         if (GameMechanics.enableLogging != true || !loggingEnabled)
             return
+        if (messagelevel<minLoglevel)
+            return
         if (indent<0) // un-indent
             currentIndent = (currentIndent+indent).coerceAtLeast(0)
         val logString = "%s [%-4.4s] %s%s\n".format(timeFormatShort.format(Date()), leveltext[messagelevel], " ".repeat(currentIndent), text)
@@ -79,7 +83,7 @@ object Logger
 
     fun info(text: String, messagelevel: Int = Log.INFO, indent: Int =0)
     {
-        log(text, Log.DEBUG, indent)
+        log(text, Log.INFO, indent)
         Log.i(TAG, text)
     }
 

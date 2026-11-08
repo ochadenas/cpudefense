@@ -2,7 +2,7 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:padding="4dp">
         <shape android:shape="rectangle">
-            <solid android:color="@color/led_red" />
+            <solid android:color="@color/led_red_display" />
         </shape>
     </item>
     <item android:padding="2dp">

@@ -146,7 +146,7 @@ class LevelStatisticsFragment : Fragment() {
     private lateinit var memoryMapView: MemoryMapView
     private lateinit var fragmentMemorybankBinding: FragmentMemorybankBinding
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View
     {
         fragmentMemorybankBinding = FragmentMemorybankBinding.inflate(layoutInflater, container, false)
         memoryMapView = fragmentMemorybankBinding.mapView
@@ -155,7 +155,7 @@ class LevelStatisticsFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        memoryMapView.let { setCaption(it.totalCashSum.toInt()) }
+        setCaption(memoryMapView.totalCashSum.toInt())
     }
 
     /** updates the information in the caption below the map */
@@ -168,13 +168,15 @@ class LevelStatisticsFragment : Fragment() {
 }
 
 class AboutFragment : Fragment() {
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val binding: FragmentAboutBinding = FragmentAboutBinding.inflate(layoutInflater, container, false)
+    private lateinit var binding: FragmentAboutBinding
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        binding = FragmentAboutBinding.inflate(layoutInflater, container, false)
         val activity = requireActivity()
         val info = activity.packageManager.getPackageInfo(activity.packageName, PackageManager.GET_ACTIVITIES)
         val versionView: TextView = binding.fragmentAboutVersion
         versionView.text = getString(R.string.about_version).format(info.versionName)
-        return view
+        return binding.root
     }
 }
 
@@ -187,7 +189,7 @@ class AchievementsFragment : Fragment() {
     /** prepares the view. The actual achievement list is done in onResume(),
      * because achievements may change during the activity also.
      */
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View
     {
         binding = FragmentAchievementsBinding.inflate(layoutInflater, container, false)
         Persistency(requireActivity()).loadAchievements()

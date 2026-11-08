@@ -4,6 +4,7 @@ import android.content.res.Resources
 import androidx.appcompat.app.AppCompatActivity
 import com.example.cpudefense.Persistency
 import com.example.cpudefense.R
+import com.example.cpudefense.utils.Logger
 import com.google.gson.reflect.TypeToken
 import kotlinx.serialization.Serializable
 import java.util.EnumMap
@@ -44,6 +45,7 @@ class PlayerAchievements
         val a = confirmed[type]
         a ?: run {
             val achievement = Achievement(type, binary = true, 1.0f, granted = System.currentTimeMillis())
+            Logger.info("Achievement granted: $type")
             pending[type] = achievement
         }
     }
