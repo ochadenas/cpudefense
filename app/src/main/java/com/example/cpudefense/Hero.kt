@@ -15,6 +15,7 @@ import android.text.StaticLayout
 import android.text.TextPaint
 import com.example.cpudefense.activities.GameActivity
 import com.example.cpudefense.effects.Fader
+import com.example.cpudefense.extras.AchievementType
 import com.example.cpudefense.gameElements.Button
 import com.example.cpudefense.gameElements.HeroCard
 import com.example.cpudefense.utils.setTopLeft
@@ -360,11 +361,23 @@ class Hero(var gameActivity: GameActivity, type: Type)
     fun doUpgrade()
     /** actually do a rise in level, including starting the animation */
     {
-        if (data.level >= getMaxUpgradeLevel())
+        val maxLevel = getMaxUpgradeLevel()
+        if (data.level >= maxLevel)
             return
         data.level += 1
         setDesc()
         card.upgradeAnimation()
+        when (data.level)
+        {
+            maxLevel -> grantAchievement(AchievementType.HERO_MAX)
+            2-> grantAchievement(AchievementType.HERO_UPGRADE)
+        }
+        when (data.type)
+        {
+            Type.INCREASE_CHIP_SHR_SPEED -> grantAchievement(AchievementType.HERO_LOVELACE)
+            Type.DECREASE_REMOVAL_COST -> grantAchievement(AchievementType.HERO_HAMILTON)
+            else -> {}
+        }
     }
 
     fun doDowngrade()
@@ -821,9 +834,13 @@ class Hero(var gameActivity: GameActivity, type: Type)
      * @param duration how many stages the leave will last (including start and end) */
     {
         val levelTo = Stage.Identifier(level.series, level.number+duration-1)
+        grantAchievement(AchievementType.HERO_LEAVE)
         gameActivity.gameMechanics.holidays[level.number]=Holiday(data.type, level.number, levelTo.number)
         Persistency(gameActivity).saveHolidays(gameActivity.gameMechanics)
     }
+
+    fun grantAchievement(type: AchievementType)
+    { gameActivity.achievements.grant(type) }
 
 }
 

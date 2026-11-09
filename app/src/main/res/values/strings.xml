@@ -479,4 +479,14 @@ The programming language Pascal is named after him."</string>
     <string name="achievement_TAP_INCREASE">Tap on an attacker and increase its value</string>
     <string name="achievement_TAP_42">Tap on an attacker with value 42</string>
     <string name="seven_segment_clock_display">7 segment clock display</string>
+    <string name="achievement_MARKET">Enter the hero market place</string>
+    <string name="achievement_MARKET_CV">Look up a hero cv</string>
+    <string name="achievement_REFUND_ALL">Reset all heroes</string>
+    <string name="achievement_FIRE_HERO">Fire a hero</string>
+    <string name="achievement_MARKET_OVERFLOW">Have a lot of coins to spend</string>
+    <string name="achievement_HERO_LEAVE">Grant a holiday</string>
+    <string name="achievement_HERO_UPGRADE">Upgrade a hero</string>
+    <string name="achievement_HERO_MAX">Maximize a hero\'s level</string>
+    <string name="achievement_LOVELACE">Hire Ada Lovelace</string>
+    <string name="achievement_HAMILTON">Hire Margaret Hamilton</string>
 </resources>

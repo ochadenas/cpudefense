@@ -11,6 +11,8 @@ import java.util.EnumMap
 
 enum class AchievementType { UNDEFINED, LEVEL_LOST, LOSE_BY_COIN, LOSE_BY_HEAT, GAME_WON,
     EASTER, CHRISTMAS, PURCHASE_LIFE, SPIN, WIKI, VERSIONINFO, USE_FFFORWARD, SHOW_HEX,
+    MARKET, MARKET_CV, REFUND_ALL, FIRE_HERO, MARKET_OVERFLOW, HERO_LEAVE, HERO_UPGRADE, HERO_MAX, 
+    HERO_LOVELACE, HERO_HAMILTON,
     INFO_8B, INFO_64B, INFO_1KB, INFO_1KIB, INFO_4KIB,
     TOTAL_64KIB, TOTAL_1MB, TOTAL_1MIB, TOTAL_8MIB, TOTAL_32MIB, TOTAL_100MB, TOTAL_128MIB, TOTAL_1GB, TOTAL_1GIB,
     BANK_0, BANK_4, BANK_8, BANK_MIB, BANK_GIB,
@@ -74,7 +76,7 @@ class PlayerAchievements
     companion object {
 
         /** type token of the achievements lists (used in serialization) */
-        val listType = object : TypeToken<HashMap<AchievementType, Achievement>>() {}.type
+        val listType = object : TypeToken<HashMap<AchievementType, Achievement>>() {}.type!!
 
         /** retrieves the description of the achievement of given type */
         fun getText(res: Resources, type: AchievementType): String
@@ -115,6 +117,16 @@ class PlayerAchievements
                 AchievementType.SHOW_HEX -> res.getString(R.string.achievement_SHOW_HEX)
                 AchievementType.TAP_INCREASE -> res.getString(R.string.achievement_TAP_INCREASE)
                 AchievementType.TAP_42 -> res.getString(R.string.achievement_TAP_42)
+                AchievementType.MARKET -> res.getString(R.string.achievement_MARKET)
+                AchievementType.MARKET_CV -> res.getString(R.string.achievement_MARKET_CV)
+                AchievementType.REFUND_ALL -> res.getString(R.string.achievement_REFUND_ALL)
+                AchievementType.FIRE_HERO -> res.getString(R.string.achievement_FIRE_HERO)
+                AchievementType.MARKET_OVERFLOW -> res.getString(R.string.achievement_MARKET_OVERFLOW)
+                AchievementType.HERO_LEAVE -> res.getString(R.string.achievement_HERO_LEAVE)
+                AchievementType.HERO_UPGRADE -> res.getString(R.string.achievement_HERO_UPGRADE)
+                AchievementType.HERO_MAX -> res.getString(R.string.achievement_HERO_MAX)
+                AchievementType.HERO_LOVELACE -> res.getString(R.string.achievement_LOVELACE)
+                AchievementType.HERO_HAMILTON -> res.getString(R.string.achievement_HAMILTON)
             }
         }
     }

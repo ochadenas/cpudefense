@@ -18,7 +18,6 @@ import com.example.cpudefense.effects.Fader
 import com.example.cpudefense.effects.Flippable
 import com.example.cpudefense.effects.Flipper
 import com.example.cpudefense.extras.AchievementType
-import com.example.cpudefense.extras.ActivityWithAchievements
 import com.example.cpudefense.gameElements.Button
 import com.example.cpudefense.gameElements.GameElement
 import com.example.cpudefense.networkmap.Viewport
@@ -80,7 +79,9 @@ class Marketplace(val gameView: GameView): GameElement()
      * Also creates the row of coins. */
     fun fillMarket(level: Stage.Identifier)
     {
+
         nextGameLevel = level
+        grantAchievement(AchievementType.MARKET)
         val newHeroes = mutableListOf<Hero>()
         val heroes = gameMechanics.currentHeroes(level)
         purse = gameMechanics.currentPurse()
@@ -217,7 +218,7 @@ class Marketplace(val gameView: GameView): GameElement()
                 if (coin.myArea.contains(event.x.toInt(), event.y.toInt())) {
                     if (!coin.isCurrentlyFlipping) {
                         Flipper(gameView, coin, Flipper.Type.HORIZONTAL)
-                        gameView.gameActivity.achievements.grant(AchievementType.SPIN)
+                        grantAchievement(AchievementType.SPIN)
                     }
                     return true
                 }
@@ -253,6 +254,7 @@ class Marketplace(val gameView: GameView): GameElement()
             try {
                 gameView.gameActivity.startActivity(browserIntent)
                 currentWiki = selected
+                grantAchievement(AchievementType.MARKET_CV)
             } catch (_: Exception) {
             }  // come here if no external app can handle the request
         }
@@ -270,6 +272,7 @@ class Marketplace(val gameView: GameView): GameElement()
             purse.spend(-refund)
             card.resetUpgrade()
         }
+        grantAchievement(AchievementType.REFUND_ALL)
         save()
         fillMarket(nextGameLevel)
         makeButtonText(null)
@@ -295,6 +298,7 @@ class Marketplace(val gameView: GameView): GameElement()
                     val refund = 1
                     data.coinsSpent = 0
                     purse.spend(-refund)
+                    grantAchievement(AchievementType.FIRE_HERO)
                     doDowngrade()
                 }
                 else -> {
@@ -310,6 +314,11 @@ class Marketplace(val gameView: GameView): GameElement()
         fillMarket(nextGameLevel)
         makeButtonText(hero)
     }
+
+    private fun grantAchievement(type: AchievementType)
+    { gameView.gameActivity.achievements.grant(type) }
+
+
 
     private fun save() {
         Persistency(gameView.gameActivity).saveHeroes(gameMechanics)
@@ -415,6 +424,7 @@ class Marketplace(val gameView: GameView): GameElement()
                 coinsArea.left = coin.myArea.right + coinLeftMargin
                 resources.getString(R.string.coins_available).format(coins.size).let {
                     coinsArea.displayTextLeftAlignedInRect(canvas, it, paint) }
+                grantAchievement(AchievementType.MARKET_OVERFLOW)
             }
         }
         else for (c in coins)
