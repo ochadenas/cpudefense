@@ -410,7 +410,7 @@ class GameMechanics {
     fun actualMaxInternalChipStorage(): Int
     {
         val maxStorage = heroModifier(Hero.Type.ENABLE_MEM_UPGRADE).toInt()
-        return if (maxStorage > maxInternalChipStorage) maxInternalChipStorage else maxStorage
+        return maxStorage.coerceAtMost(maxInternalChipStorage)
     }
 
     /** gives the hero modifier value for any given type, even if the hero is not present. */

@@ -489,4 +489,13 @@ The programming language Pascal is named after him."</string>
     <string name="achievement_HERO_MAX">Maximize a hero\'s level</string>
     <string name="achievement_LOVELACE">Hire Ada Lovelace</string>
     <string name="achievement_HAMILTON">Hire Margaret Hamilton</string>
+    <string name="achievement_CHIP_UPGRADE">Upgrade a chip</string>
+    <string name="achievement_CHIP_UPGRADE_MAX">Upgrade a chip to the maximum</string>
+    <string name="achievement_CHIP_SELL">Sell a chip</string>
+    <string name="achievement_CHIP_REMOVE_UNWANTED">Remove an unwanted chip</string>
+    <string name="achievement_MEM_UPGRADE">Upgrade a MEM chip</string>
+    <string name="achievement_MEM_UPGRADE_MAX">Upgrade a MEM chip to the maximum</string>
+    <string name="achievement_ACC_UPGRADE_1">Use a PLUS operation</string>
+    <string name="achievement_ACC_UPGRADE_2">Use an OR operation</string>
+    <string name="achievement_ACC_UPGRADE_3">Use an AND operation</string>
 </resources>

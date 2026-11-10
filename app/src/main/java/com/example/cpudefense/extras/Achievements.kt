@@ -13,6 +13,7 @@ enum class AchievementType { UNDEFINED, LEVEL_LOST, LOSE_BY_COIN, LOSE_BY_HEAT, 
     EASTER, CHRISTMAS, PURCHASE_LIFE, SPIN, WIKI, VERSIONINFO, USE_FFFORWARD, SHOW_HEX,
     MARKET, MARKET_CV, REFUND_ALL, FIRE_HERO, MARKET_OVERFLOW, HERO_LEAVE, HERO_UPGRADE, HERO_MAX, 
     HERO_LOVELACE, HERO_HAMILTON,
+    CHIP_UPGRADE, CHIP_UPGRADE_MAX, CHIP_SELL, CHIP_REMOVE_UNWANTED, MEM_UPGRADE, MEM_UPGRADE_MAX, ACC_UPGRADE_1, ACC_UPGRADE_2, ACC_UPGRADE_3,
     INFO_8B, INFO_64B, INFO_1KB, INFO_1KIB, INFO_4KIB,
     TOTAL_64KIB, TOTAL_1MB, TOTAL_1MIB, TOTAL_8MIB, TOTAL_32MIB, TOTAL_100MB, TOTAL_128MIB, TOTAL_1GB, TOTAL_1GIB,
     BANK_0, BANK_4, BANK_8, BANK_MIB, BANK_GIB,
@@ -127,6 +128,15 @@ class PlayerAchievements
                 AchievementType.HERO_MAX -> res.getString(R.string.achievement_HERO_MAX)
                 AchievementType.HERO_LOVELACE -> res.getString(R.string.achievement_LOVELACE)
                 AchievementType.HERO_HAMILTON -> res.getString(R.string.achievement_HAMILTON)
+                AchievementType.CHIP_UPGRADE -> res.getString(R.string.achievement_CHIP_UPGRADE)
+                AchievementType.CHIP_UPGRADE_MAX -> res.getString(R.string.achievement_CHIP_UPGRADE_MAX)
+                AchievementType.CHIP_SELL -> res.getString(R.string.achievement_CHIP_SELL)
+                AchievementType.CHIP_REMOVE_UNWANTED -> res.getString(R.string.achievement_CHIP_REMOVE_UNWANTED)
+                AchievementType.MEM_UPGRADE -> res.getString(R.string.achievement_MEM_UPGRADE)
+                AchievementType.MEM_UPGRADE_MAX -> res.getString(R.string.achievement_MEM_UPGRADE_MAX)
+                AchievementType.ACC_UPGRADE_1 -> res.getString(R.string.achievement_ACC_UPGRADE_1)
+                AchievementType.ACC_UPGRADE_2 -> res.getString(R.string.achievement_ACC_UPGRADE_2)
+                AchievementType.ACC_UPGRADE_3 -> res.getString(R.string.achievement_ACC_UPGRADE_3)
             }
         }
     }
