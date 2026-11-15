@@ -1,0 +1,10 @@
+Nouvelles fonctionnalités :
+- Ajout de nouveaux succès (64 au total)
+- Les puces peuvent être améliorées jusqu'au niveau 16.
+
+Corrections de bugs :
+- Il n'est plus possible d'améliorer les puces au-delà du niveau maximum avec le bouton « achat multiple ». Corrige le problème n° 261.
+
+Divers :
+- Nouvelles captures d'écran sur F-Droid
+- Nettoyage du code (merci à grimreaper)

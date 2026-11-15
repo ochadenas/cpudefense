@@ -1,0 +1,9 @@
+Aggiunti altri obiettivi (per un totale di 64)
+- I chip possono essere potenziati fino al livello 16.
+
+Correzioni di bug:
+- Non è più possibile potenziare i chip oltre il livello massimo utilizzando il pulsante « acquisto multiplo ». Risolve il problema n.261.
+
+Varie:
+- Nuovi screenshot su F-Droid
+- Pulizia del codice (grazie a grimreaper)

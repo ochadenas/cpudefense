@@ -1,0 +1,10 @@
+Neue Funktionen:
+- Weitere Erfolge hinzugefügt (insgesamt jetzt 64)
+- Chips können bis Level 16 verbessert werden.
+
+Fehlerbehebungen:
+- Es ist nicht mehr möglich, Chips über das maximale Level hinaus per Mehrfachkauf zu verbessern. Behebt Issue #261.
+
+Sonstiges:
+- Neue Screenshots auf F-Droid
+- Code-Bereinigung (Dank an grimreaper)

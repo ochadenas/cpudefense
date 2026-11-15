@@ -1,0 +1,12 @@
+New features:
+- Added more achievements (for a total of 64)
+- Chips can be upgraded until level 16.
+
+Bug fixes:
+- It is no longer possible to upgrade chips beyond max level using the "multiple buy" button. Fixes issue #261.
+
+Miscellaneous:
+- New screenshots in F-Droid
+- Code cleanup (thanks to grimreaper)
+
+
