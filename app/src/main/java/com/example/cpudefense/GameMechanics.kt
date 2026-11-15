@@ -32,7 +32,7 @@ class GameMechanics {
         /** for debugging purposes only. MUST BE SET TO FALSE */
         const val allowLivesPurchaseInAllStages = false
         /** for debugging purposes only. MUST BE SET TO FALSE */
-        const val enableLogging = true
+        const val enableLogging = false
         /** feature toggle */
         const val enableEditor = false
         // end of debug options
