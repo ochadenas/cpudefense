@@ -490,7 +490,11 @@ class GameActivity : ActivityWithAchievements, AppCompatActivity() {
     {
         runOnUiThread { Toast.makeText(this, resources.getString(R.string.toast_stage_cleared), Toast.LENGTH_SHORT).show() }
         gameView.intermezzo.coinsGathered = gameMechanics.state.coinsExtra + gameMechanics.state.coinsInLevel
-        gameMechanics.currentPurse().addReward(gameView.intermezzo.coinsGathered)
+        gameMechanics.currentPurse().let {
+            it.addReward(gameView.intermezzo.coinsGathered)
+            it.checkAchievements(achievements)
+        }
+
         val summaryOfCompletedStage = Stage.Summary(won = true,
                                                     coinsGot = stage.summary.coinsGot + gameMechanics.state.coinsInLevel,
                                                     coinsMaxAvailable = stage.summary.coinsMaxAvailable,

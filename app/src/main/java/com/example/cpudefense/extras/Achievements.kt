@@ -11,8 +11,10 @@ import java.util.EnumMap
 
 enum class AchievementType { UNDEFINED, LEVEL_LOST, LOSE_BY_COIN, LOSE_BY_HEAT, GAME_WON,
     EASTER, CHRISTMAS, PURCHASE_LIFE, SPIN, WIKI, VERSIONINFO, USE_FFFORWARD, SHOW_HEX,
-    MARKET, MARKET_CV, REFUND_ALL, FIRE_HERO, MARKET_OVERFLOW, HERO_LEAVE, HERO_UPGRADE, HERO_MAX, 
+    MARKET, MARKET_CV, REFUND_ALL, FIRE_HERO, MARKET_OVERFLOW, HERO_LEAVE, HERO_UPGRADE, HERO_UPGRADE_4, HERO_MAX,
     HERO_LOVELACE, HERO_HAMILTON,
+    COINS_GAINED_16, COINS_GAINED_32, COINS_GAINED_64, COINS_GAINED_128, COINS_GAINED_256, COINS_GAINED_512,
+    COINS_SPENT_16, COINS_SPENT_32, COINS_SPENT_64, COINS_SPENT_128, COINS_SPENT_256,
     CHIP_UPGRADE, CHIP_UPGRADE_MAX, CHIP_SELL, CHIP_REMOVE_UNWANTED, MEM_UPGRADE, MEM_UPGRADE_MAX, ACC_UPGRADE_1, ACC_UPGRADE_2, ACC_UPGRADE_3,
     INFO_8B, INFO_64B, INFO_1KB, INFO_1KIB, INFO_4KIB,
     TOTAL_64KIB, TOTAL_1MB, TOTAL_1MIB, TOTAL_8MIB, TOTAL_32MIB, TOTAL_100MB, TOTAL_128MIB, TOTAL_1GB, TOTAL_1GIB,
@@ -137,6 +139,18 @@ class PlayerAchievements
                 AchievementType.ACC_UPGRADE_1 -> res.getString(R.string.achievement_ACC_UPGRADE_1)
                 AchievementType.ACC_UPGRADE_2 -> res.getString(R.string.achievement_ACC_UPGRADE_2)
                 AchievementType.ACC_UPGRADE_3 -> res.getString(R.string.achievement_ACC_UPGRADE_3)
+                AchievementType.HERO_UPGRADE_4 -> res.getString(R.string.achievement_HERO_UPGRADE_4)
+                AchievementType.COINS_GAINED_16 -> res.getString(R.string.achievement_COINS_GAINED_16)
+                AchievementType.COINS_GAINED_32 -> res.getString(R.string.achievement_COINS_GAINED_32)
+                AchievementType.COINS_GAINED_64 -> res.getString(R.string.achievement_COINS_GAINED_64)
+                AchievementType.COINS_GAINED_128 -> res.getString(R.string.achievement_COINS_GAINED_128)
+                AchievementType.COINS_GAINED_256 -> res.getString(R.string.achievement_COINS_GAINED_256)
+                AchievementType.COINS_GAINED_512 -> res.getString(R.string.achievement_COINS_GAINED_512)
+                AchievementType.COINS_SPENT_16 -> res.getString(R.string.achievement_COINS_SPENT_16)
+                AchievementType.COINS_SPENT_32 -> res.getString(R.string.achievement_COINS_SPENT_32)
+                AchievementType.COINS_SPENT_64 -> res.getString(R.string.achievement_COINS_SPENT_64)
+                AchievementType.COINS_SPENT_128 -> res.getString(R.string.achievement_COINS_SPENT_128)
+                AchievementType.COINS_SPENT_256 -> res.getString(R.string.achievement_COINS_SPENT_256)
             }
         }
     }

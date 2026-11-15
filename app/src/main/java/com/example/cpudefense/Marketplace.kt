@@ -201,6 +201,7 @@ class Marketplace(val gameView: GameView): GameElement()
                 val price = it.getPrice(it.data.level)
                 if (purse.canAfford(price) && it.data.level < it.getMaxUpgradeLevel()) {
                     purse.spend(price)
+                    purse.checkAchievements(gameView.gameActivity.achievements)
                     it.data.coinsSpent += price
                     (1 until price).run { Fader(gameView, coins.last(), Fader.Type.DISAPPEAR) }
                     it.doUpgrade()

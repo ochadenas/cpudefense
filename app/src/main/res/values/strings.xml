@@ -498,4 +498,16 @@ The programming language Pascal is named after him."</string>
     <string name="achievement_ACC_UPGRADE_1">Use a PLUS operation</string>
     <string name="achievement_ACC_UPGRADE_2">Use an OR operation</string>
     <string name="achievement_ACC_UPGRADE_3">Use an AND operation</string>
+    <string name="achievement_HERO_UPGRADE_4">Upgrade a hero to level 4</string>
+    <string name="achievement_COINS_GAINED_16">Gain 16 coins</string>
+    <string name="achievement_COINS_GAINED_32">Gain 32 coins</string>
+    <string name="achievement_COINS_GAINED_64">Gain 64 coins</string>
+    <string name="achievement_COINS_GAINED_128">Gain 128 coins</string>
+    <string name="achievement_COINS_GAINED_256">Gain 256 coins</string>
+    <string name="achievement_COINS_GAINED_512">Gain 512 coins</string>
+    <string name="achievement_COINS_SPENT_16">Spend 16 coins</string>
+    <string name="achievement_COINS_SPENT_32">Spend 32 coins</string>
+    <string name="achievement_COINS_SPENT_64">Spend 64 coins</string>
+    <string name="achievement_COINS_SPENT_128">Spend 128 coins</string>
+    <string name="achievement_COINS_SPENT_256">Spend 256 coins</string>
 </resources>

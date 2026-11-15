@@ -1,23 +1,27 @@
 package com.example.cpudefense
 
 import android.content.res.Resources
+import com.example.cpudefense.extras.AchievementType
+import com.example.cpudefense.extras.PlayerAchievements
 
-class PurseOfCoins(val gameMechanics: GameMechanics, private val levelMode: GameMechanics.LevelMode = GameMechanics.LevelMode.BASIC)
-/** Auxiliary object that holds the current amount of coins for a level mode
- *
- */
+/** Auxiliary object that holds the current amount of coins for a level mode  */
+class PurseOfCoins(val gameMechanics: GameMechanics,
+                   private val levelMode: GameMechanics.LevelMode = GameMechanics.LevelMode.BASIC)
 {
-    // DO NOT change the names of the variables!
-    data class Contents (
+
+    /** the purse contents. Keeps track of the coins received and spent
+     * through different ways.
+     */
+    data class Contents (     // DO NOT change the names of the variables!
         /** total coins gathered in the game mode */
         var totalCoins: Int = 0,
-        /** coins spent on heroes */
+        /** cumulated coins spent on heroes */
         var spentCoins: Int = 0,
-        /** coins got from level rewards */
+        /** cumulated coins got from level rewards */
         var rewardCoins: Int = 0,
-        /** coins caught running in the stages */
+        /** cumulated coins caught running in the stages */
         var runningCoins: Int = 0,
-        /** coins used to purchase lost lives */
+        /** cumulated coins used to purchase lost lives */
         var coinsSpentOnPurchases: Int = 0,
         /** coins got as a one-time gift */
         var coinsGotAsGift: Int = 0
@@ -42,15 +46,16 @@ class PurseOfCoins(val gameMechanics: GameMechanics, private val levelMode: Game
 
     var contents = Contents()
 
+    /** adds the given amount to the purse */
     fun addReward(amount: Int)
     {
         contents.totalCoins += amount
         contents.rewardCoins += amount
     }
 
-    fun addGift(amount: Int): Int
     /** add a specific amount as a one-time gift.
      * @return the number of coins actually got. Will be 0 if the gift had been granted before. */
+    fun addGift(amount: Int): Int
     {
         val actual = amount - contents.coinsGotAsGift
         if (actual>0) {
@@ -62,6 +67,9 @@ class PurseOfCoins(val gameMechanics: GameMechanics, private val levelMode: Game
             return 0
     }
 
+    /** spend a coin, either for hiring and upgrading heroes, or for
+     * buying additional lives. Other types of coin usage may be added.
+     */
     fun spend(amount: Int, spendFor: ExpenditureType = ExpenditureType.HEROES)
     {
         when (spendFor)
@@ -71,19 +79,25 @@ class PurseOfCoins(val gameMechanics: GameMechanics, private val levelMode: Game
         }
     }
 
+    /** number of coins currently available for spending.
+     * This is calculated as difference between all coins got and spent.
+     */
     fun availableCoins(): Int
     {
         val value = contents.totalCoins - contents.spentCoins - contents.coinsSpentOnPurchases
         return if (value>=0) value else 0
     }
 
+    /** whether there are enough coins to pay the price, without
+     * actually buying it.
+     */
     fun canAfford(price: Int): Boolean
     {
         return availableCoins() >= price
     }
 
-    fun calculateInitialContents()
     /** method for migrating the "old" style of coin-keeping. */
+    fun calculateInitialContents()
     {
         // get number of reward coins
         val sumRewardCoinsInBasicMode = gameMechanics.summaryPerNormalLevel.values.sumOf { it.coinsGot } +
@@ -121,4 +135,24 @@ class PurseOfCoins(val gameMechanics: GameMechanics, private val levelMode: Game
         }
         contents.totalCoins = contents.rewardCoins + contents.runningCoins
     }
+
+    /** called to test whether one or more achievement conditions are met */
+    fun checkAchievements(achievements: PlayerAchievements)
+    {
+        when
+        {
+            contents.spentCoins > 256 -> achievements.grant(AchievementType.COINS_SPENT_256)
+            contents.spentCoins > 128 -> achievements.grant(AchievementType.COINS_SPENT_128)
+            contents.spentCoins > 64 -> achievements.grant(AchievementType.COINS_SPENT_64)
+            contents.spentCoins > 32 -> achievements.grant(AchievementType.COINS_SPENT_32)
+            contents.spentCoins > 16 -> achievements.grant(AchievementType.COINS_SPENT_16)
+            contents.totalCoins > 512 -> achievements.grant(AchievementType.COINS_GAINED_512)
+            contents.totalCoins > 256 -> achievements.grant(AchievementType.COINS_GAINED_256)
+            contents.totalCoins > 128 -> achievements.grant(AchievementType.COINS_GAINED_128)
+            contents.totalCoins > 64 -> achievements.grant(AchievementType.COINS_GAINED_64)
+            contents.totalCoins > 32 -> achievements.grant(AchievementType.COINS_GAINED_32)
+            contents.totalCoins > 16 -> achievements.grant(AchievementType.COINS_GAINED_16)
+        }
+    }
+
 }

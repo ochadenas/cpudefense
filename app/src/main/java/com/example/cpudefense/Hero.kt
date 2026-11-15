@@ -16,6 +16,7 @@ import android.text.TextPaint
 import com.example.cpudefense.activities.GameActivity
 import com.example.cpudefense.effects.Fader
 import com.example.cpudefense.extras.AchievementType
+import com.example.cpudefense.extras.AchievementType.HERO_LOVELACE
 import com.example.cpudefense.gameElements.Button
 import com.example.cpudefense.gameElements.HeroCard
 import com.example.cpudefense.utils.setTopLeft
@@ -371,6 +372,7 @@ class Hero(var gameActivity: GameActivity, type: Type)
         {
             maxLevel -> grantAchievement(AchievementType.HERO_MAX)
             2-> grantAchievement(AchievementType.HERO_UPGRADE)
+            4-> grantAchievement(AchievementType.HERO_UPGRADE_4)
         }
         when (data.type)
         {
