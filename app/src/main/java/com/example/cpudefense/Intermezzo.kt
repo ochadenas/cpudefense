@@ -474,7 +474,17 @@ class Intermezzo(var gameView: GameView): GameElement(), Fadable {
             textPaint.typeface = Typeface.SANS_SERIF
             textPaint.color = resources.getColor(R.color.text_amber, null)
             textPaint.alpha = 255
-            val textLayout = StaticLayout(text, textPaint, area.width()-2*margin.toInt(), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false)
+            val textLayout = StaticLayout.Builder.obtain(
+                    text,
+                    0,
+                    text.length,
+                    textPaint,
+                    area.width() - 2 * margin.toInt(),
+            )
+                .setAlignment(Layout.Alignment.ALIGN_NORMAL)
+                .setLineSpacing(0.0f, 1.0f)
+                .setIncludePad(false)
+                .build()
             textLayout.draw(canvas)
             canvas.restore()
 

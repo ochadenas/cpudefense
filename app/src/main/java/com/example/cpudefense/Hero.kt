@@ -750,12 +750,17 @@ class Hero(var gameActivity: GameActivity, type: Type)
             canvas.drawColor(Color.BLACK)
             paintBiography.textSize = CommonView.biographyTextSize*gameActivity.gameView.textScaleFactor
             paintBiography.alpha = 255
-            val textLayout = StaticLayout(
-                    text, paintBiography, screenArea.width(),
-                    Layout.Alignment.ALIGN_NORMAL,1.0f,
-                    0.0f,
-                    false
+            val textLayout = StaticLayout.Builder.obtain(
+                    text,
+                    0,
+                    text.length,
+                    paintBiography,
+                    screenArea.width()
             )
+                .setAlignment(Layout.Alignment.ALIGN_NORMAL)
+                .setLineSpacing(0.0f, 1.0f)
+                .setIncludePad(false)
+                .build()
             area.bottom = screenArea.top + textLayout.height  // may be bigger or smaller than myArea
             this.bitmap = createBitmap(area.width(), area.height(), Bitmap.Config.ARGB_8888)
             canvas = Canvas(bitmap)
