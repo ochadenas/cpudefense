@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
+
 plugins {
     id("com.android.application")
     id("com.squareup.sort-dependencies")
@@ -65,7 +67,7 @@ dependencies {
     implementation ("com.google.android.material:material:1.14.0")
     implementation ("com.google.code.gson:gson:2.14.0")
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.11.0")
-    implementation ("org.jetbrains.kotlinx:kotlinx-serialization-json:1.11.0")
+    implementation ("org.jetbrains.kotlinx:kotlinx-serialization-json:1.13.0")
 
     testImplementation ("junit:junit:4.13.2")
     testImplementation ("org.junit.jupiter:junit-jupiter:6.1.3")
