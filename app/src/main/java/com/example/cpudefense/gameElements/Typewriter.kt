@@ -1,5 +1,3 @@
-@file:Suppress("DEPRECATION", "ConstPropertyName")
-
 package com.example.cpudefense.gameElements
 
 import android.graphics.Canvas

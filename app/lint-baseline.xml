@@ -51,18 +51,29 @@
         errorLine2="                     ~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/AndroidManifest.xml"
-            line="12"
+            line="13"
             column="22"/>
     </issue>
 
     <issue
+        id="AndroidGradlePluginVersion"
+        message="A newer version of Gradle than 9.8.2 is available: 9.9.2"
+        errorLine1="distributionUrl=https\://services.gradle.org/distributions/gradle-9.8.2-bin.zip"
+        errorLine2="                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="$HOME/svn/android/cpudefense/gradle/wrapper/gradle-wrapper.properties"
+            line="3"
+            column="17"/>
+    </issue>
+
+    <issue
         id="LockedOrientationActivity"
         message="Expecting `android:screenOrientation=&quot;unspecified&quot;` or `&quot;fullSensor&quot;` for this activity so the user can use the application in any orientation and provide a great experience on Chrome OS devices"
         errorLine1="            android:screenOrientation=&quot;portrait&quot;"
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/AndroidManifest.xml"
-            line="15"
+            line="16"
             column="13"/>
     </issue>
 
@@ -73,7 +84,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/AndroidManifest.xml"
-            line="19"
+            line="20"
             column="13"/>
     </issue>
 
@@ -84,7 +95,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/AndroidManifest.xml"
-            line="23"
+            line="24"
             column="13"/>
     </issue>
 
@@ -95,7 +106,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/AndroidManifest.xml"
-            line="32"
+            line="33"
             column="13"/>
     </issue>
 
@@ -106,7 +117,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/AndroidManifest.xml"
-            line="36"
+            line="37"
             column="13"/>
     </issue>
 
@@ -117,7 +128,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/AndroidManifest.xml"
-            line="40"
+            line="41"
             column="13"/>
     </issue>
 
@@ -134,7 +145,7 @@
 
     <issue
         id="NewerVersionAvailable"
-        message="A newer version of org.jetbrains.kotlinx:kotlinx-serialization-json than 1.11.0 is available: 1.12.0"
+        message="A newer version of org.jetbrains.kotlinx:kotlinx-serialization-json than 1.11.0 is available: 1.13.0"
         errorLine1="    implementation (&quot;org.jetbrains.kotlinx:kotlinx-serialization-json:1.11.0&quot;)"
         errorLine2="                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
@@ -150,7 +161,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/AndroidManifest.xml"
-            line="15"
+            line="16"
             column="13"/>
     </issue>
 
@@ -161,7 +172,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/AndroidManifest.xml"
-            line="19"
+            line="20"
             column="13"/>
     </issue>
 
@@ -172,7 +183,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/AndroidManifest.xml"
-            line="23"
+            line="24"
             column="13"/>
     </issue>
 
@@ -183,7 +194,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/AndroidManifest.xml"
-            line="32"
+            line="33"
             column="13"/>
     </issue>
 
@@ -194,7 +205,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/AndroidManifest.xml"
-            line="36"
+            line="37"
             column="13"/>
     </issue>
 
@@ -205,7 +216,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/AndroidManifest.xml"
-            line="40"
+            line="41"
             column="13"/>
     </issue>
 
@@ -3807,6 +3818,347 @@
     </issue>
 
     <issue
+        id="MissingTranslation"
+        message="&quot;achievement_MARKET&quot; is not translated in &quot;de&quot; (German), &quot;en&quot; (English), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;zh&quot; (Chinese)"
+        errorLine1="    &lt;string name=&quot;achievement_MARKET&quot;>Enter the hero market place&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="482"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;achievement_MARKET_CV&quot; is not translated in &quot;de&quot; (German), &quot;en&quot; (English), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;zh&quot; (Chinese)"
+        errorLine1="    &lt;string name=&quot;achievement_MARKET_CV&quot;>Look up a hero cv&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="483"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;achievement_REFUND_ALL&quot; is not translated in &quot;de&quot; (German), &quot;en&quot; (English), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;zh&quot; (Chinese)"
+        errorLine1="    &lt;string name=&quot;achievement_REFUND_ALL&quot;>Reset all heroes&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="484"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;achievement_FIRE_HERO&quot; is not translated in &quot;de&quot; (German), &quot;en&quot; (English), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;zh&quot; (Chinese)"
+        errorLine1="    &lt;string name=&quot;achievement_FIRE_HERO&quot;>Fire a hero&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="485"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;achievement_MARKET_OVERFLOW&quot; is not translated in &quot;de&quot; (German), &quot;en&quot; (English), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;zh&quot; (Chinese)"
+        errorLine1="    &lt;string name=&quot;achievement_MARKET_OVERFLOW&quot;>Have a lot of coins to spend&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="486"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;achievement_HERO_LEAVE&quot; is not translated in &quot;de&quot; (German), &quot;en&quot; (English), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;zh&quot; (Chinese)"
+        errorLine1="    &lt;string name=&quot;achievement_HERO_LEAVE&quot;>Grant a holiday&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="487"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;achievement_HERO_UPGRADE&quot; is not translated in &quot;de&quot; (German), &quot;en&quot; (English), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;zh&quot; (Chinese)"
+        errorLine1="    &lt;string name=&quot;achievement_HERO_UPGRADE&quot;>Upgrade a hero&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="488"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;achievement_HERO_MAX&quot; is not translated in &quot;de&quot; (German), &quot;en&quot; (English), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;zh&quot; (Chinese)"
+        errorLine1="    &lt;string name=&quot;achievement_HERO_MAX&quot;>Maximize a hero\&apos;s level&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="489"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;achievement_LOVELACE&quot; is not translated in &quot;de&quot; (German), &quot;en&quot; (English), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;zh&quot; (Chinese)"
+        errorLine1="    &lt;string name=&quot;achievement_LOVELACE&quot;>Hire Ada Lovelace&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="490"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;achievement_HAMILTON&quot; is not translated in &quot;de&quot; (German), &quot;en&quot; (English), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;zh&quot; (Chinese)"
+        errorLine1="    &lt;string name=&quot;achievement_HAMILTON&quot;>Hire Margaret Hamilton&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="491"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;achievement_CHIP_UPGRADE&quot; is not translated in &quot;de&quot; (German), &quot;en&quot; (English), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;zh&quot; (Chinese)"
+        errorLine1="    &lt;string name=&quot;achievement_CHIP_UPGRADE&quot;>Upgrade a chip&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="492"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;achievement_CHIP_UPGRADE_MAX&quot; is not translated in &quot;de&quot; (German), &quot;en&quot; (English), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;zh&quot; (Chinese)"
+        errorLine1="    &lt;string name=&quot;achievement_CHIP_UPGRADE_MAX&quot;>Upgrade a chip to the maximum&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="493"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;achievement_CHIP_SELL&quot; is not translated in &quot;de&quot; (German), &quot;en&quot; (English), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;zh&quot; (Chinese)"
+        errorLine1="    &lt;string name=&quot;achievement_CHIP_SELL&quot;>Sell a chip&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="494"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;achievement_CHIP_REMOVE_UNWANTED&quot; is not translated in &quot;de&quot; (German), &quot;en&quot; (English), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;zh&quot; (Chinese)"
+        errorLine1="    &lt;string name=&quot;achievement_CHIP_REMOVE_UNWANTED&quot;>Remove an unwanted chip&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="495"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;achievement_MEM_UPGRADE&quot; is not translated in &quot;de&quot; (German), &quot;en&quot; (English), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;zh&quot; (Chinese)"
+        errorLine1="    &lt;string name=&quot;achievement_MEM_UPGRADE&quot;>Upgrade a MEM chip&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="496"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;achievement_MEM_UPGRADE_MAX&quot; is not translated in &quot;de&quot; (German), &quot;en&quot; (English), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;zh&quot; (Chinese)"
+        errorLine1="    &lt;string name=&quot;achievement_MEM_UPGRADE_MAX&quot;>Upgrade a MEM chip to the maximum&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="497"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;achievement_ACC_UPGRADE_1&quot; is not translated in &quot;de&quot; (German), &quot;en&quot; (English), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;zh&quot; (Chinese)"
+        errorLine1="    &lt;string name=&quot;achievement_ACC_UPGRADE_1&quot;>Use a PLUS operation&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="498"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;achievement_ACC_UPGRADE_2&quot; is not translated in &quot;de&quot; (German), &quot;en&quot; (English), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;zh&quot; (Chinese)"
+        errorLine1="    &lt;string name=&quot;achievement_ACC_UPGRADE_2&quot;>Use an OR operation&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="499"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;achievement_ACC_UPGRADE_3&quot; is not translated in &quot;de&quot; (German), &quot;en&quot; (English), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;zh&quot; (Chinese)"
+        errorLine1="    &lt;string name=&quot;achievement_ACC_UPGRADE_3&quot;>Use an AND operation&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="500"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;achievement_HERO_UPGRADE_4&quot; is not translated in &quot;de&quot; (German), &quot;en&quot; (English), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;zh&quot; (Chinese)"
+        errorLine1="    &lt;string name=&quot;achievement_HERO_UPGRADE_4&quot;>Upgrade a hero to level 4&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="501"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;achievement_COINS_GAINED_16&quot; is not translated in &quot;de&quot; (German), &quot;en&quot; (English), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;zh&quot; (Chinese)"
+        errorLine1="    &lt;string name=&quot;achievement_COINS_GAINED_16&quot;>Gain 16 coins&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="502"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;achievement_COINS_GAINED_32&quot; is not translated in &quot;de&quot; (German), &quot;en&quot; (English), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;zh&quot; (Chinese)"
+        errorLine1="    &lt;string name=&quot;achievement_COINS_GAINED_32&quot;>Gain 32 coins&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="503"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;achievement_COINS_GAINED_64&quot; is not translated in &quot;de&quot; (German), &quot;en&quot; (English), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;zh&quot; (Chinese)"
+        errorLine1="    &lt;string name=&quot;achievement_COINS_GAINED_64&quot;>Gain 64 coins&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="504"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;achievement_COINS_GAINED_128&quot; is not translated in &quot;de&quot; (German), &quot;en&quot; (English), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;zh&quot; (Chinese)"
+        errorLine1="    &lt;string name=&quot;achievement_COINS_GAINED_128&quot;>Gain 128 coins&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="505"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;achievement_COINS_GAINED_256&quot; is not translated in &quot;de&quot; (German), &quot;en&quot; (English), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;zh&quot; (Chinese)"
+        errorLine1="    &lt;string name=&quot;achievement_COINS_GAINED_256&quot;>Gain 256 coins&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="506"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;achievement_COINS_GAINED_512&quot; is not translated in &quot;de&quot; (German), &quot;en&quot; (English), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;zh&quot; (Chinese)"
+        errorLine1="    &lt;string name=&quot;achievement_COINS_GAINED_512&quot;>Gain 512 coins&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="507"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;achievement_COINS_SPENT_16&quot; is not translated in &quot;de&quot; (German), &quot;en&quot; (English), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;zh&quot; (Chinese)"
+        errorLine1="    &lt;string name=&quot;achievement_COINS_SPENT_16&quot;>Spend 16 coins&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="508"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;achievement_COINS_SPENT_32&quot; is not translated in &quot;de&quot; (German), &quot;en&quot; (English), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;zh&quot; (Chinese)"
+        errorLine1="    &lt;string name=&quot;achievement_COINS_SPENT_32&quot;>Spend 32 coins&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="509"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;achievement_COINS_SPENT_64&quot; is not translated in &quot;de&quot; (German), &quot;en&quot; (English), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;zh&quot; (Chinese)"
+        errorLine1="    &lt;string name=&quot;achievement_COINS_SPENT_64&quot;>Spend 64 coins&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="510"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;achievement_COINS_SPENT_128&quot; is not translated in &quot;de&quot; (German), &quot;en&quot; (English), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;zh&quot; (Chinese)"
+        errorLine1="    &lt;string name=&quot;achievement_COINS_SPENT_128&quot;>Spend 128 coins&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="511"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;achievement_COINS_SPENT_256&quot; is not translated in &quot;de&quot; (German), &quot;en&quot; (English), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;zh&quot; (Chinese)"
+        errorLine1="    &lt;string name=&quot;achievement_COINS_SPENT_256&quot;>Spend 256 coins&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="512"
+            column="13"/>
+    </issue>
+
+    <issue
         id="Typos"
         message="Did you mean &quot;CyoYGapIGXMIGUMQswCQYDVQQGEwJVUzETMBEGA!&quot; instead of &quot;CyoYGapIGXMIGUMQswCQYDVQQGEwJVUzETMBEGA1&quot;?"
         errorLine1="            MIIEqDCCA5CgAwIBAgIJANWFuGx90071MA0GCSqGSIb3DQEBBAUAMIGUMQswCQYDVQQGEwJVUzETMBEGA1UECBMKQ2FsaWZvcm5pYTEWMBQGA1UEBxMNTW91bnRhaW4gVmlldzEQMA4GA1UEChMHQW5kcm9pZDEQMA4GA1UECxMHQW5kcm9pZDEQMA4GA1UEAxMHQW5kcm9pZDEiMCAGCSqGSIb3DQEJARYTYW5kcm9pZEBhbmRyb2lkLmNvbTAeFw0wODA0MTUyMzM2NTZaFw0zNTA5MDEyMzM2NTZaMIGUMQswCQYDVQQGEwJVUzETMBEGA1UECBMKQ2FsaWZvcm5pYTEWMBQGA1UEBxMNTW91bnRhaW4gVmlldzEQMA4GA1UEChMHQW5kcm9pZDEQMA4GA1UECxMHQW5kcm9pZDEQMA4GA1UEAxMHQW5kcm9pZDEiMCAGCSqGSIb3DQEJARYTYW5kcm9pZEBhbmRyb2lkLmNvbTCCASAwDQYJKoZIhvcNAQEBBQADggENADCCAQgCggEBANbOLggKv+IxTdGNs8/TGFy0PTP6DHThvbbR24kT9ixcOd9W+EaBPWW+wPPKQmsHxajtWjmQwWfna8mZuSeJS48LIgAZlKkpFeVyxW0qMBujb8X8ETrWy550NaFtI6t9+u7hZeTfHwqNvacKhp1RbE6dBRGWynwMVX8XW8N1+UjFaq6GCJukT4qmpN2afb8sCjUigq0GuMwYXrFVee74bQgLHWGJwPmvmLHC69EH6kWr22ijx4OKXlSIx2xT1AsSHee70w5iDBiK4aph27yH3TxkXy9V89TDdexAcKk/cVHYNnDBapcavl7y0RiQ4biu8ymM8Ga/nmzhRKya6G0cGw8CAQOjgfwwgfkwHQYDVR0OBBYEFI0cxb6VTEM8YYY6FbBMvAPyT+CyMIHJBgNVHSMEgcEwgb6AFI0cxb6VTEM8YYY6FbBMvAPyT+CyoYGapIGXMIGUMQswCQYDVQQGEwJVUzETMBEGA1UECBMKQ2FsaWZvcm5pYTEWMBQGA1UEBxMNTW91bnRhaW4gVmlldzEQMA4GA1UEChMHQW5kcm9pZDEQMA4GA1UECxMHQW5kcm9pZDEQMA4GA1UEAxMHQW5kcm9pZDEiMCAGCSqGSIb3DQEJARYTYW5kcm9pZEBhbmRyb2lkLmNvbYIJANWFuGx90071MAwGA1UdEwQFMAMBAf8wDQYJKoZIhvcNAQEEBQADggEBABnTDPEF+3iSP0wNfdIjIz1AlnrPzgAIHVvXxunW7SBrDhEglQZBbKJEk5kT0mtKoOD1JMrSu1xuTKEBahWRbqHsXclaXjoBADb0kkjVEJu/Lh5hgYZnOjvlba8Ld7HCKePCVePoTJBdI4fvugnL8TsgK05aIskyY0hKI9L8KfqfGTl1lzOv2KoWD0KWwtAWPoGChZxmQ+nBli+gwYMzM1vAkP+aayLe0a1EQimlOalO762r0GXO0ks+UeXde2Z4e+8S/pf7pITEI/tP+MxJTALw9QUWEv9lKTk+jkbqxbsh8nfBUapfKqYn0eidpwq2AzVp3juYl7//fKnaPhJD9gs="
@@ -4434,7 +4786,7 @@
         errorLine2="           ~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/colors.xml"
-            line="62"
+            line="63"
             column="12"/>
     </issue>
 
@@ -4445,7 +4797,7 @@
         errorLine2="           ~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/colors.xml"
-            line="87"
+            line="88"
             column="12"/>
     </issue>
 
@@ -4456,7 +4808,7 @@
         errorLine2="           ~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/colors.xml"
-            line="88"
+            line="89"
             column="12"/>
     </issue>
 
@@ -4467,7 +4819,7 @@
         errorLine2="           ~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/colors.xml"
-            line="93"
+            line="94"
             column="12"/>
     </issue>
 
@@ -4478,7 +4830,7 @@
         errorLine2="           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/colors.xml"
-            line="100"
+            line="101"
             column="12"/>
     </issue>
 
@@ -4489,7 +4841,7 @@
         errorLine2="           ~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/colors.xml"
-            line="114"
+            line="115"
             column="12"/>
     </issue>
 
@@ -4500,7 +4852,7 @@
         errorLine2="           ~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/colors.xml"
-            line="115"
+            line="116"
             column="12"/>
     </issue>
 
@@ -6052,6 +6404,28 @@
             file="src/main/res/layout/layout_dialog_question.xml"
             line="11"
             column="6"/>
+    </issue>
+
+    <issue
+        id="ConstantLocale"
+        message="Assigning `Locale.getDefault()` to a final static field is suspicious; this code will not work correctly if the user changes locale while the app is running"
+        errorLine1="    private val timeFormatShort = SimpleDateFormat(&quot;HH:mm:ss.SSS&quot;, Locale.getDefault())"
+        errorLine2="                                                                   ~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/example/cpudefense/utils/Logger.kt"
+            line="28"
+            column="68"/>
+    </issue>
+
+    <issue
+        id="ConstantLocale"
+        message="Assigning `Locale.getDefault()` to a final static field is suspicious; this code will not work correctly if the user changes locale while the app is running"
+        errorLine1="    private val timeFormatLong = SimpleDateFormat(&quot;yyyy-MM-dd HH:mm:ss.SSS Z&quot;, Locale.getDefault())"
+        errorLine2="                                                                               ~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/example/cpudefense/utils/Logger.kt"
+            line="29"
+            column="80"/>
     </issue>
 
     <issue

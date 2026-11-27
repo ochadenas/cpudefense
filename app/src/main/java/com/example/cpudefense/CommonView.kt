@@ -34,7 +34,6 @@ abstract class CommonView(context: Context):
     SurfaceView(context), SurfaceHolder.Callback,
     GestureDetector.OnGestureListener
 {
-    @Suppress("ConstPropertyName")
     companion object {
         // default sizes for graphical game elements.
         const val scoreTextSize = 36f

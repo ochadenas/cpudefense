@@ -1,4 +1,4 @@
-@file:Suppress("DEPRECATION", "SpellCheckingInspection")
+@file:Suppress("SpellCheckingInspection")
 
 package com.example.cpudefense
 
