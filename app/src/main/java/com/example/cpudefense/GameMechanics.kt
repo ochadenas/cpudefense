@@ -1,5 +1,3 @@
-@file:Suppress("NOTHING_TO_INLINE", "ConstPropertyName")
-
 package com.example.cpudefense
 
 import android.util.Log
